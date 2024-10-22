@@ -1,0 +1,9 @@
+{
+  "name": "purchase-components",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/purchase/components/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project purchase-components --web",
+  "targets": {}
+}

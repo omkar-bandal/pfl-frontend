@@ -1,0 +1,19 @@
+{
+  "name": "admin-modules",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/admin/modules/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/admin/modules",
+        "main": "libs/admin/modules/src/index.ts",
+        "tsConfig": "libs/admin/modules/tsconfig.lib.json",
+        "assets": ["libs/admin/modules/*.md"]
+      }
+    }
+  }
+}

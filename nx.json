@@ -55,6 +55,16 @@
   "targetDefaults": {
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]
+    },
+    "@nx/vite:build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
@@ -70,7 +80,8 @@
       },
       "library": {
         "style": "tailwind",
-        "linter": "eslint"
+        "linter": "eslint",
+        "unitTestRunner": "none"
       }
     }
   }

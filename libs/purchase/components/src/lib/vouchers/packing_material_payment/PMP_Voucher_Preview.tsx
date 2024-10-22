@@ -1,0 +1,142 @@
+import React from 'react'
+import { Close } from '@mui/icons-material'
+import { Box, Dialog, Divider, Grid, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { PreviewContainerPropType, useAppSelector } from '@prime-fresh/modules';
+import { displayAddress, pmpVoucherState } from '@prime-fresh/purchase/modules';
+
+export const PMPVoucherPreview = ({ open, handleClose }: PreviewContainerPropType) => {
+    const { previewPMPVoucher } = useAppSelector(pmpVoucherState);
+    return (
+        <Dialog
+            fullScreen
+            open={open}
+            onClose={handleClose}
+        >
+            <Box sx={{ flex: 1, padding: 1 }}>
+                <Grid container direction="column" rowSpacing={1}>
+                    <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
+                            <Typography variant="h4" component="div">Packing Material Payment Voucher Preview</Typography>
+                            <IconButton
+                                edge="start"
+                                color="error"
+                                onClick={handleClose}
+                                aria-label="close"
+                            >
+                                <Close fontSize='large' />
+                            </IconButton>
+                        </Stack>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.grnNo}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.companyName}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.location}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Debit From / Credit To : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.debitCreditTo}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Pay To / Received From : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.payReceivedFrom}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Seller Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.sellerName}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Contact Numbers of Seller : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{`${previewPMPVoucher?.contactNo}, ${previewPMPVoucher?.altContactNo}`}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Address of Seller : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(previewPMPVoucher?.address)}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Purpose : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.purpose}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Divider textAlign="left" sx={{ marginY: 2 }}>Products Information</Divider>
+                    <Grid item>
+                        <TableContainer component={Box}>
+                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Name</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>UOM</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Quantity</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Rate</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Amount</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {previewPMPVoucher?.materials.map((product, index: number) => (
+                                        <TableRow
+                                            key={index}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemName}</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemUom}</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemQty}</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.rate}</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amt}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Total Amount : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.totalAmt}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Total Amount in Words : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.amtWords}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Payment Mode : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.paymentMode}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6" component="span" sx={{ color: "#555" }}>
+                            Received By : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.receivedBy}
+                            </Typography>
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </Box >
+        </Dialog>
+    )
+}

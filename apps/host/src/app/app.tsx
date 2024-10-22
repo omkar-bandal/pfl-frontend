@@ -1,10 +1,14 @@
-import NxWelcome from './nx-welcome';
+import { RouterProvider } from "react-router-dom";
+import { CommonProvider } from "../providers/CommonProvider";
+import { HostRoutes } from "../routes";
+import { muiTheme } from "@prime-fresh/admin_modules";
+import { coreStore } from "@prime-fresh/modules";
 
 export function App() {
   return (
-    <div>
-      <NxWelcome title="host" />
-    </div>
+    <CommonProvider store={coreStore} theme={muiTheme}>
+      <RouterProvider router={HostRoutes} />
+    </CommonProvider>
   );
 }
 
