@@ -1,6 +1,6 @@
-import { RequestedBy } from "../rfpa.interface";
+import { RequestedBy } from '../requestedBy.interface';
 
-export interface PostTPvoucher{
+export interface PostTPvoucher {
     grnNo: string,
     companyName: string;
     debitCreditTo: string,
@@ -20,14 +20,11 @@ export interface PostTPvoucher{
     receivedBy: string,
     anyAttachment: File | null,
 }
-export interface GetTPvoucher{
-    id:string;
-    createdDateAt?: string;
-    requestedBy?: RequestedBy;
-    requestingDepartment?: string;
-    baseLocation?: string;
-    grnNo: string,
-    companyName: string;
+export interface GetTPvoucher {
+    id: string,
+    createdAt: Date,
+    createdBy: RequestedBy,
+    requestingDepartment: string,
     debitCreditTo: string,
     payReceivedFrom: string,
     location: string,
@@ -43,5 +40,7 @@ export interface GetTPvoucher{
     totalAmt: number,
     amtWords: string,
     receivedBy: string,
-    anyAttachment: File | null,
+    anyAttachment: string,
+    approvalStatus: string,
+    grnNo: string,
 }

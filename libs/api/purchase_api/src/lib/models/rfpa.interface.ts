@@ -1,9 +1,7 @@
 import {  Farmer, Vendor } from "@prime-fresh/admin_modules";
+import { RequestedBy } from "./requestedBy.interface";
 
-export interface RequestedBy {
-    firstName: string,
-    lastName: string
-}
+
 export interface RFPA_Items {
     product: string;
     grade: string;

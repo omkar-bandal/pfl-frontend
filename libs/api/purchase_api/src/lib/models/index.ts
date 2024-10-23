@@ -4,3 +4,4 @@ export * from './rfpa.interface';
 export * from './voucher';
 export * from './grn.interface';
 export * from './delivery-challan.interface';
+export * from './requestedBy.interface';

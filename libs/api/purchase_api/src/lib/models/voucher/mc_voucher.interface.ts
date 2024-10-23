@@ -1,6 +1,6 @@
-import { RequestedBy } from "../rfpa.interface";
+import { RequestedBy } from "../requestedBy.interface";
 
-export interface MVItems{
+export interface MVItems {
     id?: string,
     itemName: string,
     itemQty: number,
@@ -8,7 +8,7 @@ export interface MVItems{
     rate: number,
     amt: number,
 }
-export interface PostMCvoucher{
+export interface PostMCvoucher {
     grnNo: string,
     companyName: string;
     debitCreditTo: string,
@@ -21,21 +21,20 @@ export interface PostMCvoucher{
     receivedBy: string,
     anyAttachment: File | null,
 }
-export interface GetMCvoucher{
-    id:string;
-    createdDateAt?: string;
-    requestedBy?: RequestedBy;
-    requestingDepartment?: string;
-    baseLocation?: string;
+export interface GetMCvoucher {
+    id: string,
+    requestedBy: RequestedBy,
+    requestingDepartment: string,
+    voucherNo: string,
     grnNo: string,
-    companyName: string;
+    companyName: string,
     debitCreditTo: string,
     payReceivedFrom: string,
     location: string,
-    mvItems: MVItems[]
     totalAmt: number,
     amtWords: string,
     paymentMode: string,
-    receivedBy: string,
-    anyAttachment: File | null,
+    anyAttachment: string,
+    approvalStatus: string,
+    mvItems: MVItems[],
 }

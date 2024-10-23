@@ -1,5 +1,6 @@
 import { Farmer, Vendor } from "@prime-fresh/admin_modules";
-import { Payment_Info, RequestedBy } from "./rfpa.interface";
+import { Payment_Info } from "./rfpa.interface";
+import { RequestedBy } from "./requestedBy.interface";
 
 export interface GRNProducts {
     product: string,

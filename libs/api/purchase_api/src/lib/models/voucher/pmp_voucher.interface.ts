@@ -1,5 +1,5 @@
-import { Address } from "../address.interface";
-import { RequestedBy } from "../rfpa.interface";
+import { Address } from '../address.interface';
+import { RequestedBy } from '../requestedBy.interface';
 export interface Materials {
     id?: string,
     itemName: string,
@@ -28,26 +28,24 @@ export interface PostPMPvoucher {
     anyAttachment: File | null,
 }
 export interface GetPMPvoucher {
-    id:string;
-    createdDateAt?: string;
-    requestedBy?: RequestedBy;
-    requestingDepartment?: string;
-    baseLocation?: string;
+    id: string,
+    requestedBy: RequestedBy,
+    requestingDepartment: string,
     grnNo: string,
-    companyName: string;
     debitCreditTo: string,
     payReceivedFrom: string,
     location: string,
     sellerName: string,
-    address: Address,
     contactNo: string,
     altContactNo: string,
+    address: Address,
     purpose: string,
-    materials: Materials[],
     paymentMode: string,
-    ratePerLabour: number,
     totalAmt: number,
     amtWords: string,
     receivedBy: string,
-    anyAttachment: File | null,
+    companyName: string,
+    materials: Materials[],
+    anyAttachment: string,
+    approvalStatus: string,
 }

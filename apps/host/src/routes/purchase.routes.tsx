@@ -1,4 +1,4 @@
-import { DashboardPurchase, DealSlipForm, DealSlipTable, DeliveryChallanForm, GRNForm, GRNTable, GRNView, LabourPaymentVoucherForm, LabourPaymentVoucherTable, MultipleCashVoucherForm, MultipleCashVoucherTable, PackingMaterialPaymentVoucherForm, PackingMaterialPaymentVoucherTable, RFPAForm, RFPAPreview, RFPATable, RFPAView, TransportPaymentVoucherForm, TransportPaymentVoucherTable, } from "@prime-fresh/purchase/components";
+import { DashboardPurchase, DealSlipForm, DealSlipTable, DeliveryChallanForm, GRNForm, GRNTable, GRNView, LabourPaymentVoucherForm, LabourPaymentVoucherTable, LPVoucherView, MCVoucherView, MultipleCashVoucherForm, MultipleCashVoucherTable, PackingMaterialPaymentVoucherForm, PackingMaterialPaymentVoucherTable, PMPVoucherView, RFPAForm, RFPAPreview, RFPATable, RFPAView, TPVoucherView, TransportPaymentVoucherForm, TransportPaymentVoucherTable, } from "@prime-fresh/purchase/components";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { Outlet } from "react-router-dom";
 
@@ -74,12 +74,20 @@ export const PurchaseRoutes = [
                 element: <MultipleCashVoucherForm/>,
             },
             {
+                path: `${PURCHASE_ROUTES.VIEW_MULT_CASH_VOUCHER}/:id`,
+                element: <MCVoucherView />
+            },
+            {
                 path: PURCHASE_ROUTES.CREATE_LABOUR_CASH_VOUCHER,
                 element: <LabourPaymentVoucherForm/>,
             },
             {
                 path: PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER,
                 element: <LabourPaymentVoucherTable/>,
+            },
+            {
+                path: `${PURCHASE_ROUTES.VIEW_LABOUR_CASH_VOUCHER}/:id`,
+                element: <LPVoucherView />
             },
             {
                 path: PURCHASE_ROUTES.CREATE_PACKING_MATERIAL_VOUCHER,
@@ -90,12 +98,20 @@ export const PurchaseRoutes = [
                 element: <PackingMaterialPaymentVoucherTable/>,
             },
             {
+                path: `${PURCHASE_ROUTES.VIEW_PACKING_MATERIAL_VOUCHER}/:id`,
+                element: <PMPVoucherView />
+            },
+            {
                 path: PURCHASE_ROUTES.CREATE_TRANSPORT_CASH_VOUCHER,
                 element: <TransportPaymentVoucherForm/>,
             },
             {
                 path: PURCHASE_ROUTES.GET_ALL_TRANSPORT_CASH_VOUCHER,
                 element: <TransportPaymentVoucherTable/>,
+            },
+            {
+                path: `${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/:id`,
+                element: <TPVoucherView />
             },
         ]
     },

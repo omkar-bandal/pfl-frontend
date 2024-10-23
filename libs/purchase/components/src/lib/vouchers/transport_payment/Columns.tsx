@@ -1,21 +1,12 @@
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
-import { DownloadOutlined, Preview } from "@mui/icons-material";
+import { Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
-import { RequestedBy } from "@prime-fresh/purchase_api";
+// import { RequestedBy } from "@prime-fresh/purchase_api";
 
 export const TPVoucherListCols = (): GridColDef[] => {
     const navigate = useNavigate();
-    const handleDownload = (imageUrl: string) => {
-        // Create a temporary anchor element
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = 'image.jpg'; // Set the desired filename
-
-        // Trigger the download
-        link.click();
-    };
     return ([
         { field: "id", headerName: "ID", width: 30 },
         // {
@@ -66,10 +57,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -79,10 +67,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -92,10 +77,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -105,10 +87,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -118,10 +97,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -131,24 +107,21 @@ export const TPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
-        {
-            field: "anyAttachment",
-            headerName: "Attachment",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
-                    <DownloadOutlined />
-                </IconButton>
-            ),
-        },
+        // {
+        //     field: "anyAttachment",
+        //     headerName: "Attachment",
+        //     width: 100,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     renderCell: (params: GridRenderCellParams) => (
+        //         <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
+        //             <DownloadOutlined />
+        //         </IconButton>
+        //     ),
+        // },
         {
             field: "approvalStatus",
             headerName: "Status",
@@ -194,7 +167,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             sortable: false,
             filterable: false,
             renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.id}`)}>
+                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}>
                     <Preview color="primary" />
                 </IconButton>
             ),

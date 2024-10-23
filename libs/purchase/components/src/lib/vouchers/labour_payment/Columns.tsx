@@ -1,30 +1,22 @@
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
-import { DownloadOutlined, Preview } from "@mui/icons-material";
+import { Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 
 export const LPVoucherListCols = (): GridColDef[] => {
     const navigate = useNavigate();
-    const handleDownload = (imageUrl: string) => {
-        // Create a temporary anchor element
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = 'image.jpg'; // Set the desired filename
 
-        // Trigger the download
-        link.click();
-    };
     return ([
         { field: "id", headerName: "ID", width: 30 },
-        // {
-        //     field: "grnNo",
-        //     headerName: "GRN Number",
-        //     width: 130,
-        //     align: "center",
-        //     headerAlign: "center"
-        // },
+        {
+            field: "voucherNo",
+            headerName: "Voucher Number",
+            width: 130,
+            align: "center",
+            headerAlign: "center"
+        },
         // {
         //     field: "createdAt",
         //     headerName: "Created Date",
@@ -32,26 +24,49 @@ export const LPVoucherListCols = (): GridColDef[] => {
         //     align: "center",
         //     headerAlign: "center"
         // },
-        // {
-        //     field: "requestedBy",
-        //     headerName: "Requested By",
-        //     width: 150,
-        //     align: "center",
-        //     headerAlign: "center",
-        //     valueGetter: (value: RequestedBy) => {
-        //         if (value === null)
-        //             return '-';
-        //         else
-        //             return `${value.firstName || ''} ${value.lastName || ''}`
-        //     }
-        // },
-        // {
-        //     field: "requestingDepartment",
-        //     headerName: "Department",
-        //     width: 100,
-        //     align: "center",
-        //     headerAlign: "center",
-        // },
+        {
+            field: "requestedBy",
+            headerName: "Requested By",
+            width: 150,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: RequestedBy) => {
+                if (value === null)
+                    return '-';
+                else
+                    return `${value.firstName || ''} ${value.lastName || ''}`
+            }
+        },
+        {
+            field: "requestingDepartment",
+            headerName: "Department",
+            width: 100,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
+        },
+        {
+            field: "grnNo",
+            headerName: "GRN Number",
+            width: 130,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
+        },
+        {
+            field: "companyName",
+            headerName: "Company Name",
+            width: 130,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
+        },
         {
             field: "debitCreditTo",
             headerName: "Debit From / Credit To",
@@ -79,10 +94,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -92,10 +104,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -105,10 +114,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -118,10 +124,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -131,10 +134,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -144,23 +144,17 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
-            field: "receivedBy",
-            headerName: "Received By",
+            field: "amtWords",
+            headerName: "Amount in Words",
             width: 100,
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -170,23 +164,18 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
-            field: "anyAttachment",
-            headerName: "Attachment",
+            field: "receivedBy",
+            headerName: "Received By",
             width: 100,
             align: "center",
             headerAlign: "center",
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
-                    <DownloadOutlined />
-                </IconButton>
-            ),
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
         },
         {
             field: "approvalStatus",
@@ -208,10 +197,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         // {
@@ -233,7 +219,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             sortable: false,
             filterable: false,
             renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.id}`)}>
+                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_LABOUR_CASH_VOUCHER}/${params.row.id}`)}>
                     <Preview color="primary" />
                 </IconButton>
             ),
