@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin_modules";
+import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { ErrorPage } from "@prime-fresh/ui_shared";
 import { AUTH_ROUTES, SignIn } from "@prime-fresh/authentication";
 import {Layout} from "@prime-fresh/components";

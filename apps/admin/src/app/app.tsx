@@ -1,12 +1,12 @@
 import { RouterProvider } from "react-router-dom";
 import { CommonProvider } from "../providers/CommonProvider";
 import { AdminRoutes } from "../routes/admin.routes";
-import { muiTheme } from "@prime-fresh/admin_modules";
-import { storeCore } from "@prime-fresh/modules";
+import { muiTheme } from "@prime-fresh/admin/modules";
+import { coreStore } from "@prime-fresh/modules";
 
 export function App() {
   return (
-    <CommonProvider store={storeCore} theme={muiTheme}>
+    <CommonProvider store={coreStore} theme={muiTheme}>
       <RouterProvider router={AdminRoutes} />
     </CommonProvider>
   );
