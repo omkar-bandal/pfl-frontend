@@ -1,4 +1,4 @@
-import { FormField } from "../models";
+import { FormField } from "../old_components/models";
 import * as Yup from "yup";
 
 export const generateValidationSchema = (fields: FormField[]) => {

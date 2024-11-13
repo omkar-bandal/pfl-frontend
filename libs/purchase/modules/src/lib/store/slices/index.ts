@@ -5,3 +5,5 @@ export * from './mcVoucher.slice';
 export * from './lpVoucher.slice';
 export * from './pmpVoucher.slice';
 export * from './tpVoucher.slice';
+export * from './deliveryChallan.slice';
+export * from './paymentReq.slice';

@@ -1,4 +1,4 @@
-import { FormField } from "../models";
+import { FormField } from "../old_components/models";
 
 export const generateInitialValues = (fields: FormField[]): { [key: string]: string } =>
   fields.reduce((acc, field) => {

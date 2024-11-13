@@ -6,15 +6,18 @@ export const initValMaterials = {
   };
   
   export const initValDeliveryChallan = {
-    grnNo: "",
-    senderName: "",
+    partyName: '',
+    grnNo: '',
+    companyName: '',
     items: [initValMaterials],
-    totAmt: 0,
-    fromLocation: "",
-    toLocation: "",
-    driverName: "",
-    contactNo: "",
-    altContactNo: "",
-    vehicleNo: "",
-    receiverName: "",
+    totAmt: '',
+    fromLocation: '',
+    toLocation: '',
+    driverName: '',
+    contactNo: '',
+    altContactNo: '',
+    vehicleNo: '',
+    receiverName: '',
+    deliveryCType: '',
+    anyAttachment: null,
   };

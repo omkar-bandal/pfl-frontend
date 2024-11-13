@@ -1,13 +1,13 @@
 import React from 'react'
 import { Grid, Typography } from '@mui/material'
-import { PreviewContainerPropType, useAppSelector } from '@prime-fresh/modules';
+import { useAppSelector } from '@prime-fresh/modules';
 import { lpVoucherState } from '@prime-fresh/purchase/modules';
 import { PreviewContainer } from '@prime-fresh/ui_shared';
 
-export const LPVoucherPreview = ({ open, handleClose }: PreviewContainerPropType) => {
+export const LPVoucherPreview = () => {
     const { previewLPVoucher } = useAppSelector(lpVoucherState);
     return (
-        <PreviewContainer open={open} handleClose={handleClose} title='Labour Payment Voucher Preview'>
+        <PreviewContainer title='Labour Payment Voucher Preview'>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                     GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.grnNo}

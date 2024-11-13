@@ -18,10 +18,6 @@
       "@prime-fresh/admin/components": ["libs/admin/components/src/index.ts"],
       "@prime-fresh/admin/modules": ["libs/admin/modules/src/index.ts"],
       "@prime-fresh/admin_api": ["libs/api/admin_api/src/index.ts"],
-      "@prime-fresh/admin_components": [
-        "libs/admin/admin_components/src/index.ts"
-      ],
-      "@prime-fresh/admin_modules": ["libs/admin/admin_modules/src/index.ts"],
       "@prime-fresh/auth_api": ["libs/api/auth_api/src/index.ts"],
       "@prime-fresh/authentication": [
         "libs/shared/features/authentication/src/index.ts"
@@ -37,12 +33,19 @@
       ],
       "@prime-fresh/purchase/modules": ["libs/purchase/modules/src/index.ts"],
       "@prime-fresh/purchase_api": ["libs/api/purchase_api/src/index.ts"],
-      // "@prime-fresh/purchase_components": [
-      //   "libs/purchase/purchase_components/src/index.ts"
-      // ],
-      // "@prime-fresh/purchase_modules": [
-      //   "libs/purchase/purchase_modules/src/index.ts"
-      // ],
+      "@prime-fresh/shared/masters/customer": [
+        "libs/shared/masters/customer/src/index.ts"
+      ],
+      "@prime-fresh/shared/masters/farmer": [
+        "libs/shared/masters/farmer/src/index.ts"
+      ],
+      "@prime-fresh/shared/masters/products": [
+        "libs/shared/masters/products/src/index.ts"
+      ],
+      "@prime-fresh/shared/masters/vendor": [
+        "libs/shared/masters/vendor/src/index.ts"
+      ],
+      "@prime-fresh/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@prime-fresh/ui_shared": ["libs/ui_shared/src/index.ts"]
     }
   },

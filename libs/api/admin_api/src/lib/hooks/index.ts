@@ -3,6 +3,7 @@ export * from './users/employee/useCreateEmployee';
 export * from './users/employee/useGetAllEmployee';
 export * from './users/employee/useGetEmployee';
 export * from './users/employee/useUpdateEmployee';
+export * from './users/employee/useGetAllRoles';
 
 //Hooks: Users -> Customer
 export * from './users/customer/useCreateCustomer';
@@ -27,17 +28,17 @@ export * from './users/vendor/useGetAllVendorSubCat';
 export * from './users/vendor/useGetVendor';
 
 //Hooks: Product
-export * from './product/product_classification/useGetAllProductClass';
-export * from './product/product_subcategories/useGetAllProductSubCat';
-export * from './product/products_categories/useGetAllProductCat';
-export * from './product/products/useCreateProduct';
-export * from './product/products/useGetAllProducts';
+export * from './product';
 
 //Hooks: UOM
 export * from './uoms/uom/useCreateUOM';
 export * from './uoms/uom/useGetAllUOMs';
+export * from './uoms/uom/useGetAUOM';
+export * from './uoms/uom/useUpdateUOM';
 export * from './uoms/uom_matrix/useCreateUOMConvMat';
 export * from './uoms/uom_matrix/useGetAllUOMConvMat';
+export * from './uoms/uom_matrix/useGetAUOMConvMat';
+export * from './uoms/uom_matrix/useUpdateUOMConvMat';
 
 //Hooks: Locations -> Branches
 export * from './locations/branches/useCreateBranch';

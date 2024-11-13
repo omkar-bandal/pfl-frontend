@@ -1,4 +1,4 @@
-import { CustomerTypes } from "@prime-fresh/admin_modules";
+import { CustomerTypes } from "../../../models";
 import {useGetAllData} from "@prime-fresh/common_api";
 
 export const useGetAllCustomerTypes = (url: string) => {

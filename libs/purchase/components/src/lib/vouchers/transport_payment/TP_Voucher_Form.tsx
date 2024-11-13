@@ -9,13 +9,12 @@ import { initValTransportPaymentVoucher, PURCHASE_ARRAYS } from "@prime-fresh/pu
 import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
-import { previewState, setPreview, useAppSelector } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./TP_Voucher_Preview";
 
 //Labour Payment Voucher
 export const TransportPaymentVoucherForm = () => {
   const dispatch = useDispatch();
-  const open = useAppSelector(previewState);
   const { data } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
   const allGRN = data ? data : [];
   // const calculateAmounts = (values: PostTPvoucher, setFieldValue: (field: string, value: any,) => void) => {
@@ -241,7 +240,7 @@ export const TransportPaymentVoucherForm = () => {
           </form>
         )}
       </Formik>
-      <TPVoucherPreview open={open} handleClose={() => dispatch(setPreview(false))} />
+      <TPVoucherPreview />
     </>
   );
 };

@@ -5,7 +5,7 @@ import { RootState } from "../store.purchase";
 type lpVoucherState = {
     lpVouchers: GetLPvoucher[];
     selectedLPVoucher: GetLPvoucher | undefined;
-    previewLPVoucher: PostLPvoucher | undefined;
+    previewLPVoucher: PostLPvoucher | GetLPvoucher | undefined;
 }
 const initialState : lpVoucherState = {
     lpVouchers: [],
@@ -23,7 +23,7 @@ export const lpVoucherSlice = createSlice({
         setSelectedLPVoucher: (state, action: PayloadAction<GetLPvoucher | undefined>) => {
             state.selectedLPVoucher = action.payload;
         },
-        setPreviewLPVoucher: (state, action: PayloadAction<PostLPvoucher | undefined>) => {
+        setPreviewLPVoucher: (state, action: PayloadAction<PostLPvoucher | GetLPvoucher | undefined>) => {
             state.previewLPVoucher = action.payload;
         }
     }

@@ -38,15 +38,30 @@ export const ADMIN_API_URL = {
 
     //Prooducts
     GET_ALL_PRODUCTS: "/products/",
+    GET_A_PRODUCTS: "/products/",
     CREATE_PRODUCTS: "/products/",
-    GET_PRODUCT_CATEGORY: "/productCategory/",
-    GET_PRODUCT_SUBCATEGORY: "/productSubcategory/",
-    GET_PRODUCT_CLASSIFICATION: "/productClassification/",
+    UPDATE_PRODUCTS: "/products/",
+    GET_ALL_PRODUCT_CATEGORY: "/productCategory",
+    GET_A_PRODUCT_CATEGORY: "/productCategory",
+    CREATE_PRODUCT_CATEGORY: "/productCategory",
+    UPDATE_PRODUCT_CATEGORY: "/productCategory",
+    GET_ALL_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    GET_A_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    CREATE_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    UPDATE_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    GET_ALL_PRODUCT_CLASSIFICATION: "/productClassification",
+    GET_A_PRODUCT_CLASSIFICATION: "/productClassification",
+    CREATE_PRODUCT_CLASSIFICATION: "/productClassification",
+    UPDATE_PRODUCT_CLASSIFICATION: "/productClassification",
 
-    GET_UOM: "/uoms/",
+    GET_ALL_UOM: "/uoms/",
     CREATE_UOM: "/uoms/",
-    GET_UOM_CONVERSION: "/uom-conversion-matrix/",
+    GET_A_UOM: "/uoms/",
+    UPDATE_UOM: "/uoms/",
+    GET_ALL_UOM_CONVERSION: "/uom-conversion-matrix/",
+    GET_A_UOM_CONVERSION: "/uom-conversion-matrix/",
     CREATE_UOM_CONVERSION: "/uom-conversion-matrix/",
+    UPDATE_UOM_CONVERSION: "/uom-conversion-matrix/",
 
     //Locations
     //Offices

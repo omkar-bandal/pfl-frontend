@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldArray, Field, ErrorMessage, FieldProps } from "formik";
 import { Button, TextField, Grid, IconButton, Typography } from "@mui/material";
-import { FormField } from "../models";
+import { FormField } from "./models";
 import { CloseOutlined } from "@mui/icons-material";
 
 interface ArrayInputProps {

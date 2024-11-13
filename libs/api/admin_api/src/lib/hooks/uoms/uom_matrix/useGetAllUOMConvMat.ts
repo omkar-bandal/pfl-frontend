@@ -1,6 +1,6 @@
-import { UOMConversionMatrix } from "@prime-fresh/admin_modules";
 import {useGetAllData} from "@prime-fresh/common_api";
+import { GetUOMConversionMatrix } from "../../../models";
 
 export const useGetAllUOMConversionMatrixs = (url: string) => {
-  return useGetAllData<null, UOMConversionMatrix[]>(url, ['getUOMConversionMatrixs']);
+  return useGetAllData<null, GetUOMConversionMatrix[]>(url, ['getUOMConversionMatrixs']);
 };

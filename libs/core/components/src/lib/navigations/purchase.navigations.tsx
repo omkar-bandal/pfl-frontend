@@ -71,7 +71,7 @@ export const purchaseNavigations: Navigations[] = [
     {
         name: "Delivery Challan",
         logo: <LocalShipping />,
-        path: PURCHASE_ROUTES.CREATE_DELIVERY_CHALLAN,
+        path: PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN,
         roles: [STRINGS.ROLE_MANAGER, STRINGS.ROLE_EMPLOYEE],
         depts: [STRINGS.DEPT_PURCHASE]
     },

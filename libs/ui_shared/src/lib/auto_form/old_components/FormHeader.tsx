@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { FormSchema } from "../models";
+import { FormSchema } from "./models";
 import { useAppSelector } from "@prime-fresh/modules";
-import { formContainerState } from "@prime-fresh/admin_modules";
+import { formContainerState } from "@prime-fresh/admin/modules";
 
 
 type FormHeaderProp = {

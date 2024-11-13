@@ -1,7 +1,7 @@
 import { Autocomplete, FormHelperText, Grid, TextField, Typography } from "@mui/material";
 import { FormikErrors, FormikTouched } from "formik";
 
-type AutoCompleteInputProps = {
+type AutoCompleteInputProps =  & {
     isRequired: boolean;
     label: string;
     name: string;

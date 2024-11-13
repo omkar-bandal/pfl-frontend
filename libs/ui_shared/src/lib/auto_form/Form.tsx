@@ -1,15 +1,15 @@
 import { Box, Button, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { Formik, Form } from "formik";
-import { DynamicFormProps } from "./models";
+import { DynamicFormProps } from "./old_components/models";
 // import { generateValidationSchema } from "./functions";
 import { FormFields } from "./old_components";
 import { useState } from "react";
 import { useAppSelector } from '@prime-fresh/modules';
-import { formContainerState } from "@prime-fresh/admin_modules";
+import { formContainerState } from "@prime-fresh/admin/modules";
 
-const DynamicForm = <T extends object>({ initialValues, schema, validationSchema, handleSubmit }: DynamicFormProps<T>) => {
+export const DynamicForm = <T extends object>({ initialValues, schema, validationSchema, handleSubmit }: DynamicFormProps<T>) => {
   const [value, setValue] = useState(0);
-  const {openFor} = useAppSelector(formContainerState);
+  const { openFor } = useAppSelector(formContainerState);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     console.log(event.target);
     setValue(newValue);
@@ -47,39 +47,40 @@ const DynamicForm = <T extends object>({ initialValues, schema, validationSchema
       {() => (
         <Form>
           <Box sx={{ flex: 1, paddingX: 2 }}>
-      <Grid container alignItems="center">
-        <Grid item xs={9}>
-          <Typography variant="h5" component="h5" sx={{ fontWeight: 500 }}>
-            {schema.title}
-          </Typography>
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{ fontWeight: 500 }}
-          >
-            {schema.subtitle}
-          </Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant="contained"
-            size="medium"
-            type="reset"
-            color="secondary"
-            sx={{ marginRight: 5 }}
-          >
-            Reset
-          </Button>
-          <Button
-            variant="contained"
-            size="medium"
-            type="submit"
-          >
-            {openFor === 'create' ? `Create` : `Update`}
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
+            <Grid container alignItems="center">
+              <Grid item xs={8}>
+                <Typography variant="h5" component="h5" sx={{ fontWeight: 500 }}>
+                  {schema.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="div"
+                  sx={{ fontWeight: 500 }}
+                >
+                  {schema.subtitle}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  type="reset"
+                  color="secondary"
+                  sx={{ width: 150, marginRight: 5 }}
+                >
+                  Reset
+                </Button>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  type="submit"
+                  sx={{width: 150}}
+                >
+                  {openFor === 'create' ? `Create` : `Update`}
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
           {schema.tabs &&
             (<Box sx={{ width: '100%', borderBottom: 1, borderColor: 'divider' }}>
               <Tabs
@@ -98,7 +99,8 @@ const DynamicForm = <T extends object>({ initialValues, schema, validationSchema
             <CustomTabPanel value={value} index={index}>
               <Grid
                 container
-                spacing={1}
+                rowSpacing={2}
+                columnSpacing={1}
                 alignItems="center"
                 sx={{ marginY: 1, paddingX: 2, paddingY: 1 }}
               >
@@ -108,7 +110,8 @@ const DynamicForm = <T extends object>({ initialValues, schema, validationSchema
           )))}
           {schema.fields && (<Grid
             container
-            spacing={1}
+            rowSpacing={2}
+            columnSpacing={1}
             alignItems="center"
             sx={{ marginY: 1, paddingX: 2, paddingY: 1 }}
           ><FormFields fields={schema.fields} /></Grid>)}

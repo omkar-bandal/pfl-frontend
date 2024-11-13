@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button } from "@mui/material";
 import { useAppSelector } from "@prime-fresh/modules";
-import { openForState } from "@prime-fresh/admin_modules";
+import { openForState } from "@prime-fresh/admin/modules";
 
 export const FormActions: React.FC = () => {
   const oepnFormFor = useAppSelector(openForState);

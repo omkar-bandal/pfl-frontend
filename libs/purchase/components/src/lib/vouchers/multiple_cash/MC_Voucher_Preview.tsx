@@ -1,13 +1,13 @@
 import React from 'react'
 import { Box, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { PreviewContainerPropType, useAppSelector } from '@prime-fresh/modules';
+import { useAppSelector } from '@prime-fresh/modules';
 import { mcVoucherState } from '@prime-fresh/purchase/modules';
 import { PreviewContainer } from '@prime-fresh/ui_shared';
 
-export const MCVoucherPreview = ({ open, handleClose }: PreviewContainerPropType) => {
+export const MCVoucherPreview = () => {
     const { previewMCVoucher } = useAppSelector(mcVoucherState);
     return (
-        <PreviewContainer open={open} handleClose={handleClose} title='Multiple Cash Voucher Preview'>
+        <PreviewContainer title='Multiple Cash Voucher Preview'>
                     <Grid item>
                         <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                             GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.grnNo}

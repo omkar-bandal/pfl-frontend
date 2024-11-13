@@ -11,18 +11,17 @@ import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, PUR
 import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Materials, PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRN } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, useGetAllUOMs } from "@prime-fresh/admin_api";
-import { UOM } from "@prime-fresh/admin_modules";
+import { UOM } from "@prime-fresh/admin/modules";
 import { useDispatch } from "react-redux";
-import { previewState, setPreview, useAppSelector } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { PMPVoucherPreview } from "./PMP_Voucher_Preview";
 
 //Labour Payment Voucher
 export const PackingMaterialPaymentVoucherForm = () => {
   const dispatch = useDispatch();
-  const open = useAppSelector(previewState);
   const { data } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
   const allGRN = data ? data : [];
-  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_UOM);
+  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const allUOMS = UOMs ? UOMs : [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -414,7 +413,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
           </form>
         )}
       </Formik>
-      <PMPVoucherPreview open={open} handleClose={() => dispatch(setPreview(false))}/>
+      <PMPVoucherPreview/>
     </>
   );
 };

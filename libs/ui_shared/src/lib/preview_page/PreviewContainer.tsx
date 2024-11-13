@@ -1,17 +1,34 @@
 import { Close } from "@mui/icons-material"
-import { Box, Dialog, Grid, IconButton, Stack, Typography } from "@mui/material"
+import { Box, Dialog, Grid, IconButton, Slide, Stack, Typography } from "@mui/material"
+import { TransitionProps } from "@mui/material/transitions"
+import { previewState, setPreview } from "@prime-fresh/modules"
+import { useAppSelector } from "@prime-fresh/purchase/modules"
+import React from "react"
+import { useDispatch } from "react-redux"
+
 type PreviewContainerPropTypes = {
-    open: boolean,
-    handleClose: ()=> void,
     title: string,
     children: React.ReactNode,
 }
-export const PreviewContainer: React.FC<PreviewContainerPropTypes> = ({open, title, handleClose, children}) => {
+
+const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+        children: React.ReactElement<unknown>;
+    },
+    ref: React.Ref<unknown>,
+) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export const PreviewContainer: React.FC<PreviewContainerPropTypes> = ({ title, children }) => {
+    const dispatch = useDispatch()
+    const open = useAppSelector(previewState);
     return (
         <Dialog
             fullScreen
             open={open}
-            onClose={handleClose}
+            onClose={() => dispatch(setPreview(false))}
+            TransitionComponent={Transition}
         >
             <Box sx={{ flex: 1, padding: 1 }}>
                 <Grid container direction="column" rowSpacing={1}>
@@ -21,7 +38,7 @@ export const PreviewContainer: React.FC<PreviewContainerPropTypes> = ({open, tit
                             <IconButton
                                 edge="start"
                                 color="error"
-                                onClick={handleClose}
+                                onClick={() => dispatch(setPreview(false))}
                                 aria-label="close"
                             >
                                 <Close fontSize='large' />

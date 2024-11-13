@@ -31,7 +31,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
 
   return (
     <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-      {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
       <Drawer
         variant="temporary"
         open={mobileOpen}

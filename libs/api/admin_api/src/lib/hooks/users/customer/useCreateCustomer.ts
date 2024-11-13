@@ -1,6 +1,6 @@
-import { CustomerPost, Response } from "@prime-fresh/admin_modules";
 import { useCreateData } from "@prime-fresh/common_api";
+import { PostResponse } from "../../../models";
 
 export const useCreateCustomer = (url: string) => {
-    return useCreateData<CustomerPost, Response>(url)
+    return useCreateData<FormData, PostResponse>(url)
 }

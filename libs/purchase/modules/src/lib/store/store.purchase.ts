@@ -6,7 +6,9 @@ import {
     mcVoucherReducer,
     tpVoucherReducer,
     lpVoucherReducer,
-    pmpVoucherReducer
+    pmpVoucherReducer,
+    deliveryChallanReducer,
+    paymentReqReducer
 } from './slices';
 
 export const purchaseStore = configureStore({
@@ -18,6 +20,8 @@ export const purchaseStore = configureStore({
         lp_voucher: lpVoucherReducer,
         tp_voucher: tpVoucherReducer,
         pmp_voucher: pmpVoucherReducer,
+        delivery_challan: deliveryChallanReducer,
+        payment_request: paymentReqReducer,
     }
 })
 

@@ -1,6 +1,6 @@
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Field, FieldProps, FormikProps } from "formik";
-import { FormField } from "../models";
+import { FormField } from "./models";
 import { AttachFile } from "@mui/icons-material";
 import React from "react";
 

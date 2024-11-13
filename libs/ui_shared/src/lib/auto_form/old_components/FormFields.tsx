@@ -3,11 +3,12 @@ import { Box, Grid, Typography } from "@mui/material";
 import { Radios } from "./Radios";
 import { DropdownMenu } from "./DropdownMenu";
 import { TexteInput } from "./TextInput";
-import { FormField } from "../models";
+import { FormField } from "./models";
 import { DateInput } from "./DateInput";
 // import { ImageInput } from "./ImageInput";
 import { ArrayInput } from "./ArrayInput";
 import { FileInput } from "./FileInput";
+import { ImageUpload } from "../components";
 
 interface FormFieldsProps {
   fields: FormField[];
@@ -24,10 +25,11 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
           <Grid container item direction="column" key={field.name} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Typography
-                variant="caption"
+                variant="body2"
                 component="h6"
                 sx={{ fontWeight: 500 }}
               >
+                {field.isRequired && <Typography variant="body2" color="error" component="span" sx={{ fontWeight: 900 }}>* </Typography>}
                 {field.label}
               </Typography>
             </Grid>
@@ -41,10 +43,11 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
           <Grid container item direction="column" key={field.name} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Typography
-                variant="caption"
+                variant="body2"
                 component="h6"
                 sx={{ fontWeight: 500 }}
               >
+                {field.isRequired && <Typography variant="body2" color="error" component="span" sx={{ fontWeight: 900 }}>* </Typography>}
                 {field.label}
               </Typography>
             </Grid>
@@ -53,32 +56,20 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
             </Grid>
           </Grid>
         );
-      // case "image":
-      //   return (
-      //     <Grid container item direction="column" sm={field.length} key={field.name}>
-      //       <Grid item xs={12} sm={field.length}>
-      //         <Typography
-      //           variant="caption"
-      //           component="h6"
-      //           sx={{ fontWeight: 500 }}
-      //         >
-      //           {field.label}
-      //         </Typography>
-      //       </Grid>
-      //       <Grid item xs={12} sm={field.length}>
-      //         <ImageInput formField={field} />
-      //       </Grid>
-      //     </Grid>
-      //   );
+      case "image":
+        return (
+         <ImageUpload isRequired={field.isRequired? field.isRequired : false} name={field.name} label={field.label} />
+        );
       case "date":
         return (
           <Grid container item direction="column" key={field.name} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Typography
-                variant="caption"
+                variant="body2"
                 component="h6"
                 sx={{ fontWeight: 500 }}
               >
+                {field.isRequired && <Typography variant="body2" color="error" component="span" sx={{ fontWeight: 900 }}>* </Typography>}
                 {field.label}
               </Typography>
             </Grid>
@@ -92,10 +83,11 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
           <Grid container item direction="column" key={field.name} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Typography
-                variant="caption"
+                variant="body2"
                 component="h6"
                 sx={{ fontWeight: 500 }}
               >
+                {field.isRequired && <Typography variant="body2" color="error" component="span" sx={{ fontWeight: 900 }}>* </Typography>}
                 {field.label}
               </Typography>
             </Grid>
@@ -109,10 +101,11 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
           <Grid container item direction="column" key={field.name} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Typography
-                variant="caption"
+                variant="body2"
                 component="h6"
                 sx={{ fontWeight: 500 }}
               >
+                {field.isRequired && <Typography variant="body2" color="error" component="span" sx={{ fontWeight: 900 }}>* </Typography>}
                 {field.label}
               </Typography>
             </Grid>
@@ -125,7 +118,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
         return (
           <Grid item xs={12}>
             <Box sx={{ width: "100%", borderBottom: `1px solid #BDBDBD` }}>
-              <Typography variant="caption">{field.label}</Typography>
+              <Typography variant="body2">{field.label}</Typography>
             </Box>
           </Grid>
         );
@@ -133,7 +126,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
         return (
           <Grid item xs={12} sm={12}>
             <Box sx={{ width: '100%', padding: 1, marginY: 2 }}>
-              <Typography variant="caption" textAlign="justify">{field.label}</Typography>
+              <Typography variant="body2" textAlign="justify">{field.label}</Typography>
             </Box>
           </Grid>
         );
@@ -142,7 +135,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
           <Grid container item direction="column" key={field.label} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Typography
-                variant="caption"
+                variant="body2"
                 component="h6"
                 sx={{ fontWeight: 500 }}
               >
@@ -160,7 +153,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ fields }) => {
           <Grid container item direction="column" key={field.label} sm={field.length}>
             <Grid item xs={12} sm={field.length}>
               <Box sx={{ width: "100%", borderBottom: `1px solid #BDBDBD` }}>
-                <Typography variant="caption" sx={{ fontWeight: 'bold' }}>{field.label}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{field.label}</Typography>
               </Box>
             </Grid>
             <Grid item xs={12} sm={field.length}>

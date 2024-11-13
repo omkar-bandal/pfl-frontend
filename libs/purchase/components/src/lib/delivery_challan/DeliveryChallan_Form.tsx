@@ -1,279 +1,270 @@
-import {
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from "@mui/material";
+import React from "react";
+import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValDeliveryChallan, initValMaterials } from "@prime-fresh/purchase/modules";
-import { TextInput } from "@prime-fresh/ui_shared";
+import { initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, setPreviewDC } from "@prime-fresh/purchase/modules";
+import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { DCItems, PostDeliveryChallan, PURCHASE_API_URL, useCreateDeliveryChallan, useGetAllGRN } from "@prime-fresh/purchase_api";
+import { DeliveryChallanPreview } from "./DeliveryChallan_Preview";
+import { useDispatch } from "react-redux";
+import { setPreview} from "@prime-fresh/modules";
 
-//Labour Payment Voucher
 export const DeliveryChallanForm = () => {
-  const allgrn = ["GRN0001", "GRN0002", "GRN0003"];
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
+  const dispatch = useDispatch();
+  const { data: allGRN } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
+  const { mutateAsync: mutatePost } = useCreateDeliveryChallan(PURCHASE_API_URL.POST_DELIVERY_CHALLAN);
+  const handleSubmit = (values: PostDeliveryChallan) => {
+    const formData = new FormData();
+    (Object.keys(values) as Array<keyof PostDeliveryChallan>).forEach((key) => {
+      const value = values[key];
+      if (key === "anyAttachment" && value instanceof File) {
+        formData.append(key, value); // Append file directly
+      } else if (key === "items" && Array.isArray(value)) {
+        value.forEach((item, index) => {
+          Object.keys(item).forEach((field) => {
+            const fieldValue = item[field as keyof DCItems];
+            if (fieldValue !== undefined && fieldValue !== null) {
+              formData.append(`items[${index}][${field}]`, fieldValue.toString());
+            }
+          });
+        });
+      } else if (typeof value !== "undefined" && value !== null) {
+        formData.append(key, value.toString());
+      }
+    });
+    mutatePost(formData);
   };
-
   return (
-    <Formik
-      initialValues={initValDeliveryChallan}
-      onSubmit={(values) => {
-        console.log(values); // Output the form data
-      }}
-    >
-      {({ values, handleChange, handleSubmit, setFieldValue }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h4">Delivery Challan</Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Stack direction="row" justifyContent="end" alignItems="center">
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  sx={{ width: 150 }}
-                >
-                  Create
-                </Button>
-                <Button
-                  type="reset"
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  sx={{ width: 150, marginLeft: 2 }}
-                >
-                  Reset
-                </Button>
-              </Stack>
-            </Grid>
-
-            {/* GRN No. */}
-            <Grid item xs={12} md={3}>
-              <Grid container direction="column">
-                <Grid item xs={12}>
-                  <Typography variant="body2">Select GRN</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <Select
-                      id="grnNo"
-                      name="grnNo"
-                      size="small"
-                      value={values.grnNo} // Bind to Formik values
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setFieldValue("grnNo", value); // Update Formik state
-                      }}
-                      MenuProps={MenuProps}
-                    >
-                      {allgrn.map((grn, index) => (
-                        <MenuItem key={index} value={grn}>
-                          {grn}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+    <>
+      <Formik
+        initialValues={initValDeliveryChallan}
+        onSubmit={(values) => {
+          console.log(values); // Output the form data
+          handleSubmit(values);
+        }}
+      >
+        {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h4">Delivery Challan</Typography>
               </Grid>
-            </Grid>
-            {/* Other form fields */}
-            <Grid item xs={12} md={9}>
-              <TextInput
-                type="text"
-                isRequired={true}
-                name="senderName"
-                label="M/s"
-                value={values.senderName}
-                handleChange={handleChange}
-              />
-            </Grid>
-            {/* FieldArray for materials */}
-            <Grid item xs={12}>
-              <FieldArray name="items">
-                {({ remove, push }) => (
-                  <>
-                    {values.items.map((item, index) => (
+              <Grid item xs={12} md={6}>
+                <Stack direction="row" justifyContent="end" alignItems="center">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="success"
+                    size="large"
+                    sx={{ width: 150 }}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    type="reset"
+                    variant="contained"
+                    color="secondary"
+                    size="large"
+                    sx={{ width: 150, marginLeft: 2 }}
+                  >
+                    Reset
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color='info'
+                    size='large'
+                    sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewDC(values)); dispatch(setPreview(true)) }}>Preview</Button>
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <RadioGroupInput isRequired={true} name="deliveryCType" label="Challan Type" options={PURCHASE_ARRAYS.deliveryChallanType} value={values.deliveryCType} handleChange={handleChange} />
+              </Grid>
+              {/* GRN No. */}
+              <Grid item xs={12} md={3}>
+                <SelectInput isRequired={false} name="grnNo" label="Referred GRN" value={values.grnNo} options={allGRN ? mapToValueLabelArray(allGRN, 'id', 'grnNo') : [{ label: '', value: '' }]}
+                  handleChange={handleChange} />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <SelectInput isRequired={true} name="companyName" label="Company Name" value={values.companyName} options={PURCHASE_ARRAYS.companyNames} handleChange={handleChange} />
+              </Grid>
+              <Grid item xs={12} md={5}>
+                <TextInput isRequired={true} name="partyName" label="Party Name" type="text" value={values.partyName} handleChange={handleChange} touched={touched} errors={errors} />
+              </Grid>
+              <Grid item xs={12}>
+                <FieldArray name="items">
+                  {({ remove, push }) => (
+                    <>
+                      {values.items.map((item, index) => (
+                        <Grid
+                          container
+                          columnSpacing={1}
+                          key={index}
+                          alignItems="center"
+                          sx={{
+                            border: `1px solid #BDBDBD`,
+                            marginY: 1,
+                            padding: 1,
+                            borderRadius: 2,
+                          }}
+                        >
+                          <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                            <Typography variant="body1" component="div">Product : {index + 1}</Typography>
+                            <IconButton color="error" onClick={() => remove(index)}>
+                              <Close />
+                            </IconButton>
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <TextInput
+                              type="text"
+                              isRequired={true}
+                              name={`items.${index}.itemName`}
+                              label="Name"
+                              value={item.itemName}
+                              handleChange={handleChange}
+                            />
+                          </Grid>
+                          {/* More material fields */}
+                          <Grid item xs={12} md={2}>
+                            <TextInput
+                              type="text"
+                              isRequired={true}
+                              name={`items.${index}.itemQty`}
+                              label="Quantity"
+                              value={item.itemQty}
+                              handleChange={handleChange}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <TextInput
+                              type="text"
+                              isRequired={true}
+                              name={`items.${index}.rate`}
+                              label="Rate"
+                              value={item.rate}
+                              handleChange={handleChange}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <TextInput
+                              type="text"
+                              isRequired={false}
+                              name={`items.${index}.amt`}
+                              label="Amount"
+                              value={item.amt}
+                              handleChange={handleChange}
+                            />
+                          </Grid>
+                        </Grid>
+                      ))}
                       <Grid
-                        container
-                        columnSpacing={1}
-                        key={index}
-                        alignItems="center"
+                        item
+                        xs={12}
                         sx={{
-                          border: `1px solid #BDBDBD`,
-                          marginY: 1,
-                          padding: 1,
-                          borderRadius: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
                         }}
                       >
-                        <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-                          <Typography variant="body1" component="div">Product : {index+1}</Typography>
-                          <IconButton color="error" onClick={() => remove(index)}>
-                            <Close />
-                          </IconButton>
-                        </Grid>
-                        <Grid item xs={12} md={5}>
-                          <TextInput
-                            type="text"
-                            isRequired={false}
-                            name={`items.${index}.itemName`}
-                            label="Name"
-                            value={item.itemName}
-                            handleChange={handleChange}
-                          />
-                        </Grid>
-                        {/* More material fields */}
-                        <Grid item xs={12} md={2}>
-                          <TextInput
-                            type="text"
-                            isRequired={false}
-                            name={`items.${index}.itemQty`}
-                            label="Quantity"
-                            value={item.itemQty}
-                            handleChange={handleChange}
-                          />
-                        </Grid>
-                        <Grid item xs={12} md={2}>
-                          <TextInput
-                            type="text"
-                            isRequired={false}
-                            name={`items.${index}.rate`}
-                            label="Rate"
-                            value={item.rate}
-                            handleChange={handleChange}
-                          />
-                        </Grid>
-                        <Grid item xs={12} md={2}>
-                          <TextInput
-                            type="text"
-                            isRequired={false}
-                            name={`items.${index}.amt`}
-                            label="Amount"
-                            value={item.amt}
-                            handleChange={handleChange}
-                          />
-                        </Grid>
+                        <Button
+                          variant="text"
+                          startIcon={<Add />}
+                          onClick={() => push(initValMaterials)}
+                        >
+                          Add More
+                        </Button>
                       </Grid>
-                    ))}
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "end",
-                      }}
-                    >
-                      <Button
-                        variant="text"
-                        startIcon={<Add />}
-                        onClick={() => push(initValMaterials)}
-                      >
-                        Add More
-                      </Button>
-                    </Grid>
-                  </>
-                )}
-              </FieldArray>
+                    </>
+                  )}
+                </FieldArray>
+              </Grid>
+              <Grid item xs={12} md={2}>
+                <TextInput
+                  type="number"
+                  isRequired={false}
+                  name="totAmt"
+                  label="Total Amount"
+                  value={values.totAmt}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={5}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="fromLocation"
+                  label="From"
+                  value={values.fromLocation}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={5}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="toLocation"
+                  label="To"
+                  value={values.toLocation}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="driverName"
+                  label="Driver Name"
+                  value={values.driverName}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="contactNo"
+                  label="Contact No"
+                  value={values.contactNo}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="altContactNo"
+                  label="Alternate Contact No"
+                  value={values.altContactNo}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="vehicleNo"
+                  label="Vehicle No"
+                  value={values.vehicleNo}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="receiverName"
+                  label="Receiver Name"
+                  value={values.receiverName}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={2}>
-              <TextInput
-                type="number"
-                isRequired={false}
-                name="totAmt"
-                label="Total Amount"
-                value={values.totAmt}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <TextInput
-                type="text"
-                isRequired={false}
-                name="fromLocation"
-                label="From"
-                value={values.fromLocation}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <TextInput
-                type="text"
-                isRequired={false}
-                name="toLocation"
-                label="To"
-                value={values.toLocation}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextInput
-                type="text"
-                isRequired={false}
-                name="driverName"
-                label="Driver Name"
-                value={values.driverName}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextInput
-                type="text"
-                isRequired={false}
-                name="contactNo"
-                label="Contact No"
-                value={values.contactNo}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextInput
-                type="text"
-                isRequired={true}
-                name="altContactNo"
-                label="Alternate Contact No"
-                value={values.altContactNo}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextInput
-                type="text"
-                isRequired={true}
-                name="vehicleNo"
-                label="Vehicle No"
-                value={values.vehicleNo}
-                handleChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <TextInput
-                type="text"
-                isRequired={true}
-                name="receiverName"
-                label="Receiver Name"
-                value={values.receiverName}
-                handleChange={handleChange}
-              />
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
+          </form>
+        )}
+      </Formik>
+      <DeliveryChallanPreview />
+    </>
   );
 };

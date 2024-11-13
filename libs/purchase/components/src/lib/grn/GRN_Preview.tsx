@@ -1,18 +1,18 @@
 import React from 'react'
 import { Box, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { PreviewContainerPropType, useAppSelector } from '@prime-fresh/modules';
+import { useAppSelector } from '@prime-fresh/modules';
 import { displayAddress, grnDataState } from '@prime-fresh/purchase/modules';
-import { farmersDataState, productsDataState, vendorsDataState } from '@prime-fresh/admin_modules';
+import { farmersDataState, productsDataState, vendorsDataState } from '@prime-fresh/admin/modules';
 import { PreviewContainer } from '@prime-fresh/ui_shared';
 
-export const GRNPreview = ({ open, handleClose }: PreviewContainerPropType) => {
+export const GRNPreview = () => {
   const { previewGRN } = useAppSelector(grnDataState);
   const { selectedVendor } = useAppSelector(vendorsDataState);
   const { selectedFarmer } = useAppSelector(farmersDataState);
   const { selectedProduct } = useAppSelector(productsDataState);
 
   return (
-    <PreviewContainer open={open} handleClose={handleClose} title='GRN Preview'>
+    <PreviewContainer title='GRN Preview'>
       <Grid item>
         <Typography variant="h6" component="span" sx={{ color: "#555" }}>
           Bill No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewGRN?.billNo}

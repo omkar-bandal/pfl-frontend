@@ -1,6 +1,6 @@
-import { Employee } from "@prime-fresh/admin_modules";
 import {useGetData} from "@prime-fresh/common_api";
+import { GetEmployee } from "../../../models";
 
 export const useGetEmployee = (url: string, id: string) => {
-    return useGetData<null, Employee>(url, id, ['getEmployee']);
+    return useGetData<null, GetEmployee>(url, id, ['getEmployee']);
   };

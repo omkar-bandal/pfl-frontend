@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { Navigations } from '@prime-fresh/modules';
 import { STRINGS } from "@prime-fresh/modules";
-import {ADMIN_ROUTES} from "@prime-fresh/admin_modules";
+import {ADMIN_ROUTES} from "@prime-fresh/admin/modules";
 
 export const adminNavigations: Navigations[] = [
   {
@@ -37,8 +37,9 @@ export const adminNavigations: Navigations[] = [
     depts: [STRINGS.DEPT_ADMIN],
     children: [
       { name: "Products", path: ADMIN_ROUTES.GET_ALL_PRODUCTS, roles: [STRINGS.ROLE_ADMIN], depts: [STRINGS.DEPT_ADMIN] },
-      { name: "Produces Category", path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT, roles: [STRINGS.ROLE_ADMIN], depts: [STRINGS.DEPT_ADMIN] },
-      { name: "Produces Subcategory", path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT, roles: [STRINGS.ROLE_ADMIN], depts: [STRINGS.DEPT_ADMIN] },
+      { name: "Product Classification", path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS, roles: [STRINGS.ROLE_ADMIN], depts: [STRINGS.DEPT_ADMIN] },
+      { name: "Product Category", path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT, roles: [STRINGS.ROLE_ADMIN], depts: [STRINGS.DEPT_ADMIN] },
+      { name: "Product Subcategory", path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT, roles: [STRINGS.ROLE_ADMIN], depts: [STRINGS.DEPT_ADMIN] },
     ],
   },
   {

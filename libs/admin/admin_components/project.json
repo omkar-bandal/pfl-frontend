@@ -1,9 +1,0 @@
-{
-  "name": "admin_components",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/admin/admin_components/src",
-  "projectType": "library",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project admin_components --web",
-  "targets": {}
-}

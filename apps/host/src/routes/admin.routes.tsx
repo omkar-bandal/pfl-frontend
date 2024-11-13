@@ -1,9 +1,190 @@
-import { ADMIN_ROUTES } from "@prime-fresh/admin_modules";
-import { DashboardAdmin } from "@prime-fresh/admin_components";
+import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { BranchForm, CCTable, CorporateOfficeTable, CustomerTable, DashboardAdmin, DCTable, EmployeeTable, FarmerTable, OfficeForm, OfficeView, ProductCatForm, ProductCatTable, ProductClassForm, ProductClassTable, ProductSubcatForm, ProductSubCatTable, ProductTable, RegisteredOfficeTable, SeasonalCCTable, UOMConvMatrixForm, UOMConvMatrixTable, UOMForm, UOMTable, VendorTable, WHTable } from "@prime-fresh/admin/components";
+import { Outlet } from "react-router-dom";
+import { ErrorPage } from "@prime-fresh/ui_shared";
 
 export const AdminRoutes = [
     {
         path: ADMIN_ROUTES.DASHBOARD_ADMIN,
         element: <DashboardAdmin />,
-    }
+    },
+    {
+        path: ADMIN_ROUTES.USERS,
+        element: <Outlet />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: ADMIN_ROUTES.GET_ALL_EMPLOYEES,
+                element: <EmployeeTable />,
+            },
+            // {
+            //     path: ADMIN_ROUTES.CREATE_EMPLOYEE,
+            //     element: <FormEmployee />,
+            // },
+            // {
+            //     path: `${ADMIN_ROUTES.VIEW_EMPLOYEE}/:id`,
+            //     element: <ViewEmployee />,
+            // },
+            // {
+            //     path: `${ADMIN_ROUTES.EDIT_EMPLOYEE}/:id`,
+            //     element: <ViewEmployee />,
+            // },
+            {
+                path: ADMIN_ROUTES.GET_ALL_CUSTOMERS,
+                element: <CustomerTable />,
+            },
+            // {
+            //     path: ADMIN_ROUTES.CREATE_CUSTOMER,
+            //     element: <CreateCustomer />,
+            // },
+            // {
+            //     path: `${ADMIN_ROUTES.VIEW_CUSTOMER}/:id`,
+            //     element: <ViewCustomer />,
+            // },
+            {
+                path: ADMIN_ROUTES.GET_ALL_VENDORS,
+                element: <VendorTable />,
+            },
+            // {
+            //     path: ADMIN_ROUTES.CREATE_VENDOR,
+            //     element: <CreateVendor />,
+            // },
+            // {
+            //     path: `${ADMIN_ROUTES.VIEW_VENDOR}/:id`,
+            //     element: <ViewVendor />,
+            // },
+            {
+                path: ADMIN_ROUTES.GET_ALL_FARMERS,
+                element: <FarmerTable />,
+            },
+            // {
+            //     path: ADMIN_ROUTES.CREATE_FARMER,
+            //     element: <CreateFarmer />,
+            // },
+            // {
+            //     path: `${ADMIN_ROUTES.VIEW_FARMER}/:id`,
+            //     element: <ViewFarmer />,
+            // },
+        ]
+    },
+    {
+        path: ADMIN_ROUTES.PRODUCTS,
+        element: <Outlet />,
+        children: [
+            {
+                path: ADMIN_ROUTES.GET_ALL_PRODUCTS,
+                element: <ProductTable />,
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS,
+                element: <ProductClassTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_PRODUCT_CLASS,
+                element: <ProductClassForm />,
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT,
+                element: <ProductCatTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_PRODUCT_CAT,
+                element: <ProductCatForm />,
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT,
+                element: <ProductSubCatTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_PRODUCT_SUBCAT,
+                element: <ProductSubcatForm />,
+            },
+        ]
+    },
+    {
+        path: ADMIN_ROUTES.UOM,
+        element: <Outlet />,
+        children: [
+            {
+                path: ADMIN_ROUTES.GET_ALL_UOMs,
+                element: <UOMTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_UOM,
+                element: <UOMForm />
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX,
+                element: <UOMConvMatrixTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_UOMs_CONV_MATRIX,
+                element: <UOMConvMatrixForm />,
+            },
+            {
+                path: `${ADMIN_ROUTES.EDIT_UOMs_CONV_MATRIX}/:oid`,
+                element: <UOMConvMatrixForm />,
+            },
+        ]
+    },
+    {
+        path: ADMIN_ROUTES.LOCATIONS,
+        element: <Outlet />,
+        children: [
+            {
+                path: ADMIN_ROUTES.GET_CORPORATE_OFFICE,
+                element: <CorporateOfficeTable />
+            },
+            {
+                path: ADMIN_ROUTES.GET_REGISTERED_OFFICE,
+                element: <RegisteredOfficeTable />
+            },
+            {
+                path: `${ADMIN_ROUTES.CREATE_OFFICE}/:officeType`,
+                element: <OfficeForm/>
+            },
+            {
+                path: `${ADMIN_ROUTES.EDIT_OFFICE}/:officeType/:id`,
+                element: <OfficeForm />
+            },
+            {
+                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:officeType/:id`,
+                element: <OfficeView />,
+            },
+            {
+                path: ADMIN_ROUTES.BRANCHES,
+                element: <Outlet />,
+                children: [
+                    {
+                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_CC,
+                        element: <CCTable />
+                    },
+                    {
+                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_DC,
+                        element: <DCTable />
+                    },
+                    {
+                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_SEASONAL_CC,
+                        element: <SeasonalCCTable />
+                    },
+                    {
+                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_WAREHOUSES_WH,
+                        element: <WHTable />
+                    },
+                    {
+                        path: `${ADMIN_ROUTES.CREATE_BRANCHES}/:branchType`,
+                        element: <BranchForm />
+                    },
+                    {
+                        path: `${ADMIN_ROUTES.EDIT_BRANCHES}/:branchType/:id`,
+                        element: <BranchForm />
+                    },
+                    // {
+                    //     path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:branchType/:id`,
+                    //     element: <BranchView />
+                    // },
+                ]
+            }
+        ]
+    },
 ]

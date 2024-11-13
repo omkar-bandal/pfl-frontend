@@ -1,54 +1,31 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
-import { AppBar, Autocomplete, Box, Button, Dialog, Divider, FormControl, FormHelperText, Grid, IconButton, MenuItem, Select, Slide, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Grid, IconButton, Stack, TextField, Typography } from '@mui/material'
 import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, rfpaDataState, setPreviewRFPA } from '@prime-fresh/purchase/modules';
 import { PostRFPA } from '@prime-fresh/purchase_api';
-import { useAppSelector } from '@prime-fresh/modules';
+import { setPreview, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA, rfpaSchema } from '@prime-fresh/purchase/modules';
-import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, Product, Address, setSelectedProduct, ADMIN_ROUTES, Vendor, Farmer } from '@prime-fresh/admin_modules';
-import { ADMIN_API_URL, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, Address, setSelectedProduct, ADMIN_ROUTES} from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, GetFarmer, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
 import { PURCHASE_API_URL, useCreateRFPA } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
-import { TransitionProps } from '@mui/material/transitions';
-import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TexteInput, TextInput } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { RFPAPreview } from './RFPA_Preview';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-export const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement<unknown>;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 export const RFPAForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
     const { data: Farmers } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-    const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_UOM);
+    const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const [source, setSource] = React.useState<string>();
     const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
     const { allFarmers, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts, selectedProduct } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
-    const [open, setOpen] = React.useState(false);
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     React.useEffect(() => {
         setSource("vendor");
@@ -63,17 +40,17 @@ export const RFPAForm = () => {
         value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFarmerData(Farmers ? Farmers : []));
     };
 
-    const handleSourceNameChange = (dataId: string) => {
-        if (source === "vendor") {
-            const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
-            dispatch(setSelectedVendor(selectedVendor));
-        } else if (source === "farmer") {
-            const selectedFarmer = allFarmers.find((farmer) => farmer.id === dataId)
-            dispatch(setSelectedFarmer(selectedFarmer))
+    const handleSourceNameChange = (values: PostRFPA, dataId: string) => {
+        if (values.source === "vendor") {
+          const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
+          dispatch(setSelectedVendor(selectedVendor));
+        } else if (values.source === "farmer") {
+          const selectedFarmer = allFarmers.find((farmer) => farmer.id === dataId)
+          dispatch(setSelectedFarmer(selectedFarmer))
         }
-    };
+      };
     const handleProductNameChange = (dataId: string) => {
-        const selectedProduct: Product | undefined = allProducts.find((products) => products.id === dataId);
+        const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
         dispatch(setSelectedProduct(selectedProduct));
     }
     const displayAddress = (value: Address | undefined) => {
@@ -85,7 +62,7 @@ export const RFPAForm = () => {
         console.log("Total", total);
     }
     const { mutateAsync: mutatePost } = useCreateRFPA(PURCHASE_API_URL.POST_RFPA);
-    const { selectedRFPA } = useAppSelector(rfpaDataState);
+    
     return (
         <>
             <Formik
@@ -107,7 +84,7 @@ export const RFPAForm = () => {
                                 <Stack direction="row" justifyContent="end" alignItems="center">
                                     <Button type="submit" variant="contained" color='success' size='large' sx={{ width: 150 }}>Create</Button>
                                     <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }}>Reset</Button>
-                                    <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewRFPA(values)); setOpen(true); }}>Preview</Button>
+                                    <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }}>Preview</Button>
                                 </Stack>
                             </Grid>
                             <Grid item xs={12} md={4}>
@@ -138,172 +115,79 @@ export const RFPAForm = () => {
                                         handlesSourceChange(event.target.value, setFieldValue)
                                     }} />
                             </Grid>
-                            <Grid item xs={12} md={3}>
-                                {source === "vendor" ?
-                                    (<AutoCompleteInput
-                                        isRequired={true}
-                                        name="selectedParty"
-                                        label="Vendor Company Name"
-                                        options={mapToValueLabelArray<Vendor>(allVendors, 'id', 'companyName')}
+                            <Grid item xs={12} md={4}>
+                                {values.source === "vendor" ?
+                                    (
+                                        <AutoCompleteInput 
+                                        isRequired={true} 
+                                        name="selectedParty" 
+                                        label="Vendor Company Name" 
+                                        options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')} 
+                                        errors={errors} 
+                                        touched={touched} 
                                         handleChange={(event, newValue) => {
                                             if (newValue) {
                                                 setFieldValue('selectedParty', newValue.value);
-                                                handleSourceNameChange(newValue.value || '');
+                                                handleSourceNameChange(values, newValue.value || '');
                                             } else {
                                                 setFieldValue('selectedParty', '');
-                                                handleSourceNameChange('');
+                                                handleSourceNameChange(values, '');
                                             }
-                                        }} errors={errors} touched={touched} />) :
-                                    (<AutoCompleteInput
-                                        isRequired={true}
-                                        name="selectedParty"
-                                        label="Farmer Name"
-                                        options={mapToValueLabelArray<Farmer>(allFarmers, 'id', 'farmerfName')}
-                                        errors={errors}
-                                        touched={touched}
-                                        handleChange={(event, newValue) => {
-                                            if (newValue) {
-                                                setFieldValue('selectedParty', newValue.value);
-                                                handleSourceNameChange(newValue.value || '');
-                                            } else {
-                                                setFieldValue('selectedParty', '');
-                                                handleSourceNameChange('');
-                                            }
-                                        }} />)
-                                }
-
+                                        }} />
+                                    ) : (
+                                        <AutoCompleteInput
+                                            isRequired={true}
+                                            name="selectedParty"
+                                            label="Farmer Name"
+                                            options={mapToValueLabelArray<GetFarmer>(allFarmers, 'id', 'farmerfName')}
+                                            errors={errors}
+                                            touched={touched}
+                                            handleChange={(event, newValue) => {
+                                                if (newValue) {
+                                                    setFieldValue('selectedParty', newValue.value);
+                                                    handleSourceNameChange(values, newValue.value || '');
+                                                } else {
+                                                    setFieldValue('selectedParty', '');
+                                                    handleSourceNameChange(values, '');
+                                                }
+                                            }} />
+                                    )}
                             </Grid>
-                            {source === "vendor" ?
+                            {values.source === "vendor" ?
                                 (<>
                                     <Grid item xs={12} md={4}>
-                                        <TextInput isRequired={false} isReadOnly={true} label="Vendor Code" name='' type='text' value={selectedVendor?.vendorCode}/>
+                                        <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={4}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Contact Person</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={`${selectedVendor?.vendorSaleInfo.contactFName || ''} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={`${selectedVendor?.vendorSaleInfo.contactFName || ''} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Company Address</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={displayAddress(selectedVendor?.officeAddress)}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={6}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Company Email</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={selectedVendor?.email}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Company Email' name='email' type='email' value={`${selectedVendor?.email || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={6}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Company Contact No</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={selectedVendor?.officeContactNo}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Company Contact No' name='contactNo' type='text' value={`${selectedVendor?.officeContactNo || ''}`} isReadOnly={true} />
                                     </Grid>
                                 </>) :
                                 (<>
-                                    <Grid item xs={12} md={3}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Farmer Code</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={selectedFarmer?.farmerCode}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                    <Grid item xs={12} md={2}>
+                                        <TextInput isRequired={false} label='Farmer Code' name='farmerCode' type='text' value={`${selectedFarmer?.farmerCode || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Farmer Email</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={selectedFarmer?.email}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Farmer Email' name='email' type='email' value={`${selectedFarmer?.email || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Farmer Contact No</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={selectedFarmer?.primaryMobileNo}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Farmer Contact No' name='contactNo' type='text' value={`${selectedFarmer?.primaryMobileNo || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Grid container direction="column">
-                                            <Grid item xs={12}>
-                                                <Typography variant='body2'>Farmer Residential Address</Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    value={displayAddress(selectedFarmer?.residensialAddress || undefined)}
-                                                    InputProps={{ readOnly: true }}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <TextInput isRequired={false} label='Farmer Residential Address' name='residentialAddress' type='text' value={selectedFarmer?.residensialAddress ? displayAddress(selectedFarmer?.residensialAddress) : ''} isReadOnly={true} />
                                     </Grid>
                                 </>)}
                             <Grid item xs={12} marginY={2}>
                                 <Box sx={{ width: '100%' }}>
-                                    {source === "vendor" ?
+                                    {values.source === "vendor" ?
                                         (<Typography variant='body2' sx={{ fontWeight: 600 }}>If Vendor Not Found <Button variant='text' onClick={() => navigate(ADMIN_ROUTES.CREATE_VENDOR)} >Click Here</Button></Typography>) :
                                         (<Typography variant='body2' sx={{ fontWeight: 600 }}>If Farmer Not Found <Button variant='text' onClick={() => navigate(ADMIN_ROUTES.CREATE_FARMER)} >Click Here</Button></Typography>)
                                     }
@@ -340,7 +224,7 @@ export const RFPAForm = () => {
                                                                     fullWidth
                                                                     options={allProducts}
                                                                     getOptionLabel={allProducts => allProducts.name}
-                                                                    onChange={(event, newValue: Product | null) => {
+                                                                    onChange={(event, newValue: GetProduct | null) => {
                                                                         if (newValue) {
                                                                             setFieldValue(`rfpaProducts.${index}.product`, newValue.id);
                                                                             handleProductNameChange(newValue.id || '');
@@ -356,142 +240,41 @@ export const RFPAForm = () => {
                                                         </Grid>
                                                     </Grid>
                                                     <Grid item xs={12} md={3}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Product Code</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" value={selectedProduct?.productCode} fullWidth />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={false} name="productCode" label="Product Code" value={selectedProduct?.productCode} isReadOnly={true}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={1}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Product Grade</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" id={`rfpaProducts.${index}.grade`} name={`rfpaProducts.${index}.grade`} fullWidth value={values.rfpaProducts[index].grade} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={false} id={`rfpaProducts.${index}.grade`} name={`rfpaProducts.${index}.grade`} label="Product Grade" value={values.rfpaProducts[index].grade} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={2}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>UOM</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <FormControl fullWidth>
-                                                                    <Select
-                                                                        size='small'
-                                                                        id={`rfpaProducts.${index}.uom`}
-                                                                        name={`rfpaProducts.${index}.uom`}
-                                                                        value={values.rfpaProducts[index].uom}
-                                                                        onChange={handleChange}
-                                                                        displayEmpty
-                                                                    >
-                                                                        <MenuItem value="" disabled>
-                                                                            Select UOM
-                                                                        </MenuItem>
-                                                                        {allUOMs.map((uoms) => (
-                                                                            <MenuItem value={uoms.id} key={uoms.id}>{uoms.unit}</MenuItem>
-                                                                        ))}
-                                                                    </Select>
-                                                                    <FormHelperText></FormHelperText>
-                                                                </FormControl>
-                                                            </Grid>
-                                                        </Grid>
+                                                        <SelectInput isRequired={true} id={`rfpaProducts.${index}.uom`} name={`rfpaProducts.${index}.uom`} label="UOM" value={values.rfpaProducts[index].uom} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} onChange={handleChange} />
                                                     </Grid>
                                                     <Grid item xs={4} md={1}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Quantity</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" type="number" id={`rfpaProducts.${index}.quantity`} name={`rfpaProducts.${index}.quantity`} fullWidth value={values.rfpaProducts[index].quantity} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.quantity`} name={`rfpaProducts.${index}.quantity`} label="Quantity" value={values.rfpaProducts[index].quantity} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={4} md={1}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Unit Price</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" type="number" id={`rfpaProducts.${index}.unitPrice`} name={`rfpaProducts.${index}.unitPrice`} fullWidth value={values.rfpaProducts[index].unitPrice} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, index, setFieldValue)} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.unitPrice`} name={`rfpaProducts.${index}.unitPrice`} label="Unit Price" value={values.rfpaProducts[index].unitPrice} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={4} md={1}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Total Price</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" type="number" id={`rfpaProducts.${index}.totalVal`} name={`rfpaProducts.${index}.totalVal`} fullWidth value={values.rfpaProducts[index].totalVal} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.totalVal`} name={`rfpaProducts.${index}.totalVal`} label="Total Price" value={values.rfpaProducts[index].totalVal} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={12}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Description</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" id={`rfpaProducts.${index}.description`} name={`rfpaProducts.${index}.description`} fullWidth value={values.rfpaProducts[index].description} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} id={`rfpaProducts.${index}.description`} name={`rfpaProducts.${index}.description`} label="Description" value={values.rfpaProducts[index].description} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={2}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Purchase Date</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField type='date' size="small" id={`rfpaProducts.${index}.purchaseDate`} name={`rfpaProducts.${index}.purchaseDate`} fullWidth value={values.rfpaProducts[index].purchaseDate} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.purchaseDate`} name={`rfpaProducts.${index}.purchaseDate`} label="Purchase Date" value={values.rfpaProducts[index].purchaseDate} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={2}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Dispatch Date</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField type='date' size="small" id={`rfpaProducts.${index}.dispatchDate`} name={`rfpaProducts.${index}.dispatchDate`} fullWidth value={values.rfpaProducts[index].dispatchDate} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.dispatchDate`} name={`rfpaProducts.${index}.dispatchDate`} label="Dispatch Date" value={values.rfpaProducts[index].dispatchDate} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={2}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Delivery Date</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField type='date' size="small" id={`rfpaProducts.${index}.deliveryDate`} name={`rfpaProducts.${index}.deliveryDate`} fullWidth value={values.rfpaProducts[index].deliveryDate} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.deliveryDate`} name={`rfpaProducts.${index}.deliveryDate`} label="Delivery Date" value={values.rfpaProducts[index].deliveryDate} onChange={handleChange}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={4}>
-                                                        <Grid container direction="column">
-                                                            <Grid item xs={12}>
-                                                                <Typography variant='body2'>Delivery Location</Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <TextField size="small" id={`rfpaProducts.${index}.deliveryLocation`} name={`rfpaProducts.${index}.deliveryLocation`} fullWidth value={values.rfpaProducts[index].deliveryLocation} onChange={handleChange} />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <TextInput isRequired={true} id={`rfpaProducts.${index}.deliveryLocation`} name={`rfpaProducts.${index}.deliveryLocation`} label="Delivery Location" value={values.rfpaProducts[index].deliveryLocation} onChange={handleChange}/>
                                                     </Grid>
                                                     {source === "farmer" &&
                                                         (<Grid item xs={2}>
-                                                            <Grid container direction="column">
-                                                                <Grid item xs={12}>
-                                                                    <Typography variant='body2'>Expected Harvest Date</Typography>
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <TextField type='date' size="small" id={`rfpaProducts.${index}.expectedHarvestDate`} name={`rfpaProducts.${index}.expectedHarvestDate`} fullWidth value={values.rfpaProducts[index].expectedHarvestDate} onChange={handleChange} />
-                                                                </Grid>
-                                                            </Grid>
+                                                            <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.expectedHarvestDate`} name={`rfpaProducts.${index}.expectedHarvestDate`} label="Expected Harvest Date" value={values.rfpaProducts[index].expectedHarvestDate} onChange={handleChange}/>
                                                         </Grid>)}
                                                 </Grid>
                                             ))}
@@ -516,296 +299,30 @@ export const RFPAForm = () => {
                                 </Box>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Payment Mode</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField size="small" id="paymentInfo.paymentMode" name="paymentInfo.paymentMode" fullWidth value={values.paymentInfo.paymentMode} onChange={handleChange} />
-                                    </Grid>
-                                </Grid>
+                            <TextInput isRequired={true} id="paymentInfo.paymentMode" name="paymentInfo.paymentMode" label="Payment Mode" value={values.paymentInfo.paymentMode} onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Payment Date</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField type="date" size="small" id="paymentInfo.paymentDate" name="paymentInfo.paymentDate" fullWidth value={values.paymentInfo.paymentDate} onChange={handleChange} />
-                                    </Grid>
-                                </Grid>
+                            <TextInput isRequired={true} type="date" id="paymentInfo.paymentDate" name="paymentInfo.paymentDate" label="Payment Date" value={values.paymentInfo.paymentDate} onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Advance Paid Amount</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField size="small" id="paymentInfo.advancePaidAmt" name="paymentInfo.advancePaidAmt" fullWidth value={values.paymentInfo.advancePaidAmt} onChange={handleChange} />
-                                    </Grid>
-                                </Grid>
+                            <TextInput isRequired={true} type="number" id="paymentInfo.advancePaidAmt" name="paymentInfo.advancePaidAmt" label="Advance Paid Amount" value={values.paymentInfo.advancePaidAmt} onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Payment Terms</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControl fullWidth>
-                                            <Select
-                                                size='small'
-                                                id="paymentInfo.paymentTerms"
-                                                name="paymentInfo.paymentTerms"
-                                                value={values.paymentInfo.paymentTerms}
-                                                onChange={handleChange}
-                                                displayEmpty
-                                            >
-                                                <MenuItem value="" disabled>
-                                                    Select Term
-                                                </MenuItem>
-                                                <MenuItem value="1 Day" key={1}>1 Day</MenuItem>
-                                                <MenuItem value="3-8 Day" key={2}>3-8 Day</MenuItem>
-                                                <MenuItem value="8-15 Day" key={3}>8-15 Day</MenuItem>
-                                                <MenuItem value="15-25 Day" key={4}>15-25 Day</MenuItem>
-                                                <MenuItem value="25+ Day" key={5}>25+ Day</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
+                                <TextInput isRequired={true} type="number" label="Payment Terms (in Days)" id="paymentInfo.paymentTerms" name="paymentInfo.paymentTerms" value={values.paymentInfo.paymentTerms} onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Delivery Receiving Person</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField size="small" id="deliveryReceivingPerson" name="deliveryReceivingPerson" fullWidth value={values.deliveryReceivingPerson} onChange={handleChange} />
-                                    </Grid>
-                                </Grid>
+                                <TextInput isRequired={true} label="Delivery Receiving Person" id="deliveryReceivingPerson" name="deliveryReceivingPerson" value={values.deliveryReceivingPerson} onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Validity of Quote</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField size="small" id="validityOfQuote" name="validityOfQuote" fullWidth value={values.validityOfQuote} onChange={handleChange} />
-                                    </Grid>
-                                </Grid>
+                                <TextInput isRequired={true} label="Validity of Quote" id="validityOfQuote" name="validityOfQuote" value={values.validityOfQuote} onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} md={12}>
-                                <Grid container direction="column">
-                                    <Grid item xs={12}>
-                                        <Typography variant='body2'>Packaging Instructions</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField size="small" id="packingInstruction" name="packingInstruction" fullWidth value={values.packingInstruction} onChange={handleChange} />
-                                    </Grid>
-                                </Grid>
+                                <TextInput isRequired={true} label="Packaging Instructions" id="packingInstruction" name="packingInstruction" value={values.packingInstruction} onChange={handleChange}/>
                             </Grid>
                         </Grid>
                     </form>)}
             </Formik>
-            <Dialog
-                fullScreen
-                open={open}
-                onClose={handleClose}
-                TransitionComponent={Transition}
-            >
-                <AppBar sx={{ position: 'relative', bgcolor: "#FFF" }}>
-                    <Toolbar>
-                        <IconButton
-                            edge="start"
-                            color="error"
-                            onClick={handleClose}
-                            aria-label="close"
-                        >
-                            <Close />
-                        </IconButton>
-                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div" color='#000000'>
-                            Preview
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                <Box sx={{ flex: 1, padding: 1 }}>
-                    <Grid container direction="column" rowSpacing={1}>
-                        <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
-                            <Typography variant="h4" component="span">RFPA Details</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Purchase Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.purchaseLocation}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Purchase for which location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.purchaseForWhich}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Special Request : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.specialReq}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Source: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.source}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Divider textAlign="left" sx={{ marginY: 2 }}>Vendor / Farmer Information</Divider>
-                        {selectedRFPA?.source === "vendor" ? (
-                            <>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Company Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.companyName}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Vendor Code: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.vendorCode}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Office Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedVendor?.officeAddress)}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Office Contact No: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.officeContactNo}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.email}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                            </>
-                        ) : (
-                            <>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Farmer Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.farmerfName} {selectedRFPA?.farmer?.farmerlName}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Farmer Code: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.farmerCode}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Residential Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmer?.residensialAddress)}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Farm Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmer?.farmAddress)}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Contact No: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.primaryMobileNo}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                        Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.email}
-                                        </Typography>
-                                    </Typography>
-                                </Grid>
-                            </>
-                        )}
-                        <Divider textAlign="left" sx={{ marginY: 2 }}>Products Information</Divider>
-                        <Grid item>
-                            <TableContainer component={Box}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Product</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Grade</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Quantity</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>UOM</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Unit Price</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Total</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Purchase Date</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Dispatch Date</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Delivery Date</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Delivery Location</TableCell>
-                                            {selectedRFPA?.source === "farmer" ? <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Expected Harvest Date</TableCell> : ''}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {selectedRFPA?.rfpaProducts.map((product, index) => (
-                                            <TableRow
-                                                key={index}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{selectedProduct?.name}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.grade}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.quantity}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.totalVal}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate.toLocaleString()}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate.toLocaleString()}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate.toLocaleString()}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryLocation}</TableCell>
-                                                {selectedRFPA?.source === "farmer" ? <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.expectedHarvestDate?.toLocaleString()}</TableCell> : ''}
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                        <Divider textAlign="left" sx={{ marginY: 2 }}>Additional Payment Information</Divider>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Payment Mode: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.paymentInfo.paymentMode}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Payment Date: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.paymentInfo.paymentDate.toLocaleString()}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Payment Terms : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.paymentInfo.paymentTerms}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Validity Of Quote : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.validityOfQuote}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Packing Instruction : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedRFPA?.packingInstruction}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Box >
-            </Dialog>
+            <RFPAPreview />
         </>
     )
 }

@@ -22,9 +22,13 @@ export interface PostTPvoucher {
 }
 export interface GetTPvoucher {
     id: string,
-    createdAt: Date,
-    createdBy: RequestedBy,
+    createdDate: string,
+    createdTime: string,
+    requestedBy: RequestedBy,
     requestingDepartment: string,
+    voucherNo: string,
+    grnNo: string,
+    companyName: string,
     debitCreditTo: string,
     payReceivedFrom: string,
     location: string,
@@ -39,8 +43,8 @@ export interface GetTPvoucher {
     freightAmt: number,
     totalAmt: number,
     amtWords: string,
-    receivedBy: string,
     anyAttachment: string,
     approvalStatus: string,
-    grnNo: string,
+    receiverName: string,
+    receivedBy: string,
 }

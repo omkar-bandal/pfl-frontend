@@ -16,14 +16,16 @@ export const PURCHASE_API_URL = {
     GET_ALL_GRN: "/grns/",
     GET_A_GRN: "/grns",
     POST_GRN: "/grns/",
+    UPDATE_GRN: "/grns",
     APPROVE_GRN: "/grns/approve/",
+    GET_ALL_GRN_NO: "/grns/grnnumbers/getAllgrnNo",
 
     //Vouchers
     //Multiple Cash voucher
     POST_MC_VOUCHER: "/multiCashVoucher/",
     GET_ALL_MC_VOUCHER: "/multiCashVoucher/",
     GET_A_MC_VOUCHER: "/multiCashVoucher",
-    UPDATE_MC_VOUCHER: "/multiCashVoucher/",
+    UPDATE_MC_VOUCHER: "/multiCashVoucher",
 
     //PackingMaterialPaymentVoucher
     POST_PMP_VOUCHER: "/pmpvoucher/",
@@ -35,11 +37,17 @@ export const PURCHASE_API_URL = {
     POST_LP_VOUCHER: "/lpvoucher/",
     GET_ALL_LP_VOUCHER: "/lpvoucher/",
     GET_A_LP_VOUCHER: "/lpvoucher",
-    UPDATE_LP_VOUCHER: "/lpvoucher/",
+    UPDATE_LP_VOUCHER: "/lpvoucher",
 
     //Transport Payment Voucher
     POST_TP_VOUCHER: "/tpvoucher/",
     GET_ALL_TP_VOUCHER: "/tpvoucher/",
     GET_A_TP_VOUCHER: "/tpvoucher",
-    UPDATE_TP_VOUCHER: "/tpvoucher/",
+    UPDATE_TP_VOUCHER: "/tpvoucher",
+
+    //Delivery Challan
+    POST_DELIVERY_CHALLAN: "/deliveryChallan/",
+    GET_ALL_DELIVERY_CHALLAN: "/deliveryChallan/",
+    GET_A_DELIVERY_CHALLAN: "/deliveryChallan",
+    UPDATE_DELIVERY_CHALLAN: "/deliveryChallan/",
 }

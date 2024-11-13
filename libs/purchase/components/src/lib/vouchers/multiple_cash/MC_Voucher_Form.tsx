@@ -5,18 +5,17 @@ import { initValMCVItems, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRA
 import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { MVItems, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher, useGetAllGRN } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, useGetAllUOMs } from "@prime-fresh/admin_api";
-import { UOM } from "@prime-fresh/admin_modules";
+import { UOM } from "@prime-fresh/admin/modules";
 import { MCVoucherPreview } from "./MC_Voucher_Preview";
-import { previewState, setPreview, useAppSelector } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 
 export const MultipleCashVoucherForm = () => {
   const dispatch = useDispatch();
   const { data } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
-  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_UOM);
+  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const allGRN = data ? data : [];
   const allUOMS = UOMs ? UOMs : [];
-  const open = useAppSelector(previewState);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateAmounts = (values: PostMCvoucher, setFieldValue: (field: string, value: any,) => void) => {
     const updatedProducts = values.mvItems.map((product: MVItems) => ({
@@ -245,7 +244,7 @@ export const MultipleCashVoucherForm = () => {
         )
         }
       </Formik >
-      <MCVoucherPreview open={open} handleClose={() => dispatch(setPreview(false))} />
+      <MCVoucherPreview/>
     </>
   );
 };

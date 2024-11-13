@@ -5,13 +5,12 @@ import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } f
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { LPVoucherPreview } from './LP_Voucher_Preview'
-import { previewState, setPreview, useAppSelector } from '@prime-fresh/modules'
+import { setPreview} from '@prime-fresh/modules'
 
 export const LabourPaymentVoucherForm = () => {
   const dispatch = useDispatch();
   const { data } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
   const allGRN = data ? data : [];
-  const open = useAppSelector(previewState);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateAmounts = (values: PostLPvoucher, setFieldValue: (field: string, value: any,) => void) => {
     const totalAmt = values.noOfLabours * values.ratePerLabour;
@@ -196,7 +195,7 @@ export const LabourPaymentVoucherForm = () => {
             </Grid>
           </form>)}
       </Formik>
-      <LPVoucherPreview open={open} handleClose={() => dispatch(setPreview(false))} />
+      <LPVoucherPreview />
     </>
   )
 }

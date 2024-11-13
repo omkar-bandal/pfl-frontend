@@ -23,6 +23,8 @@ export interface PostMCvoucher {
 }
 export interface GetMCvoucher {
     id: string,
+    createdDate: string,
+    createdTime: string,
     requestedBy: RequestedBy,
     requestingDepartment: string,
     voucherNo: string,
@@ -36,5 +38,14 @@ export interface GetMCvoucher {
     paymentMode: string,
     anyAttachment: string,
     approvalStatus: string,
-    mvItems: MVItems[],
+    receiverName: string,
+    receivedBy: string,
+    mvItems: {
+        id: string,
+        itemName: string,
+        itemQty: number,
+        itemUom: string,
+        rate: number,
+        amt: number,
+    }[],
 }

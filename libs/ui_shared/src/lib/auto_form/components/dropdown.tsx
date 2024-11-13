@@ -7,7 +7,7 @@ type SelectInputProps = SelectProps & {
   label: string;
   name: string;
   value: string | number | undefined | null;
-  options: Array<{ label: string; value: string }>;
+  options: Array<{ label: string; value: string }> | undefined;
   handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   touched?: FormikTouched<{ [key: string]: any }>;
@@ -66,11 +66,13 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             MenuProps={MenuProps}
             {...otherProps}
           >
-            {options.map((option, index: number) => (
+            {options ? (options.map((option, index: number) => (
               <MenuItem key={index} value={option.value}>
                 {option.label}
               </MenuItem>
-            ))}
+            ))) : (<MenuItem value="">
+              {""}
+            </MenuItem>)}
           </Select>
           {/* Display error message */}
           {touched[name] && getHelperText() && (

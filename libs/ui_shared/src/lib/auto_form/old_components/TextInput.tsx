@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { Field, FieldProps } from "formik";
-import { FormField } from "../models";
+import { FormField } from "./models";
 
 type TextInputProp = {
   formField: FormField;

@@ -7,7 +7,6 @@ type TextInputProps = TextFieldProps & {
   isRequired: boolean;
   label: string;
   name: string;
-  type: "text" | "number" | "email" | "password" | "date" | "time";
   value: string | number | Date | undefined | null;
   handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   isReadOnly?: boolean;
@@ -54,7 +53,7 @@ export const TextInput: React.FC<TextInputProps> = ({
           type={type}
           id={name}
           name={name}
-          value={value ?? ""} // Handle null or undefined
+          value={value ?? ""} 
           onChange={handleChange}
           InputLabelProps={{ shrink: type === "date" }}
           InputProps={{ readOnly: isReadOnly ?? false }}

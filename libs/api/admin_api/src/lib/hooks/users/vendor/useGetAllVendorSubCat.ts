@@ -1,6 +1,6 @@
-import { VendorSubcategory } from "@prime-fresh/admin_modules";
 import {useGetAllData} from "@prime-fresh/common_api";
+import { GetVendorSubcategory } from "../../../models";
 
 export const useGetAllVendorSubCat = (url: string) => {
-    return useGetAllData<null, VendorSubcategory[]>(url, ['getVendor']);
+    return useGetAllData<null, GetVendorSubcategory[]>(url, ['getVendor']);
   };

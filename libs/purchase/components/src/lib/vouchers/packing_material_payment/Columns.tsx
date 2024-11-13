@@ -1,6 +1,6 @@
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
-import { Preview } from "@mui/icons-material";
+import { Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
@@ -188,18 +188,18 @@ export const PMPVoucherListCols = (): GridColDef[] => {
                     return value;
             }
         },
-        // {
-        //     field: 'edit',
-        //     headerName: 'Edit',
-        //     width: 50,
-        //     sortable: false,
-        //     filterable: false,
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.CREATE_RFPA}/${params.row.id}`)}>
-        //             <Edit color="secondary" />
-        //         </IconButton>
-        //     ),
-        // },
+        {
+            field: 'edit',
+            headerName: 'Edit',
+            width: 50,
+            sortable: false,
+            filterable: false,
+            renderCell: (params: GridRenderCellParams) => (
+                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_PACKING_MATERIAL_VOUCHER}/${params.row.id}`)}>
+                    <Edit color="secondary" />
+                </IconButton>
+            ),
+        },
         {
             field: 'view',
             headerName: 'View',

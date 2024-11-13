@@ -21,7 +21,8 @@ export interface PostLPvoucher {
 }
 export interface GetLPvoucher {
     id: string,
-    createdAt: Date,
+    createdDate: string,
+    createdTime: string,
     requestedBy: RequestedBy,
     requestingDepartment: string,
     voucherNo: string,
@@ -40,6 +41,7 @@ export interface GetLPvoucher {
     paymentMode: string,
     totalAmt: number,
     amtWords: string,
+    receiverName: string,
     anyAttachment: string,
     approvalStatus: string,
 }

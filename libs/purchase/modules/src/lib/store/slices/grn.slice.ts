@@ -5,7 +5,7 @@ import { RootState } from "../store.purchase";
 type grnDataState = {
     grn: GetGRN[];
     selectedGRN: GetGRN | undefined;
-    previewGRN: PostGRN | undefined;
+    previewGRN: PostGRN | GetGRN| undefined;
     subTotalAmt: number;
     totalAmt: number;
     totAmtWords: string;
@@ -28,7 +28,7 @@ export const grnDataSlice = createSlice({
         setSelectedGRN: (state, action: PayloadAction<GetGRN|undefined>) => {
             state.selectedGRN = action.payload;
         },
-        setPreviewGRN:(state, action: PayloadAction<PostGRN|undefined>) => {
+        setPreviewGRN:(state, action: PayloadAction<PostGRN| GetGRN |undefined>) => {
             state.previewGRN = action.payload;
         },
         setSubTotalAmt: (state, action: PayloadAction<number>)=>{

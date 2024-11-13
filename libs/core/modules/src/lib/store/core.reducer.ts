@@ -10,7 +10,7 @@ import {
     branchesDataReducer,
     vendorDataReducer,
     alertSnackbarReducer,
-  } from '@prime-fresh/admin_modules';
+  } from '@prime-fresh/admin/modules';
   
 export const coreReducer = {
     layout: layoutReducer,

@@ -1,0 +1,9 @@
+{
+  "name": "shared-masters-vendor",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/masters/vendor/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project shared-masters-vendor --web",
+  "targets": {}
+}

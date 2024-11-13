@@ -1,21 +1,16 @@
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
-import { DownloadOutlined, Edit, Preview } from "@mui/icons-material";
+import { AddCard, Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 
 export const GRNListCols = (): GridColDef[] => {
     const navigate = useNavigate();
-    const handleDownload = (imageUrl: string) => {
-        // Create a temporary anchor element
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = 'image.jpg'; // Set the desired filename
-
-        // Trigger the download
-        link.click();
-    };
+    const handlePaymentReq = (status: string, id: string) => {
+        if(status === "approved")
+            navigate(`${PURCHASE_ROUTES.CREATE_PAYMENT_REQ}/${id}`)
+    }
     return ([
         { field: "id", headerName: "ID", width: 30 },
         {
@@ -37,13 +32,6 @@ export const GRNListCols = (): GridColDef[] => {
                 else
                     return value;
             }
-        },
-        {
-            field: "createdAt",
-            headerName: "Created Date",
-            width: 120,
-            align: "center",
-            headerAlign: "center"
         },
         {
             field: "requestedBy",
@@ -89,10 +77,7 @@ export const GRNListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -102,10 +87,7 @@ export const GRNListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
+                return value ? value : '-';
             }
         },
         {
@@ -115,34 +97,21 @@ export const GRNListCols = (): GridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                if (value === null)
-                    return '';
-                else
-                    return value.charAt(0).toUpperCase() + value.slice(1);
+                return value ? value : '-';
             }
-        },
-        {
-            field: "billImage",
-            headerName: "Attachment",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
-                    <DownloadOutlined />
-                </IconButton>
-            ),
         },
         {
             field: "approvalStatus",
             headerName: "Status",
             width: 130,
+            align: "center",
+            headerAlign: "center",
             renderCell: (params: GridRenderCellParams) => {
                 switch (params.row.approvalStatus) {
                     case "pending": return <Chip label={params.row.approvalStatus} color="default" size="small" sx={{ width: 80 }} />;
-                    case "approved": return <Chip label="Approved" color="info" size="small" sx={{ width: 80 }} />;
-                    case "rejected": return <Chip label="Not Approved" color="error" size="small" sx={{ width: 80 }} />;
-                    default: return <Chip label="pending" color="error" size="small" />
+                    case "approved": return <Chip label={params.row.approvalStatus} color="info" size="small" sx={{ width: 80 }} />;
+                    case "notApproved": return <Chip label={params.row.approvalStatus} color="error" size="small" sx={{ width: 80 }} />;
+                    default: return <Chip label="-" color="error" size="small" />
                 }
             }
         },
@@ -159,18 +128,30 @@ export const GRNListCols = (): GridColDef[] => {
                     return value;
             }
         },
-        // {
-        //     field: 'edit',
-        //     headerName: 'Edit',
-        //     width: 50,
-        //     sortable: false,
-        //     filterable: false,
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.CREATE_RFPA}/${params.row.id}`)}>
-        //             <Edit color="secondary" />
-        //         </IconButton>
-        //     ),
-        // },
+        {
+            field: 'payment_req',
+            headerName: 'Payment Request',
+            width: 50,
+            sortable: false,
+            filterable: false,
+            renderCell: (params: GridRenderCellParams) => (
+                <IconButton aria-label="payment_req" onClick={() => handlePaymentReq(params.row.approvalStatus, params.row.id)}>
+                    <AddCard color="info" />
+                </IconButton>
+            ),
+        },
+        {
+            field: 'edit',
+            headerName: 'Edit',
+            width: 50,
+            sortable: false,
+            filterable: false,
+            renderCell: (params: GridRenderCellParams) => (
+                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)}>
+                    <Edit color="secondary" />
+                </IconButton>
+            ),
+        },
         {
             field: 'view',
             headerName: 'View',

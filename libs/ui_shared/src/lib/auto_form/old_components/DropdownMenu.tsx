@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormControl, MenuItem, Select, Typography } from "@mui/material";
-import { FormField } from "../models";
+import { FormField } from "./models";
 import { Field, FieldProps } from "formik";
 
 type DropdownMenuProp = {

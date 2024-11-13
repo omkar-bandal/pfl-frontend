@@ -5,3 +5,4 @@ export * from './voucher';
 export * from './grn.interface';
 export * from './delivery-challan.interface';
 export * from './requestedBy.interface';
+export * from './payment-request.interface';

@@ -8,7 +8,7 @@ import { SignInSchema } from './validation_schema';
 import Logo from '../../../../../assets/logo_auth.jpg';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
-import { ADMIN_ROUTES } from '@prime-fresh/admin_modules';
+import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { AUTH_API_URL, SignInRequest, useSignInService } from '@prime-fresh/auth_api';
 
 export const SignIn = () => {
