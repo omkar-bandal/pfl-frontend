@@ -13,7 +13,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@prime-fresh/admin/components": ["libs/admin/components/src/index.ts"],
       "@prime-fresh/admin/modules": ["libs/admin/modules/src/index.ts"],
