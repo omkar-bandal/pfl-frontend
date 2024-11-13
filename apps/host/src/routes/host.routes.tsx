@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { AUTH_ROUTES, SignIn } from "@prime-fresh/authentication";
+import { SignIn } from "@prime-fresh/authentication";
 import { ErrorPage } from "@prime-fresh/ui_shared";
 import { Layout } from "@prime-fresh/components";
 import { STRINGS } from "@prime-fresh/modules";
@@ -14,7 +14,7 @@ import { ProductForm } from "@prime-fresh/shared/masters/products";
 
 export const HostRoutes = createBrowserRouter([
     {
-        path: AUTH_ROUTES.SIGN_IN,
+        path: "/",
         element: <SignIn />,
         errorElement: <ErrorPage />
     },

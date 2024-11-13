@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { AUTH_ROUTES, SignIn } from "@prime-fresh/authentication";
+import { SignIn } from "@prime-fresh/authentication";
 import { ErrorPage } from "@prime-fresh/ui_shared";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import {Layout} from "@prime-fresh/components";
@@ -8,7 +8,7 @@ import {RFPAForm, DashboardPurchase} from "@prime-fresh/purchase/components";
 
 export const PurchaseRoutes = createBrowserRouter([
     {
-        path: AUTH_ROUTES.SIGN_IN,
+        path: "/",
         element: <SignIn />,
         errorElement: <ErrorPage />
     },
