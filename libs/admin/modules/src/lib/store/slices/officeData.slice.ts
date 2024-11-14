@@ -13,7 +13,7 @@ const initialState: OfficesDataState = {
     officeType: OfficeType.REGISTERED_OFFICE,
     selectedOffices: undefined
 }
-export const officesDataSlice = createSlice({
+const officesDataSlice = createSlice({
     name: "officesData",
     initialState,
     reducers: {

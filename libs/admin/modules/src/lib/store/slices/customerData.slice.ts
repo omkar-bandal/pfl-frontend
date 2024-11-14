@@ -8,7 +8,7 @@ type customerDataState = {
 const initialState: customerDataState = {
     customers: [],
 }
-export const customerDataSlice = createSlice({
+const customerDataSlice = createSlice({
     name: 'customerData',
     initialState,
     reducers: {

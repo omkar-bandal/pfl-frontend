@@ -1,6 +1,4 @@
-import { Address } from "../models";
-
-export const initValAddress: Address = {
+export const initValAddress = {
     address1: '',
     address2: '',
     location: '',

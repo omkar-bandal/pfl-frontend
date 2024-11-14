@@ -12,7 +12,7 @@ const initialState: BranchesDataState = {
     BranchType: BranchType.COLLECTION_CENTER,
     selectedBranches: undefined
 }
-export const branchesDataSlice = createSlice({
+const branchesDataSlice = createSlice({
     name: "branchesData",
     initialState,
     reducers: {

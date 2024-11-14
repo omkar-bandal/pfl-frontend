@@ -13,7 +13,7 @@ const initialState : paymentReqState = {
    previewPaymentReq: undefined,
 }
 
-export const paymentReqSlice = createSlice({
+const paymentReqSlice = createSlice({
     name: "payment_request",
     initialState,
     reducers: {

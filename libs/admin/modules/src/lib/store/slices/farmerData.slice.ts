@@ -10,7 +10,7 @@ const initialState : farmerDataState = {
     allFarmers: [],
     selectedFarmer: undefined,
 }
-export const farmerDataSlice = createSlice({
+const farmerDataSlice = createSlice({
     name: 'farmerData',
     initialState,
     reducers: {

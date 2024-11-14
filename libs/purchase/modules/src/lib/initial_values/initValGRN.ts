@@ -14,6 +14,7 @@ export const initValGRNProducts: GRNProducts = {
     deliveryDate: new Date(),
     deliveryLocation: '',
     revisedRate: 0,
+    revisedQuantity: 0,
 }
 // export const initValGRNPaymentInfo: GRNPaymentInfo = {
 //     advancePaidAmt: 0,

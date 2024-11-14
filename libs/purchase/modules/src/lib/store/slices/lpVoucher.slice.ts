@@ -13,7 +13,7 @@ const initialState : lpVoucherState = {
     previewLPVoucher: undefined,
 }
 
-export const lpVoucherSlice = createSlice({
+const lpVoucherSlice = createSlice({
     name: "lp_voucher",
     initialState,
     reducers: {

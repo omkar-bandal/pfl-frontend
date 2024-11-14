@@ -18,7 +18,7 @@ const initialState: grnDataState = {
     totalAmt: 0,
     totAmtWords: "",
 }
-export const grnDataSlice = createSlice({
+const grnDataSlice = createSlice({
     name: 'grnData',
     initialState,
     reducers: {

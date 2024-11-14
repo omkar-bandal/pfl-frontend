@@ -1,4 +1,4 @@
-import {  Farmer, Vendor } from "@prime-fresh/admin_modules";
+import {  GetFarmer, GetVendor } from "@prime-fresh/admin_api";
 import { RequestedBy } from "./requestedBy.interface";
 
 
@@ -36,8 +36,8 @@ export interface PostRFPA {
     specialReq: string;
     source: string;
     selectedParty: string;
-    farmer?: Farmer;
-    vendor?: Vendor;
+    farmer?: GetFarmer;
+    vendor?: GetVendor;
     rfpaProducts: RFPA_Items[];
     paymentInfo: Payment_Info;
     deliveryReceivingPerson: string;
@@ -58,8 +58,8 @@ export interface GetRFPA {
     specialReq: string;
     source: string;
     selectedParty: string;
-    farmer?: Farmer;
-    vendor?: Vendor;
+    farmer?: GetFarmer;
+    vendor?: GetVendor;
     rfpaProducts: RFPA_Items[];
     paymentInfo: Payment_Info;
     deliveryReceivingPerson: string;

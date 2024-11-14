@@ -12,7 +12,7 @@ const initialState: rfpaDataState = {
     selectedRFPA: undefined,
     previewRFPA: undefined,
 }
-export const rfpaDataSlice = createSlice({
+const rfpaDataSlice = createSlice({
     name: 'rfpaData',
     initialState,
     reducers: {

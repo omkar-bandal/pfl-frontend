@@ -12,7 +12,7 @@ const initialState: AlertSnackbarType = {
     severity: 'success',
 }
 
-export const alertSnackbarSlice = createSlice({
+const alertSnackbarSlice = createSlice({
     name: 'alertSnackbar',
     initialState,
     reducers: {

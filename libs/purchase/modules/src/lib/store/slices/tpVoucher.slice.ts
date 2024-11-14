@@ -13,7 +13,7 @@ const initialState : tpVoucherState = {
     previewTPVoucher: undefined,
 }
 
-export const tpVoucherSlice = createSlice({
+const tpVoucherSlice = createSlice({
     name: "tp_voucher",
     initialState,
     reducers: {

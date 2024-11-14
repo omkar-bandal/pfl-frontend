@@ -10,7 +10,7 @@ const initialState: dealSlipDataState = {
     dealSlip: [],
     selectedDealSlip: undefined,
 }
-export const dealSlipDataSlice = createSlice({
+const dealSlipDataSlice = createSlice({
     name: 'dealSlipData',
     initialState,
     reducers: {

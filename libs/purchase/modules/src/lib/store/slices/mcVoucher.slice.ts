@@ -13,7 +13,7 @@ const initialState : mcVoucherState = {
     previewMCVoucher: undefined,
 }
 
-export const mcVoucherSlice = createSlice({
+const mcVoucherSlice = createSlice({
     name: "mc_voucher",
     initialState,
     reducers: {

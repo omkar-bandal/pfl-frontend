@@ -1,4 +1,4 @@
-import { UOM } from '@prime-fresh/admin_modules';
+import { GetUOM } from '@prime-fresh/admin_api';
 import { Address } from '../address.interface';
 import { RequestedBy } from '../requestedBy.interface';
 export interface Materials {
@@ -52,7 +52,7 @@ export interface GetPMPvoucher {
     materials: { id: string,
         itemName: string,
         itemQty: number,
-        itemUom: UOM,
+        itemUom: GetUOM,
         rate: number,
         amt: number,}[],
     receiverName: string,

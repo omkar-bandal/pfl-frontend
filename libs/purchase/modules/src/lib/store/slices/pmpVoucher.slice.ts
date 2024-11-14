@@ -13,7 +13,7 @@ const initialState : pmpVoucherState = {
     previewPMPVoucher: undefined,
 }
 
-export const pmpVoucherSlice = createSlice({
+const pmpVoucherSlice = createSlice({
     name: "pmp_voucher",
     initialState,
     reducers: {

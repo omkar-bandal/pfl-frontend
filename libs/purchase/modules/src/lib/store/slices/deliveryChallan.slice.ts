@@ -13,7 +13,7 @@ const initialState : deliveryChallanState = {
     previewDC: undefined,
 }
 
-export const deliveryChallanSlice = createSlice({
+const deliveryChallanSlice = createSlice({
     name: "delivery_challan",
     initialState,
     reducers: {

@@ -10,7 +10,7 @@ const initialState: vendorDataState = {
     allVendors: [],
     selectedVendor: undefined,
 }
-export const vendorDataSlice = createSlice({
+const vendorDataSlice = createSlice({
     name: 'vendorData',
     initialState,
     reducers: {
