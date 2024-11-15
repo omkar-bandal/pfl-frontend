@@ -1,0 +1,20 @@
+export declare const initValTransportPaymentVoucher: {
+    grnNo: string;
+    companyName: string;
+    debitCreditTo: string;
+    payReceivedFrom: string;
+    location: string;
+    driverName: string;
+    contactNo: string;
+    altContactNo: string;
+    vehicleNo: string;
+    dispatchLocation: string;
+    destinationLocation: string;
+    products: string;
+    paymentMode: string;
+    freightAmt: number;
+    totalAmt: number;
+    amtWords: string;
+    receivedBy: string;
+    anyAttachment: null;
+};

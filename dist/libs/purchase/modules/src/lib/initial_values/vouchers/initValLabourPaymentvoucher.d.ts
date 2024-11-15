@@ -1,0 +1,19 @@
+export declare const initValLabourPaymentvoucher: {
+    grnNo: string;
+    companyName: string;
+    debitCreditTo: string;
+    payReceivedFrom: string;
+    location: string;
+    noOfLabours: number;
+    loadingDate: Date;
+    workLocation: string;
+    contactNo: string;
+    altContactNo: string;
+    products: string;
+    paymentMode: string;
+    ratePerLabour: number;
+    totalAmt: number;
+    amtWords: string;
+    receiverName: string;
+    anyAttachment: null;
+};

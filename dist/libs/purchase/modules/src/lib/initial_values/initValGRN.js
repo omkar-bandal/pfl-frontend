@@ -1,0 +1,57 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.initValGRN = exports.initValGRNProducts = void 0;
+exports.initValGRNProducts = {
+    product: '',
+    count: '',
+    uom: '',
+    quantity: 0,
+    rate: 0,
+    amt: 0,
+    rtv: 'no',
+    purchaseDate: new Date(),
+    expectedHarvestDate: null,
+    dispatchDate: new Date(),
+    deliveryDate: new Date(),
+    deliveryLocation: '',
+    revisedRate: 0,
+    revisedQuantity: 0,
+};
+// export const initValGRNPaymentInfo: GRNPaymentInfo = {
+//     advancePaidAmt: 0,
+//     creditPeriod: 0,
+//     dueDate: new Date(),
+//     paymentDate: new Date(),
+//     paymentMode: '',
+//     paymentTerms: '',
+// }
+exports.initValGRN = {
+    dealSlipId: '',
+    billNo: '',
+    serialNo: '',
+    companyName: '',
+    purchaseRequestByWhom: '',
+    purchaseLocation: '',
+    purchaseForWhich: '',
+    specialReq: '',
+    source: 'vendor',
+    selectedParty: '',
+    products: [exports.initValGRNProducts],
+    deliveryReceivingPerson: '',
+    validityOfQuote: '',
+    packingInstruction: '',
+    subTotalAmt: 0,
+    totalAmt: 0,
+    amtWords: '',
+    freight: 0,
+    otherCharges: 0,
+    purchasedBy: '',
+    receivedThrough: '',
+    securityPerson: '',
+    vehicleNo: '',
+    timeIn: '',
+    cratesIn: 0,
+    // paymentInfo: initValGRNPaymentInfo,
+    billImage: null,
+};
+//# sourceMappingURL=initValGRN.js.map
