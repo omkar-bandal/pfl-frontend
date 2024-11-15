@@ -1,6 +1,4 @@
-import { PostPaymentRequest } from "@prime-fresh/purchase_api";
-
-export const initValPaymentRequest: PostPaymentRequest = {
+export const initValPaymentRequest = {
     paymentDate: new Date(),
     partyName: '',
     amount: 0,

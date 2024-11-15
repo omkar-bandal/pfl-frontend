@@ -1,5 +1,4 @@
-import {GRNProducts } from "@prime-fresh/purchase_api"
-
+import { GRNProducts } from "@prime-fresh/purchase_api";
 export const initValGRNProducts: GRNProducts = {
     product: '',
     count: '',

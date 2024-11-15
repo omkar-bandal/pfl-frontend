@@ -5,7 +5,7 @@ import { AppBar, Autocomplete, Box, Button, Dialog, Divider, FormControl, FormCo
 import { dealSlipDataState, displayAddress, grnDataState, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { setPreview, useAppSelector } from '@prime-fresh/modules';
 import { Field, FieldArray, FieldProps, Formik } from 'formik';
-import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, Product, Address, setSelectedProduct, ADMIN_ROUTES, UOM } from '@prime-fresh/admin/modules';
+import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, GetFarmer, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
 import { GetDealSlip, GRNProducts, PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlip } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
@@ -310,7 +310,7 @@ export const GRNForm = () => {
                             {/* <SelectInput isRequired={true} name={`products.${index}.count`} label="Count" value={values.products[index].count} options={selectedProduct?.count.length ? selectedProduct?.count.map(str => ({ label: str, value: str })) : [{ label: '', value: '' }]} /> */}
                           </Grid>
                           <Grid item xs={4} md={1}>
-                            <SelectInput isRequired={true} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray<UOM>(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} touched={touched} errors={errors} />
+                            <SelectInput isRequired={true} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} touched={touched} errors={errors} />
                           </Grid>
                           <Grid item xs={4} md={2}>
                             <TextInput isRequired={false} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity}
