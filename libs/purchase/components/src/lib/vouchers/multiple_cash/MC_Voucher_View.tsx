@@ -25,15 +25,15 @@ export const MultipleCashVoucherView = () => {
                     <Box sx={{ flex: 1, marginY: 1 }}>
                         <Grid container rowSpacing={1}>
                             <Grid xs={12} md={6}>
-                                <Typography variant="h4" component="div" sx={{fontWeight: 700}}>Multiple Cash Voucher Details</Typography>
+                                <Typography variant="h4" component="div" sx={{ fontWeight: 700 }}>Multiple Cash Voucher Details</Typography>
                             </Grid>
                             <Grid xs={12} md={6}>
                                 <Grid container columnSpacing={2}>
                                     <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED")}}>Approve</Button>
+                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED") }}>Approve</Button>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved")}}>Not Approve</Button>
+                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved") }}>Not Approve</Button>
                                     </Grid>
                                     <Grid item xs={4}>
                                         <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
@@ -47,7 +47,7 @@ export const MultipleCashVoucherView = () => {
                         </Grid>
                         <Box sx={{ flex: 1, padding: 1 }} ref={contentRef}>
                             <Box sx={{ width: '100%', marginY: 1, padding: 2, border: `1px solid #000000` }}>
-                                <Grid container sx={{borderBottom: '1px solid #000000'}}>
+                                <Grid container sx={{ borderBottom: '1px solid #000000' }}>
                                     <Grid item xs={3} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Box sx={{ width: 250, height: 100, padding: 1 }}>
                                             <img
@@ -58,13 +58,12 @@ export const MultipleCashVoucherView = () => {
                                         </Box>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Typography variant="h6" component="div" textAlign="center" sx={{ fontWeight: 700 }}>LABOUR PAYMENT VOUCHER</Typography>
                                         <Typography variant="h4" component="div" textAlign="center" sx={{ fontWeight: 700 }}>PRIME FRESH LIMITED</Typography>
                                         <Typography variant="caption" component="div" textAlign="center">102, Sanskar-ll, Nr. Ketav Petrol Pump, Polytechnic Road, Ambawadi, Ahmedabad-380015.</Typography>
                                         <Typography variant="caption" component="div" textAlign="center"> Ph.:+91-79-40320244, Email: info@primecustomer.co.in, Web: www.primecustomer.co.in</Typography>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <Typography variant="h5" component="div" textAlign="center" sx={{fontWeight: 700, marginBottom: 2}}>CASH / BANK VOUCHER</Typography>
+                                        <Typography variant="h5" component="div" textAlign="center" sx={{ fontWeight: 700, marginBottom: 2 }}>CASH / BANK VOUCHER</Typography>
                                         <Typography variant="body2" component="div" textAlign="center" sx={{ color: "#555" }}>Voucher No</Typography>
                                         <Typography variant="h6" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>{mcVoucher?.voucherNo}</Typography>
                                     </Grid>
@@ -117,21 +116,15 @@ export const MultipleCashVoucherView = () => {
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Sr. No.</TableCell>
-                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Product Name</TableCell>
-                                                    {/* <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Unit</TableCell> */}
-                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Quantity</TableCell>
-                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Rate</TableCell>
+                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Particulars</TableCell>
                                                     <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Amount (Rs)</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {mcVoucher?.mvItems.map((row, index) => (
+                                                {mcVoucher?.particulars.map((row, index) => (
                                                     <TableRow key={row.id}>
                                                         <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{index + 1}</TableCell>
-                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.itemName}</TableCell>
-                                                        {/* <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.itemUom}</TableCell> */}
-                                                        <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.itemQty}</TableCell>
-                                                        <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.rate}</TableCell>
+                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.description}</TableCell>
                                                         <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.amt}</TableCell>
                                                     </TableRow>
                                                 ))}
@@ -161,23 +154,26 @@ export const MultipleCashVoucherView = () => {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={2} padding={1}>
-                                            <Box sx={{ width: '100%', height: 70, border: '1px solid #000000' }}></Box>
+                                        <Grid item xs={2} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                            <Box sx={{ width: 100, height: 100, border: '1px solid #000000' }}></Box>
                                             <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Receiver Sign</Typography>
                                         </Grid>
                                     </Grid>
                                 </Box>
                                 <Grid container marginY={1}>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
-                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
+                                        <Box sx={{ width: '100%' }}>
+                                            <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
+                                            <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${mcVoucher?.requestedBy.firstName} ${mcVoucher?.requestedBy.lastName})`}</Typography>
+                                        </Box>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Passed By</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Approved By</Typography>
                                     </Grid>
                                 </Grid>

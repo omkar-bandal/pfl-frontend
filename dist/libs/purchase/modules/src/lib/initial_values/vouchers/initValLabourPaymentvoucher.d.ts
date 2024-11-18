@@ -10,10 +10,12 @@ export declare const initValLabourPaymentvoucher: {
     contactNo: string;
     altContactNo: string;
     products: string;
+    kyc: boolean;
     paymentMode: string;
     ratePerLabour: number;
     totalAmt: number;
     amtWords: string;
     receiverName: string;
+    remark: string;
     anyAttachment: null;
 };

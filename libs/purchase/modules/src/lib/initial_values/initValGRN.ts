@@ -1,4 +1,4 @@
-import { GRNProducts } from "@prime-fresh/purchase_api";
+import { GRNProducts, PostGRN } from "@prime-fresh/purchase_api";
 export const initValGRNProducts: GRNProducts = {
     product: '',
     count: '',
@@ -15,15 +15,8 @@ export const initValGRNProducts: GRNProducts = {
     revisedRate: 0,
     revisedQuantity: 0,
 }
-// export const initValGRNPaymentInfo: GRNPaymentInfo = {
-//     advancePaidAmt: 0,
-//     creditPeriod: 0,
-//     dueDate: new Date(),
-//     paymentDate: new Date(),
-//     paymentMode: '',
-//     paymentTerms: '',
-// }
-export const initValGRN = {
+
+export const initValGRN: PostGRN = {
     dealSlipId: '',
     billNo: '',
     serialNo: '',
@@ -49,6 +42,6 @@ export const initValGRN = {
     vehicleNo: '',
     timeIn: '',
     cratesIn: 0,
-    // paymentInfo: initValGRNPaymentInfo,
+    rmn: '',
     billImage: null,
 }

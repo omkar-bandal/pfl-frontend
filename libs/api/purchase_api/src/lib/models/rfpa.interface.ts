@@ -18,10 +18,12 @@ export interface RFPA_Items {
 }
 export interface Payment_Info {
     paymentMode: string;
-    paymentTerms: string;
-    paymentDate: Date;
-    dueDate: Date;
+    creditPeriod: number;
+    paymentDate: string;
+    paymentTerms: number;
+    dueDate: string;
     advancePaidAmt: number;
+    validityofQuote: string;
 }
 export interface PostRFPA {
     rfpaId?: string;
@@ -43,6 +45,7 @@ export interface PostRFPA {
     deliveryReceivingPerson: string;
     validityOfQuote: string;
     packingInstruction: string;
+    remark: string;
 }
 export interface GetRFPA {
     id: string;
@@ -65,6 +68,7 @@ export interface GetRFPA {
     deliveryReceivingPerson: string;
     validityOfQuote: string;
     packingInstruction: string;
+    remark: string;
     approvalStatus?: string;
 }
 

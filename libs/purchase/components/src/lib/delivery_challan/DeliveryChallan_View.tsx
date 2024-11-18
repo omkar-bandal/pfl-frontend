@@ -1,165 +1,201 @@
-import { Box, Button, Divider, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { PURCHASE_API_URL, useGetDeliveryChallan } from "@prime-fresh/purchase_api";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+import { smallLogo } from "@prime-fresh/ui_shared";
 
 export const DeliveryChallanView = () => {
+    const contentRef = useRef<HTMLDivElement>(null);
+    const reactToPrintFn = useReactToPrint({ contentRef });
     // const navigate = useNavigate();
     const [reason, setReason] = useState<string>("");
-    // const [approval, setApproval] = useState<string>("");
+    const [approval, setApproval] = useState<string>("");
     const { id } = useParams<{ id: string }>();
     const dcId = id ? id : '';
     const { data: dc, isLoading } = useGetDeliveryChallan(PURCHASE_API_URL.GET_A_MC_VOUCHER, dcId);
+    const dcData = dc ? dc : [];
     console.log(dc)
     return (
-        <Box sx={{ flex: 1, padding: 1 }}>
+        <Container maxWidth="xl">
             {isLoading ?
                 (<Box sx={{ flex: 1 }}>
                     <LinearProgress />
                 </Box>) :
                 (
-                    <Grid container direction="column" rowSpacing={1}>
-                        <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
-                            <Grid container direction="row">
-                                <Grid item xs={8}>
-                                    <Typography variant="h4" component="span">Delivery Challan Details</Typography>
-                                </Grid>
-                                <Grid item xs={4} sx={{ display: "flex", alignItem: "center", justifyContent: "space-around" }}>
-                                    <Button fullWidth variant="contained" color='success' size='medium' sx={{ width: 150, height: 40 }}>Approve</Button>
-                                    <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ width: 150, height: 40 }}>Not Approve</Button>
+                    <Box sx={{ flex: 1, marginY: 1 }}>
+                        <Grid container rowSpacing={1}>
+                            <Grid xs={12} md={6}>
+                                <Typography variant="h4" component="div" sx={{ fontWeight: 700 }}>Delivery Challan Details</Typography>
+                            </Grid>
+                            <Grid xs={12} md={6}>
+                                <Grid container columnSpacing={2}>
+                                    <Grid item xs={4}>
+                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED") }}>Approve</Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved") }}>Not Approve</Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
+                                    </Grid>
                                 </Grid>
                             </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
+                                <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
-                            <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Challan No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.challanNo}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Challan Type : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.deliveryCType}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Created Date : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.createdDate}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Created Time : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.createdTime?.split('.', 1)}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Requested By : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.requestedBy?.firstName} {dc?.requestedBy?.lastName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Requesting Department : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.requestingDepartment}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.grnNo}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.companyName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                            Party Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.partyName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                From Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.fromLocation}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                To Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.toLocation}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Driver Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.driverName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Vehicle Number : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.vehicleNo}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Driver Contact : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{`${dc?.contactNo} , ${dc?.altContactNo}`}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Divider textAlign="left" sx={{ marginY: 2 }}>Products Information</Divider>
-                        <Grid item>
-                            <TableContainer component={Box}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Name</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Quantity</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Rate</TableCell>
-                                            <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Amount</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {dc?.items.map((product, index: number) => (
-                                            <TableRow
-                                                key={index}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemName}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemQty}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.rate}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amt}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Total Amount : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.totAmt}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Receiver Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dc?.receiverName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                    </Grid>
+                        <Box sx={{ flex: 1, padding: 1 }} ref={contentRef}>
+                            <Box sx={{ width: '100%', marginY: 1, padding: 2, border: `1px solid #000000` }}>
+                                <Grid container>
+                                    <Grid item xs={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <Box sx={{ width: 250, height: 100, padding: 1 }}>
+                                            <img
+                                                src={smallLogo}
+                                                alt="prime-fresh-logo"
+                                                style={{ width: `100%`, height: `100%` }}
+                                            />
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={10} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "end" }}>
+                                        <Typography variant="h6" component="div" textAlign="end" sx={{ fontWeight: 700 }}>DELIVERY CHALLAN</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid container rowSpacing={1} sx={{ border: '1px solid black' }}>
+                                    <Grid item xs={2}>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}>Head Office:</Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}>102, Sanskar-Il, Nr. Ketav Petrol Pump, Polytechnic Rd, Ambawadi, Ahmedabad-380015.</Typography>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}>Ph.:+91-79-40320244, Email: info@primefreshlimited.com, Web: www.primefreshlirnited.corn</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}>Naroda Shop:</Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}> Mini Shed No. 3, Anar Estate, Nr. K.D.Market, Naroda Fruit Market, Naroda, Ahrnedabad.</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}>Mumbai Office:</Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <Typography variant="body2" component="div" sx={{ fontWeight: 700 }}>448, APMC Masala Market, Sec-19, Market-1, Phase-2, Vashi, New Mumbai-400073.</Typography>
+                                    </Grid>
+                                </Grid>
+                                {/* <Grid container padding={2} columnSpacing={2} rowSpacing={1}>
+                                    <Grid item xs={12} md={8}>
+                                        <Grid container>
+                                            <Grid item xs={3}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}> Debit / Credit to :</Typography>
+                                            </Grid>
+                                            <Grid item xs={9} sx={{ borderBottom: `1px solid #000000` }}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.debitCreditTo}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <Grid container>
+                                            <Grid item xs={3}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>Location :</Typography>
+                                            </Grid>
+                                            <Grid item xs={9} sx={{ borderBottom: `1px solid #000000` }}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.location}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12} md={8}>
+                                        <Grid container>
+                                            <Grid item xs={3}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>  Pay to / Received from : </Typography>
+                                            </Grid>
+                                            <Grid item xs={9} sx={{ borderBottom: `1px solid #000000` }}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.payReceivedFrom}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <Grid container>
+                                            <Grid item xs={3}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>Date :</Typography>
+                                            </Grid>
+                                            <Grid item xs={9} sx={{ borderBottom: `1px solid #000000` }}>
+                                                <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.createdDate}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Box sx={{ flex: 1, border: `1px solid #000000` }}>
+                                    <TableContainer component={Box}>
+                                        <Table sx={{ minWidth: 650 }} size="small">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Sr. No.</TableCell>
+                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Particulars</TableCell>
+                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Amount (Rs)</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {dcData?.particulars.map((row, index) => (
+                                                    <TableRow key={row.id}>
+                                                        <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{index + 1}</TableCell>
+                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.description}</TableCell>
+                                                        <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.amt}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                    <Grid container marginY={2} paddingX={1}>
+                                        <Grid item xs={10}>
+                                            <Grid container rowSpacing={3} columnSpacing={2}>
+                                                <Grid item xs={3}>
+                                                    <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>Payment Mode :</Typography>
+                                                </Grid>
+                                                <Grid item xs={3} sx={{ borderBottom: `1px solid #000000` }}>
+                                                    <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.paymentMode}</Typography>
+                                                </Grid>
+                                                <Grid item xs={3}>
+                                                    <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>Total Amount :</Typography>
+                                                </Grid>
+                                                <Grid item xs={3} sx={{ borderBottom: `1px solid #000000` }}>
+                                                    <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.totalAmt}</Typography>
+                                                </Grid>
+                                                <Grid item xs={3}>
+                                                    <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>Rupees :</Typography>
+                                                </Grid>
+                                                <Grid item xs={9} sx={{ borderBottom: `1px solid #000000` }}>
+                                                    <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.amtWords}</Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item xs={2} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                            <Box sx={{ width: 100, height: 100, border: '1px solid #000000' }}></Box>
+                                            <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Receiver Sign</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Box> */}
+                                <Grid container marginY={1}>
+                                    <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
+                                        <Box sx={{ width: '100%' }}>
+                                            <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
+                                            {/* <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${dcData?.requestedBy.firstName} ${dcData?.requestedBy.lastName})`}</Typography> */}
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
+                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Passed By</Typography>
+                                    </Grid>
+                                    <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
+                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Approved By</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Box>
+                    </Box>
                 )}
-        </Box>
+        </Container>
     )
 }

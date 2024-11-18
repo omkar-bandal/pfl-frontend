@@ -33,4 +33,5 @@ export declare const PURCHASE_API_URL: {
     GET_ALL_DELIVERY_CHALLAN: string;
     GET_A_DELIVERY_CHALLAN: string;
     UPDATE_DELIVERY_CHALLAN: string;
+    GET_ALL_DELIVERY_CHALLAN_NO: string;
 };

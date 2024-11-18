@@ -1,11 +1,12 @@
 import { Button, Grid, Stack, Typography } from '@mui/material'
 import { PostLPvoucher, PURCHASE_API_URL, useCreateLPVoucher, useGetAllGRN } from '@prime-fresh/purchase_api'
 import { initValLabourPaymentvoucher, numToWords, PURCHASE_ARRAYS, setPreviewLPVoucher } from '@prime-fresh/purchase/modules'
-import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from '@prime-fresh/ui_shared'
+import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { LPVoucherPreview } from './LP_Voucher_Preview'
 import { setPreview} from '@prime-fresh/modules'
+import { appendFormData } from '@prime-fresh/shared/utils'
 
 export const LabourPaymentVoucherForm = () => {
   const dispatch = useDispatch();
@@ -21,17 +22,7 @@ export const LabourPaymentVoucherForm = () => {
   const { mutateAsync: mutatePost, isPending, isError, error, data: Res } = useCreateLPVoucher(PURCHASE_API_URL.POST_LP_VOUCHER);
   const handleSubmit = (values: PostLPvoucher) => {
     const formData = new FormData();
-
-    (Object.keys(values) as Array<keyof PostLPvoucher>).forEach((key) => {
-      const value = values[key];
-      if (key === "anyAttachment" && value instanceof File) {
-        formData.append(key, value);
-      }
-      else if (typeof value !== "undefined" && value !== null) {
-        formData.append(key, value.toString()); // For all other fields
-      }
-    });
-    // Mutate the formData with your mutation function
+    appendFormData(formData, values);
     mutatePost(formData);
   };
   return (
@@ -188,6 +179,29 @@ export const LabourPaymentVoucherForm = () => {
                   label="Products"
                   value={values.products}
                   handleChange={handleChange} />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInput
+                  type="text"
+                  multiline
+                  maxRows={2}
+                  isRequired={false}
+                  name="remark"
+                  label="Remark"
+                  value={values.remark}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <RadioGroupInput
+                  isRequired={true}
+                  label="is Labour KYC Attached ? (If available) :"
+                  name="kyc"
+                  value={values.kyc}
+                  options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />

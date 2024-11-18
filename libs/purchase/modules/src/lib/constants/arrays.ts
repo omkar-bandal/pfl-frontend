@@ -21,5 +21,6 @@ export const PURCHASE_ARRAYS = {
         { value: "Customer", label: "Customer" },
         { value: "Stock Transfer (Internal)", label: "Stock Transfer (Internal)" },
         { value: "DC-DC Stock Transfer", label: "DC-DC Stock Transfer" },
+        { value: "Other", label: "Other" }, 
     ]
 }

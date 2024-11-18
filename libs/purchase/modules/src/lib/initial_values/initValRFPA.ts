@@ -16,21 +16,24 @@ export const initValRFPAItems: RFPA_Items = {
 }
 const initValPaymentInfo: Payment_Info = {
     paymentMode: '',
-    paymentDate: new Date(),
-    dueDate: new Date(),
+    paymentDate: '',
+    paymentTerms: 0,
+    dueDate: '',
     advancePaidAmt: 0,
-    paymentTerms: '',
+    creditPeriod: 0,
+    validityofQuote: '',
 }
 export const initValRFPA= {
     companyName: '',
     purchaseLocation: '',
     purchaseForWhich: '',
     specialReq: '',
-    source: '',
+    source: 'vendor',
     selectedParty: '',
     rfpaProducts: [initValRFPAItems],
     paymentInfo: initValPaymentInfo,
     deliveryReceivingPerson: '',
     validityOfQuote: '',
     packingInstruction: '',
+    remark: '',
 }

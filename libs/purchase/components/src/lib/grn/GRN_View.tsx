@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { useNavigate, useParams } from "react-router-dom";
 import { AxiosResponse } from "axios";
@@ -7,6 +7,10 @@ import { displayAddress, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { axiosInstance, handleError } from "@prime-fresh/common_api";
 import { useReactToPrint } from "react-to-print";
 import { smallLogo } from "@prime-fresh/ui_shared";
+import { ADMIN_API_URL, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from "@prime-fresh/admin_api";
+import { useDispatch } from "react-redux";
+import { farmerDataReducer, farmersDataState, productsDataState, setProducts, setSelectedFarmer, setSelectedVendor, setUOMs, uomsDataState, vendorsDataState } from "@prime-fresh/admin/modules";
+import { useAppSelector } from "@prime-fresh/modules";
 
 export const GRNView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -17,12 +21,34 @@ export const GRNView = () => {
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
   const { data: grn, isLoading } = useGetGRN(PURCHASE_API_URL.GET_A_GRN, grnId);
-  console.log(grn)
+  const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
+  const { data: Farmers } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
+  const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+  const products = Products ? Products : [];
+  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+  const uoms = UOMs ? UOMs : [];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if(grn?.source === "vendor"){
+      const vendor = Vendors?.find(vendor => vendor.id === grn.selectedParty);
+      dispatch(setSelectedVendor(vendor));
+    }else{
+      const farmer = Farmers?.find(farmer => farmer.id === grn?.selectedParty);
+      dispatch(setSelectedFarmer(farmer));
+    }
+    dispatch(setProducts(products));
+    dispatch(setUOMs(uoms));
+  })
+  const {selectedVendor} = useAppSelector(vendorsDataState);
+  const {selectedFarmer} = useAppSelector(farmersDataState);
+  const {allProducts} = useAppSelector(productsDataState);
+  const {allUOMs} = useAppSelector(uomsDataState);
+
   const role = localStorage.getItem('role');
   const handleStatusChange = async () => {
     try {
-      const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${grnId}`, 
-        {approvalNote: `${reason}`, approvalStatus: `${approval}`});
+      const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${grnId}`,
+        { approvalNote: `${reason}`, approvalStatus: `${approval}` });
       console.log(response.data);
       if (response.status === 200)
         navigate(PURCHASE_ROUTES.GET_ALL_GRN);
@@ -144,31 +170,31 @@ export const GRNView = () => {
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>{grn?.source === "vendor" ? "Vendor" : "Farmer"} Name</Typography>
                   </Grid>
                   <Grid item xs={6} sx={{ borderBottom: `1px solid #000000`, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? grn?.vendor?.companyName : `${grn?.farmer?.farmerfName} ${grn?.farmer?.farmerlName}`}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.companyName : `${selectedFarmer?.farmerfName} ${selectedFarmer?.farmerlName}`}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>{grn?.source === "vendor" ? "Vendor" : "Farmer"} Code</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? grn?.vendor?.vendorCode : grn?.farmer?.farmerCode}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.vendorCode : selectedFarmer?.farmerCode}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>Contact No</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: `1px solid #000000`, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? grn?.vendor?.officeContactNo : grn?.farmer?.primaryMobileNo}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.officeContactNo : selectedFarmer?.primaryMobileNo}</Typography>
                   </Grid>
                   <Grid item xs={4} sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>Email</Typography>
                   </Grid>
                   <Grid item xs={8} sx={{ borderBottom: `1px solid #000000`, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? grn?.vendor?.email : grn?.farmer?.email}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.email : selectedFarmer?.email}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>{grn?.source === "vendor" ? "Office" : "Farm"} Address</Typography>
                   </Grid>
                   <Grid item xs={9} sx={{ borderBottom: `1px solid #000000`, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? displayAddress(grn?.vendor?.officeAddress) : displayAddress(grn?.farmer?.farmAddress)}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? displayAddress(selectedVendor?.officeAddress) : displayAddress(selectedFarmer?.farmAddress)}</Typography>
                   </Grid>
                   {grn?.source === "farmer" && (
                     <>
@@ -176,7 +202,7 @@ export const GRNView = () => {
                         <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>Residential Address</Typography>
                       </Grid>
                       <Grid item xs={9} sx={{ paddingX: 1 }}>
-                        <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(grn?.farmer?.residensialAddress)}</Typography>
+                        <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmer?.residensialAddress)}</Typography>
                       </Grid></>
                   )}
                   <Grid item xs={12}>
@@ -200,9 +226,9 @@ export const GRNView = () => {
                             >
 
                               <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{index + 1}</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{product.product ? product.product : ''}</TableCell>
+                              <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{allProducts.find(item => item.id === product.product)?.name}</TableCell>
                               <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{product.quantity ? product.quantity : ''}</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{product.uom ? product.uom : ''}</TableCell>
+                              <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{allUOMs.find(item => item.id === product.uom)?.unit}</TableCell>
                               <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000`, borderRight: `1px solid #000000` }}>{product.rate ? product.rate : ''}</TableCell>
                               <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16, borderBottom: `1px solid #000000` }}>{product.amt ? product.amt : ''}</TableCell>
                             </TableRow>

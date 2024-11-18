@@ -1,20 +1,14 @@
-import {
-  Button,
-  Grid,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Materials, PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRN } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, useGetAllUOMs } from "@prime-fresh/admin_api";
-import { UOM } from "@prime-fresh/admin/modules";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
 import { PMPVoucherPreview } from "./PMP_Voucher_Preview";
+import { appendFormData } from "@prime-fresh/shared/utils";
 
 //Labour Payment Voucher
 export const PackingMaterialPaymentVoucherForm = () => {
@@ -40,35 +34,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
   const { mutateAsync: mutatePost, isPending, isError, error, data: Res } = useCreatePMPVoucher(PURCHASE_API_URL.POST_PMP_VOUCHER);
   const handleSubmit = (values: PostPMPvoucher) => {
     const formData = new FormData();
-
-    (Object.keys(values) as Array<keyof PostPMPvoucher>).forEach((key) => {
-      const value = values[key];
-
-      if (key === "anyAttachment" && value instanceof File) 
-      {
-        formData.append(key, value); 
-      } 
-      else if (key === "address")
-        {
-          formData.append(key, JSON.stringify(value));
-        }
-      else if(key === "materials" && Array.isArray(value)) {
-        // Handle mvItems array of objects
-        value.forEach((item, index) => {
-          // Append each field of mvItems
-          Object.keys(item).forEach((field) => {
-            const fieldValue = item[field as keyof Materials];
-            // Check if fieldValue is not undefined or null
-            if (fieldValue !== undefined && fieldValue !== null) {
-              formData.append(`mvItems[${index}][${field}]`, fieldValue.toString());
-            }
-          });
-        });
-      } else if (typeof value !== "undefined" && value !== null) {
-        formData.append(key, value.toString()); // For all other fields
-      }
-    });
-    // Mutate the formData with your mutation function
+    appendFormData(formData, values);
     mutatePost(formData);
   };
   return (
@@ -307,7 +273,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
                             />
                           </Grid>
                           <Grid item xs={12} md={2}>
-                            <SelectInput isRequired={true} label="Unit" name={`materials.${index}.uom`} options={mapToValueLabelArray<UOM>(allUOMS, 'id', 'unit')} value={item.itemUom} handleChange={handleChange} />
+                            <SelectInput isRequired={true} label="Unit" name={`materials.${index}.uom`} options={mapToValueLabelArray(allUOMS, 'id', 'unit')} value={item.itemUom} handleChange={handleChange} />
                           </Grid>
                           {/* More material fields */}
                           <Grid item xs={12} md={2}>
@@ -400,11 +366,34 @@ export const PackingMaterialPaymentVoucherForm = () => {
                 <TextInput
                   type="text"
                   isRequired={false}
-                  name="receivedBy"
-                  label="ReceivedBy"
-                  value={values.receivedBy}
+                  name="receiverName"
+                  label="Receiver Name"
+                  value={values.receiverName}
                   handleChange={handleChange}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInput
+                  type="text"
+                  multiline
+                  maxRows={2}
+                  isRequired={false}
+                  name="remark"
+                  label="Remark"
+                  value={values.remark}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <RadioGroupInput
+                  isRequired={true}
+                  label="is KYC attached? (if available)"
+                  name="kyc"
+                  value={values.kyc}
+                  options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />

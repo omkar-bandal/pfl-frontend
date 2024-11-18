@@ -21,6 +21,9 @@ exports.initValDeliveryChallan = {
     vehicleNo: '',
     receiverName: '',
     deliveryCType: '',
+    otherCType: '',
+    remark: '',
+    rmn: '',
     anyAttachment: null,
 };
 //# sourceMappingURL=initValDeliveryChallan.js.map

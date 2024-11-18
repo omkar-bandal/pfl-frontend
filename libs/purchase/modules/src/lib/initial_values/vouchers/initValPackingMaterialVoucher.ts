@@ -1,3 +1,4 @@
+import { PostPMPvoucher } from "@prime-fresh/purchase_api";
 import { initValAddress } from "../initValAddress";
 
 export const initValPackingMaterials = {
@@ -7,7 +8,7 @@ export const initValPackingMaterials = {
     rate: 0,
     amt: 0,
   };
-  export const initValPackingMaterialVoucher = {
+  export const initValPackingMaterialVoucher: PostPMPvoucher = {
     grnNo: "",
     companyName: '',
     debitCreditTo: "",
@@ -23,6 +24,8 @@ export const initValPackingMaterials = {
     ratePerLabour: 0,
     totalAmt: 0,
     amtWords: "",
-    receivedBy: "",
+    receiverName: "",
+    kyc: false,
+    remark: "",
     anyAttachment: null,
   };

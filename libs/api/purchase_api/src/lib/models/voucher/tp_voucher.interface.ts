@@ -15,9 +15,11 @@ export interface PostTPvoucher {
     products: string,
     paymentMode: string,
     freightAmt: number,
+    kyc: boolean,
     totalAmt: number,
     amtWords: string,
-    receivedBy: string,
+    receiverName: string,
+    remark: string,
     anyAttachment: File | null,
 }
 export interface GetTPvoucher {
@@ -41,10 +43,12 @@ export interface GetTPvoucher {
     products: string,
     paymentMode: string,
     freightAmt: number,
+    kyc: boolean;
     totalAmt: number,
     amtWords: string,
     anyAttachment: string,
     approvalStatus: string,
     receiverName: string,
     receivedBy: string,
+    remark: string,
 }

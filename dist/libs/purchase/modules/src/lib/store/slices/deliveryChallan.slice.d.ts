@@ -5,7 +5,7 @@ type deliveryChallanState = {
     selectedDC: GetDeliveryChallan | undefined;
     previewDC: PostDeliveryChallan | GetDeliveryChallan | undefined;
 };
-export declare const setDCs: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetDeliveryChallan[], "delivery_challan/setDCs">, setPreviewDC: import("@reduxjs/toolkit").ActionCreatorWithOptionalPayload<GetDeliveryChallan | PostDeliveryChallan | undefined, "delivery_challan/setPreviewDC">, setSelectedDC: import("@reduxjs/toolkit").ActionCreatorWithOptionalPayload<GetDeliveryChallan | undefined, "delivery_challan/setSelectedDC">;
+export declare const setDCs: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetDeliveryChallan[], "delivery_challan/setDCs">, setPreviewDC: import("@reduxjs/toolkit").ActionCreatorWithOptionalPayload<PostDeliveryChallan | GetDeliveryChallan | undefined, "delivery_challan/setPreviewDC">, setSelectedDC: import("@reduxjs/toolkit").ActionCreatorWithOptionalPayload<GetDeliveryChallan | undefined, "delivery_challan/setSelectedDC">;
 export declare const dcState: (state: RootState) => deliveryChallanState;
 export declare const deliveryChallanReducer: import("@reduxjs/toolkit").Reducer<deliveryChallanState>;
 export {};

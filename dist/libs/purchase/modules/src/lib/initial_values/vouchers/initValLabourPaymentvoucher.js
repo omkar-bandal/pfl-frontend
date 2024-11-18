@@ -13,11 +13,13 @@ exports.initValLabourPaymentvoucher = {
     contactNo: '',
     altContactNo: '',
     products: '',
+    kyc: false,
     paymentMode: '',
     ratePerLabour: 0,
     totalAmt: 0,
     amtWords: '',
     receiverName: '',
+    remark: '',
     anyAttachment: null,
 };
 //# sourceMappingURL=initValLabourPaymentvoucher.js.map

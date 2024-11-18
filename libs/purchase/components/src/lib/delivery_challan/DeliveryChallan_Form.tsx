@@ -4,10 +4,11 @@ import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, setPreviewDC } from "@prime-fresh/purchase/modules";
 import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
-import { DCItems, PostDeliveryChallan, PURCHASE_API_URL, useCreateDeliveryChallan, useGetAllGRN } from "@prime-fresh/purchase_api";
+import { PostDeliveryChallan, PURCHASE_API_URL, useCreateDeliveryChallan, useGetAllGRN } from "@prime-fresh/purchase_api";
 import { DeliveryChallanPreview } from "./DeliveryChallan_Preview";
 import { useDispatch } from "react-redux";
 import { setPreview} from "@prime-fresh/modules";
+import { appendFormData } from "@prime-fresh/shared/utils";
 
 export const DeliveryChallanForm = () => {
   const dispatch = useDispatch();
@@ -15,23 +16,7 @@ export const DeliveryChallanForm = () => {
   const { mutateAsync: mutatePost } = useCreateDeliveryChallan(PURCHASE_API_URL.POST_DELIVERY_CHALLAN);
   const handleSubmit = (values: PostDeliveryChallan) => {
     const formData = new FormData();
-    (Object.keys(values) as Array<keyof PostDeliveryChallan>).forEach((key) => {
-      const value = values[key];
-      if (key === "anyAttachment" && value instanceof File) {
-        formData.append(key, value); // Append file directly
-      } else if (key === "items" && Array.isArray(value)) {
-        value.forEach((item, index) => {
-          Object.keys(item).forEach((field) => {
-            const fieldValue = item[field as keyof DCItems];
-            if (fieldValue !== undefined && fieldValue !== null) {
-              formData.append(`items[${index}][${field}]`, fieldValue.toString());
-            }
-          });
-        });
-      } else if (typeof value !== "undefined" && value !== null) {
-        formData.append(key, value.toString());
-      }
-    });
+    appendFormData(formData, values);
     mutatePost(formData);
   };
   return (
@@ -39,7 +24,7 @@ export const DeliveryChallanForm = () => {
       <Formik
         initialValues={initValDeliveryChallan}
         onSubmit={(values) => {
-          console.log(values); // Output the form data
+          console.log(values); 
           handleSubmit(values);
         }}
       >
@@ -79,7 +64,10 @@ export const DeliveryChallanForm = () => {
               <Grid item xs={12}>
                 <RadioGroupInput isRequired={true} name="deliveryCType" label="Challan Type" options={PURCHASE_ARRAYS.deliveryChallanType} value={values.deliveryCType} handleChange={handleChange} />
               </Grid>
-              {/* GRN No. */}
+              { values.deliveryCType === "Other" ? 
+              (<Grid item xs={12}>
+                <TextInput isRequired={true} name="otherCType" label="If other please specify " type="text" value={values.otherCType} handleChange={handleChange} touched={touched} errors={errors} />
+              </Grid>) : ('')}
               <Grid item xs={12} md={3}>
                 <SelectInput isRequired={false} name="grnNo" label="Referred GRN" value={values.grnNo} options={allGRN ? mapToValueLabelArray(allGRN, 'id', 'grnNo') : [{ label: '', value: '' }]}
                   handleChange={handleChange} />
@@ -247,13 +235,33 @@ export const DeliveryChallanForm = () => {
                   handleChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
                   isRequired={true}
                   name="receiverName"
                   label="Receiver Name"
                   value={values.receiverName}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="rmn"
+                  label="RM Name"
+                  value={values.rmn}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="remark"
+                  label="Remark"
+                  value={values.remark}
                   handleChange={handleChange}
                 />
               </Grid>

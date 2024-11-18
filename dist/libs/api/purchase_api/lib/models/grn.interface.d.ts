@@ -42,6 +42,7 @@ export interface PostGRN {
     vehicleNo: string;
     timeIn: string;
     cratesIn: number;
+    rmn: string;
     billImage: File | null;
 }
 export interface GetGRN {
@@ -77,11 +78,12 @@ export interface GetGRN {
     cratesIn: number;
     purchasedBy: string;
     securityPerson: string;
+    rmn: string;
     approvalStatus?: string;
     approvalNote?: string;
     billImage: File | null;
 }
-export interface getAllGRNnumbers {
+export interface GetAllGRNnumbers {
     id: string;
     grnNo: string;
 }

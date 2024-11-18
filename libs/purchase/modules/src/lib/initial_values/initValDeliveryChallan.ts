@@ -1,3 +1,5 @@
+import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
+
 export const initValMaterials = {
     itemName: "",
     itemQty: 0,
@@ -5,7 +7,7 @@ export const initValMaterials = {
     amt: 0,
   };
   
-  export const initValDeliveryChallan = {
+  export const initValDeliveryChallan: PostDeliveryChallan = {
     partyName: '',
     grnNo: '',
     companyName: '',
@@ -19,5 +21,8 @@ export const initValMaterials = {
     vehicleNo: '',
     receiverName: '',
     deliveryCType: '',
+    otherCType: '',
+    remark: '',
+    rmn: '',
     anyAttachment: null,
   };

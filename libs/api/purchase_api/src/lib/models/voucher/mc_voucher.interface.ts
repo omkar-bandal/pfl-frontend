@@ -1,24 +1,23 @@
 import { RequestedBy } from "../requestedBy.interface";
 
-export interface MVItems {
+export interface Particulars {
     id?: string,
-    itemName: string,
-    itemQty: number,
-    itemUom: string,
-    rate: number,
+    description: string,
     amt: number,
 }
 export interface PostMCvoucher {
     grnNo: string,
+    challanNo: string,
     companyName: string;
     debitCreditTo: string,
     payReceivedFrom: string,
     location: string,
-    mvItems: MVItems[]
+    particulars: Particulars[],
     totalAmt: number,
     amtWords: string,
     paymentMode: string,
-    receivedBy: string,
+    receiverName: string,
+    remark: string,
     anyAttachment: File | null,
 }
 export interface GetMCvoucher {
@@ -29,6 +28,7 @@ export interface GetMCvoucher {
     requestingDepartment: string,
     voucherNo: string,
     grnNo: string,
+    challanNo: string,
     companyName: string,
     debitCreditTo: string,
     payReceivedFrom: string,
@@ -39,13 +39,10 @@ export interface GetMCvoucher {
     anyAttachment: string,
     approvalStatus: string,
     receiverName: string,
-    receivedBy: string,
-    mvItems: {
+    remark: string,
+    particulars: {
         id: string,
-        itemName: string,
-        itemQty: number,
-        itemUom: string,
-        rate: number,
+        description: string,
         amt: number,
     }[],
 }

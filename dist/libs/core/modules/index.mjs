@@ -6285,7 +6285,7 @@ Se.HttpStatusCode = Li;
 Se.default = Se;
 const th = {
   //Authentication
-  BASE_URL: "https://3e9a-182-156-141-17.ngrok-free.app"
+  BASE_URL: "ec2-13-234-20-64.ap-south-1.compute.amazonaws.com:80"
 }, Ui = Se.create({
   baseURL: th.BASE_URL,
   headers: {

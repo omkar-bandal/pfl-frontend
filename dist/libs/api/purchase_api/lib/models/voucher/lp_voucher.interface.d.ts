@@ -11,12 +11,14 @@ export interface PostLPvoucher {
     workLocation: string;
     contactNo: string;
     altContactNo: string;
+    kyc: boolean;
     products: string;
     paymentMode: string;
     ratePerLabour: number;
     totalAmt: number;
     amtWords: string;
     receiverName: string;
+    remark: string;
     anyAttachment: File | null;
 }
 export interface GetLPvoucher {
@@ -38,10 +40,12 @@ export interface GetLPvoucher {
     contactNo: string;
     altContactNo: string;
     products: string;
+    kyc: boolean;
     paymentMode: string;
     totalAmt: number;
     amtWords: string;
     receiverName: string;
+    remark: string;
     anyAttachment: string;
     approvalStatus: string;
 }

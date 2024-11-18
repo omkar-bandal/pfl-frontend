@@ -17,14 +17,7 @@ export interface GRNProducts {
     revisedRate: number,
     revisedQuantity: number,
 }
-// export interface GRNPaymentInfo {
-//     paymentMode: string,
-//     paymentDate: Date,
-//     advancePaidAmt: number,
-//     paymentTerms: string,
-//     dueDate: Date,
-//     creditPeriod: number,
-// }
+
 export interface PostGRN {
     dealSlipId?: string;
     billNo: string;
@@ -51,9 +44,10 @@ export interface PostGRN {
     vehicleNo: string,
     timeIn: string,
     cratesIn: number,
-    // paymentInfo: GRNPaymentInfo,
+    rmn: string,
     billImage: File | null,
 }
+
 export interface GetGRN {
     id: string;
     grnNo?: string;
@@ -87,13 +81,13 @@ export interface GetGRN {
     cratesIn: number,
     purchasedBy: string,
     securityPerson: string,
-    // paymentInfo: GRNPaymentInfo, 
+    rmn: string, 
     approvalStatus?: string;
     approvalNote?: string;
     billImage: File | null;
 }
 
-export interface getAllGRNnumbers {
+export interface GetAllGRNnumbers {
     id: string;
     grnNo: string;
 }

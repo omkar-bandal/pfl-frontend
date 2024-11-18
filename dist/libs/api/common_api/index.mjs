@@ -4523,7 +4523,7 @@ de.HttpStatusCode = On;
 de.default = de;
 const Na = {
   //Authentication
-  BASE_URL: "https://3e9a-182-156-141-17.ngrok-free.app"
+  BASE_URL: "ec2-13-234-20-64.ap-south-1.compute.amazonaws.com:80"
 }, $e = de.create({
   baseURL: Na.BASE_URL,
   headers: {

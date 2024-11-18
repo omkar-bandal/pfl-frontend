@@ -25,7 +25,9 @@ export interface PostPMPvoucher {
     ratePerLabour: number,
     totalAmt: number,
     amtWords: string,
-    receivedBy: string,
+    receiverName: string,
+    kyc: boolean,
+    remark: string,
     anyAttachment: File | null,
 }
 export interface GetPMPvoucher {
@@ -56,6 +58,8 @@ export interface GetPMPvoucher {
         rate: number,
         amt: number,}[],
     receiverName: string,
+    kyc: boolean,
+    remark: string,
     anyAttachment: string,
     approvalStatus: string,
 }

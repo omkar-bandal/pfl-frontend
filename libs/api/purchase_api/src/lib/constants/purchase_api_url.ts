@@ -50,4 +50,5 @@ export const PURCHASE_API_URL = {
     GET_ALL_DELIVERY_CHALLAN: "/deliveryChallan/",
     GET_A_DELIVERY_CHALLAN: "/deliveryChallan",
     UPDATE_DELIVERY_CHALLAN: "/deliveryChallan/",
+    GET_ALL_DELIVERY_CHALLAN_NO: "/deliveryChallan/challanNos/getAllChallanNo",
 }

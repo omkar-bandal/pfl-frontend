@@ -12,4 +12,5 @@ export declare const initValRFPA: {
     deliveryReceivingPerson: string;
     validityOfQuote: string;
     packingInstruction: string;
+    remark: string;
 };

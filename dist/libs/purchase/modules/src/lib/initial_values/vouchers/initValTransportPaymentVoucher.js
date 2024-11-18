@@ -16,9 +16,11 @@ exports.initValTransportPaymentVoucher = {
     products: "",
     paymentMode: "",
     freightAmt: 0,
+    kyc: false,
     totalAmt: 0,
     amtWords: "",
-    receivedBy: "",
+    receiverName: "",
+    remark: "",
     anyAttachment: null,
 };
 //# sourceMappingURL=initValTransportPaymentVoucher.js.map

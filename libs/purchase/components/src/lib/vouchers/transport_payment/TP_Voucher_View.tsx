@@ -28,7 +28,7 @@ export const TransportPaymentVoucherView = () => {
         createData(5, "Destination", tpVoucher?.destinationLocation, "", ""),
         createData(5, "Product", tpVoucher?.products, "", ""),
         createData(7, "Freight Amount (Box, Crates x )", tpVoucher?.freightAmt, "", ""),
-        createData(8, "KYC : Driver Lic. / RC Book / PAN", tpVoucher?.products, "", ""),
+        createData(8, "KYC : Driver Lic. / RC Book / PAN", tpVoucher?.kyc === true? "Yes" : "No", "", ""),
     ];
 
     return (
@@ -74,7 +74,7 @@ export const TransportPaymentVoucherView = () => {
                                         </Box>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Typography variant="h6" component="div" textAlign="center" sx={{ fontWeight: 700 }}>LABOUR PAYMENT VOUCHER</Typography>
+                                        <Typography variant="h6" component="div" textAlign="center" sx={{ fontWeight: 700 }}>TRANSPORT PAYMENT VOUCHER</Typography>
                                         <Typography variant="h4" component="div" textAlign="center" sx={{ fontWeight: 700 }}>PRIME FRESH LIMITED</Typography>
                                         <Typography variant="caption" component="div" textAlign="center">102, Sanskar-ll, Nr. Ketav Petrol Pump, Polytechnic Road, Ambawadi, Ahmedabad-380015.</Typography>
                                         <Typography variant="caption" component="div" textAlign="center"> Ph.:+91-79-40320244, Email: info@primecustomer.co.in, Web: www.primecustomer.co.in</Typography>
@@ -179,8 +179,8 @@ export const TransportPaymentVoucherView = () => {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={2} padding={1}>
-                                            <Box sx={{ width: '100%', height: 70, border: '1px solid #000000' }}></Box>
+                                        <Grid item xs={2} sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                            <Box sx={{ width: 100, height: 100, border: '1px solid #000000' }}></Box>
                                             <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Receiver Sign</Typography>
                                         </Grid>
                                     </Grid>
@@ -189,6 +189,7 @@ export const TransportPaymentVoucherView = () => {
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
                                         <Box sx={{width: '100%', height: 50}}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
+                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${tpVoucher?.requestedBy.firstName} ${tpVoucher?.requestedBy.lastName})`}</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
                                         <Box sx={{width: '100%', height: 50}}></Box>

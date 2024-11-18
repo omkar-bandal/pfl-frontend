@@ -25,7 +25,9 @@ exports.initValPackingMaterialVoucher = {
     ratePerLabour: 0,
     totalAmt: 0,
     amtWords: "",
-    receivedBy: "",
+    receiverName: "",
+    kyc: false,
+    remark: "",
     anyAttachment: null,
 };
 //# sourceMappingURL=initValPackingMaterialVoucher.js.map

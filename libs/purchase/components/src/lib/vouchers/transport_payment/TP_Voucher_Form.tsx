@@ -4,19 +4,20 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { PostTPvoucher, PURCHASE_API_URL, useCreateTPVoucher, useGetAllGRN } from "@prime-fresh/purchase_api";
-import { initValTransportPaymentVoucher, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { PostTPvoucher, PURCHASE_API_URL, useCreateTPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
+import { initValTransportPaymentVoucher, numToWords, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
+import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./TP_Voucher_Preview";
+import { appendFormData } from "@prime-fresh/shared/utils";
 
 //Labour Payment Voucher
 export const TransportPaymentVoucherForm = () => {
   const dispatch = useDispatch();
-  const { data } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
-  const allGRN = data ? data : [];
+  const { data: grnnos } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
+  const allGRNNums = grnnos ? grnnos : [];
   // const calculateAmounts = (values: PostTPvoucher, setFieldValue: (field: string, value: any,) => void) => {
   //   const amtWords = numToWords(values.totalAmt);
   //   setFieldValue("amtWords", amtWords);
@@ -24,17 +25,7 @@ export const TransportPaymentVoucherForm = () => {
   const { mutateAsync: mutatePost, isPending, isError, error, data: Res } = useCreateTPVoucher(PURCHASE_API_URL.POST_TP_VOUCHER);
   const handleSubmit = (values: PostTPvoucher) => {
     const formData = new FormData();
-
-    (Object.keys(values) as Array<keyof PostTPvoucher>).forEach((key) => {
-      const value = values[key];
-      if (key === "anyAttachment" && value instanceof File) {
-        formData.append(key, value);
-      }
-      else if (typeof value !== "undefined" && value !== null) {
-        formData.append(key, value.toString()); // For all other fields
-      }
-    });
-    // Mutate the formData with your mutation function
+    appendFormData(formData, values);
     mutatePost(formData);
   };
   return (
@@ -85,20 +76,35 @@ export const TransportPaymentVoucherForm = () => {
                 </Stack>
               </Grid>
               <Grid item xs={12} md={4}>
-                <SelectInput isRequired={false} label="Select GRN" name="grnNo" options={mapToValueLabelArray(allGRN, 'id', 'grnNo')} value={values.grnNo} handleChange={handleChange} />
+                <SelectInput
+                  isRequired={false}
+                  label="Select GRN"
+                  name="grnNo"
+                  options={mapToValueLabelArray(allGRNNums, 'id', 'grnNo')}
+                  value={values.grnNo}
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} touched={touched} errors={errors} />
+                <SelectInput
+                  isRequired={true}
+                  label="Company Name"
+                  name="companyName"
+                  options={PURCHASE_ARRAYS.companyNames}
+                  value={values.companyName}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="location"
                   label="Location"
                   value={values.location}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
@@ -108,7 +114,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Debit / Credit To"
                   value={values.debitCreditTo}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
@@ -118,7 +125,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Pay To / Received From"
                   value={values.payReceivedFrom}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -128,22 +136,24 @@ export const TransportPaymentVoucherForm = () => {
                   label="Driver Name"
                   value={values.driverName}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="contactNo"
                   label="Contact No"
                   value={values.contactNo}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="number"
-                  isRequired={true}
+                  isRequired={false}
                   name="altContactNo"
                   label="Alternate Contact Number"
                   value={values.altContactNo}
@@ -158,7 +168,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Vehicle No"
                   value={values.vehicleNo}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
@@ -168,17 +179,19 @@ export const TransportPaymentVoucherForm = () => {
                   label="Dispatch Location"
                   value={values.dispatchLocation}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="destinationLocation"
                   label="Destination Location"
                   value={values.destinationLocation}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
@@ -188,10 +201,19 @@ export const TransportPaymentVoucherForm = () => {
                   label="Products"
                   value={values.products}
                   handleChange={handleChange}
-                />
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <SelectInput isRequired={true} label="Payment Mode" name="paymentMode" options={PURCHASE_ARRAYS.paymentMode} value={values.paymentMode} handleChange={handleChange} />
+                <SelectInput
+                  isRequired={true}
+                  label="Payment Mode"
+                  name="paymentMode"
+                  options={PURCHASE_ARRAYS.paymentMode}
+                  value={values.paymentMode}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -206,12 +228,14 @@ export const TransportPaymentVoucherForm = () => {
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="totalAmt"
                   label="Total Amount"
                   value={values.totalAmt}
                   handleChange={handleChange}
-                />
+                  onBlur={() => { const amtInWords = numToWords(values.totalAmt); setFieldValue("amtWords", amtInWords)}}
+                  touched={touched}
+                  errors={errors}/>
               </Grid>
               <Grid item xs={12} md={9}>
                 <TextInput
@@ -220,18 +244,40 @@ export const TransportPaymentVoucherForm = () => {
                   name="amtWords"
                   label="Amount In Words"
                   value={values.amtWords}
-                  handleChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
                   isRequired={false}
-                  name="receivedBy"
-                  label="Received By"
-                  value={values.receivedBy}
+                  name="receiverName"
+                  label="Receiver Name"
+                  value={values.receiverName}
                   handleChange={handleChange}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInput
+                  type="text"
+                  multiline
+                  maxRows={2}
+                  isRequired={false}
+                  name="remark"
+                  label="Remark"
+                  value={values.remark}
+                  handleChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <RadioGroupInput
+                  isRequired={true}
+                  label="is KYC attached? (Driver Lic. / RC Book / PAN)"
+                  name="kyc"
+                  value={values.kyc}
+                  options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />

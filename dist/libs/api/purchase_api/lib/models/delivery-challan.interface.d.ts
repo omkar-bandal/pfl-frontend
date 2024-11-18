@@ -20,6 +20,9 @@ export interface PostDeliveryChallan {
     vehicleNo: string;
     receiverName: string;
     deliveryCType: string;
+    otherCType: string;
+    remark: string;
+    rmn: string;
     anyAttachment: File | null;
 }
 export interface GetDeliveryChallan {
@@ -42,5 +45,12 @@ export interface GetDeliveryChallan {
     vehicleNo: string;
     receiverName: string;
     deliveryCType: string;
+    otherCType: string;
+    remark: string;
+    rmn: string;
     anyAttachment: string;
+}
+export interface GetAllChallanNumbers {
+    id: string;
+    challanNo: string;
 }

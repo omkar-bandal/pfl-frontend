@@ -1,4 +1,6 @@
-export const initValTransportPaymentVoucher = {
+import { PostTPvoucher } from "@prime-fresh/purchase_api";
+
+export const initValTransportPaymentVoucher: PostTPvoucher = {
     grnNo: "",
     companyName: '',
     debitCreditTo: "",
@@ -13,9 +15,11 @@ export const initValTransportPaymentVoucher = {
     products: "",
     paymentMode: "",
     freightAmt: 0,
+    kyc: false,
     totalAmt: 0,
     amtWords: "",
-    receivedBy: "",
+    receiverName: "",
+    remark: "",
     anyAttachment: null,
   };
   

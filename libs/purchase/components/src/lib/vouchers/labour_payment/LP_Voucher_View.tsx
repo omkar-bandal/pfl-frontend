@@ -27,6 +27,7 @@ export const LabourPaymentVoucherView = () => {
         createData(3, "Per Day Rs.", lpVoucher?.ratePerLabour, "", ""),
         createData(4, "Location of Labour Work", lpVoucher?.workLocation, "", ""),
         createData(5, "Paymetn Mode", lpVoucher?.paymentMode, "", ""),
+        createData(6, "Labour KYC Attached", lpVoucher?.kyc === true? "Yes" : "No", "", ""),
         createData(7, "Mobile No of Any 1 or 2", lpVoucher?.contactNo, "", ""),
         createData(8, "Product", lpVoucher?.products, "", ""),
     ];
@@ -190,8 +191,8 @@ export const LabourPaymentVoucherView = () => {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={2} padding={1}>
-                                            <Box sx={{ width: '100%', height: 70, border: '1px solid #000000' }}></Box>
+                                        <Grid item xs={2} sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                            <Box sx={{ width: 100, height: 100, border: '1px solid #000000' }}></Box>
                                             <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Receiver Sign</Typography>
                                         </Grid>
                                     </Grid>
@@ -200,6 +201,7 @@ export const LabourPaymentVoucherView = () => {
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
                                         <Box sx={{width: '100%', height: 50}}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
+                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000"}}>{`(${lpVoucher?.requestedBy.firstName} ${lpVoucher?.requestedBy.lastName})`}</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
                                         <Box sx={{width: '100%', height: 50}}></Box>

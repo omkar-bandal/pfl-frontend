@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { Add, Close, CloudUploadOutlined } from '@mui/icons-material'
-import { AppBar, Autocomplete, Box, Button, Dialog, Divider, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, Slide, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material'
-import { dealSlipDataState, displayAddress, grnDataState, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
+import { Add, Close, Label } from '@mui/icons-material'
+import { Autocomplete, Box, Button, FormControl, Grid, IconButton, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { dealSlipDataState, displayAddress, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { setPreview, useAppSelector } from '@prime-fresh/modules';
-import { Field, FieldArray, FieldProps, Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, GetFarmer, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { ADMIN_API_URL, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
 import { GetDealSlip, GRNProducts, PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlip } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
@@ -53,15 +53,17 @@ export const GRNForm = () => {
   }
 
   const { mutateAsync: mutatePost } = useCreateGRN(PURCHASE_API_URL.POST_GRN);
-  const { previewGRN } = useAppSelector(grnDataState);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateAmounts = (values: any, setFieldValue: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updatedProducts = values.products.map((product: any) => ({
       ...product,
       amt: product.quantity * product.rate,
     }));
 
     // Calculate subtotal from the product amounts
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const subTotalAmt = updatedProducts.reduce((acc: any, product: any) => acc + product.amt, 0);
 
     // Calculate total (subtotal + freight + other charges)
@@ -186,7 +188,7 @@ export const GRNForm = () => {
                       isRequired={true}
                       name="selectedParty"
                       label="Farmer Name"
-                      options={mapToValueLabelArray<GetFarmer>(allFarmers, 'id', 'farmerfName')}
+                      options={allFarmers.map((farmer) => ({value: farmer.id, label: `${farmer.farmerfName} ${farmer.farmerlName}`}))}
                       errors={errors}
                       touched={touched}
                       handleChange={(event, newValue) => {
@@ -284,10 +286,10 @@ export const GRNForm = () => {
                               </Grid>
                             </Grid>
                           </Grid>
-                          <Grid item xs={6} md={1}>
-                            <TextInput isRequired={false} name="productOrigin" label="Origin" value={selectedProduct?.productOrigin} isReadOnly={true} />
+                          <Grid item xs={4} md={1}>
+                            <TextInput isRequired={false} name="productOrigin" label="Origin" value={selectedProduct?.productOrigin? selectedProduct?.productOrigin : ''} isReadOnly={true} />
                           </Grid>
-                          <Grid item xs={6} md={1}>
+                          <Grid item xs={4} md={1}>
                             <Grid container direction="column">
                               <Grid item>
                                 <Typography variant='body2' component="div">Count</Typography>
@@ -301,18 +303,19 @@ export const GRNForm = () => {
                                     onChange={handleChange}
                                     size="small"
                                   >
-                                    {selectedProduct?.count.map((count, index) => (
-                                      <MenuItem key={index} value={count}>{count}</MenuItem>))}
+                                    {selectedProduct?.count ? (selectedProduct?.count.map((count, index) => (
+                                      <MenuItem key={index} value={count}>{count}</MenuItem>))) :
+                                      (<MenuItem key={''} value={''}>{''}</MenuItem>)
+                                    }
                                   </Select>
                                 </FormControl>
                               </Grid>
                             </Grid>
-                            {/* <SelectInput isRequired={true} name={`products.${index}.count`} label="Count" value={values.products[index].count} options={selectedProduct?.count.length ? selectedProduct?.count.map(str => ({ label: str, value: str })) : [{ label: '', value: '' }]} /> */}
-                          </Grid>
-                          <Grid item xs={4} md={1}>
-                            <SelectInput isRequired={true} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} touched={touched} errors={errors} />
                           </Grid>
                           <Grid item xs={4} md={2}>
+                            <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} touched={touched} errors={errors} />
+                          </Grid>
+                          <Grid item xs={4} md={1}>
                             <TextInput isRequired={false} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity}
                               handleChange={(e) => {
                                 handleChange(e);
@@ -333,26 +336,25 @@ export const GRNForm = () => {
                           <Grid item xs={4} md={2}>
                             <TextInput isRequired={false} label='Amount' name={`products.${index}.amt`} type='number' value={values.products[index].amt} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2.5}>
+                          <Grid item xs={12} md={2}>
                             <TextInput isRequired={false} label='Purchase Date' name={`products.${index}.purchaseDate`} type='date' value={values.products[index].purchaseDate} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2.5}>
+                          <Grid item xs={12} md={2}>
                             <TextInput isRequired={false} label='Dispatch Date' name={`products.${index}.dispatchDate`} type='date' value={values.products[index].dispatchDate} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2.5}>
+                          <Grid item xs={12} md={2}>
                             <TextInput isRequired={false} label='Delivery Date' name={`products.${index}.deliveryDate`} type='date' value={values.products[index].deliveryDate} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2.5}>
+                          <Grid item xs={12} md={2}>
                             <TextInput isRequired={false} label='Delivery Location' name={`products.${index}.deliveryLocation`} type='text' value={values.products[index].deliveryLocation} handleChange={handleChange} />
                           </Grid>
+                          {values.source === "farmer" ? 
+                          (<Grid item xs={12} md={2}>
+                            <TextInput isRequired={false} label='Expected Harvest Date' name={`products.${index}.expectedHarvestDate`} type='date' value={values.products[index].expectedHarvestDate} handleChange={handleChange} />
+                          </Grid>) : (<></>)}
                           <Grid item xs={12} md={2}>
                             <RadioGroupInput isRequired={true} label="RTV" name={`products.${index}.rtv`} options={[{ label: "Yes", value: "yes" }, { label: "No", value: "no" }]} value={values.products[index].rtv} onChange={handleChange} />
                           </Grid>
-                          {localStorage.getItem("role") === "MANAGER" &&
-                            <Grid item xs={12} md={2.5}>
-                              <TextInput isRequired={false} label='Revised Rate' name={`products.${index}.revisedRate`} type='number' value={values.products[index].revisedRate} handleChange={handleChange} />
-                            </Grid>
-                          }
                         </Grid>
                       ))}
                       <Box sx={{ display: 'flex', justifyContent: 'end' }}>
@@ -388,20 +390,23 @@ export const GRNForm = () => {
               <Grid item xs={12} md={2}>
                 <TextInput isRequired={false} label="Vehicle Number" name="vehicleNo" type='text' value={values.vehicleNo} handleChange={handleChange} />
               </Grid>
-              <Grid item xs={12} md={1}>
+              <Grid item xs={12} md={2}>
                 <TextInput isRequired={false} label="Crates In" name="cratesIn" type='number' value={values.cratesIn} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={2}>
                 <TextInput isRequired={false} label="Time In" name='timeIn' type='time' value={values.timeIn} handleChange={handleChange} />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} md={3}>
                 <TextInput isRequired={false} label="Received Through" name="receivedThrough" type='text' value={values.receivedThrough} handleChange={handleChange} />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} md={3}>
                 <TextInput isRequired={false} label="Purchase By" name="purchasedBy" type='text' value={values.purchasedBy} handleChange={handleChange} />
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid item xs={12} md={6}>
                 <TextInput isRequired={false} label="Security Person Name" name="securityPerson" type='text' value={values.securityPerson} handleChange={handleChange} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextInput isRequired={false} label="RM Name" name="rmn" type='text' value={values.rmn} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name='billImage' label='Bill Image' />

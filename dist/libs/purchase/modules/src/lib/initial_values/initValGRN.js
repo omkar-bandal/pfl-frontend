@@ -17,14 +17,6 @@ exports.initValGRNProducts = {
     revisedRate: 0,
     revisedQuantity: 0,
 };
-// export const initValGRNPaymentInfo: GRNPaymentInfo = {
-//     advancePaidAmt: 0,
-//     creditPeriod: 0,
-//     dueDate: new Date(),
-//     paymentDate: new Date(),
-//     paymentMode: '',
-//     paymentTerms: '',
-// }
 exports.initValGRN = {
     dealSlipId: '',
     billNo: '',
@@ -51,7 +43,7 @@ exports.initValGRN = {
     vehicleNo: '',
     timeIn: '',
     cratesIn: 0,
-    // paymentInfo: initValGRNPaymentInfo,
+    rmn: '',
     billImage: null,
 };
 //# sourceMappingURL=initValGRN.js.map
