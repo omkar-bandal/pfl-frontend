@@ -4046,7 +4046,8 @@ const uo = {
   baseURL: uo.BASE_URL,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "Content-Type": "multipart/form-data",
+    credentials: !0
   }
 }), Ri = () => localStorage.getItem("access_token"), _i = () => localStorage.getItem("refresh_token");
 Ur.interceptors.request.use(
@@ -4082,7 +4083,8 @@ const wi = async (t, e) => {
     return (await oe.post(`${uo.BASE_URL}${t}`, e, {
       headers: {
         // 'ngrok-skip-browser-warning': 'true',
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        credentials: !0
       }
     })).data;
   } catch (o) {

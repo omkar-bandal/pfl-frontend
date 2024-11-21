@@ -4608,7 +4608,8 @@ const Ba = {
   baseURL: Ba.BASE_URL,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "Content-Type": "multipart/form-data",
+    credentials: !0
   }
 }), $a = () => localStorage.getItem("access_token"), Ga = () => localStorage.getItem("refresh_token");
 We.interceptors.request.use(

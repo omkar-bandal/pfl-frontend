@@ -6,6 +6,7 @@ export const axiosInstance = axios.create({
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
     'Content-Type': 'multipart/form-data',
+    'credentials': true,
   },
 });
 

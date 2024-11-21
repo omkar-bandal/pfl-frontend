@@ -7,7 +7,8 @@ export const signinService = async (url: string, data: SignInRequest) => {
         const response: AxiosResponse<SignInResponse> = await axios.post(`${COM_API_URL.BASE_URL}${url}`, data, {
             headers: {
                 // 'ngrok-skip-browser-warning': 'true',
-                'Content-Type': 'application/json',               
+                'Content-Type': 'application/json', 
+                'credentials': true,              
             },
         });
         return response.data;

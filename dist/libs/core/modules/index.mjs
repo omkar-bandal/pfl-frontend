@@ -6306,7 +6306,8 @@ const hh = {
   baseURL: hh.BASE_URL,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "Content-Type": "multipart/form-data",
+    credentials: !0
   }
 }), mh = () => localStorage.getItem("access_token"), yh = () => localStorage.getItem("refresh_token");
 Yi.interceptors.request.use(

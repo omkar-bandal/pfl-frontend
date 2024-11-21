@@ -4529,7 +4529,8 @@ const Na = {
   baseURL: Na.BASE_URL,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "Content-Type": "multipart/form-data",
+    credentials: !0
   }
 }), Ia = () => localStorage.getItem("access_token"), Ua = () => localStorage.getItem("refresh_token");
 $e.interceptors.request.use(
