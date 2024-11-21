@@ -23043,6 +23043,7 @@ const wh = {
   // BASE_URL: "https://eef2-182-156-141-17.ngrok-free.app",
 }, ja = We.create({
   baseURL: wh.BASE_URL,
+  withCredentials: !0,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
     "Content-Type": "multipart/form-data"
@@ -23311,7 +23312,8 @@ const nP = {
       headers: {
         // 'ngrok-skip-browser-warning': 'true',
         "Content-Type": "application/json"
-      }
+      },
+      withCredentials: !0
     })).data;
   } catch (n) {
     if (We.isAxiosError(n)) {

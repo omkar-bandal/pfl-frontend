@@ -6304,6 +6304,7 @@ const hh = {
   // BASE_URL: "https://eef2-182-156-141-17.ngrok-free.app",
 }, Yi = Oe.create({
   baseURL: hh.BASE_URL,
+  withCredentials: !0,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
     "Content-Type": "multipart/form-data"

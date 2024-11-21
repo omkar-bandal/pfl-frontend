@@ -4579,6 +4579,7 @@ const Ba = {
   // BASE_URL: "https://eef2-182-156-141-17.ngrok-free.app",
 }, $e = de.create({
   baseURL: Ba.BASE_URL,
+  withCredentials: !0,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
     "Content-Type": "multipart/form-data"
