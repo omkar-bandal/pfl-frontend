@@ -9,27 +9,6 @@ export const TPVoucherListCols = (): GridColDef[] => {
     const navigate = useNavigate();
     return ([
         { field: "id", headerName: "ID", width: 30 },
-        // {
-        //     field: "grnNo",
-        //     headerName: "GRN Number",
-        //     width: 130,
-        //     align: "center",
-        //     headerAlign: "center"
-        // },
-        {
-            field: "createdAt",
-            headerName: "Created Date",
-            width: 120,
-            align: "center",
-            headerAlign: "center"
-        },
-        // {
-        //     field: "requestingDepartment",
-        //     headerName: "Department",
-        //     width: 100,
-        //     align: "center",
-        //     headerAlign: "center",
-        // },
         {
             field: "debitCreditTo",
             headerName: "Debit From / Credit To",
@@ -110,18 +89,36 @@ export const TPVoucherListCols = (): GridColDef[] => {
                 return value ? value : '-';
             }
         },
-        // {
-        //     field: "anyAttachment",
-        //     headerName: "Attachment",
-        //     width: 100,
-        //     align: "center",
-        //     headerAlign: "center",
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
-        //             <DownloadOutlined />
-        //         </IconButton>
-        //     ),
-        // },
+        {
+            field: "grnNo",
+            headerName: "Reference GRN",
+            width: 130,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
+        },
+        {
+            field: "createdDate",
+            headerName: "Created Date",
+            width: 120,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
+        },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center",
+            valueGetter: (value: string) => {
+                return value ? value : '-';
+            }
+        },
         {
             field: "approvalStatus",
             headerName: "Status",

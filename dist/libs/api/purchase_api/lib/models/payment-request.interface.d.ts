@@ -6,13 +6,19 @@ export type PostPaymentRequest = {
     ifscCode: string;
     paymentMode: string;
     typesOfTransaction: string;
+    otherTransaction: string;
     vehicleNo: string;
     placeOfPurchase: string;
-    contactperson: string;
+    contactpersonRec: string;
+    contactpersonSen: string;
     costCenter: string;
     kycByEmail: string;
     remark: string;
 };
-export type GetPaymentRequest = {
+export type GetPaymentRequest = PostPaymentRequest & {
     id: string;
-} & PostPaymentRequest;
+    requestedBy: {
+        firstName: string;
+        lastName: string;
+    };
+};

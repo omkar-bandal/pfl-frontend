@@ -1,15 +1,16 @@
 import { Box, Button, Grid, LinearProgress, Stack, Typography } from '@mui/material'
 import { PURCHASE_API_URL, useGetAllGRNNums, useGetLPVoucher, useUpdateLPVoucher } from '@prime-fresh/purchase_api'
-import { initValLabourPaymentvoucher, numToWords, PURCHASE_ARRAYS, setPreviewLPVoucher } from '@prime-fresh/purchase/modules'
-import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared'
+import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher } from '@prime-fresh/purchase/modules'
+import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { LPVoucherPreview } from './LP_Voucher_Preview'
-import { setPreview } from '@prime-fresh/modules'
-import { useParams } from 'react-router-dom'
+import { setPreview, showNotification } from '@prime-fresh/modules'
+import { useNavigate, useParams } from 'react-router-dom'
 import { appendFormData } from '@prime-fresh/shared/utils'
 
 export const LabourPaymentVoucherUpdate = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     //Get Id from URL
@@ -34,14 +35,21 @@ export const LabourPaymentVoucherUpdate = () => {
     };
 
     //React Query to update labour payment voucher
-    const { mutateAsync: mutatePatch, isPending, isError, error, data: Res } = useUpdateLPVoucher(PURCHASE_API_URL.UPDATE_LP_VOUCHER, voucherId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateLPVoucher(PURCHASE_API_URL.UPDATE_LP_VOUCHER, voucherId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUpdate = (values: any) => {
         console.log(values);
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePatch(formData);
+        mutatePatch(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Labour payment voucher updated successfully !!!" }));
+            setTimeout(() => {
+                navigate(PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER);
+            }, 5000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+        });;
     };
 
     return (
@@ -52,9 +60,10 @@ export const LabourPaymentVoucherUpdate = () => {
                 </Box >) :
                 (
                     <>
-                        <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+                        <Notification />
                         <Formik
                             initialValues={lpVoucherValues}
+                            validationSchema={labourPaymentVoucherSchema}
                             onSubmit={(values) => {
                                 console.log(values);
                                 handleUpdate(values);
@@ -96,11 +105,13 @@ export const LabourPaymentVoucherUpdate = () => {
                                         <Grid item xs={12} md={4}>
                                             <TextInput
                                                 type='text'
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="location"
                                                 label="Location"
                                                 value={values.location}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <TextInput
@@ -109,7 +120,9 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 name="debitCreditTo"
                                                 label="Debit / Credit To"
                                                 value={values.debitCreditTo}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <TextInput
@@ -118,7 +131,9 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 name="payReceivedFrom"
                                                 label="Pay To / Received From"
                                                 value={values.payReceivedFrom}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextInput
@@ -127,16 +142,20 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 name="workLocation"
                                                 label="Location of Labour Work"
                                                 value={values.workLocation}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <TextInput
                                                 type='date'
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="loadingDate"
                                                 label="Day of Loading / Unloading"
                                                 value={values.loadingDate}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <TextInput
@@ -146,7 +165,9 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 label="No of Labours"
                                                 value={values.noOfLabours}
                                                 handleChange={handleChange}
-                                                onBlur={() => calculateAmounts(values, setFieldValue)} />
+                                                onBlur={() => calculateAmounts(values, setFieldValue)}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <TextInput
@@ -156,12 +177,14 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 label="Per Day of Labour"
                                                 value={values.ratePerLabour}
                                                 handleChange={handleChange}
-                                                onBlur={() => calculateAmounts(values, setFieldValue)} />
+                                                onBlur={() => calculateAmounts(values, setFieldValue)}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <TextInput
                                                 type='number'
-                                                isRequired={true}
+                                                isRequired={false}
                                                 name="totalAmt"
                                                 label="Total Amount"
                                                 value={values.totalAmt} />
@@ -173,12 +196,14 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 name="paymentMode"
                                                 options={PURCHASE_ARRAYS.paymentMode}
                                                 value={values.paymentMode}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={9}>
                                             <TextInput
                                                 type='text'
-                                                isRequired={true}
+                                                isRequired={false}
                                                 name="amtWords"
                                                 label="Amount In Words"
                                                 value={values.amtWords} />
@@ -190,7 +215,9 @@ export const LabourPaymentVoucherUpdate = () => {
                                                 name="contactNo"
                                                 label="Contact Number"
                                                 value={values.contactNo}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <TextInput
@@ -204,11 +231,13 @@ export const LabourPaymentVoucherUpdate = () => {
                                         <Grid item xs={12} md={3}>
                                             <TextInput
                                                 type='text'
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="receiverName"
                                                 label="Receiver Name"
                                                 value={values.receiverName}
-                                                handleChange={handleChange} />
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={5}>
                                             <TextInput

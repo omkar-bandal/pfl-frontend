@@ -1,4 +1,4 @@
-import { AddShoppingCart } from '@mui/icons-material';
+import { AddShoppingCart, Category } from '@mui/icons-material';
 import {
   GridViewOutlined,
   Groups2,
@@ -81,13 +81,15 @@ export const adminNavigations: Navigations[] = [
     children: [
       {
         name: "Vendor Category",
-        path: ADMIN_ROUTES.GET_ALL_VENDORS,
+        logo: <Category />,
+        path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
         roles: [STRINGS.ROLE_ADMIN],
         depts: [STRINGS.DEPT_ADMIN]
       },
       {
-        name: "Customer Category",
-        path: ADMIN_ROUTES.GET_ALL_VENDORS,
+        name: "Vendor Subategory",
+        logo: <Category />,
+        path: ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT,
         roles: [STRINGS.ROLE_ADMIN],
         depts: [STRINGS.DEPT_ADMIN]
       },

@@ -24,6 +24,10 @@ exports.ADMIN_ROUTES = {
     GET_ALL_VENDORS: "/admin/users/vendors/getall",
     VIEW_VENDOR: "/admin/users/vendor/view",
     EDIT_VENDOR: "/admin/users/vendor/update",
+    GET_ALL_VENDORS_CAT: "/admin/users/vendors/categories/getall",
+    CREATE_VENDORS_CAT: "/admin/users/vendors/category/create",
+    GET_ALL_VENDORS_SUBCAT: "/admin/users/vendors/subcategories/getall",
+    CREATE_VENDORS_SUBCAT: "/admin/users/vendors/subcategory/create",
     //Farmer
     FARMER: "/admin/users/farmer",
     GET_ALL_FARMERS: "/admin/users/farmers/getall",
@@ -31,7 +35,8 @@ exports.ADMIN_ROUTES = {
     EDIT_FARMER: "/admin/users/farmer/update",
     //Products
     PRODUCTS: "/admin/products",
-    GET_ALL_PRODUCTS: "/admin/products/products",
+    GET_ALL_PRODUCTS: "/admin/products/products/getall",
+    GET_A_PRODUCT: "/admin/products/products/view",
     GET_ALL_PRODUCT_CLASS: "/admin/products/products_classification",
     GET_A_PRODUCT_CLASS: "/admin/products/products_classification/view",
     CREATE_PRODUCT_CLASS: "/admin/products/products_classification/create",

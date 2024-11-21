@@ -6,7 +6,7 @@ import { Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@prime-fresh/modules";
-import { employeesState, setEmployeeData } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, employeesState, setEmployeeData } from "@prime-fresh/admin/modules";
 import { ADMIN_API_URL, useGetAllEmployee } from "@prime-fresh/admin_api";
 import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
 
@@ -22,7 +22,7 @@ export function EmployeeTable() {
   }, [data, dispatch]);
   
   const handleCreate = () => {
-    navigate(ADMIN_API_URL.CREATE_EMPLOYEE);
+    navigate(ADMIN_ROUTES.CREATE_EMPLOYEE);
   }
 
   console.log(Employees);

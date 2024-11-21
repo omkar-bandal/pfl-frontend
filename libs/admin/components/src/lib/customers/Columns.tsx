@@ -3,17 +3,17 @@ import { Preview, Edit } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES, setDataId, setOpenFor } from "@prime-fresh/admin/modules";
-import { useDispatch } from "react-redux";
-import { Address, CustomerCategory, CustomerTypes } from '@prime-fresh/admin/modules';
+// import { useDispatch } from "react-redux";
+import { Address, CustomerCategory, CustomerTypes } from '@prime-fresh/admin_api';
 
 export const CustomerListCols = (): GridColDef[] => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEdit = (id: string) => {
-    dispatch(setDataId(id));
-    dispatch(setOpenFor('update'));
-  }
+  // const handleEdit = (id: string) => {
+  //   dispatch(setDataId(id));
+  //   dispatch(setOpenFor('update'));
+  // }
   return ([
     { field: "id", type: "string", headerName: "ID", width: 30 },
     {
@@ -94,18 +94,18 @@ export const CustomerListCols = (): GridColDef[] => {
       headerName: "Remark",
       width: 100,
     },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      width: 50,
-      sortable: false,
-      filterable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
-          <Edit color="secondary" />
-        </IconButton>
-      ),
-    },
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   width: 50,
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
+    //       <Edit color="secondary" />
+    //     </IconButton>
+    //   ),
+    // },
     {
       field: 'view',
       headerName: 'View',

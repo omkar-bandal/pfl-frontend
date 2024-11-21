@@ -34,11 +34,13 @@ export const ADMIN_API_URL = {
     POST_VENDOR: "/vendors/",
     UPDATE_VENDOR: "/vendors",
     GET_ALL_VENDOR_CAT: "/vendor-categories/",
+    CREATE_VENDOR_CAT: "/vendor-categories/",
     GET_ALL_VENDOR_SUBCAT: "/vendor-subcategories/",
+    CREATE_VENDOR_SUBCAT: "/vendor-subcategories/",
 
     //Prooducts
     GET_ALL_PRODUCTS: "/products/",
-    GET_A_PRODUCTS: "/products/",
+    GET_A_PRODUCTS: "/products",
     CREATE_PRODUCTS: "/products/",
     UPDATE_PRODUCTS: "/products/",
     GET_ALL_PRODUCT_CATEGORY: "/productCategory",
@@ -76,9 +78,13 @@ export const ADMIN_API_URL = {
 
     //Branches
     GET_ALL_CC: "/location_branches/COLLECTION_CENTER",
+    GET_A_CC: "/location_branches/COLLECTION_CENTER",
     GET_ALL_DC: "/location_branches/DISTRIBUTION_CENTER",
+    GET_A_DC: "/location_branches/DISTRIBUTION_CENTER",
     GET_ALL_SEASONAL_CC: "/location_branches/SEASONAL_COLLECTION_CENTER",
+    GET_A_SEASONAL_CC: "/location_branches/SEASONAL_COLLECTION_CENTER",
     GET_ALL_WAREHOUSE: "/location_branches/WAREHOUSE",
+    GET_A_WAREHOUSE: "/location_branches/WAREHOUSE",
     POST_BRANCH: "/location_branches",
     UPDATE_BRANCH: "/location_branches",
 }

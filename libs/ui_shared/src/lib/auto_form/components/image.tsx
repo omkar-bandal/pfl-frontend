@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFormikContext } from 'formik';
 import { Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { Close, CloudUploadOutlined } from '@mui/icons-material';
@@ -10,8 +10,15 @@ interface ImageUploadProps {
 }
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({ isRequired, name, label }) => {
-  const { setFieldValue } = useFormikContext(); // Use Formik's setFieldValue to handle form updates
-  const [preview, setPreview] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { setFieldValue, values } = useFormikContext<any>();
+  const [preview, setPreview] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (values[name] && typeof values[name] === "string") {
+      setPreview(values[name]); // Set the preview to the existing image URL
+    }
+  }, [values, name]);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

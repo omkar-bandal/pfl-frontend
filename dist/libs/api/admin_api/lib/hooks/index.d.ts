@@ -19,6 +19,8 @@ export * from './users/vendor/useGetAllVendor';
 export * from './users/vendor/useGetAllVendorCat';
 export * from './users/vendor/useGetAllVendorSubCat';
 export * from './users/vendor/useGetVendor';
+export * from './users/vendor/useCreateVendorCat';
+export * from './users/vendor/useCreateVendorSubCat';
 export * from './product';
 export * from './uoms/uom/useCreateUOM';
 export * from './uoms/uom/useGetAllUOMs';

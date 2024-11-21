@@ -1,5 +1,4 @@
 export type PostVendorCategory = {
-    id: string;
     name: string;
   }
 

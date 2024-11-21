@@ -29,8 +29,6 @@ export interface PostGRN {
     selectedParty: string;
     products: GRNProducts[];
     deliveryReceivingPerson: string;
-    validityOfQuote: string;
-    packingInstruction: string;
     subTotalAmt: number;
     totalAmt: number;
     amtWords: string;
@@ -43,6 +41,7 @@ export interface PostGRN {
     timeIn: string;
     cratesIn: number;
     rmn: string;
+    remark: string;
     billImage: File | null;
 }
 export interface GetGRN {
@@ -65,8 +64,6 @@ export interface GetGRN {
     selectedParty: string;
     products: GRNProducts[];
     deliveryReceivingPerson: string;
-    validityOfQuote: string;
-    packingInstruction: string;
     freight: number;
     subTotalAmt: number;
     totalAmt: number;
@@ -79,9 +76,10 @@ export interface GetGRN {
     purchasedBy: string;
     securityPerson: string;
     rmn: string;
+    remark: string;
     approvalStatus?: string;
     approvalNote?: string;
-    billImage: File | null;
+    billImage: string;
 }
 export interface GetAllGRNnumbers {
     id: string;

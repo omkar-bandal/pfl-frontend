@@ -1,25 +1,40 @@
 import React from 'react'
 import { Button, Grid, Stack, Typography } from '@mui/material';
-import { setPreview } from '@prime-fresh/modules';
-import { initValPaymentRequest, PURCHASE_ARRAYS, setPreviewPaymentReq } from '@prime-fresh/purchase/modules';
-import { RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { setPreview, showNotification } from '@prime-fresh/modules';
+import { initValPaymentRequest, paymentRequestSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPaymentReq } from '@prime-fresh/purchase/modules';
+import { Notification, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { PostPaymentRequest } from '@prime-fresh/purchase_api';
+import { PostPaymentRequest, PURCHASE_API_URL, useCreatePaymentRequest } from '@prime-fresh/purchase_api';
 import { PaymentRequestPreview } from './PaymentRequest_Preview';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { appendFormData } from '@prime-fresh/shared/utils';
 
 export const PaymentRequestForm = () => {
-  const {grnid} = useParams();
+  const navigate = useNavigate();
+  const { grnid } = useParams();
   const grnId = grnid ? grnid : '';
   const dispatch = useDispatch();
+  const { mutateAsync, error, data: Res } = useCreatePaymentRequest(`${PURCHASE_API_URL.POST_PAYMENT_REQ}/${grnId}`);
   const handleSubmit = (values: PostPaymentRequest) => {
-    console.log(values);
+    const formData = new FormData();
+    appendFormData(formData, values);
+    mutateAsync(formData).then(() => {
+      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Payment Request created successfully !!!" }));
+      setTimeout(() => {
+        navigate(PURCHASE_ROUTES.GET_ALL_GRN);
+      }, 3000);
+    }).catch(() => {
+      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+    });
   }
   return (
     <>
+      <Notification />
       <Formik
         initialValues={initValPaymentRequest}
+        validationSchema={paymentRequestSchema}
+        validateOnBlur={true}
         onSubmit={(values) => {
           handleSubmit(values);
         }}
@@ -50,6 +65,9 @@ export const PaymentRequestForm = () => {
                 <TextInput isRequired={true} name="typesOfTransaction" label="Type of Transaction" value={values.typesOfTransaction} handleChange={handleChange} touched={touched} errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
+                <TextInput isRequired={true} name="otherTransaction" label="Other Type of Transaction (if any)" value={values.otherTransaction} handleChange={handleChange} touched={touched} errors={errors} />
+              </Grid>
+              <Grid item xs={12} md={4}>
                 <SelectInput isRequired={true} name="paymentMode" label="Payment Mode" value={values.paymentMode} options={PURCHASE_ARRAYS.paymentMode} handleChange={handleChange} touched={touched} errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
@@ -68,7 +86,10 @@ export const PaymentRequestForm = () => {
                 <TextInput isRequired={true} name="costCenter" label="Cost Center" value={values.costCenter} handleChange={handleChange} touched={touched} errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} name="contactperson" label="Contact Person" value={values.contactperson} handleChange={handleChange} touched={touched} errors={errors} />
+                <TextInput isRequired={true} name="contactpersonRec" label="Receiver Contact Person" value={values.contactpersonRec} handleChange={handleChange} touched={touched} errors={errors} />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput isRequired={true} name="contactpersonSen" label="Sender Contact Person" value={values.contactpersonSen} handleChange={handleChange} touched={touched} errors={errors} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <RadioGroupInput isRequired={true} name="kycByEmail" label="KYC By Email" value={values.kycByEmail} options={[{ label: "Yes", value: "yes" }, { label: "No", value: "no" }]} handleChange={handleChange} />

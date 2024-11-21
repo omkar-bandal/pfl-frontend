@@ -5,7 +5,7 @@ exports.farmerDataReducer = exports.farmersDataState = exports.setSelectedFarmer
 const toolkit_1 = require("@reduxjs/toolkit");
 const initialState = {
     allFarmers: [],
-    selectedFarmer: undefined,
+    selectedFarmer: null,
 };
 const farmerDataSlice = (0, toolkit_1.createSlice)({
     name: 'farmerData',

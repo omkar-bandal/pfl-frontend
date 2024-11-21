@@ -1,6 +1,4 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { Preview, Edit } from '@mui/icons-material';
-import { IconButton } from "@mui/material";
 import { GetUOM } from "@prime-fresh/admin_api";
 
 export const UOMMatrixListCols: GridColDef[] = [
@@ -27,29 +25,5 @@ export const UOMMatrixListCols: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     valueGetter: (value: GetUOM) => value ? value.unit : '-',
-  },
-  {
-    field: 'edit',
-    headerName: 'Edit',
-    width: 50,
-    sortable: false,
-    filterable: false,
-    renderCell: () => (
-        <IconButton aria-label="edit">
-          <Edit color="secondary" />
-        </IconButton>
-    ),
-  },
-  {
-    field: 'view',
-    headerName: 'View',
-    width: 50,
-    sortable: false,
-    filterable: false,
-    renderCell: () => (
-        <IconButton aria-label="edit">
-          <Preview color="primary" />
-        </IconButton>
-    ),
   },
 ];

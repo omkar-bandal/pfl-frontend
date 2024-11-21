@@ -3,6 +3,7 @@ import { Preview, Edit } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
+import { Address } from "@prime-fresh/admin_api";
 // import { Address } from "../../api/admin/models";
 
 export const FarmerListCols = (): GridColDef[] => {
@@ -10,19 +11,9 @@ export const FarmerListCols = (): GridColDef[] => {
   return [
     { field: "id", headerName: "ID", width: 30 },
     {
-      field: "farmerCode",
-      headerName: "Code",
-      width: 100,
-    },
-    {
-      field: "farmerGrading",
-      headerName: "Grade",
-      width: 100,
-    },
-    {
       field: "farmerName",
       headerName: "Name",
-      width: 100,
+      width: 250,
       valueGetter: (value, row)=>{
         console.log(value);
         return `${row.farmerfName || ''} ${row.farmermName || ''} ${row.farmerlName || ''}`
@@ -38,25 +29,47 @@ export const FarmerListCols = (): GridColDef[] => {
     //   }
     // },
     {
+      field: "farmAddress",
+      headerName: "Farm Address",
+      width: 500,
+      valueGetter: (value: Address) => {
+       if( value !== null ){
+         return `${value.address1 || ''}, ${value.address2 || ''}, ${value.location || ''}, ${value.city || ''}, ${value.state || ''}, ${value.pincode || ''}`
+        } else { 
+          return "-";
+        }
+      }
+    },
+    {
       field: "primaryMobileNo",
       headerName: "Contact No",
       width: 150,
     },
     {
-      field: "secondaryMobileNo",
-      headerName: "Alternate",
+      field: "farmerCode",
+      headerName: "Code",
       width: 150,
     },
-    {
-      field: "email",
-      headerName: "Email",
-      width: 150,
-    },
-    {
-      field: "dob",
-      headerName: "DOB",
-      width: 150,
-    },
+    // {
+    //   field: "farmerGrading",
+    //   headerName: "Grade",
+    //   width: 100,
+    // },
+    // {
+    //   field: "secondaryMobileNo",
+    //   headerName: "Alternate",
+    //   width: 150,
+    // },
+    // {
+    //   field: "email",
+    //   headerName: "Email",
+    //   width: 150,
+    // },
+    // {
+    //   field: "dob",
+    //   headerName: "DOB",
+    //   width: 150,
+    // },
     // {
     //   field: "farmAddress",
     //   headerName: "Farm Address",
@@ -69,40 +82,41 @@ export const FarmerListCols = (): GridColDef[] => {
     {
       field: "totalLandArea",
       headerName: "Farm Area (Total)",
-      width: 120,
+      width: 150,
+      align: "center",
     },
-    {
-      field: "cultivationArea",
-      headerName: "Cultivation Area",
-      width: 120,
-    },
-    {
-      field: "dateOfVisit",
-      headerName: "DOV",
-      width: 100,
-    },
-    {
-      field: "registerDate",
-      headerName: "Register Date",
-      width: 100,
-    },
-    {
-      field: "registerBy",
-      headerName: "Register By",
-      width: 100,
-    },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      width: 50,
-      sortable: false,
-      filterable: false,
-      renderCell: () => (
-          <IconButton aria-label="edit">
-            <Edit color="secondary" />
-          </IconButton>
-      ),
-    },
+    // {
+    //   field: "cultivationArea",
+    //   headerName: "Cultivation Area",
+    //   width: 120,
+    // },
+    // {
+    //   field: "dateOfVisit",
+    //   headerName: "DOV",
+    //   width: 100,
+    // },
+    // {
+    //   field: "registerDate",
+    //   headerName: "Register Date",
+    //   width: 100,
+    // },
+    // {
+    //   field: "registerBy",
+    //   headerName: "Register By",
+    //   width: 100,
+    // },
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   width: 50,
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: () => (
+    //       <IconButton aria-label="edit">
+    //         <Edit color="secondary" />
+    //       </IconButton>
+    //   ),
+    // },
     {
       field: 'view',
       headerName: 'View',

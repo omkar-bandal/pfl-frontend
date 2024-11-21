@@ -1,16 +1,17 @@
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema } from "@prime-fresh/purchase/modules";
+import { ImageUpload, mapToValueLabelArray, Notification, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { GetMCvoucher, Particulars, PostMCvoucher, PURCHASE_API_URL, useGetAllDeliveryChallanNums, useGetAllGRNNums, useGetMCVoucher, useUpdateMCVoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./MC_Voucher_Preview";
-import { setPreview } from "@prime-fresh/modules";
+import { setPreview, showNotification } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
 
 export const MultipleCashVoucherUpdate = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { voucherid } = useParams();
     const voucherId = voucherid ? voucherid : '';
@@ -31,12 +32,19 @@ export const MultipleCashVoucherUpdate = () => {
         setFieldValue("amtWords", amtWords);
     };
 
-    const { mutateAsync: mutatePatch, isPending, isError, error, data: Res } = useUpdateMCVoucher(PURCHASE_API_URL.UPDATE_MC_VOUCHER, voucherId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateMCVoucher(PURCHASE_API_URL.UPDATE_MC_VOUCHER, voucherId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePatch(formData);
+        mutatePatch(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher updated successfully !!!"  }));
+            setTimeout(() => {
+              navigate(PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER);
+            }, 5000);
+          }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+          });;
     };
 
     return (
@@ -47,9 +55,10 @@ export const MultipleCashVoucherUpdate = () => {
                 </Box>) :
                 (
                     <>
-                        <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+                        <Notification />
                         <Formik
                             initialValues={mcVoucherValues}
+                            validationSchema={multicashVoucherSchema}
                             onSubmit={(values) => {
                                 console.log(values);
                                 handleSubmit(values);

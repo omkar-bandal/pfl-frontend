@@ -13,6 +13,10 @@ export declare const PURCHASE_API_URL: {
     UPDATE_GRN: string;
     APPROVE_GRN: string;
     GET_ALL_GRN_NO: string;
+    GET_ALL_PAYMENT_REQ: string;
+    GET_A_PAYMENT_REQ: string;
+    POST_PAYMENT_REQ: string;
+    UPDATE_PAYMENT_REQ: string;
     POST_MC_VOUCHER: string;
     GET_ALL_MC_VOUCHER: string;
     GET_A_MC_VOUCHER: string;

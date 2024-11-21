@@ -54,6 +54,11 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
     preview: {
         preview: boolean;
     };
+    notification: {
+        isOpen: boolean;
+        severity: "success" | "error";
+        message: string;
+    };
     formContainer: {
         openDrawer: boolean;
         openFor: "create" | "update";
@@ -63,19 +68,19 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
         customers: import('../../../../../api/admin_api/src/index.ts').GetCustomer[];
     };
     vendorData: {
-        allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[];
-        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | undefined;
+        allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[] | [];
+        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | null | undefined;
     };
     employeeData: {
         employees: import('../../../../../api/admin_api/src/index.ts').GetEmployee[];
     };
     farmerData: {
         allFarmers: import('../../../../../api/admin_api/src/index.ts').GetFarmer[];
-        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | undefined;
+        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | null | undefined;
     };
     productData: {
         allProducts: import('../../../../../api/admin_api/src/index.ts').GetProduct[];
-        selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | undefined;
+        selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | null | undefined;
         productCat: import('../../../../../api/admin_api/src/index.ts').GetProductCategory[];
         productSubCat: import('../../../../../api/admin_api/src/index.ts').GetProductSubcategory[];
     };

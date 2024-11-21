@@ -208,11 +208,11 @@ export const PurchaseRoutes = [
                 element: <DeliveryChallanForm />,
             },
             {
-                path: `${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/:dcid`,
+                path: `${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/:id`,
                 element: <DeliveryChallanView />
             },
             {
-                path: `${PURCHASE_ROUTES.UPDATE_DELIVERY_CHALLAN}/:dcid`,
+                path: `${PURCHASE_ROUTES.UPDATE_DELIVERY_CHALLAN}/:id`,
                 element: <DeliveryChallanUpdate />
             },
         ]

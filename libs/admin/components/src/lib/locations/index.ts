@@ -3,6 +3,7 @@ export * from './branches/dc/DC_Table';
 export * from './branches/seasonal_cc/SeasonalCC_Table';
 export * from './branches/warehouses/WH_Table';
 export * from './branches/Branch_Form';
+export * from './branches/Branch_View';
 export * from './offices/registered_offices/RegiOffice_Table';
 export * from './offices/corporate_offices/CorpOffice_Table';
 export * from './offices/Office_Form';

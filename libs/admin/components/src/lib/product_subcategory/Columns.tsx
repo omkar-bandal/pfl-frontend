@@ -1,36 +1,22 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { Preview, Edit } from '@mui/icons-material';
-import { IconButton } from "@mui/material";
+
+import { GetProductCategory } from "@prime-fresh/admin_api";
 
 export const ProductSubcategoryListCols: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 90 },
+  { 
+    field: "id", 
+    headerName: "ID", 
+    width: 90 
+  },
   {
     field: "name",
     headerName: "Subcategory",
-    width: 750,
+    width: 200,
   },
   {
-    field: 'edit',
-    headerName: 'Edit',
-    width: 50,
-    sortable: false,
-    filterable: false,
-    renderCell: () => (
-        <IconButton aria-label="edit">
-          <Edit color="secondary" />
-        </IconButton>
-    ),
-  },
-  {
-    field: 'view',
-    headerName: 'View',
-    width: 50,
-    sortable: false,
-    filterable: false,
-    renderCell: () => (
-        <IconButton aria-label="edit">
-          <Preview color="primary" />
-        </IconButton>
-    ),
-  },
+    field: "category",
+    headerName: "Related Category",
+    width: 200,
+    valueGetter: (value: GetProductCategory) => value? value.name : "-",
+  }
 ];

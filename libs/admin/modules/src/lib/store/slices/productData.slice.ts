@@ -4,7 +4,7 @@ import { GetProduct, GetProductCategory, GetProductSubcategory } from "@prime-fr
 
 type ProductDataState = {
     allProducts: GetProduct[],
-    selectedProduct: GetProduct | undefined,
+    selectedProduct: GetProduct | null |undefined,
     productCat: GetProductCategory[],
     productSubCat: GetProductSubcategory[],
 }
@@ -21,7 +21,7 @@ const productDataSlice = createSlice({
         setProducts : (state, action: PayloadAction<GetProduct[]>) => {
             state.allProducts = action.payload;
         },
-        setSelectedProduct : (state, action: PayloadAction<GetProduct | undefined>) => {
+        setSelectedProduct : (state, action: PayloadAction<GetProduct | null | undefined>) => {
             state.selectedProduct = action.payload;
         },
         setProductCat : (state, action: PayloadAction<GetProductCategory[]>) => {

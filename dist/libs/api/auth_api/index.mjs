@@ -4040,11 +4040,12 @@ oe.HttpStatusCode = Ir;
 oe.default = oe;
 const uo = {
   //Authentication
-  BASE_URL: "ec2-13-234-20-64.ap-south-1.compute.amazonaws.com:80"
+  BASE_URL: "http://ec2-13-235-128-158.ap-south-1.compute.amazonaws.com:80"
+  // BASE_URL: "https://eef2-182-156-141-17.ngrok-free.app",
 }, Ur = oe.create({
   baseURL: uo.BASE_URL,
   headers: {
-    "ngrok-skip-browser-warning": "true",
+    // 'ngrok-skip-browser-warning': 'true',
     "Content-Type": "multipart/form-data"
   }
 }), Ri = () => localStorage.getItem("access_token"), _i = () => localStorage.getItem("refresh_token");
@@ -4080,7 +4081,7 @@ const wi = async (t, e) => {
   try {
     return (await oe.post(`${uo.BASE_URL}${t}`, e, {
       headers: {
-        "ngrok-skip-browser-warning": "true",
+        // 'ngrok-skip-browser-warning': 'true',
         "Content-Type": "application/json"
       }
     })).data;

@@ -78,18 +78,18 @@ export const VendorListCols = (): GridColDef[] => {
       headerName: "Regd Date",
       width: 150,
     },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      width: 50,
-      sortable: false,
-      filterable: false,
-      renderCell: () => (
-          <IconButton aria-label="edit">
-            <Edit color="secondary" />
-          </IconButton>
-      ),
-    },
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   width: 50,
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: () => (
+    //       <IconButton aria-label="edit">
+    //         <Edit color="secondary" />
+    //       </IconButton>
+    //   ),
+    // },
     {
       field: 'view',
       headerName: 'View',

@@ -5,7 +5,7 @@ exports.vendorDataReducer = exports.vendorsDataState = exports.setSelectedVendor
 const toolkit_1 = require("@reduxjs/toolkit");
 const initialState = {
     allVendors: [],
-    selectedVendor: undefined,
+    selectedVendor: null,
 };
 const vendorDataSlice = (0, toolkit_1.createSlice)({
     name: 'vendorData',

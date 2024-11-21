@@ -1,18 +1,20 @@
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, packingMaterialPaymentVoucherSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Materials, PURCHASE_API_URL, useGetAllGRNNums, useGetPMPVoucher, useUpdatePMPVoucher } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, GetUOM, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { useDispatch } from "react-redux";
-import { setPreview } from "@prime-fresh/modules";
+import { setPreview, showNotification } from "@prime-fresh/modules";
 import { PMPVoucherPreview } from "./PMP_Voucher_Preview";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
 
 //Labour Payment Voucher
 export const PackingMaterialPaymentVoucherUpdate = () => {
+    const navigate = useNavigate();
+
     const { voucherid } = useParams();
     const voucherId = voucherid ? voucherid : '';
 
@@ -41,13 +43,20 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
         setFieldValue("amtWords", amtWords);
     };
 
-    const { mutateAsync: mutatePatch, isPending, isError, error, data: Res } = useUpdatePMPVoucher(PURCHASE_API_URL.UPDATE_PMP_VOUCHER, voucherId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdatePMPVoucher(PURCHASE_API_URL.UPDATE_PMP_VOUCHER, voucherId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePatch(formData);
+        mutatePatch(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Packing material payment voucher updated successfully !!!" }));
+            setTimeout(() => {
+                navigate(PURCHASE_ROUTES.GET_ALL_PACKING_MATERIAL_VOUCHER);
+            }, 5000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+        });;
     };
 
     return (
@@ -58,9 +67,10 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                 </Box>) :
                 (
                     <>
-                        <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+                        <Notification />
                         <Formik
                             initialValues={pmpVoucherValues}
+                            // validationSchema={packingMaterialPaymentVoucherSchema}
                             onSubmit={(values) => {
                                 console.log(values);
                                 handleSubmit(values);
@@ -105,8 +115,6 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                 </Button>
                                             </Stack>
                                         </Grid>
-
-                                        {/* GRN No. */}
                                         <Grid item xs={12} md={4}>
                                             <SelectInput
                                                 isRequired={false}
@@ -114,24 +122,31 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                 name="grnNo"
                                                 options={mapToValueLabelArray(allGRNNumbers, 'id', 'grnNo')}
                                                 value={allGRNNumbers.find(nums => nums.grnNo === values.grnNo)?.id}
-                                                handleChange={handleChange} />                </Grid>
-
-                                        <Grid item xs={12} md={4}>
-                                            <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} touched={touched} errors={errors} />
+                                                handleChange={handleChange} />
                                         </Grid>
-
+                                        <Grid item xs={12} md={4}>
+                                            <SelectInput
+                                                isRequired={true}
+                                                label="Company Name"
+                                                name="companyName"
+                                                options={PURCHASE_ARRAYS.companyNames}
+                                                value={values.companyName}
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
+                                        </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="location"
                                                 label="Location"
                                                 value={values.location}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
-
-                                        {/* Other form fields */}
                                         <Grid item xs={12} md={6}>
                                             <TextInput
                                                 type="text"
@@ -140,9 +155,10 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                 label="Debit / Credit To"
                                                 value={values.debitCreditTo}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
-
                                         <Grid item xs={12} md={6}>
                                             <TextInput
                                                 type="text"
@@ -151,9 +167,10 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                 label="Pay To / Received From"
                                                 value={values.payReceivedFrom}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
-
                                         <Grid item xs={12} md={4}>
                                             <TextInput
                                                 type="text"
@@ -162,22 +179,26 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                 label="Seller Name"
                                                 value={values.sellerName}
                                                 handleChange={handleChange}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} md={4}>
-                                            <TextInput
-                                                type="text"
-                                                isRequired={false}
-                                                name="contactNo"
-                                                label="Contact No"
-                                                value={values.contactNo}
-                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextInput
                                                 type="text"
                                                 isRequired={true}
+                                                name="contactNo"
+                                                label="Contact No"
+                                                value={values.contactNo}
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                            <TextInput
+                                                type="text"
+                                                isRequired={false}
                                                 name="altContactNo"
                                                 label="Alternate Contact No"
                                                 value={values.altContactNo}
@@ -187,11 +208,13 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         <Grid item xs={12} md={6}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="address.address1"
                                                 label="Address1"
                                                 value={values.address.address1}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={6}>
@@ -207,57 +230,61 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         <Grid item xs={12} md={3}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="address.location"
                                                 label="Location"
                                                 value={values.address.location}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
-                                        {/* More address fields */}
                                         <Grid item xs={12} md={3}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="address.city"
                                                 label="City"
                                                 value={values.address.city}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="address.state"
                                                 label="State"
                                                 value={values.address.state}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="address.pincode"
                                                 label="Pincode"
                                                 value={values.address.pincode}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
-
                                         <Grid item xs={12} md={12}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={true}
+                                                isRequired={false}
                                                 name="purpose"
                                                 label="Purpose"
                                                 value={values.purpose}
                                                 handleChange={handleChange}
                                             />
                                         </Grid>
-
-                                        {/* FieldArray for materials */}
                                         <Grid item xs={12}>
                                             <FieldArray name="materials">
                                                 {({ remove, push }) => (
@@ -287,27 +314,31 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                 <Grid item xs={12} md={4}>
                                                                     <TextInput
                                                                         type="text"
-                                                                        isRequired={false}
+                                                                        isRequired={true}
                                                                         name={`materials.${index}.itemName`}
                                                                         label="Name"
                                                                         value={values.materials[index].itemName}
                                                                         handleChange={handleChange}
+                                                                        touched={touched}
+                                                                        errors={errors}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={12} md={2}>
-                                                                    <SelectInput 
-                                                                    isRequired={true} 
-                                                                    label="Unit" 
-                                                                    name={`materials.${index}.uom`} 
-                                                                    options={mapToValueLabelArray<GetUOM>(allUOMS, 'id', 'unit')} 
-                                                                    value={values.materials[index].itemQty} 
-                                                                    handleChange={handleChange} />
+                                                                    <SelectInput
+                                                                        isRequired={true}
+                                                                        label="Unit"
+                                                                        name={`materials.${index}.itemUom`}
+                                                                        options={mapToValueLabelArray<GetUOM>(allUOMS, 'id', 'unit')}
+                                                                        value={values.materials[index].itemUom}
+                                                                        handleChange={handleChange}
+                                                                        touched={touched}
+                                                                        errors={errors}
+                                                                    />
                                                                 </Grid>
-                                                                {/* More material fields */}
                                                                 <Grid item xs={12} md={2}>
                                                                     <TextInput
                                                                         type="text"
-                                                                        isRequired={false}
+                                                                        isRequired={true}
                                                                         name={`materials.${index}.itemQty`}
                                                                         label="Quantity"
                                                                         value={values.materials[index].itemQty}
@@ -316,12 +347,14 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                             setFieldValue(`materials.${index}.itemQty`, parseFloat(e.target.value) || 0);
                                                                         }}
                                                                         onBlur={() => calculateAmounts(values, setFieldValue)}
+                                                                        touched={touched}
+                                                                        errors={errors}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={12} md={2}>
                                                                     <TextInput
                                                                         type="text"
-                                                                        isRequired={false}
+                                                                        isRequired={true}
                                                                         name={`materials.${index}.rate`}
                                                                         label="Rate"
                                                                         value={values.materials[index].rate}
@@ -330,6 +363,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                             setFieldValue(`materials.${index}.rate`, parseFloat(e.target.value) || 0);
                                                                         }}
                                                                         onBlur={() => calculateAmounts(values, setFieldValue)}
+                                                                        touched={touched}
+                                                                        errors={errors}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={12} md={2}>
@@ -365,10 +400,17 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                 )}
                                             </FieldArray>
                                         </Grid>
-
-                                        {/* Payment Mode */}
                                         <Grid item xs={12} md={6}>
-                                            <SelectInput isRequired={true} label="Payment Mode" name="paymentMode" options={PURCHASE_ARRAYS.paymentMode} value={values.paymentMode} handleChange={handleChange} />
+                                            <SelectInput
+                                                isRequired={true}
+                                                label="Payment Mode"
+                                                name="paymentMode"
+                                                options={PURCHASE_ARRAYS.paymentMode}
+                                                value={values.paymentMode}
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
+                                            />
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <TextInput
@@ -393,11 +435,13 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         <Grid item xs={12} md={6}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={false}
+                                                isRequired={true}
                                                 name="receiverName"
                                                 label="Receiver Name"
                                                 value={values.receiverName}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -414,7 +458,7 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         </Grid>
                                         <Grid item xs={12}>
                                             <RadioGroupInput
-                                                isRequired={true}
+                                                isRequired={false}
                                                 label="is KYC attached? (if available)"
                                                 name="kyc"
                                                 value={values.kyc}

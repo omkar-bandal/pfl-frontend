@@ -30,8 +30,6 @@ exports.initValGRN = {
     selectedParty: '',
     products: [exports.initValGRNProducts],
     deliveryReceivingPerson: '',
-    validityOfQuote: '',
-    packingInstruction: '',
     subTotalAmt: 0,
     totalAmt: 0,
     amtWords: '',
@@ -44,6 +42,7 @@ exports.initValGRN = {
     timeIn: '',
     cratesIn: 0,
     rmn: '',
+    remark: '',
     billImage: null,
 };
 //# sourceMappingURL=initValGRN.js.map

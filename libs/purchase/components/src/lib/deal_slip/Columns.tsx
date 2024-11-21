@@ -1,4 +1,4 @@
-import { Edit, Preview } from "@mui/icons-material";
+import { Preview } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { RequestedBy } from "@prime-fresh/purchase_api";
@@ -93,18 +93,18 @@ export const DealSlipListCols = (): GridColDef[] => {
                 }
             }
         },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.CREATE_DEAL_SLIP}/${params.row.id}`)}>
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
+        // {
+        //     field: 'edit',
+        //     headerName: 'Edit',
+        //     width: 50,
+        //     sortable: false,
+        //     filterable: false,
+        //     renderCell: (params: GridRenderCellParams) => (
+        //         <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.CREATE_DEAL_SLIP}/${params.row.id}`)}>
+        //             <Edit color="secondary" />
+        //         </IconButton>
+        //     ),
+        // },
         {
             field: 'view',
             headerName: 'View',

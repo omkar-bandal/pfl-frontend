@@ -1,7 +1,7 @@
 import { ADMIN_API_URL, useGetAllProductClassification } from "@prime-fresh/admin_api"
 import { mapToValueLabelArray } from "@prime-fresh/ui_shared";
 
-export const productCatFormFields = () => {
+export const ProductCatFormFields = () => {
   const { data } = useGetAllProductClassification(ADMIN_API_URL.GET_ALL_PRODUCT_CLASSIFICATION);
   const classifications = data ? data : [{ id: "", name: "" }];
   return (

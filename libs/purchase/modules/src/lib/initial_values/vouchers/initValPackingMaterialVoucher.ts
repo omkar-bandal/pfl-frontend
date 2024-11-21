@@ -21,7 +21,6 @@ export const initValPackingMaterials = {
     purpose: "",
     materials: [initValPackingMaterials],
     paymentMode: "",
-    ratePerLabour: 0,
     totalAmt: 0,
     amtWords: "",
     receiverName: "",

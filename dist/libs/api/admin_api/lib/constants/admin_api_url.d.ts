@@ -22,7 +22,9 @@ export declare const ADMIN_API_URL: {
     POST_VENDOR: string;
     UPDATE_VENDOR: string;
     GET_ALL_VENDOR_CAT: string;
+    CREATE_VENDOR_CAT: string;
     GET_ALL_VENDOR_SUBCAT: string;
+    CREATE_VENDOR_SUBCAT: string;
     GET_ALL_PRODUCTS: string;
     GET_A_PRODUCTS: string;
     CREATE_PRODUCTS: string;
@@ -56,9 +58,13 @@ export declare const ADMIN_API_URL: {
     UPDATE_REGI_OFFICES: string;
     UPDATE_CORP_OFFICES: string;
     GET_ALL_CC: string;
+    GET_A_CC: string;
     GET_ALL_DC: string;
+    GET_A_DC: string;
     GET_ALL_SEASONAL_CC: string;
+    GET_A_SEASONAL_CC: string;
     GET_ALL_WAREHOUSE: string;
+    GET_A_WAREHOUSE: string;
     POST_BRANCH: string;
     UPDATE_BRANCH: string;
 };

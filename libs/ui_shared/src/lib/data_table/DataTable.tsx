@@ -21,6 +21,8 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         getRowId={(row) => row.id}
         disableRowSelectionOnClick
         pageSizeOptions={[5, 7, 10]}
+        disableColumnMenu={true}
+        disableColumnSorting={true}
         initialState={{
           pagination: {
             paginationModel: {

@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 export declare const dealSlipSchema: Yup.ObjectSchema<{
-    location: string;
-    loadingLoctn: string;
+    loadingLocation: string;
+    lotNo: string;
 }, Yup.AnyObject, {
-    location: undefined;
-    loadingLoctn: undefined;
+    loadingLocation: undefined;
+    lotNo: undefined;
 }, "">;

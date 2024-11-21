@@ -197,17 +197,17 @@ export const DeliveryChallanListCols = (): GridColDef[] => {
                 </IconButton>
             ),
         },
-        // {
-        //     field: 'view',
-        //     headerName: 'View',
-        //     width: 50,
-        //     sortable: false,
-        //     filterable: false,
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/${params.row.id}`)}>
-        //             <Preview color="primary" />
-        //         </IconButton>
-        //     ),
-        // },
+        {
+            field: 'view',
+            headerName: 'View',
+            width: 50,
+            sortable: false,
+            filterable: false,
+            renderCell: (params: GridRenderCellParams) => (
+                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/${params.row.id}`)}>
+                    <Preview color="primary" />
+                </IconButton>
+            ),
+        },
     ])
 }

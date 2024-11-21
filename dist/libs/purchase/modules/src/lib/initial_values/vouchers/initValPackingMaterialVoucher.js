@@ -22,7 +22,6 @@ exports.initValPackingMaterialVoucher = {
     purpose: "",
     materials: [exports.initValPackingMaterials],
     paymentMode: "",
-    ratePerLabour: 0,
     totalAmt: 0,
     amtWords: "",
     receiverName: "",

@@ -43,7 +43,7 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({ isRequired
                     renderInput={(params) => <TextField {...params} />}
                 />
                 {touched[name] && getHelperText() && (
-                    <FormHelperText>{getHelperText()}</FormHelperText>
+                    <FormHelperText><Typography variant="caption" component="div" color="error">{getHelperText()}</Typography></FormHelperText>
                 )}
             </Grid>
         </Grid>

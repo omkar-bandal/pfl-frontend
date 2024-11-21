@@ -1,1 +1,1 @@
-export * from './signIn.schema';
+export * from './signin.schema';

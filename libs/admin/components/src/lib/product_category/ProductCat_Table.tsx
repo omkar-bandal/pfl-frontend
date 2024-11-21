@@ -11,6 +11,7 @@ import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 export function ProductCatTable() {
   const navigate = useNavigate();
   const { data: ProductCat, isLoading } = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
+  console.log(ProductCat);
   const apiRef = useGridApiRef();
   
   return (

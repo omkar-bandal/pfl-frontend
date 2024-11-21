@@ -46,9 +46,12 @@ export const GRNView = () => {
 
   const role = localStorage.getItem('role');
   const handleStatusChange = async () => {
+    const formData = new FormData();
+    formData.append("approvalNote", reason);
+    formData.append("approvalStatus", approval);
     try {
-      const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${grnId}`,
-        { approvalNote: `${reason}`, approvalStatus: `${approval}` });
+      const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${grnId}`, formData)
+        // { approvalNote: `${reason}`, approvalStatus: `${approval}` });
       console.log(response.data);
       if (response.status === 200)
         navigate(PURCHASE_ROUTES.GET_ALL_GRN);
@@ -66,21 +69,21 @@ export const GRNView = () => {
         (
           <Box sx={{ flex: 1 }}>
             <Grid container rowSpacing={1}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h4" component="span">GRN Details</Typography>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={8}>
                 {role === 'MANAGER' && (
                   <Grid container columnSpacing={2}>
-                    <Grid item xs={3}>
+                    <Grid item xs={4}>
                       {grn?.approvalStatus === "pending" ?
-                        (<Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED"); handleStatusChange(); }}>Approve</Button>) : ''}
+                        (<Button fullWidth variant="contained" color='success' size='small' sx={{ height: 40 }} onClick={() => { setApproval("approved"); handleStatusChange(); }}>Approve</Button>) : ''}
                     </Grid>
-                    <Grid item xs={3}>
-                      <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved"); handleStatusChange(); }}>Not Approve</Button>
+                    <Grid item xs={4}>
+                      <Button fullWidth variant="contained" color='secondary' size='small' sx={{ height: 40 }} onClick={() => { setApproval("notApproved"); handleStatusChange(); }}>Not Approve</Button>
                     </Grid>
-                    <Grid item xs={3}>
-                      <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
+                    <Grid item xs={4}>
+                      <Button fullWidth variant="contained" color="info" size="small" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
                     </Grid>
                   </Grid>
                 )}

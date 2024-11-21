@@ -14,7 +14,8 @@ export const RFPAView = () => {
     const role = localStorage.getItem('role');
     const handleStatusChange = async () => {
         try {
-            const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_RFPA}${rfpaId}`);
+            const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_RFPA}${rfpaId}`, 
+                {approvalNote: "-", approvalStatus: "approved"});
             console.log(response.data);
             if (response.status === 200)
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
@@ -33,7 +34,7 @@ export const RFPAView = () => {
                     <Grid container direction="column" rowSpacing={1}>
                         <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
                             <Typography variant="h4" component="span">RFPA Details</Typography>
-                            {role === 'manager' ?
+                            {role === 'MANAGER' ?
                                 (<Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }} onClick={handleStatusChange}>Approve</Button>) : ''}
                         </Grid>
                         <Grid item>

@@ -7,6 +7,11 @@ export declare const coreReducer: {
     preview: import('redux').Reducer<{
         preview: boolean;
     }>;
+    notification: import('redux').Reducer<{
+        isOpen: boolean;
+        severity: "success" | "error";
+        message: string;
+    }>;
     formContainer: import('redux').Reducer<{
         openDrawer: boolean;
         openFor: "create" | "update";
@@ -16,19 +21,19 @@ export declare const coreReducer: {
         customers: import('../../../../../api/admin_api/src/index.ts').GetCustomer[];
     }>;
     vendorData: import('redux').Reducer<{
-        allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[];
-        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | undefined;
+        allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[] | [];
+        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | null | undefined;
     }>;
     employeeData: import('redux').Reducer<{
         employees: import('../../../../../api/admin_api/src/index.ts').GetEmployee[];
     }>;
     farmerData: import('redux').Reducer<{
         allFarmers: import('../../../../../api/admin_api/src/index.ts').GetFarmer[];
-        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | undefined;
+        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | null | undefined;
     }>;
     productData: import('redux').Reducer<{
         allProducts: import('../../../../../api/admin_api/src/index.ts').GetProduct[];
-        selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | undefined;
+        selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | null | undefined;
         productCat: import('../../../../../api/admin_api/src/index.ts').GetProductCategory[];
         productSubCat: import('../../../../../api/admin_api/src/index.ts').GetProductSubcategory[];
     }>;

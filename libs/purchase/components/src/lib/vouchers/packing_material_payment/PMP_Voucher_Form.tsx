@@ -1,20 +1,23 @@
 import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
-import { Materials, PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRN } from "@prime-fresh/purchase_api";
+import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, packingMaterialPaymentVoucherSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { Materials, PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { useDispatch } from "react-redux";
-import { setPreview } from "@prime-fresh/modules";
+import { setPreview, showNotification } from "@prime-fresh/modules";
 import { PMPVoucherPreview } from "./PMP_Voucher_Preview";
 import { appendFormData } from "@prime-fresh/shared/utils";
+import { useNavigate } from "react-router-dom";
 
-//Labour Payment Voucher
 export const PackingMaterialPaymentVoucherForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
-  const allGRN = data ? data : [];
+
+  const { data } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
+  const allGRNNumbers = data ? data : [];
+
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const allUOMS = UOMs ? UOMs : [];
 
@@ -31,17 +34,25 @@ export const PackingMaterialPaymentVoucherForm = () => {
     setFieldValue("totalAmt", totalAmt);
     setFieldValue("amtWords", amtWords);
   };
-  const { mutateAsync: mutatePost, isPending, isError, error, data: Res } = useCreatePMPVoucher(PURCHASE_API_URL.POST_PMP_VOUCHER);
+  const { mutateAsync: mutatePost, error, data: Res } = useCreatePMPVoucher(PURCHASE_API_URL.POST_PMP_VOUCHER);
   const handleSubmit = (values: PostPMPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
-    mutatePost(formData);
+    mutatePost(formData).then(() => {
+      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Packing material payment voucher created successfully !!!" }));
+      setTimeout(() => {
+        navigate(PURCHASE_ROUTES.GET_ALL_PACKING_MATERIAL_VOUCHER);
+      }, 5000);
+    }).catch(() => {
+      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+    });;
   };
   return (
     <>
-      <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+      <Notification />
       <Formik
         initialValues={initValPackingMaterialVoucher}
+        validationSchema={packingMaterialPaymentVoucherSchema}
         onSubmit={(values) => {
           console.log(values);
           handleSubmit(values);
@@ -86,28 +97,38 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   </Button>
                 </Stack>
               </Grid>
-
-              {/* GRN No. */}
               <Grid item xs={12} md={4}>
-                <SelectInput isRequired={false} label="Select GRN" name="grnNo" options={mapToValueLabelArray(allGRN, 'id', 'grnNo')} value={values.grnNo} handleChange={handleChange} />
+                <SelectInput
+                  isRequired={false}
+                  label="Select GRN"
+                  name="grnNo"
+                  options={mapToValueLabelArray(allGRNNumbers, 'id', 'grnNo')}
+                  value={values.grnNo}
+                  handleChange={handleChange} />
               </Grid>
-
               <Grid item xs={12} md={4}>
-                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} touched={touched} errors={errors} />
+                <SelectInput
+                  isRequired={true}
+                  label="Company Name"
+                  name="companyName"
+                  options={PURCHASE_ARRAYS.companyNames}
+                  value={values.companyName}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
-
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="location"
                   label="Location"
                   value={values.location}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
-
-              {/* Other form fields */}
               <Grid item xs={12} md={6}>
                 <TextInput
                   type="text"
@@ -116,9 +137,10 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   label="Debit / Credit To"
                   value={values.debitCreditTo}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
-
               <Grid item xs={12} md={6}>
                 <TextInput
                   type="text"
@@ -127,9 +149,10 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   label="Pay To / Received From"
                   value={values.payReceivedFrom}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
-
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
@@ -138,38 +161,42 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   label="Seller Name"
                   value={values.sellerName}
                   handleChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <TextInput
-                  type="text"
-                  isRequired={false}
-                  name="contactNo"
-                  label="Contact No"
-                  value={values.contactNo}
-                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
                   type="text"
                   isRequired={true}
+                  name="contactNo"
+                  label="Contact No"
+                  value={values.contactNo}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
                   name="altContactNo"
                   label="Alternate Contact No"
                   value={values.altContactNo}
                   handleChange={handleChange}
                 />
               </Grid>
-
-              {/* Address Fields */}
               <Grid item xs={12} md={6}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="address.address1"
                   label="Address1"
                   value={values.address.address1}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -185,57 +212,61 @@ export const PackingMaterialPaymentVoucherForm = () => {
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="address.location"
                   label="Location"
                   value={values.address.location}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
-              {/* More address fields */}
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="address.city"
                   label="City"
                   value={values.address.city}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="address.state"
                   label="State"
                   value={values.address.state}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="address.pincode"
                   label="Pincode"
                   value={values.address.pincode}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
-
               <Grid item xs={12} md={12}>
                 <TextInput
                   type="text"
-                  isRequired={true}
+                  isRequired={false}
                   name="purpose"
                   label="Purpose"
                   value={values.purpose}
                   handleChange={handleChange}
                 />
               </Grid>
-
-              {/* FieldArray for materials */}
               <Grid item xs={12}>
                 <FieldArray name="materials">
                   {({ remove, push }) => (
@@ -265,21 +296,28 @@ export const PackingMaterialPaymentVoucherForm = () => {
                           <Grid item xs={12} md={4}>
                             <TextInput
                               type="text"
-                              isRequired={false}
+                              isRequired={true}
                               name={`materials.${index}.itemName`}
                               label="Name"
                               value={item.itemName}
                               handleChange={handleChange}
+                              touched={touched}
+                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={2}>
-                            <SelectInput isRequired={true} label="Unit" name={`materials.${index}.uom`} options={mapToValueLabelArray(allUOMS, 'id', 'unit')} value={item.itemUom} handleChange={handleChange} />
+                            <SelectInput
+                              isRequired={true}
+                              label="Unit"
+                              name={`materials.${index}.itemUom`}
+                              options={mapToValueLabelArray(allUOMS, 'id', 'unit')}
+                              value={item.itemUom}
+                              handleChange={handleChange} />
                           </Grid>
-                          {/* More material fields */}
                           <Grid item xs={12} md={2}>
                             <TextInput
                               type="text"
-                              isRequired={false}
+                              isRequired={true}
                               name={`materials.${index}.itemQty`}
                               label="Quantity"
                               value={values.materials[index].itemQty}
@@ -288,12 +326,14 @@ export const PackingMaterialPaymentVoucherForm = () => {
                                 setFieldValue(`materials.${index}.itemQty`, parseFloat(e.target.value) || 0);
                               }}
                               onBlur={() => calculateAmounts(values, setFieldValue)}
+                              touched={touched}
+                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
                               type="text"
-                              isRequired={false}
+                              isRequired={true}
                               name={`materials.${index}.rate`}
                               label="Rate"
                               value={values.materials[index].rate}
@@ -302,6 +342,8 @@ export const PackingMaterialPaymentVoucherForm = () => {
                                 setFieldValue(`materials.${index}.rate`, parseFloat(e.target.value) || 0);
                               }}
                               onBlur={() => calculateAmounts(values, setFieldValue)}
+                              touched={touched}
+                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={2}>
@@ -337,10 +379,16 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   )}
                 </FieldArray>
               </Grid>
-
-              {/* Payment Mode */}
               <Grid item xs={12} md={6}>
-                <SelectInput isRequired={true} label="Payment Mode" name="paymentMode" options={PURCHASE_ARRAYS.paymentMode} value={values.paymentMode} handleChange={handleChange} />
+                <SelectInput
+                  isRequired={true}
+                  label="Payment Mode"
+                  name="paymentMode"
+                  options={PURCHASE_ARRAYS.paymentMode}
+                  value={values.paymentMode}
+                  handleChange={handleChange}
+                  touched={touched}
+                  errors={errors} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
@@ -365,11 +413,13 @@ export const PackingMaterialPaymentVoucherForm = () => {
               <Grid item xs={12} md={6}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="receiverName"
                   label="Receiver Name"
                   value={values.receiverName}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -386,7 +436,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
               </Grid>
               <Grid item xs={12}>
                 <RadioGroupInput
-                  isRequired={true}
+                  isRequired={false}
                   label="is KYC attached? (if available)"
                   name="kyc"
                   value={values.kyc}
@@ -402,7 +452,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
           </form>
         )}
       </Formik>
-      <PMPVoucherPreview/>
+      <PMPVoucherPreview />
     </>
   );
 };

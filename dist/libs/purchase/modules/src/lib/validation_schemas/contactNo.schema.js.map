@@ -1,0 +1,1 @@
+{"version":3,"file":"contactNo.schema.js","sourceRoot":"","sources":["../../../../../../../libs/purchase/modules/src/lib/validation_schemas/contactNo.schema.ts"],"names":[],"mappings":";;;AAAA,2BAA2B;AAE3B,MAAM,cAAc,GAAG,cAAc,CAAC,CAAC,gCAAgC;AAE1D,QAAA,eAAe,GAAG,GAAG,CAAC,MAAM,EAAE;KACxC,OAAO,CAAC,cAAc,EAAE,8CAA8C,CAAC;KACvE,QAAQ,CAAC,4BAA4B,CAAC,CAAC"}

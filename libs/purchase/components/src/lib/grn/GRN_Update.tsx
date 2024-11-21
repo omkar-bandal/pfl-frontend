@@ -2,16 +2,17 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from '@mui/material'
-import { displayAddress, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
+import { displayAddress, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { FieldArray, Formik } from 'formik';
 import { ADMIN_ROUTES, setVendorData, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, vendorsDataState, farmersDataState, productsDataState, uomsDataState, setSelectedProduct, setFarmerData } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, GetFarmer, GetProduct, GetUOM, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
 import { GetDealSlip, GetGRN, PostGRN, PURCHASE_API_URL, useGetAllDealSlip, useGetGRN, useUpdateGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
-import { useAppSelector } from '@prime-fresh/modules';
+import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { showNotification, useAppSelector } from '@prime-fresh/modules';
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { GRNPreview } from './GRN_Preview';
+import { Notification } from '@prime-fresh/ui_shared';
 
 export const GRNUpdate = () => {
     const { grnid } = useParams<{ grnid: string }>();
@@ -21,7 +22,7 @@ export const GRNUpdate = () => {
     const selectedGRN = grn ? grn : initValGRN;
 
     const navigate = useNavigate();
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     console.log("GRN API DATA : ", selectedGRN);
 
     const { data: dealSlips } = useGetAllDealSlip(PURCHASE_API_URL.GET_ALL_DEAL_SLIP);
@@ -34,7 +35,7 @@ export const GRNUpdate = () => {
     const { allFarmers, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
-    
+
     React.useEffect(() => {
         dispatch(setDealSlipData(dealSlips ? dealSlips : []));
         dispatch(setVendorData(Vendors ? Vendors : []));
@@ -71,17 +72,10 @@ export const GRNUpdate = () => {
             ...product,
             amt: product.revisedRate * product.revisedQuantity,
         }));
-
-        // Calculate subtotal from the product amounts
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const subTotalAmt = updatedProducts.reduce((acc: any, product: any) => acc + product.amt, 0);
-
-        // Calculate total (subtotal + freight + other charges)
-        const totalAmt = subTotalAmt + values.freight + values.otherCharges;
-
-        // Convert total amount to words
-        const amtWords = numToWords(totalAmt);
-
+        const subTotalAmt = updatedProducts.reduce((acc: any, product: any) => acc + product.amt, 0);  // Calculate subtotal from the product amounts
+        const totalAmt = subTotalAmt + values.freight + values.otherCharges; // Calculate total (subtotal + freight + other charges)
+        const amtWords = numToWords(totalAmt); // Convert total amount to words
         // Update form fields with calculated values
         setFieldValue("products", updatedProducts);
         setFieldValue("subTotalAmt", subTotalAmt);
@@ -89,14 +83,19 @@ export const GRNUpdate = () => {
         setFieldValue("amtWords", amtWords);
     };
 
-    const { mutateAsync: mutatePatch, isPending, isError, error, data: Res } = useUpdateGRN(PURCHASE_API_URL.UPDATE_GRN, grnId);
+    const { mutateAsync: mutatePatch, error, data } = useUpdateGRN(PURCHASE_API_URL.UPDATE_GRN, grnId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePatch(formData);
-        console.log(error);
-        // navigate(PURCHASE_ROUTES.GET_ALL_GRN);
+        mutatePatch(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: data ? data.message : "GRN updated successfully !!!" }));
+            setTimeout(() => {
+                navigate(PURCHASE_ROUTES.GET_ALL_GRN);
+            }, 5000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+        });
     }
     return (
         <>
@@ -107,7 +106,7 @@ export const GRNUpdate = () => {
                     </Box >) :
                     (
                         <>
-                            <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+                            <Notification />
                             <Formik
                                 initialValues={selectedGRN}
                                 onSubmit={(values) => {
@@ -277,14 +276,14 @@ export const GRNUpdate = () => {
                                                                             name={`products.${index}.count`}
                                                                             label="Count"
                                                                             value={values.products[index].count}
-                                                                            options={allProducts?.find(product => product.id === values.products[index].product)?.count === null ? [{label: '', value: ''}] : allProducts?.find(product => product.id === values.products[index].product)?.count.map((count) => ({ label: count, value: count }))}
+                                                                            options={allProducts?.find(product => product.id === values.products[index].product)?.count === null ? [{ label: '', value: '' }] : allProducts?.find(product => product.id === values.products[index].product)?.count.map((count) => ({ label: count, value: count }))}
                                                                             handleChange={handleChange} />
                                                                     </Grid>
                                                                     <Grid item xs={4} md={2}>
                                                                         <SelectInput isRequired={true} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray<GetUOM>(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} touched={touched} errors={errors} />
                                                                     </Grid>
                                                                     <Grid item xs={4} md={2}>
-                                                                        <TextInput isRequired={false} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity} isReadOnly={true}
+                                                                        <TextInput isRequired={false} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity}
                                                                             handleChange={(e) => {
                                                                                 handleChange(e);
                                                                                 setFieldValue(`products.${index}.quantity`, parseFloat(e.target.value) || 0);
@@ -293,7 +292,11 @@ export const GRNUpdate = () => {
                                                                         />
                                                                     </Grid>
                                                                     <Grid item xs={4} md={2}>
-                                                                        <TextInput isRequired={false} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate} isReadOnly={true} />
+                                                                        <TextInput isRequired={false} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate} handleChange={(e) => {
+                                                                            handleChange(e);
+                                                                            setFieldValue(`products.${index}.quantity`, parseFloat(e.target.value) || 0);
+                                                                        }}
+                                                                            onBlur={() => calculateAmounts(values, setFieldValue)} />
                                                                     </Grid>
                                                                     <Grid item xs={4} md={2}>
                                                                         <TextInput isRequired={false} label='Amount' name={`products.${index}.amt`} type='number' value={values.products[index].amt} handleChange={handleChange} />

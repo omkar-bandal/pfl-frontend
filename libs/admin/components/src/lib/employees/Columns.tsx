@@ -18,18 +18,18 @@ export const EmployeeListCols = (): GridColDef[] => {
     dispatch(setDataId(id));
   }
   return ([
-    {
-      field: "employeeStatus",
-      headerName: "Employee Status",
-      width: 100,
-      renderCell: (params: GridRenderCellParams) => {
-        switch (params.row.employeeStatus) {
-          case "active": return <Chip label={params.row.employeeStatus} color="primary" size="small" sx={{ width: 80 }} />;
-          case "inactive": return <Chip label={params.row.employeeStatus} color="error" size="small" sx={{ width: 80 }} />;
-          default: return <Chip label={params.row.employeeStatus} color="error" size="small" sx={{ width: 80 }} />;
-        }
-      }
-    },
+    // {
+    //   field: "employeeStatus",
+    //   headerName: "Employee Status",
+    //   width: 100,
+    //   renderCell: (params: GridRenderCellParams) => {
+    //     switch (params.row.employeeStatus) {
+    //       case "active": return <Chip label={params.row.employeeStatus} color="primary" size="small" sx={{ width: 80 }} />;
+    //       case "inactive": return <Chip label={params.row.employeeStatus} color="error" size="small" sx={{ width: 80 }} />;
+    //       default: return <Chip label={params.row.employeeStatus} color="error" size="small" sx={{ width: 80 }} />;
+    //     }
+    //   }
+    // },
     {
       field: "role",
       headerName: "Role",
@@ -97,21 +97,21 @@ export const EmployeeListCols = (): GridColDef[] => {
       headerName: "Relocation Date",
       width: 100,
     },
-    {
-      field: "recommendedBy",
-      headerName: "Recommended By",
-      width: 100,
-    },
-    {
-      field: "reportingAuthorityFunctional",
-      headerName: "Reporting Authority (Functional)",
-      width: 100,
-    },
-    {
-      field: "reportingAuthorityAdministrative",
-      headerName: "Reporting Authority (Administrative)",
-      width: 100,
-    },
+    // {
+    //   field: "recommendedBy",
+    //   headerName: "Recommended By",
+    //   width: 100,
+    // },
+    // {
+    //   field: "reportingAuthorityFunctional",
+    //   headerName: "Reporting Authority (Functional)",
+    //   width: 100,
+    // },
+    // {
+    //   field: "reportingAuthorityAdministrative",
+    //   headerName: "Reporting Authority (Administrative)",
+    //   width: 100,
+    // },
     {
       field: "status",
       headerName: "Status",
@@ -153,23 +153,23 @@ export const EmployeeListCols = (): GridColDef[] => {
         }
       },
     },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      headerAlign: 'center',
-      align: 'center',
-      width: 80,
-      hideable: false,
-      sortable: false,
-      filterable: false,
-      disableExport: true,
-      disableColumnMenu: true,
-      renderCell: (params: GridRenderCellParams) => (
-          <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
-            <Edit color="info" />
-          </IconButton>
-      ),
-    },
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   width: 80,
+    //   hideable: false,
+    //   sortable: false,
+    //   filterable: false,
+    //   disableExport: true,
+    //   disableColumnMenu: true,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //       <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
+    //         <Edit color="info" />
+    //       </IconButton>
+    //   ),
+    // },
     {
       field: 'view',
       headerName: 'View',

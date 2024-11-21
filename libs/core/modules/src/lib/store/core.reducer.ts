@@ -1,4 +1,4 @@
-import { layoutReducer, previewReducer } from "./slices";
+import { layoutReducer, notificationReducer, previewReducer } from "./slices";
 import { 
     formContainerReducer, 
     customerDataReducer, 
@@ -15,6 +15,7 @@ import {
 export const coreReducer = {
     layout: layoutReducer,
     preview: previewReducer,
+    notification: notificationReducer,
     formContainer: formContainerReducer,
     customerData: customerDataReducer,
     vendorData: vendorDataReducer,

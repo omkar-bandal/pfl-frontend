@@ -4,11 +4,11 @@ import { GetFarmer } from "@prime-fresh/admin_api";
 
 type farmerDataState = {
     allFarmers: GetFarmer[];
-    selectedFarmer: GetFarmer | undefined;
+    selectedFarmer: GetFarmer | null | undefined;
 }
 const initialState : farmerDataState = {
     allFarmers: [],
-    selectedFarmer: undefined,
+    selectedFarmer: null,
 }
 const farmerDataSlice = createSlice({
     name: 'farmerData',
@@ -17,7 +17,7 @@ const farmerDataSlice = createSlice({
         setFarmerData: (state, action: PayloadAction<GetFarmer[]>) => {
             state.allFarmers = action.payload;
         },
-        setSelectedFarmer: (state, action: PayloadAction<GetFarmer | undefined>) => {
+        setSelectedFarmer: (state, action: PayloadAction<GetFarmer | null | undefined>) => {
             state.selectedFarmer = action.payload;
         }
     }

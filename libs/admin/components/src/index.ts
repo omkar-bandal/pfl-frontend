@@ -10,3 +10,5 @@ export * from './lib/product_classification';
 export * from './lib/uom';
 export * from './lib/uom_matrix';
 export * from './lib/vendors';
+export * from './lib/vendor_category';
+export * from './lib/vendor_subcategory';

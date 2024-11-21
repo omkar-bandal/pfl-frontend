@@ -1,6 +1,5 @@
 import { RequestedBy } from '../requestedBy.interface';
 import { Address } from '../address.interface';
-import { GetUOM } from '../../../../../admin_api/src/index.ts';
 
 export interface Materials {
     id?: string;
@@ -23,7 +22,6 @@ export interface PostPMPvoucher {
     purpose: string;
     materials: Materials[];
     paymentMode: string;
-    ratePerLabour: number;
     totalAmt: number;
     amtWords: string;
     receiverName: string;
@@ -56,7 +54,7 @@ export interface GetPMPvoucher {
         id: string;
         itemName: string;
         itemQty: number;
-        itemUom: GetUOM;
+        itemUom: string;
         rate: number;
         amt: number;
     }[];

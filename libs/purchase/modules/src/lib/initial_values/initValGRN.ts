@@ -29,8 +29,6 @@ export const initValGRN: PostGRN = {
     selectedParty: '',
     products: [initValGRNProducts],
     deliveryReceivingPerson: '',
-    validityOfQuote: '',
-    packingInstruction: '',
     subTotalAmt: 0,
     totalAmt: 0,
     amtWords: '',
@@ -43,5 +41,6 @@ export const initValGRN: PostGRN = {
     timeIn: '',
     cratesIn: 0,
     rmn: '',
+    remark: '',
     billImage: null,
 }

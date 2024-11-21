@@ -56,9 +56,16 @@ export const TextInput: React.FC<TextInputProps> = ({
           value={value ?? ""} 
           onChange={handleChange}
           InputLabelProps={{ shrink: type === "date" }}
-          InputProps={{ readOnly: isReadOnly ?? false }}
+          InputProps={{ 
+            readOnly: isReadOnly ?? false, 
+          }}
           error={Boolean(touched[name] && errors[name])} 
           helperText={touched[name] && getHelperText()} 
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              pointerEvents: isReadOnly ? "none" : "auto", 
+            },
+          }}
           {...otherProps}
         />
       </Grid>

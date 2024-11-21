@@ -1,5 +1,41 @@
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-import { BranchForm, CCTable, CorporateOfficeTable, CustomerTable, DashboardAdmin, DCTable, EmployeeTable, FarmerTable, OfficeForm, OfficeView, ProductCatForm, ProductCatTable, ProductClassForm, ProductClassTable, ProductSubcatForm, ProductSubCatTable, ProductTable, RegisteredOfficeTable, SeasonalCCTable, UOMConvMatrixForm, UOMConvMatrixTable, UOMForm, UOMTable, VendorTable, WHTable } from "@prime-fresh/admin/components";
+import { BranchForm, 
+    CCTable, 
+    CorporateOfficeTable, 
+    CustomerTable, 
+    DashboardAdmin, 
+    DCTable, 
+    EmployeeTable, 
+    FarmerTable, 
+    OfficeForm, 
+    ViewOffice, 
+    ProductCatForm, 
+    ProductCatTable, 
+    ProductClassForm,
+     ProductClassTable, 
+     ProductSubcatForm, 
+     ProductSubCatTable, 
+     ProductTable, 
+     RegisteredOfficeTable, 
+     SeasonalCCTable, 
+     UOMConvMatrixForm, 
+     UOMConvMatrixTable, 
+     UOMForm, 
+     UOMTable,
+    VendorTable, 
+    ViewFarmer, 
+    ViewVendor, 
+    WHTable, 
+    ViewEmployee, 
+    EmployeeForm, 
+    ViewCustomer,
+    VendorCatForm,
+    VendorCatTable,
+    VendorSubcatForm,
+    VendorSubcatTable,
+    ViewBranch,
+    ViewProduct
+} from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
 import { ErrorPage } from "@prime-fresh/ui_shared";
 
@@ -17,42 +53,46 @@ export const AdminRoutes = [
                 path: ADMIN_ROUTES.GET_ALL_EMPLOYEES,
                 element: <EmployeeTable />,
             },
-            // {
-            //     path: ADMIN_ROUTES.CREATE_EMPLOYEE,
-            //     element: <FormEmployee />,
-            // },
-            // {
-            //     path: `${ADMIN_ROUTES.VIEW_EMPLOYEE}/:id`,
-            //     element: <ViewEmployee />,
-            // },
-            // {
-            //     path: `${ADMIN_ROUTES.EDIT_EMPLOYEE}/:id`,
-            //     element: <ViewEmployee />,
-            // },
+            {
+                path: ADMIN_ROUTES.CREATE_EMPLOYEE,
+                element: <EmployeeForm />,
+            },
+            {
+                path: `${ADMIN_ROUTES.VIEW_EMPLOYEE}/:id`,
+                element: <ViewEmployee />,
+            },
             {
                 path: ADMIN_ROUTES.GET_ALL_CUSTOMERS,
                 element: <CustomerTable />,
             },
-            // {
-            //     path: ADMIN_ROUTES.CREATE_CUSTOMER,
-            //     element: <CreateCustomer />,
-            // },
-            // {
-            //     path: `${ADMIN_ROUTES.VIEW_CUSTOMER}/:id`,
-            //     element: <ViewCustomer />,
-            // },
+            {
+                path: `${ADMIN_ROUTES.VIEW_CUSTOMER}/:id`,
+                element: <ViewCustomer />,
+            },
             {
                 path: ADMIN_ROUTES.GET_ALL_VENDORS,
                 element: <VendorTable />,
             },
-            // {
-            //     path: ADMIN_ROUTES.CREATE_VENDOR,
-            //     element: <CreateVendor />,
-            // },
-            // {
-            //     path: `${ADMIN_ROUTES.VIEW_VENDOR}/:id`,
-            //     element: <ViewVendor />,
-            // },
+            {
+                path: `${ADMIN_ROUTES.VIEW_VENDOR}/:id`,
+                element: <ViewVendor />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_VENDORS_CAT,
+                element: <VendorCatForm />
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
+                element: <VendorCatTable />
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_VENDORS_SUBCAT,
+                element: <VendorSubcatForm />
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT,
+                element: <VendorSubcatTable />
+            },
             {
                 path: ADMIN_ROUTES.GET_ALL_FARMERS,
                 element: <FarmerTable />,
@@ -61,10 +101,10 @@ export const AdminRoutes = [
             //     path: ADMIN_ROUTES.CREATE_FARMER,
             //     element: <CreateFarmer />,
             // },
-            // {
-            //     path: `${ADMIN_ROUTES.VIEW_FARMER}/:id`,
-            //     element: <ViewFarmer />,
-            // },
+            {
+                path: `${ADMIN_ROUTES.VIEW_FARMER}/:id`,
+                element: <ViewFarmer />,
+            },
         ]
     },
     {
@@ -74,6 +114,10 @@ export const AdminRoutes = [
             {
                 path: ADMIN_ROUTES.GET_ALL_PRODUCTS,
                 element: <ProductTable />,
+            },
+            {
+                path: `${ADMIN_ROUTES.GET_A_PRODUCT}/:id`,
+                element: <ViewProduct />,
             },
             {
                 path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS,
@@ -149,7 +193,7 @@ export const AdminRoutes = [
             },
             {
                 path: `${ADMIN_ROUTES.VIEW_OFFICE}/:officeType/:id`,
-                element: <OfficeView />,
+                element: <ViewOffice />,
             },
             {
                 path: ADMIN_ROUTES.BRANCHES,
@@ -179,10 +223,10 @@ export const AdminRoutes = [
                         path: `${ADMIN_ROUTES.EDIT_BRANCHES}/:branchType/:id`,
                         element: <BranchForm />
                     },
-                    // {
-                    //     path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:branchType/:id`,
-                    //     element: <BranchView />
-                    // },
+                    {
+                        path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:branchType/:id`,
+                        element: <ViewBranch />
+                    },
                 ]
             }
         ]

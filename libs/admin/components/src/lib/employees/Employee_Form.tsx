@@ -4,7 +4,7 @@ import { EmployeeFormFields } from './employeeFormField';
 import { employeesState, employeeValidationSchema, formContainerState } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, PostEmployee, useCreateEmployee, useUpdateEmployee } from '@prime-fresh/admin_api';
 import { DynamicForm, generateInitialValues } from '@prime-fresh/ui_shared';
-
+import { appendFormData } from '@prime-fresh/shared/utils';
 
 export const EmployeeForm = () => {
 
@@ -19,13 +19,15 @@ export const EmployeeForm = () => {
     const EmployeeInitValue = openFor === 'update' && dataId ? Employees.find(item => item.id === dataId) : generateInitialValues(EmployeeFormFields().fields);
 
     const handleSubmit = (values: PostEmployee) => {
-        mutatePost(values);
-        console.log(values);
+        const formData = new FormData();
+        appendFormData(formData, values);
+        mutatePost(formData);
     };
 
     const handleUpdate = (values: PostEmployee) => {
-        console.log(values);
-        mutatePatch(values);
+        const formData = new FormData();
+        appendFormData(formData, values);
+        mutatePatch(formData);
     };
 
     return (

@@ -32,11 +32,6 @@ export const TableToolbar: React.FC<DataTableProps> = ({ apiRef }) => {
   ]
   return (
     <ButtonGroup variant="outlined" aria-label="Basic button group">
-      <Tooltip title="Columns">
-        <Button aria-label="column">
-          <ViewColumn />
-        </Button>
-      </Tooltip>
       <Tooltip title="Filters">
         <Button
           aria-label="filter"
@@ -51,11 +46,11 @@ export const TableToolbar: React.FC<DataTableProps> = ({ apiRef }) => {
           menuItems={RowDensityMenu}
         />
       </Tooltip>
-      <Tooltip title="Sort">
+      {/* <Tooltip title="Sort">
         <Button aria-label="sort" onClick={() => apiRef.current.sortColumn('id', 'desc')}>
           <SwapVertOutlined />
         </Button>
-      </Tooltip>
+      </Tooltip> */}
       {/* <Modal
         open={open}
         onClose={handleClose}

@@ -20,6 +20,12 @@ export const PURCHASE_API_URL = {
     APPROVE_GRN: "/grns/approve/",
     GET_ALL_GRN_NO: "/grns/grnnumbers/getAllgrnNo",
 
+    //Payment Request
+    GET_ALL_PAYMENT_REQ: "/paymentRequest/",
+    GET_A_PAYMENT_REQ: " /paymentRequest/",
+    POST_PAYMENT_REQ: "/paymentRequest",
+    UPDATE_PAYMENT_REQ: "/paymentRequest",
+
     //Vouchers
     //Multiple Cash voucher
     POST_MC_VOUCHER: "/multiCashVoucher/",
@@ -49,6 +55,6 @@ export const PURCHASE_API_URL = {
     POST_DELIVERY_CHALLAN: "/deliveryChallan/",
     GET_ALL_DELIVERY_CHALLAN: "/deliveryChallan/",
     GET_A_DELIVERY_CHALLAN: "/deliveryChallan",
-    UPDATE_DELIVERY_CHALLAN: "/deliveryChallan/",
+    UPDATE_DELIVERY_CHALLAN: "/deliveryChallan",
     GET_ALL_DELIVERY_CHALLAN_NO: "/deliveryChallan/challanNos/getAllChallanNo",
 }

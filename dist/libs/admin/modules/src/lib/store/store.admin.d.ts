@@ -8,19 +8,19 @@ export declare const storeAdmin: import("@reduxjs/toolkit").EnhancedStore<{
         customers: import("@prime-fresh/admin_api").GetCustomer[];
     };
     vendorData: {
-        allVendors: import("@prime-fresh/admin_api").GetVendor[];
-        selectedVendor: import("@prime-fresh/admin_api").GetVendor | undefined;
+        allVendors: import("@prime-fresh/admin_api").GetVendor[] | [];
+        selectedVendor: import("@prime-fresh/admin_api").GetVendor | null | undefined;
     };
     employeeData: {
         employees: import("@prime-fresh/admin_api").GetEmployee[];
     };
     farmerData: {
         allFarmers: import("@prime-fresh/admin_api").GetFarmer[];
-        selectedFarmer: import("@prime-fresh/admin_api").GetFarmer | undefined;
+        selectedFarmer: import("@prime-fresh/admin_api").GetFarmer | null | undefined;
     };
     productData: {
         allProducts: import("@prime-fresh/admin_api").GetProduct[];
-        selectedProduct: import("@prime-fresh/admin_api").GetProduct | undefined;
+        selectedProduct: import("@prime-fresh/admin_api").GetProduct | null | undefined;
         productCat: import("@prime-fresh/admin_api").GetProductCategory[];
         productSubCat: import("@prime-fresh/admin_api").GetProductSubcategory[];
     };
@@ -56,19 +56,19 @@ export declare const storeAdmin: import("@reduxjs/toolkit").EnhancedStore<{
             customers: import("@prime-fresh/admin_api").GetCustomer[];
         };
         vendorData: {
-            allVendors: import("@prime-fresh/admin_api").GetVendor[];
-            selectedVendor: import("@prime-fresh/admin_api").GetVendor | undefined;
+            allVendors: import("@prime-fresh/admin_api").GetVendor[] | [];
+            selectedVendor: import("@prime-fresh/admin_api").GetVendor | null | undefined;
         };
         employeeData: {
             employees: import("@prime-fresh/admin_api").GetEmployee[];
         };
         farmerData: {
             allFarmers: import("@prime-fresh/admin_api").GetFarmer[];
-            selectedFarmer: import("@prime-fresh/admin_api").GetFarmer | undefined;
+            selectedFarmer: import("@prime-fresh/admin_api").GetFarmer | null | undefined;
         };
         productData: {
             allProducts: import("@prime-fresh/admin_api").GetProduct[];
-            selectedProduct: import("@prime-fresh/admin_api").GetProduct | undefined;
+            selectedProduct: import("@prime-fresh/admin_api").GetProduct | null | undefined;
             productCat: import("@prime-fresh/admin_api").GetProductCategory[];
             productSubCat: import("@prime-fresh/admin_api").GetProductSubcategory[];
         };

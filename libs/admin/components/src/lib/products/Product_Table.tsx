@@ -42,7 +42,7 @@ export function ProductTable() {
       <DataTable
         loading={isLoading}
         rows={Products}
-        columns={ProductListCols}
+        columns={ProductListCols()}
         apiRef={apiRef}
       />
     </Box>

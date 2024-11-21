@@ -9,3 +9,5 @@ export * from './lib/auto_form/old_components';
 export * from './lib/alert_bar/Alertbar';
 export * from './lib/preview_page';
 export * from './assets';
+export * from './lib/view_page/DataDisplay';
+export * from './lib/notification/Notification';

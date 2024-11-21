@@ -1,4 +1,6 @@
-export const initValPaymentRequest = {
+import { PostPaymentRequest } from "@prime-fresh/purchase_api";
+
+export const initValPaymentRequest: PostPaymentRequest = {
     paymentDate: new Date(),
     partyName: '',
     amount: 0,
@@ -6,9 +8,11 @@ export const initValPaymentRequest = {
     ifscCode: '',
     paymentMode: '',
     typesOfTransaction: '',
+    otherTransaction: '',
     vehicleNo: '',
     placeOfPurchase: '',
-    contactperson: '',
+    contactpersonRec: '',
+    contactpersonSen: '',
     costCenter: '',
     kycByEmail: 'no',
     remark:'',

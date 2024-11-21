@@ -26,6 +26,8 @@ export * from './users/vendor/useGetAllVendor';
 export * from './users/vendor/useGetAllVendorCat';
 export * from './users/vendor/useGetAllVendorSubCat';
 export * from './users/vendor/useGetVendor';
+export * from './users/vendor/useCreateVendorCat';
+export * from './users/vendor/useCreateVendorSubCat';
 
 //Hooks: Product
 export * from './product';

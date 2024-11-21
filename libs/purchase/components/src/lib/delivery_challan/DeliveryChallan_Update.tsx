@@ -2,21 +2,22 @@ import React from "react";
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, setPreviewDC } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC } from "@prime-fresh/purchase/modules";
+import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { PURCHASE_API_URL, useGetAllGRNNums, useGetDeliveryChallan, useUpdateDeliveryChallan } from "@prime-fresh/purchase_api";
 import { DeliveryChallanPreview } from "./DeliveryChallan_Preview";
-import { setPreview } from "@prime-fresh/modules";
-import { useParams } from "react-router-dom";
+import { setPreview, showNotification } from "@prime-fresh/modules";
+import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useDispatch } from "react-redux";
 
 export const DeliveryChallanUpdate = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     //Get Id from URL
-    const { dcid } = useParams<{ dcid: string }>();
-    const dcId = dcid ? dcid : '';
+    const { id } = useParams<{ id: string }>();
+    const dcId = id ? id : '';
 
     //Get delivery challan data by id
     const { data: dcData, isLoading } = useGetDeliveryChallan(PURCHASE_API_URL.GET_A_DELIVERY_CHALLAN, dcId);
@@ -27,13 +28,20 @@ export const DeliveryChallanUpdate = () => {
     const allGRNNumbers = grnNums ? grnNums : [];
 
     //React Query to update delivery challan
-    const { mutateAsync: mutatePatch, isPending, isError, error, data: Res } = useUpdateDeliveryChallan(PURCHASE_API_URL.UPDATE_DELIVERY_CHALLAN, dcId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateDeliveryChallan(PURCHASE_API_URL.UPDATE_DELIVERY_CHALLAN, dcId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUpdate = (values: any) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePatch(formData);
+        mutatePatch(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Delivery challan updated successfully !!!" }));
+            setTimeout(() => {
+                navigate(PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN);
+            }, 5000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+        });
     };
 
     return (
@@ -44,11 +52,12 @@ export const DeliveryChallanUpdate = () => {
                 </Box >) :
                 (
                     <>
-                        <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+                        <Notification />
                         <Formik
                             initialValues={dcValues}
+                            // validationSchema={deliveryChallanSchema}
                             onSubmit={(values) => {
-                                console.log(values);
+                                console.log("updated data:", values);
                                 handleUpdate(values);
                             }}
                         >
@@ -86,23 +95,57 @@ export const DeliveryChallanUpdate = () => {
                                             </Stack>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <RadioGroupInput isRequired={true} name="deliveryCType" label="Challan Type" options={PURCHASE_ARRAYS.deliveryChallanType} value={values.deliveryCType} handleChange={handleChange} />
+                                            <RadioGroupInput
+                                                isRequired={true}
+                                                name="deliveryCType"
+                                                label="Challan Type"
+                                                options={PURCHASE_ARRAYS.deliveryChallanType}
+                                                value={values.deliveryCType}
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
-                                        {/* GRN No. */}
+                                        {values.deliveryCType === "Other" ?
+                                            (<Grid item xs={12}>
+                                                <TextInput
+                                                    isRequired={true}
+                                                    name="otherCType"
+                                                    label="If other please specify "
+                                                    type="text" value={values.otherCType}
+                                                    handleChange={handleChange}
+                                                    touched={touched}
+                                                    errors={errors} />
+                                            </Grid>) : ('')}
                                         <Grid item xs={12} md={3}>
                                             <SelectInput
                                                 isRequired={false}
-                                                label="Select GRN"
                                                 name="grnNo"
+                                                label="Select GRN"
                                                 options={mapToValueLabelArray(allGRNNumbers, 'id', 'grnNo')}
-                                                value={allGRNNumbers.find(nums => nums.grnNo === values.grnNo)?.id}
+                                                value={values.grnNo}
                                                 handleChange={handleChange} />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
-                                            <SelectInput isRequired={true} name="companyName" label="Company Name" value={values.companyName} options={PURCHASE_ARRAYS.companyNames} handleChange={handleChange} />
+                                            <SelectInput
+                                                isRequired={true}
+                                                name="companyName"
+                                                label="Company Name"
+                                                value={values.companyName}
+                                                options={PURCHASE_ARRAYS.companyNames}
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12} md={5}>
-                                            <TextInput isRequired={true} name="partyName" label="Party Name" type="text" value={values.partyName} handleChange={handleChange} touched={touched} errors={errors} />
+                                            <TextInput
+                                                isRequired={true}
+                                                name="partyName"
+                                                label="Party Name"
+                                                type="text"
+                                                value={values.partyName}
+                                                handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors} />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <FieldArray name="items">
@@ -135,32 +178,37 @@ export const DeliveryChallanUpdate = () => {
                                                                         label="Name"
                                                                         value={item.itemName}
                                                                         handleChange={handleChange}
+                                                                        touched={touched}
+                                                                        errors={errors}
                                                                     />
                                                                 </Grid>
-                                                                {/* More material fields */}
                                                                 <Grid item xs={12} md={2}>
                                                                     <TextInput
-                                                                        type="text"
+                                                                        type="number"
                                                                         isRequired={true}
                                                                         name={`items.${index}.itemQty`}
                                                                         label="Quantity"
                                                                         value={item.itemQty}
                                                                         handleChange={handleChange}
+                                                                        touched={touched}
+                                                                        errors={errors}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={12} md={2}>
                                                                     <TextInput
-                                                                        type="text"
+                                                                        type="number"
                                                                         isRequired={true}
                                                                         name={`items.${index}.rate`}
                                                                         label="Rate"
                                                                         value={item.rate}
                                                                         handleChange={handleChange}
+                                                                        touched={touched}
+                                                                        errors={errors}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item xs={12} md={2}>
                                                                     <TextInput
-                                                                        type="text"
+                                                                        type="number"
                                                                         isRequired={false}
                                                                         name={`items.${index}.amt`}
                                                                         label="Amount"
@@ -209,6 +257,8 @@ export const DeliveryChallanUpdate = () => {
                                                 label="From"
                                                 value={values.fromLocation}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={5}>
@@ -219,6 +269,8 @@ export const DeliveryChallanUpdate = () => {
                                                 label="To"
                                                 value={values.toLocation}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
@@ -229,6 +281,8 @@ export const DeliveryChallanUpdate = () => {
                                                 label="Driver Name"
                                                 value={values.driverName}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
@@ -239,12 +293,14 @@ export const DeliveryChallanUpdate = () => {
                                                 label="Contact No"
                                                 value={values.contactNo}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextInput
                                                 type="text"
-                                                isRequired={true}
+                                                isRequired={false}
                                                 name="altContactNo"
                                                 label="Alternate Contact No"
                                                 value={values.altContactNo}
@@ -259,6 +315,8 @@ export const DeliveryChallanUpdate = () => {
                                                 label="Vehicle No"
                                                 value={values.vehicleNo}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
@@ -269,6 +327,8 @@ export const DeliveryChallanUpdate = () => {
                                                 label="Receiver Name"
                                                 value={values.receiverName}
                                                 handleChange={handleChange}
+                                                touched={touched}
+                                                errors={errors}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>

@@ -15,12 +15,17 @@ export declare const ADMIN_ROUTES: {
     GET_ALL_VENDORS: string;
     VIEW_VENDOR: string;
     EDIT_VENDOR: string;
+    GET_ALL_VENDORS_CAT: string;
+    CREATE_VENDORS_CAT: string;
+    GET_ALL_VENDORS_SUBCAT: string;
+    CREATE_VENDORS_SUBCAT: string;
     FARMER: string;
     GET_ALL_FARMERS: string;
     VIEW_FARMER: string;
     EDIT_FARMER: string;
     PRODUCTS: string;
     GET_ALL_PRODUCTS: string;
+    GET_A_PRODUCT: string;
     GET_ALL_PRODUCT_CLASS: string;
     GET_A_PRODUCT_CLASS: string;
     CREATE_PRODUCT_CLASS: string;

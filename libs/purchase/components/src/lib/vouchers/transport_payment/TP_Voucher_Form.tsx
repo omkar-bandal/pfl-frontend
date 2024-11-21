@@ -5,16 +5,18 @@ import {
   Typography,
 } from "@mui/material";
 import { PostTPvoucher, PURCHASE_API_URL, useCreateTPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
-import { initValTransportPaymentVoucher, numToWords, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { Alertbar, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { initValTransportPaymentVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, transportPaymentVoucherSchema } from "@prime-fresh/purchase/modules";
+import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
-import { setPreview } from "@prime-fresh/modules";
+import { setPreview, showNotification } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./TP_Voucher_Preview";
 import { appendFormData } from "@prime-fresh/shared/utils";
+import { useNavigate } from "react-router-dom";
 
 //Labour Payment Voucher
 export const TransportPaymentVoucherForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data: grnnos } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
   const allGRNNums = grnnos ? grnnos : [];
@@ -22,17 +24,25 @@ export const TransportPaymentVoucherForm = () => {
   //   const amtWords = numToWords(values.totalAmt);
   //   setFieldValue("amtWords", amtWords);
   // };
-  const { mutateAsync: mutatePost, isPending, isError, error, data: Res } = useCreateTPVoucher(PURCHASE_API_URL.POST_TP_VOUCHER);
+  const { mutateAsync: mutatePost, error, data: Res } = useCreateTPVoucher(PURCHASE_API_URL.POST_TP_VOUCHER);
   const handleSubmit = (values: PostTPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
-    mutatePost(formData);
+    mutatePost(formData).then(() => {
+      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Transport payment voucher created successfully !!!"  }));
+      setTimeout(() => {
+        navigate(PURCHASE_ROUTES.GET_ALL_TRANSPORT_CASH_VOUCHER);
+      }, 5000);
+    }).catch(() => {
+      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+    });;
   };
   return (
     <>
-      <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+      <Notification />
       <Formik
         initialValues={initValTransportPaymentVoucher}
+        validationSchema={transportPaymentVoucherSchema}
         onSubmit={(values) => {
           console.log(values);
           handleSubmit(values);
@@ -249,11 +259,13 @@ export const TransportPaymentVoucherForm = () => {
               <Grid item xs={12} md={3}>
                 <TextInput
                   type="text"
-                  isRequired={false}
+                  isRequired={true}
                   name="receiverName"
                   label="Receiver Name"
                   value={values.receiverName}
                   handleChange={handleChange}
+                  touched={touched}
+                  errors={errors}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -270,7 +282,7 @@ export const TransportPaymentVoucherForm = () => {
               </Grid>
               <Grid item xs={12}>
                 <RadioGroupInput
-                  isRequired={true}
+                  isRequired={false}
                   label="is KYC attached? (Driver Lic. / RC Book / PAN)"
                   name="kyc"
                   value={values.kyc}
