@@ -23045,8 +23045,7 @@ const wh = {
   baseURL: wh.BASE_URL,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data",
-    credentials: !0
+    "Content-Type": "multipart/form-data"
   }
 }), Gx = () => localStorage.getItem("access_token"), Xx = () => localStorage.getItem("refresh_token");
 ja.interceptors.request.use(
@@ -23311,8 +23310,7 @@ const nP = {
     return (await We.post(`${wh.BASE_URL}${e}`, t, {
       headers: {
         // 'ngrok-skip-browser-warning': 'true',
-        "Content-Type": "application/json",
-        credentials: !0
+        "Content-Type": "application/json"
       }
     })).data;
   } catch (n) {

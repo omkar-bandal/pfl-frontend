@@ -48739,8 +48739,7 @@ const Bz = {
   baseURL: Bz.BASE_URL,
   headers: {
     // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data",
-    credentials: !0
+    "Content-Type": "multipart/form-data"
   }
 }), Wz = () => localStorage.getItem("access_token"), Mz = () => localStorage.getItem("refresh_token");
 Gp.interceptors.request.use(

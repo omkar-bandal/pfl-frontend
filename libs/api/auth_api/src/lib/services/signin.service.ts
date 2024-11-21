@@ -8,7 +8,6 @@ export const signinService = async (url: string, data: SignInRequest) => {
             headers: {
                 // 'ngrok-skip-browser-warning': 'true',
                 'Content-Type': 'application/json', 
-                'credentials': true,              
             },
         });
         return response.data;
