@@ -23039,7 +23039,7 @@ We.HttpStatusCode = Na;
 We.default = We;
 const wh = {
   //Authentication
-  BASE_URL: "http://ec2-43-205-254-4.ap-south-1.compute.amazonaws.com:80"
+  BASE_URL: "http://ec2-13-127-113-138.ap-south-1.compute.amazonaws.com:80"
   // BASE_URL: "https://c7fb-182-156-141-17.ngrok-free.app",
 }, ja = We.create({
   baseURL: wh.BASE_URL,
