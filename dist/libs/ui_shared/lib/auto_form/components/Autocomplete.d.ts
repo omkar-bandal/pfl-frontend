@@ -1,17 +1,17 @@
 import { FormikErrors, FormikTouched } from 'formik';
+import { default as React } from 'react';
 
+type AutoCompleteOption = {
+    label: string;
+    value: string;
+};
 type AutoCompleteInputProps = {
-    isRequired: boolean;
+    isRequired?: boolean;
     label: string;
     name: string;
-    options: {
-        label: string;
-        value: string;
-    }[];
-    handleChange?: ((event: any, newValue: {
-        label: string;
-        value: string;
-    } | null) => void) | undefined;
+    options: AutoCompleteOption[];
+    value?: AutoCompleteOption | null;
+    handleChange?: (event: any, newValue: AutoCompleteOption | null) => void;
     touched?: FormikTouched<{
         [key: string]: any;
     }>;

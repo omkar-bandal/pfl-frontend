@@ -2,10 +2,12 @@ export declare const PURCHASE_API_URL: {
     GET_ALL_RFPA: string;
     GET_A_RFPA: string;
     POST_RFPA: string;
+    UPDATE_RFPA: string;
     APPROVE_RFPA: string;
     GET_ALL_DEAL_SLIP: string;
     GET_A_DEAL_SLIP: string;
     POST_DEAL_SLIP: string;
+    UPDATE_DEAL_SLIP: string;
     APPROVE_DEAL_SLIP: string;
     GET_ALL_GRN: string;
     GET_A_GRN: string;

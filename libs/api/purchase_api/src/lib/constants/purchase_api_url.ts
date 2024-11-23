@@ -4,12 +4,14 @@ export const PURCHASE_API_URL = {
     GET_ALL_RFPA: "/rfpa/",
     GET_A_RFPA: "/rfpa",
     POST_RFPA: "/rfpa/",
+    UPDATE_RFPA: "/rfpa",
     APPROVE_RFPA: "/rfpa/approve/",
 
     //Deal Slip
     GET_ALL_DEAL_SLIP: "/dealSlip/",
     GET_A_DEAL_SLIP: "/dealSlip",
     POST_DEAL_SLIP: "/dealSlip/",
+    UPDATE_DEAL_SLIP: "/dealSlip",
     APPROVE_DEAL_SLIP: "/dealSlip/approve/",
 
     //GRN

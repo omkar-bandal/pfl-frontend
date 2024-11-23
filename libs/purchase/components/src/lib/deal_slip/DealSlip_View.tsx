@@ -29,12 +29,6 @@ export const DealSlipView = () => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Refered RFPA : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.rfpa.rfpaId}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                                 Created Date : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.dealSlipCreatedAt.toLocaleString().split('T', 1)}
                                 </Typography>
                             </Typography>
@@ -48,30 +42,6 @@ export const DealSlipView = () => {
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                                 Requested By : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.requestedBy?.firstName} {dealSlip?.requestedBy?.lastName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Requesting Department : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.rfpa?.requestingDepartment}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.rfpa?.companyName}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Purchase Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.rfpa?.purchaseLocation}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Purchase for which location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.rfpa?.purchaseForWhich}
                                 </Typography>
                             </Typography>
                         </Grid>
@@ -95,7 +65,7 @@ export const DealSlipView = () => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Remark : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.remarks}
+                                Remark : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.remark}
                                 </Typography>
                             </Typography>
                         </Grid>

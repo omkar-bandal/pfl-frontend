@@ -1,21 +1,25 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
-import {Box, Button, Grid, IconButton, Stack, Typography } from '@mui/material'
+import { Box, Button, Grid, IconButton, LinearProgress, SelectChangeEvent, Stack, Typography } from '@mui/material'
 import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewRFPA } from '@prime-fresh/purchase/modules';
-import { PostRFPA, RFPA_Items } from '@prime-fresh/purchase_api';
+import { PostRFPA, RFPA_Items, useGetRFPA, useUpdateRFPA } from '@prime-fresh/purchase_api';
 import { setPreview, showNotification, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
-import { initValRFPA, rfpaSchema } from '@prime-fresh/purchase/modules';
+import { initValRFPA } from '@prime-fresh/purchase/modules';
 import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, Address, GetFarmer, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
-import { PURCHASE_API_URL, useCreateRFPA } from '@prime-fresh/purchase_api';
-import { useNavigate } from 'react-router-dom';
+import { PURCHASE_API_URL } from '@prime-fresh/purchase_api';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AutoCompleteInput, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './RFPA_Preview';
 import { appendFormData } from '@prime-fresh/shared/utils';
 
-export const RFPAForm = () => {
+export const RFPAUpdate = () => {
+    const { id } = useParams<{ id: string }>();
+    const rfpaId = id ? id : '';
+    const { data, isLoading } = useGetRFPA(PURCHASE_API_URL.GET_A_RFPA, rfpaId);
+    const rfpaValues = data ? data : initValRFPA;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
@@ -29,13 +33,14 @@ export const RFPAForm = () => {
     const { allUOMs } = useAppSelector(uomsDataState);
 
     React.useEffect(() => {
-        dispatch(setSelectedVendor(null));
-        dispatch(setSelectedFarmer(null));
-        dispatch(setSelectedProduct(null));
         dispatch(setVendorData(Vendors ? Vendors : []));
         dispatch(setProducts(Products ? Products : []));
         dispatch(setUOMs(UOMs ? UOMs : []));
-    }, [dispatch, setSource, Products, Vendors, UOMs]);
+        if (rfpaValues.source === "vendor")
+            dispatch(setSelectedVendor(allVendors.find(vendor => vendor.id === rfpaValues.selectedParty)))
+        else
+            dispatch(setSelectedFarmer(allFarmers.find(farmer => farmer.id === rfpaValues.selectedParty)))
+    }, [dispatch, setSource, Products, Vendors, UOMs, allVendors, allFarmers, rfpaValues]);
 
     const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
         setFieldValue("source", value);
@@ -74,12 +79,12 @@ export const RFPAForm = () => {
         return date.toISOString().split("T")[0];
     };
 
-    const { mutateAsync: mutatePost, error, data: Res } = useCreateRFPA(PURCHASE_API_URL.POST_RFPA);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateRFPA(PURCHASE_API_URL.UPDATE_RFPA, rfpaId);
     const handleSubmit = (values: PostRFPA) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePost(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "RFPA created successfully !!!" }));
+        mutatePatch(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "RFPA updated successfully !!!" }));
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
             }, 3000);
@@ -87,12 +92,19 @@ export const RFPAForm = () => {
             dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
         });;
     }
+    if (isLoading) {
+        return (
+            <Box sx={{ flex: 1 }}>
+                <LinearProgress />
+            </Box>
+        )
+    }
     return (
         <>
             <Notification />
             <Formik
-                initialValues={initValRFPA}
-                validationSchema={rfpaSchema}
+                initialValues={rfpaValues}
+                // validationSchema={rfpaSchema}
                 onSubmit={(values) => {
                     console.log(values);
                     handleSubmit(values);
@@ -102,11 +114,11 @@ export const RFPAForm = () => {
                     <form onSubmit={handleSubmit}>
                         <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid item xs={12} md={6}>
-                                <Typography variant='h4' component="div">Request For Purchase Approval</Typography>
+                                <Typography variant='h4'>Request For Purchase Approval</Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Stack direction="row" justifyContent="end" alignItems="center">
-                                    <Button type="submit" variant="contained" color='success' size='large' sx={{ width: 150 }}>Create</Button>
+                                    <Button type="submit" variant="contained" color='success' size='large' sx={{ width: 150 }}>Update</Button>
                                     <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }}>Reset</Button>
                                     <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }}>Preview</Button>
                                 </Stack>
@@ -146,6 +158,7 @@ export const RFPAForm = () => {
                                             isRequired={true}
                                             name="selectedParty"
                                             label="Vendor Company Name"
+                                            value={{ value: selectedVendor ? selectedVendor.id : '', label: selectedVendor ? selectedVendor.companyName : '' }}
                                             options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')}
                                             errors={errors}
                                             touched={touched}
@@ -163,6 +176,7 @@ export const RFPAForm = () => {
                                             isRequired={true}
                                             name="selectedParty"
                                             label="Farmer Name"
+                                            value={{ value: '', label: '' }}
                                             options={mapToValueLabelArray<GetFarmer>(allFarmers, 'id', 'farmerfName')}
                                             errors={errors}
                                             touched={touched}
@@ -237,22 +251,24 @@ export const RFPAForm = () => {
                                                             onClick={() => remove(index)}><Close /></IconButton>
                                                     </Grid>
                                                     <Grid item xs={12} md={4}>
-                                                        <AutoCompleteInput
+                                                        <SelectInput
                                                             isRequired={true}
                                                             name={`rfpaProducts.${index}.product`}
-                                                            label="Product Name"
+                                                            label='Product Name'
+                                                            value={values.rfpaProducts[index].product}
                                                             options={mapToValueLabelArray(allProducts, 'id', 'name')}
-                                                            handleChange={(event, newValue) => {
-                                                                if (newValue) {
-                                                                    setFieldValue(`rfpaProducts.${index}.product`, newValue.value);
-                                                                    handleProductNameChange(newValue.value || '');
+                                                            handleChange={(event: SelectChangeEvent<unknown>) => {
+                                                                const value = event.target.value;
+                                                                if (value) {
+                                                                    setFieldValue(`rfpaProducts.${index}.product`, value);
+                                                                    handleProductNameChange(typeof value === 'string' ? value : '');
                                                                 } else {
                                                                     setFieldValue(`rfpaProducts.${index}.product`, '');
                                                                     handleProductNameChange('');
                                                                 }
                                                             }}
-                                                            touched={touched}
                                                             errors={errors}
+                                                            touched={touched}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12} md={4}>

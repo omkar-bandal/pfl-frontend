@@ -18919,26 +18919,26 @@ const _O = De().shape({
   CREATE_MULT_CASH_VOUCHER: "/purchase/voucher/Multiple_Cash_Voucher/create",
   GET_ALL_MULT_CASH_VOUCHER: "/purchase/voucher/Multiple_Cash_Voucher/getall",
   GET_A_MULT_CASH_VOUCHER: "/purchase/voucher/Multiple_Cash_Voucher/get",
-  VIEW_MULT_CASH_VOUCHER: "/purchase/voucher/Multiple_Cash_Voucher/view",
-  UPDATE_MULT_CASH_VOUCHER: "/purchase/voucher/Multiple_Cash_Voucher/update",
+  VIEW_MULT_CASH_VOUCHER: "/purchase/voucher/view/Multiple_Cash_Voucher",
+  UPDATE_MULT_CASH_VOUCHER: "/purchase/voucher/update/Multiple_Cash_Voucher",
   //Tranport Cash Voucher
   CREATE_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/Transport_Cash_Voucher/create",
   GET_ALL_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/Transport_Cash_Voucher/getall",
   GET_A_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/Transport_Cash_Voucher/get",
-  VIEW_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/Transport_Cash_Voucher/view",
-  UPDATE_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/Transport_Cash_Voucher/update",
+  VIEW_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/view/Transport_Cash_Voucher",
+  UPDATE_TRANSPORT_CASH_VOUCHER: "/purchase/voucher/update/Transport_Cash_Voucher",
   //Packing Material Voucher
   CREATE_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/Packing_Material_Payment_Voucher/create",
   GET_ALL_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/Packing_Material_Payment_Voucher/getall",
   GET_A_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/Packing_Material_Payment_Voucher/get",
-  VIEW_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/Packing_Material_Payment_Voucher/view",
-  UPDATE_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/Packing_Material_Payment_Voucher/update",
+  VIEW_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/view/Packing_Material_Payment_Voucher",
+  UPDATE_PACKING_MATERIAL_VOUCHER: "/purchase/voucher/update/Packing_Material_Payment_Voucher",
   //Labour Cash Voucher
   CREATE_LABOUR_CASH_VOUCHER: "/purchase/voucher/Labour_Cash_Voucher/create",
   GET_ALL_LABOUR_CASH_VOUCHER: "/purchase/voucher/Labour_Cash_Voucher/getall",
   GET_A_LABOUR_CASH_VOUCHER: "/purchase/voucher/Labour_Cash_Voucher/get",
-  VIEW_LABOUR_CASH_VOUCHER: "/purchase/voucher/Labour_Cash_Voucher/view",
-  UPDATE_LABOUR_CASH_VOUCHER: "/purchase/voucher/Labour_Cash_Voucher/update",
+  VIEW_LABOUR_CASH_VOUCHER: "/purchase/voucher/view/Labour_Cash_Voucher",
+  UPDATE_LABOUR_CASH_VOUCHER: "/purchase/voucher/update/Labour_Cash_Voucher",
   //Delivery Challan
   DELIVERY_CHALLAN: "/purchase/Delivery_Challan",
   CREATE_DELIVERY_CHALLAN: "/purchase/Delivery_Challan/create",
@@ -23039,8 +23039,8 @@ We.HttpStatusCode = Na;
 We.default = We;
 const wh = {
   //Authentication
-  BASE_URL: "http://ec2-13-235-128-158.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://eef2-182-156-141-17.ngrok-free.app",
+  BASE_URL: "http://ec2-43-205-254-4.ap-south-1.compute.amazonaws.com:80"
+  // BASE_URL: "https://c7fb-182-156-141-17.ngrok-free.app",
 }, ja = We.create({
   baseURL: wh.BASE_URL,
   withCredentials: !0,

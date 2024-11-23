@@ -1,4 +1,4 @@
-import { Preview } from "@mui/icons-material";
+import { Edit, Preview } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { RequestedBy } from "@prime-fresh/purchase_api";
@@ -10,6 +10,13 @@ export const DealSlipListCols = (): GridColDef[] => {
 
     return ([
         { field: "id", headerName: "ID", width: 30 },
+        {
+            field: "dealSlipNo",
+            headerName: "Deal Slip No",
+            width: 150,
+            align: "center",
+            headerAlign: "center",
+        },
         {
             field: "createdAt",
             headerName: "Created Date",
@@ -36,9 +43,7 @@ export const DealSlipListCols = (): GridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => {
-                return `${value.firstName || ''} ${value.lastName || ''}`
-            }
+            valueGetter: (value: RequestedBy) => value? `${value.firstName || ''} ${value.lastName || ''}` : "",
         },
         {
             field: "requestingDepartment",
@@ -48,38 +53,32 @@ export const DealSlipListCols = (): GridColDef[] => {
             headerAlign: "center",
         },
         {
-            field: "companyName",
-            headerName: "Company",
-            width: 150,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : 'Prime Fresh Ltd.';
-            }
-        },
-        {
             field: "loadingLocation",
             headerName: "Loading Location",
             width: 150,
             align: "center",
-            headerAlign: "center"
+            headerAlign: "center",
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "lotNo",
             headerName: "Lot Number",
             width: 100,
             align: "center",
-            headerAlign: "center"
+            headerAlign: "center",
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
-            field: "remarks",
+            field: "remark",
             headerName: "Remarks",
             width: 200,
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "specialRequest",
             headerName: "Special Request",
             width: 200,
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "approvalStatus",
@@ -93,18 +92,18 @@ export const DealSlipListCols = (): GridColDef[] => {
                 }
             }
         },
-        // {
-        //     field: 'edit',
-        //     headerName: 'Edit',
-        //     width: 50,
-        //     sortable: false,
-        //     filterable: false,
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.CREATE_DEAL_SLIP}/${params.row.id}`)}>
-        //             <Edit color="secondary" />
-        //         </IconButton>
-        //     ),
-        // },
+        {
+            field: 'edit',
+            headerName: 'Edit',
+            width: 50,
+            sortable: false,
+            filterable: false,
+            renderCell: (params: GridRenderCellParams) => (
+                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_DEAL_SLIP}/${params.row.id}`)}>
+                    <Edit color="secondary" />
+                </IconButton>
+            ),
+        },
         {
             field: 'view',
             headerName: 'View',

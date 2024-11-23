@@ -4,6 +4,6 @@ export const initValDealSlip: PostDealSlip = {
     rfpa: '',
     lotNo: '',
     loadingLocation: '',
-    remarks: '',
+    remark: '',
     specialRequest:'',
 }

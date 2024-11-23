@@ -61,8 +61,6 @@ export interface GetRFPA {
     specialReq: string;
     source: string;
     selectedParty: string;
-    farmer?: GetFarmer;
-    vendor?: GetVendor;
     rfpaProducts: RFPA_Items[];
     paymentInfo: Payment_Info;
     deliveryReceivingPerson: string;

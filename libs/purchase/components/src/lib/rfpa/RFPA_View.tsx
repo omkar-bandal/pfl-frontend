@@ -12,6 +12,7 @@ export const RFPAView = () => {
     const { data: rfpa, isLoading } = useGetRFPA(PURCHASE_API_URL.GET_A_RFPA, rfpaId);
     console.log(rfpa)
     const role = localStorage.getItem('role');
+    console.log(role);
     const handleStatusChange = async () => {
         try {
             const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_RFPA}${rfpaId}`, 
@@ -34,8 +35,8 @@ export const RFPAView = () => {
                     <Grid container direction="column" rowSpacing={1}>
                         <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
                             <Typography variant="h4" component="span">RFPA Details</Typography>
-                            {role === 'MANAGER' ?
-                                (<Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }} onClick={handleStatusChange}>Approve</Button>) : ''}
+                            {role === 'MANAGER' &&
+                                (<Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }} onClick={handleStatusChange}>Approve</Button>)}
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>

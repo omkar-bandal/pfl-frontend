@@ -5,7 +5,7 @@ exports.initValDealSlip = {
     rfpa: '',
     lotNo: '',
     loadingLocation: '',
-    remarks: '',
+    remark: '',
     specialRequest: '',
 };
 //# sourceMappingURL=initValDealSlip.js.map

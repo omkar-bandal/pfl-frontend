@@ -3,6 +3,7 @@ import {
     DealSlipForm,
     DealSlipTable,
     DealSlipView,
+    DealSlipUpdate,
     DeliveryChallanForm,
     DeliveryChallanTable,
     DeliveryChallanUpdate,
@@ -25,13 +26,13 @@ import {
     PackingMaterialPaymentVoucherView,
     PaymentRequestForm,
     RFPAForm,
-    RFPAPreview,
     RFPATable,
     RFPAView,
     TransportPaymentVoucherForm,
     TransportPaymentVoucherTable,
     TransportPaymentVoucherUpdate,
     TransportPaymentVoucherView,
+    RFPAUpdate,
 } from "@prime-fresh/purchase/components";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { Outlet } from "react-router-dom";
@@ -58,9 +59,9 @@ export const PurchaseRoutes = [
                 element: <RFPAView />
             },
             {
-                path: PURCHASE_ROUTES.PREVIEW_RFPA,
-                element: <RFPAPreview />
-            }
+                path: `${PURCHASE_ROUTES.UPDATE_RFPA}/:id`,
+                element: <RFPAUpdate />
+            },
         ]
     },
     {
@@ -78,6 +79,10 @@ export const PurchaseRoutes = [
             {
                 path: `${PURCHASE_ROUTES.VIEW_DEAL_SLIP}/:id`,
                 element: <DealSlipView />
+            },
+            {
+                path: `${PURCHASE_ROUTES.UPDATE_DEAL_SLIP}/:id`,
+                element: <DealSlipUpdate />
             },
         ]
     },
