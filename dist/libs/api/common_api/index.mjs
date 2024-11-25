@@ -4523,13 +4523,13 @@ de.HttpStatusCode = On;
 de.default = de;
 const Na = {
   //Authentication
-  // BASE_URL: "http://ec2-13-127-113-138.ap-south-1.compute.amazonaws.com:80",
-  BASE_URL: "https://617a-182-156-141-17.ngrok-free.app"
+  BASE_URL: "http://ec2-3-111-36-226.ap-south-1.compute.amazonaws.com:80"
+  // BASE_URL: "https://617a-182-156-141-17.ngrok-free.app",
 }, $e = de.create({
   baseURL: Na.BASE_URL,
-  // withCredentials: true,
+  withCredentials: !0,
   headers: {
-    "ngrok-skip-browser-warning": "true",
+    // 'ngrok-skip-browser-warning': 'true',
     "Content-Type": "multipart/form-data"
   }
 }), Ia = () => localStorage.getItem("access_token"), Ua = () => localStorage.getItem("refresh_token");
