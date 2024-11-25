@@ -19,7 +19,7 @@ export const uomFormFields = () => {
                 "placeholder": "Enter abbreviation of UOM."
               },
               {
-                "isRequired": true,
+                "isRequired": false,
                 "name": "description",
                 "label": "Description",
                 "type": "text",

@@ -4,7 +4,7 @@ exports.addressSchema = void 0;
 const Yup = require("yup");
 exports.addressSchema = Yup.object().shape({
     address1: Yup.string().required('Address Line 1 is required'),
-    address2: Yup.string(),
+    address2: Yup.string().nullable(),
     location: Yup.string().required('Location is required'),
     city: Yup.string().required('City is required'),
     state: Yup.string().required('State is required'),

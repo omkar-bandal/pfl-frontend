@@ -32,7 +32,7 @@ export function ProductSubCatTable() {
           loading={isLoading}
           apiRef={apiRef}
           rows={ProductSubCat}
-          columns={ProductSubcategoryListCols}
+          columns={ProductSubcategoryListCols()}
         />
       </Box>
   );

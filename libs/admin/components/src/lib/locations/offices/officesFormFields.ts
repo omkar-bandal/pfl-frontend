@@ -1,12 +1,9 @@
-import { openForState } from "@prime-fresh/admin/modules";
-import { useAppSelector } from "@prime-fresh/modules";
 
-export const OfficesFormFields = () => {
-    const oepnFormFor = useAppSelector(openForState);
+export const OfficesFormFields = (openFormFor: 'create' | 'update') => {
     return (
         {
-            "title": oepnFormFor === 'create' ? "Add Office" : "Update Office",
-            "subtitle": oepnFormFor === 'create' ? "Create a new office data by filling below form." : "Update the office data by editing below form.",
+            "title": openFormFor === 'create' ? "Add Office" : "Update Office",
+            "subtitle": openFormFor === 'create' ? "Create a new office data by filling below form." : "Update the office data by editing below form.",
             "fields": [
                 {
                     "isRequired": true,

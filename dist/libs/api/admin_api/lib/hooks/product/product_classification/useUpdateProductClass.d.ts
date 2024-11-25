@@ -1,3 +1,3 @@
-import { PostProductClassification, PostResponse } from '../../../models';
+import { PostResponse } from '../../../models';
 
-export declare const useUpdateProductClassification: (url: string, id: string) => import('@tanstack/react-query').UseMutationResult<PostResponse, Error, PostProductClassification, unknown>;
+export declare const useUpdateProductClassification: (url: string, id: string) => import('@tanstack/react-query').UseMutationResult<PostResponse, Error, FormData, unknown>;

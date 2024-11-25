@@ -6,7 +6,7 @@ declare const vendorValidationSchema: Yup.ObjectSchema<{
     inFandVBusinessSince: string | undefined;
     dateOfIncorporation: string | undefined;
     officeAddress: {
-        address2?: string | undefined;
+        address2?: string | null | undefined;
         address1: string;
         location: string;
         city: string;

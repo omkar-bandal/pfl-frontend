@@ -1,6 +1,6 @@
 import { useUpdateData } from "@prime-fresh/common_api";
-import { PostProductClassification, PostResponse } from "../../../models";
+import { PostResponse } from "../../../models";
 
 export const useUpdateProductClassification = (url: string, id: string) => {
-    return useUpdateData<PostProductClassification, PostResponse>(url, id);
+    return useUpdateData<FormData, PostResponse>(url, id);
 }

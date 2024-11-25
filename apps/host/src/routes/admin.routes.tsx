@@ -128,6 +128,10 @@ export const AdminRoutes = [
                 element: <ProductClassForm />,
             },
             {
+                path: `${ADMIN_ROUTES.UPDATE_PRODUCT_CLASS}/:id`,
+                element: <ProductClassForm />,
+            },
+            {
                 path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT,
                 element: <ProductCatTable />,
             },
@@ -136,11 +140,19 @@ export const AdminRoutes = [
                 element: <ProductCatForm />,
             },
             {
+                path: `${ADMIN_ROUTES.UPDATE_PRODUCT_CAT}/:id`,
+                element: <ProductCatForm />,
+            },
+            {
                 path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT,
                 element: <ProductSubCatTable />,
             },
             {
                 path: ADMIN_ROUTES.CREATE_PRODUCT_SUBCAT,
+                element: <ProductSubcatForm />,
+            },
+            {
+                path: `${ADMIN_ROUTES.UPDATE_PRODUCT_SUBCAT}/:id`,
                 element: <ProductSubcatForm />,
             },
         ]
@@ -158,6 +170,10 @@ export const AdminRoutes = [
                 element: <UOMForm />
             },
             {
+                path: `${ADMIN_ROUTES.UPDATE_UOM}/:id`,
+                element: <UOMForm />
+            },
+            {
                 path: ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX,
                 element: <UOMConvMatrixTable />,
             },
@@ -166,7 +182,7 @@ export const AdminRoutes = [
                 element: <UOMConvMatrixForm />,
             },
             {
-                path: `${ADMIN_ROUTES.EDIT_UOMs_CONV_MATRIX}/:oid`,
+                path: `${ADMIN_ROUTES.UPDATE_UOMs_CONV_MATRIX}/:oid`,
                 element: <UOMConvMatrixForm />,
             },
         ]
@@ -184,15 +200,15 @@ export const AdminRoutes = [
                 element: <RegisteredOfficeTable />
             },
             {
-                path: `${ADMIN_ROUTES.CREATE_OFFICE}/:officeType`,
+                path: `${ADMIN_ROUTES.CREATE_OFFICE}/:type`,
                 element: <OfficeForm/>
             },
             {
-                path: `${ADMIN_ROUTES.EDIT_OFFICE}/:officeType/:id`,
+                path: `${ADMIN_ROUTES.EDIT_OFFICE}/:type/:id`,
                 element: <OfficeForm />
             },
             {
-                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:officeType/:id`,
+                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:type/:id`,
                 element: <ViewOffice />,
             },
             {

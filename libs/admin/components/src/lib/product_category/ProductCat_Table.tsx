@@ -33,7 +33,7 @@ export function ProductCatTable() {
           loading={isLoading}
           apiRef={apiRef}
           rows={ProductCat}
-          columns={ProductCategoryListCols}
+          columns={ProductCategoryListCols()}
         />
       </Box>
   );

@@ -1,9 +1,7 @@
-import { ADMIN_API_URL, GetUOM, useGetAllUOMs } from "@prime-fresh/admin_api"
+import {GetUOM} from "@prime-fresh/admin_api"
 import { mapToValueLabelArray } from "@prime-fresh/ui_shared"
 
-export const uomConvMatrixFormFields = () => {
-  const { data } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const uoms = data ? data : [];
+export const UomConvMatrixFormFields = (uoms: GetUOM[]) => {
   return (
     {
       "title": "Add UOM Conversions",
@@ -13,7 +11,7 @@ export const uomConvMatrixFormFields = () => {
           "isRequired": true,
           "name": "conversionFactor",
           "label": "Conversion Factor",
-          "type": "text",
+          "type": "number",
           "placeholder": "Enter Conversion Factor."
         },
         {

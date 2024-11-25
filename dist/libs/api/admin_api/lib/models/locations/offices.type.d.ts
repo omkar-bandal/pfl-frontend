@@ -21,7 +21,6 @@ export type PostOffices = {
     contactNumber: string;
     officeEmail: string;
     notes: string;
-    type: string;
 };
 export declare enum OfficeType {
     "REGISTERED_OFFICE" = 0,

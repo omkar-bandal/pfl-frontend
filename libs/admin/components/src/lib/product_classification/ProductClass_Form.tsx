@@ -1,28 +1,66 @@
-import { ADMIN_API_URL, 
-    PostProductClassification, 
-    useCreateProductClassification
+import {
+    ADMIN_API_URL,
+    PostProductClassification,
+    useCreateProductClassification,
+    useGetAProductClassification,
+    useUpdateProductClassification
 } from "@prime-fresh/admin_api";
-import { DynamicForm } from "@prime-fresh/ui_shared";
+import { DynamicForm, Notification } from "@prime-fresh/ui_shared";
 import { productClassFormFields } from "./productClassFormFields";
-
-const initValProductClass: PostProductClassification = {
-    name: '',
-}
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { showNotification } from "@prime-fresh/modules";
+import { ADMIN_ROUTES, initValProductClass, productClassificationSchema } from "@prime-fresh/admin/modules";
+import { Box, LinearProgress } from "@mui/material";
 
 export function ProductClassForm() {
-   
-    const { mutateAsync: postProductClassification } = useCreateProductClassification(ADMIN_API_URL.CREATE_PRODUCT_CLASSIFICATION);
+    const { id } = useParams<{ id: string }>();
+    const classificationId = id ? id : "";
+    const { data, isLoading } = useGetAProductClassification(ADMIN_API_URL.GET_A_PRODUCT_CLASSIFICATION, classificationId);
+    const productClassVal = data ? data : initValProductClass;
 
-    const handleSubmit = (values: PostProductClassification) => {
+    const { mutateAsync: postProductClassification, error: postError, data: postRes } = useCreateProductClassification(ADMIN_API_URL.CREATE_PRODUCT_CLASSIFICATION);
+    const { mutateAsync: patchProductClassification, error: patchError, data: patchRes } = useUpdateProductClassification(ADMIN_API_URL.UPDATE_PRODUCT_CLASSIFICATION, classificationId);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleSubmit = (values: any) => {
         console.log(values);
         const formData = new FormData();
         formData.append("name", values.name)
-        postProductClassification(formData);
+        classificationId === "" ? (postProductClassification(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Product classification created successfully !!!" }));
+            setTimeout(() => {
+                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
+            }, 2000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+        })) : (patchProductClassification(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: patchRes ? patchRes.message : "Product classification updated successfully !!!" }));
+            setTimeout(() => {
+                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
+            }, 2000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
+        }));
+    }
+    if(isLoading){
+        return(
+            <Box sx={{flex: 1}}>
+                <LinearProgress />
+            </Box>
+        )
     }
     return (
-        <DynamicForm<PostProductClassification>
-            schema={productClassFormFields()}
-            initialValues={initValProductClass}
-            handleSubmit={handleSubmit} />
+        <>
+            <Notification />
+            <DynamicForm<PostProductClassification>
+                schema={productClassFormFields()}
+                validationSchema={productClassificationSchema}
+                initialValues={productClassVal}
+                handleSubmit={handleSubmit} />
+        </>
     )
 }

@@ -1,11 +1,38 @@
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
+import { hideNotification } from "@prime-fresh/modules";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { Edit } from "@mui/icons-material";
 
-export const ProductClassificationListCols: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "name",
-    headerName: "Classification",
-    width: 750,
-    valueGetter: (value: string) => value? value : '-',
-  },
-];
+export const ProductClassificationListCols = (): GridColDef[] => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleEdit = (rowId: string) => {
+    dispatch(hideNotification());
+    dispatch(setOpenFor('update'));
+    navigate(`${ADMIN_ROUTES.UPDATE_PRODUCT_CLASS}/${rowId}`);
+  }
+  return [
+    { field: "id", headerName: "ID", width: 90 },
+    {
+      field: "name",
+      headerName: "Classification",
+      width: 750,
+      valueGetter: (value: string) => value ? value : '-',
+    },
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      width: 50,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
+          <Edit color="secondary" />
+        </IconButton>
+      ),
+    },
+  ];
+}

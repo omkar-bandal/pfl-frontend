@@ -44,11 +44,11 @@ export const DynamicForm = <T extends object>({ initialValues, schema, validatio
         formikHelpers.setSubmitting(false);
       }}
     >
-      {() => (
+      {({ handleReset }) => (
         <Form>
           <Box sx={{ flex: 1, paddingX: 2 }}>
             <Grid container alignItems="center">
-              <Grid item xs={8}>
+              <Grid item xs={6}>
                 <Typography variant="h5" component="h5" sx={{ fontWeight: 500 }}>
                   {schema.title}
                 </Typography>
@@ -60,13 +60,14 @@ export const DynamicForm = <T extends object>({ initialValues, schema, validatio
                   {schema.subtitle}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6} sx={{display: "flex", alignItems: "center", justifyContent: "end"}}>
                 <Button
                   variant="contained"
                   size="medium"
                   type="reset"
                   color="secondary"
                   sx={{ width: 150, marginRight: 5 }}
+                  onClick={handleReset}
                 >
                   Reset
                 </Button>
@@ -74,7 +75,7 @@ export const DynamicForm = <T extends object>({ initialValues, schema, validatio
                   variant="contained"
                   size="medium"
                   type="submit"
-                  sx={{width: 150}}
+                  sx={{ width: 150 }}
                 >
                   {openFor === 'create' ? `Create` : `Update`}
                 </Button>

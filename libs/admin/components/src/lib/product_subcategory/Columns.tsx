@@ -1,8 +1,21 @@
-import { GridColDef } from "@mui/x-data-grid";
-
 import { GetProductCategory } from "@prime-fresh/admin_api";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
+import { hideNotification } from "@prime-fresh/modules";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { Edit } from "@mui/icons-material";
 
-export const ProductSubcategoryListCols: GridColDef[] = [
+export const ProductSubcategoryListCols = (): GridColDef[] => { 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleEdit = (rowId: string) => {
+    dispatch(hideNotification());
+    dispatch(setOpenFor('update'));
+    navigate(`${ADMIN_ROUTES.UPDATE_PRODUCT_SUBCAT}/${rowId}`);
+  }
+  return [
   { 
     field: "id", 
     headerName: "ID", 
@@ -18,5 +31,18 @@ export const ProductSubcategoryListCols: GridColDef[] = [
     headerName: "Related Category",
     width: 200,
     valueGetter: (value: GetProductCategory) => value? value.name : "-",
-  }
+  },
+  {
+    field: 'edit',
+    headerName: 'Edit',
+    width: 50,
+    sortable: false,
+    filterable: false,
+    renderCell: (params: GridRenderCellParams) => (
+      <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
+        <Edit color="secondary" />
+      </IconButton>
+    ),
+  },
 ];
+}

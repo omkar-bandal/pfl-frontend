@@ -4,7 +4,7 @@ export declare const farmerValidationSchema: Yup.ObjectSchema<{
     farmermName: Yup.Maybe<string | undefined>;
     farmerlName: string;
     residensialAddress: {
-        address2?: string | undefined;
+        address2?: string | null | undefined;
         address1: string;
         location: string;
         city: string;

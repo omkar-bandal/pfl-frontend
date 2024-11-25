@@ -1,6 +1,6 @@
 import { useCreateData } from "@prime-fresh/common_api"
-import { PostOffices, PostResponse } from "../../../models"
+import {PostResponse } from "../../../models"
 
 export const useCreateOffice = (url: string) => {
-    return useCreateData<PostOffices, PostResponse>(url)
+    return useCreateData<FormData, PostResponse>(url)
 }

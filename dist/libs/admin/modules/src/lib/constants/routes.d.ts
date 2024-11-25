@@ -41,11 +41,11 @@ export declare const ADMIN_ROUTES: {
     UOM: string;
     GET_ALL_UOMs: string;
     CREATE_UOM: string;
-    EDIT_UOM: string;
+    UPDATE_UOM: string;
     VIEW_UOM: string;
     GET_ALL_UOMs_CONV_MATRIX: string;
     CREATE_UOMs_CONV_MATRIX: string;
-    EDIT_UOMs_CONV_MATRIX: string;
+    UPDATE_UOMs_CONV_MATRIX: string;
     VIEW_UOMs_CONV_MATRIX: string;
     LOCATIONS: string;
     LOCATIONS_REGISTERED_OFFICE: string;

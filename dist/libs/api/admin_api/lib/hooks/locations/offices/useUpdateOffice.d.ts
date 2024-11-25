@@ -1,3 +1,3 @@
-import { PostOffices, PostResponse } from '../../../models';
+import { PostResponse } from '../../../models';
 
-export declare const useUpdateOffice: (url: string, id: string) => import('@tanstack/react-query').UseMutationResult<PostResponse, Error, PostOffices, unknown>;
+export declare const useUpdateOffice: (url: string, id: string) => import('@tanstack/react-query').UseMutationResult<PostResponse, Error, FormData, unknown>;

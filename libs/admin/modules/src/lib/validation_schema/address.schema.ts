@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const addressSchema = Yup.object().shape({
     address1: Yup.string().required('Address Line 1 is required'),
-    address2: Yup.string(),
+    address2: Yup.string().nullable(),
     location: Yup.string().required('Location is required'),
     city: Yup.string().required('City is required'),
     state: Yup.string().required('State is required'),

@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 export declare const addressSchema: Yup.ObjectSchema<{
     address1: string;
-    address2: string | undefined;
+    address2: string | null | undefined;
     location: string;
     city: string;
     state: string;

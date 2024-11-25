@@ -53,11 +53,11 @@ exports.ADMIN_ROUTES = {
     UOM: "/admin/UOM",
     GET_ALL_UOMs: "/admin/UOM/getall",
     CREATE_UOM: "/admin/UOM/create",
-    EDIT_UOM: "/admin/UOM/edit",
+    UPDATE_UOM: "/admin/UOM/edit",
     VIEW_UOM: "/admin/UOM/view",
     GET_ALL_UOMs_CONV_MATRIX: "/admin/UOM/UOM-Conversion-Matrix/getall",
     CREATE_UOMs_CONV_MATRIX: "/admin/UOM/UOM-Conversion-Matrix/create",
-    EDIT_UOMs_CONV_MATRIX: "/admin/UOM/UOM-Conversion-Matrix/edit",
+    UPDATE_UOMs_CONV_MATRIX: "/admin/UOM/UOM-Conversion-Matrix/edit",
     VIEW_UOMs_CONV_MATRIX: "/admin/UOM/UOM-Conversion-Matrix/view",
     //Locations
     LOCATIONS: "/admin/locations",

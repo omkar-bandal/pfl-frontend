@@ -58,12 +58,12 @@ export const ADMIN_API_URL = {
 
     GET_ALL_UOM: "/uoms/",
     CREATE_UOM: "/uoms/",
-    GET_A_UOM: "/uoms/",
-    UPDATE_UOM: "/uoms/",
+    GET_A_UOM: "/uoms",
+    UPDATE_UOM: "/uoms",
     GET_ALL_UOM_CONVERSION: "/uom-conversion-matrix/",
-    GET_A_UOM_CONVERSION: "/uom-conversion-matrix/",
+    GET_A_UOM_CONVERSION: "/uom-conversion-matrix",
     CREATE_UOM_CONVERSION: "/uom-conversion-matrix/",
-    UPDATE_UOM_CONVERSION: "/uom-conversion-matrix/",
+    UPDATE_UOM_CONVERSION: "/uom-conversion-matrix",
 
     //Locations
     //Offices
