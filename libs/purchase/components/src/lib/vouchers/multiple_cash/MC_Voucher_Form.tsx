@@ -36,7 +36,7 @@ export const MultipleCashVoucherForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePost(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher created successfully !!!"  }));
+      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher created successfully !!!" }));
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER);
       }, 5000);
@@ -47,10 +47,11 @@ export const MultipleCashVoucherForm = () => {
 
   return (
     <>
-      <Notification/>
+      <Notification />
       <Formik
         initialValues={initValMMultipleCashVoucher}
         validationSchema={multicashVoucherSchema}
+        validateOnBlur={true}
         onSubmit={(values) => {
           console.log(values);
           handleSubmit(values);
@@ -156,8 +157,8 @@ export const MultipleCashVoucherForm = () => {
                               label="Description"
                               value={values.particulars[index].description}
                               handleChange={handleChange}
-                              touched={touched}
-                  errors={errors}
+                              touched={touched.particulars ? touched.particulars[index] : touched}
+                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={2}>
@@ -169,8 +170,8 @@ export const MultipleCashVoucherForm = () => {
                               value={values.particulars[index].amt}
                               handleChange={handleChange}
                               onBlur={() => calculateAmounts(values, setFieldValue)}
-                              touched={touched}
-                  errors={errors}
+                              touched={touched.particulars ? touched.particulars[index] : touched}
+                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={1} sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>

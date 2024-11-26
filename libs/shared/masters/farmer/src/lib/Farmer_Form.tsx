@@ -1,30 +1,40 @@
-import { Alertbar, DynamicForm } from '@prime-fresh/ui_shared';
+import { DynamicForm, Notification } from '@prime-fresh/ui_shared';
 import { FarmerFormFields } from './farmerFormField';
-import { ADMIN_ROUTES, PostFarmer, farmerValidationSchema } from '@prime-fresh/admin/modules';
-import { useCreateFarmer, ADMIN_API_URL } from '@prime-fresh/admin_api';
+import { ADMIN_ROUTES, farmerValidationSchema } from '@prime-fresh/admin/modules';
+import { useCreateFarmer, ADMIN_API_URL, PostFarmer } from '@prime-fresh/admin_api';
 import { initValFarmer } from './initValFarmer';
 import { useNavigate } from 'react-router-dom';
 import { appendFormData } from "@prime-fresh/shared/utils";
+import { useDispatch } from 'react-redux';
+import { showNotification } from '@prime-fresh/modules';
 
 export const FarmerForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // const { openFor } = useAppSelector(formContainerState);
 
   // const Farmers = useAppSelector(farmersState);
 
-  const { mutateAsync: mutatePost, isSuccess: PostSuccess, isError: PostError, error, isPending, data } = useCreateFarmer(ADMIN_API_URL.POST_FARMER);
+  const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateFarmer(ADMIN_API_URL.POST_FARMER);
 
   // const { mutate: mutatePatch } = useUpdateFarmer(URLs.UPDATE_FARMER, dataId);
 
   const handleSubmit = async (values: PostFarmer) => {
+    console.log(values);
     const formData = new FormData();
     appendFormData(formData, values);
-    mutatePost(formData);
-    PostSuccess ? navigate(ADMIN_ROUTES.GET_ALL_FARMERS) : navigate(ADMIN_ROUTES.CREATE_FARMER);
+    mutatePost(formData).then(() => {
+      dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Farmer created successfully !!!" }));
+      setTimeout(() => {
+        navigate(ADMIN_ROUTES.GET_ALL_FARMERS);
+      }, 2000);
+    }).catch(() => {
+      dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+    })
   };
   return (
     <>
-      <Alertbar open={isPending || PostError || PostSuccess } error={error} resMessage={data} />
+      <Notification />
       <DynamicForm<PostFarmer>
         schema={FarmerFormFields()}
         initialValues={initValFarmer}

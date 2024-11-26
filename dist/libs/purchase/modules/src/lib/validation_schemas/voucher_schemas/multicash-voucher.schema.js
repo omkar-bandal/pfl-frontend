@@ -10,7 +10,7 @@ exports.multicashVoucherSchema = yup.object().shape({
     paymentMode: yup.string().required('Payment mode is required'),
     receiverName: yup.string().required('Receiver name is required'),
     particulars: yup.array().of(yup.object().shape({
-        description: yup.string().required('Description is required'),
+        description: yup.string().required('Description is required').min(5, 'Minimum 5 characters required'),
         amt: yup.number().required('Amount is required').positive('Amount cannot be negative'),
     }))
 });

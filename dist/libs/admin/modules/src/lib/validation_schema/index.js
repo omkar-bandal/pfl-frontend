@@ -12,4 +12,5 @@ tslib_1.__exportStar(require("./vendor.schema"), exports);
 tslib_1.__exportStar(require("./farmer.schema"), exports);
 tslib_1.__exportStar(require("./uom.schema"), exports);
 tslib_1.__exportStar(require("./uomConversionMatrix.schema"), exports);
+tslib_1.__exportStar(require("./address.schema"), exports);
 //# sourceMappingURL=index.js.map

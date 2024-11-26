@@ -11,12 +11,28 @@ export declare const farmerValidationSchema: Yup.ObjectSchema<{
         state: string;
         pincode: string;
     };
+    farmAddress: {
+        address2?: string | null | undefined;
+        address1: string;
+        location: string;
+        city: string;
+        state: string;
+        pincode: string;
+    };
     primaryMobileNo: string;
 }, Yup.AnyObject, {
     farmerfName: undefined;
     farmermName: undefined;
     farmerlName: undefined;
     residensialAddress: {
+        address1: undefined;
+        address2: undefined;
+        location: undefined;
+        city: undefined;
+        state: undefined;
+        pincode: undefined;
+    };
+    farmAddress: {
         address1: undefined;
         address2: undefined;
         location: undefined;

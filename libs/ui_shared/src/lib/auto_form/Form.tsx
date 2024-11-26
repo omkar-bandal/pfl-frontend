@@ -39,6 +39,8 @@ export const DynamicForm = <T extends object>({ initialValues, schema, validatio
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema ? validationSchema : null}
+      validateOnChange={true}
+      validateOnBlur={true}
       onSubmit={(values, formikHelpers) => {
         handleSubmit(values as T);
         formikHelpers.setSubmitting(false);

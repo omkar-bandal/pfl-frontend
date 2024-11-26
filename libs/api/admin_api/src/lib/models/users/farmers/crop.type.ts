@@ -1,9 +1,9 @@
 export type PostCrops = {
     crop: string,
     variety: string,
-    noOfPlants: string,
-    pruningDate: Date,
-    expectedHarvestDate: Date,
+    noOfPlants: number,
+    pruningDate: string,
+    expectedHarvestDate: string,
     expectedQuantityInTonnes: number
 }
 

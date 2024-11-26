@@ -9,3 +9,4 @@ export * from './vendor.schema';
 export * from './farmer.schema';
 export * from './uom.schema';
 export * from './uomConversionMatrix.schema';
+export * from './address.schema';

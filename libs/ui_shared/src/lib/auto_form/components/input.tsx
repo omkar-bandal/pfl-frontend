@@ -13,28 +13,27 @@ type TextInputProps = TextFieldProps & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   touched?: FormikTouched<{ [key: string]: any }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors?: FormikErrors<{ [key: string]: any }>;
+  errors?: FormikErrors<{[key: string]: any}> | string;
 };
 
-export const TextInput: React.FC<TextInputProps> = ({
-  isRequired,
-  label,
-  name,
-  type,
-  value,
-  handleChange,
-  isReadOnly,
-  touched = {},
-  errors = {},
-  ...otherProps
-}) => {
-  // Ensure helperText is a string or undefined
-  const getHelperText = () => {
-    const error = errors[name];
-    return typeof error === "string" ? error : undefined;
-  };
+export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, type, value, handleChange, isReadOnly, touched = {}, errors = {}, ...otherProps}) => {
 
-  return (
+  const getHelperText = () => {
+    if (typeof errors === "string") {
+      return errors; // Directly return the string error
+    }
+    if (errors && typeof errors === "object") {
+      const fieldError = errors[name];
+      return typeof fieldError === "string" ? fieldError : undefined;
+    }
+    return undefined; // No error
+  };
+  const hasError =
+  touched[name] &&
+  ((typeof errors === "string" && !!errors) || // Check if errors is a non-empty string
+    (errors && typeof errors === "object" && typeof errors[name] === "string"));
+  
+    return (
     <Grid container direction="column">
       <Grid item xs={12}>
         {isRequired && (
@@ -59,8 +58,8 @@ export const TextInput: React.FC<TextInputProps> = ({
           InputProps={{ 
             readOnly: isReadOnly ?? false, 
           }}
-          error={Boolean(touched[name] && errors[name])} 
-          helperText={touched[name] && getHelperText()} 
+          error={!!hasError} 
+          helperText={hasError ? getHelperText() : ""}
           sx={{
             "& .MuiOutlinedInput-root": {
               pointerEvents: isReadOnly ? "none" : "auto", 

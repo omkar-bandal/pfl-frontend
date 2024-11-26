@@ -16,7 +16,6 @@ export const DropdownMenu: React.FC<DropdownMenuProp> = ({ formField }) => {
     setOpen(true);
   };
   return (
-    <>
       <Field name={formField.name}>
         {({ field: formikField, meta }: FieldProps) => (
           <>
@@ -32,7 +31,7 @@ export const DropdownMenu: React.FC<DropdownMenuProp> = ({ formField }) => {
                 fullWidth
               >
                 {formField.options?.map((option) => (
-                  <MenuItem key={option.label} value={option.value}>
+                  <MenuItem key={option.label} value={typeof option.value === "string"? option.value :  ''}>
                     {option.label}
                   </MenuItem>
                 ))}
@@ -46,6 +45,5 @@ export const DropdownMenu: React.FC<DropdownMenuProp> = ({ formField }) => {
           </>
         )}
       </Field>
-    </>
   );
 };

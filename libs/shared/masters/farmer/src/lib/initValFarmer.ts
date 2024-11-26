@@ -1,14 +1,18 @@
 import { initValAddress } from "@prime-fresh/admin/modules"
 import { PostFarmer } from "@prime-fresh/admin_api"
 
+const today = new Date();
+const formattedDate = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`
+
 const initValCrop = {
     crop: '',
     variety: '',
-    noOfPlants: '',
-    pruningDate: new Date(),
-    expectedHarvestDate: new Date(),
+    noOfPlants: 0,
+    pruningDate: formattedDate,
+    expectedHarvestDate: formattedDate,
     expectedQuantityInTonnes: 0,
 }
+
 export const initValFarmer: PostFarmer = {
     //Farmer Details
     farmerfName: '',
@@ -23,9 +27,6 @@ export const initValFarmer: PostFarmer = {
     idProofNo: '',
     idProofCopy: null,
     howDoYouSell: '',
-    farmerCode: '',
-    farmerType: '',
-    farmerGrading: '',
 
     //Farm Details
     landHoldingStatus: '',
@@ -38,7 +39,7 @@ export const initValFarmer: PostFarmer = {
     farmerPhoto: null,
     farmPhoto: null,
     crops: [initValCrop],
-    dateOfVisit: new Date(),
+    dateOfVisit: formattedDate,
     registerBy: '',
-    registerDate: new Date(),
+    registerDate: formattedDate,
 }

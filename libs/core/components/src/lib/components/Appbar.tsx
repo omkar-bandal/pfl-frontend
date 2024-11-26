@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {AppBar, Typography, IconButton, MenuItem, Menu, Box } from '@mui/material';
+import {AppBar, Typography, IconButton, Box, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+// import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {isClosingState, mobileOpenState, setMobileOpen, useAppSelector} from '@prime-fresh/modules';
@@ -11,25 +11,28 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const location = useLocation().pathname.split('/').slice(-2)[0];
   const pageName = location.replace(/_/g, " ");
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isClosing = useAppSelector(isClosingState);
   const mobileOpen = useAppSelector(mobileOpenState);
   const navigate = useNavigate();
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
-  const handleClose = () => {
-    navigate(AUTH_ROUTES.SIGN_IN);
-    localStorage.clear();
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   navigate(AUTH_ROUTES.SIGN_IN);
+  //   localStorage.clear();
+  //   setAnchorEl(null);
+  // };
   const handleDrawerToggle = () => {
     if (!isClosing) {
       dispatch(setMobileOpen(!mobileOpen));
     }
   };
-
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate(AUTH_ROUTES.SIGN_IN)
+  }
   return (
     <AppBar
       position="fixed"
@@ -56,7 +59,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           {pageName}
         </Typography>
         <div>
-          <IconButton
+          {/* <IconButton 
             size="large"
             aria-label="account of current user"
             aria-controls="menu-appbar"
@@ -82,7 +85,8 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
+          </Menu>*/}/
+          <Button variant='text' sx={{textTransform: 'none', fontSize: 15, fontWeight: 700}} onClick={() => handleLogout()}>Logout</Button>
         </div>
 
       </Box>

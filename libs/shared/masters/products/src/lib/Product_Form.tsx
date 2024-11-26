@@ -1,35 +1,39 @@
 import { FieldArray, Formik } from "formik";
 import { initValProduct } from "./initValProduct";
 import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
-import { Alertbar, ImageUpload, mapToValueLabelArray, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { ImageUpload, mapToValueLabelArray, Notification, SelectInput, TextInput } from '@prime-fresh/ui_shared';
 import { Add, Close } from "@mui/icons-material";
 import { ADMIN_API_URL, PostProduct, useCreateProduct, useGetAllProductClassification, useGetAllProductsCat, useGetAllProductSubCat, useGetAllUOMs } from "@prime-fresh/admin_api";
+import { appendFormData } from '@prime-fresh/shared/utils';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { showNotification } from "@prime-fresh/modules";
+import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+
 export const ProductForm = () => {
     const { data: classifications } = useGetAllProductClassification(ADMIN_API_URL.GET_ALL_PRODUCT_CLASSIFICATION);
     const { data: categories } = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
     const { data: subcategories } = useGetAllProductSubCat(ADMIN_API_URL.GET_ALL_PRODUCT_SUBCATEGORY);
     const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-    const { mutateAsync: mutatePost, isPending, isError, error, data: Res } = useCreateProduct(ADMIN_API_URL.CREATE_PRODUCTS);
+    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateProduct(ADMIN_API_URL.CREATE_PRODUCTS);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = (values: PostProduct) => {
         const formData = new FormData();
-        (Object.keys(values) as Array<keyof PostProduct>).forEach((key) => {
-            const value = values[key];
-            if (key === "image" && value instanceof File) {
-                formData.append(key, value);
-            } else if (key === "count" && Array.isArray(value)) {
-                value.forEach((count, index) => {
-                    formData.append(`count${index}`, count);
-                })
-            } else if (typeof value !== "undefined" && value !== null) {
-                formData.append(key, value.toString());
-            }
-        });
-        mutatePost(formData);
+        appendFormData(formData, values);
+        mutatePost(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Product created successfully !!!" }));
+            setTimeout(() => {
+                navigate(ADMIN_ROUTES.GET_ALL_PRODUCTS);
+            }, 2000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+        });;
     }
     return (
         <>
-            <Alertbar open={isPending || isError} error={error} resMessage={Res} />
+            <Notification />
             <Formik
                 initialValues={initValProduct}
                 onSubmit={(values) => {
@@ -93,7 +97,7 @@ export const ProductForm = () => {
                                                         handleChange={handleChange}
                                                     />
                                                 </Grid>
-                                                    <Grid item xs={0.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                    <Grid item xs={0.5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                         <IconButton
                                                             color="error"
                                                             onClick={() => remove(index)}

@@ -1,19 +1,23 @@
-import { customersState, formContainerState } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, customersState, formContainerState } from "@prime-fresh/admin/modules";
 import { ADMIN_API_URL, PostCustomer, useCreateCustomer, useUpdateCustomer } from "@prime-fresh/admin_api";
-import { useAppSelector } from "@prime-fresh/modules";
+import { showNotification, useAppSelector } from "@prime-fresh/modules";
 import { CustomerFormFields } from "./customerFormField";
 import { customerValidationSchema } from "./customer.schema";
-import { DynamicForm } from '@prime-fresh/ui_shared';
+import { DynamicForm, Notification } from '@prime-fresh/ui_shared';
 import { initValCustomer } from "./initValCustomer";
 import { appendFormData } from "@prime-fresh/shared/utils";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const CustomerForm = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { openFor, dataId } = useAppSelector(formContainerState);
 
     const Customers = useAppSelector(customersState);
 
-    const { mutate: mutatePost } = useCreateCustomer(ADMIN_API_URL.POST_CUSTOMER);
+    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateCustomer(ADMIN_API_URL.POST_CUSTOMER);
 
     const { mutate: mutatePatch } = useUpdateCustomer(ADMIN_API_URL.UPDATE_CUSTOMER, dataId);
 
@@ -22,7 +26,14 @@ export const CustomerForm = () => {
     const handleSubmit = async (values: PostCustomer) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        mutatePost(formData);
+        mutatePost(formData).then(() => {
+            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Customer created successfully !!!" }));
+            setTimeout(() => {
+                navigate(ADMIN_ROUTES.GET_ALL_CUSTOMERS);
+            }, 2000);
+        }).catch(() => {
+            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+        });
     };
 
     const handleUpdate = (values: PostCustomer) => {
@@ -32,10 +43,13 @@ export const CustomerForm = () => {
     };
 
     return (
-        <DynamicForm<PostCustomer>
-            schema={CustomerFormFields()}
-            initialValues={CustomerInitValue ? CustomerInitValue : initValCustomer}
-            validationSchema={customerValidationSchema}
-            handleSubmit={openFor === 'update' ? handleUpdate : handleSubmit} />
+        <>
+            <Notification />
+            <DynamicForm<PostCustomer>
+                schema={CustomerFormFields()}
+                initialValues={CustomerInitValue ? CustomerInitValue : initValCustomer}
+                validationSchema={customerValidationSchema}
+                handleSubmit={openFor === 'update' ? handleUpdate : handleSubmit} />
+        </>
     )
 }

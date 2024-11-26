@@ -66,6 +66,7 @@ export const VendorFormFields = () => {
               "type": "divider",
             },
             {
+              "isRequired": true,
               "name": "officeAddress.address1",
               "label": "Address Line 1",
               "type": "text",
@@ -80,6 +81,7 @@ export const VendorFormFields = () => {
               "length": 6
             },
             {
+              "isRequired": true,
               "name": "officeAddress.location",
               "label": "Location",
               "type": "text",
@@ -87,6 +89,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
+              "isRequired": true,
               "name": "officeAddress.city",
               "label": "City",
               "type": "text",
@@ -94,6 +97,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
+              "isRequired": true,
               "name": "officeAddress.state",
               "label": "State",
               "type": "text",
@@ -101,6 +105,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
+              "isRequired": true,
               "name": "officeAddress.pincode",
               "label": "Pincode",
               "type": "text",
@@ -108,6 +113,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
+              "isRequired": true,
               "name": "officeContactNo",
               "label": "Office Contact Number",
               "type": "text",
@@ -143,7 +149,6 @@ export const VendorFormFields = () => {
               "length": 6
             },
             {
-              "isRequired": true,
               "name": "listOfAllProducts",
               "label": "List Of All Products",
               "type": "text",
@@ -159,6 +164,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
+              "isRequired": true,
               "name": "warehouseLocations",
               "label": "Warehouse Locations",
               "type": "text",
@@ -290,7 +296,7 @@ export const VendorFormFields = () => {
           "value": 2,
           "fields": [
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "contactFName",
               "label": "First Name",
               "type": "text",
@@ -305,7 +311,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "contactLName",
               "label": "Last Name",
               "type": "text",
@@ -313,7 +319,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "directContactNumber",
               "label": "Contact No",
               "type": "text",
@@ -346,7 +352,7 @@ export const VendorFormFields = () => {
               "type": "divider"
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "beneficiaryFName",
               "label": "First Name",
               "type": "text",
@@ -361,7 +367,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "beneficiaryLName",
               "label": "Last Name",
               "type": "text",
@@ -369,7 +375,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "bankName",
               "label": "Bank Name",
               "type": "text",
@@ -377,7 +383,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "typeOfAcc",
               "label": "Type of Account",
               "type": "select",
@@ -391,7 +397,7 @@ export const VendorFormFields = () => {
               ]
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ifscCode",
               "label": "IFSC Code",
               "type": "text",
@@ -477,7 +483,7 @@ export const VendorFormFields = () => {
               "type": "divider"
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1FName",
               "label": "First Name",
               "type": "text",
@@ -492,7 +498,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1LName",
               "label": "Last Name",
               "type": "text",
@@ -500,7 +506,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1PrimaryCNumb",
               "label": "Mobile No",
               "type": "text",
@@ -515,7 +521,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1Email",
               "label": "Email",
               "type": "email",
@@ -523,7 +529,7 @@ export const VendorFormFields = () => {
               "length": 4
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1Address.address1",
               "label": "Address 1",
               "type": "text",
@@ -538,7 +544,7 @@ export const VendorFormFields = () => {
               "length": 6
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1Address.location",
               "label": "Location",
               "type": "text",
@@ -546,7 +552,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1Address.city",
               "label": "District",
               "type": "text",
@@ -554,7 +560,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1Address.state",
               "label": "State",
               "type": "text",
@@ -562,7 +568,7 @@ export const VendorFormFields = () => {
               "length": 3
             },
             {
-              "isRequired": true,
+              // "isRequired": true,
               "name": "ref1Address.pincode",
               "label": "Pincode",
               "type": "text",

@@ -11,7 +11,6 @@ export type PostFarmer = {
     email: string;
     gender: string;
     dob: string;
-    farmerType: string;
     idProofNo: string;
     idProofCopy: File | null;
     howDoYouSell: string;
@@ -25,12 +24,13 @@ export type PostFarmer = {
     farmerPhoto: File | null;
     farmPhoto: File | null;
     crops: PostCrops[];
-    dateOfVisit: Date;
+    dateOfVisit: string;
     registerBy: string;
-    registerDate: Date;
-    farmerCode: string;
-    farmerGrading: string;
+    registerDate: string;
 };
 export type GetFarmer = {
     id: string;
+    farmerCode: string;
+    farmerGrading: string;
+    farmerType: string;
 } & PostFarmer;
