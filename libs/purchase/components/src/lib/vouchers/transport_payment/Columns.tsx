@@ -1,14 +1,23 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
 import { Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 // import { RequestedBy } from "@prime-fresh/purchase_api";
 
-export const TPVoucherListCols = (): GridColDef[] => {
+export const TPVoucherListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
     return ([
         { field: "id", headerName: "ID", width: 30 },
+        {
+            field: "voucherNo",
+            headerName: "Voucher Number",
+            width: 130,
+            align: "center",
+            headerAlign: "center",
+            isMobileVisible: true,
+        },
         {
             field: "debitCreditTo",
             headerName: "Debit From / Credit To",
@@ -151,6 +160,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}>
                     <Edit color="secondary" />
@@ -163,6 +173,7 @@ export const TPVoucherListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}>
                     <Preview color="primary" />

@@ -1,13 +1,14 @@
 import { IconButton } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {GridRenderCellParams } from "@mui/x-data-grid";
 import { Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
 import { Address, BranchType } from "@prime-fresh/admin_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
 
-export const BranchListCols = (): GridColDef[] => {
+export const BranchListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -26,6 +27,7 @@ export const BranchListCols = (): GridColDef[] => {
             field: "name",
             headerName: "Name",
             width: 150,
+            isMobileVisible: true,
         },
         {
             field: "address",
@@ -42,13 +44,14 @@ export const BranchListCols = (): GridColDef[] => {
             field: "pincode",
             headerName: "Pincode",
             width: 100,
+            isMobileVisible: true,
             valueGetter: (value, row) => {
                 console.log(value);
                 if (row.address !== null)
                     return `${row.address.pincode}`;
                 else
                     return '';
-            }
+            },
         },
         {
             field: 'fullName',
@@ -92,6 +95,7 @@ export const BranchListCols = (): GridColDef[] => {
             filterable: false,
             disableExport: true,
             disableColumnMenu: true,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id, params.row.type)}>
                     <Edit color="secondary" />
@@ -109,6 +113,7 @@ export const BranchListCols = (): GridColDef[] => {
             filterable: false,
             disableExport: true,
             disableColumnMenu: true,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                     <IconButton aria-label="edit" onClick={() => handleView(params.row.id, params.row.type)}>
                         <Preview color="primary" />

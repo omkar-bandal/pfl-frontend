@@ -11,6 +11,10 @@ export declare const storeAdmin: import("@reduxjs/toolkit").EnhancedStore<{
         allVendors: import("@prime-fresh/admin_api").GetVendor[] | [];
         selectedVendor: import("@prime-fresh/admin_api").GetVendor | null | undefined;
     };
+    vendorCategoryData: {
+        allVendorCategories: import("@prime-fresh/admin_api").GetVendorCategory[];
+        selectedVendorCategory: import("@prime-fresh/admin_api").GetVendorCategory | null;
+    };
     employeeData: {
         employees: import("@prime-fresh/admin_api").GetEmployee[];
     };
@@ -58,6 +62,10 @@ export declare const storeAdmin: import("@reduxjs/toolkit").EnhancedStore<{
         vendorData: {
             allVendors: import("@prime-fresh/admin_api").GetVendor[] | [];
             selectedVendor: import("@prime-fresh/admin_api").GetVendor | null | undefined;
+        };
+        vendorCategoryData: {
+            allVendorCategories: import("@prime-fresh/admin_api").GetVendorCategory[];
+            selectedVendorCategory: import("@prime-fresh/admin_api").GetVendorCategory | null;
         };
         employeeData: {
             employees: import("@prime-fresh/admin_api").GetEmployee[];

@@ -8,12 +8,12 @@ import { showNotification } from "@prime-fresh/modules";
 import { Box, LinearProgress } from "@mui/material";
 
 export const UOMConvMatrixForm = () => {
-    const { oid } = useParams<{oid: string}>();
+    const { oid } = useParams<{ oid: string }>();
     const uomConvMatId = oid ? oid : '';
     const { data, isLoading } = useGetAUOMConversionMatrixs(ADMIN_API_URL.GET_A_UOM_CONVERSION, uomConvMatId);
     const { id, ...uomConvMat } = data ? data : {};
     const UOMsConvMatInitValue = uomConvMatId === '' ? initValUOMConversionMatrix : uomConvMat;
-    const {data: uoms} = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+    const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const allUoms = uoms ? uoms : [];
     const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateUOMConversionMatrix(ADMIN_API_URL.CREATE_UOM_CONVERSION);
     const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateUOMConversionMatrixs(ADMIN_API_URL.UPDATE_UOM_CONVERSION, uomConvMatId);
@@ -45,21 +45,21 @@ export const UOMConvMatrixForm = () => {
                 dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
             }));
     };
-    if (isLoading) {
-        return (
-            <Box sx={{ flex: 1 }}>
-                <LinearProgress />
-            </Box>
-        )
-    }
+
     return (
         <>
+            {isLoading ?
+                (
+                    <Box sx={{ flex: 1 }}>
+                        <LinearProgress />
+                    </Box>
+                ) :
+                (<DynamicForm<PostUOMConversionMatrix>
+                    schema={UomConvMatrixFormFields(allUoms)}
+                    validationSchema={uomConversionMatrixSchema}
+                    initialValues={UOMsConvMatInitValue ? UOMsConvMatInitValue : initValUOMConversionMatrix}
+                    handleSubmit={handleSubmit} />)}
             <Notification />
-            <DynamicForm<PostUOMConversionMatrix>
-                schema={UomConvMatrixFormFields(allUoms)}
-                validationSchema={uomConversionMatrixSchema}
-                initialValues={UOMsConvMatInitValue ? UOMsConvMatInitValue : initValUOMConversionMatrix}
-                handleSubmit={handleSubmit} />
         </>
     )
 }

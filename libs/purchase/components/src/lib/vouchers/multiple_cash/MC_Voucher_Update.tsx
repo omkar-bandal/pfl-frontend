@@ -38,13 +38,13 @@ export const MultipleCashVoucherUpdate = () => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePatch(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher updated successfully !!!"  }));
+            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher updated successfully !!!" }));
             setTimeout(() => {
-              navigate(PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER);
+                navigate(PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER);
             }, 5000);
-          }).catch(() => {
+        }).catch(() => {
             dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
-          });;
+        });;
     };
 
     return (
@@ -57,6 +57,7 @@ export const MultipleCashVoucherUpdate = () => {
                     <>
                         <Notification />
                         <Formik
+                            enableReinitialize={true}
                             initialValues={mcVoucherValues}
                             validationSchema={multicashVoucherSchema}
                             onSubmit={(values) => {

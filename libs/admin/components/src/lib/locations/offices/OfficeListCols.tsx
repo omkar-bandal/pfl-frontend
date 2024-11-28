@@ -1,13 +1,14 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Preview, Edit } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
 import { Address } from "@prime-fresh/admin_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
 
-export const OfficeListCols = (): GridColDef[] => {
+export const OfficeListCols = (): CustomGridColDef[] => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -26,6 +27,7 @@ export const OfficeListCols = (): GridColDef[] => {
             field: "name",
             headerName: "Name",
             width: 150,
+            isMobileVisible: true,
         },
         {
             field: "address",
@@ -39,6 +41,7 @@ export const OfficeListCols = (): GridColDef[] => {
             field: "pincode",
             headerName: "Pincode",
             width: 100,
+            isMobileVisible: true,
             valueGetter: (value, row) => {
                 console.log(value);
                 return `${row.address.pincode}`;
@@ -79,6 +82,7 @@ export const OfficeListCols = (): GridColDef[] => {
             filterable: false,
             disableExport: true,
             disableColumnMenu: true,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                     <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id, params.row.type)}>
                         <Edit color="secondary" />
@@ -96,6 +100,7 @@ export const OfficeListCols = (): GridColDef[] => {
             filterable: false,
             disableExport: true,
             disableColumnMenu: true,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                     <IconButton aria-label="edit" onClick={() => handleView(params.row.id, params.row.type)}>
                         <Preview color="primary" />

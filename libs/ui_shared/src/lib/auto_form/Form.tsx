@@ -37,6 +37,7 @@ export const DynamicForm = <T extends object>({ initialValues, schema, validatio
   }
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={initialValues}
       validationSchema={validationSchema ? validationSchema : null}
       validateOnChange={true}
@@ -62,7 +63,7 @@ export const DynamicForm = <T extends object>({ initialValues, schema, validatio
                   {schema.subtitle}
                 </Typography>
               </Grid>
-              <Grid item xs={6} sx={{display: "flex", alignItems: "center", justifyContent: "end"}}>
+              <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
                 <Button
                   variant="contained"
                   size="medium"

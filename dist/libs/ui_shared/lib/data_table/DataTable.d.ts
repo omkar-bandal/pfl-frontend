@@ -1,7 +1,8 @@
-import { GridApi, GridColDef } from '@mui/x-data-grid';
+import { CustomGridColDef } from './models/columntype.interface';
+import { GridApi } from '@mui/x-data-grid';
 
 interface DataGridProps<T> {
-    columns: GridColDef[];
+    columns: CustomGridColDef[];
     rows: T[] | undefined;
     loading: boolean;
     apiRef: React.MutableRefObject<GridApi>;

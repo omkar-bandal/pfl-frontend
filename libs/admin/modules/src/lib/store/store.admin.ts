@@ -10,6 +10,7 @@ import {
     branchesDataReducer,
     vendorDataReducer,
     alertSnackbarReducer,
+    vendorCategoryDataReducer,
   } from './slices';
   
 export const storeAdmin = configureStore({
@@ -17,6 +18,7 @@ export const storeAdmin = configureStore({
         formContainer: formContainerReducer,
         customerData: customerDataReducer,
         vendorData: vendorDataReducer,
+        vendorCategoryData: vendorCategoryDataReducer,
         employeeData: employeeDataReducer,
         farmerData: farmerDataReducer,
         productData: productDataReducer,

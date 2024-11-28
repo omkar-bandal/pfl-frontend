@@ -1,11 +1,12 @@
 import { Edit, Preview } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { useNavigate } from "react-router-dom";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const DealSlipListCols = (): GridColDef[] => {
+export const DealSlipListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
 
     return ([
@@ -16,6 +17,7 @@ export const DealSlipListCols = (): GridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
+            isMobileVisible: true,
         },
         {
             field: "createdAt",
@@ -84,6 +86,7 @@ export const DealSlipListCols = (): GridColDef[] => {
             field: "approvalStatus",
             headerName: "Status",
             width: 100,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => {
                 switch (params.row.approvalStatus) {
                     case "pending": return <Chip label={params.row.approvalStatus} color="default" size="small" sx={{ width: 80 }} />;
@@ -98,6 +101,7 @@ export const DealSlipListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_DEAL_SLIP}/${params.row.id}`)}>
                     <Edit color="secondary" />
@@ -110,6 +114,7 @@ export const DealSlipListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DEAL_SLIP}/${params.row.id}`)}>
                     <Preview color="primary" />

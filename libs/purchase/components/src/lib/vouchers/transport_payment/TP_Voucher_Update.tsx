@@ -50,6 +50,7 @@ export const TransportPaymentVoucherUpdate = () => {
           <>
             <Notification />
             <Formik
+              enableReinitialize={true}
               initialValues={tpVoucherValues}
               onSubmit={(values) => {
                 console.log(values);
@@ -272,7 +273,7 @@ export const TransportPaymentVoucherUpdate = () => {
                         value={values.receiverName}
                         handleChange={handleChange}
                         touched={touched}
-                          errors={errors}
+                        errors={errors}
                       />
                     </Grid>
                     <Grid item xs={12}>

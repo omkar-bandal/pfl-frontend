@@ -1,13 +1,14 @@
 import { GetProductClassification } from "@prime-fresh/admin_api";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
 import { hideNotification } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { Edit } from "@mui/icons-material";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const ProductCategoryListCols = (): GridColDef[] => {
+export const ProductCategoryListCols = (): CustomGridColDef[] => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleEdit = (rowId: string) => {
@@ -21,6 +22,7 @@ export const ProductCategoryListCols = (): GridColDef[] => {
       field: "name",
       headerName: "Category",
       width: 200,
+      isMobileVisible: true,
       valueGetter: (value) => value ? value : "-"
     },
     {
@@ -35,6 +37,7 @@ export const ProductCategoryListCols = (): GridColDef[] => {
       width: 50,
       sortable: false,
       filterable: false,
+      isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
         <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
           <Edit color="secondary" />

@@ -1,6 +1,6 @@
 import { useCreateData } from "@prime-fresh/common_api";
-import { PostResponse } from "../../../models";
+import { PostResponse } from "../../../../models";
 
-export const useCreateVendorCat = (url: string) => {
+export const useCreateVendorSubCat = (url: string) => {
     return useCreateData<FormData, PostResponse>(url);
 }

@@ -1,3 +1,3 @@
-import { PostBranches, PostResponse } from '../../../models';
+import { PostResponse } from '../../../models';
 
-export declare const useCreateBranches: (url: string) => import('@tanstack/react-query').UseMutationResult<PostResponse, Error, PostBranches, unknown>;
+export declare const useCreateBranches: (url: string) => import('@tanstack/react-query').UseMutationResult<PostResponse, Error, FormData, unknown>;

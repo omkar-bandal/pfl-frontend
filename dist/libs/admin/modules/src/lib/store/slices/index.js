@@ -11,4 +11,5 @@ tslib_1.__exportStar(require("./uomData.slice"), exports);
 tslib_1.__exportStar(require("./officeData.slice"), exports);
 tslib_1.__exportStar(require("./branchesData.slice"), exports);
 tslib_1.__exportStar(require("./alertsnackbar.slice"), exports);
+tslib_1.__exportStar(require("./vendorCategoryData.slice"), exports);
 //# sourceMappingURL=index.js.map

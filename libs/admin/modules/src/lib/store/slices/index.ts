@@ -8,3 +8,4 @@ export * from './uomData.slice';
 export * from './officeData.slice';
 export * from './branchesData.slice';
 export * from './alertsnackbar.slice';
+export * from './vendorCategoryData.slice';

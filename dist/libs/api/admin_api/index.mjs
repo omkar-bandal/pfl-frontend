@@ -33,8 +33,12 @@ const Ka = {
   UPDATE_VENDOR: "/vendors",
   GET_ALL_VENDOR_CAT: "/vendor-categories/",
   CREATE_VENDOR_CAT: "/vendor-categories/",
+  GET_A_VENDOR_CAT: "/vendor-categories",
+  UPDATE_VENDOR_CAT: "/vendor-categories",
   GET_ALL_VENDOR_SUBCAT: "/vendor-subcategories/",
   CREATE_VENDOR_SUBCAT: "/vendor-subcategories/",
+  GET_A_VENDOR_SUBCAT: "/vendor-subcategories",
+  UPDATE_VENDOR_SUBCAT: "/vendor-subcategories",
   //Prooducts
   GET_ALL_PRODUCTS: "/products/",
   GET_A_PRODUCTS: "/products",
@@ -782,7 +786,7 @@ function Yo() {
       return R.call($, ne, H++);
     }), V;
   }
-  function Ue(f) {
+  function Ie(f) {
     if (f._status === -1) {
       var R = f._result;
       R = R(), R.then(function($) {
@@ -839,7 +843,7 @@ function Yo() {
   }, M.forwardRef = function(f) {
     return { $$typeof: l, render: f };
   }, M.isValidElement = $e, M.lazy = function(f) {
-    return { $$typeof: m, _payload: { _status: -1, _result: f }, _init: Ue };
+    return { $$typeof: m, _payload: { _status: -1, _result: f }, _init: Ie };
   }, M.memo = function(f, R) {
     return { $$typeof: y, type: f, compare: R === void 0 ? null : R };
   }, M.startTransition = function(f) {
@@ -941,7 +945,7 @@ function Ko() {
         ReactCurrentOwner: se
       };
       Ee.ReactDebugCurrentFrame = he, Ee.ReactCurrentActQueue = x;
-      function Ue(s) {
+      function Ie(s) {
         {
           for (var i = arguments.length, d = new Array(i > 1 ? i - 1 : 0), p = 1; p < i; p++)
             d[p - 1] = arguments[p];
@@ -1053,7 +1057,7 @@ function Ko() {
         }, ne = function(s, i) {
           Object.defineProperty(V.prototype, s, {
             get: function() {
-              Ue("%s(...) is deprecated in plain JavaScript React classes. %s", i[0], i[1]);
+              Ie("%s(...) is deprecated in plain JavaScript React classes. %s", i[0], i[1]);
             }
           });
         };
@@ -1347,7 +1351,7 @@ function Ko() {
           var sn = L(s);
           if (typeof sn == "function") {
             var ss = s;
-            sn === ss.entries && (St || Ue("Using Maps as children is not supported. Use an array of keyed ReactElements instead."), St = !0);
+            sn === ss.entries && (St || Ie("Using Maps as children is not supported. Use an array of keyed ReactElements instead."), St = !0);
             for (var Fo = sn.call(ss), os, Lo = 0; !(os = Fo.next()).done; )
               ue = os.value, le = be + ft(ue, Lo++), me += Qe(ue, i, d, le, C);
           } else if (P === "object") {
@@ -1459,7 +1463,7 @@ function Ko() {
                 return i.displayName;
               },
               set: function(T) {
-                C || (Ue("Setting `displayName` on Context.Consumer has no effect. You should set it directly on the context with Context.displayName = '%s'.", T), C = !0);
+                C || (Ie("Setting `displayName` on Context.Consumer has no effect. You should set it directly on the context with Context.displayName = '%s'.", T), C = !0);
               }
             }
           }), i.Consumer = P;
@@ -2007,10 +2011,10 @@ Check the top-level render call using <` + d + ">.");
       var es = !1;
       function Co(s) {
         var i = Zn.bind(null, s);
-        return i.type = s, es || (es = !0, Ue("React.createFactory() is deprecated and will be removed in a future major release. Consider using JSX or use React.createElement() directly instead.")), Object.defineProperty(i, "type", {
+        return i.type = s, es || (es = !0, Ie("React.createFactory() is deprecated and will be removed in a future major release. Consider using JSX or use React.createElement() directly instead.")), Object.defineProperty(i, "type", {
           enumerable: !1,
           get: function() {
-            return Ue("Factory.type is deprecated. Access the class directly before passing it to createFactory."), Object.defineProperty(this, "type", {
+            return Ie("Factory.type is deprecated. Access the class directly before passing it to createFactory."), Object.defineProperty(this, "type", {
               value: s
             }), s;
           }
@@ -2031,7 +2035,7 @@ Check the top-level render call using <` + d + ">.");
         } finally {
           if (ie.transition = d, d === null && p._updatedFibers) {
             var C = p._updatedFibers.size;
-            C > 10 && Ue("Detected a large number of updates inside startTransition. If this is due to a subscription please re-write it to use React provided hooks. Otherwise concurrent mode guarantees are off the table."), p._updatedFibers.clear();
+            C > 10 && Ie("Detected a large number of updates inside startTransition. If this is due to a subscription please re-write it to use React provided hooks. Otherwise concurrent mode guarantees are off the table."), p._updatedFibers.clear();
           }
         }
       }
@@ -2278,14 +2282,14 @@ function Qo() {
         }
       return null;
     }
-    var Se = Object.assign, Ee = 0, Ue, w, Ne, it, Ge, f, R;
+    var Se = Object.assign, Ee = 0, Ie, w, Ne, it, Ge, f, R;
     function $() {
     }
     $.__reactDisabledLog = !0;
     function V() {
       {
         if (Ee === 0) {
-          Ue = console.log, w = console.info, Ne = console.warn, it = console.error, Ge = console.group, f = console.groupCollapsed, R = console.groupEnd;
+          Ie = console.log, w = console.info, Ne = console.warn, it = console.error, Ge = console.group, f = console.groupCollapsed, R = console.groupEnd;
           var a = {
             configurable: !0,
             enumerable: !0,
@@ -2315,7 +2319,7 @@ function Qo() {
           };
           Object.defineProperties(console, {
             log: Se({}, a, {
-              value: Ue
+              value: Ie
             }),
             info: Se({}, a, {
               value: w
@@ -2907,25 +2911,25 @@ function Gs(e, t) {
 const { toString: fi } = Object.prototype, { getPrototypeOf: Ln } = Object, Fr = /* @__PURE__ */ ((e) => (t) => {
   const r = fi.call(t);
   return e[r] || (e[r] = r.slice(8, -1).toLowerCase());
-})(/* @__PURE__ */ Object.create(null)), Ie = (e) => (e = e.toLowerCase(), (t) => Fr(t) === e), Lr = (e) => (t) => typeof t === e, { isArray: xt } = Array, Kt = Lr("undefined");
+})(/* @__PURE__ */ Object.create(null)), xe = (e) => (e = e.toLowerCase(), (t) => Fr(t) === e), Lr = (e) => (t) => typeof t === e, { isArray: xt } = Array, Kt = Lr("undefined");
 function di(e) {
-  return e !== null && !Kt(e) && e.constructor !== null && !Kt(e.constructor) && Le(e.constructor.isBuffer) && e.constructor.isBuffer(e);
+  return e !== null && !Kt(e) && e.constructor !== null && !Kt(e.constructor) && ke(e.constructor.isBuffer) && e.constructor.isBuffer(e);
 }
-const Vs = Ie("ArrayBuffer");
+const Vs = xe("ArrayBuffer");
 function hi(e) {
   let t;
   return typeof ArrayBuffer < "u" && ArrayBuffer.isView ? t = ArrayBuffer.isView(e) : t = e && e.buffer && Vs(e.buffer), t;
 }
-const pi = Lr("string"), Le = Lr("function"), qs = Lr("number"), kr = (e) => e !== null && typeof e == "object", mi = (e) => e === !0 || e === !1, Cr = (e) => {
+const pi = Lr("string"), ke = Lr("function"), qs = Lr("number"), kr = (e) => e !== null && typeof e == "object", mi = (e) => e === !0 || e === !1, Cr = (e) => {
   if (Fr(e) !== "object")
     return !1;
   const t = Ln(e);
   return (t === null || t === Object.prototype || Object.getPrototypeOf(t) === null) && !(Symbol.toStringTag in e) && !(Symbol.iterator in e);
-}, yi = Ie("Date"), Ei = Ie("File"), vi = Ie("Blob"), bi = Ie("FileList"), gi = (e) => kr(e) && Le(e.pipe), Ri = (e) => {
+}, yi = xe("Date"), Ei = xe("File"), vi = xe("Blob"), bi = xe("FileList"), gi = (e) => kr(e) && ke(e.pipe), Ri = (e) => {
   let t;
-  return e && (typeof FormData == "function" && e instanceof FormData || Le(e.append) && ((t = Fr(e)) === "formdata" || // detect form-data instance
-  t === "object" && Le(e.toString) && e.toString() === "[object FormData]"));
-}, _i = Ie("URLSearchParams"), [Ci, Oi, Si, Ti] = ["ReadableStream", "Request", "Response", "Headers"].map(Ie), wi = (e) => e.trim ? e.trim() : e.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+  return e && (typeof FormData == "function" && e instanceof FormData || ke(e.append) && ((t = Fr(e)) === "formdata" || // detect form-data instance
+  t === "object" && ke(e.toString) && e.toString() === "[object FormData]"));
+}, _i = xe("URLSearchParams"), [Ci, Oi, Si, Ti] = ["ReadableStream", "Request", "Response", "Headers"].map(xe), wi = (e) => e.trim ? e.trim() : e.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
 function Xt(e, t, { allOwnKeys: r = !1 } = {}) {
   if (e === null || typeof e > "u")
     return;
@@ -2960,7 +2964,7 @@ function Cn() {
   return t;
 }
 const Ai = (e, t, r, { allOwnKeys: n } = {}) => (Xt(t, (o, c) => {
-  r && Le(o) ? e[c] = Gs(o, r) : e[c] = o;
+  r && ke(o) ? e[c] = Gs(o, r) : e[c] = o;
 }, { allOwnKeys: n }), e), Pi = (e) => (e.charCodeAt(0) === 65279 && (e = e.slice(1)), e), Di = (e, t, r, n) => {
   e.prototype = Object.create(t.prototype, n), e.prototype.constructor = e, Object.defineProperty(e, "super", {
     value: t.prototype
@@ -3001,12 +3005,12 @@ const Ai = (e, t, r, { allOwnKeys: n } = {}) => (Xt(t, (o, c) => {
   for (; (r = e.exec(t)) !== null; )
     n.push(r);
   return n;
-}, Ni = Ie("HTMLFormElement"), ji = (e) => e.toLowerCase().replace(
+}, Ni = xe("HTMLFormElement"), ji = (e) => e.toLowerCase().replace(
   /[-_\s]([a-z\d])(\w*)/g,
   function(r, n, o) {
     return n.toUpperCase() + o;
   }
-), bs = (({ hasOwnProperty: e }) => (t, r) => e.call(t, r))(Object.prototype), Mi = Ie("RegExp"), zs = (e, t) => {
+), bs = (({ hasOwnProperty: e }) => (t, r) => e.call(t, r))(Object.prototype), Mi = xe("RegExp"), zs = (e, t) => {
   const r = Object.getOwnPropertyDescriptors(e), n = {};
   Xt(r, (o, c) => {
     let u;
@@ -3014,10 +3018,10 @@ const Ai = (e, t, r, { allOwnKeys: n } = {}) => (Xt(t, (o, c) => {
   }), Object.defineProperties(e, n);
 }, Bi = (e) => {
   zs(e, (t, r) => {
-    if (Le(e) && ["arguments", "caller", "callee"].indexOf(r) !== -1)
+    if (ke(e) && ["arguments", "caller", "callee"].indexOf(r) !== -1)
       return !1;
     const n = e[r];
-    if (Le(n)) {
+    if (ke(n)) {
       if (t.enumerable = !1, "writable" in t) {
         t.writable = !1;
         return;
@@ -3047,7 +3051,7 @@ const Ai = (e, t, r, { allOwnKeys: n } = {}) => (Xt(t, (o, c) => {
   return r;
 };
 function Wi(e) {
-  return !!(e && Le(e.append) && e[Symbol.toStringTag] === "FormData" && e[Symbol.iterator]);
+  return !!(e && ke(e.append) && e[Symbol.toStringTag] === "FormData" && e[Symbol.iterator]);
 }
 const Hi = (e) => {
   const t = new Array(10), r = (n, o) => {
@@ -3066,13 +3070,13 @@ const Hi = (e) => {
     return n;
   };
   return r(e, 0);
-}, zi = Ie("AsyncFunction"), Yi = (e) => e && (kr(e) || Le(e)) && Le(e.then) && Le(e.catch), Ks = ((e, t) => e ? setImmediate : t ? ((r, n) => (pt.addEventListener("message", ({ source: o, data: c }) => {
+}, zi = xe("AsyncFunction"), Yi = (e) => e && (kr(e) || ke(e)) && ke(e.then) && ke(e.catch), Ks = ((e, t) => e ? setImmediate : t ? ((r, n) => (pt.addEventListener("message", ({ source: o, data: c }) => {
   o === pt && c === r && n.length && n.shift()();
 }, !1), (o) => {
   n.push(o), pt.postMessage(r, "*");
 }))(`axios@${Math.random()}`, []) : (r) => setTimeout(r))(
   typeof setImmediate == "function",
-  Le(pt.postMessage)
+  ke(pt.postMessage)
 ), Ki = typeof queueMicrotask < "u" ? queueMicrotask.bind(pt) : typeof process < "u" && process.nextTick || Ks, h = {
   isArray: xt,
   isArrayBuffer: Vs,
@@ -3093,7 +3097,7 @@ const Hi = (e) => {
   isFile: Ei,
   isBlob: vi,
   isRegExp: Mi,
-  isFunction: Le,
+  isFunction: ke,
   isStream: gi,
   isURLSearchParams: _i,
   isTypedArray: Ui,
@@ -3106,7 +3110,7 @@ const Hi = (e) => {
   inherits: Di,
   toFlatObject: Fi,
   kindOf: Fr,
-  kindOfTest: Ie,
+  kindOfTest: xe,
   endsWith: Li,
   toArray: ki,
   forEachEntry: Ii,
@@ -4603,7 +4607,7 @@ de.default = de;
 const Ba = {
   //Authentication
   BASE_URL: "http://ec2-3-109-211-250.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://66da-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://c83c-182-156-141-17.ngrok-free.app",
 }, We = de.create({
   baseURL: Ba.BASE_URL,
   withCredentials: !0,
@@ -4713,13 +4717,13 @@ const Fe = (e) => {
 }, ge = (e, t) => {
   const r = new er();
   return $s({ queryKey: t, queryFn: () => r.getData(e) });
-}, ke = (e, t, r) => {
+}, Le = (e, t, r) => {
   const n = new er();
   return $s({ queryKey: r, queryFn: () => n.getDataById(e, t) });
-}, xe = (e, t) => {
+}, Ue = (e, t) => {
   const r = new er();
   return Fn({ mutationFn: (n) => r.updateData(e, t, n) });
-}, Ja = (e) => Fe(e), Qa = (e) => ge(e, ["getAllEmployees"]), Xa = (e, t) => ke(e, t, ["getEmployee"]), Za = (e, t) => xe(e, t), eu = (e) => ge(e, ["getAllRoles"]), tu = (e) => Fe(e), ru = (e) => Va(e), nu = (e) => ge(e, ["getAllCustomers"]), su = (e) => ge(e, ["getAllCustomerCategories"]), ou = (e) => ge(e, ["getAllCustomerTypes"]), iu = (e, t) => ke(e, t, ["getCustomer"]), au = (e, t) => xe(e, t), uu = (e) => Fe(e), cu = (e) => ge(e, ["getFarmers"]), lu = (e, t) => ke(e, t, ["getFarmer"]), fu = (e, t) => xe(e, t), du = (e) => Fe(e), hu = (e) => ge(e, ["getAllVendors"]), pu = (e) => ge(e, ["getAllVendorCat"]), mu = (e) => ge(e, ["getVendor"]), yu = (e, t) => ke(e, t, ["getVendor"]), Eu = (e) => Fe(e), vu = (e) => Fe(e), bu = (e) => Fe(e), gu = (e) => ge(e, ["getProducts"]), Ru = (e, t) => ke(e, t, ["getAProduct"]), _u = (e, t) => xe(e, t), Cu = (e) => Fe(e), Ou = (e, t) => ke(e, t, ["getAProductClassification"]), Su = (e) => ge(e, ["getProductsClassification"]), Tu = (e, t) => xe(e, t), wu = (e) => Fe(e), Au = (e, t) => ke(e, t, ["getAProductCategory"]), Pu = (e) => ge(e, ["getProductCat"]), Du = (e, t) => xe(e, t), Fu = (e) => Fe(e), Lu = (e, t) => ke(e, t, ["getAProductSubcategory"]), ku = (e) => ge(e, ["getProductSubcat"]), Uu = (e, t) => xe(e, t), Iu = (e) => Fe(e), xu = (e) => ge(e, ["getUOMs"]), Nu = (e, t) => ke(e, t, ["getAUOM"]), ju = (e, t) => xe(e, t), Mu = (e) => Fe(e), Bu = (e) => ge(e, ["getUOMConversionMatrixs"]), $u = (e, t) => ke(e, t, ["getAUOMConversionMatrix"]), Gu = (e, t) => xe(e, t), Vu = (e) => Fe(e), qu = (e, t) => ke(e, t, ["getABranch"]), Wu = (e) => ge(e, ["getAllBranches"]), Hu = (e, t) => xe(e, t), zu = (e) => Fe(e), Yu = (e, t) => ke(e, t, ["getAOffice"]), Ku = (e) => ge(e, ["getAllOffices"]), Ju = (e, t) => xe(e, t);
+}, Ja = (e) => Fe(e), Qa = (e) => Va(e), Xa = (e) => ge(e, ["getAllCustomers"]), Za = (e) => ge(e, ["getAllCustomerCategories"]), eu = (e) => ge(e, ["getAllCustomerTypes"]), tu = (e, t) => Le(e, t, ["getCustomer"]), ru = (e, t) => Ue(e, t), nu = (e) => Fe(e), su = (e) => ge(e, ["getAllEmployees"]), ou = (e) => ge(e, ["getAllRoles"]), iu = (e, t) => Le(e, t, ["getEmployee"]), au = (e, t) => Ue(e, t), uu = (e) => Fe(e), cu = (e) => ge(e, ["getFarmers"]), lu = (e, t) => Le(e, t, ["getFarmer"]), fu = (e, t) => Ue(e, t), du = (e) => Fe(e), hu = (e) => ge(e, ["getAllVendors"]), pu = (e, t) => Le(e, t, ["getVendor"]), mu = (e) => Fe(e), yu = (e, t) => Le(e, t, ["getAVendorCategory"]), Eu = (e) => ge(e, ["getAllVendorCat"]), vu = (e, t) => Ue(e, t), bu = (e) => Fe(e), gu = (e, t) => Le(e, t, ["getAVendorSubcategory"]), Ru = (e) => ge(e, ["getVendor"]), _u = (e, t) => Ue(e, t), Cu = (e) => Fe(e), Ou = (e) => ge(e, ["getProducts"]), Su = (e, t) => Le(e, t, ["getAProduct"]), Tu = (e, t) => Ue(e, t), wu = (e) => Fe(e), Au = (e, t) => Le(e, t, ["getAProductClassification"]), Pu = (e) => ge(e, ["getProductsClassification"]), Du = (e, t) => Ue(e, t), Fu = (e) => Fe(e), Lu = (e, t) => Le(e, t, ["getAProductCategory"]), ku = (e) => ge(e, ["getProductCat"]), Uu = (e, t) => Ue(e, t), Iu = (e) => Fe(e), xu = (e, t) => Le(e, t, ["getAProductSubcategory"]), Nu = (e) => ge(e, ["getProductSubcat"]), ju = (e, t) => Ue(e, t), Mu = (e) => Fe(e), Bu = (e, t) => Le(e, t, ["getAUOM"]), $u = (e) => ge(e, ["getUOMs"]), Gu = (e, t) => Ue(e, t), Vu = (e) => Fe(e), qu = (e, t) => Le(e, t, ["getAUOMConversionMatrix"]), Wu = (e) => ge(e, ["getUOMConversionMatrixs"]), Hu = (e, t) => Ue(e, t), zu = (e) => Fe(e), Yu = (e, t) => Le(e, t, ["getABranch"]), Ku = (e) => ge(e, ["getAllBranches"]), Ju = (e, t) => Ue(e, t), Qu = (e) => Fe(e), Xu = (e, t) => Le(e, t, ["getAOffice"]), Zu = (e) => ge(e, ["getAllOffices"]), ec = (e, t) => Ue(e, t);
 var qa = /* @__PURE__ */ ((e) => (e[e.COLLECTION_CENTER = 0] = "COLLECTION_CENTER", e[e.DISTRIBUTION_CENTER = 1] = "DISTRIBUTION_CENTER", e[e.SEASONAL_COLLECTION_CENTER = 2] = "SEASONAL_COLLECTION_CENTER", e[e.WAREHOUSE = 3] = "WAREHOUSE", e))(qa || {}), Wa = /* @__PURE__ */ ((e) => (e[e.REGISTERED_OFFICE = 0] = "REGISTERED_OFFICE", e[e.CORPORATE_OFFICE = 1] = "CORPORATE_OFFICE", e))(Wa || {}), Ha = /* @__PURE__ */ ((e) => (e.OWNED = "Owned", e.LEASED = "Leased", e.SHARED = "Shared", e.ENCUMBERED = "Encumbered", e))(Ha || {}), za = /* @__PURE__ */ ((e) => (e.CULTIVABLE = "Cultivable", e.FALLOW = "Fallow", e.IRRIGATED = "Irrigated", e.NON_IRRIGATED = "Non-Irrigated", e))(za || {});
 export {
   Ka as ADMIN_API_URL,
@@ -4727,59 +4731,63 @@ export {
   Ha as LandHoldingStatus,
   za as LandStatus,
   Wa as OfficeType,
-  Vu as useCreateBranches,
-  tu as useCreateCustomer,
-  Ja as useCreateEmployee,
+  zu as useCreateBranches,
+  Ja as useCreateCustomer,
+  nu as useCreateEmployee,
   uu as useCreateFarmer,
-  zu as useCreateOffice,
-  bu as useCreateProduct,
-  wu as useCreateProductCat,
-  Cu as useCreateProductClassification,
-  Fu as useCreateProductSubcat,
-  Iu as useCreateUOM,
-  Mu as useCreateUOMConversionMatrix,
+  Qu as useCreateOffice,
+  Cu as useCreateProduct,
+  Fu as useCreateProductCat,
+  wu as useCreateProductClassification,
+  Iu as useCreateProductSubcat,
+  Mu as useCreateUOM,
+  Vu as useCreateUOMConversionMatrix,
   du as useCreateVendor,
-  vu as useCreateVendorCat,
-  Eu as useCreateVendorSubCat,
-  ru as useDeleteCustomer,
-  qu as useGetABranch,
-  Yu as useGetAOffice,
-  Ru as useGetAProduct,
-  Au as useGetAProductCat,
-  Ou as useGetAProductClassification,
-  Lu as useGetAProductSubcat,
-  Nu as useGetAUOM,
-  $u as useGetAUOMConversionMatrixs,
-  Wu as useGetAllBranches,
-  su as useGetAllCustomerCategories,
-  ou as useGetAllCustomerTypes,
-  nu as useGetAllCustomers,
-  Qa as useGetAllEmployee,
+  bu as useCreateVendorCat,
+  mu as useCreateVendorSubCat,
+  Qa as useDeleteCustomer,
+  Yu as useGetABranch,
+  Xu as useGetAOffice,
+  Su as useGetAProduct,
+  Lu as useGetAProductCat,
+  Au as useGetAProductClassification,
+  xu as useGetAProductSubcat,
+  Bu as useGetAUOM,
+  qu as useGetAUOMConversionMatrixs,
+  yu as useGetAVendorCat,
+  gu as useGetAVendorSubCat,
+  Ku as useGetAllBranches,
+  Za as useGetAllCustomerCategories,
+  eu as useGetAllCustomerTypes,
+  Xa as useGetAllCustomers,
+  su as useGetAllEmployee,
   cu as useGetAllFarmers,
-  Ku as useGetAllOffices,
-  Su as useGetAllProductClassification,
-  ku as useGetAllProductSubCat,
-  gu as useGetAllProducts,
-  Pu as useGetAllProductsCat,
-  eu as useGetAllRoles,
-  Bu as useGetAllUOMConversionMatrixs,
-  xu as useGetAllUOMs,
-  pu as useGetAllVendorCat,
-  mu as useGetAllVendorSubCat,
+  Zu as useGetAllOffices,
+  Pu as useGetAllProductClassification,
+  Nu as useGetAllProductSubCat,
+  Ou as useGetAllProducts,
+  ku as useGetAllProductsCat,
+  ou as useGetAllRoles,
+  Wu as useGetAllUOMConversionMatrixs,
+  $u as useGetAllUOMs,
+  Eu as useGetAllVendorCat,
+  Ru as useGetAllVendorSubCat,
   hu as useGetAllVendors,
-  iu as useGetCustomer,
-  Xa as useGetEmployee,
+  tu as useGetCustomer,
+  iu as useGetEmployee,
   lu as useGetFarmer,
-  yu as useGetVendor,
-  Hu as useUpdateBranch,
-  au as useUpdateCustomer,
-  Za as useUpdateEmployee,
+  pu as useGetVendor,
+  Ju as useUpdateBranch,
+  ru as useUpdateCustomer,
+  au as useUpdateEmployee,
   fu as useUpdateFarmer,
-  Ju as useUpdateOffice,
-  _u as useUpdateProduct,
-  Du as useUpdateProductCat,
-  Tu as useUpdateProductClassification,
-  Uu as useUpdateProductSubcat,
-  ju as useUpdateUOM,
-  Gu as useUpdateUOMConversionMatrixs
+  ec as useUpdateOffice,
+  Tu as useUpdateProduct,
+  Uu as useUpdateProductCat,
+  Du as useUpdateProductClassification,
+  ju as useUpdateProductSubcat,
+  Gu as useUpdateUOM,
+  Hu as useUpdateUOMConversionMatrixs,
+  vu as useUpdateVendorCat,
+  _u as useUpdateVendorSubCat
 };

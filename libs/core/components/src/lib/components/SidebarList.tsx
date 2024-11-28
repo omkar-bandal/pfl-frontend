@@ -8,11 +8,12 @@ import {
 } from "@mui/material";
 import { ExpandMore, ExpandLess, Remove } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { SidebarListProps } from "@prime-fresh/modules";
+import { setMobileOpen, SidebarListProps } from "@prime-fresh/modules";
+import { useDispatch } from "react-redux";
 
 const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, setSelectedItem, navigations }) => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   // State to manage the expanded items
   const [openItems, setOpenItems] = React.useState<{ [key: string]: boolean }>({});
 
@@ -34,7 +35,7 @@ const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, setSelect
               <ListItemButton
                 key={item.name}
                 selected={selectedItem === item.name}
-                onClick={() => { navigate(item.path ? item.path : '') }}
+                onClick={() => { navigate(item.path ? item.path : ''); dispatch(setMobileOpen(false)) }}
                 sx={{
                   width: '95%',
                   borderRadius: 2,
@@ -97,7 +98,7 @@ const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, setSelect
                                     },
                                   },
                                 }}
-                                onClick={() => { navigate(child.path ? child.path : '')}}
+                                onClick={() => { navigate(child.path ? child.path : ''); dispatch(setMobileOpen(false))}}
                               >
                                 <ListItemIcon><Remove fontSize="small" /></ListItemIcon>
                                 <ListItemText>{child.name}</ListItemText>
@@ -144,7 +145,7 @@ const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, setSelect
                                                 },
                                               },
                                             }}
-                                            onClick={() => { navigate(grandChild.path ? grandChild.path : ''); }}
+                                            onClick={() => { navigate(grandChild.path ? grandChild.path : ''); dispatch(setMobileOpen(false)) }}
                                           >
                                             <ListItemIcon><Remove fontSize="small" /></ListItemIcon>
                                             <ListItemText>{grandChild.name}</ListItemText>

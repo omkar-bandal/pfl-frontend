@@ -1,7 +1,7 @@
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, packingMaterialPaymentVoucherSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { Materials, PURCHASE_API_URL, useGetAllGRNNums, useGetPMPVoucher, useUpdatePMPVoucher } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, GetUOM, useGetAllUOMs } from "@prime-fresh/admin_api";
@@ -11,7 +11,6 @@ import { PMPVoucherPreview } from "./PMP_Voucher_Preview";
 import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
 
-//Labour Payment Voucher
 export const PackingMaterialPaymentVoucherUpdate = () => {
     const navigate = useNavigate();
 
@@ -69,6 +68,7 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                     <>
                         <Notification />
                         <Formik
+                            enableReinitialize={true}
                             initialValues={pmpVoucherValues}
                             // validationSchema={packingMaterialPaymentVoucherSchema}
                             onSubmit={(values) => {

@@ -32,7 +32,7 @@ export function VendorSubcatTable() {
           loading={isLoading}
           apiRef={apiRef}
           rows={VendorSubcat}
-          columns={VendorSubcategoryListCols}
+          columns={VendorSubcategoryListCols()}
         />
       </Box>
   );

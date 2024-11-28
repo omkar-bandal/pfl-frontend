@@ -1,19 +1,20 @@
 import { IconButton, Chip, Button } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Preview, Edit } from '@mui/icons-material';
+import { GridRenderCellParams } from "@mui/x-data-grid";
+import { Preview } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ADMIN_ROUTES, setDataId, setOpenFor } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, setDataId } from "@prime-fresh/admin/modules";
 import { GetRole } from "@prime-fresh/admin_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const EmployeeListCols = (): GridColDef[] => {
+export const EmployeeListCols = (): CustomGridColDef[] => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEdit = (id: string) => {
-    dispatch(setDataId(id));
-    dispatch(setOpenFor('update'));
-  }
+  // const handleEdit = (id: string) => {
+  //   dispatch(setDataId(id));
+  //   dispatch(setOpenFor('update'));
+  // }
   const handleEmployeeStatus = (id: string) => {
     dispatch(setDataId(id));
   }
@@ -57,6 +58,7 @@ export const EmployeeListCols = (): GridColDef[] => {
       field: 'fullName',
       headerName: "Name",
       width: 170,
+      isMobileVisible: true,
       valueGetter: (value, row) => {
         console.log(value);
         return `${row.firstName || ''} ${row.middleName || ''} ${row.lastName || ''}`;
@@ -116,6 +118,7 @@ export const EmployeeListCols = (): GridColDef[] => {
       field: "status",
       headerName: "Status",
       width: 100,
+      isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
         switch (params.row.status) {
           case "pending": return <Chip label={params.row.status} color="default" size="small" sx={{ width: 80 }} />;

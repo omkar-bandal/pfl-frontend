@@ -35,8 +35,12 @@ export const ADMIN_API_URL = {
     UPDATE_VENDOR: "/vendors",
     GET_ALL_VENDOR_CAT: "/vendor-categories/",
     CREATE_VENDOR_CAT: "/vendor-categories/",
+    GET_A_VENDOR_CAT: "/vendor-categories",
+    UPDATE_VENDOR_CAT: "/vendor-categories",
     GET_ALL_VENDOR_SUBCAT: "/vendor-subcategories/",
     CREATE_VENDOR_SUBCAT: "/vendor-subcategories/",
+    GET_A_VENDOR_SUBCAT: "/vendor-subcategories",
+    UPDATE_VENDOR_SUBCAT: "/vendor-subcategories",
 
     //Prooducts
     GET_ALL_PRODUCTS: "/products/",

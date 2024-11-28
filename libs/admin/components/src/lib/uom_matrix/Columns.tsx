@@ -1,13 +1,14 @@
 import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
 import { GetUOM } from "@prime-fresh/admin_api";
 import { hideNotification } from "@prime-fresh/modules";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export const UOMMatrixListCols = (): GridColDef[] => {
+export const UOMMatrixListCols = (): CustomGridColDef[] => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleEdit = (rowId: string) => {
@@ -22,7 +23,8 @@ export const UOMMatrixListCols = (): GridColDef[] => {
       headerName: "Conversion Factor",
       width: 250,
       align: "center",
-      headerAlign: "center"
+      headerAlign: "center",
+      isMobileVisible: true,
     },
     {
       field: "fromUOM",
@@ -30,6 +32,7 @@ export const UOMMatrixListCols = (): GridColDef[] => {
       width: 250,
       align: "center",
       headerAlign: "center",
+      isMobileVisible: true,
       valueGetter: (value: GetUOM) => value ? value.unit : '-',
     },
     {
@@ -38,6 +41,7 @@ export const UOMMatrixListCols = (): GridColDef[] => {
       width: 250,
       align: "center",
       headerAlign: "center",
+      isMobileVisible: true,
       valueGetter: (value: GetUOM) => value ? value.unit : '-',
     },
     {
@@ -46,6 +50,7 @@ export const UOMMatrixListCols = (): GridColDef[] => {
       width: 50,
       sortable: false,
       filterable: false,
+      isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
         <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
           <Edit color="secondary" />

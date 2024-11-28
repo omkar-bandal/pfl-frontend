@@ -1,4 +1,54 @@
 export declare const useAppSelector: import('react-redux').UseSelector<{
+    formContainer: {
+        openDrawer: boolean;
+        openFor: "create" | "update";
+        dataId: string;
+    };
+    customerData: {
+        customers: import('../../../../../api/admin_api/src/index.ts').GetCustomer[];
+    };
+    vendorData: {
+        allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[] | [];
+        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | null | undefined;
+    };
+    vendorCategoryData: {
+        allVendorCategories: import('../../../../../api/admin_api/src/index.ts').GetVendorCategory[];
+        selectedVendorCategory: import('../../../../../api/admin_api/src/index.ts').GetVendorCategory | null;
+    };
+    employeeData: {
+        employees: import('../../../../../api/admin_api/src/index.ts').GetEmployee[];
+    };
+    farmerData: {
+        allFarmers: import('../../../../../api/admin_api/src/index.ts').GetFarmer[];
+        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | null | undefined;
+    };
+    productData: {
+        allProducts: import('../../../../../api/admin_api/src/index.ts').GetProduct[];
+        selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | null | undefined;
+        productCat: import('../../../../../api/admin_api/src/index.ts').GetProductCategory[];
+        productSubCat: import('../../../../../api/admin_api/src/index.ts').GetProductSubcategory[];
+    };
+    uomData: {
+        allUOMs: import('../../../../../api/admin_api/src/index.ts').GetUOM[];
+        selectedUOM: import('../../../../../api/admin_api/src/index.ts').GetUOM | undefined;
+        allUOMConvMat: import('../../../../../api/admin_api/src/index.ts').GetUOMConversionMatrix[];
+        selectedUOMConvMat: import('../../../../../api/admin_api/src/index.ts').GetUOMConversionMatrix | undefined;
+    };
+    officesData: {
+        offices: import('../../../../../api/admin_api/src/index.ts').GetOffices[];
+        officeType: import('../../../../../api/admin_api/src/index.ts').OfficeType;
+        selectedOffices: import('../../../../../api/admin_api/src/index.ts').GetOffices | undefined;
+    };
+    branchesData: {
+        branches: import('../../../../../api/admin_api/src/index.ts').GetBranches[] | undefined;
+        BranchType: import('../../../../../api/admin_api/src/index.ts').BranchType;
+        selectedBranches: import('../../../../../api/admin_api/src/index.ts').GetBranches | undefined;
+    };
+    alertSnackbar: {
+        open: boolean;
+        message: string;
+        severity: "success" | "error";
+    };
     rfpaData: {
         rfpa: import('../../../../../api/purchase_api/src/index.ts').GetRFPA[];
         selectedRFPA: import('../../../../../api/purchase_api/src/index.ts').GetRFPA | undefined;
@@ -58,51 +108,5 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
         isOpen: boolean;
         severity: "success" | "error";
         message: string;
-    };
-    formContainer: {
-        openDrawer: boolean;
-        openFor: "create" | "update";
-        dataId: string;
-    };
-    customerData: {
-        customers: import('../../../../../api/admin_api/src/index.ts').GetCustomer[];
-    };
-    vendorData: {
-        allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[] | [];
-        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | null | undefined;
-    };
-    employeeData: {
-        employees: import('../../../../../api/admin_api/src/index.ts').GetEmployee[];
-    };
-    farmerData: {
-        allFarmers: import('../../../../../api/admin_api/src/index.ts').GetFarmer[];
-        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | null | undefined;
-    };
-    productData: {
-        allProducts: import('../../../../../api/admin_api/src/index.ts').GetProduct[];
-        selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | null | undefined;
-        productCat: import('../../../../../api/admin_api/src/index.ts').GetProductCategory[];
-        productSubCat: import('../../../../../api/admin_api/src/index.ts').GetProductSubcategory[];
-    };
-    uomData: {
-        allUOMs: import('../../../../../api/admin_api/src/index.ts').GetUOM[];
-        selectedUOM: import('../../../../../api/admin_api/src/index.ts').GetUOM | undefined;
-        allUOMConvMat: import('../../../../../api/admin_api/src/index.ts').GetUOMConversionMatrix[];
-        selectedUOMConvMat: import('../../../../../api/admin_api/src/index.ts').GetUOMConversionMatrix | undefined;
-    };
-    officesData: {
-        offices: import('../../../../../api/admin_api/src/index.ts').GetOffices[];
-        officeType: import('../../../../../api/admin_api/src/index.ts').OfficeType;
-        selectedOffices: import('../../../../../api/admin_api/src/index.ts').GetOffices | undefined;
-    };
-    branchesData: {
-        branches: import('../../../../../api/admin_api/src/index.ts').GetBranches[] | undefined;
-        BranchType: import('../../../../../api/admin_api/src/index.ts').BranchType;
-        selectedBranches: import('../../../../../api/admin_api/src/index.ts').GetBranches | undefined;
-    };
-    alertSnackbar: {
-        open: boolean;
-        message: string;
-        severity: "success" | "error";
     };
 }>;

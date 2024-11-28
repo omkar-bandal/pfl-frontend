@@ -1,11 +1,12 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
 import { AddCard, Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const GRNListCols = (): GridColDef[] => {
+export const GRNListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
     const handlePaymentReq = (status: string, id: string) => {
         if(status === "approved")
@@ -18,7 +19,8 @@ export const GRNListCols = (): GridColDef[] => {
             headerName: "GRN Number",
             width: 130,
             align: "center",
-            headerAlign: "center"
+            headerAlign: "center",
+            isMobileVisible: true,
         },
         {
             field: "billNo",
@@ -106,6 +108,7 @@ export const GRNListCols = (): GridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => {
                 switch (params.row.approvalStatus) {
                     case "pending": return <Chip label={params.row.approvalStatus} color="default" size="small" sx={{ width: 80 }} />;
@@ -134,6 +137,7 @@ export const GRNListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="payment_req" onClick={() => handlePaymentReq(params.row.approvalStatus, params.row.id)}>
                     <AddCard color="info" />
@@ -146,6 +150,7 @@ export const GRNListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)}>
                     <Edit color="secondary" />
@@ -158,6 +163,7 @@ export const GRNListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.id}`)}>
                     <Preview color="primary" />

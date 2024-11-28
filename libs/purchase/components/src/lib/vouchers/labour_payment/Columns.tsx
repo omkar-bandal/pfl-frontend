@@ -1,11 +1,12 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
 import { Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const LPVoucherListCols = (): GridColDef[] => {
+export const LPVoucherListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
 
     return ([
@@ -15,7 +16,8 @@ export const LPVoucherListCols = (): GridColDef[] => {
             headerName: "Voucher Number",
             width: 130,
             align: "center",
-            headerAlign: "center"
+            headerAlign: "center",
+            isMobileVisible: true,
         },
         // {
         //     field: "createdAt",
@@ -206,6 +208,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_LABOUR_CASH_VOUCHER}/${params.row.id}`)}>
                     <Edit color="secondary" />
@@ -218,6 +221,7 @@ export const LPVoucherListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_LABOUR_CASH_VOUCHER}/${params.row.id}`)}>
                     <Preview color="primary" />

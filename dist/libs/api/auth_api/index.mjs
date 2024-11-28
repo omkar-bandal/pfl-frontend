@@ -4041,7 +4041,7 @@ oe.default = oe;
 const uo = {
   //Authentication
   BASE_URL: "http://ec2-3-109-211-250.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://66da-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://c83c-182-156-141-17.ngrok-free.app",
 }, Ur = oe.create({
   baseURL: uo.BASE_URL,
   withCredentials: !0,

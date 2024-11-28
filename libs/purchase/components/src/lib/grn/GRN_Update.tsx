@@ -108,6 +108,7 @@ export const GRNUpdate = () => {
                         <>
                             <Notification />
                             <Formik
+                                enableReinitialize={true}
                                 initialValues={selectedGRN}
                                 onSubmit={(values) => {
                                     console.log("GRN FORM VALUES : ", values);

@@ -82,11 +82,19 @@ export const AdminRoutes = [
                 element: <VendorCatForm />
             },
             {
+                path: `${ADMIN_ROUTES.UPDATE_VENDORS_CAT}/:id`,
+                element: <VendorCatForm />
+            },
+            {
                 path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
                 element: <VendorCatTable />
             },
             {
                 path: ADMIN_ROUTES.CREATE_VENDORS_SUBCAT,
+                element: <VendorSubcatForm />
+            },
+            {
+                path: `${ADMIN_ROUTES.UPDATE_VENDORS_SUBCAT}/:id`,
                 element: <VendorSubcatForm />
             },
             {

@@ -54,6 +54,7 @@ export const DeliveryChallanUpdate = () => {
                     <>
                         <Notification />
                         <Formik
+                            enableReinitialize={true}
                             initialValues={dcValues}
                             // validationSchema={deliveryChallanSchema}
                             onSubmit={(values) => {

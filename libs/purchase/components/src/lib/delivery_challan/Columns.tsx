@@ -1,11 +1,12 @@
 import { Edit, Preview } from "@mui/icons-material";
 import { Chip, IconButton } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 
-export const DeliveryChallanListCols = (): GridColDef[] => {
+export const DeliveryChallanListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
     return ([
         { field: "id", headerName: "ID", width: 30 },
@@ -15,6 +16,7 @@ export const DeliveryChallanListCols = (): GridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
+            isMobileVisible: true,
         },
         {
             field: "deliveryCType",
@@ -191,6 +193,7 @@ export const DeliveryChallanListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: this,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_DELIVERY_CHALLAN}/${params.row.id}`)}>
                     <Edit color="secondary" />
@@ -203,6 +206,7 @@ export const DeliveryChallanListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/${params.row.id}`)}>
                     <Preview color="primary" />

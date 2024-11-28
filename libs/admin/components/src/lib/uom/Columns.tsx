@@ -1,12 +1,13 @@
 import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
 import { hideNotification } from "@prime-fresh/modules";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export const UOMListCols = (): GridColDef[] => {
+export const UOMListCols = (): CustomGridColDef[] => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleEdit = (rowId: string) => {
@@ -20,6 +21,7 @@ export const UOMListCols = (): GridColDef[] => {
       field: "unit",
       headerName: "UOM Name",
       width: 150,
+      isMobileVisible: true,
     },
     {
       field: "abbreviation",
@@ -27,6 +29,7 @@ export const UOMListCols = (): GridColDef[] => {
       width: 150,
       align: "center",
       headerAlign: "center",
+      isMobileVisible: true,
     },
     {
       field: "description",
@@ -39,6 +42,7 @@ export const UOMListCols = (): GridColDef[] => {
       width: 50,
       sortable: false,
       filterable: false,
+      isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
         <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
           <Edit color="secondary" />

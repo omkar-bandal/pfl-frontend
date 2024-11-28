@@ -1,12 +1,13 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Preview, Edit } from '@mui/icons-material';
+import { GridRenderCellParams } from "@mui/x-data-grid";
+import { Preview } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { Address } from "@prime-fresh/admin_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 // import { Address } from "../../api/admin/models";
 
-export const FarmerListCols = (): GridColDef[] => {
+export const FarmerListCols = (): CustomGridColDef[] => {
   const navigate = useNavigate();
   return [
     { field: "id", headerName: "ID", width: 30 },
@@ -14,6 +15,7 @@ export const FarmerListCols = (): GridColDef[] => {
       field: "farmerName",
       headerName: "Name",
       width: 250,
+      isMobileVisible: true,
       valueGetter: (value, row)=>{
         console.log(value);
         return `${row.farmerfName || ''} ${row.farmermName || ''} ${row.farmerlName || ''}`
@@ -123,6 +125,7 @@ export const FarmerListCols = (): GridColDef[] => {
       width: 50,
       sortable: false,
       filterable: false,
+      isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
           <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_FARMER}/${params.row.id}`)}>
             <Preview color="primary" />

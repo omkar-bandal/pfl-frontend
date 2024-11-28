@@ -1,12 +1,13 @@
 import { DynamicForm, Notification } from '@prime-fresh/ui_shared';
 import { FarmerFormFields } from './farmerFormField';
-import { ADMIN_ROUTES, farmerValidationSchema } from '@prime-fresh/admin/modules';
+import { ADMIN_ROUTES} from '@prime-fresh/admin/modules';
 import { useCreateFarmer, ADMIN_API_URL, PostFarmer } from '@prime-fresh/admin_api';
 import { initValFarmer } from './initValFarmer';
 import { useNavigate } from 'react-router-dom';
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useDispatch } from 'react-redux';
 import { showNotification } from '@prime-fresh/modules';
+import { farmerValidationSchema } from './farmer.schema';
 
 export const FarmerForm = () => {
   const navigate = useNavigate();
@@ -43,4 +44,3 @@ export const FarmerForm = () => {
     </>
   )
 }
-

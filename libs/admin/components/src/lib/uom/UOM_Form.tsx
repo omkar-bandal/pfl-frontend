@@ -41,21 +41,20 @@ export const UOMForm = () => {
                 dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
             }))
     };
-    if (isLoading) {
-        return (
-            <Box sx={{ flex: 1 }}>
-                <LinearProgress />
-            </Box>
-        )
-    }
+    
     return (
         <>
+            {isLoading ? (
+                <Box sx={{ flex: 1 }}>
+                    <LinearProgress />
+                </Box>
+            ) :
+                (<DynamicForm<PostUOM>
+                    schema={uomFormFields()}
+                    validationSchema={uomSchema}
+                    initialValues={UOMsInitValue ? UOMsInitValue : initValUOM}
+                    handleSubmit={handleSubmit} />)}
             <Notification />
-            <DynamicForm<PostUOM>
-                schema={uomFormFields()}
-                validationSchema={uomSchema}
-                initialValues={UOMsInitValue ? UOMsInitValue : initValUOM}
-                handleSubmit={handleSubmit} />
         </>
     )
 }

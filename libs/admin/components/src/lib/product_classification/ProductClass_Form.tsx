@@ -46,21 +46,25 @@ export function ProductClassForm() {
             dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
         }));
     }
-    if(isLoading){
-        return(
-            <Box sx={{flex: 1}}>
-                <LinearProgress />
-            </Box>
-        )
+    if (isLoading) {
+        return
     }
     return (
         <>
+            {isLoading ?
+                (
+                    <Box sx={{ flex: 1 }}>
+                        <LinearProgress />
+                    </Box>
+                ) :
+                (
+                    <DynamicForm<PostProductClassification>
+                        schema={productClassFormFields()}
+                        validationSchema={productClassificationSchema}
+                        initialValues={productClassVal}
+                        handleSubmit={handleSubmit} />
+                )}
             <Notification />
-            <DynamicForm<PostProductClassification>
-                schema={productClassFormFields()}
-                validationSchema={productClassificationSchema}
-                initialValues={productClassVal}
-                handleSubmit={handleSubmit} />
         </>
     )
 }

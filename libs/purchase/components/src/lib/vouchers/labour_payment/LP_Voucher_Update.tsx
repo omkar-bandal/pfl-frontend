@@ -62,6 +62,7 @@ export const LabourPaymentVoucherUpdate = () => {
                     <>
                         <Notification />
                         <Formik
+                            enableReinitialize={true}
                             initialValues={lpVoucherValues}
                             validationSchema={labourPaymentVoucherSchema}
                             onSubmit={(values) => {

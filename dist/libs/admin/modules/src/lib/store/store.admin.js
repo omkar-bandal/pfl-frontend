@@ -8,6 +8,7 @@ exports.storeAdmin = (0, toolkit_1.configureStore)({
         formContainer: slices_1.formContainerReducer,
         customerData: slices_1.customerDataReducer,
         vendorData: slices_1.vendorDataReducer,
+        vendorCategoryData: slices_1.vendorCategoryDataReducer,
         employeeData: slices_1.employeeDataReducer,
         farmerData: slices_1.farmerDataReducer,
         productData: slices_1.productDataReducer,

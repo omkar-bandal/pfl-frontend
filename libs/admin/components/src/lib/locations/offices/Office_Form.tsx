@@ -59,21 +59,22 @@ export const OfficeForm = () => {
         });
         console.log(values);
     }
-    if (isLoading) {
-        return (
-            <Box sx={{ flex: 1 }}>
-                <LinearProgress />
-            </Box>
-        )
-    }
+    
     return (
         <>
+            {isLoading ? (
+                <Box sx={{ flex: 1 }}>
+                    <LinearProgress />
+                </Box>
+            ) :
+                (
+                    <DynamicForm<PostOffices>
+                        schema={OfficesFormFields(openFor)}
+                        initialValues={openFor === "create" ? generateInitialValues(OfficesFormFields(openFor).fields) : officeData}
+                        validationSchema={officeValidationSchema}
+                        handleSubmit={openFor === 'update' ? handleUpdate : handleCreate} />
+                )}
             <Notification />
-            <DynamicForm<PostOffices>
-                schema={OfficesFormFields(openFor)}
-                initialValues={openFor === "create" ? generateInitialValues(OfficesFormFields(openFor).fields) : officeData}
-                validationSchema={officeValidationSchema}
-                handleSubmit={openFor === 'update' ? handleUpdate : handleCreate} />
         </>
     )
 }

@@ -23,8 +23,12 @@ export declare const ADMIN_API_URL: {
     UPDATE_VENDOR: string;
     GET_ALL_VENDOR_CAT: string;
     CREATE_VENDOR_CAT: string;
+    GET_A_VENDOR_CAT: string;
+    UPDATE_VENDOR_CAT: string;
     GET_ALL_VENDOR_SUBCAT: string;
     CREATE_VENDOR_SUBCAT: string;
+    GET_A_VENDOR_SUBCAT: string;
+    UPDATE_VENDOR_SUBCAT: string;
     GET_ALL_PRODUCTS: string;
     GET_A_PRODUCTS: string;
     CREATE_PRODUCTS: string;

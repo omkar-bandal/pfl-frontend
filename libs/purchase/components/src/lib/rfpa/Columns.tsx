@@ -1,11 +1,12 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
 import { Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const RFPAListCols = (): GridColDef[] => {
+export const RFPAListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
 
     return ([
@@ -15,7 +16,8 @@ export const RFPAListCols = (): GridColDef[] => {
             headerName: "RFPA Number",
             width: 130,
             align: "center",
-            headerAlign: "center"
+            headerAlign: "center",
+            isMobileVisible: true,
         },
         {
             field: "createdDate",
@@ -113,6 +115,7 @@ export const RFPAListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_RFPA}/${params.row.id}`)}>
                     <Edit color="secondary" />
@@ -125,6 +128,7 @@ export const RFPAListCols = (): GridColDef[] => {
             width: 50,
             sortable: false,
             filterable: false,
+            isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_RFPA}/${params.row.id}`)}>
                     <Preview color="primary" />

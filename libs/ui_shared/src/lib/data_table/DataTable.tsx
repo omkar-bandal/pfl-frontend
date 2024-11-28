@@ -1,23 +1,29 @@
-import { DataGrid, GridApi, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridApi } from "@mui/x-data-grid";
 import { CustomNoRowsOverlay } from "./components";
 import { useMediaQuery, useTheme } from "@mui/material";
+import { CustomGridColDef } from "./models/columntype.interface";
 interface DataGridProps<T> {
-  columns: GridColDef[];
+  columns: CustomGridColDef[];
   rows: T[] | undefined;
   loading: boolean
   apiRef: React.MutableRefObject<GridApi>
 }
 export const DataTable = <T extends { id: string | number }>({ columns, rows, apiRef, loading, ...rest }: DataGridProps<T>) => {
   const theme = useTheme();
+
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  // Filter columns for mobile view
+  const mobileColumns = isMobile ? columns.filter((col) => col.isMobileVisible) : columns;
+
   return (
     <div style={{ height: isMobile ? '100%' : 440, width: '100%' }}>
       <DataGrid
         loading={loading}
-        columns={isMobile ? columns.slice(0, 3) : columns}
+        columns={mobileColumns}
         rows={rows}
         apiRef={apiRef}
-        checkboxSelection = {false}
+        checkboxSelection={false}
         getRowId={(row) => row.id}
         disableRowSelectionOnClick
         pageSizeOptions={[5, 7, 10]}
@@ -48,7 +54,7 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
             fontSize: 14,
             // padding: isMobile ? '8px' : '16px',
           },
-          "--DataGrid-overlayHeight": "300px", 
+          "--DataGrid-overlayHeight": "300px",
         }}
         {...rest}
       />

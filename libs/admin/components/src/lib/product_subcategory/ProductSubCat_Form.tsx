@@ -15,8 +15,8 @@ export function ProductSubcatForm() {
 
     const ProductSubcatInitValue = subcategoryId === '' ? initValProductSubcat : subcategory;
 
-    const {data} = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
-    const categories = data ? data :[]
+    const { data } = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
+    const categories = data ? data : []
 
     const { mutateAsync: postProductSubcategory, error: postError, data: postRes } = useCreateProductSubcat(ADMIN_API_URL.CREATE_PRODUCT_SUBCATEGORY);
     const { mutateAsync: patchProductSubcategory, error: patchError, data: patchRes } = useUpdateProductSubcat(ADMIN_API_URL.UPDATE_PRODUCT_SUBCATEGORY, subcategoryId);
@@ -30,40 +30,39 @@ export function ProductSubcatForm() {
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("category", values.category);
-        subcategoryId === '' ? 
-        (postProductSubcategory(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Product subcategory created successfully !!!" }));
-            setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
-            }, 2000);
-        }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
-        })) 
-        : (patchProductSubcategory(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: patchRes ? patchRes.message : "Product subcategory updated successfully !!!" }));
-            setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
-            }, 2000);
-        }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
-        }));
+        subcategoryId === '' ?
+            (postProductSubcategory(formData).then(() => {
+                dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Product subcategory created successfully !!!" }));
+                setTimeout(() => {
+                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
+                }, 2000);
+            }).catch(() => {
+                dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+            }))
+            : (patchProductSubcategory(formData).then(() => {
+                dispatch(showNotification({ severity: 'success', message: patchRes ? patchRes.message : "Product subcategory updated successfully !!!" }));
+                setTimeout(() => {
+                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
+                }, 2000);
+            }).catch(() => {
+                dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
+            }));
 
     }
-    if(isLoading){
-        return(
-            <Box sx={{flex: 1}}>
-                <LinearProgress />
-            </Box>
-        )
-    }
+
     return (
         <>
+            {isLoading ?
+                (
+                    <Box sx={{ flex: 1 }}>
+                        <LinearProgress />
+                    </Box>) :
+                (<DynamicForm<PostProductSubcategory>
+                    schema={productSubcatFormFields(categories)}
+                    validationSchema={productSubcategorySchema}
+                    initialValues={ProductSubcatInitValue ? ProductSubcatInitValue : initValProductSubcat}
+                    handleSubmit={handleSubmit} />)}
             <Notification />
-            <DynamicForm<PostProductSubcategory>
-                schema={productSubcatFormFields(categories)}
-                validationSchema={productSubcategorySchema}
-                initialValues={ProductSubcatInitValue ? ProductSubcatInitValue : initValProductSubcat}
-                handleSubmit={handleSubmit} />
         </>
     )
 }

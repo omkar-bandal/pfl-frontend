@@ -103,6 +103,7 @@ export const RFPAUpdate = () => {
         <>
             <Notification />
             <Formik
+                enableReinitialize={true}
                 initialValues={rfpaValues}
                 // validationSchema={rfpaSchema}
                 onSubmit={(values) => {

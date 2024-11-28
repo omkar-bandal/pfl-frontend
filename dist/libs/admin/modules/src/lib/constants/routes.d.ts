@@ -17,8 +17,10 @@ export declare const ADMIN_ROUTES: {
     EDIT_VENDOR: string;
     GET_ALL_VENDORS_CAT: string;
     CREATE_VENDORS_CAT: string;
+    UPDATE_VENDORS_CAT: string;
     GET_ALL_VENDORS_SUBCAT: string;
     CREATE_VENDORS_SUBCAT: string;
+    UPDATE_VENDORS_SUBCAT: string;
     FARMER: string;
     GET_ALL_FARMERS: string;
     VIEW_FARMER: string;
