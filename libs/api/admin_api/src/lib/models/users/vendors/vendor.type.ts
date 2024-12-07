@@ -111,3 +111,12 @@ export type GetVendor = {
     ref2Address: Address;
     ref2Email: string;
   }
+
+  export type GetAllFilteredVendorData = {
+    id: string,
+    companyName: string,
+    officeContactNo: string,
+    email: string,
+    vendorCode: string,
+    officeAddress: Address
+  }

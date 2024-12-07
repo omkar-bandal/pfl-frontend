@@ -10,11 +10,11 @@ export interface RFPA_Items {
     unitPrice: number;
     totalVal: number;
     description: string;
-    purchaseDate: Date;
-    dispatchDate: Date;
-    deliveryDate: Date;
+    purchaseDate: string;
+    dispatchDate: string;
+    deliveryDate: string;
     deliveryLocation: string;
-    expectedHarvestDate?: Date;
+    expectedHarvestDate?: string;
 }
 export interface Payment_Info {
     paymentMode: string;
@@ -76,4 +76,10 @@ export interface ChangeStatusResponse {
         designation: string;
         department: string;
     }
+}
+
+export interface GetAllRFPAnumbers {
+    id: string;
+    rfpaId: string;
+    approvalStatus: string;
 }

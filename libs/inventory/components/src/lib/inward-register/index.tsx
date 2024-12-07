@@ -1,0 +1,1 @@
+export * from './inward-register-create.form';

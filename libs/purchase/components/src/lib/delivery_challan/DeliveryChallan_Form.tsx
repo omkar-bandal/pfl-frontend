@@ -3,11 +3,11 @@ import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC } from "@prime-fresh/purchase/modules";
-import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { PostDeliveryChallan, PURCHASE_API_URL, useCreateDeliveryChallan, useGetAllGRNNums } from "@prime-fresh/purchase_api";
 import { DeliveryChallanPreview } from "./DeliveryChallan_Preview";
 import { useDispatch } from "react-redux";
-import { setPreview, showNotification } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
 
@@ -22,27 +22,28 @@ export const DeliveryChallanForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePost(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Delivery challan created successfully !!!" }));
+      toast.success(Res? Res.message : "Delivery challan created.");
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN);
-      }, 5000);
+      }, 2500);
     }).catch(() => {
-      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+      toast.error(error? error.message : "Error while creating delivery challan.");
     });
   };
 
   return (
     <>
-      <Notification />
       <Formik
         initialValues={initValDeliveryChallan}
         validationSchema={deliveryChallanSchema}
+        validateOnBlur={true}
+        validateOnChange={true}
         onSubmit={(values) => {
           console.log(values);
           handleSubmit(values);
         }}
       >
-        {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => (
+        {({ values, handleChange, handleSubmit, setFieldValue, handleReset }) => (
           <form onSubmit={handleSubmit}>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} md={6}>
@@ -65,6 +66,7 @@ export const DeliveryChallanForm = () => {
                     color="secondary"
                     size="large"
                     sx={{ width: 150, marginLeft: 2 }}
+                    onClick={handleReset}
                   >
                     Reset
                   </Button>
@@ -82,9 +84,7 @@ export const DeliveryChallanForm = () => {
                   label="Challan Type"
                   options={PURCHASE_ARRAYS.deliveryChallanType}
                   value={values.deliveryCType}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                  handleChange={handleChange} />
               </Grid>
               {values.deliveryCType === "Other" ?
                 (<Grid item xs={12}>
@@ -93,9 +93,7 @@ export const DeliveryChallanForm = () => {
                     name="otherCType"
                     label="If other please specify "
                     type="text" value={values.otherCType}
-                    handleChange={handleChange}
-                    touched={touched}
-                    errors={errors} />
+                    handleChange={handleChange}/>
                 </Grid>) : ('')}
               <Grid item xs={12} md={3}>
                 <SelectInput
@@ -113,9 +111,7 @@ export const DeliveryChallanForm = () => {
                   label="Company Name"
                   value={values.companyName}
                   options={PURCHASE_ARRAYS.companyNames}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={5}>
                 <TextInput
@@ -124,9 +120,7 @@ export const DeliveryChallanForm = () => {
                   label="Party Name"
                   type="text"
                   value={values.partyName}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <FieldArray name="items">
@@ -158,10 +152,7 @@ export const DeliveryChallanForm = () => {
                               name={`items.${index}.itemName`}
                               label="Name"
                               value={item.itemName}
-                              handleChange={handleChange}
-                              touched={touched}
-                              errors={errors}
-                            />
+                              handleChange={handleChange}/>
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
@@ -170,10 +161,7 @@ export const DeliveryChallanForm = () => {
                               name={`items.${index}.itemQty`}
                               label="Quantity"
                               value={item.itemQty}
-                              handleChange={handleChange}
-                              touched={touched}
-                              errors={errors}
-                            />
+                              handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
@@ -182,10 +170,7 @@ export const DeliveryChallanForm = () => {
                               name={`items.${index}.rate`}
                               label="Rate"
                               value={item.rate}
-                              handleChange={handleChange}
-                              touched={touched}
-                              errors={errors}
-                            />
+                              handleChange={handleChange}/>
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
@@ -194,20 +179,11 @@ export const DeliveryChallanForm = () => {
                               name={`items.${index}.amt`}
                               label="Amount"
                               value={item.amt}
-                              handleChange={handleChange}
-                            />
+                              handleChange={handleChange}/>
                           </Grid>
                         </Grid>
                       ))}
-                      <Grid
-                        item
-                        xs={12}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "end",
-                        }}
-                      >
+                      <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
                         <Button
                           variant="text"
                           startIcon={<Add />}
@@ -227,8 +203,7 @@ export const DeliveryChallanForm = () => {
                   name="totAmt"
                   label="Total Amount"
                   value={values.totAmt}
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={5}>
                 <TextInput
@@ -237,10 +212,7 @@ export const DeliveryChallanForm = () => {
                   name="fromLocation"
                   label="From"
                   value={values.fromLocation}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange}/>
               </Grid>
               <Grid item xs={12} md={5}>
                 <TextInput
@@ -249,10 +221,7 @@ export const DeliveryChallanForm = () => {
                   name="toLocation"
                   label="To"
                   value={values.toLocation}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -261,10 +230,7 @@ export const DeliveryChallanForm = () => {
                   name="driverName"
                   label="Driver Name"
                   value={values.driverName}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -273,10 +239,7 @@ export const DeliveryChallanForm = () => {
                   name="contactNo"
                   label="Contact No"
                   value={values.contactNo}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -295,10 +258,7 @@ export const DeliveryChallanForm = () => {
                   name="vehicleNo"
                   label="Vehicle No"
                   value={values.vehicleNo}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -307,10 +267,7 @@ export const DeliveryChallanForm = () => {
                   name="receiverName"
                   label="Receiver Name"
                   value={values.receiverName}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput
@@ -319,10 +276,7 @@ export const DeliveryChallanForm = () => {
                   name="rmn"
                   label="RM Name"
                   value={values.rmn}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors}
-                />
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <TextInput

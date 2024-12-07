@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react';
 import { FormControl, Grid, MenuItem, Select, Typography, SelectProps, FormHelperText, SelectChangeEvent } from '@mui/material';
-import { FormikErrors, FormikTouched } from 'formik';
+import { FormikErrors, FormikTouched, useField } from 'formik';
 
 type SelectInputProps = SelectProps & {
   isRequired: boolean;
   label: string;
   name: string;
   value: string | number | undefined | null;
-  options: Array<{ label: string; value: string }> | undefined;
+  options: Array<{ label: string | number; value: string | number }> | undefined;
   handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   touched?: FormikTouched<{ [key: string]: any }>;
@@ -38,11 +38,11 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   ...otherProps
 }) => {
   // Ensure helperText is a string or undefined
-  const getHelperText = () => {
-    const error = errors[name];
-    return typeof error === 'string' ? error : undefined;
-  };
-
+  // const getHelperText = () => {
+  //   const error = errors[name];
+  //   return typeof error === 'string' ? error : undefined;
+  // };
+  const [field, meta] = useField(name);
   return (
     <Grid container direction="column">
       <Grid item xs={12}>
@@ -56,12 +56,12 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <FormControl fullWidth error={Boolean(touched[name] && errors[name])}>
+        <FormControl fullWidth error={meta.touched && Boolean(meta.error)} {...field}>
           <Select
             id={name}
             name={name}
             size="small"
-            value={value ?? ''} // Ensure null or undefined values are handled
+            value={value ?? ''}
             onChange={handleChange}
             MenuProps={MenuProps}
             {...otherProps}
@@ -75,8 +75,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             </MenuItem>)}
           </Select>
           {/* Display error message */}
-          {touched[name] && getHelperText() && (
-            <FormHelperText>{getHelperText()}</FormHelperText>
+          {meta.touched && Boolean(meta.error) && (
+            <FormHelperText>{meta.error}</FormHelperText>
           )}
         </FormControl>
       </Grid>

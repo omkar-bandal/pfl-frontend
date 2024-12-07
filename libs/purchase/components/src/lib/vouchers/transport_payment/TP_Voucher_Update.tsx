@@ -1,17 +1,10 @@
-import {
-  Box,
-  Button,
-  Grid,
-  LinearProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, LinearProgress, Stack, Typography } from "@mui/material";
 import { PURCHASE_API_URL, useGetAllGRNNums, useGetTPVoucher, useUpdateTPVoucher } from "@prime-fresh/purchase_api";
 import { initValTransportPaymentVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
-import { ImageUpload, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
-import { setPreview, showNotification } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./TP_Voucher_Preview";
 import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
@@ -32,12 +25,12 @@ export const TransportPaymentVoucherUpdate = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePatch(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Transport payment voucher updated successfully !!!" }));
+      toast.success(Res? Res.message: "Voucher updating.")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_TRANSPORT_CASH_VOUCHER);
-      }, 5000);
+      }, 2500);
     }).catch(() => {
-      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+      toast.error(error? error.message : "Error while updating voucher.");
     });;
   };
   return (
@@ -46,10 +39,7 @@ export const TransportPaymentVoucherUpdate = () => {
         (<Box sx={{ flex: 1 }} >
           <LinearProgress />
         </Box >) :
-        (
-          <>
-            <Notification />
-            <Formik
+        (<Formik
               enableReinitialize={true}
               initialValues={tpVoucherValues}
               onSubmit={(values) => {
@@ -305,8 +295,7 @@ export const TransportPaymentVoucherUpdate = () => {
                   </Grid>
                 </form>
               )}
-            </Formik>
-          </>)}
+            </Formik>)}
       <TPVoucherPreview />
     </>
   );

@@ -5,11 +5,9 @@ import {
     useGetAProductClassification,
     useUpdateProductClassification
 } from "@prime-fresh/admin_api";
-import { DynamicForm, Notification } from "@prime-fresh/ui_shared";
+import { DynamicForm, toast } from "@prime-fresh/ui_shared";
 import { productClassFormFields } from "./productClassFormFields";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { showNotification } from "@prime-fresh/modules";
 import { ADMIN_ROUTES, initValProductClass, productClassificationSchema } from "@prime-fresh/admin/modules";
 import { Box, LinearProgress } from "@mui/material";
 
@@ -22,7 +20,6 @@ export function ProductClassForm() {
     const { mutateAsync: postProductClassification, error: postError, data: postRes } = useCreateProductClassification(ADMIN_API_URL.CREATE_PRODUCT_CLASSIFICATION);
     const { mutateAsync: patchProductClassification, error: patchError, data: patchRes } = useUpdateProductClassification(ADMIN_API_URL.UPDATE_PRODUCT_CLASSIFICATION, classificationId);
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,41 +27,36 @@ export function ProductClassForm() {
         console.log(values);
         const formData = new FormData();
         formData.append("name", values.name)
-        classificationId === "" ? (postProductClassification(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Product classification created successfully !!!" }));
-            setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
-            }, 2000);
-        }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
-        })) : (patchProductClassification(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: patchRes ? patchRes.message : "Product classification updated successfully !!!" }));
-            setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
-            }, 2000);
-        }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
-        }));
-    }
-    if (isLoading) {
-        return
+        classificationId === "" ?
+            (postProductClassification(formData).then(() => {
+                toast.success(postRes ? postRes.message : "Product Classification Created")
+                setTimeout(() => {
+                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
+                }, 2000);
+            }).catch(() => {
+                toast.error(`Error: ${postError?.message}`)
+            })) : (patchProductClassification(formData).then(() => {
+                toast.success(patchRes ? patchRes.message : "Product Classification Updated");
+                setTimeout(() => {
+                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
+                }, 2000);
+            }).catch(() => {
+                toast.error(`Error: ${patchError?.message}`)
+            }));
     }
     return (
-        <>
-            {isLoading ?
-                (
-                    <Box sx={{ flex: 1 }}>
-                        <LinearProgress />
-                    </Box>
-                ) :
-                (
-                    <DynamicForm<PostProductClassification>
-                        schema={productClassFormFields()}
-                        validationSchema={productClassificationSchema}
-                        initialValues={productClassVal}
-                        handleSubmit={handleSubmit} />
-                )}
-            <Notification />
-        </>
+        isLoading ?
+            (
+                <Box sx={{ flex: 1 }}>
+                    <LinearProgress />
+                </Box>
+            ) :
+            (
+                <DynamicForm<PostProductClassification>
+                    schema={productClassFormFields()}
+                    validationSchema={productClassificationSchema}
+                    initialValues={productClassVal}
+                    handleSubmit={handleSubmit} />
+            )
     )
 }

@@ -34,3 +34,13 @@ export type GetFarmer = {
     farmerGrading: string;
     farmerType: string;
 } & PostFarmer;
+export type GetAllFilteredFarmerData = {
+    id: string;
+    fullName: string;
+    primaryMobileNo: string;
+    secondaryMobileNo: string;
+    email: string;
+    farmerCode: string;
+    residensialAddress: Address;
+    farmAddress: Address;
+};

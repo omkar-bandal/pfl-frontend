@@ -8,8 +8,8 @@ type SelectInputProps = SelectProps & {
     name: string;
     value: string | number | undefined | null;
     options: Array<{
-        label: string;
-        value: string;
+        label: string | number;
+        value: string | number;
     }> | undefined;
     handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined;
     touched?: FormikTouched<{

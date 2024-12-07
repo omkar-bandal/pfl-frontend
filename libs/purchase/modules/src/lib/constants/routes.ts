@@ -1,5 +1,5 @@
 export const PURCHASE_ROUTES = {
-   //Admin
+   //Purchase
    PURCHASE: "/purchase",
  
    //Dashboard

@@ -9,10 +9,10 @@ export const initValRFPAItems: RFPA_Items = {
     totalVal: 0,
     description: '',
     deliveryLocation: '',
-    purchaseDate: new Date(2024, 11, 11),
-    dispatchDate: new Date(2024, 11, 11),
-    deliveryDate: new Date(2024, 11, 11),
-    expectedHarvestDate: new Date(2024, 11, 11),
+    purchaseDate: '',
+    dispatchDate: '',
+    deliveryDate: '',
+    expectedHarvestDate: '',
 }
 const initValPaymentInfo: Payment_Info = {
     paymentMode: '',

@@ -17,10 +17,12 @@ export declare const ADMIN_API_URL: {
     POST_FARMER: string;
     UPDATE_FARMER: string;
     GET_A_FARMER: string;
+    GET_ALL_FARMERS_FILTERED: string;
     GET_ALL_VENDORS: string;
     GET_A_VENDOR: string;
     POST_VENDOR: string;
     UPDATE_VENDOR: string;
+    GET_ALL_VENDOR_FILTERED: string;
     GET_ALL_VENDOR_CAT: string;
     CREATE_VENDOR_CAT: string;
     GET_A_VENDOR_CAT: string;

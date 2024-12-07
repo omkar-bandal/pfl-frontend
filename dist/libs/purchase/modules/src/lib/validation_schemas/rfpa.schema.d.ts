@@ -4,6 +4,17 @@ export declare const rfpaSchema: yup.ObjectSchema<{
     purchaseLocation: string;
     purchaseForWhich: string;
     selectedParty: string;
+    rfpaProducts: {
+        expectedHarvestDate?: Date | null | undefined;
+        product: string;
+        grade: string;
+        quantity: number;
+        unitPrice: number;
+        purchaseDate: Date;
+        dispatchDate: Date;
+        deliveryDate: Date;
+        deliveryLocation: string;
+    }[];
     paymentInfo: {
         paymentMode: string;
         creditPeriod: number;
@@ -16,6 +27,7 @@ export declare const rfpaSchema: yup.ObjectSchema<{
     purchaseLocation: undefined;
     purchaseForWhich: undefined;
     selectedParty: undefined;
+    rfpaProducts: "";
     paymentInfo: {
         paymentMode: undefined;
         creditPeriod: undefined;

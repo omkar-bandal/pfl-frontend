@@ -2,10 +2,10 @@ import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema } from "@prime-fresh/purchase/modules";
-import { ImageUpload, mapToValueLabelArray, Notification, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { ImageUpload, mapToValueLabelArray, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Particulars, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher, useGetAllDeliveryChallanNums, useGetAllGRNNums } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./MC_Voucher_Preview";
-import { setPreview, showNotification } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
@@ -36,28 +36,28 @@ export const MultipleCashVoucherForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePost(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher created successfully !!!" }));
+      toast.success(Res? Res.message : "Voucher created.")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER);
-      }, 5000);
+      }, 2500);
     }).catch(() => {
-      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+      toast.error(error? error.message : "Error while creating voucher")
     });;
   };
 
   return (
     <>
-      <Notification />
       <Formik
         initialValues={initValMMultipleCashVoucher}
         validationSchema={multicashVoucherSchema}
         validateOnBlur={true}
+        validateOnChange={true}
         onSubmit={(values) => {
           console.log(values);
           handleSubmit(values);
         }}
       >
-        {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => (
+        {({ values, handleChange, handleSubmit, setFieldValue, handleReset }) => (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Grid container columnSpacing={2} rowSpacing={2} padding={1}>
               <Grid item xs={12} md={6}>
@@ -66,7 +66,7 @@ export const MultipleCashVoucherForm = () => {
               <Grid item xs={12} md={6}>
                 <Stack direction="row" justifyContent="end" alignItems="center">
                   <Button type="submit" variant="contained" color="success" size="large" sx={{ width: 150 }}>Create</Button>
-                  <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, marginLeft: 2 }}>Reset</Button>
+                  <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, marginLeft: 2 }} onClick={handleReset}>Reset</Button>
                   <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => dispatch(setPreview(true))}>Preview</Button>
                 </Stack>
               </Grid>
@@ -78,8 +78,7 @@ export const MultipleCashVoucherForm = () => {
                   options={mapToValueLabelArray(allGRNNums, 'id', 'grnNo')}
                   value={values.grnNo}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                  />
               </Grid>
               <Grid item xs={12} md={4}>
                 <SelectInput
@@ -89,8 +88,7 @@ export const MultipleCashVoucherForm = () => {
                   options={mapToValueLabelArray(allDCNums, 'id', 'challanNo')}
                   value={values.challanNo}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                  />
               </Grid>
               <Grid item xs={12} md={4}>
                 <SelectInput
@@ -100,8 +98,7 @@ export const MultipleCashVoucherForm = () => {
                   options={PURCHASE_ARRAYS.companyNames}
                   value={values.companyName}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                 />
               </Grid>
               <Grid item xs={12} md={5}>
                 <TextInput
@@ -111,8 +108,7 @@ export const MultipleCashVoucherForm = () => {
                   label="Debit / Credit To"
                   value={values.debitCreditTo}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                />
               </Grid>
               <Grid item xs={12} md={5}>
                 <TextInput
@@ -122,8 +118,7 @@ export const MultipleCashVoucherForm = () => {
                   label="Pay To / Received From"
                   value={values.payReceivedFrom}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                />
               </Grid>
               <Grid item xs={12} md={2}>
                 <TextInput
@@ -133,8 +128,7 @@ export const MultipleCashVoucherForm = () => {
                   label="Location"
                   value={values.location}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                />
               </Grid>
               <Grid item xs={12}>
                 <FieldArray name="particulars">
@@ -157,8 +151,6 @@ export const MultipleCashVoucherForm = () => {
                               label="Description"
                               value={values.particulars[index].description}
                               handleChange={handleChange}
-                              touched={touched.particulars ? touched.particulars[index] : touched}
-                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={2}>
@@ -170,8 +162,6 @@ export const MultipleCashVoucherForm = () => {
                               value={values.particulars[index].amt}
                               handleChange={handleChange}
                               onBlur={() => calculateAmounts(values, setFieldValue)}
-                              touched={touched.particulars ? touched.particulars[index] : touched}
-                              errors={errors}
                             />
                           </Grid>
                           <Grid item xs={12} md={1} sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
@@ -196,8 +186,7 @@ export const MultipleCashVoucherForm = () => {
                   options={PURCHASE_ARRAYS.paymentMode}
                   value={values.paymentMode}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                />
               </Grid>
               <Grid item xs={12} md={2}>
                 <TextInput
@@ -226,8 +215,7 @@ export const MultipleCashVoucherForm = () => {
                   label="Receiver Name"
                   value={values.receiverName}
                   handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextInput

@@ -22,18 +22,29 @@ export type PostFarmer = {
     totalLandArea: number;
     cultivationArea: number;
     sevenTwelveNo: string;
-    sevenTwelveCopy: string; 
-    farmerPhoto:File | null;
-    farmPhoto:File | null;
+    sevenTwelveCopy: string;
+    farmerPhoto: File | null;
+    farmPhoto: File | null;
     crops: PostCrops[];
     dateOfVisit: string;
-    registerBy:string;
-    registerDate:string;   
+    registerBy: string;
+    registerDate: string;
 }
 
-export type GetFarmer  = {
-    id: string, 
+export type GetFarmer = {
+    id: string,
     farmerCode: string;
     farmerGrading: string;
-    farmerType: string; 
+    farmerType: string;
 } & PostFarmer;
+
+export type GetAllFilteredFarmerData = {
+    id: string,
+    fullName: string,
+    primaryMobileNo: string,
+    secondaryMobileNo: string,
+    email: string,
+    farmerCode: string,
+    residensialAddress: Address,
+    farmAddress: Address,
+}

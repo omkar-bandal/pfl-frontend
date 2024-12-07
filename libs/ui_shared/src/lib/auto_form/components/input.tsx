@@ -1,5 +1,5 @@
 import { Grid, TextField, TextFieldProps, Typography } from "@mui/material";
-import { FormikErrors, FormikTouched } from "formik";
+import { FormikErrors, FormikTouched, useField } from "formik";
 import { ChangeEvent } from "react";
 
 // Define the type for the TextInput props
@@ -13,27 +13,17 @@ type TextInputProps = TextFieldProps & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   touched?: FormikTouched<{ [key: string]: any }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors?: FormikErrors<{[key: string]: any}> | string;
+  errors?: FormikErrors<{ [key: string]: any }>;
 };
 
 export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, type, value, handleChange, isReadOnly, touched = {}, errors = {}, ...otherProps}) => {
+const [field, meta] = useField(name);
+  // const getHelperText = () => {
+  //   const error = errors[name];
+  //   return typeof error === "string" ? error : undefined;
+  // };
 
-  const getHelperText = () => {
-    if (typeof errors === "string") {
-      return errors; // Directly return the string error
-    }
-    if (errors && typeof errors === "object") {
-      const fieldError = errors[name];
-      return typeof fieldError === "string" ? fieldError : undefined;
-    }
-    return undefined; // No error
-  };
-  const hasError =
-  touched[name] &&
-  ((typeof errors === "string" && !!errors) || // Check if errors is a non-empty string
-    (errors && typeof errors === "object" && typeof errors[name] === "string"));
-  
-    return (
+  return (
     <Grid container direction="column">
       <Grid item xs={12}>
         {isRequired && (
@@ -47,6 +37,7 @@ export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, t
       </Grid>
       <Grid item xs={12}>
         <TextField
+        {...field}
           fullWidth
           size="small"
           type={type}
@@ -58,8 +49,8 @@ export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, t
           InputProps={{ 
             readOnly: isReadOnly ?? false, 
           }}
-          error={!!hasError} 
-          helperText={hasError ? getHelperText() : ""}
+          error={meta.touched && Boolean(meta.error)} 
+          helperText={meta.touched && meta.error? meta.error : ""} 
           sx={{
             "& .MuiOutlinedInput-root": {
               pointerEvents: isReadOnly ? "none" : "auto", 

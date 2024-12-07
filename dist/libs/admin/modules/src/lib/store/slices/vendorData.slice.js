@@ -5,6 +5,7 @@ exports.vendorDataReducer = exports.vendorsDataState = exports.setSelectedVendor
 const toolkit_1 = require("@reduxjs/toolkit");
 const initialState = {
     allVendors: [],
+    allVendorsFiltered: [],
     selectedVendor: null,
 };
 const vendorDataSlice = (0, toolkit_1.createSlice)({
@@ -13,6 +14,9 @@ const vendorDataSlice = (0, toolkit_1.createSlice)({
     reducers: {
         setVendorData: (state, action) => {
             state.allVendors = action.payload;
+        },
+        setFilteredFarmerData: (state, action) => {
+            state.allVendorsFiltered = action.payload;
         },
         setSelectedVendor: (state, action) => {
             state.selectedVendor = action.payload;

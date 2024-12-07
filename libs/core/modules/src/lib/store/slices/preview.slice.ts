@@ -18,6 +18,7 @@ export const previewSlice = createSlice({
 })
 
 export const {setPreview} = previewSlice.actions;
+export const previewActionCreators = {setPreview};
 export const previewState = (state: RootState) => state.preview.preview;
 export const previewReducer = previewSlice.reducer;
   

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PURCHASE_ROUTES = void 0;
 exports.PURCHASE_ROUTES = {
-    //Admin
+    //Purchase
     PURCHASE: "/purchase",
     //Dashboard
     DASHBOARD_PURCHASE: "/purchase/dashboard",

@@ -2,16 +2,16 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, SelectChangeEvent, Stack, Typography } from '@mui/material'
-import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewRFPA } from '@prime-fresh/purchase/modules';
+import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, rfpaSchema, setPreviewRFPA } from '@prime-fresh/purchase/modules';
 import { PostRFPA, RFPA_Items, useGetRFPA, useUpdateRFPA } from '@prime-fresh/purchase_api';
-import { setPreview, showNotification, useAppSelector } from '@prime-fresh/modules';
+import { setPreview, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA } from '@prime-fresh/purchase/modules';
-import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, Address, GetFarmer, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { farmersDataState, setVendorData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES, setFilteredFarmerData } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, Address, GetAllFilteredFarmerData, GetProduct, GetVendor, useGetAllFilteredFarmerData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
 import { PURCHASE_API_URL } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AutoCompleteInput, mapToValueLabelArray, Notification, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './RFPA_Preview';
 import { appendFormData } from '@prime-fresh/shared/utils';
 
@@ -23,29 +23,31 @@ export const RFPAUpdate = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
-    const { data: Farmers } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
+    const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const [source, setSource] = React.useState<string>();
     const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
-    const { allFarmers, selectedFarmer } = useAppSelector(farmersDataState);
+    const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts, selectedProduct } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
-
+    if (rfpaValues.source === "vendor")
+        dispatch(setSelectedVendor(allVendors.find(vendor => vendor.id === rfpaValues.selectedParty)))
+    else
+        dispatch(setSelectedFarmer(allFarmersFiltered.find(farmer => farmer.id === rfpaValues.selectedParty)))
     React.useEffect(() => {
+        dispatch(setSelectedVendor(null));
+        dispatch(setSelectedFarmer(null));
+        dispatch(setSelectedProduct(null));
         dispatch(setVendorData(Vendors ? Vendors : []));
         dispatch(setProducts(Products ? Products : []));
         dispatch(setUOMs(UOMs ? UOMs : []));
-        if (rfpaValues.source === "vendor")
-            dispatch(setSelectedVendor(allVendors.find(vendor => vendor.id === rfpaValues.selectedParty)))
-        else
-            dispatch(setSelectedFarmer(allFarmers.find(farmer => farmer.id === rfpaValues.selectedParty)))
-    }, [dispatch, setSource, Products, Vendors, UOMs, allVendors, allFarmers, rfpaValues]);
+    }, [dispatch, setSource, Products, Vendors, UOMs, allVendors, allFarmersFiltered, rfpaValues]);
 
     const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
         setFieldValue("source", value);
         setSource(value);
-        value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFarmerData(Farmers ? Farmers : []));
+        value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
     };
 
     const handlePartyNameChange = (values: PostRFPA, dataId: string) => {
@@ -53,7 +55,7 @@ export const RFPAUpdate = () => {
             const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
             dispatch(setSelectedVendor(selectedVendor));
         } else if (values.source === "farmer") {
-            const selectedFarmer = allFarmers.find((farmer) => farmer.id === dataId)
+            const selectedFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId)
             dispatch(setSelectedFarmer(selectedFarmer))
         }
     };
@@ -84,12 +86,12 @@ export const RFPAUpdate = () => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePatch(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "RFPA updated successfully !!!" }));
+            toast.success(Res ? Res.message : "RFPA Updated");
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
-            }, 3000);
+            }, 2500);
         }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+            toast.error(error ? error.message : "Error while updating");
         });;
     }
     if (isLoading) {
@@ -101,17 +103,16 @@ export const RFPAUpdate = () => {
     }
     return (
         <>
-            <Notification />
             <Formik
                 enableReinitialize={true}
                 initialValues={rfpaValues}
-                // validationSchema={rfpaSchema}
+                validationSchema={rfpaSchema}
                 onSubmit={(values) => {
                     console.log(values);
                     handleSubmit(values);
                 }}
             >
-                {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => (
+                {({ values, handleChange, handleSubmit, setFieldValue, handleReset }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid item xs={12} md={6}>
@@ -120,21 +121,21 @@ export const RFPAUpdate = () => {
                             <Grid item xs={12} md={6}>
                                 <Stack direction="row" justifyContent="end" alignItems="center">
                                     <Button type="submit" variant="contained" color='success' size='large' sx={{ width: 150 }}>Update</Button>
-                                    <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }}>Reset</Button>
+                                    <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={handleReset}>Reset</Button>
                                     <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }}>Preview</Button>
                                 </Stack>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} touched={touched} errors={errors} />
+                                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <TextInput isRequired={true} type="text" label="Purchase Location" name="purchaseLocation" value={values.purchaseLocation} handleChange={handleChange} touched={touched} errors={errors} />
+                                <TextInput isRequired={true} type="text" label="Purchase Location" name="purchaseLocation" value={values.purchaseLocation} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <TextInput isRequired={true} type="text" label="Purchase For Which Location" name="purchaseForWhich" value={values.purchaseForWhich} handleChange={handleChange} touched={touched} errors={errors} />
+                                <TextInput isRequired={true} type="text" label="Purchase For Which Location" name="purchaseForWhich" value={values.purchaseForWhich} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextInput isRequired={false} type="text" label="Special Request" name="specialReq" value={values.specialReq} handleChange={handleChange} touched={touched} errors={errors} />
+                                <TextInput isRequired={false} type="text" label="Special Request" name="specialReq" value={values.specialReq} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} marginY={2}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
@@ -161,8 +162,6 @@ export const RFPAUpdate = () => {
                                             label="Vendor Company Name"
                                             value={{ value: selectedVendor ? selectedVendor.id : '', label: selectedVendor ? selectedVendor.companyName : '' }}
                                             options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')}
-                                            errors={errors}
-                                            touched={touched}
                                             handleChange={(event, newValue) => {
                                                 if (newValue) {
                                                     setFieldValue('selectedParty', newValue.value);
@@ -177,10 +176,8 @@ export const RFPAUpdate = () => {
                                             isRequired={true}
                                             name="selectedParty"
                                             label="Farmer Name"
-                                            value={{ value: '', label: '' }}
-                                            options={mapToValueLabelArray<GetFarmer>(allFarmers, 'id', 'farmerfName')}
-                                            errors={errors}
-                                            touched={touched}
+                                            value={{ value: selectedFarmer ? selectedFarmer.id : '', label: selectedFarmer ? selectedFarmer.fullName : '' }}
+                                            options={mapToValueLabelArray<GetAllFilteredFarmerData>(allFarmersFiltered, 'id', 'fullName')}
                                             handleChange={(event, newValue) => {
                                                 if (newValue) {
                                                     setFieldValue('selectedParty', newValue.value);
@@ -268,8 +265,8 @@ export const RFPAUpdate = () => {
                                                                     handleProductNameChange('');
                                                                 }
                                                             }}
-                                                            errors={errors}
-                                                            touched={touched}
+
+
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12} md={4}>
@@ -282,28 +279,28 @@ export const RFPAUpdate = () => {
                                                         <SelectInput isRequired={false} id={`rfpaProducts.${index}.uom`} name={`rfpaProducts.${index}.uom`} label="UOM" value={values.rfpaProducts[index].uom} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} onChange={handleChange} />
                                                     </Grid>
                                                     <Grid item xs={4} md={3}>
-                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.quantity`} name={`rfpaProducts.${index}.quantity`} label="Quantity" value={values.rfpaProducts[index].quantity} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, setFieldValue)} touched={touched} errors={errors} />
+                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.quantity`} name={`rfpaProducts.${index}.quantity`} label="Quantity" value={values.rfpaProducts[index].quantity} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, setFieldValue)} />
                                                     </Grid>
                                                     <Grid item xs={4} md={3}>
-                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.unitPrice`} name={`rfpaProducts.${index}.unitPrice`} label="Unit Price" value={values.rfpaProducts[index].unitPrice} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, setFieldValue)} touched={touched} errors={errors} />
+                                                        <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.unitPrice`} name={`rfpaProducts.${index}.unitPrice`} label="Unit Price" value={values.rfpaProducts[index].unitPrice} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, setFieldValue)} />
                                                     </Grid>
                                                     <Grid item xs={4} md={3}>
                                                         <TextInput isRequired={false} type="number" id={`rfpaProducts.${index}.totalVal`} name={`rfpaProducts.${index}.totalVal`} label="Total Price" value={values.rfpaProducts[index].totalVal} />
                                                     </Grid>
                                                     <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={true} id={`rfpaProducts.${index}.deliveryLocation`} name={`rfpaProducts.${index}.deliveryLocation`} label="Delivery Location" value={values.rfpaProducts[index].deliveryLocation} onChange={handleChange} touched={touched} errors={errors} />
+                                                        <TextInput isRequired={true} id={`rfpaProducts.${index}.deliveryLocation`} name={`rfpaProducts.${index}.deliveryLocation`} label="Delivery Location" value={values.rfpaProducts[index].deliveryLocation} onChange={handleChange} />
                                                     </Grid>
                                                     <Grid item xs={12}>
                                                         <TextInput isRequired={false} id={`rfpaProducts.${index}.description`} name={`rfpaProducts.${index}.description`} label="Description" value={values.rfpaProducts[index].description} onChange={handleChange} />
                                                     </Grid>
                                                     <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.purchaseDate`} name={`rfpaProducts.${index}.purchaseDate`} label="Purchase Date" value={values.rfpaProducts[index].purchaseDate} onChange={handleChange} touched={touched} errors={errors} />
+                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.purchaseDate`} name={`rfpaProducts.${index}.purchaseDate`} label="Purchase Date" value={values.rfpaProducts[index].purchaseDate} onChange={handleChange} />
                                                     </Grid>
                                                     <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.dispatchDate`} name={`rfpaProducts.${index}.dispatchDate`} label="Dispatch Date" value={values.rfpaProducts[index].dispatchDate} onChange={handleChange} touched={touched} errors={errors} />
+                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.dispatchDate`} name={`rfpaProducts.${index}.dispatchDate`} label="Dispatch Date" value={values.rfpaProducts[index].dispatchDate} onChange={handleChange} />
                                                     </Grid>
                                                     <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.deliveryDate`} name={`rfpaProducts.${index}.deliveryDate`} label="Delivery Date" value={values.rfpaProducts[index].deliveryDate} onChange={handleChange} touched={touched} errors={errors} />
+                                                        <TextInput isRequired={true} type='date' id={`rfpaProducts.${index}.deliveryDate`} name={`rfpaProducts.${index}.deliveryDate`} label="Delivery Date" value={values.rfpaProducts[index].deliveryDate} onChange={handleChange} />
                                                     </Grid>
                                                     {source === "farmer" &&
                                                         (<Grid item xs={3}>
@@ -332,7 +329,7 @@ export const RFPAUpdate = () => {
                                 </Box>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <SelectInput isRequired={true} id="paymentInfo.paymentMode" name="paymentInfo.paymentMode" label="Payment Mode" options={PURCHASE_ARRAYS.paymentMode} value={values.paymentInfo.paymentMode} onChange={handleChange} touched={touched} errors={errors} />
+                                <SelectInput isRequired={true} id="paymentInfo.paymentMode" name="paymentInfo.paymentMode" label="Payment Mode" options={PURCHASE_ARRAYS.paymentMode} value={values.paymentInfo.paymentMode} onChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <TextInput isRequired={false} type="number" id="paymentInfo.advancePaidAmt" name="paymentInfo.advancePaidAmt" label="Advance Paid Amount" value={values.paymentInfo.advancePaidAmt} onChange={handleChange} />
@@ -341,7 +338,7 @@ export const RFPAUpdate = () => {
                                 <TextInput isRequired={false} label="Validity of Quote" id="validityOfQuote" name="validityOfQuote" value={values.validityOfQuote} onChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <TextInput isRequired={true} type="number" label="Payment Terms (in Days)" id="paymentInfo.paymentTerms" name="paymentInfo.paymentTerms" value={values.paymentInfo.paymentTerms} onChange={handleChange} touched={touched} errors={errors} />
+                                <TextInput isRequired={true} type="number" label="Payment Terms (in Days)" id="paymentInfo.paymentTerms" name="paymentInfo.paymentTerms" value={values.paymentInfo.paymentTerms} onChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput
@@ -352,8 +349,8 @@ export const RFPAUpdate = () => {
                                     label="Payment Date"
                                     value={values.paymentInfo.paymentDate}
                                     handleChange={handleChange}
-                                    touched={touched}
-                                    errors={errors}
+
+
                                     onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
                                         const paymentDate = event.target.value;
                                         setFieldValue("paymentInfo.paymentDate", paymentDate);
@@ -372,8 +369,8 @@ export const RFPAUpdate = () => {
                                     name="paymentInfo.creditPeriod"
                                     value={values.paymentInfo.creditPeriod}
                                     handleChange={handleChange}
-                                    touched={touched}
-                                    errors={errors}
+
+
                                     onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
                                         const creditPeriod = parseInt(event.target.value, 10) || 0;
                                         setFieldValue("paymentInfo.creditPeriod", creditPeriod);
@@ -387,7 +384,7 @@ export const RFPAUpdate = () => {
                                 <TextInput isRequired={false} type="date" label="Due Date" id="paymentInfo.dueDate" name="paymentInfo.dueDate" value={values.paymentInfo.dueDate} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <TextInput isRequired={true} label="Delivery Receiving Person" id="deliveryReceivingPerson" name="deliveryReceivingPerson" value={values.deliveryReceivingPerson} onChange={handleChange} touched={touched} errors={errors} />
+                                <TextInput isRequired={true} label="Delivery Receiving Person" id="deliveryReceivingPerson" name="deliveryReceivingPerson" value={values.deliveryReceivingPerson} onChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={9}>
                                 <TextInput isRequired={false} label="Packaging Instructions" id="packingInstruction" name="packingInstruction" value={values.packingInstruction} onChange={handleChange} />

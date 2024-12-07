@@ -14,7 +14,7 @@ const initialState: LayoutState = {
   pageTitle: "Dashboard",
 };
 
-export const layoutSlice = createSlice({
+const layoutSlice = createSlice({
   name: 'layout',
   initialState,
   reducers: {
@@ -31,7 +31,7 @@ export const layoutSlice = createSlice({
 });
 
 export const { setMobileOpen, setIsClosing, setPageTitle } = layoutSlice.actions;
-
+export const layoutActionCreators = { setMobileOpen, setIsClosing, setPageTitle };
 // Other code such as selectors can use the imported `RootState` type
 export const mobileOpenState = (state: RootState) => state.layout.mobileOpen;
 export const isClosingState = (state: RootState) => state.layout.isClosing;

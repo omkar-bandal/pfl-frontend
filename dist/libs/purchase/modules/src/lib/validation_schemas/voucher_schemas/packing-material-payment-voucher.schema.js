@@ -14,13 +14,11 @@ exports.packingMaterialPaymentVoucherSchema = yup.object().shape({
     contactNo: contactNo_schema_1.contactNoSchema,
     paymentMode: yup.string().required('Payment mode is required'),
     receiverName: yup.string().required('Receiver name is required'),
-    // materials: yup.array().of(
-    //     yup.object().shape({
-    //         itemName: yup.string().required('Item name is required'),
-    //         uom: yup.string().required('UOM is required'),
-    //         itemQty: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
-    //         rate: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
-    //     })
-    // )
+    materials: yup.array().of(yup.object().shape({
+        itemName: yup.string().required('Item name is required'),
+        uom: yup.string().required('UOM is required'),
+        itemQty: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
+        rate: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
+    }))
 });
 //# sourceMappingURL=packing-material-payment-voucher.schema.js.map

@@ -9,7 +9,8 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
     };
     vendorData: {
         allVendors: import('../../../../../api/admin_api/src/index.ts').GetVendor[] | [];
-        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetVendor | null | undefined;
+        allVendorsFiltered: import('../../../../../api/admin_api/src/index.ts').GetAllFilteredVendorData[];
+        selectedVendor: import('../../../../../api/admin_api/src/index.ts').GetAllFilteredVendorData | null | undefined;
     };
     vendorCategoryData: {
         allVendorCategories: import('../../../../../api/admin_api/src/index.ts').GetVendorCategory[];
@@ -20,7 +21,8 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
     };
     farmerData: {
         allFarmers: import('../../../../../api/admin_api/src/index.ts').GetFarmer[];
-        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetFarmer | null | undefined;
+        allFarmersFiltered: import('../../../../../api/admin_api/src/index.ts').GetAllFilteredFarmerData[];
+        selectedFarmer: import('../../../../../api/admin_api/src/index.ts').GetAllFilteredFarmerData | null | undefined;
     };
     productData: {
         allProducts: import('../../../../../api/admin_api/src/index.ts').GetProduct[];
@@ -96,6 +98,7 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
         selectedPaymentReq: import('../../../../../api/purchase_api/src/index.ts').GetPaymentRequest | undefined;
         previewPaymentReq: import('../../../../../api/purchase_api/src/index.ts').PostPaymentRequest | undefined;
     };
+    auth: import('../../../../../api/auth_api/src/index.ts').AuthState;
     layout: {
         mobileOpen: boolean;
         isClosing: boolean;

@@ -3,13 +3,13 @@ import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, Stack, Typography } from '@mui/material'
 import { dealSlipDataState, displayAddress, grnSchema, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
-import { setPreview, showNotification, useAppSelector } from '@prime-fresh/modules';
+import { useActions, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
-import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, GetProduct, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { farmersDataState, setVendorData, setFarmerData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES, setFilteredFarmerData } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, GetProduct, GetVendor, useGetAllProducts, useGetAllUOMs, useGetAllVendors, useGetAllFilteredFarmerData, useGetAllFarmers } from '@prime-fresh/admin_api';
 import { GetDealSlip, PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlip } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
-import { AutoCompleteInput, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './GRN_Preview';
 import { appendFormData } from '@prime-fresh/shared/utils';
 import { Notification } from '@prime-fresh/ui_shared';
@@ -17,13 +17,16 @@ import { Notification } from '@prime-fresh/ui_shared';
 export const GRNForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {setPreview} = useActions();
   const { data: dealSlips } = useGetAllDealSlip(PURCHASE_API_URL.GET_ALL_DEAL_SLIP);
   const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
   const { data: Farmers } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
+  const { data: FilteredFarmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
+  console.log(FilteredFarmers);
   const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
-  const { allFarmers, selectedFarmer } = useAppSelector(farmersDataState);
+  const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
   const { allProducts, selectedProduct } = useAppSelector(productsDataState);
   const { allUOMs } = useAppSelector(uomsDataState);
   const { dealSlip } = useAppSelector(dealSlipDataState);
@@ -36,24 +39,26 @@ export const GRNForm = () => {
     dispatch(setVendorData(Vendors ? Vendors : []));
     dispatch(setProducts(Products ? Products : []));
     dispatch(setUOMs(UOMs ? UOMs : []));
-  }, [dispatch, Products, Vendors, UOMs]);
+  }, [dispatch, Products, Vendors, UOMs, dealSlips]);
 
   const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
     setFieldValue("source", value);
-    value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFarmerData(Farmers ? Farmers : []));
+    value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(FilteredFarmers ? FilteredFarmers : []));
   };
 
   const handleSourceNameChange = (values: PostGRN, dataId: string) => {
     if (values.source === "vendor") {
       const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
+      console.log(selectedVendor);
       dispatch(setSelectedVendor(selectedVendor));
     } else if (values.source === "farmer") {
-      const selectedFarmer = allFarmers.find((farmer) => farmer.id === dataId)
-      dispatch(setSelectedFarmer(selectedFarmer))
+      const selectFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId)
+      dispatch(setSelectedFarmer(selectFarmer))
     }
   };
   const handleProductNameChange = (dataId: string) => {
     const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
+    console.log(selectedProduct);
     dispatch(setSelectedProduct(selectedProduct));
   }
 
@@ -81,12 +86,12 @@ export const GRNForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePost(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: data ? data.message : "GRN created successfully !!!"  }));
+      toast.success(data? data.message : "GRN created.")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_GRN);
-      }, 5000);
+      }, 2500);
     }).catch(() => {
-      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+      toast.error(error? error.message : "Error while creating GRN.")
     })
   }
   return (
@@ -101,7 +106,7 @@ export const GRNForm = () => {
           handleSubmit(values);
         }}
       >
-        {({ values, touched, handleChange, handleSubmit, setFieldValue, errors }) => (
+        {({ values, handleChange, handleSubmit, setFieldValue, handleReset }) => (
           <form onSubmit={handleSubmit} encType='multipart/form-data'>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} md={6}>
@@ -110,8 +115,8 @@ export const GRNForm = () => {
               <Grid item xs={12} md={6}>
                 <Stack direction="row" justifyContent="end" alignItems="center">
                   <Button type="submit" variant="contained" color='success' size='large' sx={{ width: 150 }}>Create</Button>
-                  <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }}>Reset</Button>
-                  <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }}>Preview</Button>
+                  <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={handleReset}>Reset</Button>
+                  <Button variant="contained" color='info' size='large' sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewGRN(values)); setPreview(true) }}>Preview</Button>
                 </Stack>
               </Grid>
               <Grid item xs={12} md={3}>
@@ -121,27 +126,25 @@ export const GRNForm = () => {
                   name="dealSlipId"
                   options={mapToValueLabelArray<GetDealSlip>(dealSlip, 'id', 'dealSlipNo')}
                   value={values.dealSlipId}
-                  handleChange={handleChange}
-                  touched={touched}
-                  errors={errors} />
+                  handleChange={handleChange}/>
               </Grid>
               <Grid item xs={12} md={4}>
-                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} touched={touched} errors={errors} />
+                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={2}>
-                <TextInput isRequired={true} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange} errors={errors} touched={touched} />
+                <TextInput isRequired={true} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={3}>
-                <TextInput isRequired={true} type="text" name='serialNo' label='Serial Number' value={values.serialNo} handleChange={handleChange} errors={errors} touched={touched} />
+                <TextInput isRequired={true} type="text" name='serialNo' label='Serial Number' value={values.serialNo} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} type="text" name='purchaseRequestByWhom' label='Purchase Request By Whom' value={values.purchaseRequestByWhom} handleChange={handleChange} errors={errors} touched={touched} />
+                <TextInput isRequired={true} type="text" name='purchaseRequestByWhom' label='Purchase Request By Whom' value={values.purchaseRequestByWhom} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} type="text" name='purchaseLocation' label='Purchase Location' value={values.purchaseLocation} handleChange={handleChange} errors={errors} touched={touched} />
+                <TextInput isRequired={true} type="text" name='purchaseLocation' label='Purchase Location' value={values.purchaseLocation} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} type="text" name='purchaseForWhich' label='Purchase For Which Location' value={values.purchaseForWhich} handleChange={handleChange} errors={errors} touched={touched} />
+                <TextInput isRequired={true} type="text" name='purchaseForWhich' label='Purchase For Which Location' value={values.purchaseForWhich} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12}>
                 <TextInput isRequired={false} type="text" name="specialReq" label='Special Request' value={values.specialReq} handleChange={handleChange} />
@@ -159,32 +162,33 @@ export const GRNForm = () => {
               <Grid item xs={12} md={4}>
                 {values.source === "vendor" ?
                   (
-                    <AutoCompleteInput isRequired={true} name="selectedParty" label="Vendor Company Name" options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')} errors={errors} touched={touched} handleChange={(event, newValue) => {
+                    <AutoCompleteInput 
+                    isRequired={true} 
+                    name="selectedParty" 
+                    label="Vendor Company Name" 
+                    options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')} 
+                    handleChange={(event, newValue) => {
                       if (newValue) {
-                        setFieldValue('selectedParty', newValue.value);
-                        handleSourceNameChange(values, newValue.value || '');
+                          setFieldValue('selectedParty', newValue.value);
                       } else {
-                        setFieldValue('selectedParty', '');
-                        handleSourceNameChange(values, '');
+                          setFieldValue('selectedParty', '');
                       }
-                    }} />
+                  }} 
+                    handleBlur={handleSourceNameChange(values, values.selectedParty)} />
                   ) : (
                     <AutoCompleteInput
                       isRequired={true}
                       name="selectedParty"
                       label="Farmer Name"
-                      options={allFarmers.map((farmer) => ({ value: farmer.id, label: `${farmer.farmerfName} ${farmer.farmerlName}` }))}
-                      errors={errors}
-                      touched={touched}
+                      options={allFarmersFiltered.map((farmer) => ({ value: farmer.id, label: farmer.fullName }))}
                       handleChange={(event, newValue) => {
                         if (newValue) {
-                          setFieldValue('selectedParty', newValue.value);
-                          handleSourceNameChange(values, newValue.value || '');
+                            setFieldValue('selectedParty', newValue.value);
                         } else {
-                          setFieldValue('selectedParty', '');
-                          handleSourceNameChange(values, '');
+                            setFieldValue('selectedParty', '');
                         }
-                      }} />
+                    }}
+                      handleBlur={handleSourceNameChange(values, values.selectedParty)}/>
                   )}
               </Grid>
               {values.source === "vendor" ?
@@ -245,29 +249,26 @@ export const GRNForm = () => {
                             {values.products.length > 1 && <IconButton color='error' size='medium'
                               onClick={() => remove(index)}><Close /></IconButton>}
                           </Grid>
-                          <Grid item xs={12} md={3}>
+                          <Grid item xs={12} md={4}>
                             <AutoCompleteInput
                               isRequired={true}
                               name={`products.${index}.product`}
                               label="Product Name"
                               options={mapToValueLabelArray(allProducts, 'id', 'name')}
-                              touched={touched}
-                              errors={errors}
                               handleChange={(event, newValue) => {
                                 if (newValue) {
-                                  setFieldValue(`products.${index}.product`, newValue.value);
-                                  handleProductNameChange(newValue.value || '');
+                                    setFieldValue(`products.${index}.product`, newValue.value);
                                 } else {
-                                  setFieldValue(`products.${index}.product`, '');
-                                  handleProductNameChange('');
+                                    setFieldValue(`products.${index}.product`, '');
                                 }
-                              }}
+                            }}
+                              handleBlur={handleProductNameChange(values.products[index].product)}
                             />
                           </Grid>
-                          <Grid item xs={4} md={1}>
+                          <Grid item xs={4} md={2}>
                             <TextInput isRequired={false} name="productOrigin" label="Origin" value={selectedProduct?.productOrigin ? selectedProduct?.productOrigin : ''} isReadOnly={true} />
                           </Grid>
-                          <Grid item xs={4} md={1}>
+                          <Grid item xs={4} md={3}>
                             <SelectInput
                               isRequired={true}
                               id={`products.${index}.count`}
@@ -276,15 +277,13 @@ export const GRNForm = () => {
                               value={values.products[index].count}
                               options={selectedProduct?.count.map((count) => ({ value: count, label: count }))}
                               handleChange={handleChange}
-                              touched={touched}
-                              errors={errors}
                             />
                           </Grid>
-                          <Grid item xs={4} md={2}>
-                            <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} touched={touched} errors={errors} />
+                          <Grid item xs={4} md={3}>
+                            <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange}  />
                           </Grid>
-                          <Grid item xs={4} md={1}>
-                            <TextInput isRequired={true} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity} touched={touched} errors={errors}
+                          <Grid item xs={4} md={4}>
+                            <TextInput isRequired={true} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity} 
                               handleChange={(e) => {
                                 handleChange(e);
                                 setFieldValue(`products.${index}.quantity`, parseFloat(e.target.value) || 0);
@@ -292,8 +291,8 @@ export const GRNForm = () => {
                               onBlur={() => calculateAmounts(values, setFieldValue)}
                             />
                           </Grid>
-                          <Grid item xs={4} md={2}>
-                            <TextInput isRequired={true} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate} touched={touched} errors={errors}
+                          <Grid item xs={4} md={4}>
+                            <TextInput isRequired={true} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate} 
                               handleChange={(e) => {
                                 handleChange(e);
                                 setFieldValue(`products.${index}.rate`, parseFloat(e.target.value) || 0);
@@ -301,26 +300,26 @@ export const GRNForm = () => {
                               onBlur={() => calculateAmounts(values, setFieldValue)}
                             />
                           </Grid>
-                          <Grid item xs={4} md={2}>
+                          <Grid item xs={4} md={4}>
                             <TextInput isRequired={false} label='Amount' name={`products.${index}.amt`} type='number' value={values.products[index].amt} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2}>
+                          <Grid item xs={12} md={3}>
                             <TextInput isRequired={false} label='Purchase Date' name={`products.${index}.purchaseDate`} type='date' value={values.products[index].purchaseDate} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2}>
+                          <Grid item xs={12} md={3}>
                             <TextInput isRequired={false} label='Dispatch Date' name={`products.${index}.dispatchDate`} type='date' value={values.products[index].dispatchDate} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2}>
+                          <Grid item xs={12} md={3}>
                             <TextInput isRequired={false} label='Delivery Date' name={`products.${index}.deliveryDate`} type='date' value={values.products[index].deliveryDate} handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={12} md={2}>
-                            <TextInput isRequired={false} label='Delivery Location' name={`products.${index}.deliveryLocation`} type='text' value={values.products[index].deliveryLocation} handleChange={handleChange} />
-                          </Grid>
                           {values.source === "farmer" ?
-                            (<Grid item xs={12} md={2}>
+                            (<Grid item xs={12} md={3}>
                               <TextInput isRequired={false} label='Expected Harvest Date' name={`products.${index}.expectedHarvestDate`} type='date' value={values.products[index].expectedHarvestDate} handleChange={handleChange} />
                             </Grid>) : ('')}
-                          <Grid item xs={12} md={2}>
+                          <Grid item xs={12} md={3}>
+                            <TextInput isRequired={false} label='Delivery Location' name={`products.${index}.deliveryLocation`} type='text' value={values.products[index].deliveryLocation} handleChange={handleChange} />
+                          </Grid>
+                          <Grid item xs={12} md={9}>
                             <RadioGroupInput isRequired={true} label="RTV" name={`products.${index}.rtv`} options={[{ label: "Yes", value: "yes" }, { label: "No", value: "no" }]} value={values.products[index].rtv} onChange={handleChange} />
                           </Grid>
                         </Grid>
@@ -371,13 +370,13 @@ export const GRNForm = () => {
                 <TextInput isRequired={false} label="Purchase By" name="purchasedBy" type='text' value={values.purchasedBy} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} label="Delivery Receiving Person" name="deliveryReceivingPerson" type='text' value={values.deliveryReceivingPerson} handleChange={handleChange} touched={touched} errors={errors} />
+                <TextInput isRequired={true} label="Delivery Receiving Person" name="deliveryReceivingPerson" type='text' value={values.deliveryReceivingPerson} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput isRequired={false} label="Security Person Name" name="securityPerson" type='text' value={values.securityPerson} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} label="RM Name" name="rmn" type='text' value={values.rmn} handleChange={handleChange} touched={touched} errors={errors} />
+                <TextInput isRequired={true} label="RM Name" name="rmn" type='text' value={values.rmn} handleChange={handleChange}  />
               </Grid>
               <Grid item xs={12} md={12}>
                 <TextInput isRequired={false} label="Remark" name="remark" type='text' value={values.remark} handleChange={handleChange} />

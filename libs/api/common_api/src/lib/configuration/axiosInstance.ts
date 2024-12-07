@@ -11,8 +11,8 @@ export const axiosInstance = axios.create({
 });
 
 // You can store the tokens in localStorage or any other secure storage.
-const getAccessToken = () => localStorage.getItem('access_token');
-const getRefreshToken = () => localStorage.getItem('refresh_token');
+export const getAccessToken = () => localStorage.getItem('access_token');
+export const getRefreshToken = () => localStorage.getItem('refresh_token');
 
 // Request Interceptor
 axiosInstance.interceptors.request.use(
@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
       if (refreshToken) {
         try {
           // Make a request to refresh the token
-          const { data } = await axios.post(`https://7759-182-156-141-17.ngrok-free.app/auth/refresh-token`, {
+          const { data } = await axios.post(`${COM_API_URL.BASE_URL}/auth/refresh-token`, {
             refreshToken,
           });
 

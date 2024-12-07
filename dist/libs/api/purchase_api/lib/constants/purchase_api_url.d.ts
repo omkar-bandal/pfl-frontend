@@ -4,6 +4,7 @@ export declare const PURCHASE_API_URL: {
     POST_RFPA: string;
     UPDATE_RFPA: string;
     APPROVE_RFPA: string;
+    GET_ALL_RFPA_NO: string;
     GET_ALL_DEAL_SLIP: string;
     GET_A_DEAL_SLIP: string;
     POST_DEAL_SLIP: string;

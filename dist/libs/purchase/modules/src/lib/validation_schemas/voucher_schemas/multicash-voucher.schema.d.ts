@@ -17,5 +17,5 @@ export declare const multicashVoucherSchema: yup.ObjectSchema<{
     location: undefined;
     paymentMode: undefined;
     receiverName: undefined;
-    particulars: "";
+    particulars: undefined;
 }, "">;

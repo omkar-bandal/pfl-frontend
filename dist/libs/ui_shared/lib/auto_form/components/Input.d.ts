@@ -14,7 +14,7 @@ type TextInputProps = TextFieldProps & {
     }>;
     errors?: FormikErrors<{
         [key: string]: any;
-    }> | string;
+    }>;
 };
 export declare const TextInput: React.FC<TextInputProps>;
 export {};

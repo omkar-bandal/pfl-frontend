@@ -9,7 +9,8 @@ export declare const adminReducer: {
     }>;
     vendorData: import("@reduxjs/toolkit").Reducer<{
         allVendors: import("@prime-fresh/admin_api").GetVendor[] | [];
-        selectedVendor: import("@prime-fresh/admin_api").GetVendor | null | undefined;
+        allVendorsFiltered: import("@prime-fresh/admin_api").GetAllFilteredVendorData[];
+        selectedVendor: import("@prime-fresh/admin_api").GetAllFilteredVendorData | null | undefined;
     }>;
     vendorCategoryData: import("@reduxjs/toolkit").Reducer<{
         allVendorCategories: import("@prime-fresh/admin_api").GetVendorCategory[];
@@ -20,7 +21,8 @@ export declare const adminReducer: {
     }>;
     farmerData: import("@reduxjs/toolkit").Reducer<{
         allFarmers: import("@prime-fresh/admin_api").GetFarmer[];
-        selectedFarmer: import("@prime-fresh/admin_api").GetFarmer | null | undefined;
+        allFarmersFiltered: import("@prime-fresh/admin_api").GetAllFilteredFarmerData[];
+        selectedFarmer: import("@prime-fresh/admin_api").GetAllFilteredFarmerData | null | undefined;
     }>;
     productData: import("@reduxjs/toolkit").Reducer<{
         allProducts: import("@prime-fresh/admin_api").GetProduct[];

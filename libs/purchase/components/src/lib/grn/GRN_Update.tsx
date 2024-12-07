@@ -4,8 +4,8 @@ import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from '@mui/material'
 import { displayAddress, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { FieldArray, Formik } from 'formik';
-import { ADMIN_ROUTES, setVendorData, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, vendorsDataState, farmersDataState, productsDataState, uomsDataState, setSelectedProduct, setFarmerData } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, GetFarmer, GetProduct, GetUOM, GetVendor, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { ADMIN_ROUTES, setVendorData, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, vendorsDataState, farmersDataState, productsDataState, uomsDataState, setSelectedProduct, setFarmerData, setFilteredFarmerData } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, GetAllFilteredFarmerData, GetFarmer, GetProduct, GetUOM, GetVendor, useGetAllFarmers, useGetAllFilteredFarmerData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
 import { GetDealSlip, GetGRN, PostGRN, PURCHASE_API_URL, useGetAllDealSlip, useGetGRN, useUpdateGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
@@ -27,27 +27,27 @@ export const GRNUpdate = () => {
 
     const { data: dealSlips } = useGetAllDealSlip(PURCHASE_API_URL.GET_ALL_DEAL_SLIP);
     const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
-    const { data: Farmers } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
+    const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
 
     const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
-    const { allFarmers, selectedFarmer } = useAppSelector(farmersDataState);
+    const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
 
     React.useEffect(() => {
         dispatch(setDealSlipData(dealSlips ? dealSlips : []));
         dispatch(setVendorData(Vendors ? Vendors : []));
-        dispatch(setFarmerData(Farmers ? Farmers : []));
+        dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
         dispatch(setProducts(Products ? Products : []));
         dispatch(setUOMs(UOMs ? UOMs : []));
         if (selectedGRN.source === "vendor") {
             dispatch(setSelectedVendor(allVendors.find(vendor => vendor.id === selectedGRN.selectedParty)))
         } else {
-            dispatch(setSelectedFarmer(allFarmers.find(farmer => farmer.id === selectedGRN.selectedParty)));
+            dispatch(setSelectedFarmer(allFarmersFiltered.find(farmer => farmer.id === selectedGRN.selectedParty)));
         }
-    }, [dispatch, Products, Vendors, UOMs]);
+    }, [dispatch, Products, Vendors, Farmers, UOMs, dealSlips ]);
 
 
     const handleSourceNameChange = (values: PostGRN | GetGRN, dataId: string) => {
@@ -55,7 +55,7 @@ export const GRNUpdate = () => {
             const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
             dispatch(setSelectedVendor(selectedVendor));
         } else if (values.source === "farmer") {
-            const selectedFarmer = allFarmers.find((farmer) => farmer.id === dataId)
+            const selectedFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId)
             dispatch(setSelectedFarmer(selectedFarmer))
         }
     };
@@ -191,7 +191,7 @@ export const GRNUpdate = () => {
                                                             isRequired={true}
                                                             name="selectedParty"
                                                             label="Farmer Name"
-                                                            options={mapToValueLabelArray<GetFarmer>(allFarmers, 'id', 'farmerfName')}
+                                                            options={mapToValueLabelArray<GetAllFilteredFarmerData>(allFarmersFiltered, 'id', 'fullName')}
                                                             value={values.selectedParty}
                                                             handleChange={(e) => {
                                                                 if (e.target.value) {

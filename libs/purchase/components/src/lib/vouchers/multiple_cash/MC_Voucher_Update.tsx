@@ -2,10 +2,10 @@ import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema } from "@prime-fresh/purchase/modules";
-import { ImageUpload, mapToValueLabelArray, Notification, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { ImageUpload, mapToValueLabelArray, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { GetMCvoucher, Particulars, PostMCvoucher, PURCHASE_API_URL, useGetAllDeliveryChallanNums, useGetAllGRNNums, useGetMCVoucher, useUpdateMCVoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./MC_Voucher_Preview";
-import { setPreview, showNotification } from "@prime-fresh/modules";
+import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
@@ -38,12 +38,12 @@ export const MultipleCashVoucherUpdate = () => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePatch(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Multiple cash voucher updated successfully !!!" }));
+            toast.success(Res? Res.message : "Voucher created")
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER);
-            }, 5000);
+            }, 2500);
         }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+            toast.error(error? error.message : "Error while creating voucher")
         });;
     };
 
@@ -53,10 +53,7 @@ export const MultipleCashVoucherUpdate = () => {
                 (<Box sx={{ flex: 1 }}>
                     <LinearProgress />
                 </Box>) :
-                (
-                    <>
-                        <Notification />
-                        <Formik
+                (<Formik
                             enableReinitialize={true}
                             initialValues={mcVoucherValues}
                             validationSchema={multicashVoucherSchema}
@@ -248,11 +245,8 @@ export const MultipleCashVoucherUpdate = () => {
                                             <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
                                         </Grid>
                                     </Grid>
-                                </form>
-                            )
-                            }
-                        </Formik >
-                    </>)}
+                                </form>)}
+                        </Formik >)}
             < MCVoucherPreview />
         </>
     );

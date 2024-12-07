@@ -6,6 +6,8 @@ export const PURCHASE_API_URL = {
     POST_RFPA: "/rfpa/",
     UPDATE_RFPA: "/rfpa",
     APPROVE_RFPA: "/rfpa/approve/",
+    GET_ALL_RFPA_NO: "/rfpa/rfpanumbers/getAllRfpaNo",
+ 
 
     //Deal Slip
     GET_ALL_DEAL_SLIP: "/dealSlip/",

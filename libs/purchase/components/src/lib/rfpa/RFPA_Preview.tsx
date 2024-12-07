@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Box, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { displayAddress, rfpaDataState } from "@prime-fresh/purchase/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { farmersDataState, productsDataState, vendorsDataState } from "@prime-fresh/admin/modules";
@@ -13,10 +13,6 @@ export const RFPAPreview = () => {
 
     return (
         <PreviewContainer title='RFPA Preview'>
-            <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
-                <Typography variant="h4" component="span">previewRFPA Details</Typography>
-                <Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }}>Submit</Button>
-            </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                     Purchase Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewRFPA?.purchaseLocation}
@@ -79,7 +75,7 @@ export const RFPAPreview = () => {
                 <>
                     <Grid item>
                         <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                            Farmer Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.farmerfName} {previewRFPA?.farmer?.farmerlName}
+                            Farmer Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.fullName}
                             </Typography>
                         </Typography>
                     </Grid>

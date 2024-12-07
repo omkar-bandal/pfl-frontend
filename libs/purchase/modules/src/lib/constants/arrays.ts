@@ -3,7 +3,8 @@ export const PURCHASE_ARRAYS = {
         { value: "Prime Fresh Limited", label: "Prime Fresh Limited" },
         { value: "Florens Fresh Supply Solutions Pvt.Ltd.", label: "Florens Fresh Supply Solutions Pvt.Ltd." },
         { value: "Florens Farming Private Limited", label: "Florens Farming Private Limited" },
-        { value: "Prime Fresh Retail (I) Private Limited", label: "Prime Fresh Retail (I) Private Limited" }
+        { value: "Prime Fresh Retail (I) Private Limited", label: "Prime Fresh Retail (I) Private Limited" },
+        { value: "VyankteshPrime Fresh Farmers Producer Company Limited", label: "VyankteshPrime Fresh Farmers Producer Company Limited" }
     ],
     source: [
         { value: "vendor", label: "Vendor" },

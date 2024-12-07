@@ -1,0 +1,19 @@
+{
+  "name": "inventory-modules",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/inventory/modules/src",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:inventory"],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/inventory/modules",
+        "main": "libs/inventory/modules/src/index.ts",
+        "tsConfig": "libs/inventory/modules/tsconfig.lib.json",
+        "assets": ["libs/inventory/modules/*.md"]
+      }
+    }
+  }
+}

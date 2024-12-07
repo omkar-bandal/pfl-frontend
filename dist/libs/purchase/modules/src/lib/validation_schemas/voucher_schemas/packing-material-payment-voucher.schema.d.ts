@@ -16,6 +16,12 @@ export declare const packingMaterialPaymentVoucherSchema: yup.ObjectSchema<{
     contactNo: string;
     paymentMode: string;
     receiverName: string;
+    materials: {
+        uom: string;
+        rate: number;
+        itemName: string;
+        itemQty: number;
+    }[] | undefined;
 }, yup.AnyObject, {
     companyName: undefined;
     debitCreditTo: undefined;
@@ -33,4 +39,5 @@ export declare const packingMaterialPaymentVoucherSchema: yup.ObjectSchema<{
     contactNo: undefined;
     paymentMode: undefined;
     receiverName: undefined;
+    materials: "";
 }, "">;

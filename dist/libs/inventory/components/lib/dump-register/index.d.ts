@@ -1,0 +1,1 @@
+export * from './dump-register-create.form';

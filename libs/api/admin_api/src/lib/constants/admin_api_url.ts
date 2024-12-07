@@ -26,6 +26,7 @@ export const ADMIN_API_URL = {
     POST_FARMER: "/farmers/",
     UPDATE_FARMER: "/farmers",
     GET_A_FARMER: "/farmers",
+    GET_ALL_FARMERS_FILTERED: "/farmers/filterFarmer/all",
 
 
     //Vendors
@@ -33,6 +34,7 @@ export const ADMIN_API_URL = {
     GET_A_VENDOR: "/vendors",
     POST_VENDOR: "/vendors/",
     UPDATE_VENDOR: "/vendors",
+    GET_ALL_VENDOR_FILTERED: "/vendors/filterVendor/all",
     GET_ALL_VENDOR_CAT: "/vendor-categories/",
     CREATE_VENDOR_CAT: "/vendor-categories/",
     GET_A_VENDOR_CAT: "/vendor-categories",

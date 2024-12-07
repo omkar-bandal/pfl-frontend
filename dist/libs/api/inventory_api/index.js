@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const R={GET_ALL_INWARD_REGISTER:"/inwardRegister",GET_A_INWARD_REGISTER:"/inwardRegister",POST_INWARD_REGISTER:"/inwardRegister",UPDATE_INWARD_REGISTER:"/inwardRegister"};exports.INVENTORY_API_URL=R;

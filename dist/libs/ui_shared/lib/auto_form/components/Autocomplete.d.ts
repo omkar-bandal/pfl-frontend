@@ -11,6 +11,7 @@ type AutoCompleteInputProps = {
     name: string;
     options: AutoCompleteOption[];
     value?: AutoCompleteOption | null;
+    handleBlur?: any;
     handleChange?: (event: any, newValue: AutoCompleteOption | null) => void;
     touched?: FormikTouched<{
         [key: string]: any;
