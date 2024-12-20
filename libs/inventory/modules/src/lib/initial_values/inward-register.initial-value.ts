@@ -21,6 +21,7 @@ export const InwardRegisterInitialValue: PostInwardRegister = {
     batchNo: '',
     date: getCurrentDate(),
     source: 'vendor',
+    selectedParty: '',
     inwardBy: '',
     inwardCost: 0,
     inwardProduct: [InwardProductInitialValue],
@@ -30,6 +31,5 @@ export const InwardRegisterInitialValue: PostInwardRegister = {
     purchasedBy: '',
     purchasedQty: 0,
     remarks: '',
-    selectedParty: '',
     totalWeightInKg: 0,
 }

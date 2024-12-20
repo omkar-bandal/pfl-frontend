@@ -4524,7 +4524,7 @@ de.default = de;
 const uo = {
   //Authentication
   BASE_URL: "http://ec2-3-109-211-250.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://60da-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://b641-182-156-141-17.ngrok-free.app",
 }, $e = de.create({
   baseURL: uo.BASE_URL,
   withCredentials: !0,

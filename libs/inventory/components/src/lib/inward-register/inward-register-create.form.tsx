@@ -1,25 +1,29 @@
 import React from 'react'
 import { FieldArray, Formik } from "formik";
-import { InwardProductInitialValue, InwardRegisterInitialValue } from "@prime-fresh/inventory/modules";
-import { Box, Button, Grid, IconButton, Stack, Typography } from "@mui/material";
-import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { arrayConstants, inventoryRouteConstants, InwardProductInitialValue, InwardRegisterInitialValue } from "@prime-fresh/inventory/modules";
+import { Box, Button, CircularProgress, Grid, IconButton, Typography } from "@mui/material";
+import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Add, Close } from '@mui/icons-material';
-import { displayAddress, PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
-import { ADMIN_API_URL, GetAllFilteredFarmerData, GetProduct, GetVendor, useGetAllFilteredFarmerData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { displayAddress } from '@prime-fresh/purchase/modules';
+import { ADMIN_API_URL, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetFilteredBranchData, GetProduct, useGetAllFilteredBranches, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { useDispatch } from 'react-redux';
-import { ADMIN_ROUTES, farmersDataState, productsDataState, setFilteredFarmerData, setProducts, setSelectedFarmer, setSelectedProduct, setSelectedVendor, setUOMs, setVendorData, uomsDataState, vendorsDataState } from '@prime-fresh/admin/modules';
+import { ADMIN_ROUTES, farmersDataState, productsDataState, setFilteredFarmerData, setFilteredVendorData, setProducts, setSelectedFarmer, setSelectedProduct, setSelectedVendor, setUOMs, uomsDataState, vendorsDataState } from '@prime-fresh/admin/modules';
 import { useAppSelector } from '@prime-fresh/modules';
-import { PostInwardRegister } from '@prime-fresh/inventory_api';
+import { INVENTORY_API_URL, PostInwardRegister, useCreateInwardRegister } from '@prime-fresh/inventory_api';
 import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { appendFormData } from '@prime-fresh/shared/utils';
 
 export const InwardRegisterCreateForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
+  const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
   const { data: FilteredFarmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
   const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
+  const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+  const Locations = locations ? locations : [];
+  const { allVendorsFiltered, selectedVendor } = useAppSelector(vendorsDataState);
   const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
   const { allProducts, selectedProduct } = useAppSelector(productsDataState);
   const { allUOMs } = useAppSelector(uomsDataState);
@@ -28,22 +32,23 @@ export const InwardRegisterCreateForm = () => {
     dispatch(setSelectedVendor(null));
     dispatch(setSelectedFarmer(null));
     dispatch(setSelectedProduct(null));
-    dispatch(setVendorData(Vendors ? Vendors : []));
-    dispatch(setProducts(Products? Products : []));
+    dispatch(setFilteredVendorData(Vendors ? Vendors : []));
+    dispatch(setProducts(Products ? Products : []));
     dispatch(setUOMs(UOMs ? UOMs : []));
   }, [dispatch, Products, Vendors, UOMs]);
 
   const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
     setFieldValue("source", value);
-    value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(FilteredFarmers ? FilteredFarmers : []));
+    value === "vendor" ? dispatch(setFilteredVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(FilteredFarmers ? FilteredFarmers : []));
   };
 
   const handleSourceNameChange = (values: PostInwardRegister, dataId: string) => {
+    console.log("Selected Party: ", dataId);
     if (values.source === "vendor") {
-      const selectedVendor:GetVendor | undefined = allVendors.find((vendor) => vendor.id === dataId);
+      const selectedVendor: GetAllFilteredVendorData | undefined = allVendorsFiltered.find((vendor) => vendor.id === dataId);
       dispatch(setSelectedVendor(selectedVendor));
     } else if (values.source === "farmer") {
-      const selectFarmer:GetAllFilteredFarmerData | undefined = allFarmersFiltered.find((farmer) => farmer.id === dataId)
+      const selectFarmer: GetAllFilteredFarmerData | undefined = allFarmersFiltered.find((farmer) => farmer.id === dataId)
       dispatch(setSelectedFarmer(selectFarmer))
     }
   };
@@ -59,12 +64,28 @@ export const InwardRegisterCreateForm = () => {
     }));
     setFieldValue("inwardProduct", updatedProducts);
   }
+  const { mutateAsync, error, data } = useCreateInwardRegister(INVENTORY_API_URL.POST_INWARD_REGISTER);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCreate = (values: any) => {
+    const formData = new FormData();
+    appendFormData(formData, values);
+    mutateAsync(formData).then(() => {
+      toast.success(data ? data.message : "Inward register record created successfully.");
+      setTimeout(() => {
+        navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
+      }, 2500)
+    }).catch(() => {
+      toast.error(error ? error.message : "")
+    })
+  }
+
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={InwardRegisterInitialValue}
-      onSubmit={(values) => console.log(values)}
-    >
-      {({ values, handleChange, handleSubmit, setFieldValue }) => (
+      onSubmit={(values) => handleCreate(values)}>
+      {({ values, handleChange, handleSubmit, handleReset, setFieldValue, isSubmitting }) => (
         <form onSubmit={handleSubmit}>
           <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
             <Grid item xs={12} md={6}>
@@ -72,27 +93,29 @@ export const InwardRegisterCreateForm = () => {
                 Inward Register
               </Typography>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Stack direction="row" justifyContent="end" alignItems="center">
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  sx={{ width: 150 }}
-                >
-                  Create
-                </Button>
-                <Button
-                  type="reset"
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  sx={{ width: 150, marginLeft: 2 }}
-                >
-                  Reset
-                </Button>
-              </Stack>
+            <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+            <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                size="large"
+                disabled={isSubmitting} sx={{
+                  width: 150, textTransform: 'none', '&:disabled': {
+                    backgroundColor: "#A5D6A7",
+                  },
+                }}>
+                {isSubmitting ? <CircularProgress color='inherit' size={25} /> : "Create"}
+              </Button>              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: "none" }} onClick={handleReset}>Reset</Button>
+            </Grid>
+            <Grid item xs={12}>
+              <RadioGroupInput
+                isRequired={true}
+                label="Inward Type"
+                name="inwardType"
+                alignment="horizontal"
+                options={arrayConstants.INWARD_TYPE.map((type) => { return { value: type, label: type } })}
+                value={values.inwardType}
+                handleChange={handleChange} />
             </Grid>
             <Grid item xs={12} md={3}>
               <SelectInput
@@ -117,7 +140,7 @@ export const InwardRegisterCreateForm = () => {
                 isRequired={true}
                 label="Company Name"
                 name="companyName"
-                options={PURCHASE_ARRAYS.companyNames}
+                options={arrayConstants.COMPANY_NAMES}
                 value={values.companyName}
                 handleChange={handleChange} />
             </Grid>
@@ -131,13 +154,12 @@ export const InwardRegisterCreateForm = () => {
                 handleChange={handleChange} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <TextInput
-                type="text"
+              <AutoCompleteInput
                 isRequired={true}
                 name="location"
                 label="Location"
-                value={values.location}
-                handleChange={handleChange} />
+                options={mapToValueLabelArray<GetFilteredBranchData>(Locations, 'id', 'name')}
+                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')}/>
             </Grid>
             <Grid item xs={12} md={4}>
               <TextInput
@@ -153,7 +175,7 @@ export const InwardRegisterCreateForm = () => {
                 isRequired={true}
                 label="Source:"
                 name="source"
-                options={PURCHASE_ARRAYS.source}
+                options={arrayConstants.SOURCES}
                 value={values.source}
                 handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   handlesSourceChange(event.target.value, setFieldValue)
@@ -166,14 +188,8 @@ export const InwardRegisterCreateForm = () => {
                     isRequired={true}
                     name="selectedParty"
                     label="Vendor Company Name"
-                    options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')}
-                    handleChange={(event, newValue) => {
-                      if (newValue) {
-                        setFieldValue('selectedParty', newValue.value);
-                      } else {
-                        setFieldValue('selectedParty', '');
-                      }
-                    }}
+                    options={mapToValueLabelArray<GetAllFilteredVendorData>(allVendorsFiltered, 'id', 'companyName')}
+                    handleChange={(event, newValue) => newValue ? setFieldValue('selectedParty', newValue.value) : setFieldValue('selectedParty', '')}
                     handleBlur={handleSourceNameChange(values, values.selectedParty)} />
                 ) : (
                   <AutoCompleteInput
@@ -181,13 +197,7 @@ export const InwardRegisterCreateForm = () => {
                     name="selectedParty"
                     label="Farmer Name"
                     options={mapToValueLabelArray(allFarmersFiltered, 'id', 'fullName')}
-                    handleChange={(event, newValue) => {
-                      if (newValue) {
-                        setFieldValue('selectedParty', newValue.value);
-                      } else {
-                        setFieldValue('selectedParty', '');
-                      }
-                    }}
+                    handleChange={(event, newValue) => newValue ? setFieldValue('selectedParty', newValue.value) : setFieldValue('selectedParty', '')}
                     handleBlur={handleSourceNameChange(values, values.selectedParty)} />
                 )}
             </Grid>
@@ -197,7 +207,7 @@ export const InwardRegisterCreateForm = () => {
                   <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={`${selectedVendor?.vendorSaleInfo.contactFName || ''} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`} isReadOnly={true} />
+                  <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />
@@ -296,7 +306,7 @@ export const InwardRegisterCreateForm = () => {
                             isRequired={true}
                             label="Count"
                             name={`inwardProduct.${index}.count`}
-                            options={selectedProduct?.count.map((count) => ({ value: count, label: count }))}
+                            options={selectedProduct?.count !== null ? selectedProduct?.count.map((count) => ({ value: count, label: count })) : []}
                             value={values.inwardProduct[index].count}
                             handleChange={handleChange} />
                         </Grid>
@@ -305,7 +315,7 @@ export const InwardRegisterCreateForm = () => {
                             isRequired={true}
                             label="Size"
                             name={`inwardProduct.${index}.size`}
-                            options={selectedProduct?.count.map((count) => ({ value: count, label: count }))}
+                            options={selectedProduct?.size? selectedProduct.size.map((size) => ({ value: size, label: size })) : []}
                             value={values.inwardProduct[index].size}
                             handleChange={handleChange} />
                         </Grid>

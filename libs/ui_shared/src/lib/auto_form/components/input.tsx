@@ -7,7 +7,7 @@ type TextInputProps = TextFieldProps & {
   isRequired: boolean;
   label: string;
   name: string;
-  value: string | number | Date | undefined | null;
+  value: string | number | Date | undefined | null ;
   handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   isReadOnly?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,11 +18,6 @@ type TextInputProps = TextFieldProps & {
 
 export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, type, value, handleChange, isReadOnly, touched = {}, errors = {}, ...otherProps}) => {
 const [field, meta] = useField(name);
-  // const getHelperText = () => {
-  //   const error = errors[name];
-  //   return typeof error === "string" ? error : undefined;
-  // };
-
   return (
     <Grid container direction="column">
       <Grid item xs={12}>

@@ -22,18 +22,19 @@ export const DeliveryChallanForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePost(formData).then(() => {
-      toast.success(Res? Res.message : "Delivery challan created.");
+      toast.success(Res ? Res.message : "Delivery challan created.");
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN);
       }, 2500);
     }).catch(() => {
-      toast.error(error? error.message : "Error while creating delivery challan.");
+      toast.error(error ? error.message : "Error while creating delivery challan.");
     });
   };
 
   return (
     <>
       <Formik
+        enableReinitialize={true}
         initialValues={initValDeliveryChallan}
         validationSchema={deliveryChallanSchema}
         validateOnBlur={true}
@@ -82,6 +83,7 @@ export const DeliveryChallanForm = () => {
                   isRequired={true}
                   name="deliveryCType"
                   label="Challan Type"
+                  alignment="horizontal"
                   options={PURCHASE_ARRAYS.deliveryChallanType}
                   value={values.deliveryCType}
                   handleChange={handleChange} />
@@ -93,7 +95,7 @@ export const DeliveryChallanForm = () => {
                     name="otherCType"
                     label="If other please specify "
                     type="text" value={values.otherCType}
-                    handleChange={handleChange}/>
+                    handleChange={handleChange} />
                 </Grid>) : ('')}
               <Grid item xs={12} md={3}>
                 <SelectInput
@@ -127,32 +129,15 @@ export const DeliveryChallanForm = () => {
                   {({ remove, push }) => (
                     <>
                       {values.items.map((item, index) => (
-                        <Grid
-                          container
-                          columnSpacing={1}
-                          key={index}
-                          alignItems="center"
-                          sx={{
-                            border: `1px solid #BDBDBD`,
-                            marginY: 1,
-                            padding: 1,
-                            borderRadius: 2,
-                          }}
-                        >
-                          <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                            <Typography variant="body1" component="div">Product : {index + 1}</Typography>
-                            <IconButton color="error" onClick={() => remove(index)}>
-                              <Close />
-                            </IconButton>
-                          </Grid>
-                          <Grid item xs={12} md={6}>
+                        <Grid container columnSpacing={1} key={index} alignItems="center">
+                          <Grid item xs={12} md={4}>
                             <TextInput
                               type="text"
                               isRequired={true}
                               name={`items.${index}.itemName`}
-                              label="Name"
+                              label="Product Name"
                               value={item.itemName}
-                              handleChange={handleChange}/>
+                              handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
@@ -170,7 +155,7 @@ export const DeliveryChallanForm = () => {
                               name={`items.${index}.rate`}
                               label="Rate"
                               value={item.rate}
-                              handleChange={handleChange}/>
+                              handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
@@ -179,19 +164,18 @@ export const DeliveryChallanForm = () => {
                               name={`items.${index}.amt`}
                               label="Amount"
                               value={item.amt}
-                              handleChange={handleChange}/>
+                              handleChange={handleChange} />
+                          </Grid>
+                          <Grid item xs={12} md={2} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                            {values.items.length > 1 ? (<IconButton color="error" size="large" sx={{ marginTop: 2 }} onClick={() => remove(index)}>
+                              <Close />
+                            </IconButton>) : ('')}
+                            <IconButton color="primary" size="large" sx={{ marginTop: 2 }} onClick={() => push(initValMaterials)}>
+                              <Add />
+                            </IconButton>
                           </Grid>
                         </Grid>
                       ))}
-                      <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-                        <Button
-                          variant="text"
-                          startIcon={<Add />}
-                          onClick={() => push(initValMaterials)}
-                        >
-                          Add More
-                        </Button>
-                      </Grid>
                     </>
                   )}
                 </FieldArray>
@@ -212,7 +196,7 @@ export const DeliveryChallanForm = () => {
                   name="fromLocation"
                   label="From"
                   value={values.fromLocation}
-                  handleChange={handleChange}/>
+                  handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={5}>
                 <TextInput

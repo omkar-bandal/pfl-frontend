@@ -19,7 +19,7 @@ const vendorDataSlice = createSlice({
         setVendorData: (state, action: PayloadAction<GetVendor[]>) => {
             state.allVendors = action.payload;
         },
-        setFilteredFarmerData: (state, action: PayloadAction<GetAllFilteredVendorData[]>) => {
+        setFilteredVendorData: (state, action: PayloadAction<GetAllFilteredVendorData[]>) => {
             state.allVendorsFiltered = action.payload
         },
         setSelectedVendor: (state, action: PayloadAction<GetAllFilteredVendorData | null | undefined>) =>{
@@ -28,7 +28,7 @@ const vendorDataSlice = createSlice({
     }
 })
 
-export const { setVendorData, setSelectedVendor } = vendorDataSlice.actions;
+export const { setVendorData, setFilteredVendorData, setSelectedVendor } = vendorDataSlice.actions;
 
 export const vendorsDataState = (state: RootState) => state.vendorData;
 

@@ -34,7 +34,7 @@ export const ADMIN_API_URL = {
     GET_A_VENDOR: "/vendors",
     POST_VENDOR: "/vendors/",
     UPDATE_VENDOR: "/vendors",
-    GET_ALL_VENDOR_FILTERED: "/vendors/filterVendor/all",
+    GET_ALL_VENDORS_FILTERED: "/vendors/filterVendor/all",
     GET_ALL_VENDOR_CAT: "/vendor-categories/",
     CREATE_VENDOR_CAT: "/vendor-categories/",
     GET_A_VENDOR_CAT: "/vendor-categories",
@@ -93,4 +93,6 @@ export const ADMIN_API_URL = {
     GET_A_WAREHOUSE: "/location_branches/WAREHOUSE",
     POST_BRANCH: "/location_branches",
     UPDATE_BRANCH: "/location_branches",
+
+    GET_ALL_BRANCHES_FILTERED: "/location_branches/filterData/filter/all",
 }

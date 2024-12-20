@@ -32,7 +32,7 @@ const Ka = {
   GET_A_VENDOR: "/vendors",
   POST_VENDOR: "/vendors/",
   UPDATE_VENDOR: "/vendors",
-  GET_ALL_VENDOR_FILTERED: "/vendors/filterVendor/all",
+  GET_ALL_VENDORS_FILTERED: "/vendors/filterVendor/all",
   GET_ALL_VENDOR_CAT: "/vendor-categories/",
   CREATE_VENDOR_CAT: "/vendor-categories/",
   GET_A_VENDOR_CAT: "/vendor-categories",
@@ -86,7 +86,8 @@ const Ka = {
   GET_ALL_WAREHOUSE: "/location_branches/WAREHOUSE",
   GET_A_WAREHOUSE: "/location_branches/WAREHOUSE",
   POST_BRANCH: "/location_branches",
-  UPDATE_BRANCH: "/location_branches"
+  UPDATE_BRANCH: "/location_branches",
+  GET_ALL_BRANCHES_FILTERED: "/location_branches/filterData/filter/all"
 };
 var Pr = class {
   constructor() {
@@ -4609,7 +4610,7 @@ de.default = de;
 const ho = {
   //Authentication
   BASE_URL: "http://ec2-3-109-211-250.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://60da-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://b641-182-156-141-17.ngrok-free.app",
 }, We = de.create({
   baseURL: ho.BASE_URL,
   withCredentials: !0,
@@ -4725,7 +4726,7 @@ const Fe = (e) => {
 }, ke = (e, t) => {
   const r = new er();
   return Fn({ mutationFn: (n) => r.updateData(e, t, n) });
-}, Ja = (e) => Fe(e), Qa = (e) => Va(e), Xa = (e) => ye(e, ["getAllCustomers"]), Za = (e) => ye(e, ["getAllCustomerCategories"]), eu = (e) => ye(e, ["getAllCustomerTypes"]), tu = (e, t) => Le(e, t, ["getCustomer"]), ru = (e, t) => ke(e, t), nu = (e) => Fe(e), su = (e) => ye(e, ["getAllEmployees"]), ou = (e) => ye(e, ["getAllRoles"]), iu = (e, t) => Le(e, t, ["getEmployee"]), au = (e, t) => ke(e, t), uu = (e) => Fe(e), cu = (e) => ye(e, ["getFarmers"]), lu = (e, t) => Le(e, t, ["getFarmer"]), fu = (e, t) => ke(e, t), du = (e) => ye(e, ["getAllFilteredFarmerData"]), hu = (e) => Fe(e), pu = (e) => ye(e, ["getAllVendors"]), mu = (e) => ye(e, ["getAllFilteredVendorData"]), yu = (e, t) => Le(e, t, ["getVendor"]), Eu = (e) => Fe(e), vu = (e, t) => Le(e, t, ["getAVendorCategory"]), bu = (e) => ye(e, ["getAllVendorCat"]), gu = (e, t) => ke(e, t), Ru = (e) => Fe(e), _u = (e, t) => Le(e, t, ["getAVendorSubcategory"]), Cu = (e) => ye(e, ["getVendor"]), Ou = (e, t) => ke(e, t), Su = (e) => Fe(e), Tu = (e) => ye(e, ["getProducts"]), wu = (e, t) => Le(e, t, ["getAProduct"]), Au = (e, t) => ke(e, t), Pu = (e) => Fe(e), Du = (e, t) => Le(e, t, ["getAProductClassification"]), Fu = (e) => ye(e, ["getProductsClassification"]), Lu = (e, t) => ke(e, t), Uu = (e) => Fe(e), ku = (e, t) => Le(e, t, ["getAProductCategory"]), Iu = (e) => ye(e, ["getProductCat"]), xu = (e, t) => ke(e, t), Nu = (e) => Fe(e), ju = (e, t) => Le(e, t, ["getAProductSubcategory"]), Mu = (e) => ye(e, ["getProductSubcat"]), Bu = (e, t) => ke(e, t), Gu = (e) => Fe(e), $u = (e, t) => Le(e, t, ["getAUOM"]), Vu = (e) => ye(e, ["getUOMs"]), qu = (e, t) => ke(e, t), Wu = (e) => Fe(e), Hu = (e, t) => Le(e, t, ["getAUOMConversionMatrix"]), zu = (e) => ye(e, ["getUOMConversionMatrixs"]), Yu = (e, t) => ke(e, t), Ku = (e) => Fe(e), Ju = (e, t) => Le(e, t, ["getABranch"]), Qu = (e) => ye(e, ["getAllBranches"]), Xu = (e, t) => ke(e, t), Zu = (e) => Fe(e), ec = (e, t) => Le(e, t, ["getAOffice"]), tc = (e) => ye(e, ["getAllOffices"]), rc = (e, t) => ke(e, t);
+}, Ja = (e) => Fe(e), Qa = (e) => Va(e), Xa = (e) => ye(e, ["getAllCustomers"]), Za = (e) => ye(e, ["getAllCustomerCategories"]), eu = (e) => ye(e, ["getAllCustomerTypes"]), tu = (e, t) => Le(e, t, ["getCustomer"]), ru = (e, t) => ke(e, t), nu = (e) => Fe(e), su = (e) => ye(e, ["getAllEmployees"]), ou = (e) => ye(e, ["getAllRoles"]), iu = (e, t) => Le(e, t, ["getEmployee"]), au = (e, t) => ke(e, t), uu = (e) => Fe(e), cu = (e) => ye(e, ["getFarmers"]), lu = (e, t) => Le(e, t, ["getFarmer"]), fu = (e, t) => ke(e, t), du = (e) => ye(e, ["getAllFilteredFarmerData"]), hu = (e) => Fe(e), pu = (e) => ye(e, ["getAllVendors"]), mu = (e) => ye(e, ["getAllFilteredVendorData"]), yu = (e, t) => Le(e, t, ["getVendor"]), Eu = (e) => Fe(e), vu = (e, t) => Le(e, t, ["getAVendorCategory"]), bu = (e) => ye(e, ["getAllVendorCat"]), gu = (e, t) => ke(e, t), Ru = (e) => Fe(e), _u = (e, t) => Le(e, t, ["getAVendorSubcategory"]), Cu = (e) => ye(e, ["getVendor"]), Ou = (e, t) => ke(e, t), Su = (e) => Fe(e), Tu = (e) => ye(e, ["getProducts"]), wu = (e, t) => Le(e, t, ["getAProduct"]), Au = (e, t) => ke(e, t), Pu = (e) => Fe(e), Du = (e, t) => Le(e, t, ["getAProductClassification"]), Fu = (e) => ye(e, ["getProductsClassification"]), Lu = (e, t) => ke(e, t), Uu = (e) => Fe(e), ku = (e, t) => Le(e, t, ["getAProductCategory"]), Iu = (e) => ye(e, ["getProductCat"]), xu = (e, t) => ke(e, t), Nu = (e) => Fe(e), ju = (e, t) => Le(e, t, ["getAProductSubcategory"]), Mu = (e) => ye(e, ["getProductSubcat"]), Bu = (e, t) => ke(e, t), Gu = (e) => Fe(e), $u = (e, t) => Le(e, t, ["getAUOM"]), Vu = (e) => ye(e, ["getUOMs"]), qu = (e, t) => ke(e, t), Wu = (e) => Fe(e), Hu = (e, t) => Le(e, t, ["getAUOMConversionMatrix"]), zu = (e) => ye(e, ["getUOMConversionMatrixs"]), Yu = (e, t) => ke(e, t), Ku = (e) => Fe(e), Ju = (e, t) => Le(e, t, ["getABranch"]), Qu = (e) => ye(e, ["getAllBranches"]), Xu = (e, t) => ke(e, t), Zu = (e) => ye(e, ["get-all-filtered-branches"]), ec = (e) => Fe(e), tc = (e, t) => Le(e, t, ["getAOffice"]), rc = (e) => ye(e, ["getAllOffices"]), nc = (e, t) => ke(e, t);
 var qa = /* @__PURE__ */ ((e) => (e[e.COLLECTION_CENTER = 0] = "COLLECTION_CENTER", e[e.DISTRIBUTION_CENTER = 1] = "DISTRIBUTION_CENTER", e[e.SEASONAL_COLLECTION_CENTER = 2] = "SEASONAL_COLLECTION_CENTER", e[e.WAREHOUSE = 3] = "WAREHOUSE", e))(qa || {}), Wa = /* @__PURE__ */ ((e) => (e[e.REGISTERED_OFFICE = 0] = "REGISTERED_OFFICE", e[e.CORPORATE_OFFICE = 1] = "CORPORATE_OFFICE", e))(Wa || {}), Ha = /* @__PURE__ */ ((e) => (e.OWNED = "Owned", e.LEASED = "Leased", e.SHARED = "Shared", e.ENCUMBERED = "Encumbered", e))(Ha || {}), za = /* @__PURE__ */ ((e) => (e.CULTIVABLE = "Cultivable", e.FALLOW = "Fallow", e.IRRIGATED = "Irrigated", e.NON_IRRIGATED = "Non-Irrigated", e))(za || {});
 export {
   Ka as ADMIN_API_URL,
@@ -4737,7 +4738,7 @@ export {
   Ja as useCreateCustomer,
   nu as useCreateEmployee,
   uu as useCreateFarmer,
-  Zu as useCreateOffice,
+  ec as useCreateOffice,
   Su as useCreateProduct,
   Uu as useCreateProductCat,
   Pu as useCreateProductClassification,
@@ -4749,7 +4750,7 @@ export {
   Eu as useCreateVendorSubCat,
   Qa as useDeleteCustomer,
   Ju as useGetABranch,
-  ec as useGetAOffice,
+  tc as useGetAOffice,
   wu as useGetAProduct,
   ku as useGetAProductCat,
   Du as useGetAProductClassification,
@@ -4764,9 +4765,10 @@ export {
   Xa as useGetAllCustomers,
   su as useGetAllEmployee,
   cu as useGetAllFarmers,
+  Zu as useGetAllFilteredBranches,
   du as useGetAllFilteredFarmerData,
   mu as useGetAllFilteredVendorData,
-  tc as useGetAllOffices,
+  rc as useGetAllOffices,
   Fu as useGetAllProductClassification,
   Mu as useGetAllProductSubCat,
   Tu as useGetAllProducts,
@@ -4785,7 +4787,7 @@ export {
   ru as useUpdateCustomer,
   au as useUpdateEmployee,
   fu as useUpdateFarmer,
-  rc as useUpdateOffice,
+  nc as useUpdateOffice,
   Au as useUpdateProduct,
   xu as useUpdateProductCat,
   Lu as useUpdateProductClassification,

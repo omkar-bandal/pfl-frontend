@@ -8,8 +8,10 @@ import { AUTH_API_URL, useSignOutService } from '@prime-fresh/auth_api';
 import { getAccessToken, getRefreshToken } from '@prime-fresh/common_api';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
-  const location = useLocation().pathname.split('/').slice(-2)[0];
-  const pageName = location.replace(/_/g, " ");
+  const location = useLocation().pathname.split('/').slice(-1)[0];
+  const pageName = location.split('-')
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
   const dispatch = useDispatch();
   const isClosing = useAppSelector(isClosingState);
   const mobileOpen = useAppSelector(mobileOpenState);

@@ -18,6 +18,7 @@ exports.initValGRNProducts = {
     revisedQuantity: 0,
 };
 exports.initValGRN = {
+    grnType: "",
     dealSlipId: '',
     billNo: '',
     serialNo: '',

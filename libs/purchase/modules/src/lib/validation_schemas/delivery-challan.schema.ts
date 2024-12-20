@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { contactNoSchema } from './contactNo.schema';
 
 export const deliveryChallanSchema = yup.object().shape({
+    deliveryCType: yup.string().required('Challan type is required'),
     companyName: yup.string().required('Company name is required'),
     partyName: yup.string().required('Party name is required'),
     fromLocation: yup.string().required('Location is required'),
@@ -17,5 +18,18 @@ export const deliveryChallanSchema = yup.object().shape({
             itemQty: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
             rate: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
         })
-    )
+    ),
+    anyAttachment: yup.mixed().nullable()
+        .test('fileFormat', 'Invalid image format (only jpg, jpeg, png allowed)', (value) => {
+            if (!value) return true; // No file selected
+            const file = value as File;
+            const allowedFormats = ['image/jpeg', 'image/png', 'image/jpg'];
+            return allowedFormats.includes(file.type);
+        })
+        .test('fileSize', 'Image is too large (max 1MB)', (value) => {
+            if (!value) return true; // No file selected
+            const file = value as File;
+            const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
+            return file.size <= maxSizeInBytes;
+        }),
 })

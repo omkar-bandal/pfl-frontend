@@ -1,13 +1,14 @@
 import * as yup from 'yup';
 
 export const grnSchema = yup.object().shape({
+    grnType: yup.string().required('Type of GRN is required'),
     companyName: yup.string().required('Company Name is required'),
     billNo: yup.string().required("Bill number is required"),
     serialNo: yup.string().required("Serial number is required"),
     purchaseRequestByWhom: yup.string().required("Requesting person name required"),
     purchaseLocation: yup.string().required('Purchase Location is required'),
     purchaseForWhich: yup.string().required('Purchase For Which is required'),
-    source: yup.string().required("Source required"),
+    source: yup.string().required("Source is required"),
     selectedParty: yup.string().required("Please select one option"),
     products: yup.array().of(
         yup.object().shape({

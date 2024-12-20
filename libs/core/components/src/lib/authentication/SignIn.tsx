@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { images } from "@prime-fresh/assets";
-import { authRouteConstants, authState, SignInWithEmailSchema, SignInWithMobileNoSchema, stringConstants, useActions, useAppSelector } from "@prime-fresh/modules";
+import { authRouteConstants, authState, SignInSchema, stringConstants, useActions, useAppSelector } from "@prime-fresh/modules";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 
 const InitValSignIn: SignInRequest = {
@@ -30,14 +30,19 @@ export const SignIn = () => {
         checkAuth();
         const dept = localStorage.getItem('department');
         if (isLoggedIn && dept) {
-            if (dept === stringConstants.DEPT_ADMIN)
-                navigate(ADMIN_ROUTES.DASHBOARD_ADMIN)
-            if (dept === stringConstants.DEPT_PURCHASE)
-                navigate(PURCHASE_ROUTES.DASHBOARD_PURCHASE)
-            if(dept === stringConstants.DEPT_INVENTORY)
-                navigate(inventoryRouteConstants.DASHBOARD_INVENTORY)
-        } else {
-            navigate(authRouteConstants.SIGN_IN)
+            switch (dept) {
+                case stringConstants.DEPT_ADMIN:
+                    navigate(ADMIN_ROUTES.DASHBOARD_ADMIN);
+                    break;
+                case stringConstants.DEPT_PURCHASE:
+                    navigate(PURCHASE_ROUTES.DASHBOARD_PURCHASE);
+                    break;
+                case stringConstants.DEPT_INVENTORY:
+                    navigate(inventoryRouteConstants.DASHBOARD_INVENTORY);
+                    break;
+                default:
+                    navigate(authRouteConstants.SIGN_IN);
+            }
         }
     }, [checkAuth, isLoggedIn, navigate]);
 
@@ -50,7 +55,7 @@ export const SignIn = () => {
     const changeSigninMethod = () => signinMethod === 'email' ? setSigninMethod('mobile') : setSigninMethod('email');
 
     //custom hook for sign in
-    const { mutateAsync, isPending, isSuccess, isError, error, data } = useSignInService(AUTH_API_URL.SIGNIN);
+    const { mutateAsync, isError, error, data } = useSignInService(AUTH_API_URL.SIGNIN);
 
     //submit function of sign in form.
     const handleSignIn = async (values: SignInRequest) => {
@@ -80,14 +85,13 @@ export const SignIn = () => {
                     </Grid>
                     <Grid item sm={6} xs={12}>
                         <Formik
-                            enableReinitialize={true}
                             initialValues={InitValSignIn}
-                            validationSchema={signinMethod === "email" ? SignInWithEmailSchema : SignInWithMobileNoSchema}
+                            validationSchema={SignInSchema(signinMethod)}
                             validateOnBlur={true}
                             validateOnChange={true}
                             onSubmit={(values) => handleSignIn(values)}
                         >
-                            {({ values, handleChange, handleSubmit, touched, errors }) => (
+                            {({ values, handleChange, handleSubmit, touched, errors, isSubmitting }) => (
                                 <form onSubmit={handleSubmit}>
                                     <Grid container direction="column" spacing={0.5} padding={1}>
                                         <Grid item xs={12}>
@@ -147,25 +151,21 @@ export const SignIn = () => {
                                                 <Typography variant='body2' color="error" sx={{ fontWeight: 500 }}>{errors.password}</Typography>
                                             ) : null}
                                         </Grid>
-                                        {/* <Grid item xs={12} sx={{ display: "flex", alignItems: "center", marginY: 1 }}>
-                                                <Checkbox
-                                                size="small"
-                                                name="remember"
-                                                sx={{ padding: 0, marginRight: 2 }}
-                                                />
-                                                <Typography variant='body2'>{stringConstants.REMEMBER_ME}</Typography>
-                                            </Grid> */}
                                         <Grid item xs={12}>
                                             <Button
                                                 type="submit"
                                                 color="primary"
                                                 variant="contained"
                                                 fullWidth
-                                                sx={{ my: 2, textTransform: 'none', fontSize: 15, fontWeight: 'bold' }}
+                                                sx={{
+                                                    my: 2, textTransform: 'none', fontSize: 15, fontWeight: 'bold', '&:disabled': {
+                                                        backgroundColor: "#A5D6A7",
+                                                    },
+                                                }}
                                                 disableElevation
-                                                disabled={(!values.uid && !values.password) || isPending || isSuccess}
+                                                disabled={isSubmitting}
                                             >
-                                                {isPending ? <CircularProgress size={25} color="inherit" /> : stringConstants.SIGN_IN}
+                                                {isSubmitting ? <CircularProgress size={25} color="inherit" /> : stringConstants.SIGN_IN}
                                             </Button>
                                         </Grid>
                                         <Grid item xs={12}>

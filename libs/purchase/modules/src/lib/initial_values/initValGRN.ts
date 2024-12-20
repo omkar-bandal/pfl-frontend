@@ -17,6 +17,7 @@ export const initValGRNProducts: GRNProducts = {
 }
 
 export const initValGRN: PostGRN = {
+    grnType: "",
     dealSlipId: '',
     billNo: '',
     serialNo: '',

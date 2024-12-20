@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 export declare const grnSchema: yup.ObjectSchema<{
+    grnType: string;
     companyName: string;
     billNo: string;
     serialNo: string;
@@ -18,6 +19,7 @@ export declare const grnSchema: yup.ObjectSchema<{
     deliveryReceivingPerson: string;
     rmn: string;
 }, yup.AnyObject, {
+    grnType: undefined;
     companyName: undefined;
     billNo: undefined;
     serialNo: undefined;

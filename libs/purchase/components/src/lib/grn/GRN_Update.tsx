@@ -4,8 +4,8 @@ import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from '@mui/material'
 import { displayAddress, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { FieldArray, Formik } from 'formik';
-import { ADMIN_ROUTES, setVendorData, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, vendorsDataState, farmersDataState, productsDataState, uomsDataState, setSelectedProduct, setFarmerData, setFilteredFarmerData } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, GetAllFilteredFarmerData, GetFarmer, GetProduct, GetUOM, GetVendor, useGetAllFarmers, useGetAllFilteredFarmerData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { ADMIN_ROUTES, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, vendorsDataState, farmersDataState, productsDataState, uomsDataState, setSelectedProduct, setFilteredFarmerData, setFilteredVendorData } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetProduct, GetUOM, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { GetDealSlip, GetGRN, PostGRN, PURCHASE_API_URL, useGetAllDealSlip, useGetGRN, useUpdateGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
@@ -26,33 +26,33 @@ export const GRNUpdate = () => {
     console.log("GRN API DATA : ", selectedGRN);
 
     const { data: dealSlips } = useGetAllDealSlip(PURCHASE_API_URL.GET_ALL_DEAL_SLIP);
-    const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
+    const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
     const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
 
-    const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
+    const { allVendorsFiltered, selectedVendor } = useAppSelector(vendorsDataState);
     const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
 
     React.useEffect(() => {
         dispatch(setDealSlipData(dealSlips ? dealSlips : []));
-        dispatch(setVendorData(Vendors ? Vendors : []));
+        dispatch(setFilteredVendorData(Vendors ? Vendors : []));
         dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
         dispatch(setProducts(Products ? Products : []));
         dispatch(setUOMs(UOMs ? UOMs : []));
         if (selectedGRN.source === "vendor") {
-            dispatch(setSelectedVendor(allVendors.find(vendor => vendor.id === selectedGRN.selectedParty)))
+            dispatch(setSelectedVendor(allVendorsFiltered.find(vendor => vendor.id === selectedGRN.selectedParty)))
         } else {
             dispatch(setSelectedFarmer(allFarmersFiltered.find(farmer => farmer.id === selectedGRN.selectedParty)));
         }
-    }, [dispatch, Products, Vendors, Farmers, UOMs, dealSlips ]);
+    }, [dispatch,selectedGRN, Products, Vendors, Farmers, UOMs, dealSlips, allVendorsFiltered, allFarmersFiltered ]);
 
 
     const handleSourceNameChange = (values: PostGRN | GetGRN, dataId: string) => {
         if (values.source === "vendor") {
-            const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
+            const selectedVendor = allVendorsFiltered.find((vendor) => vendor.id === dataId);
             dispatch(setSelectedVendor(selectedVendor));
         } else if (values.source === "farmer") {
             const selectedFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId)
@@ -175,7 +175,7 @@ export const GRNUpdate = () => {
                                                             isRequired={true}
                                                             name="selectedParty"
                                                             label="Vendor Company Name"
-                                                            options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')}
+                                                            options={mapToValueLabelArray<GetAllFilteredVendorData>(allVendorsFiltered, 'id', 'companyName')}
                                                             value={values.selectedParty}
                                                             handleChange={(e) => {
                                                                 if (e.target.value) {
@@ -210,7 +210,7 @@ export const GRNUpdate = () => {
                                                         <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={selectedVendor?.vendorCode} isReadOnly={true} />
                                                     </Grid>
                                                     <Grid item xs={12} md={4}>
-                                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={`${selectedVendor?.vendorSaleInfo.contactFName || ''} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`} isReadOnly={true} />
+                                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
                                                     </Grid>
                                                     <Grid item xs={12}>
                                                         <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor.officeAddress) : ''} isReadOnly={true} />
@@ -270,7 +270,9 @@ export const GRNUpdate = () => {
                                                                             label="Product Name"
                                                                             value={values.products[index].product}
                                                                             options={mapToValueLabelArray(allProducts, 'id', 'name')}
-                                                                            handleChange={handleChange} />
+                                                                            handleChange={handleChange} 
+                                                                            onBlur={() => handleProductNameChange(values.products[index].product)}
+                                                                            />
                                                                     </Grid>
                                                                     <Grid item xs={4} md={1}>
                                                                         <SelectInput isRequired={true} id={`products.${index}.count`}

@@ -33,3 +33,8 @@ export type PostBranches = {
     balanceCapacity: number;
     type: string;
 };
+export type GetFilteredBranchData = {
+    id: string;
+    name: string;
+    type: string;
+};

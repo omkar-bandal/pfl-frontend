@@ -7,8 +7,8 @@ import { PostRFPA, RFPA_Items } from '@prime-fresh/purchase_api';
 import { setPreview, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA, rfpaSchema } from '@prime-fresh/purchase/modules';
-import { farmersDataState, setVendorData,vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES, setFilteredFarmerData } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, Address, GetAllFilteredFarmerData, GetProduct, GetVendor, useGetAllFilteredFarmerData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { farmersDataState, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES, setFilteredFarmerData, setFilteredVendorData } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, Address, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetProduct, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { PURCHASE_API_URL, useCreateRFPA } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
@@ -18,12 +18,12 @@ import { appendFormData } from '@prime-fresh/shared/utils';
 export const RFPAForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
+    const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
     const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const [source, setSource] = React.useState<string>();
-    const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
+    const { allVendorsFiltered, selectedVendor } = useAppSelector(vendorsDataState);
     const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts, selectedProduct } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
@@ -32,7 +32,7 @@ export const RFPAForm = () => {
         dispatch(setSelectedVendor(null));
         dispatch(setSelectedFarmer(null));
         dispatch(setSelectedProduct(null));
-        dispatch(setVendorData(Vendors ? Vendors : []));
+        dispatch(setFilteredVendorData(Vendors ? Vendors : []));
         dispatch(setProducts(Products ? Products : []));
         dispatch(setUOMs(UOMs ? UOMs : []));
     }, [dispatch, setSource, Products, Vendors, UOMs]);
@@ -40,12 +40,12 @@ export const RFPAForm = () => {
     const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
         setFieldValue("source", value);
         setSource(value);
-        value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
+        value === "vendor" ? dispatch(setFilteredVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
     };
 
     const handlePartyNameChange = (values: PostRFPA, dataId: string) => {
         if (values.source === "vendor") {
-            const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
+            const selectedVendor = allVendorsFiltered.find((vendor) => vendor.id === dataId);
             dispatch(setSelectedVendor(selectedVendor));
         } else if (values.source === "farmer") {
             const selectedFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId)
@@ -148,7 +148,7 @@ export const RFPAForm = () => {
                                             isRequired={true}
                                             name="selectedParty"
                                             label="Vendor Company Name"
-                                            options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')}
+                                            options={mapToValueLabelArray<GetAllFilteredVendorData>(allVendorsFiltered, 'id', 'companyName')}
                                             handleChange={(event, newValue) => {
                                                 if (newValue) {
                                                     setFieldValue('selectedParty', newValue.value);
@@ -181,7 +181,7 @@ export const RFPAForm = () => {
                                         <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={4}>
-                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={`${selectedVendor?.vendorSaleInfo.contactFName || ''} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`} isReadOnly={true} />
+                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />
@@ -225,7 +225,6 @@ export const RFPAForm = () => {
                                     {({ push, remove }) => (
                                         <>
                                             {values.rfpaProducts.map((_, index) => (
-
                                                 <Grid container spacing={1} key={index} padding={1} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
                                                     <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
                                                         <Typography variant="body1">Product : {index + 1}</Typography>

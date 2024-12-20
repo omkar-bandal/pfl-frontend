@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import { Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { Close, CloudUploadOutlined } from '@mui/icons-material';
 
@@ -13,7 +13,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ isRequired, name, labe
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { setFieldValue, values } = useFormikContext<any>();
   const [preview, setPreview] = React.useState<string | null>(null);
-
+  const [field, meta] = useField(name);
   React.useEffect(() => {
     if (values[name] && typeof values[name] === "string") {
       setPreview(values[name]); // Set the preview to the existing image URL
@@ -51,43 +51,48 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ isRequired, name, labe
           {label}
         </Typography>
       </Grid>
-      <Grid item xs={12} sx={{display: "flex", alignItems: "start", justifyContent: "center", border: '1px solid #BDBDBD', borderRadius: 2, padding: 1}}>
-          <Box
-            sx={{
-              // border: '1px dashed grey',
-              borderRadius: '8px',
-              width: '200px',
-              height: '200px',
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {preview ? (
-              <img
-                src={preview}
-                alt="Image preview"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-              />
-            ) : (
-              <Stack direction="column">
-                <IconButton component="label">
-                  <CloudUploadOutlined sx={{fontSize: 50}} />
-                  <input hidden accept="image/*" type="file" onChange={handleImageUpload} />
-                </IconButton>
-                <Typography variant='body2' component="div">Upload Image</Typography>
-              </Stack>
-            )}
-          </Box>
-          {preview && (
-            <IconButton
-              sx={{backgroundColor: 'none' }}
-              onClick={handleRemoveImage}
-            >
-              <Close color='error' />
-            </IconButton>
+      <Grid item xs={12} sx={{ display: "flex", alignItems: "start", justifyContent: "center", border: '1px solid #BDBDBD', borderRadius: 2, padding: 1 }}>
+        <Box
+          sx={{
+            // border: '1px dashed grey',
+            borderRadius: '8px',
+            width: '200px',
+            height: '200px',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {preview ? (
+            <img
+              src={preview}
+              alt="Image preview"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+            />
+          ) : (
+            <Stack direction="column">
+              <IconButton component="label">
+                <CloudUploadOutlined sx={{ fontSize: 50 }} />
+                <input hidden accept="image/*" type="file" onChange={handleImageUpload} />
+              </IconButton>
+              <Typography variant='body2' component="div">Upload Image</Typography>
+            </Stack>
           )}
+        </Box>
+        {preview && (
+          <IconButton
+            sx={{ backgroundColor: 'none' }}
+            onClick={handleRemoveImage}
+          >
+            <Close color='error' />
+          </IconButton>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        {meta.touched && Boolean(meta.error) && (
+          <Typography variant='caption' component="div" color='error'>{meta.error}</Typography>
+        )}
       </Grid>
     </Grid>
   );

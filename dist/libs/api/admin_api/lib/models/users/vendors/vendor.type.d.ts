@@ -106,6 +106,7 @@ export type GetAllFilteredVendorData = {
     id: string;
     companyName: string;
     officeContactNo: string;
+    fullName: string;
     email: string;
     vendorCode: string;
     officeAddress: Address;

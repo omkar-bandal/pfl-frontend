@@ -116,6 +116,7 @@ export type GetVendor = {
     id: string,
     companyName: string,
     officeContactNo: string,
+    fullName: string,
     email: string,
     vendorCode: string,
     officeAddress: Address

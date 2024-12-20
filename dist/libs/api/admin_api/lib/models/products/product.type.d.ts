@@ -13,23 +13,35 @@ export type PostProduct = {
     uom: string;
     productOrigin: string;
     count: string[];
+    size: string[];
+    variety: string[];
+    brand: string;
     packingType: string;
-    shelfLife: string;
-    storageTemp: string;
+    shelfLife: number;
+    storageTemp: number;
+    qualityParameters: {
+        name: string;
+    }[];
 };
 export type GetProduct = {
     id: string;
     name: string;
-    image: string;
+    image: File | null;
     description: string;
     classification: GetProductClassification;
     category: GetProductCategory;
     subcategory: GetProductSubcategory;
     uom: GetUOM;
-    productCode: string;
     productOrigin: string;
     count: string[];
+    size: string[];
+    variety: string[];
+    brand: string;
     packingType: string;
     shelfLife: number;
-    storageTemp: string;
+    storageTemp: number;
+    qualityParameters: {
+        id: string;
+        name: string;
+    }[];
 };

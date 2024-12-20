@@ -7,6 +7,7 @@ type RadioGroupInputProps = RadioGroupProps & {
     label: string;
     name: string;
     value: string | boolean | undefined | null;
+    alignment?: "horizontal" | "vertical";
     options: Array<{
         label: string;
         value: string | number | boolean;

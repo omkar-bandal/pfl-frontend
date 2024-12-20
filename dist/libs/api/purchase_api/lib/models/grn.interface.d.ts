@@ -17,6 +17,7 @@ export interface GRNProducts {
     revisedQuantity: number;
 }
 export interface PostGRN {
+    grnType: string;
     dealSlipId?: string;
     billNo: string;
     serialNo: string;

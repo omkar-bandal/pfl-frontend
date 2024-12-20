@@ -14,7 +14,7 @@ export const inventoryRouteConstants = {
 
     //Inward Register
     INWARD_REGISTER: "/inventory/inward-register",
-    GET_ALL_INWARD_REGISTER: "/inventory/inward-register",
+    GET_ALL_INWARD_REGISTERS: "/inventory/inward-register",
     CREATE_INWARD_REGISTER: "/inventory/inward-register/create",
     VIEW_INWARD_REGISTER: "/inventory/inward-register/view",
     UPDATE_INWARD_REGISTER: "/inventory/inward-register/update",
@@ -27,11 +27,17 @@ export const inventoryRouteConstants = {
     UPDATE_AQR: "/inventory/arrival-qc-report/update",
 
     //Labour Register
-    LABOUR_REGISTER: "/inventory/labour-register",
-    GET_ALL_LABOUR_REGISTER: "/inventory/labour-register",
-    CREATE_LABOUR_REGISTER: "/inventory/labour-register/create",
-    VIEW_LABOUR_REGISTER: "/inventory/labour-register/view",
-    UPDATE_LABOUR_REGISTER: "/inventory/labour-register/update",
+    LABOUR_REGISTER: "/inventory/labor-register",
+    GET_ALL_LABOUR_REGISTER: "/inventory/labor-register",
+    CREATE_LABOUR_REGISTER: "/inventory/labor-register/create",
+    VIEW_LABOUR_REGISTER: "/inventory/labor-register/view",
+    UPDATE_LABOUR_REGISTER: "/inventory/labor-register/update",
+
+    //Labour Attendance
+    LABOUR_ATTENDANCE: "/inventory/labor-attendance",
+    GET_ALL_LABOUR_ATTENDANCE: "/inventory/labor-attendance",
+    CREATE_LABOUR_ATTENDANCE: "/inventory/labor-attendance/create",
+    UPDATE_LABOUR_ATTENDANCE: "/inventory/labor-attendance/update",
 
     //Goods Received Note
     GRN: "/inventory/goods-received-note",
@@ -42,17 +48,17 @@ export const inventoryRouteConstants = {
 
     //Dump Register
     DUMP_REGISTER: "/inventory/dump-register",
-    GET_ALL_DUMP_REGISTER: "/inventory/dump-register",
+    GET_ALL_DUMP_REGISTERS: "/inventory/dump-register",
     CREATE_DUMP_REGISTER: "/inventory/dump-register/create",
     VIEW_DUMP_REGISTER: "/inventory/dump-register/view",
     UPDATE_DUMP_REGISTER: "/inventory/dump-register/update",
 
-    //Dispatch Register
-    DISPATCH_REGISTER: "/inventory/dispatch-register",
-    GET_ALL_DISPATCH_REGISTER: "/inventory/dispatch-register",
-    CREATE_DISPATCH_REGISTER: "/inventory/dispatch-register/create",
-    VIEW_DISPATCH_REGISTER: "/inventory/dispatch-register/view",
-    UPDATE_DISPATCH_REGISTER: "/inventory/dispatch-register/update",
+    //Vehicle Dispatch Register
+    VEHICLE_DISPATCH_REGISTER: "/inventory/vehicle-dispatch-register",
+    GET_ALL_VEHILCE_DISPATCH_REGISTER: "/inventory/vehicle-dispatch-register",
+    CREATE_VEHILCE_DISPATCH_REGISTER: "/inventory/vehicle-dispatch-register/create",
+    VIEW_VEHILCE_DISPATCH_REGISTER: "/inventory/vehicle-dispatch-register/view",
+    UPDATE_VEHILCE_DISPATCH_REGISTER: "/inventory/vehicle-dispatch-register/update",
     
     //Second Sale Register
     SECOND_SALE_REGISTER: "/inventory/second-sale-register",
@@ -69,9 +75,9 @@ export const inventoryRouteConstants = {
     UPDATE_STOCK_REGISTER: "/inventory/stock-register/update",
 
     //End of Day (EOD) Report
-    EOD: "/inventory/eod-report",
-    GET_ALL_EOD: "/inventory/eod-report",
-    CREATE_EOD: "/inventory/eod-report/create",
-    VIEW_EOD: "/inventory/eod-report/view",
-    UPDATE_EOD: "/inventory/eod-report/update",
+    EOD_REPORT: "/inventory/eod-report",
+    GET_ALL_EOD_REPORT: "/inventory/eod-report",
+    CREATE_EOD_REPORT: "/inventory/eod-report/create",
+    VIEW_EOD_REPORT: "/inventory/eod-report/view",
+    UPDATE_EOD_REPORT: "/inventory/eod-report/update",
 }

@@ -7,8 +7,8 @@ import { PostRFPA, RFPA_Items, useGetRFPA, useUpdateRFPA } from '@prime-fresh/pu
 import { setPreview, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA } from '@prime-fresh/purchase/modules';
-import { farmersDataState, setVendorData, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES, setFilteredFarmerData } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, Address, GetAllFilteredFarmerData, GetProduct, GetVendor, useGetAllFilteredFarmerData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from '@prime-fresh/admin_api';
+import { farmersDataState, vendorsDataState, productsDataState, uomsDataState, setProducts, setUOMs, setSelectedVendor, setSelectedFarmer, setSelectedProduct, ADMIN_ROUTES, setFilteredFarmerData, setFilteredVendorData } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, Address, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetProduct, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { PURCHASE_API_URL } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
@@ -22,37 +22,37 @@ export const RFPAUpdate = () => {
     const rfpaValues = data ? data : initValRFPA;
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
+    const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
     const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const [source, setSource] = React.useState<string>();
-    const { allVendors, selectedVendor } = useAppSelector(vendorsDataState);
+    const { allVendorsFiltered, selectedVendor } = useAppSelector(vendorsDataState);
     const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts, selectedProduct } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
     if (rfpaValues.source === "vendor")
-        dispatch(setSelectedVendor(allVendors.find(vendor => vendor.id === rfpaValues.selectedParty)))
+        dispatch(setSelectedVendor(allVendorsFiltered.find(vendor => vendor.id === rfpaValues.selectedParty)))
     else
         dispatch(setSelectedFarmer(allFarmersFiltered.find(farmer => farmer.id === rfpaValues.selectedParty)))
     React.useEffect(() => {
         dispatch(setSelectedVendor(null));
         dispatch(setSelectedFarmer(null));
         dispatch(setSelectedProduct(null));
-        dispatch(setVendorData(Vendors ? Vendors : []));
+        dispatch(setFilteredVendorData(Vendors ? Vendors : []));
         dispatch(setProducts(Products ? Products : []));
         dispatch(setUOMs(UOMs ? UOMs : []));
-    }, [dispatch, setSource, Products, Vendors, UOMs, allVendors, allFarmersFiltered, rfpaValues]);
+    }, [dispatch, setSource, Products, Vendors, UOMs, allFarmersFiltered, rfpaValues]);
 
     const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
         setFieldValue("source", value);
         setSource(value);
-        value === "vendor" ? dispatch(setVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
+        value === "vendor" ? dispatch(setFilteredVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(Farmers ? Farmers : []));
     };
 
     const handlePartyNameChange = (values: PostRFPA, dataId: string) => {
         if (values.source === "vendor") {
-            const selectedVendor = allVendors.find((vendor) => vendor.id === dataId);
+            const selectedVendor = allVendorsFiltered.find((vendor) => vendor.id === dataId);
             dispatch(setSelectedVendor(selectedVendor));
         } else if (values.source === "farmer") {
             const selectedFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId)
@@ -161,7 +161,7 @@ export const RFPAUpdate = () => {
                                             name="selectedParty"
                                             label="Vendor Company Name"
                                             value={{ value: selectedVendor ? selectedVendor.id : '', label: selectedVendor ? selectedVendor.companyName : '' }}
-                                            options={mapToValueLabelArray<GetVendor>(allVendors, 'id', 'companyName')}
+                                            options={mapToValueLabelArray<GetAllFilteredVendorData>(allVendorsFiltered, 'id', 'companyName')}
                                             handleChange={(event, newValue) => {
                                                 if (newValue) {
                                                     setFieldValue('selectedParty', newValue.value);
@@ -195,7 +195,7 @@ export const RFPAUpdate = () => {
                                         <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12} md={4}>
-                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={`${selectedVendor?.vendorSaleInfo.contactFName || ''} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`} isReadOnly={true} />
+                                        <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />

@@ -1,7 +1,7 @@
 "use strict";
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.vendorDataReducer = exports.vendorsDataState = exports.setSelectedVendor = exports.setVendorData = void 0;
+exports.vendorDataReducer = exports.vendorsDataState = exports.setSelectedVendor = exports.setFilteredVendorData = exports.setVendorData = void 0;
 const toolkit_1 = require("@reduxjs/toolkit");
 const initialState = {
     allVendors: [],
@@ -15,7 +15,7 @@ const vendorDataSlice = (0, toolkit_1.createSlice)({
         setVendorData: (state, action) => {
             state.allVendors = action.payload;
         },
-        setFilteredFarmerData: (state, action) => {
+        setFilteredVendorData: (state, action) => {
             state.allVendorsFiltered = action.payload;
         },
         setSelectedVendor: (state, action) => {
@@ -23,7 +23,7 @@ const vendorDataSlice = (0, toolkit_1.createSlice)({
         }
     }
 });
-_a = vendorDataSlice.actions, exports.setVendorData = _a.setVendorData, exports.setSelectedVendor = _a.setSelectedVendor;
+_a = vendorDataSlice.actions, exports.setVendorData = _a.setVendorData, exports.setFilteredVendorData = _a.setFilteredVendorData, exports.setSelectedVendor = _a.setSelectedVendor;
 const vendorsDataState = (state) => state.vendorData;
 exports.vendorsDataState = vendorsDataState;
 exports.vendorDataReducer = vendorDataSlice.reducer;

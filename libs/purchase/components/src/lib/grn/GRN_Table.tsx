@@ -6,14 +6,15 @@ import { GRNListCols } from "./Columns"
 import { PURCHASE_API_URL, GetGRN, useGetAllGRN } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules"
 import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
-
+import {inventoryRouteConstants} from "@prime-fresh/inventory/modules";
 export const GRNTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
     const { data: allGRN, isLoading } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
     console.log(allGRN);
-    const handleCreate = () => {
-        navigate(PURCHASE_ROUTES.CREATE_GRN);
+    const handleCreate = async() => {
+        const route = localStorage.getItem("department") === "Inventory" ? inventoryRouteConstants.CREATE_GRN : PURCHASE_ROUTES.CREATE_GRN; 
+        await navigate(route);
     }
     return (
         <Box sx={{ flex: 1 }}>

@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 export declare const deliveryChallanSchema: yup.ObjectSchema<{
+    deliveryCType: string;
     companyName: string;
     partyName: string;
     fromLocation: string;
@@ -14,7 +15,9 @@ export declare const deliveryChallanSchema: yup.ObjectSchema<{
         itemName: string;
         itemQty: number;
     }[] | undefined;
+    anyAttachment: {} | null | undefined;
 }, yup.AnyObject, {
+    deliveryCType: undefined;
     companyName: undefined;
     partyName: undefined;
     fromLocation: undefined;
@@ -25,4 +28,5 @@ export declare const deliveryChallanSchema: yup.ObjectSchema<{
     receiverName: undefined;
     rmn: undefined;
     items: "";
+    anyAttachment: undefined;
 }, "">;

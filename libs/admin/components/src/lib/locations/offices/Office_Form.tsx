@@ -1,10 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { OfficesFormFields } from "./officesFormFields";
 import { ADMIN_ROUTES, formContainerState, officeValidationSchema } from "@prime-fresh/admin/modules";
-import { DynamicForm, generateInitialValues, Notification } from "@prime-fresh/ui_shared";
-import { showNotification, useAppSelector } from "@prime-fresh/modules";
+import { DynamicForm, generateInitialValues, toast } from "@prime-fresh/ui_shared";
+import { useAppSelector } from "@prime-fresh/modules";
 import { ADMIN_API_URL, PostOffices, useCreateOffice, useGetAOffice, useUpdateOffice } from "@prime-fresh/admin_api";
-import { useDispatch } from "react-redux";
 import { Box, LinearProgress } from "@mui/material";
 import { appendFormData } from "@prime-fresh/shared/utils";
 
@@ -20,12 +19,11 @@ export const OfficeForm = () => {
     const GetURL = officeType === 'CORPORATE_OFFICE' ? ADMIN_API_URL.GET_A_CORP_OFFICES : ADMIN_API_URL.GET_A_REGI_OFFICES;
     const CreateURL = officeType === 'CORPORATE_OFFICE' ? ADMIN_API_URL.POST_CORP_OFFICES : ADMIN_API_URL.POST_REGI_OFFICES;
     const UpdateURL = officeType === 'CORPORATE_OFFICE' ? ADMIN_API_URL.UPDATE_CORP_OFFICES : ADMIN_API_URL.UPDATE_REGI_OFFICES;
+    const GetAllRoutes = officeType === 'CORPORATE_OFFICE' ? ADMIN_ROUTES.LOCATIONS_CORPORATE_OFFICE : ADMIN_ROUTES.LOCATIONS_REGISTERED_OFFICE;
 
     const { data, isLoading } = useGetAOffice(GetURL, officeId);
     const officeData = data ? data : generateInitialValues(OfficesFormFields(openFor).fields);
 
-    //
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     //To create new office Data
@@ -34,14 +32,13 @@ export const OfficeForm = () => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePost(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Office location created successfully !!!" }));
+            toast.success(postRes ? postRes.message : "Office location created successfully.")
             setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_REGISTERED_OFFICE);
-            }, 2000);
+                navigate(GetAllRoutes);
+            }, 2500);
         }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+            toast.error(postError ? postError.message : "Error while creating office data.");
         });
-        console.log(values);
     }
 
     //To update existing office Data
@@ -50,31 +47,27 @@ export const OfficeForm = () => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePatch(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: patchRes ? patchRes.message : "Office location updated successfully !!!" }));
+            toast.success(patchRes ? patchRes.message : "Office location updated successfully");
             setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_REGISTERED_OFFICE);
-            }, 2000);
+                navigate(GetAllRoutes);
+            }, 2500);
         }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + patchError?.message }));
+            toast.error(patchError ? patchError.message : "Error while updating office data.");
         });
-        console.log(values);
     }
-    
+
     return (
-        <>
-            {isLoading ? (
-                <Box sx={{ flex: 1 }}>
-                    <LinearProgress />
-                </Box>
-            ) :
-                (
-                    <DynamicForm<PostOffices>
-                        schema={OfficesFormFields(openFor)}
-                        initialValues={openFor === "create" ? generateInitialValues(OfficesFormFields(openFor).fields) : officeData}
-                        validationSchema={officeValidationSchema}
-                        handleSubmit={openFor === 'update' ? handleUpdate : handleCreate} />
-                )}
-            <Notification />
-        </>
+        isLoading ? (
+            <Box sx={{ flex: 1 }}>
+                <LinearProgress />
+            </Box>
+        ) :
+            (
+                <DynamicForm<PostOffices>
+                    schema={OfficesFormFields(openFor)}
+                    initialValues={openFor === "create" ? generateInitialValues(OfficesFormFields(openFor).fields) : officeData}
+                    validationSchema={officeValidationSchema}
+                    handleSubmit={openFor === 'update' ? handleUpdate : handleCreate} />
+            )
     )
 }

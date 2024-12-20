@@ -14,6 +14,7 @@ import { Box, LinearProgress } from "@mui/material";
 export function ProductClassForm() {
     const { id } = useParams<{ id: string }>();
     const classificationId = id ? id : "";
+    
     const { data, isLoading } = useGetAProductClassification(ADMIN_API_URL.GET_A_PRODUCT_CLASSIFICATION, classificationId);
     const productClassVal = data ? data : initValProductClass;
 
