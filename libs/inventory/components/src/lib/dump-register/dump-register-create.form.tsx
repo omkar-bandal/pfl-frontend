@@ -1,8 +1,8 @@
 import React from 'react'
 import { FieldArray, Formik } from 'formik'
 import { dumpProductsInitialValue, dumpRegisterInitialValue, dumpRegisterSchema, inventoryRouteConstants } from '@prime-fresh/inventory/modules'
-import { Button, CircularProgress, Grid, IconButton, Typography } from '@mui/material'
-import { AutoCompleteInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Grid, IconButton, Typography } from '@mui/material'
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules'
 import { PURCHASE_API_URL, useGetAllGRN } from '@prime-fresh/purchase_api'
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -49,7 +49,7 @@ export const DumpRegisterCreateForm = () => {
   //     setFieldValue('dumpProducts', dumpProductsInitialValue);
   //   }
   // };
-  const { mutateAsync, isPending, error, data } = useCreateDumpRegister(INVENTORY_API_URL.POST_DUMP_REGISTER);
+  const { mutateAsync, error, data } = useCreateDumpRegister(INVENTORY_API_URL.POST_DUMP_REGISTER);
   const handleSubmit = (values: PostDumpRegister) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -79,24 +79,8 @@ export const DumpRegisterCreateForm = () => {
               <Typography variant="h4">Dump Register</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                size="large"
-                disabled={isSubmitting} sx={{
-                  width: 150, textTransform: 'none', '&:disabled': {
-                    backgroundColor: "#A5D6A7",
-                  },
-                }}>
-                {isSubmitting && isPending ? <CircularProgress color='inherit' size={25} /> : "Create"}
-              </Button>
-              <Button type="reset" variant="contained" color="secondary"
-                size="large"
-                sx={{ width: 150, textTransform: 'none' }}
-                onClick={handleReset}>
-                Reset
-              </Button>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={6}>
               <SelectInput

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { FormControl, Grid, MenuItem, Select, Typography, SelectProps, FormHelperText, SelectChangeEvent } from '@mui/material';
-import { FormikErrors, FormikTouched, useField } from 'formik';
+import { useField } from 'formik';
 
 type SelectInputProps = SelectProps & {
   isRequired: boolean;
@@ -8,11 +8,8 @@ type SelectInputProps = SelectProps & {
   name: string;
   value: string | number | undefined | null;
   options: Array<{ label: string | number; value: string | number }> | undefined;
-  handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  touched?: FormikTouched<{ [key: string]: any }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors?: FormikErrors<{ [key: string]: any }>;
+  handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined | any
 };
 
 const ITEM_HEIGHT = 48;
@@ -33,15 +30,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   value,
   options,
   handleChange,
-  touched = {},
-  errors = {},
   ...otherProps
 }) => {
-  // Ensure helperText is a string or undefined
-  // const getHelperText = () => {
-  //   const error = errors[name];
-  //   return typeof error === 'string' ? error : undefined;
-  // };
   const [field, meta] = useField(name);
   return (
     <Grid container direction="column">
@@ -56,12 +46,11 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <FormControl fullWidth error={meta.touched && Boolean(meta.error)} {...field}>
+        <FormControl fullWidth error={meta.touched && Boolean(meta.error)} >
           <Select
+            {...field}
             id={name}
-            name={name}
             size="small"
-            value={value ?? ''}
             onChange={handleChange}
             MenuProps={MenuProps}
             {...otherProps}

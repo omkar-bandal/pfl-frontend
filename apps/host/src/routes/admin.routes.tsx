@@ -37,7 +37,7 @@ import { BranchForm,
     ViewProduct
 } from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
-import { ErrorPage } from "@prime-fresh/ui_shared";
+import { VendorForm } from "@prime-fresh/shared/masters/vendor";
 
 export const AdminRoutes = [
     {
@@ -47,7 +47,6 @@ export const AdminRoutes = [
     {
         path: ADMIN_ROUTES.USERS,
         element: <Outlet />,
-        errorElement: <ErrorPage />,
         children: [
             {
                 path: ADMIN_ROUTES.GET_ALL_EMPLOYEES,
@@ -76,6 +75,10 @@ export const AdminRoutes = [
             {
                 path: `${ADMIN_ROUTES.VIEW_VENDOR}/:id`,
                 element: <ViewVendor />,
+            },
+            {
+                path: `${ADMIN_ROUTES.EDIT_VENDOR}/:id`,
+                element: <VendorForm />,
             },
             {
                 path: ADMIN_ROUTES.CREATE_VENDORS_CAT,

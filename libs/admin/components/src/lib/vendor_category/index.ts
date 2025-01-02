@@ -1,2 +1,2 @@
-export * from './VendorCat_Form';
-export * from './VendorCat_Table';
+export * from './vendor-category.form';
+export * from './vendor-category.table';

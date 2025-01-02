@@ -1,5 +1,4 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { ErrorPage } from "@prime-fresh/ui_shared";
 import { Layout, SignIn } from "@prime-fresh/components";
 import { stringConstants } from "@prime-fresh/modules";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
@@ -17,7 +16,6 @@ export const HostRoutes = createBrowserRouter([
     {
         path: "/",
         element: <SignIn />,
-        errorElement: <ErrorPage />
     },
     {
         path: ADMIN_ROUTES.CREATE_CUSTOMER,
@@ -25,7 +23,6 @@ export const HostRoutes = createBrowserRouter([
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <CustomerForm />
             </Layout>),
-        errorElement: <ErrorPage />,
     },
     {
         path: ADMIN_ROUTES.CREATE_VENDOR,
@@ -33,7 +30,6 @@ export const HostRoutes = createBrowserRouter([
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <VendorForm />
             </Layout>),
-        errorElement: <ErrorPage />,
     },
     {
         path: ADMIN_ROUTES.CREATE_FARMER,
@@ -41,7 +37,6 @@ export const HostRoutes = createBrowserRouter([
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <FarmerForm />
             </Layout>),
-        errorElement: <ErrorPage />,
     },
     {
         path: ADMIN_ROUTES.CREATE_PRODUCT,
@@ -49,7 +44,6 @@ export const HostRoutes = createBrowserRouter([
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <ProductForm />
             </Layout>),
-        errorElement: <ErrorPage />,
     },
     {
         path: ADMIN_ROUTES.ADMIN,
@@ -57,7 +51,6 @@ export const HostRoutes = createBrowserRouter([
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <Outlet />
             </Layout>),
-        errorElement: <ErrorPage />,
         children: AdminRoutes
     },
     {
@@ -65,7 +58,6 @@ export const HostRoutes = createBrowserRouter([
         element: (<Layout role={stringConstants.ROLE_EMPLOYEE}>
             <Outlet />
         </Layout>),
-        errorElement: <ErrorPage />,
         children: PurchaseRoutes,
     },
     {
@@ -73,7 +65,6 @@ export const HostRoutes = createBrowserRouter([
         element: (<Layout role={stringConstants.ROLE_EMPLOYEE}>
             <Outlet />
         </Layout>),
-        errorElement: <ErrorPage />,
         children: InventoryRoutes,
     }
 ])

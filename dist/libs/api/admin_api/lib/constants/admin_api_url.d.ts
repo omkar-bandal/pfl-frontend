@@ -31,6 +31,8 @@ export declare const ADMIN_API_URL: {
     CREATE_VENDOR_SUBCAT: string;
     GET_A_VENDOR_SUBCAT: string;
     UPDATE_VENDOR_SUBCAT: string;
+    GET_VENDOR_SUBCAT_BY_QUERY: string;
+    GET_VENDOR_BY_QUERY: string;
     GET_ALL_PRODUCTS: string;
     GET_A_PRODUCTS: string;
     CREATE_PRODUCTS: string;

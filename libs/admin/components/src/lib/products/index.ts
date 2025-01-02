@@ -1,2 +1,2 @@
-export * from './Product_Table';
-export * from './Product_View';
+export * from './product.table';
+export * from './product.view';

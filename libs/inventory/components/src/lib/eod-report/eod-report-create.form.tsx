@@ -1,8 +1,8 @@
 import React from 'react'
 import { arrayConstants, eodReportInitialValue, eodReportProductsInitialValue, inventoryRouteConstants } from '@prime-fresh/inventory/modules'
 import { FieldArray, Formik } from 'formik'
-import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material'
-import { AutoCompleteInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { Add, Remove } from '@mui/icons-material'
 import { ADMIN_API_URL, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api'
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -15,12 +15,12 @@ export const EODReportCreateForm = () => {
   const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  
+
   const allProducts = React.useMemo(() => mapToValueLabelArray(products || [], 'id', 'name'), [products]);
   const uomOptions = React.useMemo(() => mapToValueLabelArray(uoms || [], 'id', 'unit'), [uoms]);
-  const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id' ,'name'), [locations]);
+  const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id', 'name'), [locations]);
 
-  const { mutateAsync, isPending, error, data } = useCreateEODReport(INVENTORY_API_URL.POST_EOD_REPORT);
+  const { mutateAsync, error, data } = useCreateEODReport(INVENTORY_API_URL.POST_EOD_REPORT);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCreate = (values: any) => {
     const formData = new FormData();
@@ -46,21 +46,8 @@ export const EODReportCreateForm = () => {
               <Typography variant="h4">EOD Report</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                size="large"
-                disabled={isSubmitting} sx={{
-                  width: 150, textTransform: 'none', '&:disabled': {
-                    backgroundColor: "#A5D6A7",
-                  },
-                }}>
-                {isSubmitting && isPending ? <CircularProgress color='inherit' size={25} /> : "Create"}
-              </Button>
-              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: 'none' }} onClick={handleReset}>
-                Reset
-              </Button>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={4}>
               <AutoCompleteInput

@@ -1,8 +1,8 @@
 import React from 'react'
 import { FieldArray, Formik } from "formik";
 import { arrayConstants, inventoryRouteConstants, InwardProductInitialValue, InwardRegisterInitialValue } from "@prime-fresh/inventory/modules";
-import { Box, Button, CircularProgress, Grid, IconButton, Typography } from "@mui/material";
-import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Add, Close } from '@mui/icons-material';
 import { displayAddress } from '@prime-fresh/purchase/modules';
 import { ADMIN_API_URL, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetFilteredBranchData, GetProduct, useGetAllFilteredBranches, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
@@ -58,11 +58,11 @@ export const InwardRegisterCreateForm = () => {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateNetWeight = (values: PostInwardRegister, setFieldValue: (field: any, value: any | undefined) => void) => {
-    const updatedProducts = values.inwardProduct.map((product) => ({
+    const updatedProducts = values.inwardProducts.map((product) => ({
       ...product,
       netWeight: product.grossWeight - ((product.productContainerWeight / 1000) * product.qty),
     }));
-    setFieldValue("inwardProduct", updatedProducts);
+    setFieldValue("inwardProducts", updatedProducts);
   }
   const { mutateAsync, error, data } = useCreateInwardRegister(INVENTORY_API_URL.POST_INWARD_REGISTER);
 
@@ -71,11 +71,13 @@ export const InwardRegisterCreateForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutateAsync(formData).then(() => {
+      console.log(data)
       toast.success(data ? data.message : "Inward register record created successfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
       }, 2500)
     }).catch(() => {
+      console.log(error)
       toast.error(error ? error.message : "")
     })
   }
@@ -94,18 +96,8 @@ export const InwardRegisterCreateForm = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-            <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                size="large"
-                disabled={isSubmitting} sx={{
-                  width: 150, textTransform: 'none', '&:disabled': {
-                    backgroundColor: "#A5D6A7",
-                  },
-                }}>
-                {isSubmitting ? <CircularProgress color='inherit' size={25} /> : "Create"}
-              </Button>              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: "none" }} onClick={handleReset}>Reset</Button>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12}>
               <RadioGroupInput
@@ -159,7 +151,7 @@ export const InwardRegisterCreateForm = () => {
                 name="location"
                 label="Location"
                 options={mapToValueLabelArray<GetFilteredBranchData>(Locations, 'id', 'name')}
-                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')}/>
+                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />
             </Grid>
             <Grid item xs={12} md={4}>
               <TextInput
@@ -242,10 +234,10 @@ export const InwardRegisterCreateForm = () => {
               </Box>
             </Grid>
             <Grid item xs={12}>
-              <FieldArray name="inwardProduct">
+              <FieldArray name="inwardProducts">
                 {({ remove, push }) => (
                   <>
-                    {values.inwardProduct.map((_, index) => (
+                    {values.inwardProducts.map((_, index) => (
                       <Grid
                         container
                         columnSpacing={1}
@@ -260,7 +252,7 @@ export const InwardRegisterCreateForm = () => {
                       >
                         <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                           <Typography variant="body1" component="div">Product: {index + 1}</Typography>
-                          {values.inwardProduct.length > 1 && <IconButton
+                          {values.inwardProducts.length > 1 && <IconButton
                             color="error"
                             onClick={() => remove(index)}
                           >
@@ -270,17 +262,17 @@ export const InwardRegisterCreateForm = () => {
                         <Grid item xs={12} md={6}>
                           <AutoCompleteInput
                             isRequired={true}
-                            name={`inwardProduct.${index}.product`}
+                            name={`inwardProducts.${index}.product`}
                             label="Product Name"
                             options={mapToValueLabelArray(allProducts, 'id', 'name')}
                             handleChange={(event, newValue) => {
                               if (newValue) {
-                                setFieldValue(`inwardProduct.${index}.product`, newValue.value);
+                                setFieldValue(`inwardProducts.${index}.product`, newValue.value);
                               } else {
-                                setFieldValue(`inwardProduct.${index}.product`, '');
+                                setFieldValue(`inwardProducts.${index}.product`, '');
                               }
                             }}
-                            handleBlur={handleProductNameChange(values.inwardProduct[index].product)}
+                            handleBlur={handleProductNameChange(values.inwardProducts[index].product)}
                           />
                         </Grid>
                         <Grid item xs={12} md={3}>
@@ -290,7 +282,7 @@ export const InwardRegisterCreateForm = () => {
                             type="text"
                             name="origin"
                             label="Origin"
-                            value={selectedProduct?.productOrigin} />
+                            value={selectedProduct?.productOrigin? selectedProduct.productOrigin : ""} />
                         </Grid>
                         <Grid item xs={12} md={3}>
                           <TextInput
@@ -305,45 +297,44 @@ export const InwardRegisterCreateForm = () => {
                           <SelectInput
                             isRequired={true}
                             label="Count"
-                            name={`inwardProduct.${index}.count`}
+                            name={`inwardProducts.${index}.count`}
                             options={selectedProduct?.count !== null ? selectedProduct?.count.map((count) => ({ value: count, label: count })) : []}
-                            value={values.inwardProduct[index].count}
+                            value={values.inwardProducts[index].count}
                             handleChange={handleChange} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <SelectInput
                             isRequired={true}
                             label="Size"
-                            name={`inwardProduct.${index}.size`}
-                            options={selectedProduct?.size? selectedProduct.size.map((size) => ({ value: size, label: size })) : []}
-                            value={values.inwardProduct[index].size}
+                            name={`inwardProducts.${index}.size`}
+                            options={selectedProduct?.size !== null ? selectedProduct?.size.map((size) => ({ value: size, label: size })) : []}
+                            value={values.inwardProducts[index].size}
                             handleChange={handleChange} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                          <SelectInput
+                          <TextInput
                             isRequired={true}
                             label="Weight"
-                            name={`inwardProduct.${index}.weight`}
-                            options={selectedProduct?.count.map((count) => ({ value: count, label: count }))}
-                            value={values.inwardProduct[index].weight}
+                            name={`inwardProducts.${index}.weight`}
+                            value={values.inwardProducts[index].weight}
                             handleChange={handleChange} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <SelectInput
                             isRequired={true}
                             label="UOM"
-                            name={`inwardProduct.${index}.uom`}
+                            name={`inwardProducts.${index}.uom`}
                             options={mapToValueLabelArray(allUOMs, 'id', 'unit')}
-                            value={values.inwardProduct[index].uom}
+                            value={values.inwardProducts[index].uom}
                             handleChange={handleChange} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <TextInput
                             type="number"
                             isRequired={true}
-                            name={`inwardProduct.${index}.qty`}
+                            name={`inwardProducts.${index}.qty`}
                             label="Quantity"
-                            value={values.inwardProduct[index].qty}
+                            value={values.inwardProducts[index].qty}
                             handleChange={handleChange}
                             onBlur={() => calculateNetWeight(values, setFieldValue)}
                           />
@@ -352,9 +343,9 @@ export const InwardRegisterCreateForm = () => {
                           <TextInput
                             type="number"
                             isRequired={true}
-                            name={`inwardProduct.${index}.productContainerWeight`}
+                            name={`inwardProducts.${index}.productContainerWeight`}
                             label="Container Weight (in grams)"
-                            value={values.inwardProduct[index].productContainerWeight}
+                            value={values.inwardProducts[index].productContainerWeight}
                             handleChange={handleChange}
                             onBlur={() => calculateNetWeight(values, setFieldValue)}
                           />
@@ -363,9 +354,9 @@ export const InwardRegisterCreateForm = () => {
                           <TextInput
                             type="number"
                             isRequired={true}
-                            name={`inwardProduct.${index}.grossWeight`}
+                            name={`inwardProducts.${index}.grossWeight`}
                             label="Gross Weight"
-                            value={values.inwardProduct[index].grossWeight}
+                            value={values.inwardProducts[index].grossWeight}
                             handleChange={handleChange}
                             onBlur={() => calculateNetWeight(values, setFieldValue)}
                           />
@@ -375,9 +366,9 @@ export const InwardRegisterCreateForm = () => {
                             type="number"
                             isRequired={false}
                             isReadOnly={true}
-                            name={`inwardProduct.${index}.netWeight`}
+                            name={`inwardProducts.${index}.netWeight`}
                             label="Net Weight"
-                            value={values.inwardProduct[index].netWeight}
+                            value={values.inwardProducts[index].netWeight}
                           />
                         </Grid>
                       </Grid>

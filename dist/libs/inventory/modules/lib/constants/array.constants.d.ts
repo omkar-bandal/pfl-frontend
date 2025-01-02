@@ -16,6 +16,10 @@ export declare const arrayConstants: {
         label: string;
     }[];
     LABOUR_TYPES: string[];
+    LABOR_EMP_TYPES: {
+        value: string;
+        label: string;
+    }[];
     GENDER: string[];
     MARITAL_STATUS: string[];
     FAMILY_RELATIONS: string[];

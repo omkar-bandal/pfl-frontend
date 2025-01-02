@@ -3,30 +3,30 @@ import { Address } from '../address.interface';
 
 export interface Materials {
     id?: string;
-    itemName: string;
+    itemName: string | null;
     itemQty: number;
-    itemUom: string;
+    itemUom: string | null;
     rate: number;
     amt: number;
 }
 export interface PostPMPvoucher {
-    grnNo: string;
-    companyName: string;
-    debitCreditTo: string;
-    payReceivedFrom: string;
-    location: string;
-    sellerName: string;
+    grnNo: string | null;
+    companyName: string | null;
+    debitCreditTo: string | null;
+    payReceivedFrom: string | null;
+    location: string | null;
+    sellerName: string | null;
     address: Address;
-    contactNo: string;
-    altContactNo: string;
-    purpose: string;
+    contactNo: string | null;
+    altContactNo: string | null;
+    purpose: string | null;
     materials: Materials[];
-    paymentMode: string;
+    paymentMode: string | null;
     totalAmt: number;
-    amtWords: string;
-    receiverName: string;
+    amtWords: string | null;
+    receiverName: string | null;
     kyc: boolean;
-    remark: string;
+    remark: string | null;
     anyAttachment: File | null;
 }
 export interface GetPMPvoucher {

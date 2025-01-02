@@ -1,55 +1,44 @@
 // import React from 'react'
 import vendorValidationSchema from './vendor.schema';
-import { DynamicForm, Notification } from '@prime-fresh/ui_shared';
+import { DynamicForm, toast } from '@prime-fresh/ui_shared';
 import { VendorFormFields } from './vendorFormField';
-import { PostVendor, useCreateVendor } from '@prime-fresh/admin_api';
+import { PostVendor, useCreateVendor, useGetAllVendorCat, useGetAllVendorSubCat } from '@prime-fresh/admin_api';
 import { useNavigate } from 'react-router-dom';
 import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL } from '@prime-fresh/admin_api'
 import { initValVendor } from './initValVendor';
-import { appendFormData } from '@prime-fresh/shared/utils';
-import { useDispatch } from 'react-redux';
-import { showNotification } from '@prime-fresh/modules';
+import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils';
 
 export const VendorForm = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const { openFor, dataId } = useAppSelector(formContainerState);
 
-    // const Vendors = useAppSelector(vendorsState);
+    const { data: VendorCat } = useGetAllVendorCat(ADMIN_API_URL.GET_ALL_VENDOR_CAT);
+    const vendorCategories = VendorCat ? mapToValueLabelArray(VendorCat, 'id', 'name') : [];
+
+    const { data: VendorSubcat } = useGetAllVendorSubCat(ADMIN_API_URL.GET_ALL_VENDOR_SUBCAT);
+    const VendorSubcategories = VendorSubcat ? mapToValueLabelArray(VendorSubcat, 'id', 'name') : [];
 
     const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateVendor(ADMIN_API_URL.POST_VENDOR);
-
-    // const { mutate: mutatePatch } = useUpdateVendor(URLs.UPDATE_CUSTOMER, dataId);
-
-    // const VendorInitValue = openFor === 'update' && dataId ? Vendors.find(item => item.id === dataId) : initValVendor;
 
     const handleSubmit = async (values: PostVendor) => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePost(formData).then(() => {
-            dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Vendor created successfully !!!" }));
+            toast.success(postRes ? postRes.message : "Vendor created successfully.");
             setTimeout(() => {
                 navigate(ADMIN_ROUTES.GET_ALL_VENDORS);
-            }, 2000);
+            }, 2400);
         }).catch(() => {
-            dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+            toast.error(postError ? postError.message : "Error while registering vendor.");
         });
     };
 
-    // const handleUpdate = (values: Vendor) => {
-    //     console.log(values);
-    //     // mutatePatch(values);
-    // };
 
     return (
-        <>
-            <Notification />
-            <DynamicForm<PostVendor>
-                schema={VendorFormFields()}
-                initialValues={initValVendor}
-                validationSchema={vendorValidationSchema}
-                handleSubmit={handleSubmit} />
-        </>
+        <DynamicForm<PostVendor>
+            schema={VendorFormFields(vendorCategories, VendorSubcategories)}
+            initialValues={initValVendor}
+            validationSchema={vendorValidationSchema}
+            handleSubmit={handleSubmit} />
     )
 }

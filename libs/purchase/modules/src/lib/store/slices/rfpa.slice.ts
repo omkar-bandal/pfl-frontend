@@ -5,7 +5,7 @@ import { GetRFPA, PostRFPA } from "@prime-fresh/purchase_api";
 type rfpaDataState = {
     rfpa: GetRFPA[];
     selectedRFPA: GetRFPA | undefined;
-    previewRFPA: PostRFPA | undefined;
+    previewRFPA: PostRFPA | GetRFPA | undefined;
 }
 const initialState: rfpaDataState = {
     rfpa: [],
@@ -22,7 +22,7 @@ const rfpaDataSlice = createSlice({
         setSelectedRFPA: (state, action: PayloadAction<GetRFPA|undefined>) => {
             state.selectedRFPA = action.payload;
         },
-        setPreviewRFPA: (state, action: PayloadAction<PostRFPA | undefined>) => {
+        setPreviewRFPA: (state, action: PayloadAction<PostRFPA | GetRFPA | undefined>) => {
             state.previewRFPA = action.payload;
         }
     }

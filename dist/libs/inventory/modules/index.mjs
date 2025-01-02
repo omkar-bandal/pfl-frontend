@@ -93,6 +93,10 @@ const jt = {
     { value: "Re-Submission (after management inputs)", label: "Re-Submission (after management inputs)" }
   ],
   LABOUR_TYPES: ["Skilled", "Semi-skilled", "Unskilled"],
+  LABOR_EMP_TYPES: [
+    { value: "temporary", label: "Temporary" },
+    { value: "parmanent", label: "Parmanent" }
+  ],
   GENDER: ["Male", "Female"],
   MARITAL_STATUS: ["Married", "Unmarried"],
   FAMILY_RELATIONS: ["Father", "Mother", "Spouse"],
@@ -1858,7 +1862,7 @@ const ne = {
   selectedParty: "",
   inwardBy: "",
   inwardCost: 0,
-  inwardProduct: [kt],
+  inwardProducts: [kt],
   inwardQtyInKg: 0,
   inwardType: "",
   location: "",
@@ -1915,6 +1919,7 @@ const ne = {
   referencePosition: "",
   referenceMobileNumber: ""
 }, It = {
+  laborType: "",
   labourName: "",
   contactNo: "",
   inTime: "",

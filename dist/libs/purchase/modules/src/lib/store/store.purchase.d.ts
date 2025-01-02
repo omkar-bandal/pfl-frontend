@@ -2,7 +2,7 @@ export declare const purchaseStore: import("@reduxjs/toolkit").EnhancedStore<{
     rfpaData: {
         rfpa: import("@prime-fresh/purchase_api").GetRFPA[];
         selectedRFPA: import("@prime-fresh/purchase_api").GetRFPA | undefined;
-        previewRFPA: import("@prime-fresh/purchase_api").PostRFPA | undefined;
+        previewRFPA: import("@prime-fresh/purchase_api").PostRFPA | import("@prime-fresh/purchase_api").GetRFPA | undefined;
     };
     dealSlipData: {
         dealSlip: import("@prime-fresh/purchase_api").GetDealSlip[];
@@ -19,7 +19,7 @@ export declare const purchaseStore: import("@reduxjs/toolkit").EnhancedStore<{
     mc_voucher: {
         mcVouchers: import("@prime-fresh/purchase_api").GetMCvoucher[];
         selectedMCVoucher: import("@prime-fresh/purchase_api").GetMCvoucher | undefined;
-        previewMCVoucher: import("@prime-fresh/purchase_api").PostMCvoucher | undefined;
+        previewMCVoucher: import("@prime-fresh/purchase_api").PostMCvoucher | import("@prime-fresh/purchase_api").GetMCvoucher | undefined;
     };
     lp_voucher: {
         lpVouchers: import("@prime-fresh/purchase_api").GetLPvoucher[];
@@ -51,7 +51,7 @@ export declare const purchaseStore: import("@reduxjs/toolkit").EnhancedStore<{
         rfpaData: {
             rfpa: import("@prime-fresh/purchase_api").GetRFPA[];
             selectedRFPA: import("@prime-fresh/purchase_api").GetRFPA | undefined;
-            previewRFPA: import("@prime-fresh/purchase_api").PostRFPA | undefined;
+            previewRFPA: import("@prime-fresh/purchase_api").PostRFPA | import("@prime-fresh/purchase_api").GetRFPA | undefined;
         };
         dealSlipData: {
             dealSlip: import("@prime-fresh/purchase_api").GetDealSlip[];
@@ -68,7 +68,7 @@ export declare const purchaseStore: import("@reduxjs/toolkit").EnhancedStore<{
         mc_voucher: {
             mcVouchers: import("@prime-fresh/purchase_api").GetMCvoucher[];
             selectedMCVoucher: import("@prime-fresh/purchase_api").GetMCvoucher | undefined;
-            previewMCVoucher: import("@prime-fresh/purchase_api").PostMCvoucher | undefined;
+            previewMCVoucher: import("@prime-fresh/purchase_api").PostMCvoucher | import("@prime-fresh/purchase_api").GetMCvoucher | undefined;
         };
         lp_voucher: {
             lpVouchers: import("@prime-fresh/purchase_api").GetLPvoucher[];

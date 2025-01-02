@@ -2,8 +2,8 @@
 import React from 'react'
 import { inventoryRouteConstants, vehicleDispatchRegisterInitialValues } from '@prime-fresh/inventory/modules'
 import { Formik } from 'formik'
-import { Button, CircularProgress, Grid, Typography } from '@mui/material'
-import { RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Grid, Typography } from '@mui/material'
+import { FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { INVENTORY_API_URL, PostVehicleDispatchRegister, useCreateVehicleDispatchRegister } from '@prime-fresh/inventory_api'
 import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils'
 import { useNavigate } from 'react-router-dom'
@@ -11,9 +11,9 @@ import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/pur
 
 export const VehicleDispatchRegisterCreateForm = () => {
   const navigate = useNavigate();
-  const {data: dcs} = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-  const dcNums = React.useMemo(() => mapToValueLabelArray(dcs || [], 'id', 'challanNo'), [dcs]); 
-  const { mutateAsync, isPending, error, data } = useCreateVehicleDispatchRegister(INVENTORY_API_URL.POST_VEHICLE_DISPATCH_REGISTER);
+  const { data: dcs } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
+  const dcNums = React.useMemo(() => mapToValueLabelArray(dcs || [], 'id', 'challanNo'), [dcs]);
+  const { mutateAsync, error, data } = useCreateVehicleDispatchRegister(INVENTORY_API_URL.POST_VEHICLE_DISPATCH_REGISTER);
   const handleSubmit = (values: PostVehicleDispatchRegister) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -40,19 +40,8 @@ export const VehicleDispatchRegisterCreateForm = () => {
               <Typography variant="h4">Vehicle Dispatch Register</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                size="large"
-                disabled={isSubmitting} sx={{
-                  width: 150, textTransform: 'none', '&:disabled': {
-                    backgroundColor: "#A5D6A7",
-                  },
-                }}>
-                {isSubmitting && isPending ? <CircularProgress color='inherit' size={25} /> : "Create"}
-              </Button>
-              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: "none" }} onClick={handleReset}>Reset</Button>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={3}>
               <TextInput

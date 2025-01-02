@@ -54,7 +54,7 @@ export declare const coreStore: import('@reduxjs/toolkit').EnhancedStore<{
     rfpaData: {
         rfpa: import('../../../../../api/purchase_api/src/index.ts').GetRFPA[];
         selectedRFPA: import('../../../../../api/purchase_api/src/index.ts').GetRFPA | undefined;
-        previewRFPA: import('../../../../../api/purchase_api/src/index.ts').PostRFPA | undefined;
+        previewRFPA: import('../../../../../api/purchase_api/src/index.ts').PostRFPA | import('../../../../../api/purchase_api/src/index.ts').GetRFPA | undefined;
     };
     dealSlipData: {
         dealSlip: import('../../../../../api/purchase_api/src/index.ts').GetDealSlip[];
@@ -71,7 +71,7 @@ export declare const coreStore: import('@reduxjs/toolkit').EnhancedStore<{
     mc_voucher: {
         mcVouchers: import('../../../../../api/purchase_api/src/index.ts').GetMCvoucher[];
         selectedMCVoucher: import('../../../../../api/purchase_api/src/index.ts').GetMCvoucher | undefined;
-        previewMCVoucher: import('../../../../../api/purchase_api/src/index.ts').PostMCvoucher | undefined;
+        previewMCVoucher: import('../../../../../api/purchase_api/src/index.ts').PostMCvoucher | import('../../../../../api/purchase_api/src/index.ts').GetMCvoucher | undefined;
     };
     lp_voucher: {
         lpVouchers: import('../../../../../api/purchase_api/src/index.ts').GetLPvoucher[];
@@ -169,7 +169,7 @@ export declare const coreStore: import('@reduxjs/toolkit').EnhancedStore<{
         rfpaData: {
             rfpa: import('../../../../../api/purchase_api/src/index.ts').GetRFPA[];
             selectedRFPA: import('../../../../../api/purchase_api/src/index.ts').GetRFPA | undefined;
-            previewRFPA: import('../../../../../api/purchase_api/src/index.ts').PostRFPA | undefined;
+            previewRFPA: import('../../../../../api/purchase_api/src/index.ts').PostRFPA | import('../../../../../api/purchase_api/src/index.ts').GetRFPA | undefined;
         };
         dealSlipData: {
             dealSlip: import('../../../../../api/purchase_api/src/index.ts').GetDealSlip[];
@@ -186,7 +186,7 @@ export declare const coreStore: import('@reduxjs/toolkit').EnhancedStore<{
         mc_voucher: {
             mcVouchers: import('../../../../../api/purchase_api/src/index.ts').GetMCvoucher[];
             selectedMCVoucher: import('../../../../../api/purchase_api/src/index.ts').GetMCvoucher | undefined;
-            previewMCVoucher: import('../../../../../api/purchase_api/src/index.ts').PostMCvoucher | undefined;
+            previewMCVoucher: import('../../../../../api/purchase_api/src/index.ts').PostMCvoucher | import('../../../../../api/purchase_api/src/index.ts').GetMCvoucher | undefined;
         };
         lp_voucher: {
             lpVouchers: import('../../../../../api/purchase_api/src/index.ts').GetLPvoucher[];

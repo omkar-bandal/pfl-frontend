@@ -1,50 +1,41 @@
 import { RequestedBy } from './requestedBy.interface';
-import { GetFarmer, GetVendor } from '../../../../admin_api/src/index.ts';
 
 export interface RFPA_Items {
-    product: string;
-    grade: string;
+    product: string | null;
+    grade: string | null;
     quantity: number;
-    uom: string;
+    uom: string | null;
     unitPrice: number;
     totalVal: number;
-    description: string;
-    purchaseDate: string;
-    dispatchDate: string;
-    deliveryDate: string;
-    deliveryLocation: string;
-    expectedHarvestDate?: string;
+    description: string | null;
+    purchaseDate: string | null;
+    dispatchDate: string | null;
+    deliveryDate: string | null;
+    deliveryLocation: string | null;
+    expectedHarvestDate?: string | null;
 }
 export interface Payment_Info {
-    paymentMode: string;
+    paymentMode: string | null;
     creditPeriod: number;
-    paymentDate: string;
+    paymentDate: string | null;
     paymentTerms: number;
-    dueDate: string;
+    dueDate: string | null;
     advancePaidAmt: number;
-    validityofQuote: string;
+    validityofQuote: string | null;
 }
 export interface PostRFPA {
-    rfpaId?: string;
-    createdDate?: string;
-    createdTime?: string;
-    requestedBy?: RequestedBy;
-    requestingDepartment?: string;
-    baseLocation?: string;
-    companyName: string;
-    purchaseLocation: string;
-    purchaseForWhich: string;
-    specialReq: string;
-    source: string;
-    selectedParty: string;
-    farmer?: GetFarmer;
-    vendor?: GetVendor;
+    companyName: string | null;
+    purchaseLocation: string | null;
+    purchaseForWhich: string | null;
+    specialReq: string | null;
+    source: "vendor" | "farmer";
+    selectedParty: string | null;
     rfpaProducts: RFPA_Items[];
     paymentInfo: Payment_Info;
-    deliveryReceivingPerson: string;
-    validityOfQuote: string;
-    packingInstruction: string;
-    remark: string;
+    deliveryReceivingPerson: string | null;
+    validityOfQuote: string | null;
+    packingInstruction: string | null;
+    remark: string | null;
 }
 export interface GetRFPA {
     id: string;
@@ -58,8 +49,8 @@ export interface GetRFPA {
     purchaseLocation: string;
     purchaseForWhich: string;
     specialReq: string;
-    source: string;
-    selectedParty: string;
+    source: "vendor" | "farmer";
+    selectedParty: string | null;
     rfpaProducts: RFPA_Items[];
     paymentInfo: Payment_Info;
     deliveryReceivingPerson: string;

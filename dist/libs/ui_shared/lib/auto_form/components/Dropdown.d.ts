@@ -1,4 +1,3 @@
-import { FormikErrors, FormikTouched } from 'formik';
 import { SelectProps, SelectChangeEvent } from '@mui/material';
 import { default as React, ReactNode } from 'react';
 
@@ -11,13 +10,7 @@ type SelectInputProps = SelectProps & {
         label: string | number;
         value: string | number;
     }> | undefined;
-    handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined;
-    touched?: FormikTouched<{
-        [key: string]: any;
-    }>;
-    errors?: FormikErrors<{
-        [key: string]: any;
-    }>;
+    handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined | any;
 };
 export declare const SelectInput: React.FC<SelectInputProps>;
 export {};

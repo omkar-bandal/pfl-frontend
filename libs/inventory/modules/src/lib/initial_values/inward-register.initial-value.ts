@@ -24,7 +24,7 @@ export const InwardRegisterInitialValue: PostInwardRegister = {
     selectedParty: '',
     inwardBy: '',
     inwardCost: 0,
-    inwardProduct: [InwardProductInitialValue],
+    inwardProducts: [InwardProductInitialValue],
     inwardQtyInKg: 0,
     inwardType: '',
     location: '',

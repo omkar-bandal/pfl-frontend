@@ -1,6 +1,6 @@
 import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
 export declare const initValMaterials: {
-    itemName: string;
+    itemName: null;
     itemQty: number;
     rate: number;
     amt: number;

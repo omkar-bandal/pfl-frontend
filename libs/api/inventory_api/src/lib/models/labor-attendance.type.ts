@@ -1,4 +1,5 @@
 export type PostLaborDetails = {
+    laborType: string,
     labourName: string,
     contactNo: string,
     inTime: string,

@@ -1,2 +1,2 @@
-export * from './Vendor_Table';
-export * from './Vendor_View';
+export * from './vendor.table';
+export * from './vendor.view';

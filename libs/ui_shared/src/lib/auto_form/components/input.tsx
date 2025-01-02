@@ -35,6 +35,8 @@ const [field, meta] = useField(name);
         {...field}
           fullWidth
           size="small"
+          autoComplete="off"
+          autoCorrect="off"
           type={type}
           id={name}
           name={name}

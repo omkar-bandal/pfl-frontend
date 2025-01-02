@@ -1,6 +1,6 @@
 import React from 'react';
-import { Autocomplete, TextField, Grid, Typography } from '@mui/material';
-import { FormikErrors, FormikTouched, useField } from 'formik';
+import { Autocomplete, TextField, Grid, Typography, createFilterOptions, FilterOptionsState } from '@mui/material';
+import { useField } from 'formik';
 
 type AutoCompleteOption = {
   label: string;
@@ -17,10 +17,6 @@ type AutoCompleteInputProps = {
   handleBlur?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleChange?: (event: any, newValue: AutoCompleteOption | null) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  touched?: FormikTouched<{ [key: string]: any }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors?: FormikErrors<{ [key: string]: any }>;
 };
 
 export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
@@ -32,7 +28,7 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
   handleBlur,
 }) => {
   const [field, meta] = useField(name);
-
+  const filter = createFilterOptions<AutoCompleteOption>()
   return (
     <Grid container direction="column">
       <Grid item>
@@ -56,6 +52,16 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
           value={options.find((option) => option.value === field.value) || null}
           onChange={handleChange}
           onBlur={handleBlur}
+          filterOptions={(options: AutoCompleteOption[], params:FilterOptionsState<AutoCompleteOption> ) => {
+            const filtered = filter(options, params);
+            if (params.inputValue !== '') {
+              filtered.push({
+               value: params.inputValue,
+               label: `Add ${params.inputValue}`
+              });
+            }
+            return filtered;
+          }}
           renderInput={(params) => (
             <TextField
               {...params}

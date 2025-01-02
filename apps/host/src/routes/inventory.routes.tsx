@@ -18,10 +18,14 @@ import {
     LaborAttendanceUpdateForm,
     EODReportTable,
     AQRTable,
-    DumpRegisterUpdateForm
+    DumpRegisterUpdateForm,
+    InwardRegisterUpdateForm,
+    SecondSaleRegisterUpdateForm,
+    VehicleDispatchRegisterUpdateForm
 } from "@prime-fresh/inventory/components";
 import { Outlet } from "react-router-dom";
 import { DeliveryChallanForm, DeliveryChallanTable, GRNForm, GRNTable } from "@prime-fresh/purchase/components";
+
 export const InventoryRoutes = [
     {
         path: inventoryRouteConstants.DASHBOARD_INVENTORY,
@@ -52,6 +56,10 @@ export const InventoryRoutes = [
             {
                 path: inventoryRouteConstants.GET_ALL_INWARD_REGISTERS,
                 element: <InwardRegisterTable />
+            },
+            {
+                path: `${inventoryRouteConstants.UPDATE_INWARD_REGISTER}/:id`,
+                element: <InwardRegisterUpdateForm />
             },
         ]
     },
@@ -144,6 +152,10 @@ export const InventoryRoutes = [
             {
                 path: inventoryRouteConstants.GET_ALL_SECOND_SALE_REGISTER,
                 element: <SecondSaleRegisterTable />
+            },
+            {
+                path: `${inventoryRouteConstants.UPDATE_SECOND_SALE_REGISTER}/:id`,
+                element: <SecondSaleRegisterUpdateForm />
             }
         ]
     },
@@ -158,6 +170,10 @@ export const InventoryRoutes = [
             {
                 path: inventoryRouteConstants.GET_ALL_VEHILCE_DISPATCH_REGISTER,
                 element: <VehicleDispatchRegisterTable />
+            },
+            {
+                path: `${inventoryRouteConstants.UPDATE_VEHILCE_DISPATCH_REGISTER}/:id`,
+                element: <VehicleDispatchRegisterUpdateForm />
             }
         ]
     },

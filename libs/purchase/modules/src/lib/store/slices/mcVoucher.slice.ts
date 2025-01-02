@@ -5,7 +5,7 @@ import { RootState } from "../store.purchase";
 type mcVoucherState = {
     mcVouchers: GetMCvoucher[];
     selectedMCVoucher: GetMCvoucher | undefined;
-    previewMCVoucher: PostMCvoucher | undefined;
+    previewMCVoucher: PostMCvoucher | GetMCvoucher | undefined;
 }
 const initialState : mcVoucherState = {
     mcVouchers: [],
@@ -23,7 +23,7 @@ const mcVoucherSlice = createSlice({
         setSelectedMCVoucher: (state, action: PayloadAction<GetMCvoucher | undefined>) => {
             state.selectedMCVoucher = action.payload;
         },
-        setPreviewMCVoucher: (state, action: PayloadAction<PostMCvoucher | undefined>) => {
+        setPreviewMCVoucher: (state, action: PayloadAction<PostMCvoucher | GetMCvoucher | undefined>) => {
             state.previewMCVoucher = action.payload;
         }
     }

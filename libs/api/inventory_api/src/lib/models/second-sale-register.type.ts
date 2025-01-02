@@ -37,7 +37,7 @@ export type PostSecondSaleRegister = {
 export type GetSecondSaleRegister = {
     id: string,
     location: string,
-    dCNumber: string,
+    dcNo: string,
     saleDate: string,
     buyerName: string,
     buyerMobNo: string,

@@ -1,2 +1,2 @@
-export * from './UOMConvMatrix_Form';
-export * from './UOMConvMatrix_Table';
+export * from './uom-conversion-matrix.form';
+export * from './uom-conversion-matrix.table';

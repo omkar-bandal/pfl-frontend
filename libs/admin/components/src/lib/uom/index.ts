@@ -1,2 +1,2 @@
-export * from './UOM_Form';
-export * from './UOM_Table';
+export * from './uom.form';
+export * from './uom.table';

@@ -43,7 +43,9 @@ export const ADMIN_API_URL = {
     CREATE_VENDOR_SUBCAT: "/vendor-subcategories/",
     GET_A_VENDOR_SUBCAT: "/vendor-subcategories",
     UPDATE_VENDOR_SUBCAT: "/vendor-subcategories",
-
+    GET_VENDOR_SUBCAT_BY_QUERY: "/vendor-subcategories/getSubcategories",
+    GET_VENDOR_BY_QUERY: "/vendors/bysearch/getvendors",
+    
     //Prooducts
     GET_ALL_PRODUCTS: "/products/",
     GET_A_PRODUCTS: "/products",

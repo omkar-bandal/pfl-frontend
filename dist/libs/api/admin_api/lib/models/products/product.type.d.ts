@@ -25,6 +25,7 @@ export type PostProduct = {
 };
 export type GetProduct = {
     id: string;
+    productCode: string;
     name: string;
     image: File | null;
     description: string;

@@ -23,6 +23,10 @@ export const arrayConstants = {
         { value: "Re-Submission (after management inputs)", label: "Re-Submission (after management inputs)" },
     ],
     LABOUR_TYPES: ["Skilled", "Semi-skilled", "Unskilled"],
+    LABOR_EMP_TYPES: [ 
+        { value: "temporary", label: "Temporary" },
+        { value: "parmanent", label: "Parmanent" },
+    ],
     GENDER: ["Male", "Female"],
     MARITAL_STATUS: ["Married", "Unmarried"],
     FAMILY_RELATIONS: ["Father", "Mother", "Spouse"],

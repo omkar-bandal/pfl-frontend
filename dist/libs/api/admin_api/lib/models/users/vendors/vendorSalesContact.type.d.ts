@@ -1,10 +1,10 @@
 export type PostVendorSalesContact = {
-    contactFName: string;
-    contactMName: string;
-    contactLName: string;
-    directContactNumber: string;
-    mobileNumber: string;
-    email: string;
+    contactFName: string | null;
+    contactMName: string | null;
+    contactLName: string | null;
+    directContactNumber: string | null;
+    mobileNumber: string | null;
+    email: string | null;
 };
 export type GetVendorSalesContact = {
     id: string;

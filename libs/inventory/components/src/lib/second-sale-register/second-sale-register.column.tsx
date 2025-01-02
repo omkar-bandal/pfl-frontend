@@ -1,14 +1,13 @@
-import { Edit, Preview } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
+import { GridRenderCellParams } from "@mui/x-data-grid";
+import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const SecondSaleRegisterColumns = (): CustomGridColDef[] => {
-    // const navigate = useNavigate();
-    // const handlePaymentReq = (status: string, id: string) => {
-    //     if(status === "approved")
-    //         navigate(`${PURCHASE_ROUTES.CREATE_PAYMENT_REQ}/${id}`)
-    // }
+    const navigate = useNavigate();
+
     return ([
         { field: "id", headerName: "ID", width: 30 },
         {
@@ -71,22 +70,9 @@ export const SecondSaleRegisterColumns = (): CustomGridColDef[] => {
             sortable: false,
             filterable: false,
             isMobileVisible: true,
-            renderCell: () => (
-                <IconButton aria-label="edit">
+            renderCell: (params: GridRenderCellParams) => (
+                <IconButton aria-label="edit" onClick={() => navigate(`${inventoryRouteConstants.UPDATE_SECOND_SALE_REGISTER}/${params.row.id}`)}>
                     <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            width: 80,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: () => (
-                <IconButton aria-label="edit">
-                    <Preview color="primary" />
                 </IconButton>
             ),
         },

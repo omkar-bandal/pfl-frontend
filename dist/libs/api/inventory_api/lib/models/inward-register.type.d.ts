@@ -24,7 +24,7 @@ export type PostInwardRegister = {
     totalWeightInKg: number;
     batchNo: string;
     selectedParty: string;
-    inwardProduct: PostInwardProducts[];
+    inwardProducts: PostInwardProducts[];
     source: string;
     purchasedBy: string;
     purchasedQty: number;
@@ -46,7 +46,7 @@ export type GetInwardRegister = {
     selectedParty: string;
     selectedVendor?: GetVendor;
     selectedFarmer?: GetFarmer;
-    inwardProduct: GetInwardProducts;
+    inwardProducts: PostInwardProducts[];
     totalWeightInKg: number;
     purchasedQty: number;
     purchasedBy: string;

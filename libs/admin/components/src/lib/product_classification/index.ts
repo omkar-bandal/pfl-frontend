@@ -1,2 +1,2 @@
-export * from './ProductClass_Form';
-export * from './ProductClass_Table';
+export * from './product-classification.form';
+export * from './product-classification-table';

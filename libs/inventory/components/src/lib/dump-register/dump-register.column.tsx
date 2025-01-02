@@ -1,4 +1,4 @@
-import { Edit, Preview } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
@@ -58,19 +58,6 @@ export const DumpRegisterColumns = (): CustomGridColDef[] => {
             renderCell: (params: GridRenderCellParams) => (
                 <IconButton aria-label="edit" onClick={() => navigate(`${inventoryRouteConstants.UPDATE_DUMP_REGISTER}/${params.row.id}`)}>
                     <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            width: 80,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: () => (
-                <IconButton aria-label="edit">
-                    <Preview color="primary" />
                 </IconButton>
             ),
         },

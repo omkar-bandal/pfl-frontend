@@ -5,7 +5,14 @@ export type PostDumpProducts = {
     dumpCost: number,
 }
 
-export type GetDumpProducts = { id: string } & PostDumpProducts;
+export type GetDumpProducts = {id: string} & PostDumpProducts;
+// { 
+//     id: string, 
+//     product: {id: string, name: string},
+//     uom: {id: string, unit: string},
+//     quantity: number,
+//     dumpCost: number,
+// } 
 
 export type PostDumpRegister = {
     companyName: string,

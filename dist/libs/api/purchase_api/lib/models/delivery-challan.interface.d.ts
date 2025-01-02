@@ -1,28 +1,28 @@
 import { RequestedBy } from './requestedBy.interface';
 
 export interface DCItems {
-    itemName: string;
+    itemName: string | null;
     itemQty: number;
     rate: number;
     amt: number;
 }
 export interface PostDeliveryChallan {
-    partyName: string;
-    grnNo: string;
-    companyName: string;
+    partyName: string | null;
+    grnNo: string | null;
+    companyName: string | null;
     items: DCItems[];
-    totAmt: string;
-    fromLocation: string;
-    toLocation: string;
-    driverName: string;
-    contactNo: string;
-    altContactNo: string;
-    vehicleNo: string;
-    receiverName: string;
-    deliveryCType: string;
-    otherCType: string;
-    remark: string;
-    rmn: string;
+    totAmt: string | null;
+    fromLocation: string | null;
+    toLocation: string | null;
+    driverName: string | null;
+    contactNo: string | null;
+    altContactNo: string | null;
+    vehicleNo: string | null;
+    receiverName: string | null;
+    deliveryCType: string | null;
+    otherCType: string | null;
+    remark: string | null;
+    rmn: string | null;
     anyAttachment: File | null;
 }
 export interface GetDeliveryChallan {

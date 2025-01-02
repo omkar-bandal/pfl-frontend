@@ -1,15 +1,15 @@
 import React from 'react'
 import { FieldArray, Formik } from 'formik'
 import { dumpProductsInitialValue, dumpRegisterInitialValue, dumpRegisterSchema, inventoryRouteConstants } from '@prime-fresh/inventory/modules'
-import { Button, CircularProgress, Grid, IconButton, Typography } from '@mui/material'
-import { AutoCompleteInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Grid, IconButton, Typography } from '@mui/material'
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules'
 import { PURCHASE_API_URL, useGetAllGRN } from '@prime-fresh/purchase_api'
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils'
 import { ADMIN_API_URL, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api'
 import { Add, Close } from '@mui/icons-material'
-import {INVENTORY_API_URL, useGetADumpRegister, useUpdateDumpRegister } from '@prime-fresh/inventory_api'
+import { INVENTORY_API_URL, useGetADumpRegister, useUpdateDumpRegister } from '@prime-fresh/inventory_api'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export const DumpRegisterUpdateForm = () => {
@@ -30,9 +30,9 @@ export const DumpRegisterUpdateForm = () => {
     const allUOMs = React.useMemo(() => mapToValueLabelArray(uoms || [], 'id', 'unit'), [uoms]);
     const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id', 'name'), [locations]);
 
-    const { mutateAsync, isPending, error, data } = useUpdateDumpRegister(INVENTORY_API_URL.UPDATE_DUMP_REGISTER, dumpRegiId);
+    const { mutateAsync, error, data } = useUpdateDumpRegister(INVENTORY_API_URL.UPDATE_DUMP_REGISTER, dumpRegiId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleSubmit = (values: any) => {
+    const handleUpdate = (values: any) => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutateAsync(formData).then(() => {
@@ -54,7 +54,7 @@ export const DumpRegisterUpdateForm = () => {
             validateOnChange={true}
             onSubmit={(values) => {
                 console.log(values)
-                handleSubmit(values);
+                handleUpdate(values);
             }}>
             {({ values, handleChange, handleReset, handleSubmit, setFieldValue, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
@@ -63,24 +63,8 @@ export const DumpRegisterUpdateForm = () => {
                             <Typography variant="h4">Dump Register</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="success"
-                                size="large"
-                                disabled={isSubmitting} sx={{
-                                    width: 150, textTransform: 'none', '&:disabled': {
-                                        backgroundColor: "#A5D6A7",
-                                    },
-                                }}>
-                                {isSubmitting && isPending ? <CircularProgress color='inherit' size={25} /> : "Create"}
-                            </Button>
-                            <Button type="reset" variant="contained" color="secondary"
-                                size="large"
-                                sx={{ width: 150, textTransform: 'none' }}
-                                onClick={handleReset}>
-                                Reset
-                            </Button>
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Update" />
+                            <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <SelectInput

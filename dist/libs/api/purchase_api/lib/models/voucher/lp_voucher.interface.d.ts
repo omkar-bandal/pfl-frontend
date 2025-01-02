@@ -1,24 +1,24 @@
 import { RequestedBy } from '../requestedBy.interface';
 
 export interface PostLPvoucher {
-    grnNo: string;
-    companyName: string;
-    debitCreditTo: string;
-    payReceivedFrom: string;
-    location: string;
+    grnNo: string | null;
+    companyName: string | null;
+    debitCreditTo: string | null;
+    payReceivedFrom: string | null;
+    location: string | null;
     noOfLabours: number;
-    loadingDate: Date;
-    workLocation: string;
-    contactNo: string;
-    altContactNo: string;
+    loadingDate: string | null;
+    workLocation: string | null;
+    contactNo: string | null;
+    altContactNo: string | null;
     kyc: boolean;
-    products: string;
-    paymentMode: string;
+    products: string | null;
+    paymentMode: string | null;
     ratePerLabour: number;
     totalAmt: number;
-    amtWords: string;
-    receiverName: string;
-    remark: string;
+    amtWords: string | null;
+    receiverName: string | null;
+    remark: string | null;
     anyAttachment: File | null;
 }
 export interface GetLPvoucher {

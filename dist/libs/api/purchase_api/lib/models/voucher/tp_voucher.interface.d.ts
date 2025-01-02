@@ -1,25 +1,25 @@
 import { RequestedBy } from '../requestedBy.interface';
 
 export interface PostTPvoucher {
-    grnNo: string;
-    companyName: string;
-    debitCreditTo: string;
-    payReceivedFrom: string;
-    location: string;
-    driverName: string;
-    contactNo: string;
-    altContactNo: string;
-    vehicleNo: string;
-    dispatchLocation: string;
-    destinationLocation: string;
-    products: string;
-    paymentMode: string;
+    grnNo: string | null;
+    companyName: string | null;
+    debitCreditTo: string | null;
+    payReceivedFrom: string | null;
+    location: string | null;
+    driverName: string | null;
+    contactNo: string | null;
+    altContactNo: string | null;
+    vehicleNo: string | null;
+    dispatchLocation: string | null;
+    destinationLocation: string | null;
+    products: string | null;
+    paymentMode: string | null;
     freightAmt: number;
     kyc: boolean;
     totalAmt: number;
-    amtWords: string;
-    receiverName: string;
-    remark: string;
+    amtWords: string | null;
+    receiverName: string | null;
+    remark: string | null;
     anyAttachment: File | null;
 }
 export interface GetTPvoucher {

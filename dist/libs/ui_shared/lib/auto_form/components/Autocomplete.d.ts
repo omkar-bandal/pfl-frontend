@@ -1,4 +1,3 @@
-import { FormikErrors, FormikTouched } from 'formik';
 import { default as React } from 'react';
 
 type AutoCompleteOption = {
@@ -13,12 +12,6 @@ type AutoCompleteInputProps = {
     value?: AutoCompleteOption | null;
     handleBlur?: any;
     handleChange?: (event: any, newValue: AutoCompleteOption | null) => void;
-    touched?: FormikTouched<{
-        [key: string]: any;
-    }>;
-    errors?: FormikErrors<{
-        [key: string]: any;
-    }>;
 };
 export declare const AutoCompleteInput: React.FC<AutoCompleteInputProps>;
 export {};

@@ -1,8 +1,8 @@
 import { PostPMPvoucher } from "@prime-fresh/purchase_api";
 export declare const initValPackingMaterials: {
-    itemName: string;
+    itemName: null;
     itemQty: number;
-    itemUom: string;
+    itemUom: null;
     rate: number;
     amt: number;
 };

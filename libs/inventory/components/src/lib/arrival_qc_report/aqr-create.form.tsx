@@ -6,9 +6,9 @@ import { useDispatch } from 'react-redux'
 // import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '@prime-fresh/modules'
 import { productsDataState, setSelectedProduct } from '@prime-fresh/admin/modules'
-import { Button, CircularProgress, Grid, InputAdornment, Typography } from '@mui/material'
+import { Grid, InputAdornment, Typography } from '@mui/material'
 import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/purchase_api'
-import { AutoCompleteInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils'
 import { AQRinitalValues } from '@prime-fresh/inventory/modules'
@@ -58,7 +58,7 @@ export const AQRCreateForm = () => {
     mutateAsync(formData).then(() => {
       toast.success(data ? data.message : "AQR created successfully.")
     }).catch(() => {
-      toast.error(error? error.message : "Error while creating AQR.")
+      toast.error(error ? error.message : "Error while creating AQR.")
     })
   }
   return (
@@ -74,13 +74,9 @@ export const AQRCreateForm = () => {
             <Grid item xs={12} md={6}>
               <Typography variant='h4' component="div">Arrival QC Report</Typography>
             </Grid>
-            <Grid item xs={12} md={6} sx={{display: "flex", alignItems: "center", justifyContent: "space-evenly"}}>
-              <Button type="submit" variant="contained" color="success" size="large" disabled={isSubmitting} sx={{ width: 150, textTransform: 'none' }} onClick={() => handleSubmit}>
-                {isSubmitting ? <CircularProgress color='inherit' size="small" /> : "Create"}
-              </Button>
-              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: 'none' }} onClick={handleReset}>
-                Reset
-              </Button>
+            <Grid item xs={12} md={6} sx={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={3}>
               <SelectInput

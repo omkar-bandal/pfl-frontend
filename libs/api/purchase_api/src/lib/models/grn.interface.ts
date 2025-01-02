@@ -2,91 +2,91 @@ import { RequestedBy } from "./requestedBy.interface";
 // import {GetVendor, GetFarmer} from '@prime-fresh/admin_api';
 
 export interface GRNProducts {
-    product: string,
-    count: string,
-    uom: string,
+    product: string | null,
+    count: string | null,
+    uom: string | null,
     quantity: number,
     rate: number,
     amt: number,
-    rtv: string,
-    purchaseDate: Date,
-    expectedHarvestDate: Date | null,
-    dispatchDate: Date,
-    deliveryDate: Date,
-    deliveryLocation: string,
+    rtv: string | null,
+    purchaseDate: string | null,
+    expectedHarvestDate: string | null,
+    dispatchDate: string | null,
+    deliveryDate: string | null,
+    deliveryLocation: string | null,
     revisedRate: number,
     revisedQuantity: number,
 }
 
 export interface PostGRN {
-    grnType: string,
-    dealSlipId?: string;
-    billNo: string;
-    serialNo: string;
-    companyName: string;
-    purchaseRequestByWhom: string;
-    purchaseLocation: string;
-    purchaseForWhich: string;
-    specialReq: string;
-    source: string;
-    selectedParty: string;
+    grnType: string | null,
+    dealSlipId?: string | null;
+    billNo: string | null;
+    serialNo: string | null;
+    companyName: string | null;
+    purchaseRequestByWhom: string | null;
+    purchaseLocation: string | null;
+    purchaseForWhich: string | null;
+    specialReq: string | null;
+    source: "vendor" | "farmer";
+    selectedParty: string | null;
     products: GRNProducts[];
-    deliveryReceivingPerson: string;
+    deliveryReceivingPerson: string | null;
     subTotalAmt: number;
     totalAmt: number;
-    amtWords: string;
+    amtWords: string | null;
     freight: number,
     otherCharges: number,
-    purchasedBy: string,
-    receivedThrough: string,
-    securityPerson: string,
-    vehicleNo: string,
-    timeIn: string,
+    purchasedBy: string | null,
+    receivedThrough: string | null,
+    securityPerson: string | null,
+    vehicleNo: string | null,
+    timeIn: string | null,
     cratesIn: number,
-    rmn: string,
-    remark: string,
+    rmn: string | null,
+    remark: string | null,
     billImage: File | null,
 }
 
 export interface GetGRN {
-    id: string;
-    grnNo?: string;
-    createdDate?: string;
-    createdTime?: string;
+    id: string | null;
+    grnNo?: string | null;
+    createdDate?: string | null;
+    createdTime?: string | null;
     requestedBy?: RequestedBy;
-    requestingDepartment?: string;
-    baseLocation?: string;
-    dealSlipId: string;
-    billNo: string;
-    serialNo: string;
-    companyName: string;
-    purchaseRequestByWhom: string;
-    purchaseLocation: string;
-    purchaseForWhich: string;
-    specialReq: string;
-    source: string;
-    selectedParty: string;
+    requestingDepartment?: string | null;
+    baseLocation?: string | null;
+    dealSlipId: string | null;
+    billNo: string | null;
+    serialNo: string | null;
+    companyName: string | null;
+    purchaseRequestByWhom: string | null;
+    purchaseLocation: string | null;
+    purchaseForWhich: string | null;
+    specialReq: string | null;
+    source: string | null;
+    selectedParty: string | null;
     products: GRNProducts[];
-    deliveryReceivingPerson: string;
+    deliveryReceivingPerson: string | null;
     freight: number,
     subTotalAmt: number;
     totalAmt: number;
-    amtWords: string;
+    amtWords: string | null;
     otherCharges: number,
-    receivedThrough: string,
-    vehicleNo: string,
-    timeIn: string,
+    receivedThrough: string | null,
+    vehicleNo: string | null,
+    timeIn: string | null,
     cratesIn: number,
-    purchasedBy: string,
-    securityPerson: string,
-    rmn: string, 
-    remark: string,
-    approvalStatus?: string;
-    approvalNote?: string;
-    billImage: string;
+    purchasedBy: string | null,
+    securityPerson: string | null,
+    rmn: string | null, 
+    remark: string | null,
+    approvalStatus?: string | null;
+    approvalNote?: string | null;
+    billImage: string | null;
 }
 
 export interface GetAllGRNnumbers {
-    id: string;
-    grnNo: string;
+    id: string | null;
+    grnNo: string | null;
 }

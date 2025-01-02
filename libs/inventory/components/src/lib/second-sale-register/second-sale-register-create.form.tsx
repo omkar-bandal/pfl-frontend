@@ -1,10 +1,10 @@
 import React from 'react'
 import { Add, Close } from '@mui/icons-material';
-import { Button, CircularProgress, Grid, IconButton, Typography } from '@mui/material';
+import { Button, Grid, IconButton, Typography } from '@mui/material';
 import { ADMIN_API_URL, GetFilteredBranchData, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { inventoryRouteConstants, SecondSaleProductsInitialValue, SecondSaleRegisterInitialValue } from '@prime-fresh/inventory/modules';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
-import { AutoCompleteInput, mapToValueLabelArray, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { FieldArray, Formik } from 'formik';
 import { INVENTORY_API_URL, PostSecondSaleRegister, useCreateSecondSaleRegister } from '@prime-fresh/inventory_api';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -14,15 +14,15 @@ import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/pur
 
 export const SecondSaleRegisterCreateForm = () => {
   const navigate = useNavigate();
-  const {data: dcNo} = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-  const dcNumbers = React.useMemo(() => dcNo? mapToValueLabelArray(dcNo, 'id', 'challanNo') : [], [dcNo]); 
+  const { data: dcNo } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
+  const dcNumbers = React.useMemo(() => dcNo ? mapToValueLabelArray(dcNo, 'id', 'challanNo') : [], [dcNo]);
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
   const Locations = locations ? locations : [];
   const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const allProducts = products ? products : [];
   const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const allUOMs = uoms ? uoms : [];
-  const { mutateAsync, isPending, error, data } = useCreateSecondSaleRegister(INVENTORY_API_URL.POST_SECOND_SALE_REGISTER);
+  const { mutateAsync, error, data } = useCreateSecondSaleRegister(INVENTORY_API_URL.POST_SECOND_SALE_REGISTER);
   const handleSubmit = (values: PostSecondSaleRegister) => {
     console.log(values);
     const formData = new FormData();
@@ -51,26 +51,16 @@ export const SecondSaleRegisterCreateForm = () => {
               <Typography variant="h4">Second Sale Register</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-            <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                size="large"
-                disabled={isSubmitting} sx={{
-                  width: 150, textTransform: 'none', '&:disabled': {
-                    backgroundColor: "#A5D6A7",
-                  },
-                }}>
-                {isSubmitting && isPending ? <CircularProgress color='inherit' size={25} /> : "Create"}
-              </Button>              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: "none" }} onClick={handleReset}>Reset</Button>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={4}>
-            <AutoCompleteInput
+              <AutoCompleteInput
                 isRequired={true}
                 name="location"
                 label="Location"
                 options={mapToValueLabelArray<GetFilteredBranchData>(Locations, 'id', 'name')}
-                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')}/>
+                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />
             </Grid>
             <Grid item xs={12} md={4}>
               <SelectInput

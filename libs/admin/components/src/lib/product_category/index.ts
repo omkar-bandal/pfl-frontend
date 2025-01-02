@@ -1,2 +1,2 @@
-export * from './ProductCat_Table';
-export * from './ProductCat_Form';
+export * from './product-category-table';
+export * from './product-category-form';

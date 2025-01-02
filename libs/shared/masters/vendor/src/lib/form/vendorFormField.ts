@@ -1,15 +1,12 @@
-import { useGetAllVendorCat, useGetAllVendorSubCat, ADMIN_API_URL, GetVendorSubcategory, GetVendorCategory } from '@prime-fresh/admin_api';
-import { useAppSelector } from "@prime-fresh/modules";
-import { openForState } from "@prime-fresh/admin/modules";
-import { mapToValueLabelArray } from '@prime-fresh/shared/utils';
+type DropdownData = {
+  value: string;
+  label: string;
+}
+export const VendorFormFields = (vendorCategories: DropdownData[], vendorSubcategories: DropdownData[] ) => {
 
-export const VendorFormFields = () => {
-  const oepnFormFor = useAppSelector(openForState);
-  const { data: VendorCat } = useGetAllVendorCat(ADMIN_API_URL.GET_ALL_VENDOR_CAT);
-  const { data: VendorSubCat } = useGetAllVendorSubCat(ADMIN_API_URL.GET_ALL_VENDOR_SUBCAT);
   return (
     {
-      "title": oepnFormFor === 'create' ? "Register New Vendor" : "Update Vendor",
+      "title": "Vendor Registration",
       "tabs": ["Primary Details", "Other Details", "Sales Contact", "Bank Details", "References", "Office Use"],
       "tabpanels": [
         {
@@ -30,7 +27,7 @@ export const VendorFormFields = () => {
               "label": "Category of Vendor",
               "type": "select",
               "length": 3,
-              "options": VendorCat ? mapToValueLabelArray<GetVendorCategory>(VendorCat, 'id', 'name') : [],
+              "options": vendorCategories,
             },
             {
               "isRequired": true,
@@ -38,7 +35,7 @@ export const VendorFormFields = () => {
               "label": "Subcategory of Vendor",
               "type": "select",
               "length": 3,
-              "options": VendorSubCat ? mapToValueLabelArray<GetVendorSubcategory>(VendorSubCat, 'id', 'name') : [],
+              "options": vendorSubcategories,
             },
             {
               "name": "inFandVBusinessSince",
