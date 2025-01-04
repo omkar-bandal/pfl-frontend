@@ -13,7 +13,7 @@ export const AQRTable = () => {
     const { data, isLoading } = useGetAllAQR(INVENTORY_API_URL.GET_ALL_AQR);
     console.log(data);
     const handleCreate = () => {
-        navigate(inventoryRouteConstants.GET_ALL_AQR);
+        navigate(inventoryRouteConstants.CREATE_AQR);
     }
     return (
         <Box sx={{ flex: 1 }}>

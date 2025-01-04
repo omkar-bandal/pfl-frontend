@@ -1,5 +1,5 @@
 import { Grid, TextField, TextFieldProps, Typography } from "@mui/material";
-import { FormikErrors, FormikTouched, useField } from "formik";
+import { useField } from "formik";
 import { ChangeEvent } from "react";
 
 // Define the type for the TextInput props
@@ -10,13 +10,9 @@ type TextInputProps = TextFieldProps & {
   value: string | number | Date | undefined | null ;
   handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   isReadOnly?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  touched?: FormikTouched<{ [key: string]: any }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors?: FormikErrors<{ [key: string]: any }>;
 };
 
-export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, type, value, handleChange, isReadOnly, touched = {}, errors = {}, ...otherProps}) => {
+export const TextInput: React.FC<TextInputProps> = ({ isRequired, label, name, type, value, handleChange, isReadOnly, ...otherProps}) => {
 const [field, meta] = useField(name);
   return (
     <Grid container direction="column">

@@ -50,7 +50,7 @@ export const VendorSalesContact = () => {
             <Grid item xs={12} md={4}>
                 <TextInput
                     type="text"
-                    isRequired={true}
+                    isRequired={false}
                     name="vendorSaleInfo.mobileNumber"
                     label="Contact Number (Alternate)"
                     value={values.vendorSaleInfo.mobileNumber}
@@ -60,7 +60,7 @@ export const VendorSalesContact = () => {
             <Grid item xs={12} md={4}>
                 <TextInput
                     type="text"
-                    isRequired={true}
+                    isRequired={false}
                     name="vendorSaleInfo.email"
                     label="Email"
                     value={values.vendorSaleInfo.email}

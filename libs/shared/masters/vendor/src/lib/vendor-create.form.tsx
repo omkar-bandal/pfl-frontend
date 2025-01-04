@@ -1,14 +1,22 @@
+import React from "react"
 import { Formik } from "formik"
-import { initValVendor } from "./form/initValVendor"
-import vendorValidationSchema from "./form/vendor.schema"
+import { initValVendor } from "./initValVendor"
+// import vendorValidationSchema from "./form/vendor.schema"
 import { Grid, Typography } from "@mui/material"
-import { FormResetBtn, FormSubmitBtn, toast } from "@prime-fresh/ui_shared"
+import { FormResetBtn, FormSubmitBtn, FormTabs, TabPanel, toast } from "@prime-fresh/ui_shared"
 import { ADMIN_API_URL, PostVendor, useCreateVendor } from "@prime-fresh/admin_api"
 import { useNavigate } from "react-router-dom"
 import { appendFormData } from "@prime-fresh/shared/utils"
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules"
+import { VendorPrimaryDetails, VendorSalesContact, VendorBankDetails, VendorOtherDetails, VendorReferences } from './form';
+import { arrayConstants } from "./array.constants"
 
 export const VendorCreateForm = () => {
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
     const navigate = useNavigate();
     const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateVendor(ADMIN_API_URL.POST_VENDOR);
 
@@ -28,7 +36,7 @@ export const VendorCreateForm = () => {
         <Formik
             enableReinitialize={true}
             initialValues={initValVendor}
-            validationSchema={vendorValidationSchema}
+            // validationSchema={vendorValidationSchema}
             validateOnBlur={true}
             validateOnChange={true}
             onSubmit={(values) => {
@@ -42,10 +50,26 @@ export const VendorCreateForm = () => {
                             <Typography variant="h4">Vendor Registration</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={!postError} label="Create" />
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={false} label="Create" />
                             <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                     </Grid>
+                    <FormTabs value={value} handleChange={handleChange} tabLabels={arrayConstants.tabs} />
+                    <TabPanel value={value} index={0}>
+                        <VendorPrimaryDetails />
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <VendorOtherDetails />
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <VendorSalesContact />
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <VendorBankDetails />
+                    </TabPanel>
+                    <TabPanel value={value} index={4}>
+                        <VendorReferences />
+                    </TabPanel>
                 </form>
             )}
         </Formik>

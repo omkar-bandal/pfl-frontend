@@ -1,1 +1,1 @@
-export * from './lib/form/VendorForm';
+export * from './lib/vendor-create.form';

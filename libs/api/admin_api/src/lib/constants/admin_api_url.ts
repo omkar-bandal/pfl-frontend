@@ -85,16 +85,9 @@ export const ADMIN_API_URL = {
     UPDATE_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
 
     //Branches
-    GET_ALL_CC: "/location_branches/COLLECTION_CENTER",
-    GET_A_CC: "/location_branches/COLLECTION_CENTER",
-    GET_ALL_DC: "/location_branches/DISTRIBUTION_CENTER",
-    GET_A_DC: "/location_branches/DISTRIBUTION_CENTER",
-    GET_ALL_SEASONAL_CC: "/location_branches/SEASONAL_COLLECTION_CENTER",
-    GET_A_SEASONAL_CC: "/location_branches/SEASONAL_COLLECTION_CENTER",
-    GET_ALL_WAREHOUSE: "/location_branches/WAREHOUSE",
-    GET_A_WAREHOUSE: "/location_branches/WAREHOUSE",
-    POST_BRANCH: "/location_branches",
-    UPDATE_BRANCH: "/location_branches",
-
-    GET_ALL_BRANCHES_FILTERED: "/location_branches/filterData/filter/all",
+    GET_ALL_BRANCHES: "/location-branches/",
+    GET_A_BRANCH:"/location-branches/",
+    CREATE_BRANCH: "/location-branches",
+    UPDATE_BRANCH: "/location-branches",
+    GET_ALL_BRANCHES_FILTERED: "/location-branches/filterData/filter/all",
 }

@@ -1,8 +1,8 @@
+import React from "react";
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Field, FieldProps, FormikProps } from "formik";
 import { FormField } from "./models";
 import { AttachFile } from "@mui/icons-material";
-import React from "react";
 
 type FileInputProp = {
     formField: FormField;
@@ -42,7 +42,6 @@ export const FileInput: React.FC<FileInputProp> = ({ formField }) => {
     };
 
     return (
-        <>
             <Field name={formField.name}>
                 {({ form }: FieldProps) => (
                     <Box
@@ -69,6 +68,5 @@ export const FileInput: React.FC<FileInputProp> = ({ formField }) => {
                     </Box>
                 )}
             </Field>
-        </>
     );
 };

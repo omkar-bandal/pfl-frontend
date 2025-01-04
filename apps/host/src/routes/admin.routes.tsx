@@ -1,10 +1,8 @@
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { BranchForm, 
-    CCTable, 
     CorporateOfficeTable, 
     CustomerTable, 
     DashboardAdmin, 
-    DCTable, 
     EmployeeTable, 
     FarmerTable, 
     OfficeForm, 
@@ -17,7 +15,6 @@ import { BranchForm,
      ProductSubCatTable, 
      ProductTable, 
      RegisteredOfficeTable, 
-     SeasonalCCTable, 
      UOMConvMatrixForm, 
      UOMConvMatrixTable, 
      UOMForm, 
@@ -25,7 +22,6 @@ import { BranchForm,
     VendorTable, 
     ViewFarmer, 
     ViewVendor, 
-    WHTable, 
     ViewEmployee, 
     EmployeeForm, 
     ViewCustomer,
@@ -34,10 +30,11 @@ import { BranchForm,
     VendorSubcatForm,
     VendorSubcatTable,
     ViewBranch,
-    ViewProduct
+    ViewProduct,
+    BranchTable
 } from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
-import { VendorForm } from "@prime-fresh/shared/masters/vendor";
+import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
 
 export const AdminRoutes = [
     {
@@ -78,7 +75,7 @@ export const AdminRoutes = [
             },
             {
                 path: `${ADMIN_ROUTES.EDIT_VENDOR}/:id`,
-                element: <VendorForm />,
+                element: <VendorCreateForm />,
             },
             {
                 path: ADMIN_ROUTES.CREATE_VENDORS_CAT,
@@ -227,20 +224,8 @@ export const AdminRoutes = [
                 element: <Outlet />,
                 children: [
                     {
-                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_CC,
-                        element: <CCTable />
-                    },
-                    {
-                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_DC,
-                        element: <DCTable />
-                    },
-                    {
-                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_SEASONAL_CC,
-                        element: <SeasonalCCTable />
-                    },
-                    {
-                        path: ADMIN_ROUTES.LOCATIONS_BRANCHES_WAREHOUSES_WH,
-                        element: <WHTable />
+                        path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/:branchType`,
+                        element: <BranchTable />
                     },
                     {
                         path: `${ADMIN_ROUTES.CREATE_BRANCHES}/:branchType`,

@@ -1,1 +1,1 @@
-export * from './lib/Product_Form';
+export * from './lib/product-create.form';

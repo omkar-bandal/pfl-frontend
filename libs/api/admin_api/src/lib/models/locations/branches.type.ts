@@ -1,15 +1,16 @@
 import { Address, GetAddress } from "../address.type";
 
 export enum BranchType {
-    "COLLECTION_CENTER",
-    "DISTRIBUTION_CENTER",
-    "SEASONAL_COLLECTION_CENTER",
-    "WAREHOUSE"
+    "collection-center",
+    "distribution-center",
+    "seasonal-collection-center",
+    "warehouse",
 }
 
 export interface GetBranches {
     id: string;
     name: string;
+    prefix: string;
     address: GetAddress;
     contactNumber: string;
     cFirstName: string;
@@ -19,24 +20,30 @@ export interface GetBranches {
     totalCapacity: number;
     currentCapacity: number;
     balanceCapacity: number;
-    type: string;
+    type: "collection-center" |
+    "distribution-center" |
+    "seasonal-collection-center" |
+    "warehouse";
 }
 export type PostBranches = {
-    name: string;
+    name: string | null;
+    prefix: string | null;
     address: Address;
-    contactNumber: string;
-    cFirstName: string;
-    cMiddleName: string;
-    cLastName: string;
-    notes: string;
+    contactNumber: string | null;
+    cFirstName: string | null;
+    cMiddleName: string | null;
+    cLastName: string | null;
+    notes: string | null;
     totalCapacity: number;
     currentCapacity: number;
     balanceCapacity: number;
-    type: string;
 }
 
 export type GetFilteredBranchData = {
     id: string,
     name: string,
-    type: string,
+    type: "collection-center" |
+    "distribution-center" |
+    "seasonal-collection-center" |
+    "warehouse",
 }

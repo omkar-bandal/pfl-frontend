@@ -8,26 +8,105 @@ import {
 } from "@mui/material";
 import { ExpandMore, ExpandLess, Remove } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
-import { setMobileOpen, SidebarListProps } from "@prime-fresh/modules";
+import { Navigations, setMobileOpen, SidebarListProps } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 
-export const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, setSelectedItem, navigations }) => {
+export const SidebarList: React.FC<SidebarListProps> = ({
+  dept,
+  selectedItem,
+  setSelectedItem,
+  navigations,
+}) => {
   const dispatch = useDispatch();
-  // State to manage the expanded items
-  const [openItems, setOpenItems] = React.useState<{ [key: string]: boolean }>({});
+  const [openItems, setOpenItems] = React.useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const handleToggle = (name: string) => {
-    setOpenItems(prev => ({ ...prev, [name]: !prev[name] }));
+    setOpenItems((prev) => ({ ...prev, [name]: !prev[name] }));
   };
 
-  const handleChildrenOpen = (name: string) => {
-    setSelectedItem(prev => (prev === name ? '' : name));
-    handleToggle(name); // Toggle the collapse state
-  };
+  const renderChildItems = (children: Navigations[], parentName: string) =>
+    children.map((child) => {
+      if (child.depts?.includes(dept)) {
+        return (
+          <React.Fragment key={child.name}>
+            {child.path ? (
+              <NavLink
+                to={child.path}
+                style={({ isActive }) => ({
+                  textDecoration: 'none',
+                  color: isActive ? 'primary.main' : 'inherit',
+                })}
+              >
+                <ListItemButton
+                  selected={selectedItem === child.name}
+                  onClick={() => {
+                    dispatch(setMobileOpen(false));
+                    setSelectedItem(child.name);
+                  }}
+                  sx={{
+                    pl: 4,
+                    '&:hover': {
+                      color: 'primary.main',
+                      '& .MuiListItemIcon-root': {
+                        color: 'primary.main',
+                      },
+                    },
+                  }}
+                >
+                  <ListItemIcon>
+                    <Remove fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>{child.name}</ListItemText>
+                </ListItemButton>
+              </NavLink>
+            ) : child.grandChildren ? (
+              <>
+                <ListItemButton
+                  onClick={() => handleToggle(`${parentName}-${child.name}`)}
+                  sx={{
+                    pl: 4,
+                    '&:hover': {
+                      color: 'primary.main',
+                      '& .MuiListItemIcon-root': {
+                        color: 'primary.main',
+                      },
+                    },
+                  }}
+                >
+                  <ListItemIcon>
+                    <Remove fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>{child.name}</ListItemText>
+                  <ListItemIcon>
+                    {openItems[`${parentName}-${child.name}`] ? (
+                      <ExpandLess />
+                    ) : (
+                      <ExpandMore />
+                    )}
+                  </ListItemIcon>
+                </ListItemButton>
+                <Collapse
+                  in={openItems[`${parentName}-${child.name}`]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List component="div" disablePadding>
+                    {renderChildItems(child.grandChildren!, `${parentName}-${child.name}`)}
+                  </List>
+                </Collapse>
+              </>
+            ) : null}
+          </React.Fragment>
+        );
+      }
+      return null;
+    });
 
   return (
     <List>
-      {navigations.map(item => {
+      {navigations.map((item) => {
         if (item.depts?.includes(dept)) {
           if (item.path) {
             return (
@@ -68,7 +147,7 @@ export const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, se
             return (
               <React.Fragment key={item.name}>
                 <ListItemButton
-                  onClick={() => handleChildrenOpen(item.name)}
+                  onClick={() => handleToggle(item.name)}
                   sx={{
                     width: '95%',
                     borderRadius: 2,
@@ -87,58 +166,14 @@ export const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, se
                     {openItems[item.name] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemIcon>
                 </ListItemButton>
-
                 <Collapse in={openItems[item.name]} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    {item.children.map(child => {
-                      if (child.depts?.includes(dept)) {
-                        return (
-                          <React.Fragment key={child.name}>
-                            {child.path ? (
-                              <NavLink
-                                to={child.path}
-                                style={({ isActive }) => ({
-                                  textDecoration: 'none',
-                                  color: isActive ? 'primary.main' : 'inherit',
-                                })}
-                              >
-                                <ListItemButton
-                                  selected={selectedItem === child.name}
-                                  onClick={() => {
-                                    dispatch(setMobileOpen(false));
-                                    setSelectedItem(child.name);
-                                  }}
-                                  sx={{
-                                    width: '90%',
-                                    borderRadius: 2,
-                                    marginX: 'auto',
-                                    '&:hover': {
-                                      color: 'primary.main',
-                                      '& .MuiListItemIcon-root': {
-                                        color: 'primary.main',
-                                      },
-                                    },
-                                  }}
-                                >
-                                  <ListItemIcon>
-                                    <Remove fontSize="small" />
-                                  </ListItemIcon>
-                                  <ListItemText>{child.name}</ListItemText>
-                                </ListItemButton>
-                              </NavLink>
-                            ) : null}
-                          </React.Fragment>
-                        );
-                      }
-                      return null;
-                    })}
+                    {renderChildItems(item.children, item.name)}
                   </List>
                 </Collapse>
               </React.Fragment>
             );
           }
-
-          return <ListItemText key={item.name}>{item.name}</ListItemText>;
         }
         return null;
       })}
@@ -146,8 +181,6 @@ export const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, se
   );
 };
 export default SidebarList;
-
-// export default SidebarList;
 // const SidebarList: React.FC<SidebarListProps> = ({ dept, selectedItem, setSelectedItem, navigations }) => {
 //   const navigate = useNavigate();
 //   const dispatch = useDispatch();

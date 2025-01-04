@@ -3,6 +3,7 @@ import { ADMIN_API_URL, PostVendor, useGetAllVendorCat, useGetAllVendorSubcatego
 import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import { SelectInput, TextInput } from "@prime-fresh/ui_shared"
 import { useFormikContext } from "formik";
+import { arrayConstants } from "../array.constants";
 
 export const VendorPrimaryDetails = () => {
     const { values, handleChange } = useFormikContext<PostVendor>();
@@ -13,7 +14,7 @@ export const VendorPrimaryDetails = () => {
     const { data: vSubcat } = useGetAllVendorSubcategoriesByQuery(ADMIN_API_URL.GET_VENDOR_SUBCAT_BY_QUERY, values.category || '');
     const vendorSubcategory = vSubcat ? mapToValueLabelArray(vSubcat, 'id', 'name') : [];
     return (
-        <Grid container spacing={2} padding={1}>
+        <Grid container spacing={1}>
             <Grid item xs={12}>
                 <TextInput
                     type="text"
@@ -49,7 +50,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={false}
                     label="In F&V Business Since"
                     name="inFandVBusinessSince"
-                    options={vendorSubcategory}
+                    options={arrayConstants.inFnVBusiness}
                     value={values.inFandVBusinessSince}
                     handleChange={handleChange}
                 />
@@ -64,7 +65,7 @@ export const VendorPrimaryDetails = () => {
                     handleChange={handleChange}
                 />
             </Grid>
-            <Grid item xs={12} marginY={2}>
+            <Grid item xs={12} marginY={1}>
                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
                     <Typography variant='body2' sx={{ fontWeight: 600 }}>Vendor Office Address</Typography>
                 </Box>
@@ -143,9 +144,9 @@ export const VendorPrimaryDetails = () => {
                 <TextInput
                     type="email"
                     isRequired={false}
-                    name="email"
+                    name="officeEmail"
                     label="Office Email"
-                    value={values.email}
+                    value={values.officeEmail}
                     handleChange={handleChange}
                 />
             </Grid>

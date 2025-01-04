@@ -7,9 +7,9 @@ import { displayAddress, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { axiosInstance, handleError } from "@prime-fresh/common_api";
 import { useReactToPrint } from "react-to-print";
 import { smallLogo } from "@prime-fresh/ui_shared";
-import { ADMIN_API_URL, useGetAllFarmers, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from "@prime-fresh/admin_api";
+import { ADMIN_API_URL, useGetAllFarmers, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from "@prime-fresh/admin_api";
 import { useDispatch } from "react-redux";
-import { farmerDataReducer, farmersDataState, productsDataState, setProducts, setSelectedFarmer, setSelectedVendor, setUOMs, uomsDataState, vendorsDataState } from "@prime-fresh/admin/modules";
+import { farmersDataState, productsDataState, setProducts, setSelectedFarmer, setSelectedVendor, setUOMs, uomsDataState, vendorsDataState } from "@prime-fresh/admin/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 
 export const GRNView = () => {
@@ -21,8 +21,8 @@ export const GRNView = () => {
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
   const { data: grn, isLoading } = useGetGRN(PURCHASE_API_URL.GET_A_GRN, grnId);
-  const { data: Vendors } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
-  const { data: Farmers } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
+  const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
+  const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
   const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const products = Products ? Products : [];
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
@@ -173,7 +173,7 @@ export const GRNView = () => {
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>{grn?.source === "vendor" ? "Vendor" : "Farmer"} Name</Typography>
                   </Grid>
                   <Grid item xs={6} sx={{ borderBottom: `1px solid #000000`, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.companyName : `${selectedFarmer?.farmerfName} ${selectedFarmer?.farmerlName}`}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.companyName : selectedFarmer?.fullName}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" sx={{ color: "#555" }}>{grn?.source === "vendor" ? "Vendor" : "Farmer"} Code</Typography>

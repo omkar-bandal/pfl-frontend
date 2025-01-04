@@ -5,7 +5,7 @@ import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
 import { dealSlipDataState, grnSchema, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { useActions, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
-import { productsDataState, uomsDataState, setProducts, setUOMs, setSelectedProduct } from '@prime-fresh/admin/modules';
+import { productsDataState, uomsDataState, setProducts, setUOMs, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { GetDealSlip, PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlip } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
@@ -22,8 +22,9 @@ export const GRNForm = () => {
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
 
   const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+  console.log(Locations);
   const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
-  const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "DISTRIBUTION_CENTER"), 'id', 'name') : [];
+  const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
 
   const { allProducts, selectedProduct } = useAppSelector(productsDataState);
   const { allUOMs } = useAppSelector(uomsDataState);
@@ -160,11 +161,6 @@ export const GRNForm = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextInput isRequired={false} type="text" name="specialReq" label='Special Request' value={values.specialReq} handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} marginY={1}>
-                <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
-                  <Typography variant='body2' sx={{ fontWeight: 600 }}>Vendor / Farmer Information</Typography>
-                </Box>
               </Grid>
 
               {/*Vendor or Farmer info depend on selected source */}

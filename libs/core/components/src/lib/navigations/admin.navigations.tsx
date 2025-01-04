@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { Navigations } from '@prime-fresh/modules';
 import { stringConstants } from "@prime-fresh/modules";
-import {ADMIN_ROUTES} from "@prime-fresh/admin/modules";
+import {ADMIN_ROUTES, STRINGS} from "@prime-fresh/admin/modules";
 
 export const adminNavigations: Navigations[] = [
   {
@@ -58,17 +58,47 @@ export const adminNavigations: Navigations[] = [
     roles: [stringConstants.ROLE_ADMIN],
     depts: [stringConstants.DEPT_ADMIN],
     children: [
-      { name: "Registered Office", path: ADMIN_ROUTES.GET_REGISTERED_OFFICE, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-      { name: "Corporate Office", path: ADMIN_ROUTES.GET_CORPORATE_OFFICE, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
+      { 
+        name: "Registered Office", 
+        path: ADMIN_ROUTES.GET_REGISTERED_OFFICE, 
+        roles: [stringConstants.ROLE_ADMIN], 
+        depts: [stringConstants.DEPT_ADMIN] 
+      },
+      { 
+        name: "Corporate Office", 
+        path: ADMIN_ROUTES.GET_CORPORATE_OFFICE, 
+        roles: [stringConstants.ROLE_ADMIN], 
+        depts: [stringConstants.DEPT_ADMIN] 
+      },
       {
         name: "Branches",
         roles: [stringConstants.ROLE_ADMIN],
         depts: [stringConstants.DEPT_ADMIN],
         grandChildren: [
-          { name: "Collection Center (CC)", path: ADMIN_ROUTES.LOCATIONS_BRANCHES_CC, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-          { name: "Distribution Center (DC)", path: ADMIN_ROUTES.LOCATIONS_BRANCHES_DC, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-          { name: "Seasonal CC", path: ADMIN_ROUTES.LOCATIONS_BRANCHES_SEASONAL_CC, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-          { name: "Warehouses (WH)", path: ADMIN_ROUTES.LOCATIONS_BRANCHES_WAREHOUSES_WH, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
+          { 
+            name: "Collection Center (CC)", 
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.CC}`, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts: [stringConstants.DEPT_ADMIN] 
+          },
+          { 
+            name: "Distribution Center (DC)", 
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.DC}`, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts: [stringConstants.DEPT_ADMIN] 
+          },
+          { 
+            name: "Seasonal CC", 
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.SEASONAL_CC}`, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts: [stringConstants.DEPT_ADMIN] 
+          },
+          { 
+            name: "Warehouses (WH)", 
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.WH}`, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts: [stringConstants.DEPT_ADMIN] 
+          },
         ]
       },
     ]

@@ -38,9 +38,9 @@ class ApiServices<Req, Res> {
   }
 
   // Get Data by Query
-  async getDataByQuery(url: string, id: string): Promise<Res> {
+  async getDataByQuery(url: string, query: string): Promise<Res> {
     try {
-      const response: AxiosResponse = await axiosInstance.get(`${url}?search=${id}`);
+      const response: AxiosResponse = await axiosInstance.get(`${url}?search=${query}`);
       console.log(response.data.data);
       return response.data.data;
     } catch (error) {

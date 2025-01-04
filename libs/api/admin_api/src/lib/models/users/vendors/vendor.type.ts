@@ -67,11 +67,11 @@ export type GetVendor = {
     dateOfIncorporation: string | null;
     officeAddress: Address;
     officeContactNo: string | null;
-    email: string | null;
+    officeEmail: string | null;
     website: string | null;
     //Other Details
     mainProduct: string | null;
-    listOfAllProducts: string | null;
+    listOfAllProducts: string[] | [];
     dispatchCenter: string | null;
     warehouseLocations: string | null;
     packingCenterLocation: string | null;
@@ -88,9 +88,7 @@ export type GetVendor = {
     proposedPaymentTerms: string | null;
     creditTerms: string | null;
     anyDetailsTeamAndInfra: string | null;
-    submittedBy: string | null;
-    registeredBy: string | null;
-    registeredDate: string | null;
+    
     //Vendor Sales Contact
     vendorSaleInfo: PostVendorSalesContact;
     //Vendor Bank Details

@@ -90,10 +90,11 @@ export const ADMIN_ROUTES = {
     
     //Branches
     BRANCHES: "/admin/locations/branches",
-    LOCATIONS_BRANCHES_CC: "/admin/locations/branches/collection-center/getall",
-    LOCATIONS_BRANCHES_DC: "/admin/locations/branches/distribution-center/getall",
-    LOCATIONS_BRANCHES_SEASONAL_CC: "/admin/locations/branches/seasonal-collection-center/getall",
-    LOCATIONS_BRANCHES_WAREHOUSES_WH: "/admin/locations/branches/warehouses/getall",
+    GET_ALL_CC: "/admin/locations/branches/collection-center/getall",
+    GET_ALL_DC: "/admin/locations/branches/distribution-center/getall",
+    GET_ALL_SEASONAL_CC: "/admin/locations/branches/seasonal-collection-center/getall",
+    GET_ALL_WAREHOUSES_WH: "/admin/locations/branches/warehouses/getall",
+    GET_ALL_BRANCHES: "/admin/locations/branches/getall",
     CREATE_BRANCHES: "/admin/locations/branches/create",
     EDIT_BRANCHES: "/admin/locations/branches/edit",
     VIEW_BRANCHES: "/admin/locations/branches/view",

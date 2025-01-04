@@ -1,4 +1,4 @@
-import { initValAddress } from './initValAddress';
+import { initValAddress } from './address.initial-value';
 
 const initCustomerTypes = {
     id: '',
