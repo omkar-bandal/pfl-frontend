@@ -1,8 +1,3 @@
-import { GetUOM } from "../uoms"
-import { GetProductCategory } from "./productCategory.type"
-import { GetProductClassification } from "./productClassification.type"
-import { GetProductSubcategory } from "./productSubcategory.type"
-
 export type PostProduct = {
     name: string,
     image: File | null,
@@ -19,7 +14,7 @@ export type PostProduct = {
     packingType: string,                                      
     shelfLife: number,                                     
     storageTemp: number,
-    qualityParameters:{name: string}[],
+    qualityParameters:{name: string, type: "good" | "bad"}[],
 }
 
 export type GetProduct = {
@@ -28,10 +23,10 @@ export type GetProduct = {
     name: string,
     image: File | null,
     description: string,
-    classification: GetProductClassification,  
-    category: GetProductCategory,       
-    subcategory: GetProductSubcategory,    
-    uom: GetUOM,            
+    classification: string,  
+    category: string,       
+    subcategory: string,    
+    uom: string,            
     productOrigin: string,                                    
     count: string[],
     size: string[], 
@@ -40,5 +35,5 @@ export type GetProduct = {
     packingType: string,                                      
     shelfLife: number,                                     
     storageTemp: number,
-    qualityParameters:{id: string, name: string}[],
+    qualityParameters:{id: string, name: string, type: "good" | "bad"}[],
 }

@@ -13,12 +13,11 @@ import { useNavigate } from 'react-router-dom'
 export const EODReportCreateForm = () => {
   const navigate = useNavigate();
   const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+  const allUOMs = uoms? mapToValueLabelArray(uoms || [], 'id', 'unit') : [];
   const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+  const allProducts = products? mapToValueLabelArray(products || [], 'id', 'name') : [];
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-
-  const allProducts = React.useMemo(() => mapToValueLabelArray(products || [], 'id', 'name'), [products]);
-  const uomOptions = React.useMemo(() => mapToValueLabelArray(uoms || [], 'id', 'unit'), [uoms]);
-  const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id', 'name'), [locations]);
+  const allLocations = locations? mapToValueLabelArray(locations || [], 'id', 'name') : [];
 
   const { mutateAsync, error, data } = useCreateEODReport(INVENTORY_API_URL.POST_EOD_REPORT);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,7 +45,7 @@ export const EODReportCreateForm = () => {
               <Typography variant="h4">EOD Report</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
               <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -82,7 +81,7 @@ export const EODReportCreateForm = () => {
                               isRequired
                               name={`eodProducts.${index}.uom`}
                               label="UOM"
-                              options={uomOptions}
+                              options={allUOMs}
                               value={values.eodProducts[index].uom}
                               handleChange={handleChange}
                             />

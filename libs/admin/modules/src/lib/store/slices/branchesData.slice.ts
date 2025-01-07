@@ -9,7 +9,7 @@ type BranchesDataState = {
 }
 const initialState: BranchesDataState = {
     branches: [],
-    BranchType: BranchType.COLLECTION_CENTER,
+    BranchType: BranchType["collection-center"],
     selectedBranches: undefined
 }
 const branchesDataSlice = createSlice({

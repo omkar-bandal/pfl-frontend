@@ -12,7 +12,7 @@ export const vehicleDispatchRegisterInitialValues: PostVehicleDispatchRegister =
     transportationBillAmt: 0,
     advancePaid: 0,
     clientName: "",
-    clientLocationAddress: addressInitialValue,
+    clientAddress: addressInitialValue,
     receivingPerson: "",
     outTime: "",
     reachingTime: "",

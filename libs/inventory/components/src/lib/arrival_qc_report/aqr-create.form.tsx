@@ -75,7 +75,7 @@ export const AQRCreateForm = () => {
               <Typography variant='h4' component="div">Arrival QC Report</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
-              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
               <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={3}>

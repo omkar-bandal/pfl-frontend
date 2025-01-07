@@ -64,7 +64,7 @@ export interface GetGRN {
     purchaseLocation: string | null;
     purchaseForWhich: string | null;
     specialReq: string | null;
-    source: string | null;
+    source: "vendor" | "farmer";
     selectedParty: string | null;
     products: GRNProducts[];
     deliveryReceivingPerson: string | null;

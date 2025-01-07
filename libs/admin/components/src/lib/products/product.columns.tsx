@@ -1,5 +1,5 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Preview} from '@mui/icons-material';
+import { Edit, Preview} from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { GetProductCategory, GetProductClassification, GetProductSubcategory, GetUOM } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
@@ -14,14 +14,15 @@ export const ProductListCols = (): CustomGridColDef[] => {
       field: "productCode",
       headerName: "Product Code",
       width: 150,
-      align: "center",
       isMobileVisible: true,
       valueGetter: (value: string) => value ? value : "-",
     },
     {
       field: "name",
       headerName: "Name",
-      width: 300,
+      width: 150,
+      align: "center",
+      headerAlign: "center",
       isMobileVisible: true,
     },
     {
@@ -65,23 +66,17 @@ export const ProductListCols = (): CustomGridColDef[] => {
       valueGetter: (value: GetUOM) => value ? value.unit : "-",
     },
     {
-      field: "packingType",
-      headerName: "UOM",
-      width: 100,
-      valueGetter: (value: string) => value ? value : "-",
+      field: 'edit',
+      headerName: 'Edit',
+      width: 50,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams) => (
+          <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.UPDATE_PRODUCT}/${params.row.id}`)}>
+            <Edit color="secondary" />
+          </IconButton>
+      ),
     },
-    // {
-    //   field: 'edit',
-    //   headerName: 'Edit',
-    //   width: 50,
-    //   sortable: false,
-    //   filterable: false,
-    //   renderCell: () => (
-    //       <IconButton aria-label="edit">
-    //         <Edit color="secondary" />
-    //       </IconButton>
-    //   ),
-    // },
     {
       field: 'view',
       headerName: 'View',
@@ -90,7 +85,7 @@ export const ProductListCols = (): CustomGridColDef[] => {
       filterable: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.GET_A_PRODUCT}/${params.row.id}`)}>
+        <IconButton aria-label="view" onClick={() => navigate(`${ADMIN_ROUTES.GET_A_PRODUCT}/${params.row.id}`)}>
           <Preview color="primary" />
         </IconButton>
       ),

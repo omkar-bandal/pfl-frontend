@@ -1,19 +1,21 @@
-import { Formik } from "formik";
+import { FieldArray, Formik } from "formik";
 import { initValProduct } from "./initValProduct";
-import {Grid, InputAdornment, Typography } from "@mui/material";
-import { FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, MultipleTextInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { Box, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
+import { FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, MultipleTextInput, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { ADMIN_API_URL, PostProduct, useCreateProduct, useGetAllProductClassification, useGetAllProductsCat, useGetAllProductSubCat, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { appendFormData } from '@prime-fresh/shared/utils';
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { Add, Close } from "@mui/icons-material";
 
-export const ProductForm = () => {
+export const ProductCreateForm = () => {
     const navigate = useNavigate();
     const { data: classifications } = useGetAllProductClassification(ADMIN_API_URL.GET_ALL_PRODUCT_CLASSIFICATION);
     const { data: categories } = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
     const { data: subcategories } = useGetAllProductSubCat(ADMIN_API_URL.GET_ALL_PRODUCT_SUBCATEGORY);
     console.log(subcategories);
     const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+    const qcParamsType = ["good", "bad"].map(type => { return { value: type, label: type } });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleGetCategoryAndClassification = (values: PostProduct, setFieldValue: (field: string, value: any) => void) => {
@@ -30,9 +32,10 @@ export const ProductForm = () => {
             toast.success(postRes ? postRes.message : "Product data created successfully.");
             setTimeout(() => {
                 navigate(ADMIN_ROUTES.GET_ALL_PRODUCTS);
-            }, 2500);
+            }, 2000);
         }).catch(() => {
-            toast.error(postError? postError.message : "Error while creating product data.");
+            console.log(postError);
+            toast.error(postError ? postError.message : "Error while creating product data.");
         });
     }
     return (
@@ -197,6 +200,51 @@ export const ProductForm = () => {
                                 value={values.description}
                                 handleChange={handleChange}
                             />
+                        </Grid>
+                        <Grid item xs={12} marginY={1}>
+                            <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
+                                <Typography variant='body2' sx={{ fontWeight: 600 }}>Quality Check Parameters</Typography>
+                            </Box>
+                            <Typography variant="caption" color="error">These quality check parameters will be use for arrival quality report (AQR)</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FieldArray name="qualityParameters">
+                                {({ push, remove }) => (
+                                    <>
+                                        {
+                                            values.qualityParameters.map((_, index) => (
+                                                <Grid container spacing={1}>
+                                                    <Grid item xs={12} md={3}>
+                                                        <RadioGroupInput
+                                                            isRequired={true}
+                                                            name={`qualityParameters.${index}.type`}
+                                                            label="Parameter Type"
+                                                            value={values.qualityParameters[index].type}
+                                                            options={qcParamsType}
+                                                            handleChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={8}>
+                                                        <TextInput
+                                                            isRequired={true}
+                                                            name={`qualityParameters.${index}.name`}
+                                                            label="Parameter Name"
+                                                            value={values.qualityParameters[index].name}
+                                                            handleChange={handleChange} />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={1}>
+                                                        <IconButton color="success" size="small" sx={{ marginTop: 3 }} onClick={() => push({ name: "", type: "" })}>
+                                                            <Add />
+                                                        </IconButton>
+                                                        {values.qualityParameters.length > 1 && (<IconButton color="error" size="small" sx={{ marginTop: 3 }} onClick={() => remove(index)}>
+                                                            <Close />
+                                                        </IconButton>)}
+                                                    </Grid>
+                                                </Grid>
+                                            ))
+                                        }
+                                    </>
+                                )}
+                            </FieldArray>
                         </Grid>
                         <Grid item xs={12}>
                             <ImageUpload isRequired={false} name="image" label="Product Image" />

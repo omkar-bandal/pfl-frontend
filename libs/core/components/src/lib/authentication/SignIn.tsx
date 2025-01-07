@@ -78,7 +78,7 @@ export const SignIn = () => {
                 <Grid container>
                     <Grid item sm={6} xs={12} padding={1}>
                         <img
-                            src={images.authLogo}
+                            src={images.signuplogo}
                             width="100%"
                             alt="prime-fresh-logo"
                         />

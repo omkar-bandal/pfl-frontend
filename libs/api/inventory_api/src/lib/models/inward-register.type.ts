@@ -4,7 +4,7 @@ export type PostInwardProducts = {
     product: string,  
     count: string,
     size: string,
-    weight: string,
+    weight: number,
     uom: string,  
     qty: number,
     productContainerWeight: number, 
@@ -25,7 +25,7 @@ export type PostInwardRegister = {
     batchNo: string,
     selectedParty: string,            // selected vendor / farmer id
     inwardProducts: PostInwardProducts[],    // Relation to InwardProduct entity  
-    source: string,                  // vendor / farmer
+    source: "vendor" | "farmer",                  // vendor / farmer
     purchasedBy: string,
     purchasedQty: number,
     inwardQtyInKg: number,

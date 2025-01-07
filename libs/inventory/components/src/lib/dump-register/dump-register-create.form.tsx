@@ -19,36 +19,16 @@ export const DumpRegisterCreateForm = () => {
   // Fetch Data
   const { data: grns } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
   const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+  const allProducts = products? mapToValueLabelArray(products, 'id', 'name') : [];
   const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
 
   // Memoize derived values
   const grnNums = React.useMemo(() => mapToValueLabelArray(grns || [], 'id', 'grnNo'), [grns]);
-  const allProducts = React.useMemo(() => mapToValueLabelArray(products || [], 'id', 'name'), [products]);
   const allUOMs = React.useMemo(() => mapToValueLabelArray(uoms || [], 'id', 'unit'), [uoms]);
   const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id', 'name'), [locations]);
 
-  // Selectors
-  // const { selectedGRN } = useAppSelector(grnDataState);
 
-  // Handlers
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const handleGRNnumChange = (grnid: any, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
-  //   const selected = grns?.find((grn) => grn.id === grnid);
-  //   dispatch(setSelectedGRN(selected));
-
-  //   if (selected?.products) {
-  //     const dumpProducts = selected.products.map((grnProduct) => ({
-  //       product: products.find((item) => item.id === grnProduct.product)?.productName || '',
-  //       uom: '',
-  //       quantity: 0,
-  //       dumpCost: 0,
-  //     }));
-  //     setFieldValue('dumpProducts', dumpProducts);
-  //   } else {
-  //     setFieldValue('dumpProducts', dumpProductsInitialValue);
-  //   }
-  // };
   const { mutateAsync, error, data } = useCreateDumpRegister(INVENTORY_API_URL.POST_DUMP_REGISTER);
   const handleSubmit = (values: PostDumpRegister) => {
     const formData = new FormData();
@@ -57,7 +37,7 @@ export const DumpRegisterCreateForm = () => {
       toast.success(data ? data.message : "Dump record created sucessfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_DUMP_REGISTERS);
-      }, 2500);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating dump record.");
     })
@@ -79,7 +59,7 @@ export const DumpRegisterCreateForm = () => {
               <Typography variant="h4">Dump Register</Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
               <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={6}>

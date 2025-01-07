@@ -1,0 +1,34 @@
+import * as yup from 'yup';
+export declare const paymentRequestSchema: yup.ObjectSchema<{
+    paymentDate: Date;
+    partyName: string;
+    amount: number;
+    bankAccNo: string;
+    ifscCode: string;
+    paymentMode: string;
+    typesOfTransaction: string;
+    otherTransaction: string;
+    vehicleNo: string;
+    placeOfPurchase: string;
+    contactpersonRec: string;
+    contactpersonSen: string;
+    costCenter: string;
+    kycByEmail: string;
+    remark: string;
+}, yup.AnyObject, {
+    paymentDate: undefined;
+    partyName: undefined;
+    amount: undefined;
+    bankAccNo: undefined;
+    ifscCode: undefined;
+    paymentMode: undefined;
+    typesOfTransaction: undefined;
+    otherTransaction: undefined;
+    vehicleNo: undefined;
+    placeOfPurchase: undefined;
+    contactpersonRec: undefined;
+    contactpersonSen: undefined;
+    costCenter: undefined;
+    kycByEmail: undefined;
+    remark: undefined;
+}, "">;

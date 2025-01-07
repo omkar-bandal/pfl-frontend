@@ -95,7 +95,7 @@ export const GRNForm = () => {
                 <Typography variant='h4'>Goods Received Note</Typography>
               </Grid>
               <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
                 <FormResetBtn label="Reset" handleReset={handleReset} />
                 <FormPreviewBtn onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }} />
               </Grid>
@@ -175,7 +175,7 @@ export const GRNForm = () => {
                 <FieldArray name="products">
                   {({ push, remove }) => (
                     <>
-                      {values.products.map((product, index) => (
+                      {values.products.map((_, index) => (
                         <Grid container spacing={1} key={index} padding={1} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
                           <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography variant="body1">Product : {index + 1}</Typography>

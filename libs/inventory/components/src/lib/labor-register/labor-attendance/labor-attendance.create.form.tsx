@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FieldArray, Formik } from 'formik'
 import { arrayConstants, inventoryRouteConstants, laborAttendanceInitialValue, laborAttendanceSchema, laborsDetailsInitialValue } from '@prime-fresh/inventory/modules'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
-import { AutoCompleteInput, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { Add, Remove } from '@mui/icons-material';
 import { INVENTORY_API_URL, useCreateLaborAttendance, useGetAllLaborData } from '@prime-fresh/inventory_api';
@@ -32,7 +32,7 @@ export const LaborAttendanceForm = () => {
     }
     const handleClose = () => {
         setOpen(false);
-      };
+    };
     return (
         <>
             <Formik
@@ -47,9 +47,9 @@ export const LaborAttendanceForm = () => {
                             <Grid item xs={12} md={6}>
                                 <Typography variant="h4">Daily Labor Attendance</Typography>
                             </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                                <Button type="submit" variant="contained" color="success" size="large" sx={{ width: 150, textTransform: "none" }}>Create</Button>
-                                <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: "none" }} onClick={handleReset}>Reset</Button>
+                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <FormSubmitBtn isSubmitting={isSubmitting} isError={postError} label="Create" />
+                                <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <SelectInput
@@ -101,10 +101,10 @@ export const LaborAttendanceForm = () => {
                                                             options={permanentLabors}
                                                             handleChange={(event, newValue) => {
                                                                 if (newValue && newValue.label) {
-                                                                    if(values.labourDetails[index].laborType === "parmanent")
-                                                                    navigate(inventoryRouteConstants.CREATE_LABOUR_REGISTER)
+                                                                    if (values.labourDetails[index].laborType === "parmanent")
+                                                                        navigate(inventoryRouteConstants.CREATE_LABOUR_REGISTER)
                                                                     else
-                                                                    setOpen(true);
+                                                                        setOpen(true);
                                                                 } else if (newValue) {
                                                                     setFieldValue(`labourDetails.${index}.labourName`, newValue.value);
                                                                 } else {
@@ -175,7 +175,7 @@ export const LaborAttendanceForm = () => {
                     </form >
                 )}
             </Formik>
-            <Dialog open={open? open : false} onClose={handleClose}>
+            <Dialog open={open ? open : false} onClose={handleClose}>
                 <Formik
                     initialValues={{ laborName: '', contactNo: '' }}
                     onSubmit={(values) => console.log(values)}>

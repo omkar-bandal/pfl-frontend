@@ -1,13 +1,12 @@
 import React from 'react'
 import { FieldArray, Formik } from "formik";
 import { arrayConstants, inventoryRouteConstants, InwardProductInitialValue, InwardRegisterInitialValue } from "@prime-fresh/inventory/modules";
-import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { Button, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from "@prime-fresh/ui_shared";
 import { Add, Close } from '@mui/icons-material';
-import { displayAddress } from '@prime-fresh/purchase/modules';
-import { ADMIN_API_URL, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetFilteredBranchData, GetProduct, useGetAllFilteredBranches, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
+import { ADMIN_API_URL, GetFilteredBranchData, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { useDispatch } from 'react-redux';
-import { ADMIN_ROUTES, farmersDataState, productsDataState, setFilteredFarmerData, setFilteredVendorData, setProducts, setSelectedFarmer, setSelectedProduct, setSelectedVendor, setUOMs, uomsDataState, vendorsDataState } from '@prime-fresh/admin/modules';
+import { productsDataState, setProducts, setSelectedProduct, setUOMs, uomsDataState} from '@prime-fresh/admin/modules';
 import { useAppSelector } from '@prime-fresh/modules';
 import { INVENTORY_API_URL, PostInwardRegister, useCreateInwardRegister } from '@prime-fresh/inventory_api';
 import { useNavigate } from 'react-router-dom';
@@ -17,41 +16,19 @@ import { appendFormData } from '@prime-fresh/shared/utils';
 export const InwardRegisterCreateForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
-  const { data: FilteredFarmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
   const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
   const Locations = locations ? locations : [];
-  const { allVendorsFiltered, selectedVendor } = useAppSelector(vendorsDataState);
-  const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
   const { allProducts, selectedProduct } = useAppSelector(productsDataState);
   const { allUOMs } = useAppSelector(uomsDataState);
 
   React.useEffect(() => {
-    dispatch(setSelectedVendor(null));
-    dispatch(setSelectedFarmer(null));
     dispatch(setSelectedProduct(null));
-    dispatch(setFilteredVendorData(Vendors ? Vendors : []));
     dispatch(setProducts(Products ? Products : []));
     dispatch(setUOMs(UOMs ? UOMs : []));
-  }, [dispatch, Products, Vendors, UOMs]);
+  }, [dispatch, Products, UOMs]);
 
-  const handlesSourceChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
-    setFieldValue("source", value);
-    value === "vendor" ? dispatch(setFilteredVendorData(Vendors ? Vendors : [])) : dispatch(setFilteredFarmerData(FilteredFarmers ? FilteredFarmers : []));
-  };
-
-  const handleSourceNameChange = (values: PostInwardRegister, dataId: string) => {
-    console.log("Selected Party: ", dataId);
-    if (values.source === "vendor") {
-      const selectedVendor: GetAllFilteredVendorData | undefined = allVendorsFiltered.find((vendor) => vendor.id === dataId);
-      dispatch(setSelectedVendor(selectedVendor));
-    } else if (values.source === "farmer") {
-      const selectFarmer: GetAllFilteredFarmerData | undefined = allFarmersFiltered.find((farmer) => farmer.id === dataId)
-      dispatch(setSelectedFarmer(selectFarmer))
-    }
-  };
   const handleProductNameChange = (dataId: string) => {
     const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
     dispatch(setSelectedProduct(selectedProduct));
@@ -75,10 +52,10 @@ export const InwardRegisterCreateForm = () => {
       toast.success(data ? data.message : "Inward register record created successfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
-      }, 2500)
+      }, 2000)
     }).catch(() => {
       console.log(error)
-      toast.error(error ? error.message : "")
+      toast.error(error ? error.message : "Error while creating inward record.")
     })
   }
 
@@ -96,7 +73,7 @@ export const InwardRegisterCreateForm = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-              <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
               <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12}>
@@ -162,77 +139,9 @@ export const InwardRegisterCreateForm = () => {
                 value={values.date}
                 handleChange={handleChange} />
             </Grid>
-            <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-              <RadioGroupInput
-                isRequired={true}
-                label="Source:"
-                name="source"
-                options={arrayConstants.SOURCES}
-                value={values.source}
-                handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handlesSourceChange(event.target.value, setFieldValue)
-                }} />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              {values.source === "vendor" ?
-                (
-                  <AutoCompleteInput
-                    isRequired={true}
-                    name="selectedParty"
-                    label="Vendor Company Name"
-                    options={mapToValueLabelArray<GetAllFilteredVendorData>(allVendorsFiltered, 'id', 'companyName')}
-                    handleChange={(event, newValue) => newValue ? setFieldValue('selectedParty', newValue.value) : setFieldValue('selectedParty', '')}
-                    handleBlur={handleSourceNameChange(values, values.selectedParty)} />
-                ) : (
-                  <AutoCompleteInput
-                    isRequired={true}
-                    name="selectedParty"
-                    label="Farmer Name"
-                    options={mapToValueLabelArray(allFarmersFiltered, 'id', 'fullName')}
-                    handleChange={(event, newValue) => newValue ? setFieldValue('selectedParty', newValue.value) : setFieldValue('selectedParty', '')}
-                    handleBlur={handleSourceNameChange(values, values.selectedParty)} />
-                )}
-            </Grid>
-            {values.source === "vendor" ?
-              (<>
-                <Grid item xs={12} md={4}>
-                  <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextInput isRequired={false} label='Company Email' name='email' type='email' value={`${selectedVendor?.email || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextInput isRequired={false} label='Company Contact No' name='contactNo' type='text' value={`${selectedVendor?.officeContactNo || ''}`} isReadOnly={true} />
-                </Grid>
-              </>) :
-              (<>
-                <Grid item xs={12} md={2}>
-                  <TextInput isRequired={false} label='Farmer Code' name='farmerCode' type='text' value={`${selectedFarmer?.farmerCode || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextInput isRequired={false} label='Farmer Email' name='email' type='email' value={`${selectedFarmer?.email || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextInput isRequired={false} label='Farmer Contact No' name='contactNo' type='text' value={`${selectedFarmer?.primaryMobileNo || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextInput isRequired={false} label='Farmer Residential Address' name='residentialAddress' type='text' value={selectedFarmer?.residensialAddress ? displayAddress(selectedFarmer?.residensialAddress) : ''} isReadOnly={true} />
-                </Grid>
-              </>)}
-            <Grid item xs={12} marginY={2}>
-              <Box sx={{ width: '100%' }}>
-                {values.source === "vendor" ?
-                  (<Typography variant='body2' sx={{ fontWeight: 600 }}>If Vendor Not Found <Button variant='text' onClick={() => navigate(ADMIN_ROUTES.CREATE_VENDOR)} >Click Here</Button></Typography>) :
-                  (<Typography variant='body2' sx={{ fontWeight: 600 }}>If Farmer Not Found <Button variant='text' onClick={() => navigate(ADMIN_ROUTES.CREATE_FARMER)} >Click Here</Button></Typography>)
-                }
-              </Box>
-            </Grid>
+
+            <VendorFarmerInfo<PostInwardRegister> />
+
             <Grid item xs={12}>
               <FieldArray name="inwardProducts">
                 {({ remove, push }) => (
@@ -291,7 +200,7 @@ export const InwardRegisterCreateForm = () => {
                             type="text"
                             name="brand"
                             label="Brand"
-                            value="" />
+                            value={selectedProduct?.brand} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <SelectInput
@@ -314,15 +223,21 @@ export const InwardRegisterCreateForm = () => {
                         <Grid item xs={12} md={4}>
                           <TextInput
                             isRequired={true}
+                            type="number"
                             label="Weight"
                             name={`inwardProducts.${index}.weight`}
                             value={values.inwardProducts[index].weight}
-                            handleChange={handleChange} />
+                            handleChange={handleChange}
+                            slotProps={{
+                              input: {
+                                  endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+                              },
+                          }} />
                         </Grid>
                         <Grid item xs={12} md={4}>
                           <SelectInput
                             isRequired={true}
-                            label="UOM"
+                            label="UOM (Inward in the form)"
                             name={`inwardProducts.${index}.uom`}
                             options={mapToValueLabelArray(allUOMs, 'id', 'unit')}
                             value={values.inwardProducts[index].uom}
@@ -348,6 +263,11 @@ export const InwardRegisterCreateForm = () => {
                             value={values.inwardProducts[index].productContainerWeight}
                             handleChange={handleChange}
                             onBlur={() => calculateNetWeight(values, setFieldValue)}
+                            slotProps={{
+                              input: {
+                                  endAdornment: <InputAdornment position="end">grams</InputAdornment>,
+                              },
+                          }}
                           />
                         </Grid>
                         <Grid item xs={12} md={4}>
@@ -359,6 +279,11 @@ export const InwardRegisterCreateForm = () => {
                             value={values.inwardProducts[index].grossWeight}
                             handleChange={handleChange}
                             onBlur={() => calculateNetWeight(values, setFieldValue)}
+                            slotProps={{
+                              input: {
+                                  endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+                              },
+                          }}
                           />
                         </Grid>
                         <Grid item xs={12} md={4}>
@@ -369,6 +294,11 @@ export const InwardRegisterCreateForm = () => {
                             name={`inwardProducts.${index}.netWeight`}
                             label="Net Weight"
                             value={values.inwardProducts[index].netWeight}
+                            slotProps={{
+                              input: {
+                                  endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+                              },
+                          }}
                           />
                         </Grid>
                       </Grid>
@@ -419,9 +349,14 @@ export const InwardRegisterCreateForm = () => {
                 type="number"
                 isRequired={true}
                 name="purchasedQty"
-                label="Purchased Quantity"
+                label="Purchased Quantity (in Kg)"
                 value={values.purchasedQty}
                 handleChange={handleChange}
+                slotProps={{
+                  input: {
+                      endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+                  },
+              }}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -432,6 +367,11 @@ export const InwardRegisterCreateForm = () => {
                 label="Inward Quantity (in Kg)"
                 value={values.inwardQtyInKg}
                 handleChange={handleChange}
+                slotProps={{
+                  input: {
+                      endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+                  },
+              }}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -442,6 +382,11 @@ export const InwardRegisterCreateForm = () => {
                 label="Inward Cost"
                 value={values.inwardCost}
                 handleChange={handleChange}
+                slotProps={{
+                  input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                  },
+              }}
               />
             </Grid>
             <Grid item xs={12}>

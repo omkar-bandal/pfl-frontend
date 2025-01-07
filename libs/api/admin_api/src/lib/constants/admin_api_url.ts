@@ -50,7 +50,7 @@ export const ADMIN_API_URL = {
     GET_ALL_PRODUCTS: "/products/",
     GET_A_PRODUCTS: "/products",
     CREATE_PRODUCTS: "/products/",
-    UPDATE_PRODUCTS: "/products/",
+    UPDATE_PRODUCTS: "/products",
     GET_ALL_PRODUCT_CATEGORY: "/productCategory",
     GET_A_PRODUCT_CATEGORY: "/productCategory",
     CREATE_PRODUCT_CATEGORY: "/productCategory",

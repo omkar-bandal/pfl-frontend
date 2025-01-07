@@ -51,7 +51,7 @@ export const DeliveryChallanForm = () => {
                 <Typography variant="h4">Delivery Challan</Typography>
               </Grid>
               <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
                 <FormResetBtn label="Reset" handleReset={handleReset} />
                 <FormPreviewBtn onClick={() => { dispatch(setPreviewDC(values)); dispatch(setPreview(true)) }} />
               </Grid>

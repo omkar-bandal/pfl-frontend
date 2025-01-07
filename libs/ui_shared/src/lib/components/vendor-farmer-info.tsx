@@ -4,13 +4,13 @@ import { AutoCompleteInput, RadioGroupInput, SelectInput, TextInput } from "../a
 import { useFormikContext } from "formik";
 import { displayAddress, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
 import { mapToValueLabelArray } from "../auto_form/utils";
-import { ADMIN_API_URL, GetAllFilteredFarmerData, useGetAllFilteredFarmerData, useGetAllVendorByQuery, useGetAllVendorCat, useGetAllVendorSubcategoriesByQuery } from "@prime-fresh/admin_api";
+import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllVendorByQuery, useGetAllVendorCat, useGetAllVendorSubcategoriesByQuery } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ADMIN_ROUTES, farmersDataState, setFilteredFarmerData, setFilteredVendorData, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 
-export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", selectedParty: string | null }>() => {
+export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", selectedParty: string | null }>({ source, selectedParty }: { source?: string, selectedParty?: string }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -27,11 +27,17 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
     const allVendors = vendors ? mapToValueLabelArray(vendors, 'id', 'companyName') : [];
 
     const { data: farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
+    const allFarmers = farmers ? mapToValueLabelArray(farmers, 'id', 'fullName') : [];
 
     const { selectedVendor } = useAppSelector(vendorsDataState);
-    const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
+    const { selectedFarmer } = useAppSelector(farmersDataState);
 
     const { values, setFieldValue } = useFormikContext<T>();
+
+    React.useEffect(() => {
+        setFieldValue("source", source);
+        setFieldValue("selectedParty", selectedParty);
+    }, [source, selectedParty, setFieldValue]);
 
     const handleSourceChange = React.useCallback(
         (value: string) => {
@@ -51,14 +57,12 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
                 const selectedVendor = vendors?.find((vendor) => vendor.id === dataId);
                 dispatch(setSelectedVendor(selectedVendor));
             } else if (values.source === "farmer") {
-                const selectedFarmer = allFarmersFiltered.find((farmer) => farmer.id === dataId);
+                const selectedFarmer = farmers?.find((farmer) => farmer.id === dataId);
                 dispatch(setSelectedFarmer(selectedFarmer));
             }
         },
-        [dispatch, allFarmersFiltered, values.source, vendors]
+        [dispatch, farmers, values.source, vendors]
     );
-
-
 
     const renderVendorFields = () => {
         return (
@@ -161,7 +165,7 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
                             isRequired={true}
                             name="selectedParty"
                             label="Farmer Name"
-                            options={mapToValueLabelArray<GetAllFilteredFarmerData>(allFarmersFiltered, 'id', 'fullName')}
+                            options={allFarmers}
                             handleChange={(event, newValue) => {
                                 if (newValue) {
                                     setFieldValue('selectedParty', newValue.value);

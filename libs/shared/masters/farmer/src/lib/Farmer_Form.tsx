@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { showNotification } from '@prime-fresh/modules';
 import { farmerValidationSchema } from './farmer.schema';
 
-export const FarmerForm = () => {
+export const FarmerCreateForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const { openFor } = useAppSelector(formContainerState);

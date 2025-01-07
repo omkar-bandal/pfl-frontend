@@ -1,0 +1,52 @@
+export type PostSecondSaleProducts = {
+    product: string;
+    uom: string;
+    qty: number;
+    rate: number;
+    amount: number;
+};
+export type GetSecondSaleProducts = {
+    id: string;
+    product: string;
+    uom: string;
+    qty: number;
+    rate: number;
+    amount: number;
+};
+export type PostSecondSaleRegister = {
+    location: string;
+    dcNo: string;
+    saleDate: string;
+    buyerName: string;
+    buyerMobNo: string;
+    reasonForSale: string;
+    approvedBy: string;
+    soldBy: string;
+    secondSaleProducts: PostSecondSaleProducts[];
+    paidAmount: string;
+    paymentMode: string;
+    pendingAmt: string;
+    remarks: string;
+    comments: string;
+    submittedBy: string;
+    mobileNo: string;
+};
+export type GetSecondSaleRegister = {
+    id: string;
+    location: string;
+    dcNo: string;
+    saleDate: string;
+    buyerName: string;
+    buyerMobNo: string;
+    reasonForSale: string;
+    approvedBy: string;
+    soldBy: string;
+    secondSaleProducts: GetSecondSaleProducts[];
+    paidAmount: string;
+    paymentMode: string;
+    pendingAmt: string;
+    remarks: string;
+    comments: string;
+    submittedBy: string;
+    mobileNo: string;
+};

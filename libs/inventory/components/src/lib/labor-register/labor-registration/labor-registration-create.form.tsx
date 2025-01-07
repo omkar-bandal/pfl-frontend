@@ -1,8 +1,8 @@
 import React from 'react'
 import { FieldArray, Formik } from 'formik';
 import { arrayConstants, inventoryRouteConstants, laborFamilyDetailsInitialValue, laborRegistrationInitialValue, laborWorkExperienceInitialValue } from "@prime-fresh/inventory/modules";
-import { Box, Button, CircularProgress, Grid, IconButton, Typography } from '@mui/material';
-import { AutoCompleteInput, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { Box, Grid, IconButton, Typography } from '@mui/material';
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { Add, Close } from '@mui/icons-material';
 import { INVENTORY_API_URL, PostLaborRegistration, useCreateLaborData } from '@prime-fresh/inventory_api';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -13,9 +13,9 @@ import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api
 export const LabourRegistrationCreateForm = () => {
   const navigate = useNavigate();
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id', 'name'), [locations]);
+  const allLocations = locations? mapToValueLabelArray(locations || [], 'id', 'name') : [];
 
-  const { mutateAsync, isPending, error, data } = useCreateLaborData(INVENTORY_API_URL.POST_LABOR_REGISTRATION);
+  const { mutateAsync, error, data } = useCreateLaborData(INVENTORY_API_URL.POST_LABOR_REGISTRATION);
 
   const handleSubmit = (values: PostLaborRegistration) => {
     const formData = new FormData();
@@ -24,7 +24,7 @@ export const LabourRegistrationCreateForm = () => {
       toast.success(data ? data.message : "Labor Registered Successfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_LABOUR_REGISTER);
-      }, 2500);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating labor data.");
     })
@@ -48,20 +48,9 @@ export const LabourRegistrationCreateForm = () => {
                 Labor Registration Form
               </Typography>
             </Grid>
-            <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                size="large"
-                disabled={isSubmitting} sx={{
-                  width: 150, textTransform: 'none', '&:disabled': {
-                    backgroundColor: "#A5D6A7",
-                  },
-                }}>
-                {isSubmitting && isPending ? <CircularProgress color='inherit' size={25} /> : "Create"}
-              </Button>
-              <Button type="reset" variant="contained" color="secondary" size="large" sx={{ width: 150, textTransform: "none" }} onClick={handleReset}>Reset</Button>
+            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={5}>
               <TextInput

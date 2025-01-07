@@ -1,14 +1,13 @@
 import { Add, Close } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
-import { ADMIN_ROUTES, farmersDataState, productsDataState, setFilteredFarmerData, setFilteredVendorData, setProducts, setSelectedFarmer, setSelectedProduct, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, GetAllFilteredFarmerData, GetAllFilteredVendorData, GetProduct, useGetAllFilteredBranches, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from "@prime-fresh/admin_api";
+import { productsDataState, setProducts, setSelectedProduct } from "@prime-fresh/admin/modules";
+import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { arrayConstants, inventoryRouteConstants, InwardProductInitialValue, InwardRegisterInitialValue } from "@prime-fresh/inventory/modules";
 import { GetInwardRegister, INVENTORY_API_URL, PostInwardRegister, useGetAInwardRegister, useUpdateInwardRegister } from "@prime-fresh/inventory_api";
 import { useAppSelector } from "@prime-fresh/modules";
-import { displayAddress } from "@prime-fresh/purchase/modules";
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from "@prime-fresh/ui_shared";
 import { FieldArray, Formik } from "formik";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
@@ -21,45 +20,16 @@ export const InwardRegisterUpdateForm = () => {
     const initialValueInwardRegister = inwardData ? inwardData : InwardRegisterInitialValue;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { data: vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
-    const { data: farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
-    console.log("Farmer Data", farmers);
     const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const allUOMs = useMemo(() => mapToValueLabelArray(UOMs ? UOMs : [], 'id', 'unit'), [UOMs]);
     const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
     const allLocations = useMemo(() => mapToValueLabelArray(locations ? locations : [], 'id', 'name'), [locations]);
-    const { allVendorsFiltered, selectedVendor } = useAppSelector(vendorsDataState);
-    const { allFarmersFiltered, selectedFarmer } = useAppSelector(farmersDataState);
     const { allProducts, selectedProduct } = useAppSelector(productsDataState);
 
     React.useEffect(() => {
-        dispatch(setFilteredVendorData(vendors ? vendors : []));
-        dispatch(setFilteredFarmerData(farmers ? farmers : []));
         dispatch(setProducts(products ? products : []));
-        if (inwardData?.source === "vendor") {
-            dispatch(setSelectedVendor(allVendorsFiltered.find(vendor => vendor.id === inwardData?.selectedParty)))
-        } else {
-            dispatch(setSelectedFarmer(allFarmersFiltered.find(farmer => farmer.id === inwardData?.selectedParty)));
-        }
-    }, [dispatch, vendors, farmers, products, inwardData, allVendorsFiltered, allFarmersFiltered]);
-
-    const handlesSourceChange = useCallback((value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
-        setFieldValue("source", value);
-        value === "vendor" ? dispatch(setFilteredVendorData(vendors ? vendors : [])) : dispatch(setFilteredFarmerData(farmers ? farmers : []));
-    }, [dispatch, vendors, farmers])
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleSourceNameChange = useCallback((values: any, dataId: string) => {
-        console.log("Selected Party: ", dataId);
-        if (values.source === "vendor") {
-            const selectedVendor: GetAllFilteredVendorData | undefined = allVendorsFiltered.find((vendor) => vendor.id === dataId);
-            dispatch(setSelectedVendor(selectedVendor));
-        } else if (values.source === "farmer") {
-            const selectFarmer: GetAllFilteredFarmerData | undefined = allFarmersFiltered.find((farmer) => farmer.id === dataId)
-            dispatch(setSelectedFarmer(selectFarmer))
-        }
-    }, [dispatch, allVendorsFiltered, allFarmersFiltered]);
+    }, [dispatch, products, inwardData]);
 
     const handleProductNameChange = useCallback((dataId: string) => {
         const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
@@ -84,7 +54,7 @@ export const InwardRegisterUpdateForm = () => {
             toast.success(data ? data.message : "Inward Register updated successfully.");
             setTimeout(() => {
                 navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
-            }, 2300);
+            }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while updating inward register.");
         })
@@ -109,7 +79,7 @@ export const InwardRegisterUpdateForm = () => {
                                     </Typography >
                                 </Grid >
                                 <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
                                     <FormResetBtn label="Reset" handleReset={handleReset} />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -175,79 +145,7 @@ export const InwardRegisterUpdateForm = () => {
                                         value={values.date}
                                         handleChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-                                    <RadioGroupInput
-                                        isRequired={true}
-                                        label="Source:"
-                                        name="source"
-                                        options={arrayConstants.SOURCES}
-                                        value={values.source}
-                                        handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                            handlesSourceChange(event.target.value, setFieldValue)
-                                        }} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
-                                    {values.source === "vendor" ?
-                                        (
-                                            <AutoCompleteInput
-                                                isRequired={true}
-                                                name="selectedParty"
-                                                label="Vendor Company Name"
-                                                options={mapToValueLabelArray<GetAllFilteredVendorData>(allVendorsFiltered, 'id', 'companyName')}
-                                                handleChange={(event, newValue) => newValue ? setFieldValue('selectedParty', newValue.value) : setFieldValue('selectedParty', '')}
-                                                handleBlur={handleSourceNameChange(values, values.selectedParty)} />
-                                        ) : (
-                                            <AutoCompleteInput
-                                                isRequired={true}
-                                                name="selectedParty"
-                                                label="Farmer Name"
-                                                options={mapToValueLabelArray(allFarmersFiltered, 'id', 'fullName')}
-                                                handleChange={(event, newValue) => newValue ? setFieldValue('selectedParty', newValue.value) : setFieldValue('selectedParty', '')}
-                                                handleBlur={handleSourceNameChange(values, values.selectedParty)} />
-                                        )}
-                                </Grid>
-                                {
-                                    values.source === "vendor" ?
-                                        (<>
-                                            <Grid item xs={12} md={4}>
-                                                <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
-                                                <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <TextInput isRequired={false} label='Company Email' name='email' type='email' value={`${selectedVendor?.email || ''}`} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <TextInput isRequired={false} label='Company Contact No' name='contactNo' type='text' value={`${selectedVendor?.officeContactNo || ''}`} isReadOnly={true} />
-                                            </Grid>
-                                        </>) :
-                                        (<>
-                                            <Grid item xs={12} md={2}>
-                                                <TextInput isRequired={false} label='Farmer Code' name='farmerCode' type='text' value={`${selectedFarmer?.farmerCode || ''}`} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12} md={3}>
-                                                <TextInput isRequired={false} label='Farmer Email' name='email' type='email' value={`${selectedFarmer?.email || ''}`} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12} md={3}>
-                                                <TextInput isRequired={false} label='Farmer Contact No' name='contactNo' type='text' value={`${selectedFarmer?.primaryMobileNo || ''}`} isReadOnly={true} />
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextInput isRequired={false} label='Farmer Residential Address' name='residentialAddress' type='text' value={selectedFarmer?.residensialAddress ? displayAddress(selectedFarmer?.residensialAddress) : ''} isReadOnly={true} />
-                                            </Grid>
-                                        </>)
-                                }
-                                <Grid item xs={12} marginY={2}>
-                                    <Box sx={{ width: '100%' }}>
-                                        {values.source === "vendor" ?
-                                            (<Typography variant='body2' sx={{ fontWeight: 600 }}>If Vendor Not Found <Button variant='text' onClick={() => navigate(ADMIN_ROUTES.CREATE_VENDOR)} >Click Here</Button></Typography>) :
-                                            (<Typography variant='body2' sx={{ fontWeight: 600 }}>If Farmer Not Found <Button variant='text' onClick={() => navigate(ADMIN_ROUTES.CREATE_FARMER)} >Click Here</Button></Typography>)
-                                        }
-                                    </Box>
-                                </Grid>
+                                <VendorFarmerInfo<PostInwardRegister> />
                                 <Grid item xs={12}>
                                     <FieldArray name="inwardProducts">
                                         {({ remove, push }) => (

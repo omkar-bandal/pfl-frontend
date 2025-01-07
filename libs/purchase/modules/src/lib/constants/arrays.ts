@@ -1,27 +1,27 @@
 export const PURCHASE_ARRAYS = {
     companyNames: [
-        { value: "Prime Fresh Limited", label: "Prime Fresh Limited" },
-        { value: "Florens Fresh Supply Solutions Pvt.Ltd.", label: "Florens Fresh Supply Solutions Pvt.Ltd." },
-        { value: "Florens Farming Private Limited", label: "Florens Farming Private Limited" },
-        { value: "Prime Fresh Retail (I) Private Limited", label: "Prime Fresh Retail (I) Private Limited" },
-        { value: "VyankteshPrime Fresh Farmers Producer Company Limited", label: "VyankteshPrime Fresh Farmers Producer Company Limited" }
+        { value: "prime fresh limited", label: "Prime Fresh Limited" },
+        { value: "florens fresh supply solutions pvt.ltd.", label: "Florens Fresh Supply Solutions Pvt.Ltd." },
+        { value: "florens farming private limited", label: "Florens Farming Private Limited" },
+        { value: "prime fresh retail (i) private limited", label: "Prime Fresh Retail (I) Private Limited" },
+        { value: "vyankteshprime fresh farmers producer company limited", label: "VyankteshPrime Fresh Farmers Producer Company Limited" }
     ],
     source: [
         { value: "vendor", label: "Vendor" },
         { value: "farmer", label: "Farmer" },
     ],
     paymentMode: [
-        { value: "UPI", label: "UPI" },
-        { value: "Cash", label: "Cash" },
-        { value: "Cheque", label: "Cheque" },
-        { value: "RTGS", label: "RTGS" },
-        { value: "NEFT", label: "NEFT" },
-        { value: "Other", label: "Other" },
+        { value: "upi", label: "UPI" },
+        { value: "cash", label: "Cash" },
+        { value: "cheque", label: "Cheque" },
+        { value: "rtgs", label: "RTGS" },
+        { value: "neft", label: "NEFT" },
+        { value: "other", label: "Other" },
     ],
     deliveryChallanType: [
-        { value: "Customer", label: "Customer" },
-        { value: "Stock Transfer (Internal)", label: "Stock Transfer (Internal)" },
-        { value: "DC-DC Stock Transfer", label: "DC-DC Stock Transfer" },
-        { value: "Other", label: "Other" }, 
+        { value: "customer", label: "Customer" },
+        { value: "stock transfer (internal)", label: "Stock Transfer (Internal)" },
+        { value: "dc-dc stock transfer", label: "DC-DC Stock Transfer" },
+        { value: "other", label: "Other" }, 
     ]
 }

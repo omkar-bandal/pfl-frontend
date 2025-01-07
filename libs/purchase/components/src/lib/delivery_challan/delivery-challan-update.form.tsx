@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Button, Grid, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
+import { Box, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC } from "@prime-fresh/purchase/modules";
-import { ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { PURCHASE_API_URL, useGetAllGRNNums, useGetDeliveryChallan, useUpdateDeliveryChallan } from "@prime-fresh/purchase_api";
 import { DeliveryChallanPreview } from "./delivery-challan.preview";
 import { setPreview } from "@prime-fresh/modules";
@@ -61,38 +61,16 @@ export const DeliveryChallanUpdate = () => {
                         handleUpdate(values);
                     }}
                 >
-                    {({ values, handleChange, handleSubmit}) => (
+                    {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                         <form onSubmit={handleSubmit}>
                             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                                 <Grid item xs={12} md={6}>
                                     <Typography variant="h4">Delivery Challan</Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Stack direction="row" justifyContent="end" alignItems="center">
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="success"
-                                            size="large"
-                                            sx={{ width: 150 }}
-                                        >
-                                            Update
-                                        </Button>
-                                        <Button
-                                            type="reset"
-                                            variant="contained"
-                                            color="secondary"
-                                            size="large"
-                                            sx={{ width: 150, marginLeft: 2 }}
-                                        >
-                                            Reset
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            color='info'
-                                            size='large'
-                                            sx={{ width: 150, marginLeft: 2 }} onClick={() => { dispatch(setPreviewDC(values)); dispatch(setPreview(true)) }}>Preview</Button>
-                                    </Stack>
+                                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
+                                    <FormResetBtn label="Reset" handleReset={handleReset} />
+                                    <FormPreviewBtn onClick={() => { dispatch(setPreviewDC(values)); dispatch(setPreview(true)) }} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <RadioGroupInput
@@ -111,7 +89,7 @@ export const DeliveryChallanUpdate = () => {
                                             name="otherCType"
                                             label="If other please specify "
                                             type="text" value={values.otherCType}
-                                            handleChange={handleChange}/>
+                                            handleChange={handleChange} />
                                     </Grid>) : ('')}
                                 <Grid item xs={12} md={3}>
                                     <SelectInput
@@ -129,7 +107,7 @@ export const DeliveryChallanUpdate = () => {
                                         label="Company Name"
                                         value={values.companyName}
                                         options={PURCHASE_ARRAYS.companyNames}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={5}>
                                     <TextInput
@@ -138,7 +116,7 @@ export const DeliveryChallanUpdate = () => {
                                         label="Party Name"
                                         type="text"
                                         value={values.partyName}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <FieldArray name="items">
@@ -213,7 +191,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="fromLocation"
                                         label="From"
                                         value={values.fromLocation}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={5}>
                                     <TextInput
@@ -222,7 +200,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="toLocation"
                                         label="To"
                                         value={values.toLocation}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
                                     <TextInput
@@ -231,7 +209,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="driverName"
                                         label="Driver Name"
                                         value={values.driverName}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
                                     <TextInput
@@ -240,7 +218,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="contactNo"
                                         label="Contact No"
                                         value={values.contactNo}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
                                     <TextInput
@@ -249,7 +227,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="altContactNo"
                                         label="Alternate Contact No"
                                         value={values.altContactNo}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
                                     <TextInput
@@ -258,7 +236,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="vehicleNo"
                                         label="Vehicle No"
                                         value={values.vehicleNo}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextInput
@@ -267,7 +245,7 @@ export const DeliveryChallanUpdate = () => {
                                         name="receiverName"
                                         label="Receiver Name"
                                         value={values.receiverName}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />

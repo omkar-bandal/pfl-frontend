@@ -7,10 +7,10 @@ export const signoutService = async (url: string, data: SignOutRequest) => {
         const response: AxiosResponse<SignOutResponse> = await axios.post(`${COM_API_URL.BASE_URL}${url}`,
             data, {
             headers: {
-                'ngrok-skip-browser-warning': 'true',
+                // 'ngrok-skip-browser-warning': 'true',
                 'Content-Type': 'application/json',
             },
-            // withCredentials: true,
+            withCredentials: true,
         });
         return response.data;
     } catch (error) {

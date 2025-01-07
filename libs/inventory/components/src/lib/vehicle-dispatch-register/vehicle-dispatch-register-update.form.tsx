@@ -56,7 +56,7 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                 <Typography variant="h4">Vehicle Dispatch Register</Typography>
                             </Grid>
                             <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Update" />
+                                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                             <Grid item xs={12} md={3}>
@@ -153,54 +153,54 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                 <TextInput
                                     type="text"
                                     isRequired={true}
-                                    name="clientLocationAddress.address1"
+                                    name="clientAddress.address1"
                                     label="Client Address Line 1"
-                                    value={values.clientLocationAddress.address1}
+                                    value={values.clientAddress.address1}
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
-                                    name="clientLocationAddress.address2"
+                                    name="clientAddress.address2"
                                     label="Client Address Line 2"
-                                    value={values.clientLocationAddress.address2}
+                                    value={values.clientAddress.address2}
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
-                                    name="clientLocationAddress.location"
+                                    name="clientAddress.location"
                                     label="Location"
-                                    value={values.clientLocationAddress.location}
+                                    value={values.clientAddress.location}
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
-                                    name="clientLocationAddress.city"
+                                    name="clientAddress.city"
                                     label="City"
-                                    value={values.clientLocationAddress.city}
+                                    value={values.clientAddress.city}
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
-                                    name="clientLocationAddress.state"
+                                    name="clientAddress.state"
                                     label="State"
-                                    value={values.clientLocationAddress.state}
+                                    value={values.clientAddress.state}
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
-                                    name="clientLocationAddress.pincode"
+                                    name="clientAddress.pincode"
                                     label="Pincode"
-                                    value={values.clientLocationAddress.pincode}
+                                    value={values.clientAddress.pincode}
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={4}>

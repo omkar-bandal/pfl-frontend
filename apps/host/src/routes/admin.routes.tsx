@@ -31,7 +31,8 @@ import { BranchForm,
     VendorSubcatTable,
     ViewBranch,
     ViewProduct,
-    BranchTable
+    BranchTable,
+    ProductUpdateForm
 } from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
 import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
@@ -126,6 +127,10 @@ export const AdminRoutes = [
             {
                 path: `${ADMIN_ROUTES.GET_A_PRODUCT}/:id`,
                 element: <ViewProduct />,
+            },
+            {
+                path: `${ADMIN_ROUTES.UPDATE_PRODUCT}/:id`,
+                element: <ProductUpdateForm />,
             },
             {
                 path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS,

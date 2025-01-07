@@ -1,6 +1,5 @@
 import { PostInwardProducts, PostInwardRegister } from "@prime-fresh/inventory_api";
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { getCurrentDate } from "@prime-fresh/shared/utils";
 
 export const InwardProductInitialValue: PostInwardProducts = {
     product: '',
@@ -8,7 +7,7 @@ export const InwardProductInitialValue: PostInwardProducts = {
     size: '',
     qty: 0,
     uom: '',
-    weight: '',
+    weight: 0,
     productContainerWeight: 0,
     netWeight: 0,
     grossWeight: 0
@@ -19,7 +18,7 @@ export const InwardRegisterInitialValue: PostInwardRegister = {
     grnNo: '',
     companyName: '',
     batchNo: '',
-    date: getCurrentDate(),
+    date: '',
     source: 'vendor',
     selectedParty: '',
     inwardBy: '',

@@ -3,9 +3,9 @@ import { COM_API_URL } from "../constants/common_api_url";
 
 export const axiosInstance = axios.create({
   baseURL: COM_API_URL.BASE_URL,
-  // withCredentials: true,
+  withCredentials: true,
   headers: {
-    'ngrok-skip-browser-warning': 'true',
+    // 'ngrok-skip-browser-warning': 'true',
     'Content-Type': 'multipart/form-data',
   },
 });
@@ -44,15 +44,15 @@ axiosInstance.interceptors.response.use(
       if (refreshToken) {
         try {
           // Make a request to refresh the token
-          const { data } = await axios.post(`${COM_API_URL.BASE_URL}/auth/refresh-token`, {
+          const response = await axios.post(`${COM_API_URL.BASE_URL}/auth/refresh-token`, {
             refreshToken,
           });
 
           // Store new access token
-          localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('access_token', response.data.access_token);
 
           // Retry the original request with the new token
-          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
           return Promise.reject(refreshError);

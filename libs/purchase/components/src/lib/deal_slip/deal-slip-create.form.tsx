@@ -74,7 +74,7 @@ export const DealSlipForm = () => {
                             <Typography variant='h4'>Deal Slip</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
                             <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                         <Grid item xs={12} md={4}>

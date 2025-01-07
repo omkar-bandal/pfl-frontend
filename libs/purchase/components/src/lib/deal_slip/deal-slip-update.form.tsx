@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Grid, Typography, Stack, Box, LinearProgress, SelectChangeEvent } from "@mui/material";
+import {Grid, Typography, Box, LinearProgress, SelectChangeEvent } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { GetRFPA, PostDealSlip, PURCHASE_API_URL, useGetAllRFPA, useGetDealSlip,
 import { displayAddress } from "@prime-fresh/purchase/modules";
 import { showNotification, useAppSelector } from "@prime-fresh/modules";
 import { useNavigate, useParams } from "react-router-dom";
-import { Notification, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { FormResetBtn, FormSubmitBtn, Notification, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData } from "@prime-fresh/admin_api";
 import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
@@ -32,8 +32,8 @@ export const DealSlipUpdate = () => {
     const { data: farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const { data: vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
     const { rfpa: allrfpa, selectedRFPA } = useAppSelector(rfpaDataState);
-    const {selectedVendor} = useAppSelector(vendorsDataState);
-    const {selectedFarmer} = useAppSelector(farmersDataState);
+    const { selectedVendor } = useAppSelector(vendorsDataState);
+    const { selectedFarmer } = useAppSelector(farmersDataState);
 
     React.useEffect(() => {
         const rfpaData = allrfpas ? allrfpas : [];
@@ -44,9 +44,9 @@ export const DealSlipUpdate = () => {
             dispatch(setSelectedRFPA()) &&
             dispatch(setRFPAData([]))
         );
-        dealSlipRFPA?.source === "vendor" ? 
-        dispatch(setSelectedVendor(vendors && vendors.find(vendor => vendor.id === dealSlipRFPA?.selectedParty))) :  
-        dispatch(setSelectedFarmer(farmers && farmers.find(farmer => farmer.id === dealSlipRFPA?.selectedParty)))
+        dealSlipRFPA?.source === "vendor" ?
+            dispatch(setSelectedVendor(vendors && vendors.find(vendor => vendor.id === dealSlipRFPA?.selectedParty))) :
+            dispatch(setSelectedFarmer(farmers && farmers.find(farmer => farmer.id === dealSlipRFPA?.selectedParty)))
     }, [allrfpas, dispatch, dealSlipData, dealSlipRFPA, vendors, farmers]);
 
 
@@ -90,17 +90,15 @@ export const DealSlipUpdate = () => {
                         handleSubmit(values);
                     }}
                 >
-                    {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => (
+                    {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting}) => (
                         <form onSubmit={handleSubmit}>
                             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                                 <Grid item xs={12} md={6}>
                                     <Typography variant='h4'>Deal Slip</Typography>
                                 </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Stack direction="row" justifyContent="end" alignItems="center">
-                                        <Button type="submit" variant="contained" color='success' size='large' sx={{ width: 150 }}>Update</Button>
-                                        <Button type="reset" variant="contained" color='secondary' size='large' sx={{ width: 150, marginLeft: 2 }}>Reset</Button>
-                                    </Stack>
+                                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+                                    <FormResetBtn label="Reset" handleReset={handleReset} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <SelectInput
@@ -149,10 +147,7 @@ export const DealSlipUpdate = () => {
                                         label="Loading Location"
                                         name="loadingLocation"
                                         value={values.loadingLocation}
-                                        handleChange={handleChange}
-                                        touched={touched}
-                                        errors={errors}
-                                    />
+                                        handleChange={handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <TextInput
@@ -160,10 +155,7 @@ export const DealSlipUpdate = () => {
                                         label="Lot Number"
                                         name="lotNo"
                                         value={values.lotNo}
-                                        handleChange={handleChange}
-                                        touched={touched}
-                                        errors={errors}
-                                    />
+                                        handleChange={handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} md={8}>
                                     <TextInput
@@ -196,7 +188,7 @@ export const DealSlipUpdate = () => {
                                         isRequired={false}
                                         name="selectedParty"
                                         label={selectedRFPA?.source === "vendor" ? "Vendor Company Name" : "Farmer Name"}
-                                        value={selectedRFPA?.source === "vendor" ? selectedVendor?.companyName : `${selectedFarmer?.farmerfName} ${selectedFarmer?.farmermName} ${selectedFarmer?.farmerlName}`}
+                                        value={selectedRFPA?.source === "vendor" ? selectedVendor?.companyName : `${selectedFarmer?.fullName}`}
                                         isReadOnly={true} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
@@ -214,7 +206,7 @@ export const DealSlipUpdate = () => {
                                             isRequired={false}
                                             label="Contact Person"
                                             name="contactperson"
-                                            value={`${selectedVendor?.vendorSaleInfo?.contactFName || ""} ${selectedVendor?.vendorSaleInfo.contactMName || ''} ${selectedVendor?.vendorSaleInfo.contactLName || ''}`}
+                                            value={`${selectedVendor?.fullName}`}
                                             isReadOnly={true}
                                         />
                                     </Grid>}

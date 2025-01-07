@@ -20,13 +20,13 @@ export const DumpRegisterUpdateForm = () => {
     const { data: dumpRegi } = useGetADumpRegister(INVENTORY_API_URL.GET_A_DUMP_REGISTER, dumpRegiId);
     const { data: grns } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
     const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+    const allProducts = products? mapToValueLabelArray(products || [], 'id', 'name') : [];
     const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
 
     // Memoize derived values
     const initialValuesDumpRegi = dumpRegi ? dumpRegi : dumpRegisterInitialValue;
     const grnNums = React.useMemo(() => mapToValueLabelArray(grns || [], 'id', 'grnNo'), [grns]);
-    const allProducts = React.useMemo(() => mapToValueLabelArray(products || [], 'id', 'name'), [products]);
     const allUOMs = React.useMemo(() => mapToValueLabelArray(uoms || [], 'id', 'unit'), [uoms]);
     const allLocations = React.useMemo(() => mapToValueLabelArray(locations || [], 'id', 'name'), [locations]);
 
@@ -63,7 +63,7 @@ export const DumpRegisterUpdateForm = () => {
                             <Typography variant="h4">Dump Register</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Update" />
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
                             <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                         <Grid item xs={12} md={6}>

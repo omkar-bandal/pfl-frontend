@@ -7,8 +7,8 @@ import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { AdminRoutes } from "./admin.routes";
 import { CustomerForm } from "@prime-fresh/shared/masters/customer";
 import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
-import { FarmerForm } from "@prime-fresh/shared/masters/farmer";
-import { ProductForm } from "@prime-fresh/shared/masters/products";
+import { FarmerCreateForm } from "@prime-fresh/shared/masters/farmer";
+import { ProductCreateForm } from "@prime-fresh/shared/masters/products";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { InventoryRoutes } from "./inventory.routes";
 
@@ -35,14 +35,14 @@ export const HostRoutes = createBrowserRouter([
         path: ADMIN_ROUTES.CREATE_FARMER,
         element:
             (<Layout role={stringConstants.ROLE_ADMIN}>
-                <FarmerForm />
+                <FarmerCreateForm />
             </Layout>),
     },
     {
         path: ADMIN_ROUTES.CREATE_PRODUCT,
         element:
             (<Layout role={stringConstants.ROLE_ADMIN}>
-                <ProductForm />
+                <ProductCreateForm />
             </Layout>),
     },
     {

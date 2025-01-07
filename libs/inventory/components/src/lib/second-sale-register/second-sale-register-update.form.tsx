@@ -64,7 +64,7 @@ export const SecondSaleRegisterUpdateForm = () => {
                                 <Typography variant="h4">Second Sale Register</Typography>
                             </Grid>
                             <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Update" />
+                                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                             <Grid item xs={12} md={4}>
