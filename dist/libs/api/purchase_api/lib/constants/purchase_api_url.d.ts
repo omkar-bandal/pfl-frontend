@@ -10,6 +10,7 @@ export declare const PURCHASE_API_URL: {
     POST_DEAL_SLIP: string;
     UPDATE_DEAL_SLIP: string;
     APPROVE_DEAL_SLIP: string;
+    GET_ALL_DEAL_SLIP_NO: string;
     GET_ALL_GRN: string;
     GET_A_GRN: string;
     POST_GRN: string;

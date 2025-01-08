@@ -103,8 +103,10 @@ export const SignIn = () => {
                                         <Grid item xs={12}>
                                             <TextField
                                                 fullWidth
+                                                autoComplete="off"
+                                                autoCorrect="off"
                                                 size="small"
-                                                type="text"
+                                                type={signinMethod === "email" ? "email" : "text"}
                                                 id="uid"
                                                 name="uid"
                                                 variant="outlined"
@@ -124,6 +126,8 @@ export const SignIn = () => {
                                         <Grid item xs={12}>
                                             <OutlinedInput
                                                 fullWidth
+                                                autoComplete="off"
+                                                autoCorrect="off"
                                                 size="small"
                                                 id="password"
                                                 name="password"

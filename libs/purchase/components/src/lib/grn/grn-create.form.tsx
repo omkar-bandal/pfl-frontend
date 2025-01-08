@@ -2,12 +2,12 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
-import { dealSlipDataState, grnSchema, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setDealSlipData, setPreviewGRN } from '@prime-fresh/purchase/modules';
+import { grnSchema, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { useActions, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { productsDataState, uomsDataState, setProducts, setUOMs, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
-import { GetDealSlip, PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlip } from '@prime-fresh/purchase_api';
+import {  PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlipNums } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './grn.preview';
@@ -17,30 +17,27 @@ export const GRNForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { setPreview } = useActions();
-  const { data: dealSlips } = useGetAllDealSlip(PURCHASE_API_URL.GET_ALL_DEAL_SLIP);
+  const { data: dsNums } = useGetAllDealSlipNums(PURCHASE_API_URL.GET_ALL_DEAL_SLIP_NO);
+  const dealSlipNums = dsNums? mapToValueLabelArray(dsNums,'id', 'dealSlipNo') : [];  
   const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
 
   const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  console.log(Locations);
   const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
   const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
 
   const { allProducts, selectedProduct } = useAppSelector(productsDataState);
   const { allUOMs } = useAppSelector(uomsDataState);
-  const { dealSlip } = useAppSelector(dealSlipDataState);
 
   React.useEffect(() => {
     dispatch(setSelectedProduct(null));
-    dispatch(setDealSlipData(dealSlips ? dealSlips : []));
     dispatch(setProducts(Products ? Products : []));
     dispatch(setUOMs(UOMs ? UOMs : []));
-  }, [dispatch, Products, UOMs, dealSlips]);
+  }, [dispatch, Products, UOMs]);
 
 
   const handleProductNameChange = (dataId: string | null) => {
     const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
-    console.log(selectedProduct);
     dispatch(setSelectedProduct(selectedProduct));
   }
 
@@ -71,7 +68,7 @@ export const GRNForm = () => {
       toast.success(data ? data.message : "GRN created.")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_GRN);
-      }, 2400);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating GRN.")
     })
@@ -114,7 +111,7 @@ export const GRNForm = () => {
                   isRequired={false}
                   label="Select Deal Slip"
                   name="dealSlipId"
-                  options={mapToValueLabelArray<GetDealSlip>(dealSlip, 'id', 'dealSlipNo')}
+                  options={dealSlipNums}
                   value={values.dealSlipId}
                   handleChange={handleChange} />
               </Grid>

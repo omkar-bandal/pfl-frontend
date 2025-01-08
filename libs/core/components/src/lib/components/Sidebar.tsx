@@ -13,10 +13,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
   const [selectedItem, setSelectedItem] = useState("");
 
   const navigationMap: { [key: string]: Navigations[] } = {
-    "Admin": adminNavigations,
-    "Purchase": purchaseNavigations,
-    "Inventory": inventoryNavigations,
-    "Default": [],
+    "admin": adminNavigations,
+    "purchase": purchaseNavigations,
+    "inventory": inventoryNavigations,
+    "default": [],
   };
   const dept = localStorage.getItem("department");
   const navigations = navigationMap[dept? dept: "Default"] || [];

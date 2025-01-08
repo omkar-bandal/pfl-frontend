@@ -51,6 +51,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             {...field}
             id={name}
             size="small"
+            value={value}
             onChange={handleChange}
             MenuProps={MenuProps}
             {...otherProps}

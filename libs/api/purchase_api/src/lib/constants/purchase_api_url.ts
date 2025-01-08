@@ -15,6 +15,7 @@ export const PURCHASE_API_URL = {
     POST_DEAL_SLIP: "/dealSlip/",
     UPDATE_DEAL_SLIP: "/dealSlip",
     APPROVE_DEAL_SLIP: "/dealSlip/approve/",
+    GET_ALL_DEAL_SLIP_NO: "/dealSlip/dealslipno/getAlldealslipNo",
 
     //GRN
     GET_ALL_GRN: "/grns/",

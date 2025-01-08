@@ -4605,8 +4605,8 @@ de.HttpStatusCode = Pn;
 de.default = de;
 const po = {
   //Authentication
-  BASE_URL: "http://ec2-35-154-22-76.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://bac0-182-156-141-17.ngrok-free.app",
+  BASE_URL: "http://ec2-13-203-76-236.ap-south-1.compute.amazonaws.com:80"
+  // BASE_URL: "https://a1f0-182-156-141-17.ngrok-free.app",
 }, Me = de.create({
   baseURL: po.BASE_URL,
   withCredentials: !0,

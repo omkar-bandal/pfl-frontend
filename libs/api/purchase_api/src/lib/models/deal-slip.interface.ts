@@ -20,3 +20,8 @@ export interface PostDealSlip {
     remark: string,
     specialRequest: string,
 }
+
+export interface GetAllDealSlipNums {
+    id: string;
+    dealSlipNo: string;
+}
