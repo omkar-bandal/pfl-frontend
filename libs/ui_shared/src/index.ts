@@ -14,4 +14,4 @@ export * from './lib/view_page/DataDisplay';
 export * from './lib/notification/Notification';
 export * from './lib/notification/ToastProvider';
 export * from './lib/buttons';
-export * from './lib/components/vendor-farmer-info';
+export * from './lib/components';

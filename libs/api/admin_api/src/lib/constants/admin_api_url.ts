@@ -83,6 +83,11 @@ export const ADMIN_API_URL = {
     POST_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
     UPDATE_REGI_OFFICES: "/location_offices/REGISTERED_OFFICE",
     UPDATE_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
+    GET_ALL_OFFICES: "/location-offices/",
+    GET_A_OFFICE: "/location-offices/",
+    CREATE_OFFICE: "/location-offices",
+    UPDATE_OFFICE: "/location-offices",
+
 
     //Branches
     GET_ALL_BRANCHES: "/location-branches/",

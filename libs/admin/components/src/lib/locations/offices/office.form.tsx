@@ -1,52 +1,50 @@
-import { Formik } from "formik";
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, BranchesInitialValues } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, useCreateBranches, useUpdateBranch, useGetABranch } from "@prime-fresh/admin_api";
-import { FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
+import { ADMIN_ROUTES, OfficeInitialValues } from "@prime-fresh/admin/modules";
+import {  FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
+import { ADMIN_API_URL, useCreateOffice, useGetAOffice, useUpdateOffice } from "@prime-fresh/admin_api";
+import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { appendFormData } from "@prime-fresh/shared/utils";
+import { Formik } from "formik";
 
-export const BranchForm = () => {
-    const { id, branchType } = useParams<{ id: string, branchType: string }>();
-    const branchId = id ? id : '';
-    const branchtype = branchType ? branchType : '';
-
+export const OfficeForm = () => {
+    const { id, type } = useParams<{ id: string, type: string }>();
+    const officeId = id ? id : '';
+    const officeType = type ? type : '';
     const navigate = useNavigate();
 
-    const { data, isLoading } = useGetABranch(ADMIN_API_URL.GET_A_BRANCH, branchId)
-    const branch = data ? data : BranchesInitialValues;
 
-    //Initial value for office form
-    const branchesInitValue = branchId ? branch : BranchesInitialValues;
+    const { data, isLoading } = useGetAOffice(ADMIN_API_URL.GET_A_OFFICE, officeId);
+    const officeData = data ? data : OfficeInitialValues;
+    const officeInitialValue = officeId ? officeData : OfficeInitialValues;
 
     //To create new office Data
-    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateBranches(`${ADMIN_API_URL.CREATE_BRANCH}/${branchType}`);
-    //To update existing office Data
-    const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateBranch(`${ADMIN_API_URL.UPDATE_BRANCH}/${branchType}`, branchId);
+    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateOffice(`${ADMIN_API_URL.CREATE_OFFICE}/${officeType}`);
 
+    //To update existing office Data
+    const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateOffice(`${ADMIN_API_URL.UPDATE_OFFICE}/${officeType}`, officeId);
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
         appendFormData(formData, values);
-        branchId ?
+        officeId ?
             (mutatePatch(formData).then(() => {
-                toast.success(patchRes ? patchRes.message : "Branch location updated successfully.");
+                toast.success(patchRes ? patchRes.message : "Office location updated successfully.");
                 setTimeout(() => {
-                    navigate(`${ADMIN_ROUTES.GET_ALL_BRANCHES}/${branchtype}`);
+                    navigate(`${ADMIN_ROUTES.GET_ALL_OFFICES}/${officeType}`);
                 }, 2000);
             }).catch(() => {
-                toast.error(patchError ? patchError.message : "Error while creating new branch.");
+                toast.error(patchError ? patchError.message : "Error while creating new office.");
             })) :
             (mutatePost(formData).then(() => {
-                toast.success(postRes ? postRes.message : "Branch location created successfully.");
+                toast.success(postRes ? postRes.message : "Office location created successfully.");
                 setTimeout(() => {
-                    navigate(`${ADMIN_ROUTES.GET_ALL_BRANCHES}/${branchtype}`);
+                    navigate(`${ADMIN_ROUTES.GET_ALL_OFFICES}/${officeType}`);
                 }, 2000);
             }).catch(() => {
-                toast.error(patchError ? patchError.message : "Error while updating new branch.");
+                toast.error(patchError ? patchError.message : "Error while updating new office.");
             }))
     }
-
     return (
         isLoading ? (
             <Box sx={{ flex: 1 }}>
@@ -54,9 +52,9 @@ export const BranchForm = () => {
             </Box>
         ) :
             <Formik
-                key={branchId || "create-branch"}
+                key={officeId || "create-office"}
                 enableReinitialize={true}
-                initialValues={branchesInitValue}
+                initialValues={officeInitialValue}
                 // validationSchema={productCategorySchema}
                 validateOnChange={true}
                 validateOnBlur={true}
@@ -68,22 +66,19 @@ export const BranchForm = () => {
                     <form onSubmit={handleSubmit}>
                         <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid item xs={12} md={6}>
-                                <Typography variant='h4'>Branch</Typography>
+                                <Typography variant='h4'>Office</Typography>
                             </Grid>
                             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
-                                    label={branchId === "" ? "Create" : "Update"}
-                                    isError={branchId === "" ? postError : patchError}
+                                    label={officeId === "" ? "Create" : "Update"}
+                                    isError={officeId === "" ? postError : patchError}
                                     isSubmitting={isSubmitting} />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                         </Grid>
                         <Grid container spacing={1} padding={1}>
-                            <Grid item xs={12} md={8}>
-                                <TextInput isRequired={true} label="Branch Name" name="name" value={values.name} handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextInput isRequired={true} label="Prefix" name="prefix" value={values.prefix} handleChange={handleChange} />
+                            <Grid item xs={12}>
+                                <TextInput isRequired={true} label="Office Name" name="name" value={values.name} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} marginY={2}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
@@ -124,20 +119,6 @@ export const BranchForm = () => {
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput isRequired={false} label="Contact Number" name="contactNumber" value={values.contactNumber} handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} marginY={2}>
-                                <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
-                                    <Typography variant='body2' sx={{ fontWeight: 600 }}>Other Details</Typography>
-                                </Box>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextInput type="number" isRequired={false} label="Total Capacity" name="totalCapacity" value={values.totalCapacity} handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextInput type="number" isRequired={false} label="Current Capacity" name="currentCapacity" value={values.currentCapacity} handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextInput type="number" isRequired={false} label="Balance Capacity" name="balanceCapacity" value={values.balanceCapacity} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextInput multiline maxRows={4} isRequired={false} label="Notes" name="notes" value={values.notes} handleChange={handleChange} />

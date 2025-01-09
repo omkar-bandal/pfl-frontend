@@ -60,13 +60,13 @@ export const adminNavigations: Navigations[] = [
     children: [
       { 
         name: "Registered Office", 
-        path: ADMIN_ROUTES.GET_REGISTERED_OFFICE, 
+        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.REGISTERED_OFFICE}`, 
         roles: [stringConstants.ROLE_ADMIN], 
         depts: [stringConstants.DEPT_ADMIN] 
       },
       { 
         name: "Corporate Office", 
-        path: ADMIN_ROUTES.GET_CORPORATE_OFFICE, 
+        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.CORPORATE_OFFICE}`, 
         roles: [stringConstants.ROLE_ADMIN], 
         depts: [stringConstants.DEPT_ADMIN] 
       },

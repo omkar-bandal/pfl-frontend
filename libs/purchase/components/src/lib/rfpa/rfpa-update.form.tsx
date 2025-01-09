@@ -27,7 +27,7 @@ export const RFPAUpdate = () => {
 
     const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
     const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
-    const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "DISTRIBUTION_CENTER"), 'id', 'name') : [];
+    const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
 
     const { allProducts, selectedProduct } = useAppSelector(productsDataState);
     const { allUOMs } = useAppSelector(uomsDataState);
@@ -81,21 +81,24 @@ export const RFPAUpdate = () => {
 
             <>
                 <Formik
+                    key={rfpaId}
                     enableReinitialize={true}
                     initialValues={rfpaValues}
                     validationSchema={rfpaSchema}
+                    validateOnBlur={true}
+                    validateOnChange={true}
                     onSubmit={(values) => {
                         console.log(values);
                         handleSubmit(values);
                     }}>
                     {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
                         <form onSubmit={handleSubmit}>
-                            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
+                            <Grid container spacing={1} padding={1}>
                                 <Grid item xs={12} md={6}>
                                     <Typography variant='h4'>Request For Purchase Approval</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Update" />
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
                                     <FormResetBtn label="Reset" handleReset={handleReset} />
                                     <FormPreviewBtn onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }} />
                                 </Grid>
@@ -139,7 +142,7 @@ export const RFPAUpdate = () => {
                                 </Grid>
 
                                 {/*Vendor or Farmer info depend on selected source */}
-                                <VendorFarmerInfo<GetRFPA> />
+                                <VendorFarmerInfo<GetRFPA> source={values.source} selectedParty={values.selectedParty || ''} />
 
                                 <Grid item xs={12} marginY={2}>
                                     <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>

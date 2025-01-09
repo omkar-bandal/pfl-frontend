@@ -1,29 +1,25 @@
 import React from "react";
-import { Box, Button, Grid, SelectChangeEvent, Typography } from "@mui/material";
-import { AutoCompleteInput, RadioGroupInput, SelectInput, TextInput } from "../auto_form/components";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import { AutoCompleteInput, RadioGroupInput, TextInput } from "../auto_form/components";
 import { useFormikContext } from "formik";
-import { displayAddress, PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
+import { PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
 import { mapToValueLabelArray } from "../auto_form/utils";
 import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllVendorCat, useGetAllVendorSubCat } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ADMIN_ROUTES, farmersDataState, setFilteredFarmerData, setFilteredVendorData, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, setFilteredFarmerData, setFilteredVendorData, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
 import { useAppSelector } from "@prime-fresh/modules";
+import { VendorReadOnlyFields } from "./vendor-readonly-fields";
+import { FarmerReadOnlyFields } from "./farmer-readonly-fields";
 
 export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", selectedParty: string | null }>({ source, selectedParty }: { source?: string, selectedParty?: string }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { values, setFieldValue } = useFormikContext<T>();
-
-    const [vendorCat, setVendorCat] = React.useState<string>();
-    const [vendorSubcat, setVendorSubcat] = React.useState<string>();
-
     const { data: vCat } = useGetAllVendorCat(ADMIN_API_URL.GET_ALL_VENDOR_CAT);
-    const vendorCategory = vCat ? mapToValueLabelArray(vCat, 'id', 'name') : [];
-    console.log("Vendor Categories: ", vendorCategory)
+    const vendorCategory = vCat ? vCat : [];
     const { data: vSubcat } = useGetAllVendorSubCat(ADMIN_API_URL.GET_ALL_VENDOR_SUBCAT);
-    const vendorSubcategory = vSubcat ? mapToValueLabelArray(vSubcat, 'id', 'name') : [];
-    console.log("Vendor SubCategories", vendorSubcategory);
+    const vendorSubcategory = vSubcat ? vSubcat : [];
 
     const { data: vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
     const allVendors = vendors ? mapToValueLabelArray(vendors, 'id', 'companyName') : [];
@@ -32,8 +28,13 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
     const allFarmers = farmers ? mapToValueLabelArray(farmers, 'id', 'fullName') : [];
 
     const { selectedVendor } = useAppSelector(vendorsDataState);
-    const { selectedFarmer } = useAppSelector(farmersDataState);
-
+   
+    React.useEffect(() => {
+        source === "vendor"?
+        dispatch(setSelectedVendor(vendors?.find(vendor => vendor.id === selectedParty))) :
+        dispatch(setSelectedFarmer(farmers?.find(farmer => farmer.id === selectedParty)));
+    }, [dispatch, selectedParty, source, farmers, vendors]);
+    
     const handleSourceChange = (value: string) => {
         setFieldValue("source", value);
         if (value === "vendor") {
@@ -48,11 +49,6 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
             const selectVendor = vendors?.find((vendor) => vendor.id === dataId);
             if (selectVendor) {
                 dispatch(setSelectedVendor(selectVendor));
-                console.log("Vendor: ", selectedVendor);
-                setVendorCat(selectVendor?.category);
-                console.log("Vendor Cat: ", vendorCat);
-                setVendorSubcat(selectVendor?.subcategory);
-                console.log("Vendor Subcat: ", vendorSubcat)
             }
         } else if (values.source === "farmer") {
             const selectedFarmer = farmers?.find((farmer) => farmer.id === dataId);
@@ -60,45 +56,6 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
         }
     }
 
-    const renderVendorFields = () => {
-        return (
-            <>
-                <Grid item xs={12} md={4}>
-                    <TextInput isRequired={false} label='Vendor Code' name='vendorCode' type='text' value={`${selectedVendor?.vendorCode || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={8}>
-                    <TextInput isRequired={false} label='Contact Person' name='contactPerson' type='text' value={selectedVendor?.fullName} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextInput isRequired={false} label='Company Address' name='companyAddress' type='text' value={selectedVendor?.officeAddress ? displayAddress(selectedVendor?.officeAddress) : ''} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextInput isRequired={false} label='Company Email' name='email' type='email' value={`${selectedVendor?.email || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextInput isRequired={false} label='Company Contact No' name='contactNo' type='text' value={`${selectedVendor?.officeContactNo || ''}`} isReadOnly={true} />
-                </Grid>
-            </>
-        )
-    }
-    const renderFarmerFields = () => {
-        return (
-            <>
-                <Grid item xs={12} md={2}>
-                    <TextInput isRequired={false} label='Farmer Code' name='farmerCode' type='text' value={`${selectedFarmer?.farmerCode || ''}`} isReadOnly={true} />
-                </Grid >
-                <Grid item xs={12} md={3}>
-                    <TextInput isRequired={false} label='Farmer Email' name='email' type='email' value={`${selectedFarmer?.email || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                    <TextInput isRequired={false} label='Farmer Contact No' name='contactNo' type='text' value={`${selectedFarmer?.primaryMobileNo || ''}`} isReadOnly={true} />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextInput isRequired={false} label='Farmer Residential Address' name='residentialAddress' type='text' value={selectedFarmer?.residensialAddress ? displayAddress(selectedFarmer?.residensialAddress) : ''} isReadOnly={true} />
-                </Grid>
-            </>
-        )
-    }
     return (
         <>
             <Grid item xs={12} marginY={2}>
@@ -155,26 +112,24 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
             {values.source === "vendor" &&
                 <>
                     <Grid item xs={12} md={4}>
-                        <SelectInput
+                        <TextInput
                             isRequired={true}
                             name="vendorCategory"
                             label="Vendor Category"
-                            options={vendorCategory}
-                            value={vendorCat}
-                            handleChange={(event: SelectChangeEvent<typeof vendorCat>) => setVendorCat(event.target.value)} />
+                            value={vendorCategory.find(category => category.id === selectedVendor?.category)?.name}
+                            isReadOnly={true} />
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <SelectInput
+                        <TextInput
                             isRequired={true}
                             name="vendorSubcategory"
                             label="Vendor Subategory"
-                            options={vendorSubcategory}
-                            value={vendorSubcat}
-                            handleChange={(event: SelectChangeEvent<typeof vendorCat>) => setVendorSubcat(event.target.value)} />
+                            value={vendorSubcategory.find(subcat => subcat.id === selectedVendor?.subcategory)?.name}
+                            isReadOnly={true} />
                     </Grid>
                 </>
             }
-            {values.source === "vendor" ? renderVendorFields() : renderFarmerFields()}
+            {values.source === "vendor" ? VendorReadOnlyFields() : FarmerReadOnlyFields()}
             <Grid item xs={12} marginY={2}>
                 <Box sx={{ width: '100%' }}>
                     {values.source === "vendor" ?

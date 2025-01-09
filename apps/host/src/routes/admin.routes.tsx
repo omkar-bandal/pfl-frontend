@@ -1,38 +1,38 @@
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-import { BranchForm, 
-    CorporateOfficeTable, 
-    CustomerTable, 
-    DashboardAdmin, 
-    EmployeeTable, 
-    FarmerTable, 
-    OfficeForm, 
-    ViewOffice, 
-    ProductCatForm, 
-    ProductCatTable, 
+import {
+    BranchForm,
+    CustomerTable,
+    DashboardAdmin,
+    EmployeeTable,
+    FarmerTable,
+    OfficeForm,
+    ProductCatForm,
+    ProductCatTable,
     ProductClassForm,
-     ProductClassTable, 
-     ProductSubcatForm, 
-     ProductSubCatTable, 
-     ProductTable, 
-     RegisteredOfficeTable, 
-     UOMConvMatrixForm, 
-     UOMConvMatrixTable, 
-     UOMForm, 
-     UOMTable,
-    VendorTable, 
-    ViewFarmer, 
-    ViewVendor, 
-    ViewEmployee, 
-    EmployeeForm, 
+    ProductClassTable,
+    ProductSubcatForm,
+    ProductSubCatTable,
+    ProductTable,
+    UOMConvMatrixForm,
+    UOMConvMatrixTable,
+    UOMForm,
+    UOMTable,
+    VendorTable,
+    ViewFarmer,
+    ViewVendor,
+    ViewEmployee,
+    EmployeeForm,
     ViewCustomer,
     VendorCatForm,
     VendorCatTable,
     VendorSubcatForm,
     VendorSubcatTable,
-    ViewBranch,
     ViewProduct,
     BranchTable,
-    ProductUpdateForm
+    ProductUpdateForm,
+    OfficeTable,
+    OfficeView,
+    BranchView
 } from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
 import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
@@ -205,24 +205,20 @@ export const AdminRoutes = [
         element: <Outlet />,
         children: [
             {
-                path: ADMIN_ROUTES.GET_CORPORATE_OFFICE,
-                element: <CorporateOfficeTable />
+                path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/:officeType`,
+                element: <OfficeTable />
             },
             {
-                path: ADMIN_ROUTES.GET_REGISTERED_OFFICE,
-                element: <RegisteredOfficeTable />
-            },
-            {
-                path: `${ADMIN_ROUTES.CREATE_OFFICE}/:type`,
-                element: <OfficeForm/>
-            },
-            {
-                path: `${ADMIN_ROUTES.EDIT_OFFICE}/:type/:id`,
+                path: `${ADMIN_ROUTES.CREATE_OFFICE}/:officeType`,
                 element: <OfficeForm />
             },
             {
-                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:type/:id`,
-                element: <ViewOffice />,
+                path: `${ADMIN_ROUTES.EDIT_OFFICE}/:officeType/:id`,
+                element: <OfficeForm />
+            },
+            {
+                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:id`,
+                element: <OfficeView />
             },
             {
                 path: ADMIN_ROUTES.BRANCHES,
@@ -241,8 +237,8 @@ export const AdminRoutes = [
                         element: <BranchForm />
                     },
                     {
-                        path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:branchType/:id`,
-                        element: <ViewBranch />
+                        path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:id`,
+                        element: <BranchView />
                     },
                 ]
             }

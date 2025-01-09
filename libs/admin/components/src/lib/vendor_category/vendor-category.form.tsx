@@ -38,7 +38,7 @@ export function VendorCatForm() {
                 toast.success(postRes ? postRes.message : "Vendor category created successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_VENDORS_CAT);
-                }, 2400);
+                }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating vendor category.");
             }))
@@ -46,7 +46,7 @@ export function VendorCatForm() {
                 toast.success(patchRes ? patchRes.message : "Vendor category updated successfully.")
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_VENDORS_CAT);
-                }, 2400);
+                }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating vendor category.");
             }));
@@ -77,7 +77,7 @@ export function VendorCatForm() {
                             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
                                     label={categoryId === "" ? "Create" : "Update"}
-                                    isError={categoryId === "" ? !postError : !patchError}
+                                    isError={categoryId === "" ? postError : patchError}
                                     isSubmitting={isSubmitting} />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>

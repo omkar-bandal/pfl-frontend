@@ -8,7 +8,7 @@ import { Address } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
 
-export const OfficeListCols = (): CustomGridColDef[] => {
+export const OfficeColumns = (): CustomGridColDef[] => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

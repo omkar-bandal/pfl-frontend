@@ -41,10 +41,10 @@ export function VendorSubcatForm() {
         subcategoryId === "" ?
             (postVendorSubcategory(formData).then(() => {
                 console.log("Response", postRes);
-                toast.success(postRes?.message)
+                toast.success(postRes? postRes.message : "Vendor subcategory created successfully.")
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT);
-                }, 2400);
+                }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating vendor subcategory")
             })) :
@@ -52,7 +52,7 @@ export function VendorSubcatForm() {
                 toast.success(patchRes ? patchRes.message : "Vendor subcategory updated successfully.")
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT);
-                }, 2400);
+                }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating vendor subcategory")
             }));
@@ -85,7 +85,7 @@ export function VendorSubcatForm() {
                             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
                                     label={subcategoryId === "" ? "Create" : "Update"}
-                                    isError={subcategoryId === "" ? !postError : !patchError}
+                                    isError={subcategoryId === "" ? postError : patchError}
                                     isSubmitting={isSubmitting} />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>

@@ -102,7 +102,7 @@ export const GRNForm = () => {
                   label="Type of GRN"
                   name="grnType"
                   alignment="horizontal"
-                  options={[{ value: "CC", label: "CC" }, { value: "DC", label: "DC" }]}
+                  options={[{ value: "cc", label: "CC" }, { value: "dc", label: "DC" }]}
                   value={values.grnType}
                   handleChange={handleChange} />
               </Grid>

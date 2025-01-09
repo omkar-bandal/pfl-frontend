@@ -55,7 +55,7 @@ export const ProductCreateForm = () => {
                             <Typography variant="h4">Product</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={false} label="Create" />
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={postError} label="Create" />
                             <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                         <Grid item xs={12} md={4}>

@@ -65,7 +65,7 @@ export const ProductUpdateForm = () => {
                             <Typography variant="h4">Product</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={false} label="Update" />
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={patchError} label="Update" />
                             <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                         <Grid item xs={12} md={4}>

@@ -1,13 +1,13 @@
 import React from "react";
 import { Grid, Typography, Box } from "@mui/material";
 import { FieldArray, Formik } from "formik";
-import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA } from "@prime-fresh/purchase/modules";
+import { dealSlipSchema, initValDealSlip, initValRFPAItems, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
 import { PostDealSlip, PURCHASE_API_URL, useCreateDealSlip, useGetAllRFPA } from "@prime-fresh/purchase_api";
 import { displayAddress } from "@prime-fresh/purchase/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate } from "react-router-dom";
-import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FarmerReadOnlyFields, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
 import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData } from "@prime-fresh/admin_api";
 import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
@@ -50,7 +50,7 @@ export const DealSlipForm = () => {
             toast.success(Res ? Res.message : "Deal Slip Created")
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_DEAL_SLIP);
-            }, 2500);
+            }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while creating deal slip.")
         });;
@@ -67,7 +67,8 @@ export const DealSlipForm = () => {
                 handleSubmit(values);
             }}
         >
-            {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
+            {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) =>
+            (
                 <form onSubmit={handleSubmit}>
                     <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                         <Grid item xs={12} md={6}>
@@ -154,120 +155,67 @@ export const DealSlipForm = () => {
                         <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography variant='body2' component="span" sx={{ fontWeight: 700 }}>Source : {selectedRFPA?.source ? selectedRFPA?.source.charAt(0).toUpperCase() + selectedRFPA?.source.slice(1).toLowerCase() : ''}</Typography>
                         </Grid>
-                        <Grid item xs={12} md={4}>
-                            <TextInput
-                                isRequired={false}
-                                name="selectedParty"
-                                label={selectedRFPA?.source === "vendor" ? "Vendor Company Name" : "Farmer Name"}
-                                value={selectedRFPA?.source === "vendor" ? selectedVendor?.companyName : selectedFarmer?.fullName}
-                                isReadOnly={true} />
-                        </Grid>
-                        <Grid item xs={12} md={4}>
-                            <TextInput
-                                isRequired={false}
-                                name="code"
-                                label={`${selectedRFPA?.source === "vendor" ? "Vendor" : "Farmer"} Code`}
-                                value={selectedRFPA?.source === "vendor" ? selectedVendor?.vendorCode : selectedFarmer?.farmerCode}
-                                isReadOnly={true}
-                            />
-                        </Grid>
-                        {selectedRFPA?.source === "vendor" &&
-                            <Grid item xs={12} md={4}>
-                                <TextInput
-                                    isRequired={false}
-                                    label="Contact Person"
-                                    name="contactperson"
-                                    value={selectedVendor?.fullName || ''}
-                                    isReadOnly={true}
-                                />
-                            </Grid>}
-                        <Grid item xs={12}>
-                            <TextInput
-                                isRequired={false}
-                                name="address"
-                                label={`${selectedRFPA?.source === "vendor" ? "Company" : "Residential"} Address`}
-                                value={displayAddress(selectedRFPA?.source === "vendor" ? selectedVendor?.officeAddress : selectedFarmer?.residensialAddress)}
-                                isReadOnly={true}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextInput
-                                isRequired={false}
-                                name="email"
-                                label="Email"
-                                value={selectedRFPA?.source === "vendor" ? selectedVendor?.email : selectedFarmer?.email}
-                                isReadOnly={true}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextInput
-                                isRequired={false}
-                                name="contactno"
-                                label="Contact No"
-                                value={selectedRFPA?.source === "vendor" ? selectedVendor?.officeContactNo : selectedFarmer?.primaryMobileNo}
-                                isReadOnly={true}
-                            />
-                        </Grid>
+                        {selectedRFPA?.source === "vendor" ? <VendorReadOnlyFields /> : <FarmerReadOnlyFields />}
                         <Grid item xs={12} marginY={2}>
                             <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
                                 <Typography variant='body2' sx={{ fontWeight: 600 }}>Product Required</Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={12} padding={1}>
-                            <FieldArray name="dealSlipItems">
-                                {() => (
-                                    <Grid container spacing={1} padding={1}>
-                                        {selectedRFPA?.rfpaProducts.map((product, index) => (
-                                            <Grid container columnSpacing={1} padding={1} key={index} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
-                                                <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-                                                    <Typography variant="body1">Product : {index + 1}</Typography>
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextInput isRequired={false} label="Product Name" name="productname" value={product.product} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={6} md={3}>
-                                                    <TextInput isRequired={false} label="Product Grade" name="productgrade" value={product.grade} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={6} md={3}>
-                                                    <TextInput isRequired={false} label="UOM" name="uom" value={product.uom} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={4} md={3}>
-                                                    <TextInput isRequired={false} label="Quantity" name="qty" value={product.quantity} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={4} md={3}>
-                                                    <TextInput isRequired={false} label="Unit Price" name="uprice" value={product.unitPrice} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={4} md={3}>
-                                                    <TextInput isRequired={false} label="Total Price" name="tprice" value={product.totalVal} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
-                                                    <TextInput isRequired={false} label="Delivery Location" name="deliveryLoctn" value={product.deliveryLocation} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <TextInput multiline maxRows={2} isRequired={false} label="Description" name="description" value={product.description} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
-                                                    <TextInput isRequired={false} type="date" label="Purchase Date" name="purchaseDate" value={product.purchaseDate} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
-                                                    <TextInput isRequired={false} type="date" label="Dispatch Date" name="dispatchDate" value={product.dispatchDate} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
-                                                    <TextInput isRequired={false} type="date" label="Delivery Date" name="deliveryDate" value={product.deliveryDate} isReadOnly={true} />
-                                                </Grid>
-                                                {selectedRFPA?.source === "farmer" &&
-                                                    (<Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={false} type="date" label="Expected Harvest Date" name="expectedHarvestDate" value={product.expectedHarvestDate} isReadOnly={true} />
-                                                    </Grid>)}
+                            <Grid container spacing={1} padding={1}>
+                                {selectedRFPA?.rfpaProducts.length !== 0 ?
+                                    (selectedRFPA?.rfpaProducts.map((product, index) => (
+                                        <Grid container columnSpacing={1} padding={1} key={index} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
+                                            <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
+                                                <Typography variant="body1">Product : {index + 1}</Typography>
                                             </Grid>
-                                        ))}
-                                    </Grid>
-                                )}
-                            </FieldArray>
-                        </Grid>
-                    </Grid >
-                </form >)
-            }
+                                            <Grid item xs={12} md={6}>
+                                                <TextInput isRequired={false} label="Product Name" name="productname" value={product.product} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={6} md={3}>
+                                                <TextInput isRequired={false} label="Product Grade" name="productgrade" value={product.grade} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={6} md={3}>
+                                                <TextInput isRequired={false} label="UOM" name="uom" value={product.uom} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={4} md={3}>
+                                                <TextInput isRequired={false} label="Quantity" name="qty" value={product.quantity} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={4} md={3}>
+                                                <TextInput isRequired={false} label="Unit Price" name="uprice" value={product.unitPrice} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={4} md={3}>
+                                                <TextInput isRequired={false} label="Total Price" name="tprice" value={product.totalVal} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={12} md={3}>
+                                                <TextInput isRequired={false} label="Delivery Location" name="deliveryLoctn" value={product.deliveryLocation} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextInput multiline maxRows={2} isRequired={false} label="Description" name="description" value={product.description} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={12} md={3}>
+                                                <TextInput isRequired={false} type="date" label="Purchase Date" name="purchaseDate" value={product.purchaseDate} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={12} md={3}>
+                                                <TextInput isRequired={false} type="date" label="Dispatch Date" name="dispatchDate" value={product.dispatchDate} isReadOnly={true} />
+                                            </Grid>
+                                            <Grid item xs={12} md={3}>
+                                                <TextInput isRequired={false} type="date" label="Delivery Date" name="deliveryDate" value={product.deliveryDate} isReadOnly={true} />
+                                            </Grid>
+                                            {selectedRFPA?.source === "farmer" &&
+                                                (<Grid item xs={12} md={3}>
+                                                    <TextInput isRequired={false} type="date" label="Expected Harvest Date" name="expectedHarvestDate" value={product.expectedHarvestDate} isReadOnly={true} />
+                                                </Grid>)}
+                                        </Grid>
+                                    ))) :
+                                    (
+                                        <Typography variant="body2" component="data" color="error">Product not found in selected RFPA</Typography>
+                                    )}
+                            </Grid>
+                        </Grid >
+                    </Grid>
+                </form >
+            )}
         </Formik >
     );
 };

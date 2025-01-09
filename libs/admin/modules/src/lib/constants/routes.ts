@@ -85,6 +85,7 @@ export const ADMIN_ROUTES = {
     VIEW_CORPORATE_OFFICE: "/admin/locations/corporate-office/view",
     GET_REGISTERED_OFFICE: "/admin/locations/registered-office/getall",
     GET_CORPORATE_OFFICE: "/admin/locations/corporate-office/getall",
+    GET_ALL_OFFICES: "/admin/locations/office/getall",
     CREATE_OFFICE: "/admin/locations/office/create",
     EDIT_OFFICE: "/admin/locations/office/edit",
     VIEW_OFFICE: "/admin/locations/office/view",

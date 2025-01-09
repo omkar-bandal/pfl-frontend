@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from '@mui/material'
 import { initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewGRN } from '@prime-fresh/purchase/modules';
-import { setProducts, setUOMs, productsDataState, uomsDataState, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
+import { setProducts, setUOMs, productsDataState, uomsDataState, setSelectedProduct, STRINGS, setSelectedVendor, setSelectedFarmer } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { PostGRN, PURCHASE_API_URL, useGetAllDealSlipNums, useGetGRN, useUpdateGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -99,7 +99,7 @@ export const GRNUpdate = () => {
                                     <Typography variant='h4'>Goods Received Note</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
                                     <FormResetBtn label="Reset" handleReset={handleReset} />
                                     <FormPreviewBtn onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }} />
                                 </Grid>
@@ -109,7 +109,7 @@ export const GRNUpdate = () => {
                                         label="Type of GRN"
                                         name="grnType"
                                         alignment="horizontal"
-                                        options={[{ value: "CC", label: "CC" }, { value: "DC", label: "DC" }]}
+                                        options={[{ value: "cc", label: "CC" }, { value: "dc", label: "DC" }]}
                                         value={values.grnType}
                                         handleChange={handleChange} />
                                 </Grid>
