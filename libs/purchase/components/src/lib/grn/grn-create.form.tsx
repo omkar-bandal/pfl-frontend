@@ -207,7 +207,7 @@ export const GRNForm = () => {
                               label="Count"
                               name={`products.${index}.count`}
                               value={values.products[index].count}
-                              options={selectedProduct?.count.map((count) => ({ value: count, label: count }))}
+                              options={selectedProduct?.count? selectedProduct?.count.map((count) => ({ value: count, label: count })) : []}
                               handleChange={handleChange}
                             />
                           </Grid>

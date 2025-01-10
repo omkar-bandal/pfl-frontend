@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Button } from '@mui/material'
 import { GetVehicleDispatchRegister, INVENTORY_API_URL, useGetAllVehicleDispatchRegisters } from '@prime-fresh/inventory_api'
-import { DataTable, TableToolbar } from '@prime-fresh/ui_shared'
+import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
 import { VehicleDispatchRegisterColumns } from './vehicle-dispatch-register.column'
 import { Add } from '@mui/icons-material'
 import { inventoryRouteConstants } from '@prime-fresh/inventory/modules'
@@ -11,8 +11,12 @@ import { useGridApiRef } from '@mui/x-data-grid'
 export const VehicleDispatchRegisterTable = () => {
   const navigate = useNavigate();
   const apiRef = useGridApiRef();
-  const { data, isLoading } = useGetAllVehicleDispatchRegisters(INVENTORY_API_URL.GET_ALL_VEHICLE_DISPATCH_REGISTERS);
-  console.log(data);
+  const { data, isLoading, isError, error } = useGetAllVehicleDispatchRegisters(INVENTORY_API_URL.GET_ALL_VEHICLE_DISPATCH_REGISTERS);
+  React.useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || 'Error occured please refresh the page.')
+    }
+  }, [isError, error])
   const handleCreate = () => {
     navigate(inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER);
   }

@@ -3,15 +3,20 @@ import { Box, Button } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { GetAQR, INVENTORY_API_URL, useGetAllAQR } from "@prime-fresh/inventory_api";
-import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
+import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 import { AQRColumns } from "./aqr.columns";
+import React from "react";
 
 export const AQRTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data, isLoading } = useGetAllAQR(INVENTORY_API_URL.GET_ALL_AQR);
-    console.log(data);
+    const { data, isLoading, isError, error } = useGetAllAQR(INVENTORY_API_URL.GET_ALL_AQR);
+    React.useEffect(() => {
+        if (isError) {
+            toast.error(error?.message || 'Error occured please refresh the page.')
+        }
+    }, [isError, error])
     const handleCreate = () => {
         navigate(inventoryRouteConstants.CREATE_AQR);
     }

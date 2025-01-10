@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
 import { GetEODReport, useGetAllEODReports } from '@prime-fresh/inventory_api'
-import { DataTable, TableToolbar } from '@prime-fresh/ui_shared'
+import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
 import React from 'react'
 import { EODReportColumns } from './eod-report.column'
 import { useNavigate } from 'react-router-dom'
@@ -9,10 +9,17 @@ import { useGridApiRef } from '@mui/x-data-grid'
 import { inventoryRouteConstants } from '@prime-fresh/inventory/modules'
 
 export const EODReportTable = () => {
-  const { data, isLoading } = useGetAllEODReports("");
-  console.log(data);
   const navigate = useNavigate();
   const apiRef = useGridApiRef();
+
+  const { data, isLoading, error, isError } = useGetAllEODReports("");
+
+  React.useEffect(() => {
+    if (isError) {
+        toast.error(error?.message || 'Error occured please refresh the page.')
+    }
+}, [isError, error])
+
   const handleCreate = () => {
     navigate(inventoryRouteConstants.CREATE_EOD_REPORT);
   }

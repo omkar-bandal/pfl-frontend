@@ -7,4 +7,6 @@ export declare const STRINGS: {
     DC: string;
     SEASONAL_CC: string;
     WH: string;
+    REGISTERED_OFFICE: string;
+    CORPORATE_OFFICE: string;
 };

@@ -1,15 +1,14 @@
 import React from "react";
 import { Grid, Typography, Box } from "@mui/material";
-import { FieldArray, Formik } from "formik";
-import { dealSlipSchema, initValDealSlip, initValRFPAItems, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA } from "@prime-fresh/purchase/modules";
+import { Formik } from "formik";
+import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
 import { PostDealSlip, PURCHASE_API_URL, useCreateDealSlip, useGetAllRFPA } from "@prime-fresh/purchase_api";
-import { displayAddress } from "@prime-fresh/purchase/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate } from "react-router-dom";
 import { FarmerReadOnlyFields, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
 import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
-import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData } from "@prime-fresh/admin_api";
+import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
 
 export const DealSlipForm = () => {
@@ -18,9 +17,9 @@ export const DealSlipForm = () => {
     const { data: rfpa } = useGetAllRFPA(PURCHASE_API_URL.GET_ALL_RFPA);
     const rfpas = rfpa ? mapToValueLabelArray(rfpa, 'id', 'rfpaId') : [];
     const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
-    console.log(Farmers);
     const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
-    console.log(Vendors);
+    const {data: Products} = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+    const {data: UOM} = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const { selectedFarmer } = useAppSelector(farmersDataState);
     const { selectedVendor } = useAppSelector(vendorsDataState);
 
@@ -155,6 +154,13 @@ export const DealSlipForm = () => {
                         <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography variant='body2' component="span" sx={{ fontWeight: 700 }}>Source : {selectedRFPA?.source ? selectedRFPA?.source.charAt(0).toUpperCase() + selectedRFPA?.source.slice(1).toLowerCase() : ''}</Typography>
                         </Grid>
+                        {selectedRFPA?.source === "vendor" ?
+                            (<Grid item xs={12}>
+                                <TextInput isRequired={false} name="companyName" label="Vendor Company Name" value={selectedVendor?.companyName} isReadOnly={true} />
+                            </Grid>) :
+                            (<Grid item xs={4} md={4}>
+                                <TextInput isRequired={false} name="farmerName" label="Farmer Name" value={selectedFarmer?.fullName} isReadOnly={true} />
+                            </Grid>)}
                         {selectedRFPA?.source === "vendor" ? <VendorReadOnlyFields /> : <FarmerReadOnlyFields />}
                         <Grid item xs={12} marginY={2}>
                             <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
@@ -170,13 +176,13 @@ export const DealSlipForm = () => {
                                                 <Typography variant="body1">Product : {index + 1}</Typography>
                                             </Grid>
                                             <Grid item xs={12} md={6}>
-                                                <TextInput isRequired={false} label="Product Name" name="productname" value={product.product} isReadOnly={true} />
+                                                <TextInput isRequired={false} label="Product Name" name="productname" value={Products?.find(products => products.id === product.product)?.name || ''} isReadOnly={true} />
                                             </Grid>
                                             <Grid item xs={6} md={3}>
                                                 <TextInput isRequired={false} label="Product Grade" name="productgrade" value={product.grade} isReadOnly={true} />
                                             </Grid>
                                             <Grid item xs={6} md={3}>
-                                                <TextInput isRequired={false} label="UOM" name="uom" value={product.uom} isReadOnly={true} />
+                                                <TextInput isRequired={false} label="UOM" name="uom" value={UOM?.find(uom => uom.id === product.uom)?.unit} isReadOnly={true} />
                                             </Grid>
                                             <Grid item xs={4} md={3}>
                                                 <TextInput isRequired={false} label="Quantity" name="qty" value={product.quantity} isReadOnly={true} />

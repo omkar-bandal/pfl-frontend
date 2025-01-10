@@ -4,15 +4,19 @@ import { Box, Button, Stack } from '@mui/material'
 import { useGridApiRef } from '@mui/x-data-grid'
 import {GetTPvoucher, PURCHASE_API_URL, useGetAllTPVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules'
-import { DataTable, TableToolbar } from '@prime-fresh/ui_shared'
+import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
 import { useNavigate } from 'react-router-dom'
 import { TPVoucherListCols } from './transport-payment-voucher.columns'
 
 export const TransportPaymentVoucherTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allTPVouchers, isLoading } = useGetAllTPVoucher(PURCHASE_API_URL.GET_ALL_TP_VOUCHER);
-    console.log(allTPVouchers);
+    const { data: allTPVouchers, isLoading, isError, error } = useGetAllTPVoucher(PURCHASE_API_URL.GET_ALL_TP_VOUCHER);
+    React.useEffect(() => {
+        if (isError) {
+            toast.error(error?.message || 'Error occured please refresh the page.')
+        }
+    }, [isError, error])
     const handleCreate = () => {
         navigate(PURCHASE_ROUTES.CREATE_TRANSPORT_CASH_VOUCHER);
     }

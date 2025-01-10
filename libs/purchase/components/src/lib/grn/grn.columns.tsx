@@ -23,17 +23,20 @@ export const GRNListCols = (): CustomGridColDef[] => {
             isMobileVisible: true,
         },
         {
+            field: "grnType",
+            headerName: "GRN Type",
+            width: 100,
+            align: "center",
+            headerAlign: "center",
+            isMobileVisible: true,
+        },
+        {
             field: "billNo",
             headerName: "Bill Number",
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
-            }
+            valueGetter: (value: string) => value === null? '-' : value,
         },
         {
             field: "requestedBy",
@@ -41,12 +44,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => {
-                if (value === null)
-                    return '-';
-                else
-                    return `${value.firstName || ''} ${value.lastName || ''}`
-            }
+            valueGetter: (value: RequestedBy) => value !== null ? `${value.firstName || ''} ${value.lastName || ''}` : "-",
         },
         {
             field: "requestingDepartment",
@@ -68,9 +66,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : 'Prime Fresh Ltd.';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "purchaseLocation",
@@ -78,9 +74,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "purchaseForWhich",
@@ -88,9 +82,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "source",
@@ -98,9 +90,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "approvalStatus",

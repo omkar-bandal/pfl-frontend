@@ -10,7 +10,7 @@ type OfficesDataState = {
 
 const initialState: OfficesDataState = {
     offices: [],
-    officeType: OfficeType.REGISTERED_OFFICE,
+    officeType: OfficeType["registered-office"],
     selectedOffices: undefined
 }
 const officesDataSlice = createSlice({

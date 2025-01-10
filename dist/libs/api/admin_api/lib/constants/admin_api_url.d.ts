@@ -65,6 +65,10 @@ export declare const ADMIN_API_URL: {
     POST_CORP_OFFICES: string;
     UPDATE_REGI_OFFICES: string;
     UPDATE_CORP_OFFICES: string;
+    GET_ALL_OFFICES: string;
+    GET_A_OFFICE: string;
+    CREATE_OFFICE: string;
+    UPDATE_OFFICE: string;
     GET_ALL_BRANCHES: string;
     GET_A_BRANCH: string;
     CREATE_BRANCH: string;

@@ -1,6 +1,6 @@
 import { DataGrid, GridApi } from "@mui/x-data-grid";
 import { CustomNoRowsOverlay } from "./components";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { CustomGridColDef } from "./models/columntype.interface";
 interface DataGridProps<T> {
   columns: CustomGridColDef[];
@@ -17,7 +17,9 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
   const mobileColumns = isMobile ? columns.filter((col) => col.isMobileVisible) : columns;
 
   return (
-    <div style={{ height: isMobile ? '100%' : 440, width: '100%' }}>
+    <Box sx={{ 
+      height: isMobile ? '100%' : 440, 
+      width: '100%'}} >
       <DataGrid
         loading={loading}
         columns={mobileColumns}
@@ -48,6 +50,7 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         sx={{
           "& .MuiDataGrid-columnHeaders": {
             fontSize: 15,
+            background: "#81C784",
           },
           "& .MuiDataGrid-cell": {
             color: "#555",
@@ -58,7 +61,7 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         }}
         {...rest}
       />
-    </div>
+    </Box>
   );
 };
 

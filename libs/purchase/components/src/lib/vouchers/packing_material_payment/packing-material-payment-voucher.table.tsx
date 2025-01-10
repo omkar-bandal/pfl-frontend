@@ -4,15 +4,19 @@ import { Box, Button, Stack } from '@mui/material'
 import { useGridApiRef } from '@mui/x-data-grid'
 import { GetPMPvoucher, PURCHASE_API_URL, useGetAllPMPVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules'
-import { DataTable, TableToolbar } from '@prime-fresh/ui_shared'
+import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
 import { useNavigate } from 'react-router-dom'
 import { PMPVoucherListCols } from './packing-material-payment-voucher.columns'
 
 export const PackingMaterialPaymentVoucherTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allPMPVouchers, isLoading } = useGetAllPMPVoucher(PURCHASE_API_URL.GET_ALL__PMP_VOUCHER);
-    console.log(allPMPVouchers);
+    const { data: allPMPVouchers, isLoading, isError, error } = useGetAllPMPVoucher(PURCHASE_API_URL.GET_ALL__PMP_VOUCHER);
+    React.useEffect(() => {
+        if (isError) {
+            toast.error(error?.message || 'Error occured please refresh the page.')
+        }
+    }, [isError, error])
     const handleCreate = () => {
         navigate(PURCHASE_ROUTES.CREATE_PACKING_MATERIAL_VOUCHER);
     }

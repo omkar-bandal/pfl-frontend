@@ -1,17 +1,22 @@
+import React from "react";
 import { Add } from "@mui/icons-material";
 import { Box, Button, Stack } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { GetDeliveryChallan, PURCHASE_API_URL, useGetAllDeliveryChallan } from "@prime-fresh/purchase_api";
-import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
+import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 import { DeliveryChallanListCols } from "./delivery-challan.column";
 
 export const DeliveryChallanTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allDCs, isLoading } = useGetAllDeliveryChallan(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN);
-    console.log(allDCs);
+    const { data: allDCs, isLoading, isError, error } = useGetAllDeliveryChallan(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN);
+    React.useEffect(() => {
+        if (isError) {
+            toast.error(error?.message || 'Error occured please refresh the page.')
+        }
+    }, [isError, error])
     const handleCreate = () => {
         navigate(PURCHASE_ROUTES.CREATE_DELIVERY_CHALLAN);
     }

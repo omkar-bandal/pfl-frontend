@@ -13,16 +13,16 @@ export type GetOffices = {
     type: string;
 };
 export type PostOffices = {
-    name: string;
+    name: string | null;
     address: Address;
-    cFirstName: string;
-    cMiddleName: string;
-    cLastName: string;
-    contactNumber: string;
-    officeEmail: string;
-    notes: string;
+    cFirstName: string | null;
+    cMiddleName: string | null;
+    cLastName: string | null;
+    contactNumber: string | null;
+    officeEmail: string | null;
+    notes: string | null;
 };
 export declare enum OfficeType {
-    "REGISTERED_OFFICE" = 0,
-    "CORPORATE_OFFICE" = 1
+    "registered-office" = 0,
+    "corporate-office" = 1
 }

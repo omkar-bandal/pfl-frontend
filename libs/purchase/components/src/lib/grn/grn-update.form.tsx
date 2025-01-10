@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from '@mui/material'
 import { initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewGRN } from '@prime-fresh/purchase/modules';
-import { setProducts, setUOMs, productsDataState, uomsDataState, setSelectedProduct, STRINGS, setSelectedVendor, setSelectedFarmer } from '@prime-fresh/admin/modules';
+import { setProducts, setUOMs, productsDataState, uomsDataState, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
 import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { PostGRN, PURCHASE_API_URL, useGetAllDealSlipNums, useGetGRN, useUpdateGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ export const GRNUpdate = () => {
     const dispatch = useDispatch();
     console.log("GRN API DATA : ", selectedGRN);
     const { data: dsNums } = useGetAllDealSlipNums(PURCHASE_API_URL.GET_ALL_DEAL_SLIP_NO);
-    const dealSlipNums = dsNums? mapToValueLabelArray(dsNums,'id', 'dealSlipNo') : [];
+    const dealSlipNums = dsNums ? mapToValueLabelArray(dsNums, 'id', 'dealSlipNo') : [];
     const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
     const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
     const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
@@ -168,7 +168,7 @@ export const GRNUpdate = () => {
                                 </Grid>
 
                                 {/*Vendor or Farmer info depend on selected source */}
-                                <VendorFarmerInfo<PostGRN> source={values.source} selectedParty={values.selectedParty || ''}/>
+                                <VendorFarmerInfo<PostGRN> source={values.source} selectedParty={values.selectedParty || ''} />
 
                                 <Grid item xs={12} marginY={2}>
                                     <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
@@ -222,25 +222,13 @@ export const GRNUpdate = () => {
                                                             <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs={4} md={4}>
-                                                            <TextInput isRequired={true} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity}
-                                                                handleChange={(e) => {
-                                                                    handleChange(e);
-                                                                    setFieldValue(`products.${index}.quantity`, parseFloat(e.target.value) || 0);
-                                                                }}
-                                                                onBlur={() => calculateAmounts(values, setFieldValue)}
-                                                            />
+                                                            <TextInput isRequired={true} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity} isReadOnly={true} />
                                                         </Grid>
                                                         <Grid item xs={4} md={4}>
-                                                            <TextInput isRequired={true} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate}
-                                                                handleChange={(e) => {
-                                                                    handleChange(e);
-                                                                    setFieldValue(`products.${index}.rate`, parseFloat(e.target.value) || 0);
-                                                                }}
-                                                                onBlur={() => calculateAmounts(values, setFieldValue)}
-                                                            />
+                                                            <TextInput isRequired={true} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate} isReadOnly={true} />
                                                         </Grid>
                                                         <Grid item xs={4} md={4}>
-                                                            <TextInput isRequired={false} label='Amount' name={`products.${index}.amt`} type='number' value={values.products[index].amt} handleChange={handleChange} />
+                                                            <TextInput isRequired={false} label='Amount' name={`products.${index}.amt`} type='number' value={values.products[index].amt} isReadOnly={true} />
                                                         </Grid>
                                                         <Grid item xs={12} md={3}>
                                                             <TextInput isRequired={false} label='Purchase Date' name={`products.${index}.purchaseDate`} type='date' value={values.products[index].purchaseDate} handleChange={handleChange} />
@@ -254,11 +242,28 @@ export const GRNUpdate = () => {
                                                         {values.source === "farmer" ?
                                                             (<Grid item xs={12} md={3}>
                                                                 <TextInput isRequired={false} label='Expected Harvest Date' name={`products.${index}.expectedHarvestDate`} type='date' value={values.products[index].expectedHarvestDate} handleChange={handleChange} />
-                                                            </Grid>) : ('')}
+                                                            </Grid>) : ('')
+                                                        }
+                                                        <Grid item xs={12} md={3}>
+                                                            <TextInput isRequired={true} name={`products.${index}.revisedQuantity`} label="Revised Quantity" type="number" value={values.products[index].revisedQuantity}
+                                                                handleChange={(e) => {
+                                                                    handleChange(e);
+                                                                    setFieldValue(`products.${index}.revisedQuantity`, parseFloat(e.target.value) || 0);
+                                                                }}
+                                                                onBlur={() => calculateAmounts(values, setFieldValue)} />
+                                                        </Grid>
+                                                        <Grid item xs={12} md={3}>
+                                                            <TextInput isRequired={true} name={`products.${index}.revisedRate`} label="Revised Rate" type="number" value={values.products[index].revisedRate}
+                                                                handleChange={(e) => {
+                                                                    handleChange(e);
+                                                                    setFieldValue(`products.${index}.revisedRate`, parseFloat(e.target.value) || 0);
+                                                                }}
+                                                                onBlur={() => calculateAmounts(values, setFieldValue)} />
+                                                        </Grid>
                                                         <Grid item xs={12} md={3}>
                                                             <TextInput isRequired={false} label='Delivery Location' name={`products.${index}.deliveryLocation`} type='text' value={values.products[index].deliveryLocation} handleChange={handleChange} />
                                                         </Grid>
-                                                        <Grid item xs={12} md={9}>
+                                                        <Grid item xs={12} md={3}>
                                                             <RadioGroupInput isRequired={true} label="RTV" name={`products.${index}.rtv`} options={[{ label: "Yes", value: "yes" }, { label: "No", value: "no" }]} value={values.products[index].rtv} onChange={handleChange} />
                                                         </Grid>
                                                     </Grid>

@@ -4,15 +4,19 @@ import { Box, Button, Stack } from '@mui/material'
 import { useGridApiRef } from '@mui/x-data-grid'
 import { GetMCvoucher, PURCHASE_API_URL, useGetAllMCVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules'
-import { DataTable, TableToolbar } from '@prime-fresh/ui_shared'
+import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
 import { useNavigate } from 'react-router-dom'
 import { MCVoucherListCols } from './multi-cash-voucher.columns'
 
 export const MultipleCashVoucherTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allMCVouchers, isLoading } = useGetAllMCVoucher(PURCHASE_API_URL.GET_ALL_MC_VOUCHER);
-    console.log(allMCVouchers);
+    const { data: allMCVouchers, isLoading, isError, error } = useGetAllMCVoucher(PURCHASE_API_URL.GET_ALL_MC_VOUCHER);
+    React.useEffect(() => {
+        if (isError) {
+            toast.error(error?.message || 'Error occured please refresh the page.')
+        }
+    }, [isError, error])
     const handleCreate = () => {
         navigate(PURCHASE_ROUTES.CREATE_MULT_CASH_VOUCHER);
     }

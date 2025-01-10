@@ -4,15 +4,19 @@ import { Box, Button, Stack } from '@mui/material'
 import { useGridApiRef } from '@mui/x-data-grid'
 import { GetLPvoucher, PURCHASE_API_URL, useGetAllLPVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules'
-import { DataTable, TableToolbar } from '@prime-fresh/ui_shared'
+import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
 import { useNavigate } from 'react-router-dom'
 import { LPVoucherListCols } from './labor-payment-voucher.columns'
 
 export const LabourPaymentVoucherTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allLPVouchers, isLoading } = useGetAllLPVoucher(PURCHASE_API_URL.GET_ALL_LP_VOUCHER);
-    console.log(allLPVouchers);
+    const { data: allLPVouchers, isLoading, isError, error } = useGetAllLPVoucher(PURCHASE_API_URL.GET_ALL_LP_VOUCHER);
+    React.useEffect(() => {
+        if (isError) {
+            toast.error(error?.message || 'Error occured please refresh the page.')
+        }
+    }, [isError, error])
     const handleCreate = () => {
         navigate(PURCHASE_ROUTES.CREATE_LABOUR_CASH_VOUCHER);
     }

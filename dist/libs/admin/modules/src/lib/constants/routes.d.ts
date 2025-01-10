@@ -61,6 +61,7 @@ export declare const ADMIN_ROUTES: {
     VIEW_CORPORATE_OFFICE: string;
     GET_REGISTERED_OFFICE: string;
     GET_CORPORATE_OFFICE: string;
+    GET_ALL_OFFICES: string;
     CREATE_OFFICE: string;
     EDIT_OFFICE: string;
     VIEW_OFFICE: string;
