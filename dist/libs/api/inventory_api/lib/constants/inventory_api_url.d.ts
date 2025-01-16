@@ -15,6 +15,10 @@ export declare const INVENTORY_API_URL: {
     GET_A_REGISTERED_LABOR: string;
     POST_LABOR_REGISTRATION: string;
     UPDATE_REGISTERED_LABOR: string;
+    GET_ALL_TEMP_LABORS: string;
+    GET_A_TEMP_LABOR: string;
+    POST_A_TEMP_LABOR: string;
+    UPDATE_TEMP_LABOR: string;
     GET_ALL_LABOR_ATTENDANCE: string;
     GET_A_LABOR_ATTENDANCE: string;
     POST_LABOR_ATTENDANCE: string;

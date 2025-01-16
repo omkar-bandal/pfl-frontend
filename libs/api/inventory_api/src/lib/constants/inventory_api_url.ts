@@ -23,6 +23,12 @@ export const INVENTORY_API_URL = {
     POST_LABOR_REGISTRATION: "/labors/",
     UPDATE_REGISTERED_LABOR: "/labors",
 
+    //Temporaty Labors
+    GET_ALL_TEMP_LABORS: "/tempLabour/",
+    GET_A_TEMP_LABOR: "/tempLabour",
+    POST_A_TEMP_LABOR: "/tempLabour/",
+    UPDATE_TEMP_LABOR: "/tempLabour",
+
     //Labor Attendance
     GET_ALL_LABOR_ATTENDANCE: "/laborAttendances/",
     GET_A_LABOR_ATTENDANCE: "/laborAttendances",

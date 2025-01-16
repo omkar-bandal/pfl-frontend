@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, RadioGroupProps, Grid } from '@mui/material';
-import { FormikErrors, FormikTouched, useField } from 'formik';
+import {useField } from 'formik';
 
 type RadioGroupInputProps = RadioGroupProps & {
     isRequired: boolean;
@@ -11,10 +11,6 @@ type RadioGroupInputProps = RadioGroupProps & {
     options: Array<{ label: string; value: string | number | boolean }>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleChange?: any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    touched?: FormikTouched<{ [key: string]: any }>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    errors?: FormikErrors<{ [key: string]: any }>;
 };
 
 export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
@@ -25,8 +21,6 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
     options,
     alignment,
     handleChange,
-    touched = {},
-    errors = {},
     ...otherProps
 }) => {
     // const getHelperText = () => {

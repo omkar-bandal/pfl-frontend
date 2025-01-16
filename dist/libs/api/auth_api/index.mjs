@@ -4040,9 +4040,8 @@ Q.getAdapter = ao.getAdapter;
 Q.HttpStatusCode = Ur;
 Q.default = Q;
 const tr = {
-  //Authentication
   BASE_URL: "http://ec2-13-203-76-236.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://c911-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://e1a3-182-156-141-17.ngrok-free.app",
 }, Br = Q.create({
   baseURL: tr.BASE_URL,
   withCredentials: !0,

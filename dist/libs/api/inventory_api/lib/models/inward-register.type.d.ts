@@ -1,5 +1,3 @@
-import { GetVendor, GetFarmer } from '../../../../admin_api/src/index.ts';
-
 export type PostInwardProducts = {
     product: string;
     count: string;
@@ -44,8 +42,6 @@ export type GetInwardRegister = {
     batchNo: string;
     source: string;
     selectedParty: string;
-    selectedVendor?: GetVendor;
-    selectedFarmer?: GetFarmer;
     inwardProducts: PostInwardProducts[];
     totalWeightInKg: number;
     purchasedQty: number;

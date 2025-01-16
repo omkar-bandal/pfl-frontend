@@ -96,7 +96,7 @@ export const PurchaseRoutes = [
             },
             {
                 path: PURCHASE_ROUTES.CREATE_GRN,
-                element: <GRNForm />
+                element:  <GRNForm />
             },
             {
                 path: `${PURCHASE_ROUTES.VIEW_GRN}/:id`,

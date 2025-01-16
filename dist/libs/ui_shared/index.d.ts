@@ -15,3 +15,5 @@ export * from './lib/notification/Notification';
 export * from './lib/notification/ToastProvider';
 export * from './lib/buttons';
 export * from './lib/components';
+export * from './lib/error-boundary/error-boundary';
+export * from './lib/fallbacks';

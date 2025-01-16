@@ -1,4 +1,3 @@
-import { FormikErrors, FormikTouched } from 'formik';
 import { RadioGroupProps } from '@mui/material';
 import { default as React } from 'react';
 
@@ -13,12 +12,6 @@ type RadioGroupInputProps = RadioGroupProps & {
         value: string | number | boolean;
     }>;
     handleChange?: any;
-    touched?: FormikTouched<{
-        [key: string]: any;
-    }>;
-    errors?: FormikErrors<{
-        [key: string]: any;
-    }>;
 };
 export declare const RadioGroupInput: React.FC<RadioGroupInputProps>;
 export {};

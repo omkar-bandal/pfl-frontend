@@ -9,6 +9,7 @@ import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { images } from "@prime-fresh/assets";
 import { authRouteConstants, authState, SignInSchema, stringConstants, useActions, useAppSelector } from "@prime-fresh/modules";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
+import { SALES_ROUTES } from "@prime-fresh/sales/modules";
 
 const InitValSignIn: SignInRequest = {
     uid: '',
@@ -39,6 +40,9 @@ export const SignIn = () => {
                     break;
                 case stringConstants.DEPT_INVENTORY:
                     navigate(inventoryRouteConstants.DASHBOARD_INVENTORY);
+                    break;
+                case stringConstants.DEPT_SALES:
+                    navigate(SALES_ROUTES.DASHBOARD_SALES);
                     break;
                 default:
                     navigate(authRouteConstants.SIGN_IN);

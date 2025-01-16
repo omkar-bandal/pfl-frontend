@@ -105,8 +105,8 @@ export type GetAllFilteredVendorData = {
     subcategory: string;
     companyName: string;
     officeContactNo: string;
-    fullName: string;
-    email: string;
+    contactPersonName: string;
+    officeEmail: string;
     vendorCode: string;
     officeAddress: Address;
 };

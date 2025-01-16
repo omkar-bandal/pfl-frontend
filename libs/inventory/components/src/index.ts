@@ -1,4 +1,4 @@
-export * from './lib/arrival_qc_report';
+export * from './lib/arrival-qc-report';
 export * from './lib/dashboard';
 export * from './lib/vehicle-dispatch-register';
 export * from './lib/dump-register';

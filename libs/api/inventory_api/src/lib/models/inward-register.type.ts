@@ -1,4 +1,3 @@
-import { GetVendor, GetFarmer } from "@prime-fresh/admin_api";
 
 export type PostInwardProducts = {
     product: string,  
@@ -44,9 +43,7 @@ export type GetInwardRegister = {
     date: Date,
     batchNo: string,
     source: string,                  // vendor / farmer
-    selectedParty: string,            // selected vendor / farmer id
-    selectedVendor?: GetVendor,           // Relation to Vendor entity
-    selectedFarmer?: GetFarmer,           // Relation to Farmer entity  
+    selectedParty: string,            // selected vendor / farmer id         
     inwardProducts: PostInwardProducts[],    // Relation to InwardProduct entity  
     totalWeightInKg: number,
     purchasedQty: number,

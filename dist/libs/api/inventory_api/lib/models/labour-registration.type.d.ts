@@ -92,3 +92,10 @@ export type GetLaborRegistration = {
     referencePosition: string;
     referenceMobileNumber: string;
 };
+export type PostTempLabor = {
+    laborName: string;
+    contactNo: string;
+};
+export type GetTempLabor = {
+    id: string;
+} & PostTempLabor;

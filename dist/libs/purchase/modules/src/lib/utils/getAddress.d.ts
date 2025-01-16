@@ -1,2 +1,2 @@
 import { Address } from "@prime-fresh/purchase_api";
-export declare const displayAddress: (value: Address | undefined) => string;
+export declare const displayAddress: (address: Address | undefined) => string;

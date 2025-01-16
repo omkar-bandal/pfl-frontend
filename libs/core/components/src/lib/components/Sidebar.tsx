@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Box, Drawer } from "@mui/material";
+import { Box, Drawer} from "@mui/material";
 import { useDispatch } from "react-redux";
 import {mobileOpenState, Navigations, setIsClosing, setMobileOpen, SidebarProps, useAppSelector} from '@prime-fresh/modules';
 import Logo from "./Logo";
 import SidebarList from "./SidebarList";
-import { adminNavigations, inventoryNavigations, purchaseNavigations } from "../navigations";
+import { adminNavigations, inventoryNavigations, purchaseNavigations, salesNavigations } from "../navigations";
 
 export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
     "admin": adminNavigations,
     "purchase": purchaseNavigations,
     "inventory": inventoryNavigations,
+    "sales": salesNavigations,
     "default": [],
   };
   const dept = localStorage.getItem("department");

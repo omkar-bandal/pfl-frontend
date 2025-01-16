@@ -109,8 +109,18 @@ export const GRNUpdate = () => {
                                         label="Type of GRN"
                                         name="grnType"
                                         alignment="horizontal"
-                                        options={[{ value: "cc", label: "CC" }, { value: "dc", label: "DC" }]}
+                                        options={PURCHASE_ARRAYS.grnType}
                                         value={values.grnType}
+                                        handleChange={handleChange} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <RadioGroupInput
+                                        isRequired={true}
+                                        label="Purchase Type"
+                                        name="purchaseType"
+                                        alignment="horizontal"
+                                        options={PURCHASE_ARRAYS.purchaseType}
+                                        value={values.purchaseType}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -129,7 +139,7 @@ export const GRNUpdate = () => {
                                     <TextInput isRequired={true} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
-                                    <TextInput isRequired={true} type="text" name='purchaseRequestByWhom' label='Purchase Request By Whom' value={values.purchaseRequestByWhom} handleChange={handleChange} />
+                                    <TextInput isRequired={true} type="text" name='purchaseInstructionsBy' label='Purchase Instructions By' value={values.purchaseInstructionsBy} handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
                                     <AutoCompleteInput
@@ -150,15 +160,15 @@ export const GRNUpdate = () => {
                                 <Grid item xs={12} md={4}>
                                     <AutoCompleteInput
                                         isRequired={true}
-                                        name="purchaseForWhich"
-                                        label="Purchase For Which Location"
+                                        name="purchaseForSalesLocation"
+                                        label="Purchase For Sales Location"
                                         options={allPurchaseForEachLocations}
                                         handleChange={(event, newValue) => {
                                             if (newValue) {
-                                                setFieldValue(`purchaseForWhich`, newValue.value);
+                                                setFieldValue(`purchaseForSalesLocation`, newValue.value);
                                                 handleProductNameChange(newValue.value || '');
                                             } else {
-                                                setFieldValue(`purchaseForWhich`, '');
+                                                setFieldValue(`purchaseForSalesLocation`, '');
                                                 handleProductNameChange('');
                                             }
                                         }} />

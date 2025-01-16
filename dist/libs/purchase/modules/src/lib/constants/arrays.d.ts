@@ -15,4 +15,12 @@ export declare const PURCHASE_ARRAYS: {
         value: string;
         label: string;
     }[];
+    grnType: {
+        value: string;
+        label: string;
+    }[];
+    purchaseType: {
+        value: string;
+        label: string;
+    }[];
 };

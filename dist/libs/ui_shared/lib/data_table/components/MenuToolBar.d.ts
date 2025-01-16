@@ -9,5 +9,5 @@ interface BasicMenuProps {
     buttonLabel: React.ReactNode;
     menuItems: MenuItemProps[];
 }
-declare const MenuToolBar: React.FC<BasicMenuProps>;
+declare const MenuToolBar: React.ForwardRefExoticComponent<BasicMenuProps & React.RefAttributes<HTMLButtonElement>>;
 export default MenuToolBar;

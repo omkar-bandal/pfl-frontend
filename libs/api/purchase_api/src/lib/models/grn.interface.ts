@@ -8,9 +8,9 @@ export interface GRNProducts {
     quantity: number,
     rate: number,
     amt: number,
-    rtv: string ,
+    rtv: string,
     purchaseDate: string,
-    expectedHarvestDate: string ,
+    expectedHarvestDate: string,
     dispatchDate: string,
     deliveryDate: string,
     deliveryLocation: string,
@@ -19,73 +19,75 @@ export interface GRNProducts {
 }
 
 export interface PostGRN {
-    grnType: string ,
-    dealSlipId?: string ;
-    billNo: string ;
-    companyName: string ;
-    purchaseRequestByWhom: string ;
-    purchaseLocation: string ;
-    purchaseForWhich: string ;
-    specialReq: string ;
+    grnType: string,
+    purchaseType: "fixed price sales" | "consignment sales / bikri" | "mgp sales";
+    dealSlipId?: string;
+    billNo: string;
+    companyName: string;
+    purchaseInstructionsBy: string;
+    purchaseLocation: string;
+    purchaseForSalesLocation: string;
+    specialReq: string;
     source: "vendor" | "farmer";
-    selectedParty: string ;
+    selectedParty: string;
     products: GRNProducts[];
-    deliveryReceivingPerson: string ;
+    deliveryReceivingPerson: string;
     subTotalAmt: number;
     totalAmt: number;
-    amtWords: string ;
+    amtWords: string;
     freight: number,
     otherCharges: number,
-    purchasedBy: string ,
-    receivedThrough: string ,
-    securityPerson: string ,
-    vehicleNo: string ,
-    timeIn: string ,
+    purchasedBy: string,
+    receivedThrough: string,
+    securityPerson: string,
+    vehicleNo: string,
+    timeIn: string,
     cratesIn: number,
-    rmn: string ,
-    remark: string ,
-    billImage: File | null ,
+    rmn: string,
+    remark: string,
+    billImage: File | null,
 }
 
 export interface GetGRN {
     id: string;
-    grnType: string ,
-    grnNo?: string ;
-    createdDate?: string ;
-    createdTime?: string ;
+    grnType: string,
+    purchaseType: "fixed price sales" | "consignment sales / bikri" | "mgp sales",
+    grnNo?: string;
+    createdDate?: string;
+    createdTime?: string;
     requestedBy?: RequestedBy;
-    requestingDepartment?: string ;
-    baseLocation?: string ;
-    dealSlipId: string ;
-    billNo: string ;
-    companyName: string ;
-    purchaseRequestByWhom: string ;
-    purchaseLocation: string ;
-    purchaseForWhich: string ;
-    specialReq: string ;
+    requestingDepartment?: string;
+    baseLocation?: string;
+    dealSlipId: string;
+    billNo: string;
+    companyName: string;
+    purchaseInstructionsBy: string;
+    purchaseLocation: string;
+    purchaseForSalesLocation: string;
+    specialReq: string;
     source: "vendor" | "farmer";
-    selectedParty: string ;
+    selectedParty: string;
     products: GRNProducts[];
-    deliveryReceivingPerson: string ;
+    deliveryReceivingPerson: string;
     freight: number,
     subTotalAmt: number;
     totalAmt: number;
-    amtWords: string ;
+    amtWords: string;
     otherCharges: number,
-    receivedThrough: string ,
-    vehicleNo: string ,
-    timeIn: string ,
+    receivedThrough: string,
+    vehicleNo: string,
+    timeIn: string,
     cratesIn: number,
-    purchasedBy: string ,
-    securityPerson: string ,
-    rmn: string , 
-    remark: string ,
-    approvalStatus?: string ;
-    approvalNote?: string ;
-    billImage: string ;
+    purchasedBy: string,
+    securityPerson: string,
+    rmn: string,
+    remark: string,
+    approvalStatus?: string;
+    approvalNote?: string;
+    billImage: string;
 }
 
 export interface GetAllGRNnumbers {
-    id: string ;
-    grnNo: string ;
+    id: string;
+    grnNo: string;
 }

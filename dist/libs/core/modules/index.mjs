@@ -11362,9 +11362,8 @@ Oe.getAdapter = jc.getAdapter;
 Oe.HttpStatusCode = rs;
 Oe.default = Oe;
 const Uc = {
-  //Authentication
   BASE_URL: "http://ec2-13-203-76-236.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://c911-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://e1a3-182-156-141-17.ngrok-free.app",
 }, ns = Oe.create({
   baseURL: Uc.BASE_URL,
   withCredentials: !0,

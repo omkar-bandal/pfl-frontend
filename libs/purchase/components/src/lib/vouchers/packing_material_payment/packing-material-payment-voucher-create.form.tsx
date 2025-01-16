@@ -42,7 +42,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
       toast.success(Res ? Res.message : "Voucher Created")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_PACKING_MATERIAL_VOUCHER);
-      }, 2500);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating voucher")
     });;
@@ -69,7 +69,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
                 <FormResetBtn label="Reset" handleReset={handleReset} />
                 <FormPreviewBtn onClick={() => { dispatch(setPreviewPMPVoucher(values)); dispatch(setPreview(true)) }} />
               </Grid>

@@ -11,7 +11,7 @@ type AutoCompleteInputProps = {
     options: AutoCompleteOption[];
     value?: AutoCompleteOption | null;
     handleBlur?: any;
-    handleChange?: (event: any, newValue: AutoCompleteOption | null) => void;
+    handleChange?: (event: React.SyntheticEvent, newValue: AutoCompleteOption | null) => void;
 };
 export declare const AutoCompleteInput: React.FC<AutoCompleteInputProps>;
 export {};

@@ -18,12 +18,13 @@ export interface GRNProducts {
 }
 export interface PostGRN {
     grnType: string;
+    purchaseType: "fixed price sales" | "consignment sales / bikri" | "mgp sales";
     dealSlipId?: string;
     billNo: string;
     companyName: string;
-    purchaseRequestByWhom: string;
+    purchaseInstructionsBy: string;
     purchaseLocation: string;
-    purchaseForWhich: string;
+    purchaseForSalesLocation: string;
     specialReq: string;
     source: "vendor" | "farmer";
     selectedParty: string;
@@ -47,6 +48,7 @@ export interface PostGRN {
 export interface GetGRN {
     id: string;
     grnType: string;
+    purchaseType: "fixed price sales" | "consignment sales / bikri" | "mgp sales";
     grnNo?: string;
     createdDate?: string;
     createdTime?: string;
@@ -56,9 +58,9 @@ export interface GetGRN {
     dealSlipId: string;
     billNo: string;
     companyName: string;
-    purchaseRequestByWhom: string;
+    purchaseInstructionsBy: string;
     purchaseLocation: string;
-    purchaseForWhich: string;
+    purchaseForSalesLocation: string;
     specialReq: string;
     source: "vendor" | "farmer";
     selectedParty: string;

@@ -4,9 +4,7 @@ import {
 import Tooltip from "@mui/material/Tooltip";
 import {
   FilterAltOutlined,
-  SwapVertOutlined,
   LineWeightOutlined,
-  ViewColumn,
   FileDownloadOutlined
 } from "@mui/icons-material";
 import { Button, ButtonGroup } from "@mui/material";
@@ -18,9 +16,7 @@ interface DataTableProps {
   apiRef: React.MutableRefObject<GridApi>;
 }
 export const TableToolbar: React.FC<DataTableProps> = ({ apiRef }) => {
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
+
   const RowDensityMenu = [
     { label: "Comfortable", logo: <DensityMedium fontSize="small" />, onClick: () => apiRef.current.setDensity("comfortable") },
     { label: "Standard", logo: <DensitySmall fontSize="small" />, onClick: () => apiRef.current.setDensity("standard") },
@@ -33,39 +29,30 @@ export const TableToolbar: React.FC<DataTableProps> = ({ apiRef }) => {
   return (
     <ButtonGroup variant="outlined" aria-label="Basic button group">
       <Tooltip title="Filters">
+        <span>
         <Button
           aria-label="filter"
           onClick={() => apiRef.current.showFilterPanel()}
         >
           <FilterAltOutlined />
         </Button>
+        </span>
       </Tooltip>
       <Tooltip title="Row Size">
+        <span>
         <MenuToolBar
           buttonLabel={<LineWeightOutlined />}
           menuItems={RowDensityMenu}
         />
+        </span>
       </Tooltip>
-      {/* <Tooltip title="Sort">
-        <Button aria-label="sort" onClick={() => apiRef.current.sortColumn('id', 'desc')}>
-          <SwapVertOutlined />
-        </Button>
-      </Tooltip> */}
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          
-        </Box>
-      </Modal> */}
       <Tooltip title="Export">
+        <span>
         <MenuToolBar
           buttonLabel={<FileDownloadOutlined />}
           menuItems={ExportMenu}
         />
+        </span>
       </Tooltip>
     </ButtonGroup>
   );

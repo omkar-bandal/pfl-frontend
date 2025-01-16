@@ -1,14 +1,13 @@
 import React from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { AutoCompleteInput, RadioGroupInput, TextInput } from "../auto_form/components";
+import { AutoCompleteInput, RadioGroupInput } from "../auto_form/components";
 import { useFormikContext } from "formik";
 import { PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
 import { mapToValueLabelArray } from "../auto_form/utils";
-import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllVendorCat, useGetAllVendorSubCat } from "@prime-fresh/admin_api";
+import { ADMIN_API_URL, useGetAllFilteredFarmerData, useGetAllFilteredVendorData } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ADMIN_ROUTES, setFilteredFarmerData, setFilteredVendorData, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
-import { useAppSelector } from "@prime-fresh/modules";
+import { ADMIN_ROUTES, setFilteredFarmerData, setFilteredVendorData, setSelectedFarmer, setSelectedVendor } from "@prime-fresh/admin/modules";
 import { VendorReadOnlyFields } from "./vendor-readonly-fields";
 import { FarmerReadOnlyFields } from "./farmer-readonly-fields";
 
@@ -16,23 +15,20 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { values, setFieldValue } = useFormikContext<T>();
-    const { data: vCat } = useGetAllVendorCat(ADMIN_API_URL.GET_ALL_VENDOR_CAT);
-    const vendorCategory = vCat ? vCat : [];
-    const { data: vSubcat } = useGetAllVendorSubCat(ADMIN_API_URL.GET_ALL_VENDOR_SUBCAT);
-    const vendorSubcategory = vSubcat ? vSubcat : [];
-
+    
     const { data: vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
     const allVendors = vendors ? mapToValueLabelArray(vendors, 'id', 'companyName') : [];
-
+    console.log(vendors);
     const { data: farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
     const allFarmers = farmers ? mapToValueLabelArray(farmers, 'id', 'fullName') : [];
-
-    const { selectedVendor } = useAppSelector(vendorsDataState);
    
     React.useEffect(() => {
-        source === "vendor"?
-        dispatch(setSelectedVendor(vendors?.find(vendor => vendor.id === selectedParty))) :
-        dispatch(setSelectedFarmer(farmers?.find(farmer => farmer.id === selectedParty)));
+        alert("Component Re-render due to useEffect")
+        dispatch(setSelectedVendor(null));
+        dispatch(setSelectedFarmer(null));
+        source === "farmer"?
+        dispatch(setSelectedFarmer(farmers?.find(farmer => farmer.id === selectedParty))):
+        dispatch(setSelectedVendor(vendors?.find(vendor => vendor.id === selectedParty)));
     }, [dispatch, selectedParty, source, farmers, vendors]);
     
     const handleSourceChange = (value: string) => {
@@ -109,26 +105,6 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
                             }} />
                     )}
             </Grid>
-            {values.source === "vendor" &&
-                <>
-                    <Grid item xs={12} md={4}>
-                        <TextInput
-                            isRequired={true}
-                            name="vendorCategory"
-                            label="Vendor Category"
-                            value={vendorCategory.find(category => category.id === selectedVendor?.category)?.name}
-                            isReadOnly={true} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <TextInput
-                            isRequired={true}
-                            name="vendorSubcategory"
-                            label="Vendor Subategory"
-                            value={vendorSubcategory.find(subcat => subcat.id === selectedVendor?.subcategory)?.name}
-                            isReadOnly={true} />
-                    </Grid>
-                </>
-            }
             {values.source === "vendor" ? VendorReadOnlyFields() : FarmerReadOnlyFields()}
             <Grid item xs={12} marginY={2}>
                 <Box sx={{ width: '100%' }}>

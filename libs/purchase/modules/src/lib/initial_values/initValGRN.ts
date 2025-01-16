@@ -18,12 +18,13 @@ export const initValGRNProducts: GRNProducts = {
 
 export const initValGRN: PostGRN = {
     grnType: "",
+    purchaseType: "fixed price sales",
     dealSlipId: '',
     billNo: '',
     companyName: '',
-    purchaseRequestByWhom: '',
+    purchaseInstructionsBy: '',
     purchaseLocation: '',
-    purchaseForWhich: '',
+    purchaseForSalesLocation: '',
     specialReq: '',
     source: 'vendor',
     selectedParty: '',

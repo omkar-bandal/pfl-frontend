@@ -7,7 +7,7 @@ import { coreStore } from "@prime-fresh/modules";
 export function App() {
   return (
     <CommonProvider store={coreStore} theme={muiTheme}>
-      <RouterProvider router={HostRoutes} />
+        <RouterProvider router={HostRoutes} />
     </CommonProvider>
   );
 }

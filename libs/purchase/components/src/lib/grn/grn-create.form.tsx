@@ -5,9 +5,9 @@ import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
 import { grnSchema, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewGRN } from '@prime-fresh/purchase/modules';
 import { useActions, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
-import { productsDataState, uomsDataState, setProducts, setUOMs, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
-import {  PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlipNums } from '@prime-fresh/purchase_api';
+import { productsDataState, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
+import { PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlipNums } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './grn.preview';
@@ -18,29 +18,37 @@ export const GRNForm = () => {
   const dispatch = useDispatch();
   const { setPreview } = useActions();
   const { data: dsNums } = useGetAllDealSlipNums(PURCHASE_API_URL.GET_ALL_DEAL_SLIP_NO);
-  const dealSlipNums = dsNums? mapToValueLabelArray(dsNums,'id', 'dealSlipNo') : [];  
+  const dealSlipNums = dsNums ? mapToValueLabelArray(dsNums, 'id', 'dealSlipNo') : [];
   const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+  const allProducts = Products? mapToValueLabelArray(Products, 'id', 'name') : [];
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+  const allUOMs = UOMs? mapToValueLabelArray(UOMs, 'id', 'unit') : [];
 
   const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
   const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
   const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
 
-  const { allProducts, selectedProduct } = useAppSelector(productsDataState);
-  const { allUOMs } = useAppSelector(uomsDataState);
+  const { selectedProduct } = useAppSelector(productsDataState);
 
-  React.useEffect(() => {
-    dispatch(setSelectedProduct(null));
-    dispatch(setProducts(Products ? Products : []));
-    dispatch(setUOMs(UOMs ? UOMs : []));
-  }, [dispatch, Products, UOMs]);
-
-
-  const handleProductNameChange = (dataId: string | null) => {
-    const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
-    dispatch(setSelectedProduct(selectedProduct));
-  }
-
+ 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const debounce = (func: (...args: any[]) => void, delay: number) => {
+    let timeout: NodeJS.Timeout;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
+  
+  const handleProductNameChange = React.useCallback(
+    debounce((dataId: string | null) => {
+      const selectedProduct = Products?.find((products) => products.id === dataId)
+      dispatch(setSelectedProduct(selectedProduct));
+    }, 300), // Adjust debounce time (e.g., 300ms)
+    [Products, dispatch]
+  );
+ 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateAmounts = React.useCallback((values: any, setFieldValue: any) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,8 +110,18 @@ export const GRNForm = () => {
                   label="Type of GRN"
                   name="grnType"
                   alignment="horizontal"
-                  options={[{ value: "cc", label: "CC" }, { value: "dc", label: "DC" }]}
+                  options={PURCHASE_ARRAYS.grnType}
                   value={values.grnType}
+                  handleChange={handleChange} />
+              </Grid>
+              <Grid item xs={12}>
+                <RadioGroupInput
+                  isRequired={true}
+                  label="Purchase Type"
+                  name="purchaseType"
+                  alignment="horizontal"
+                  options={PURCHASE_ARRAYS.purchaseType}
+                  value={values.purchaseType}
                   handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={3}>
@@ -122,7 +140,7 @@ export const GRNForm = () => {
                 <TextInput isRequired={true} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <TextInput isRequired={true} type="text" name='purchaseRequestByWhom' label='Purchase Request By Whom' value={values.purchaseRequestByWhom} handleChange={handleChange} />
+                <TextInput isRequired={true} type="text" name='purchaseInstructionsBy' label='Purchase Instructions By' value={values.purchaseInstructionsBy} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <AutoCompleteInput
@@ -143,15 +161,15 @@ export const GRNForm = () => {
               <Grid item xs={12} md={4}>
                 <AutoCompleteInput
                   isRequired={true}
-                  name="purchaseForWhich"
-                  label="Purchase For Which Location"
+                  name="purchaseForSalesLocation"
+                  label="Purchase For Sales Location"
                   options={allPurchaseForEachLocations}
                   handleChange={(event, newValue) => {
                     if (newValue) {
-                      setFieldValue(`purchaseForWhich`, newValue.value);
+                      setFieldValue(`purchaseForSalesLocation`, newValue.value);
                       handleProductNameChange(newValue.value || '');
                     } else {
-                      setFieldValue(`purchaseForWhich`, '');
+                      setFieldValue(`purchaseForSalesLocation`, '');
                       handleProductNameChange('');
                     }
                   }} />
@@ -186,15 +204,16 @@ export const GRNForm = () => {
                               isRequired={true}
                               name={`products.${index}.product`}
                               label="Product Name"
-                              options={mapToValueLabelArray(allProducts, 'id', 'name')}
+                              options={allProducts}
                               handleChange={(event, newValue) => {
                                 if (newValue) {
                                   setFieldValue(`products.${index}.product`, newValue.value);
+                                  handleProductNameChange(newValue.value)
                                 } else {
                                   setFieldValue(`products.${index}.product`, '');
+                                  handleProductNameChange(null)
                                 }
                               }}
-                              handleBlur={handleProductNameChange(values.products[index].product)}
                             />
                           </Grid>
                           <Grid item xs={4} md={2}>
@@ -207,12 +226,12 @@ export const GRNForm = () => {
                               label="Count"
                               name={`products.${index}.count`}
                               value={values.products[index].count}
-                              options={selectedProduct?.count? selectedProduct?.count.map((count) => ({ value: count, label: count })) : []}
+                              options={selectedProduct?.count ? selectedProduct?.count.map((count) => ({ value: count, label: count })) : []}
                               handleChange={handleChange}
                             />
                           </Grid>
                           <Grid item xs={4} md={3}>
-                            <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} value={values.products[index].uom} handleChange={handleChange} />
+                            <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={allUOMs} value={values.products[index].uom} handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={4} md={4}>
                             <TextInput isRequired={true} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity}
