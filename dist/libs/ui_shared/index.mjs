@@ -53341,7 +53341,7 @@ const qQ = ({ source: e, selectedParty: t }) => {
   console.log(a);
   const { data: c } = cZ(fS.GET_ALL_FARMERS_FILTERED), u = c ? HS(c, "id", "fullName") : [];
   Je.useEffect(() => {
-    alert("Component Re-render due to useEffect"), n(bp(null)), n(gp(null)), n(e === "farmer" ? gp(c == null ? void 0 : c.find((p) => p.id === t)) : bp(a == null ? void 0 : a.find((p) => p.id === t)));
+    n(bp(null)), n(gp(null)), n(e === "farmer" ? gp(c == null ? void 0 : c.find((p) => p.id === t)) : bp(a == null ? void 0 : a.find((p) => p.id === t)));
   }, [n, t, e, c, a]);
   const d = (p) => {
     s("source", p), n(p === "vendor" ? qX(a || []) : zX(c || []));

@@ -593,6 +593,26 @@ export const SalesOrderCreateForm = () => {
                                 value={values.grandTotalAmount}
                                 handleChange={handleChange} />
                         </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextInput
+                                isRequired={false}
+                                type="text"
+                                name="vehicleNo"
+                                label="Vehicle Number"
+                                value={values.vehicleNo}
+                                handleChange={handleChange} />
+                        </Grid>
+                        <Grid item xs={12} md={9}>
+                            <TextInput
+                                isRequired={false}
+                                multiline
+                                maxRows={2}
+                                type="text"
+                                name="remark"
+                                label="Remark"
+                                value={values.remark}
+                                handleChange={handleChange} />
+                        </Grid>
                     </Grid>
                 </form>
             )}

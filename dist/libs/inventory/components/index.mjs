@@ -49969,7 +49969,7 @@ const FO = ({ source: e, selectedParty: t }) => {
   console.log(a);
   const { data: c } = UN(Mt.GET_ALL_FARMERS_FILTERED), u = c ? qn(c, "id", "fullName") : [];
   mt.useEffect(() => {
-    alert("Component Re-render due to useEffect"), n(Mp(null)), n(Np(null)), n(e === "farmer" ? Np(c == null ? void 0 : c.find((m) => m.id === t)) : Mp(a == null ? void 0 : a.find((m) => m.id === t)));
+    n(Mp(null)), n(Np(null)), n(e === "farmer" ? Np(c == null ? void 0 : c.find((m) => m.id === t)) : Mp(a == null ? void 0 : a.find((m) => m.id === t)));
   }, [n, t, e, c, a]);
   const f = (m) => {
     s("source", m), n(m === "vendor" ? mU(a || []) : vU(c || []));

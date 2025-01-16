@@ -23,7 +23,6 @@ export const VendorFarmerInfo = <T extends { source: "vendor" | "farmer", select
     const allFarmers = farmers ? mapToValueLabelArray(farmers, 'id', 'fullName') : [];
    
     React.useEffect(() => {
-        alert("Component Re-render due to useEffect")
         dispatch(setSelectedVendor(null));
         dispatch(setSelectedFarmer(null));
         source === "farmer"?
