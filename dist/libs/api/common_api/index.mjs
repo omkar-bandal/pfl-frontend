@@ -4660,7 +4660,7 @@ const Ha = (t) => {
   GET_FARMERS_PARTIAL: "/farmers/filterFarmer/all",
   GET_UOM_PARTIAL: "/uoms/getAll/partialdata",
   GET_BRANCHES_PARTIAL: "/location-branches/filterData/filter/all"
-}, fo = "https://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Wa = () => ce.create({
+}, fo = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Wa = () => ce.create({
   baseURL: fo,
   withCredentials: !0,
   headers: {

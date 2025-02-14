@@ -4454,7 +4454,7 @@ const Su = {
   GET_FARMERS_PARTIAL: "/farmers/filterFarmer/all",
   GET_UOM_PARTIAL: "/uoms/getAll/partialdata",
   GET_BRANCHES_PARTIAL: "/location-branches/filterData/filter/all"
-}, Ii = "https://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Ou = () => fe.create({
+}, Ii = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Ou = () => fe.create({
   baseURL: Ii,
   withCredentials: !0,
   headers: {

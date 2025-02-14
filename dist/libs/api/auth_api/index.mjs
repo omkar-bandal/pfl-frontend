@@ -4081,7 +4081,7 @@ Br.interceptors.response.use(
     return Promise.reject(t);
   }
 );
-const po = "https://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Ca = () => X.create({
+const po = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Ca = () => X.create({
   baseURL: po,
   withCredentials: !0,
   headers: {

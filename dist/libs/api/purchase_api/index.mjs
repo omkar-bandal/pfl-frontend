@@ -4701,7 +4701,7 @@ const We = (t) => {
 }, Ye = (t, e) => {
   const r = new jr();
   return qs({ mutationFn: (n) => r.updateData(t, e, n) });
-}, yo = "https://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Hi = () => ce.create({
+}, yo = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Hi = () => ce.create({
   baseURL: yo,
   withCredentials: !0,
   headers: {

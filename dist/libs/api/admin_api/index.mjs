@@ -4843,7 +4843,7 @@ const Ie = (t) => {
 }, Mr = (t, e, r) => {
   const n = new $t();
   return In({ queryKey: r, queryFn: () => n.getDataByQuery(t, e), enabled: !!e });
-}, _o = "https://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", za = () => fe.create({
+}, _o = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", za = () => fe.create({
   baseURL: _o,
   withCredentials: !0,
   headers: {
