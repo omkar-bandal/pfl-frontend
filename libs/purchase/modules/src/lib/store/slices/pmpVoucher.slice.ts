@@ -5,7 +5,7 @@ import { RootState } from "../store.purchase";
 type pmpVoucherState = {
     pmpVouchers: GetPMPvoucher[];
     selectedPMPVoucher: GetPMPvoucher | undefined;
-    previewPMPVoucher: PostPMPvoucher | undefined;
+    previewPMPVoucher: PostPMPvoucher | GetPMPvoucher | undefined;
 }
 const initialState : pmpVoucherState = {
     pmpVouchers: [],
@@ -23,7 +23,7 @@ const pmpVoucherSlice = createSlice({
         setSelectedPMPVoucher: (state, action: PayloadAction<GetPMPvoucher | undefined>) => {
             state.selectedPMPVoucher = action.payload;
         },
-        setPreviewPMPVoucher: (state, action: PayloadAction<PostPMPvoucher | undefined>) => {
+        setPreviewPMPVoucher: (state, action: PayloadAction<PostPMPvoucher | GetPMPvoucher | undefined>) => {
             state.previewPMPVoucher = action.payload;
         }
     }

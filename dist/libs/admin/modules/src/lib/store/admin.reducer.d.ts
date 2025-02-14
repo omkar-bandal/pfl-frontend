@@ -29,6 +29,7 @@ export declare const adminReducer: {
         selectedProduct: import("@prime-fresh/admin_api").GetProduct | null | undefined;
         productCat: import("@prime-fresh/admin_api").GetProductCategory[];
         productSubCat: import("@prime-fresh/admin_api").GetProductSubcategory[];
+        productPartialData: import("@prime-fresh/admin_api").ProductPartialData[];
     }>;
     uomData: import("@reduxjs/toolkit").Reducer<{
         allUOMs: import("@prime-fresh/admin_api").GetUOM[];

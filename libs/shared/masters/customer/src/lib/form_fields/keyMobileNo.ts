@@ -9,10 +9,11 @@ export const KeyMobileNo = {
         },
         {
             "name": "accDeptFName",
-            "label": "*First Name",
+            "label": "First Name",
             "type": "text",
             "placeholder": "First Name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "accDeptMName",
@@ -23,17 +24,19 @@ export const KeyMobileNo = {
         },
         {
             "name": "accDeptLName",
-            "label": "*Last Name",
+            "label": "Last Name",
             "type": "text",
             "placeholder": "Last Name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "accDeptMobileNo",
-            "label": "*Mobile No",
+            "label": "Mobile No",
             "type": "text",
             "placeholder": "+91----------",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "",
@@ -42,10 +45,11 @@ export const KeyMobileNo = {
         },
         {
             "name": "ownerFName",
-            "label": "*First Name",
+            "label": "First Name",
             "type": "text",
             "placeholder": "First Name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ownerMName",
@@ -56,17 +60,19 @@ export const KeyMobileNo = {
         },
         {
             "name": "ownerLName",
-            "label": "*Last Name",
+            "label": "Last Name",
             "type": "text",
             "placeholder": "Last Name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ownerMobileNo",
-            "label": "*Mobile No",
+            "label": "Mobile No",
             "type": "text",
             "placeholder": "+91----------",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "mandiLicenceNo",

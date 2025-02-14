@@ -1,3 +1,4 @@
+export * from './label';
 export * from './autocomplete';
 export * from './dropdown';
 export * from './image';
@@ -7,3 +8,4 @@ export * from './radio';
 export * from './tabs';
 export * from './tabpanel';
 export * from './multiple-text-inputs';
+export * from './accordion';

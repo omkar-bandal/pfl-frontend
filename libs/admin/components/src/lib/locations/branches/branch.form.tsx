@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Formik } from "formik";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, BranchesInitialValues } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, useCreateBranches, useUpdateBranch, useGetABranch } from "@prime-fresh/admin_api";
+import { ADMIN_ROUTES, BranchesInitialValues, useCreateBranch, useGetBranchById, useUpdateBranchById } from "@prime-fresh/admin/modules";
 import { FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
-import { appendFormData } from "@prime-fresh/shared/utils";
 
 export const BranchForm = () => {
     const { id, branchType } = useParams<{ id: string, branchType: string }>();
@@ -13,23 +12,20 @@ export const BranchForm = () => {
 
     const navigate = useNavigate();
 
-    const { data, isLoading } = useGetABranch(ADMIN_API_URL.GET_A_BRANCH, branchId)
-    const branch = data ? data : BranchesInitialValues;
+    const { data, isLoading } = useGetBranchById(branchId);
+    const branch = data?.data ? data.data : BranchesInitialValues;
 
     //Initial value for office form
     const branchesInitValue = branchId ? branch : BranchesInitialValues;
 
     //To create new office Data
-    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateBranches(`${ADMIN_API_URL.CREATE_BRANCH}/${branchType}`);
+    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateBranch(branchtype)
     //To update existing office Data
-    const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateBranch(`${ADMIN_API_URL.UPDATE_BRANCH}/${branchType}`, branchId);
+    const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateBranchById(branchId, branchtype, );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
         branchId ?
-            (mutatePatch(formData).then(() => {
+            (mutatePatch(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Branch location updated successfully.");
                 setTimeout(() => {
                     navigate(`${ADMIN_ROUTES.GET_ALL_BRANCHES}/${branchtype}`);
@@ -37,7 +33,7 @@ export const BranchForm = () => {
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while creating new branch.");
             })) :
-            (mutatePost(formData).then(() => {
+            (mutatePost(values).then(() => {
                 toast.success(postRes ? postRes.message : "Branch location created successfully.");
                 setTimeout(() => {
                     navigate(`${ADMIN_ROUTES.GET_ALL_BRANCHES}/${branchtype}`);
@@ -67,15 +63,8 @@ export const BranchForm = () => {
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <Typography variant='h4'>Branch</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn
-                                    label={branchId === "" ? "Create" : "Update"}
-                                    isError={branchId === "" ? postError : patchError}
-                                    isSubmitting={isSubmitting} />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                         </Grid>
                         <Grid container spacing={1} padding={1}>
@@ -141,6 +130,13 @@ export const BranchForm = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextInput multiline maxRows={4} isRequired={false} label="Notes" name="notes" value={values.notes} handleChange={handleChange} />
+                            </Grid>
+                            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <FormSubmitBtn
+                                    label={branchId === "" ? "Create" : "Update"}
+                                    isError={branchId === "" ? postError : patchError}
+                                    isSubmitting={isSubmitting} />
+                                <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                         </Grid>
                     </form>

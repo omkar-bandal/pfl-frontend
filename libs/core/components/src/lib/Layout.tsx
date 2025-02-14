@@ -4,12 +4,9 @@ import { Appbar, Sidebar } from './components';
 import { Provider } from 'react-redux';
 import {coreStore} from '@prime-fresh/modules';
 
-const drawerWidth = 280;
+const drawerWidth = 250;
 
-export function Layout({
-  children,
-  role,
-}: {
+export function Layout({ children, role }: {
   children: React.ReactNode;
   role: string;
 }) {
@@ -19,14 +16,12 @@ export function Layout({
         <CssBaseline />
         <Appbar drawerWidth={drawerWidth} />
         <Sidebar drawerWidth={drawerWidth} role={role} />
-        <Box
-          component="main"
+        <Box component="main"
           sx={{
             flexGrow: 1,
             paddingX: 1,
             width: { lg: `calc(100% - ${drawerWidth}px)` },
-          }}
-        >
+          }}>
           <Toolbar />
           {children}
         </Box>

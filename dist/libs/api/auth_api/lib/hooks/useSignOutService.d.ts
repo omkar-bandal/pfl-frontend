@@ -1,3 +1,3 @@
-import { SignOutRequest, SignOutResponse } from '../models';
+import { SignOutResponse } from '../models';
 
-export declare const useSignOutService: (url: string) => import('@tanstack/react-query').UseMutationResult<SignOutResponse, Error, SignOutRequest, unknown>;
+export declare const useSignOutService: (url: string) => import('@tanstack/react-query').UseMutationResult<SignOutResponse, Error, import('../models').TokenRes, unknown>;

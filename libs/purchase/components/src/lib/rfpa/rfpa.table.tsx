@@ -21,7 +21,7 @@ export const RFPATable = () => {
         }
       }, [isError, error]);
     return (
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1}}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Button
                     variant="outlined"

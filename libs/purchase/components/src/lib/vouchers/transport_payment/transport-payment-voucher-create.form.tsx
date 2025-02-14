@@ -8,10 +8,16 @@ import { setPreview } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./transport-payment-voucher.preview";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
+import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { handleAmountChange } from "./helper-function";
 
 export const TransportPaymentVoucherForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { data: companies } = useGetCompanyNames();
+  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+
   const { data: grnnos } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
   const allGRNNums = grnnos ? grnnos : [];
   // const calculateAmounts = (values: PostTPvoucher, setFieldValue: (field: string, value: any,) => void) => {
@@ -26,7 +32,7 @@ export const TransportPaymentVoucherForm = () => {
       toast.success(Res ? Res.message : "Voucher created.")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_TRANSPORT_CASH_VOUCHER);
-      }, 5000);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating voucher.")
     });;
@@ -46,13 +52,8 @@ export const TransportPaymentVoucherForm = () => {
         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
           <form onSubmit={handleSubmit}>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h4">Transport Payment Voucher</Typography>
-              </Grid>
-              <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewTPVoucher(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginBottom={2}>
+                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Transport Payment Voucher</Typography>
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
@@ -68,7 +69,7 @@ export const TransportPaymentVoucherForm = () => {
                   isRequired={true}
                   label="Company Name"
                   name="companyName"
-                  options={PURCHASE_ARRAYS.companyNames}
+                  options={companyNames}
                   value={values.companyName}
                   handleChange={handleChange} />
               </Grid>
@@ -188,13 +189,13 @@ export const TransportPaymentVoucherForm = () => {
                   name="totalAmt"
                   label="Total Amount"
                   value={values.totalAmt}
-                  handleChange={handleChange}
-                  onBlur={() => { const amtInWords = numToWords(values.totalAmt); setFieldValue("amtWords", amtInWords) }} />
+                  handleChange={e => handleAmountChange(e, setFieldValue)} />
               </Grid>
               <Grid item xs={12} md={9}>
                 <TextInput
                   type="text"
                   isRequired={false}
+                  isReadOnly={true}
                   name="amtWords"
                   label="Amount In Words"
                   value={values.amtWords} />
@@ -224,12 +225,18 @@ export const TransportPaymentVoucherForm = () => {
                   isRequired={false}
                   label="is KYC attached? (Driver Lic. / RC Book / PAN)"
                   name="kyc"
+                  alignment="vertical"
                   value={values.kyc}
                   options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                   handleChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
+              </Grid>
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+                <FormResetBtn label="Reset" handleReset={handleReset} />
+                <FormPreviewBtn onClick={() => { dispatch(setPreviewTPVoucher(values)); dispatch(setPreview(true)) }} />
               </Grid>
             </Grid>
           </form>

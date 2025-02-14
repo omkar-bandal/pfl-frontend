@@ -8,7 +8,7 @@ exports.deliveryChallanSchema = yup.object().shape({
     companyName: yup.string().required('Company name is required'),
     partyName: yup.string().required('Party name is required'),
     fromLocation: yup.string().required('Location is required'),
-    toLocation: yup.string().required('Location is required'),
+    toLocation: yup.string().notRequired(),
     driverName: yup.string().required('Driver name is required'),
     contactNo: contactNo_schema_1.contactNoSchema,
     vehicleNo: yup.string().required('Vehicle number is required'),

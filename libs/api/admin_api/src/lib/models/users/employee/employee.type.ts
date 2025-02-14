@@ -1,4 +1,4 @@
-import { Address, GetAddress } from "../../address.type";
+import { Address, GetAddress } from "@prime-fresh/common_api";
 import { GetRole } from "./role.type";
 
 export type GetEmployee = {

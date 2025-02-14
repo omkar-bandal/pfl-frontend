@@ -1,7 +1,8 @@
 import React from 'react';
 import { FieldArray } from 'formik';
-import { IconButton, Chip, Grid, TextField, Typography } from '@mui/material';
+import { IconButton, Chip, Grid, TextField, } from '@mui/material';
 import { Add, Close } from '@mui/icons-material';
+import { Label } from './label';
 
 type MultipleTextInputProps = {
   isRequired: boolean;
@@ -22,17 +23,14 @@ export const MultipleTextInput: React.FC<MultipleTextInputProps> = ({ isRequired
       {({ push, remove }) => (
         <Grid container direction="column">
           <Grid item xs={12}>
-            {isRequired && (
-              <Typography variant="body1" component="span" color="error" sx={{ fontWeight: 600 }}>
-                *{" "}
-              </Typography>
-            )}
-            <Typography variant="body2" component="span">
-              {label}
-            </Typography>
+            <Label
+              isRequired={isRequired}
+              isError={false}
+              label={label}
+              name={name} />
           </Grid>
           <Grid item container sx={{ border: `1px solid #ccc`, borderRadius: 1 }}>
-            <Grid item xs={11} md={3} sx={{borderRight: `1px solid #ccc`, borderBottom: `1px solid #ccc`}}>
+            <Grid item xs={11} md={3} sx={{ borderRight: `1px solid #ccc`, borderBottom: `1px solid #ccc` }}>
               <TextField
                 name="inputValue"
                 size="small"

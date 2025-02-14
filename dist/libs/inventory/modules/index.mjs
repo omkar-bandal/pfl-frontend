@@ -1,4 +1,4 @@
-const Vt = {
+const qt = {
   //Inventory
   INVENTORY: "/inventory",
   //Dashboard
@@ -67,7 +67,9 @@ const Vt = {
   GET_ALL_EOD_REPORT: "/inventory/eod-report",
   CREATE_EOD_REPORT: "/inventory/eod-report/create",
   VIEW_EOD_REPORT: "/inventory/eod-report/view",
-  UPDATE_EOD_REPORT: "/inventory/eod-report/update"
+  UPDATE_EOD_REPORT: "/inventory/eod-report/update",
+  PROFORMA_INVOICES: "/inventory/proforma-invoices",
+  GET_ALL_PROFORMA_INVOICES: "/inventory/proforma-invoices"
 }, jt = {
   COMPANY_NAMES: [
     { value: "Prime Fresh Limited", label: "Prime Fresh Limited" },
@@ -146,7 +148,7 @@ k.prototype.get = function(n) {
 k.prototype.set = function(n, e) {
   return this._size >= this._maxSize && this.clear(), n in this._values || this._size++, this._values[n] = e;
 };
-var qe = /[^.^\]^[]+|(?=\[\]|\.\.)/g, _e = /^\d+$/, Ve = /^\d/, je = /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g, Ue = /^\s*(['"]?)(.*?)(\1)\s*$/, ie = 512, pe = new k(ie), me = new k(ie), ye = new k(ie), F = {
+var Ve = /[^.^\]^[]+|(?=\[\]|\.\.)/g, xe = /^\d+$/, qe = /^\d/, je = /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g, Ue = /^\s*(['"]?)(.*?)(\1)\s*$/, ie = 512, pe = new k(ie), me = new k(ie), ye = new k(ie), F = {
   Cache: k,
   split: X,
   normalizePath: Q,
@@ -173,7 +175,7 @@ var qe = /[^.^\]^[]+|(?=\[\]|\.\.)/g, _e = /^\d+$/, Ve = /^\d/, je = /[~`!#$%\^&
   },
   join: function(n) {
     return n.reduce(function(e, t) {
-      return e + (se(t) || _e.test(t) ? "[" + t + "]" : (e ? "." : "") + t);
+      return e + (se(t) || xe.test(t) ? "[" + t + "]" : (e ? "." : "") + t);
     }, "");
   },
   forEach: function(n, e, t) {
@@ -189,7 +191,7 @@ function Q(n) {
   );
 }
 function X(n) {
-  return n.match(qe) || [""];
+  return n.match(Ve) || [""];
 }
 function Ge(n, e, t) {
   var r = n.length, i, s, a, u;
@@ -200,7 +202,7 @@ function se(n) {
   return typeof n == "string" && n && ["'", '"'].indexOf(n.charAt(0)) !== -1;
 }
 function Me(n) {
-  return n.match(Ve) && !n.match(_e);
+  return n.match(qe) && !n.match(xe);
 }
 function ze(n) {
   return je.test(n);
@@ -341,7 +343,7 @@ class b extends Error {
     return ge[Symbol.hasInstance](e) || super[Symbol.hasInstance](e);
   }
 }
-let x = {
+let _ = {
   default: "${path} is invalid",
   required: "${path} is a required field",
   defined: "${path} must be defined",
@@ -386,7 +388,7 @@ let x = {
   isValue: "${path} field must be ${value}"
 }, ee = {
   noUnknown: "${path} field has unspecified keys: ${unknown}"
-}, V = {
+}, q = {
   min: "${path} field must have at least ${min} items",
   max: "${path} field must have less than or equal to ${max} items",
   length: "${path} must have ${length} items"
@@ -401,16 +403,16 @@ let x = {
       if (t.length < i) return `${e} tuple value has too few items, expected a length of ${i} but got ${t.length} for value: \`${S(t, !0)}\``;
       if (t.length > i) return `${e} tuple value has too many items, expected a length of ${i} but got ${t.length} for value: \`${S(t, !0)}\``;
     }
-    return b.formatError(x.notType, n);
+    return b.formatError(_.notType, n);
   }
 };
 Object.assign(/* @__PURE__ */ Object.create(null), {
-  mixed: x,
+  mixed: _,
   string: y,
   number: w,
   date: J,
   object: ee,
-  array: V,
+  array: q,
   boolean: ct,
   tuple: dt
 });
@@ -444,7 +446,7 @@ class U {
     return i.resolve(t);
   }
 }
-const q = {
+const V = {
   context: "$",
   value: "."
 };
@@ -452,8 +454,8 @@ class $ {
   constructor(e, t = {}) {
     if (this.key = void 0, this.isContext = void 0, this.isValue = void 0, this.isSibling = void 0, this.path = void 0, this.getter = void 0, this.map = void 0, typeof e != "string") throw new TypeError("ref must be a string, got: " + e);
     if (this.key = e.trim(), e === "") throw new TypeError("ref must be a non-empty string");
-    this.isContext = this.key[0] === q.context, this.isValue = this.key[0] === q.value, this.isSibling = !this.isContext && !this.isValue;
-    let r = this.isContext ? q.context : this.isValue ? q.value : "";
+    this.isContext = this.key[0] === V.context, this.isValue = this.key[0] === V.value, this.isSibling = !this.isContext && !this.isValue;
+    let r = this.isContext ? V.context : this.isValue ? V.value : "";
     this.path = this.key.slice(r.length), this.getter = this.path && F.getter(this.path, !0), this.map = t.map;
   }
   getValue(e, t, r) {
@@ -639,7 +641,7 @@ function C(n, e = /* @__PURE__ */ new Map()) {
 class E {
   constructor(e) {
     this.type = void 0, this.deps = [], this.tests = void 0, this.transforms = void 0, this.conditions = [], this._mutate = void 0, this.internalTests = {}, this._whitelist = new G(), this._blacklist = new G(), this.exclusiveTests = /* @__PURE__ */ Object.create(null), this._typeCheck = void 0, this.spec = void 0, this.tests = [], this.transforms = [], this.withMutation(() => {
-      this.typeError(x.notType);
+      this.typeError(_.notType);
     }), this.type = e.type, this._typeCheck = e.check, this.spec = Object.assign({
       strip: !1,
       strict: !1,
@@ -906,16 +908,16 @@ attempted value: ${a}
   optional() {
     return this.optionality(!0);
   }
-  defined(e = x.defined) {
+  defined(e = _.defined) {
     return this.optionality(!1, e);
   }
   nullable() {
     return this.nullability(!0);
   }
-  nonNullable(e = x.notNull) {
+  nonNullable(e = _.notNull) {
     return this.nullability(!1, e);
   }
-  required(e = x.required) {
+  required(e = _.required) {
     return this.clone().withMutation((t) => t.nonNullable(e).defined(e));
   }
   notRequired() {
@@ -949,7 +951,7 @@ attempted value: ${a}
       name: e[0],
       message: e[1],
       test: e[2]
-    }, t.message === void 0 && (t.message = x.default), typeof t.test != "function") throw new TypeError("`test` is a required parameters");
+    }, t.message === void 0 && (t.message = _.default), typeof t.test != "function") throw new TypeError("`test` is a required parameters");
     let r = this.clone(), i = N(t), s = t.exclusive || t.name && r.exclusiveTests[t.name] === !0;
     if (t.exclusive && !t.name)
       throw new TypeError("Exclusive tests must provide a unique `name` identifying the test");
@@ -977,7 +979,7 @@ attempted value: ${a}
       }
     }), t;
   }
-  oneOf(e, t = x.oneOf) {
+  oneOf(e, t = _.oneOf) {
     let r = this.clone();
     return e.forEach((i) => {
       r._whitelist.add(i), r._blacklist.delete(i);
@@ -996,7 +998,7 @@ attempted value: ${a}
       }
     }), r;
   }
-  notOneOf(e, t = x.notOneOf) {
+  notOneOf(e, t = _.notOneOf) {
     let r = this.clone();
     return e.forEach((i) => {
       r._blacklist.add(i), r._whitelist.delete(i);
@@ -1073,24 +1075,24 @@ function te(n) {
   var e, t;
   const r = ht.exec(n);
   return r ? {
-    year: _(r[1]),
-    month: _(r[2], 1) - 1,
-    day: _(r[3], 1),
-    hour: _(r[4]),
-    minute: _(r[5]),
-    second: _(r[6]),
+    year: x(r[1]),
+    month: x(r[2], 1) - 1,
+    day: x(r[3], 1),
+    hour: x(r[4]),
+    minute: x(r[5]),
+    second: x(r[6]),
     millisecond: r[7] ? (
       // allow arbitrary sub-second precision beyond milliseconds
-      _(r[7].substring(0, 3))
+      x(r[7].substring(0, 3))
     ) : 0,
     precision: (e = (t = r[7]) == null ? void 0 : t.length) != null ? e : void 0,
     z: r[8] || void 0,
     plusMinus: r[9] || void 0,
-    hourOffset: _(r[10]),
-    minuteOffset: _(r[11])
+    hourOffset: x(r[10]),
+    minuteOffset: x(r[11])
   } : null;
 }
-function _(n, e = 0) {
+function x(n, e = 0) {
   return Number(n) || e;
 }
 let mt = (
@@ -1099,7 +1101,7 @@ let mt = (
 ), yt = (
   // eslint-disable-next-line
   /^((https?|ftp):)?\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
-), bt = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i, gt = "^\\d{4}-\\d{2}-\\d{2}", Et = "\\d{2}:\\d{2}:\\d{2}", vt = "(([+-]\\d{2}(:?\\d{2})?)|Z)", xt = new RegExp(`${gt}T${Et}(\\.\\d+)?${vt}$`), _t = (n) => T(n) || n === n.trim(), Tt = {}.toString();
+), bt = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i, gt = "^\\d{4}-\\d{2}-\\d{2}", Et = "\\d{2}:\\d{2}:\\d{2}", vt = "(([+-]\\d{2}(:?\\d{2})?)|Z)", _t = new RegExp(`${gt}T${Et}(\\.\\d+)?${vt}$`), xt = (n) => T(n) || n === n.trim(), Tt = {}.toString();
 function p() {
   return new Fe();
 }
@@ -1120,7 +1122,7 @@ class Fe extends E {
   }
   required(e) {
     return super.required(e).withMutation((t) => t.test({
-      message: e || x.required,
+      message: e || _.required,
       name: "required",
       skipAbsent: !0,
       test: (r) => !!r.length
@@ -1214,7 +1216,7 @@ class Fe extends E {
       message: t = "",
       allowOffset: r = !1,
       precision: i = void 0
-    } = e : t = e), this.matches(xt, {
+    } = e : t = e), this.matches(_t, {
       name: "datetime",
       message: t || y.datetime,
       excludeEmptyString: !0
@@ -1252,7 +1254,7 @@ class Fe extends E {
     return this.transform((t) => t != null ? t.trim() : t).test({
       message: e,
       name: "trim",
-      test: _t
+      test: xt
     });
   }
   lowercase(e = y.lowercase) {
@@ -1787,7 +1789,7 @@ class Ie extends E {
       types: e
     }), t;
   }
-  length(e, t = V.length) {
+  length(e, t = q.length) {
     return this.test({
       message: t,
       name: "length",
@@ -1802,7 +1804,7 @@ class Ie extends E {
     });
   }
   min(e, t) {
-    return t = t || V.min, this.test({
+    return t = t || q.min, this.test({
       message: t,
       name: "min",
       exclusive: !0,
@@ -1817,7 +1819,7 @@ class Ie extends E {
     });
   }
   max(e, t) {
-    return t = t || V.max, this.test({
+    return t = t || q.max, this.test({
       message: t,
       name: "max",
       exclusive: !0,
@@ -1851,7 +1853,7 @@ class Ie extends E {
   }
 }
 oe.prototype = Ie.prototype;
-const xe = D().shape({
+const _e = D().shape({
   address1: p().required("Address Line 1 is required"),
   address2: p().nullable(),
   location: p().required("Location is required"),
@@ -1859,7 +1861,7 @@ const xe = D().shape({
   state: p().required("State is required"),
   pincode: p().required("Pincode is required").matches(/^\d{6}$/, "Pincode must be exactly 6 digits")
 }), Dt = /^[6-9]\d{9}$/;
-p().matches(Dt, "Please enter a valid 10-digit contact number").required("Contact number is required");
+p().matches(Dt, "Please enter a valid 10-digit contact number");
 const ne = {
   address1: "",
   address2: "",
@@ -2036,8 +2038,8 @@ const ne = {
   representativeName: p().required("Prime representative name is required."),
   siteName: p().required("Site name is required"),
   laborType: p().required("Type of labor is required."),
-  presentAddress: xe,
-  permanentAddress: xe
+  presentAddress: _e,
+  permanentAddress: _e
 }), Kt = D().shape({
   companyName: p().required("Company name is required."),
   location: p().required("Location is required"),
@@ -2065,7 +2067,7 @@ export {
   Kt as dumpRegisterSchema,
   Zt as eodReportInitialValue,
   Lt as eodReportProductsInitialValue,
-  Vt as inventoryRouteConstants,
+  qt as inventoryRouteConstants,
   Mt as laborAttendanceInitialValue,
   Yt as laborAttendanceSchema,
   kt as laborBankDetailsInitialValue,

@@ -5,7 +5,7 @@ import { RootState } from "../store.purchase";
 type tpVoucherState = {
     tpVouchers: GetTPvoucher[];
     selectedTPVoucher: GetTPvoucher | undefined;
-    previewTPVoucher: PostTPvoucher | undefined;
+    previewTPVoucher: PostTPvoucher | GetTPvoucher | undefined;
 }
 const initialState : tpVoucherState = {
     tpVouchers: [],
@@ -23,7 +23,7 @@ const tpVoucherSlice = createSlice({
         setSelectedTPVoucher: (state, action: PayloadAction<GetTPvoucher | undefined>) => {
             state.selectedTPVoucher = action.payload;
         },
-        setPreviewTPVoucher: (state, action: PayloadAction<PostTPvoucher | undefined>) => {
+        setPreviewTPVoucher: (state, action: PayloadAction<PostTPvoucher | GetTPvoucher | undefined>) => {
             state.previewTPVoucher = action.payload;
         }
     }

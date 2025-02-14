@@ -1,34 +1,39 @@
-import { ADMIN_API_URL, useCreateProductSubcat, useGetAllProductsCat, useGetAProductSubcat, useUpdateProductSubcat } from "@prime-fresh/admin_api";
+import { Formik } from "formik";
 import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, initValProductSubcat, productSubcategorySchema } from "@prime-fresh/admin/modules";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import { Formik } from "formik";
-import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import {
+    ADMIN_ROUTES,
+    initValProductSubcat,
+    productSubcategorySchema,
+    useCreateProductSubategory,
+    useGetAllProductCategories,
+    useGetProductSubcategoryById,
+    useUpdateProductSubcategoryById
+} from "@prime-fresh/admin/modules";
 
 export function ProductSubcatForm() {
     const { id } = useParams<{ id: string }>();
     const subcategoryId = id ? id : '';
 
-    const { data: subcat, isLoading } = useGetAProductSubcat(ADMIN_API_URL.GET_A_PRODUCT_SUBCATEGORY, subcategoryId);
-    const subcategory = subcat ? { name: subcat.name, category: subcat.category.id } : { name: "", category: "" }
+    const { data: subcat, isLoading } = useGetProductSubcategoryById(subcategoryId);
+    const subcategory = subcat !== null && subcat?.data ? { name: subcat.data.name, category: subcat.data.category.id } : { name: "", category: "" }
+
     const productSubcatInitValue = subcategoryId ? subcategory : initValProductSubcat;
 
-    const { data } = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
-    const categories = data ? data : []
+    const { data } = useGetAllProductCategories();
+    const categories = data !== null && data?.data ? mapToValueLabelArray(data.data, 'id', 'name') : [];
 
-    const { mutateAsync: postProductSubcategory, error: postError, data: postRes } = useCreateProductSubcat(ADMIN_API_URL.CREATE_PRODUCT_SUBCATEGORY);
-    const { mutateAsync: patchProductSubcategory, error: patchError, data: patchRes } = useUpdateProductSubcat(ADMIN_API_URL.UPDATE_PRODUCT_SUBCATEGORY, subcategoryId);
+    const { mutateAsync: postProductSubcategory, error: postError, data: postRes } = useCreateProductSubategory();
+    const { mutateAsync: patchProductSubcategory, error: patchError, data: patchRes } = useUpdateProductSubcategoryById(subcategoryId);
 
     const navigate = useNavigate();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
-        console.log(values);
-        const formData = new FormData();
-        appendFormData(formData, values);
         subcategoryId === '' ?
-            (postProductSubcategory(formData).then(() => {
+            (postProductSubcategory(values).then(() => {
                 toast.success(postRes ? postRes.message : "Product subcategory created successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
@@ -36,7 +41,7 @@ export function ProductSubcatForm() {
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating product subcategory.");
             }))
-            : (patchProductSubcategory(formData).then(() => {
+            : (patchProductSubcategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Product subcategory updated successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
@@ -73,7 +78,7 @@ export function ProductSubcatForm() {
                             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
                                     label={subcategoryId === "" ? "Create" : "Update"}
-                                    isError={subcategoryId === "" ? !postError : !patchError}
+                                    isError={subcategoryId === "" ? postError : patchError}
                                     isSubmitting={isSubmitting} />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
@@ -91,7 +96,7 @@ export function ProductSubcatForm() {
                                     isRequired={true}
                                     label="Product Category"
                                     name="category"
-                                    options={mapToValueLabelArray(categories ? categories : [], 'id', 'name')}
+                                    options={categories}
                                     value={values.category}
                                     handleChange={handleChange} />
                             </Grid>

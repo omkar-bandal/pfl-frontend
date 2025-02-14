@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { ADMIN_ROUTES, OfficeInitialValues } from "@prime-fresh/admin/modules";
-import {  FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
 import { ADMIN_API_URL, useCreateOffice, useGetAOffice, useUpdateOffice } from "@prime-fresh/admin_api";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { appendFormData } from "@prime-fresh/shared/utils";
@@ -22,7 +22,7 @@ export const OfficeForm = () => {
 
     //To update existing office Data
     const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateOffice(`${ADMIN_API_URL.UPDATE_OFFICE}/${officeType}`, officeId);
-    
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
@@ -65,15 +65,8 @@ export const OfficeForm = () => {
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <Typography variant='h4'>Office</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn
-                                    label={officeId === "" ? "Create" : "Update"}
-                                    isError={officeId === "" ? postError : patchError}
-                                    isSubmitting={isSubmitting} />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                         </Grid>
                         <Grid container spacing={1} padding={1}>
@@ -122,6 +115,13 @@ export const OfficeForm = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextInput multiline maxRows={4} isRequired={false} label="Notes" name="notes" value={values.notes} handleChange={handleChange} />
+                            </Grid>
+                            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <FormSubmitBtn
+                                    label={officeId === "" ? "Create" : "Update"}
+                                    isError={officeId === "" ? postError : patchError}
+                                    isSubmitting={isSubmitting} />
+                                <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
                         </Grid>
                     </form>

@@ -1,4 +1,4 @@
-import { initValAddress } from './address.initial-value';
+import {initValAddress} from "@prime-fresh/shared/modules";
 
 const initCustomerTypes = {
     id: '',

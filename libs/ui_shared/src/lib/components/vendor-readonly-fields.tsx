@@ -10,7 +10,7 @@ export const VendorReadOnlyFields = () => {
         <>
             <Grid item xs={12} md={4}>
                 <TextInput
-                    isRequired={true}
+                    isRequired={false}
                     name="vendorCategory"
                     label="Vendor Category"
                     value={`${selectedVendor?.category || ''}`}
@@ -18,7 +18,7 @@ export const VendorReadOnlyFields = () => {
             </Grid>
             <Grid item xs={12} md={4}>
                 <TextInput
-                    isRequired={true}
+                    isRequired={false}
                     name="vendorSubcategory"
                     label="Vendor Subategory"
                     value={`${selectedVendor?.subcategory || ''}`}

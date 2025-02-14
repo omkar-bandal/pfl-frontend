@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, RadioGroupProps, Grid } from '@mui/material';
-import {useField } from 'formik';
+import { useField } from 'formik';
+import { Label } from './label';
 
 type RadioGroupInputProps = RadioGroupProps & {
     isRequired: boolean;
@@ -23,24 +24,17 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
     handleChange,
     ...otherProps
 }) => {
-    // const getHelperText = () => {
-    //     const error = errors[name];
-    //     return typeof error === 'string' ? error : undefined;
-    // };
     const [field, meta] = useField(name);
     return (
-        <Grid container direction={alignment ? "row" : "column"} alignItems={alignment ? "center" : "start"}>
-            <Grid item xs={12} md={2}>
-                {isRequired && (
-                    <Typography variant="body1" component="span" color="error" sx={{ fontWeight: 600 }}>
-                        *{" "}
-                    </Typography>
-                )}
-                <Typography variant="body2" component="span">
-                    {label}
-                </Typography>
+        <Grid container direction={alignment === "vertical" ? "column" : "row"} sx={{flex: 1, alignItems: alignment === "vertical" ? "flex-start" : "center", justifyContent: "center"}}>
+            <Grid item xs={12} md={alignment === "vertical" ? 12 : 2}>
+                <Label
+                    isRequired={isRequired}
+                    isError={meta.touched && Boolean(meta.error)}
+                    name={name}
+                    label={label} />
             </Grid>
-            <Grid item xs={12} md={10}>
+            <Grid item xs={12} md={alignment === "vertical" ? 12 : 10}>
                 <FormControl component="fieldset">
                     <RadioGroup row name={name} value={value} onChange={handleChange} {...otherProps}>
                         {options.map((option) => (
@@ -56,10 +50,11 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
-                {meta.touched && Boolean(meta.error) &&  (
+                {meta.touched && Boolean(meta.error) && (
                     <Typography variant='caption' component="div" color='error'>{meta.error}</Typography>
                 )}
             </Grid>
         </Grid>
+
     );
 };

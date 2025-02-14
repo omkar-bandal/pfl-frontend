@@ -10,11 +10,12 @@ export declare const employeeValidationSchema: Yup.ObjectSchema<{
     email: string;
     companyEmail: string;
     address: {
+        address2?: string | null | undefined;
+        address1: string;
+        location: string;
         city: string;
         state: string;
-        street: string;
-        country: string;
-        postalCode: string;
+        pincode: string;
     };
     joiningDate: string;
     relocationDate: string | undefined;
@@ -34,11 +35,12 @@ export declare const employeeValidationSchema: Yup.ObjectSchema<{
     email: undefined;
     companyEmail: undefined;
     address: {
-        street: undefined;
+        address1: undefined;
+        address2: undefined;
+        location: undefined;
         city: undefined;
         state: undefined;
-        country: undefined;
-        postalCode: undefined;
+        pincode: undefined;
     };
     joiningDate: undefined;
     relocationDate: undefined;

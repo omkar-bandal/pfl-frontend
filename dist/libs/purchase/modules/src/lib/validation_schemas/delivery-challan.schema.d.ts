@@ -4,16 +4,16 @@ export declare const deliveryChallanSchema: yup.ObjectSchema<{
     companyName: string;
     partyName: string;
     fromLocation: string;
-    toLocation: string;
+    toLocation: yup.Maybe<string | undefined>;
     driverName: string;
     contactNo: string;
     vehicleNo: string;
     receiverName: string;
     rmn: string;
     items: {
-        rate: number;
         itemName: string;
         itemQty: number;
+        rate: number;
     }[] | undefined;
     anyAttachment: {} | null | undefined;
 }, yup.AnyObject, {

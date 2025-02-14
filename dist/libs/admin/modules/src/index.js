@@ -8,4 +8,5 @@ tslib_1.__exportStar(require("./lib/store/slices"), exports);
 tslib_1.__exportStar(require("./lib/initial_values"), exports);
 tslib_1.__exportStar(require("./lib/validation_schema"), exports);
 tslib_1.__exportStar(require("./lib/theme/admin.muitheme"), exports);
+tslib_1.__exportStar(require("./lib/hooks"), exports);
 //# sourceMappingURL=index.js.map

@@ -1,26 +1,42 @@
+import { Address } from "@prime-fresh/admin_api";
 import { RequestedBy } from "./requestedBy.interface";
+import { FormBasedProductData } from "./form-based-products";
 
-export interface DCItems {
-  itemName: string | null;
-  itemQty: number;
-  rate: number;
-  amt: number;
-}
+export type DeliveryChallanProducts = FormBasedProductData;
+export type GetDeliveryChallanProducts = {
+    productName: {id: string, name: string},
+    count: string | null,
+    size: string | null,
+    uom: {id: string, unit: string},
+    quantity: number,
+    unitPrice: number,
+    amount: number,
+    grossWeight: number,
+    packingMaterialWeight: number,
+    netWeight: number,
+};
+
 export interface PostDeliveryChallan {
-  partyName: string | null,
+  deliveryCType: "customer" | "cc-dc stock transfer" | "dc-dc stock transfer" | "other",
+  otherCType: string | null,
   grnNo: string | null,
   companyName: string | null,
-  items: DCItems[],
-  totAmt: string | null,
-  fromLocation: string | null,
-  toLocation: string | null,
+  offices: string | null,
+  poNumber: string | null,
+  partyName: string | null,
+  fromLocation: string | Address | null,
+  toLocation: string | Address | null,
+  fromLocationInput: Address | null,
+  toLocationInput: Address | null,
+  deliveryChallanProducts: DeliveryChallanProducts[],
+  totalAmt: string | null,
+  totalAmtInWords: string | null,
   driverName: string | null,
+  licenseNo: string | null,
   contactNo: string | null,
   altContactNo: string | null,
   vehicleNo: string | null,
   receiverName: string | null,
-  deliveryCType: string | null,
-  otherCType: string | null,
   remark: string | null,
   rmn: string | null,
   anyAttachment: File | null,
@@ -33,22 +49,25 @@ export interface GetDeliveryChallan {
   requestedBy: RequestedBy;
   requestingDepartment: string;
   challanNo: string;
-  companyName: string;
-  partyName: string,
-  grnNo: string,
-  items: DCItems[],
-  totAmt: string,
-  fromLocation: string,
-  toLocation: string,
-  driverName: string,
-  contactNo: string,
-  altContactNo: string,
-  vehicleNo: string,
-  receiverName: string,
-  deliveryCType: string,
-  otherCType: string,
-  remark: string,
-  rmn: string,
+  deliveryCType: string | null,
+  otherCType: string | null,
+  grnNo: string | null,
+  companyName: string | null,
+  poNumber: string | null,
+  partyName: string | null,
+  fromLocation: string | Address | null,
+  toLocation: string | Address | null,
+  deliveryChallanProducts: GetDeliveryChallanProducts[],
+  totalAmt: string | null,
+  totalAmtInWords: string | null,
+  driverName: string | null,
+  licenseNo: string | null,
+  contactNo: string | null,
+  altContactNo: string | null,
+  vehicleNo: string | null,
+  receiverName: string | null,
+  remark: string | null,
+  rmn: string | null,
   anyAttachment: string,
 }
 

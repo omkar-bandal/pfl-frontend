@@ -8,7 +8,6 @@ export interface PostLPvoucher {
     location: string | null;
     noOfLabours: number;
     loadingDate: string | null;
-    workLocation: string | null;
     contactNo: string | null;
     altContactNo: string | null;
     kyc: boolean;
@@ -28,15 +27,20 @@ export interface GetLPvoucher {
     requestedBy: RequestedBy;
     requestingDepartment: string;
     voucherNo: string;
-    grnNo: string;
-    companyName: string;
+    grnNo: {
+        id: string;
+        grnNo: string;
+    };
+    companyName: {
+        id: string;
+        companyName: string;
+    };
     debitCreditTo: string;
     payReceivedFrom: string;
     location: string;
     noOfLabours: number;
     ratePerLabour: number;
     loadingDate: string;
-    workLocation: string;
     contactNo: string;
     altContactNo: string;
     products: string;

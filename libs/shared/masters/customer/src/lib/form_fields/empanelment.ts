@@ -1,4 +1,4 @@
-import { CustomerCategory, CustomerTypes } from "../../../api/admin/models";
+import { CustomerCategory, CustomerTypes } from "@prime-fresh/admin_api";
 
 export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, CustomerCategory: CustomerCategory[] | undefined) => {
     function mapToValueLabelArray<T>(arr: T[], valuekey: keyof T, labelkey: keyof T): { value: string, label: string }[] {
@@ -13,31 +13,35 @@ export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, Customer
         "fields": [
             {
                 "name": "organisationName",
-                "label": "*Name of Organisation",
+                "label": "Name of Organisation",
                 "type": "text",
                 "placeholder": "Name of Organisation",
-                "length": 6
+                "length": 6,
+                "isRequired": true
             },
             {
                 "name": "customerTypes",
-                "label": "*Type of Customer",
+                "label": "Type of Customer",
                 "type": "select",
                 "options": CustomerTypes ? mapToValueLabelArray<CustomerTypes>(CustomerTypes, 'id', 'name') : [],
-                "length": 3
+                "length": 3,
+                "isRequired": true
             },
             {
                 "name": "customerCategory",
-                "label": "*Category of Customer",
+                "label": "Category of Customer",
                 "type": "select",
                 "options": CustomerCategory ? mapToValueLabelArray<CustomerCategory>(CustomerCategory, 'id', 'name') : [],
-                "length": 3
+                "length": 3,
+                "isRequired": true
             },
             {
                 "name": "organisationType",
-                "label": "*Type of Organisation",
+                "label": "Type of Organisation",
                 "type": "select",
                 "placeholder": "",
                 "length": 4,
+                "isRequired": true,
                 "options": [
                     {value: "Proprietor", label: "Proprietor"},
                     {value: "Partnership", label: "Partnership"},
@@ -56,10 +60,11 @@ export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, Customer
             },
             {
                 "name": "customerAddress.address1",
-                "label": "*Address Line 1",
+                "label": "Address Line 1",
                 "type": "text",
                 "placeholder": "Enter Street Name, Area",
-                "length": 6
+                "length": 6,
+                "isRequired": true
             },
             {
                 "name": "customerAddress.address2",
@@ -70,42 +75,47 @@ export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, Customer
             },
             {
                 "name": "customerAddress.location",
-                "label": "*Location",
+                "label": "Location",
                 "type": "text",
                 "placeholder": "Enter location name",
-                "length": 3
+                "length": 3,
+                "isRequired": true
             },
             {
                 "name": "customerAddress.city",
-                "label": "*District",
+                "label": "District",
                 "type": "text",
                 "placeholder": "Enter city name",
-                "length": 3
+                "length": 3,
+                "isRequired": true
             },
             {
                 "name": "customerAddress.state",
-                "label": "*State",
+                "label": "State",
                 "type": "text",
                 "placeholder": "Enter state name",
-                "length": 3
+                "length": 3,
+                "isRequired": true
             },
             {
                 "name": "customerAddress.pincode",
-                "label": "*Pincode",
+                "label": "Pincode",
                 "type": "text",
                 "placeholder": "Enter pincode",
-                "length": 3
+                "length": 3,
+                "isRequired": true
             },
             {
                 "name": "primaryContactNo",
-                "label": "*Contact Number",
+                "label": "Contact Number",
                 "type": "text",
                 "placeholder": "+91----------",
-                "length": 4
+                "length": 4,
+                "isRequired": true
             },
             {
                 "name": "emailPrimary",
-                "label": "*Email",
+                "label": "Email",
                 "type": "email",
                 "placeholder": "xxxxxxxx@host_name.domain_name",
                 "length": 8

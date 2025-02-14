@@ -13,11 +13,11 @@ export type PostPaymentTerms = {
     //Initial Exposure Limit (IEL)
     IELinAmt: number,
     IELRecommendedBy: string,
-    IELRecommendedDate: Date,
+    IELRecommendedDate: string | null,
     //Revision of Exposure Limit (REL)
     RELinAmt: number,
     RELRecommendedBy: string,
-    RELRecommendedDate: Date,
+    RELRecommendedDate: string | null,
     reason: string;
     docEvidenceCopy: File | null,
 }
@@ -38,11 +38,11 @@ export type GetPaymentTerms = {
     //Initial Exposure Limit (IEL)
     IELinAmt: number,
     IELRecommendedBy: string,
-    IELRecommendedDate: Date,
+    IELRecommendedDate: string,
     //Revision of Exposure Limit (REL)
     RELinAmt: number,
     RELRecommendedBy: string,
-    RELRecommendedDate: Date,
+    RELRecommendedDate: string,
     reason: string;
     docEvidenceCopy: string,
 }

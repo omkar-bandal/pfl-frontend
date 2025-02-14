@@ -416,8 +416,8 @@ var Te, W, Jt, _e, vt, Lt, Ie, Qt, xt, Ft, bt, gt, rt, jt, K, zt, hn, pn, yn, mn
     const n = v(this, W), o = this.options, c = v(this, _e), u = v(this, vt), l = v(this, Lt), m = e !== n ? e.state : v(this, Jt), { state: y } = e;
     let g = { ...y }, j = !1, D;
     if (r._optimisticResults) {
-      const Z = this.hasListeners(), Se = !Z && ds(e, r), Ue = Z && hs(e, n, r, o);
-      (Se || Ue) && (g = {
+      const Z = this.hasListeners(), Se = !Z && ds(e, r), Be = Z && hs(e, n, r, o);
+      (Se || Be) && (g = {
         ...g,
         ...Vo(y.data, e.options)
       }), r._optimisticResults === "isRestoring" && (g.fetchStatus = "idle");
@@ -575,15 +575,15 @@ function Dn(t, e) {
 function zo(t, e) {
   return !Or(t.getCurrentResult(), e);
 }
-var nt, st, Ce, qe, Ve, Rr, Rn, js, Yo = (js = class extends Ar {
+var nt, st, Ce, Ve, We, Rr, Rn, js, Yo = (js = class extends Ar {
   constructor(e, r) {
     super();
-    re(this, Ve);
+    re(this, We);
     re(this, nt);
     re(this, st);
     re(this, Ce);
-    re(this, qe);
-    U(this, nt, e), this.setOptions(r), this.bindMethods(), oe(this, Ve, Rr).call(this);
+    re(this, Ve);
+    U(this, nt, e), this.setOptions(r), this.bindMethods(), oe(this, We, Rr).call(this);
   }
   bindMethods() {
     this.mutate = this.mutate.bind(this), this.reset = this.reset.bind(this);
@@ -602,20 +602,20 @@ var nt, st, Ce, qe, Ve, Rr, Rn, js, Yo = (js = class extends Ar {
     this.hasListeners() || (e = v(this, Ce)) == null || e.removeObserver(this);
   }
   onMutationUpdate(e) {
-    oe(this, Ve, Rr).call(this), oe(this, Ve, Rn).call(this, e);
+    oe(this, We, Rr).call(this), oe(this, We, Rn).call(this, e);
   }
   getCurrentResult() {
     return v(this, st);
   }
   reset() {
     var e;
-    (e = v(this, Ce)) == null || e.removeObserver(this), U(this, Ce, void 0), oe(this, Ve, Rr).call(this), oe(this, Ve, Rn).call(this);
+    (e = v(this, Ce)) == null || e.removeObserver(this), U(this, Ce, void 0), oe(this, We, Rr).call(this), oe(this, We, Rn).call(this);
   }
   mutate(e, r) {
     var n;
-    return U(this, qe, r), (n = v(this, Ce)) == null || n.removeObserver(this), U(this, Ce, v(this, nt).getMutationCache().build(v(this, nt), this.options)), v(this, Ce).addObserver(this), v(this, Ce).execute(e);
+    return U(this, Ve, r), (n = v(this, Ce)) == null || n.removeObserver(this), U(this, Ce, v(this, nt).getMutationCache().build(v(this, nt), this.options)), v(this, Ce).addObserver(this), v(this, Ce).execute(e);
   }
-}, nt = new WeakMap(), st = new WeakMap(), Ce = new WeakMap(), qe = new WeakMap(), Ve = new WeakSet(), Rr = function() {
+}, nt = new WeakMap(), st = new WeakMap(), Ce = new WeakMap(), Ve = new WeakMap(), We = new WeakSet(), Rr = function() {
   var r;
   const e = ((r = v(this, Ce)) == null ? void 0 : r.state) ?? Wo();
   U(this, st, {
@@ -630,9 +630,9 @@ var nt, st, Ce, qe, Ve, Rr, Rn, js, Yo = (js = class extends Ar {
 }, Rn = function(e) {
   Pr.batch(() => {
     var r, n, o, c, u, l, b, m;
-    if (v(this, qe) && this.hasListeners()) {
+    if (v(this, Ve) && this.hasListeners()) {
       const y = v(this, st).variables, g = v(this, st).context;
-      (e == null ? void 0 : e.type) === "success" ? ((n = (r = v(this, qe)).onSuccess) == null || n.call(r, e.data, y, g), (c = (o = v(this, qe)).onSettled) == null || c.call(o, e.data, null, y, g)) : (e == null ? void 0 : e.type) === "error" && ((l = (u = v(this, qe)).onError) == null || l.call(u, e.error, y, g), (m = (b = v(this, qe)).onSettled) == null || m.call(
+      (e == null ? void 0 : e.type) === "success" ? ((n = (r = v(this, Ve)).onSuccess) == null || n.call(r, e.data, y, g), (c = (o = v(this, Ve)).onSettled) == null || c.call(o, e.data, null, y, g)) : (e == null ? void 0 : e.type) === "error" && ((l = (u = v(this, Ve)).onError) == null || l.call(u, e.error, y, g), (m = (b = v(this, Ve)).onSettled) == null || m.call(
         b,
         void 0,
         e.error,
@@ -701,7 +701,7 @@ function Ko() {
   function Se(f, R) {
     return { $$typeof: t, type: f.type, key: R, ref: f.ref, props: f.props, _owner: f._owner };
   }
-  function Ue(f) {
+  function Be(f) {
     return typeof f == "object" && f !== null && f.$$typeof === t;
   }
   function Ut(f) {
@@ -733,7 +733,7 @@ function Ko() {
     }
     if (ee) return ee = f, H = H(ee), f = V === "" ? "." + Ee(ee, 0) : V, ie(H) ? ($ = "", f != null && ($ = f.replace(ot, "$&/") + "/"), we(H, R, $, "", function(pe) {
       return pe;
-    })) : H != null && (Ue(H) && (H = Se(H, $ + (!H.key || ee && ee.key === H.key ? "" : ("" + H.key).replace(ot, "$&/") + "/") + f)), R.push(H)), 1;
+    })) : H != null && (Be(H) && (H = Se(H, $ + (!H.key || ee && ee.key === H.key ? "" : ("" + H.key).replace(ot, "$&/") + "/") + f)), R.push(H)), 1;
     if (ee = 0, V = V === "" ? "." : V + ":", ie(f)) for (var X = 0; X < f.length; X++) {
       ne = f[X];
       var J = V + Ee(ne, X);
@@ -763,7 +763,7 @@ function Ko() {
     throw f._result;
   }
   var C = { current: null }, xe = { transition: null }, it = { ReactCurrentDispatcher: C, ReactCurrentBatchConfig: xe, ReactCurrentOwner: se };
-  function Be() {
+  function Me() {
     throw Error("act(...) is not supported in production builds of React.");
   }
   return B.Children = { map: ve, forEach: function(f, R, $) {
@@ -780,9 +780,9 @@ function Ko() {
       return R;
     }) || [];
   }, only: function(f) {
-    if (!Ue(f)) throw Error("React.Children.only expected to receive a single React element child.");
+    if (!Be(f)) throw Error("React.Children.only expected to receive a single React element child.");
     return f;
-  } }, B.Component = w, B.Fragment = r, B.Profiler = o, B.PureComponent = L, B.StrictMode = n, B.Suspense = b, B.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = it, B.act = Be, B.cloneElement = function(f, R, $) {
+  } }, B.Component = w, B.Fragment = r, B.Profiler = o, B.PureComponent = L, B.StrictMode = n, B.Suspense = b, B.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = it, B.act = Me, B.cloneElement = function(f, R, $) {
     if (f == null) throw Error("React.cloneElement(...): The argument must be a React element, but you passed " + f + ".");
     var V = O({}, f.props), H = f.key, ne = f.ref, ee = f._owner;
     if (R != null) {
@@ -806,7 +806,7 @@ function Ko() {
     return { current: null };
   }, B.forwardRef = function(f) {
     return { $$typeof: l, render: f };
-  }, B.isValidElement = Ue, B.lazy = function(f) {
+  }, B.isValidElement = Be, B.lazy = function(f) {
     return { $$typeof: y, _payload: { _status: -1, _result: f }, _init: ke };
   }, B.memo = function(f, R) {
     return { $$typeof: m, type: f, compare: R === void 0 ? null : R };
@@ -818,7 +818,7 @@ function Ko() {
     } finally {
       xe.transition = R;
     }
-  }, B.unstable_act = Be, B.useCallback = function(f, R) {
+  }, B.unstable_act = Me, B.useCallback = function(f, R) {
     return C.current.useCallback(f, R);
   }, B.useContext = function(f) {
     return C.current.useContext(f);
@@ -903,7 +903,7 @@ function Jo() {
         var i = he.getCurrentStack;
         return i && (s += i() || ""), s;
       };
-      var Ue = !1, Ut = !1, ot = !1, Ee = !1, we = !1, ve = {
+      var Be = !1, Ut = !1, ot = !1, Ee = !1, we = !1, ve = {
         ReactCurrentDispatcher: Y,
         ReactCurrentBatchConfig: ie,
         ReactCurrentOwner: se
@@ -934,7 +934,7 @@ function Jo() {
         }
       }
       var it = {};
-      function Be(s, i) {
+      function Me(s, i) {
         {
           var d = s.constructor, p = d && (d.displayName || d.name) || "ReactClass", S = p + "." + i;
           if (it[S])
@@ -969,7 +969,7 @@ function Jo() {
          * @internal
          */
         enqueueForceUpdate: function(s, i, d) {
-          Be(s, "forceUpdate");
+          Me(s, "forceUpdate");
         },
         /**
          * Replaces all of the state. Always use this or `setState` to mutate state.
@@ -985,7 +985,7 @@ function Jo() {
          * @internal
          */
         enqueueReplaceState: function(s, i, d, p) {
-          Be(s, "replaceState");
+          Me(s, "replaceState");
         },
         /**
          * Sets a subset of the state. This only exists because _pendingState is
@@ -1000,7 +1000,7 @@ function Jo() {
          * @internal
          */
         enqueueSetState: function(s, i, d, p) {
-          Be(s, "setState");
+          Me(s, "setState");
         }
       }, R = Object.assign, $ = {};
       Object.freeze($);
@@ -1262,7 +1262,7 @@ function Jo() {
         return "$" + p;
       }
       var Tt = !1, ar = /\/+/g;
-      function Me(s) {
+      function $e(s) {
         return s.replace(ar, "$&/");
       }
       function ft(s, i) {
@@ -1291,7 +1291,7 @@ function Jo() {
           var x = s, G = S(x), te = p === "" ? ir + ft(x, 0) : p;
           if (_t(G)) {
             var ae = "";
-            te != null && (ae = Me(te) + "/"), Qe(G, i, ae, "", function(Fo) {
+            te != null && (ae = $e(te) + "/"), Qe(G, i, ae, "", function(Fo) {
               return Fo;
             });
           } else G != null && (Je(G) && (G.key && (!x || x.key !== G.key) && at(G.key), G = Mr(
@@ -1302,7 +1302,7 @@ function Jo() {
             (G.key && (!x || x.key !== G.key) ? (
               // $FlowFixMe Flow incorrectly thinks existing element's key can be a number
               // eslint-disable-next-line react-internal/safe-string-coercion
-              Me("" + G.key) + "/"
+              $e("" + G.key) + "/"
             ) : "") + te
           )), i.push(G));
           return 1;
@@ -1530,7 +1530,7 @@ Your code should look like:
       var dr;
       dr = Symbol.for("react.module.reference");
       function a(s) {
-        return !!(typeof s == "string" || typeof s == "function" || s === c || s === l || we || s === u || s === g || s === j || Ee || s === A || Ue || Ut || ot || typeof s == "object" && s !== null && (s.$$typeof === O || s.$$typeof === D || s.$$typeof === b || s.$$typeof === m || s.$$typeof === y || // This needs to include all possible module reference object
+        return !!(typeof s == "string" || typeof s == "function" || s === c || s === l || we || s === u || s === g || s === j || Ee || s === A || Be || Ut || ot || typeof s == "object" && s !== null && (s.$$typeof === O || s.$$typeof === D || s.$$typeof === b || s.$$typeof === m || s.$$typeof === y || // This needs to include all possible module reference object
         // types supported by any Flight configuration anywhere since
         // we don't know which Flight build this will end up being used
         // with.
@@ -1610,7 +1610,7 @@ See https://reactjs.org/link/invalid-hook-call for tips about how to debug and f
         var p = _();
         return p.useImperativeHandle(s, i, d);
       }
-      function $e(s, i) {
+      function qe(s, i) {
         {
           var d = _();
           return d.useDebugValue(s, i);
@@ -2115,7 +2115,7 @@ Check the top-level render call using <` + d + ">.");
         toArray: Gr,
         only: cr
       };
-      e.Children = ko, e.Component = V, e.Fragment = c, e.Profiler = l, e.PureComponent = J, e.StrictMode = u, e.Suspense = g, e.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ve, e.act = rs, e.cloneElement = Po, e.createContext = lr, e.createElement = Ao, e.createFactory = Do, e.createRef = Ir, e.forwardRef = Yr, e.isValidElement = Je, e.lazy = zr, e.memo = E, e.startTransition = To, e.unstable_act = rs, e.useCallback = fe, e.useContext = k, e.useDebugValue = $e, e.useDeferredValue = qt, e.useEffect = N, e.useId = Kr, e.useImperativeHandle = Xe, e.useInsertionEffect = be, e.useLayoutEffect = ce, e.useMemo = Oe, e.useReducer = Q, e.useRef = q, e.useState = z, e.useSyncExternalStore = Jr, e.useTransition = Re, e.version = r, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
+      e.Children = ko, e.Component = V, e.Fragment = c, e.Profiler = l, e.PureComponent = J, e.StrictMode = u, e.Suspense = g, e.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ve, e.act = rs, e.cloneElement = Po, e.createContext = lr, e.createElement = Ao, e.createFactory = Do, e.createRef = Ir, e.forwardRef = Yr, e.isValidElement = Je, e.lazy = zr, e.memo = E, e.startTransition = To, e.unstable_act = rs, e.useCallback = fe, e.useContext = k, e.useDebugValue = qe, e.useDeferredValue = qt, e.useEffect = N, e.useId = Kr, e.useImperativeHandle = Xe, e.useInsertionEffect = be, e.useLayoutEffect = ce, e.useMemo = Oe, e.useReducer = Q, e.useRef = q, e.useState = z, e.useSyncExternalStore = Jr, e.useTransition = Re, e.version = r, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
     }();
   }(Yt, Yt.exports)), Yt.exports;
 }
@@ -2184,7 +2184,7 @@ function Xo() {
     }
     var ie = !1, I = !1, se = !1, he = !1, Z = !1, Se;
     Se = Symbol.for("react.module.reference");
-    function Ue(a) {
+    function Be(a) {
       return !!(typeof a == "string" || typeof a == "function" || a === n || a === c || Z || a === o || a === m || a === y || he || a === D || ie || I || se || typeof a == "object" && a !== null && (a.$$typeof === j || a.$$typeof === g || a.$$typeof === u || a.$$typeof === l || a.$$typeof === b || // This needs to include all possible module reference object
       // types supported by any Flight configuration anywhere since
       // we don't know which Flight build this will end up being used
@@ -2246,14 +2246,14 @@ function Xo() {
         }
       return null;
     }
-    var we = Object.assign, ve = 0, ke, C, xe, it, Be, f, R;
+    var we = Object.assign, ve = 0, ke, C, xe, it, Me, f, R;
     function $() {
     }
     $.__reactDisabledLog = !0;
     function V() {
       {
         if (ve === 0) {
-          ke = console.log, C = console.info, xe = console.warn, it = console.error, Be = console.group, f = console.groupCollapsed, R = console.groupEnd;
+          ke = console.log, C = console.info, xe = console.warn, it = console.error, Me = console.group, f = console.groupCollapsed, R = console.groupEnd;
           var a = {
             configurable: !0,
             enumerable: !0,
@@ -2295,7 +2295,7 @@ function Xo() {
               value: it
             }),
             group: we({}, a, {
-              value: Be
+              value: Me
             }),
             groupCollapsed: we({}, a, {
               value: f
@@ -2395,8 +2395,8 @@ function Xo() {
       } finally {
         J = !1, ne.current = Q, H(), Error.prepareStackTrace = z;
       }
-      var Xe = a ? a.displayName || a.name : "", $e = Xe ? X(Xe) : "";
-      return typeof a == "function" && pe.set(a, $e), $e;
+      var Xe = a ? a.displayName || a.name : "", qe = Xe ? X(Xe) : "";
+      return typeof a == "function" && pe.set(a, qe), qe;
     }
     function _t(a, E, _) {
       return er(a, !1);
@@ -2584,7 +2584,7 @@ function Xo() {
       }
     }
     var Tt = M.ReactCurrentOwner, ar = M.ReactDebugCurrentFrame;
-    function Me(a) {
+    function $e(a) {
       if (a) {
         var E = a._owner, _ = St(a.type, a._source, E ? E.type : null);
         ar.setExtraStackFrame(_);
@@ -2634,7 +2634,7 @@ Check the top-level render call using <` + _ + ">.");
           return;
         ur[_] = !0;
         var k = "";
-        a && a._owner && a._owner !== Tt.current && (k = " It was passed a child from " + Ee(a._owner.type) + "."), Me(a), L('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', _, k), Me(null);
+        a && a._owner && a._owner !== Tt.current && (k = " It was passed a child from " + Ee(a._owner.type) + "."), $e(a), L('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', _, k), $e(null);
       }
     }
     function lr(a, E) {
@@ -2686,17 +2686,17 @@ Check the top-level render call using <` + _ + ">.");
         for (var E = Object.keys(a.props), _ = 0; _ < E.length; _++) {
           var k = E[_];
           if (k !== "children" && k !== "key") {
-            Me(a), L("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", k), Me(null);
+            $e(a), L("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", k), $e(null);
             break;
           }
         }
-        a.ref !== null && (Me(a), L("Invalid attribute `ref` supplied to `React.Fragment`."), Me(null));
+        a.ref !== null && ($e(a), L("Invalid attribute `ref` supplied to `React.Fragment`."), $e(null));
       }
     }
     var $t = {};
     function fr(a, E, _, k, z, Q) {
       {
-        var q = Ue(a);
+        var q = Be(a);
         if (!q) {
           var N = "";
           (a === void 0 || typeof a == "object" && a !== null && Object.keys(a).length === 0) && (N += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.");
@@ -2722,17 +2722,17 @@ Check the top-level render call using <` + _ + ">.");
               lr(Oe, a);
         }
         if (Ye.call(E, "key")) {
-          var $e = Ee(a), Re = Object.keys(E).filter(function(Jr) {
+          var qe = Ee(a), Re = Object.keys(E).filter(function(Jr) {
             return Jr !== "key";
           }), qt = Re.length > 0 ? "{key: someKey, " + Re.join(": ..., ") + ": ...}" : "{key: someKey}";
-          if (!$t[$e + qt]) {
+          if (!$t[qe + qt]) {
             var Kr = Re.length > 0 ? "{" + Re.join(": ..., ") + ": ...}" : "{}";
             L(`A props object containing a "key" prop is being spread into JSX:
   let props = %s;
   <%s {...props} />
 React keys must be passed directly to JSX without using spread:
   let props = %s;
-  <%s key={someKey} {...props} />`, qt, $e, Kr, $e), $t[$e + qt] = !0;
+  <%s key={someKey} {...props} />`, qt, qe, Kr, qe), $t[qe + qt] = !0;
           }
         }
         return a === n ? Mt(fe) : ht(fe), fe;
@@ -4569,8 +4569,8 @@ de.getAdapter = co.getAdapter;
 de.HttpStatusCode = Pn;
 de.default = de;
 const ho = {
-  BASE_URL: "http://ec2-13-203-76-236.ap-south-1.compute.amazonaws.com:80"
-  // BASE_URL: "https://e1a3-182-156-141-17.ngrok-free.app",
+  BASE_URL: "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com"
+  // BASE_URL: "https://af11-182-156-141-17.ngrok-free.app",
 }, je = de.create({
   baseURL: ho.BASE_URL,
   withCredentials: !0,
@@ -4680,10 +4680,10 @@ class jr {
     }
   }
 }
-const We = (t) => {
+const Ge = (t) => {
   const e = new jr();
   return $s({ mutationFn: (r) => e.createData(t, r) });
-}, Ge = (t, e) => {
+}, Ue = (t, e) => {
   const r = new jr();
   return Ms({ queryKey: e, queryFn: () => r.getData(t) });
 }, He = (t, e, r) => {
@@ -4692,7 +4692,7 @@ const We = (t) => {
 }, ze = (t, e) => {
   const r = new jr();
   return $s({ mutationFn: (n) => r.updateData(t, e, n) });
-}, Ga = (t) => Ge(t, ["get-all-inward-registers"]), Ha = (t, e) => He(t, e, ["get-a-inward-register"]), za = (t) => We(t), Ya = (t, e) => ze(t, e), Ka = (t) => We(t), Ja = (t, e) => He(t, e, ["get-a-aqr"]), Qa = (t) => Ge(t, ["get-all-aqr"]), Xa = (t, e) => ze(t, e), Za = (t, e) => He(t, e, ["get-a-dump-register"]), eu = (t) => Ge(t, ["get-all-dump-registers"]), tu = (t) => We(t), ru = (t, e) => ze(t, e), nu = (t, e) => He(t, e, ["get-a-second-sale-register"]), su = (t) => Ge(t, ["get-all-second-sale-registers"]), ou = (t) => We(t), iu = (t, e) => ze(t, e), au = (t) => Ge(t, ["get-all-vehicle-dispatch-registers"]), uu = (t, e) => He(t, e, ["get-a-vehicle-dispatch-register"]), cu = (t) => We(t), lu = (t, e) => ze(t, e), fu = (t) => We(t), du = (t, e) => He(t, e, ["get-a-labor-attendance"]), hu = (t) => Ge(t, ["get-all-labor-attendance"]), pu = (t, e) => ze(t, e), yu = (t) => We(t), mu = (t, e) => He(t, e, ["get-a-labor-data"]), vu = (t) => Ge(t, ["get-all-labor-data"]), bu = (t, e) => ze(t, e), gu = (t) => We(t), Eu = (t, e) => He(t, e, ["get-a-temp-labor-data"]), Ru = (t) => Ge(t, ["get-all-temp-labor-data"]), _u = (t, e) => ze(t, e), Su = (t, e) => He(t, e, ["get-a-eod-report"]), wu = (t) => Ge(t, ["get-all-eod-reports"]), Ou = (t) => We(t), Tu = (t, e) => ze(t, e);
+}, Ga = (t) => Ue(t, ["get-all-inward-registers"]), Ha = (t, e) => He(t, e, ["get-a-inward-register"]), za = (t) => Ge(t), Ya = (t, e) => ze(t, e), Ka = (t) => Ge(t), Ja = (t, e) => He(t, e, ["get-a-aqr"]), Qa = (t) => Ue(t, ["get-all-aqr"]), Xa = (t, e) => ze(t, e), Za = (t, e) => He(t, e, ["get-a-dump-register"]), eu = (t) => Ue(t, ["get-all-dump-registers"]), tu = (t) => Ge(t), ru = (t, e) => ze(t, e), nu = (t, e) => He(t, e, ["get-a-second-sale-register"]), su = (t) => Ue(t, ["get-all-second-sale-registers"]), ou = (t) => Ge(t), iu = (t, e) => ze(t, e), au = (t) => Ue(t, ["get-all-vehicle-dispatch-registers"]), uu = (t, e) => He(t, e, ["get-a-vehicle-dispatch-register"]), cu = (t) => Ge(t), lu = (t, e) => ze(t, e), fu = (t) => Ge(t), du = (t, e) => He(t, e, ["get-a-labor-attendance"]), hu = (t) => Ue(t, ["get-all-labor-attendance"]), pu = (t, e) => ze(t, e), yu = (t) => Ge(t), mu = (t, e) => He(t, e, ["get-a-labor-data"]), vu = (t) => Ue(t, ["get-all-labor-data"]), bu = (t, e) => ze(t, e), gu = (t) => Ge(t), Eu = (t, e) => He(t, e, ["get-a-temp-labor-data"]), Ru = (t) => Ue(t, ["get-all-temp-labor-data"]), _u = (t, e) => ze(t, e), Su = (t, e) => He(t, e, ["get-a-eod-report"]), wu = (t) => Ue(t, ["get-all-eod-reports"]), Ou = (t) => Ge(t), Tu = (t, e) => ze(t, e), Cu = (t) => Ue(t, ["get-all-proforma-invoices"]);
 export {
   Wa as INVENTORY_API_URL,
   Ka as useCreateAQR,
@@ -4719,6 +4719,7 @@ export {
   Ga as useGetAllInwardRegisters,
   hu as useGetAllLaborAttendance,
   vu as useGetAllLaborData,
+  Cu as useGetAllProformaInvoices,
   su as useGetAllSecondSaleRegisters,
   Ru as useGetAllTempLaborData,
   au as useGetAllVehicleDispatchRegisters,

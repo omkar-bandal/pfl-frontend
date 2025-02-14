@@ -10,6 +10,7 @@ type SelectInputProps = SelectProps & {
         label: string | number;
         value: string | number;
     }> | undefined;
+    noOptionsMessage?: string;
     handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined | any;
 };
 export declare const SelectInput: React.FC<SelectInputProps>;

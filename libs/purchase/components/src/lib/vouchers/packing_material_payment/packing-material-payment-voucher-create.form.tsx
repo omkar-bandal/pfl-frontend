@@ -1,19 +1,24 @@
 import { Button, Grid, IconButton, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValPackingMaterials, initValPackingMaterialVoucher, numToWords, packingMaterialPaymentVoucherSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPMPVoucher } from "@prime-fresh/purchase/modules";
+import { initValPackingMaterials, initValPackingMaterialVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPMPVoucher } from "@prime-fresh/purchase/modules";
 import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { Materials, PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
+import { PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
 import { ADMIN_API_URL, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
 import { PMPVoucherPreview } from "./packing-material-payment-voucher.preview";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
+import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { calculateAmounts } from "./helper-functions";
 
 export const PackingMaterialPaymentVoucherForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { data: companies } = useGetCompanyNames();
+  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
   const { data } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
   const allGRNNumbers = data ? data : [];
@@ -21,20 +26,8 @@ export const PackingMaterialPaymentVoucherForm = () => {
   const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const allUOMS = UOMs ? UOMs : [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const calculateAmounts = (values: PostPMPvoucher, setFieldValue: (field: string, value: any,) => void) => {
-    const updatedProducts = values.materials.map((product: Materials) => ({
-      ...product,
-      amt: product.itemQty * product.rate,
-    }));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const totalAmt = updatedProducts.reduce((acc: any, product: Materials) => acc + product.amt, 0);
-    const amtWords = numToWords(totalAmt);
-    setFieldValue("materials", updatedProducts);
-    setFieldValue("totalAmt", totalAmt);
-    setFieldValue("amtWords", amtWords);
-  };
   const { mutateAsync: mutatePost, error, data: Res } = useCreatePMPVoucher(PURCHASE_API_URL.POST_PMP_VOUCHER);
+  
   const handleSubmit = (values: PostPMPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -45,8 +38,9 @@ export const PackingMaterialPaymentVoucherForm = () => {
       }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating voucher")
-    });;
+    });
   };
+
   return (
     <>
       <Formik
@@ -63,15 +57,8 @@ export const PackingMaterialPaymentVoucherForm = () => {
         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
           <form onSubmit={handleSubmit}>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h4">
-                  Packing Material Payment Voucher
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewPMPVoucher(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginBottom={2}>
+                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Packing Material Payment Voucher</Typography>
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
@@ -87,7 +74,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   isRequired={true}
                   label="Company Name"
                   name="companyName"
-                  options={PURCHASE_ARRAYS.companyNames}
+                  options={companyNames}
                   value={values.companyName}
                   handleChange={handleChange} />
               </Grid>
@@ -226,13 +213,10 @@ export const PackingMaterialPaymentVoucherForm = () => {
                           }}
                         >
                           <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                            <Typography variant="body1" component="div">Product: {index + 1}</Typography>
-                            <IconButton
-                              color="error"
-                              onClick={() => remove(index)}
-                            >
+                            <Typography variant="caption" component="div">Product: {index + 1}</Typography>
+                            {values.materials.length > 0 && <IconButton color="error" onClick={() => remove(index)}>
                               <Close />
-                            </IconButton>
+                            </IconButton>}
                           </Grid>
                           <Grid item xs={12} md={4}>
                             <TextInput
@@ -258,12 +242,8 @@ export const PackingMaterialPaymentVoucherForm = () => {
                               isRequired={true}
                               name={`materials.${index}.itemQty`}
                               label="Quantity"
-                              value={values.materials[index].itemQty}
-                              handleChange={(e) => {
-                                handleChange(e);
-                                setFieldValue(`materials.${index}.itemQty`, parseFloat(e.target.value) || 0);
-                              }}
-                              onBlur={() => calculateAmounts(values, setFieldValue)} />
+                              value={values.materials[index].itemQty || ""}
+                              handleChange={e => calculateAmounts(index, "itemQty", e.target.value, values, setFieldValue)} />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
@@ -271,21 +251,17 @@ export const PackingMaterialPaymentVoucherForm = () => {
                               isRequired={true}
                               name={`materials.${index}.rate`}
                               label="Rate"
-                              value={values.materials[index].rate}
-                              handleChange={(e) => {
-                                handleChange(e);
-                                setFieldValue(`materials.${index}.rate`, parseFloat(e.target.value) || 0);
-                              }}
-                              onBlur={() => calculateAmounts(values, setFieldValue)} />
+                              value={values.materials[index].rate || ""}
+                              handleChange={e => calculateAmounts(index, "rate", e.target.value, values, setFieldValue)} />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <TextInput
                               type="text"
                               isRequired={false}
+                              isReadOnly={true}
                               name={`item.${index}.amt`}
                               label="Amount"
-                              value={item.amt}
-                              handleChange={handleChange} />
+                              value={item.amt}/>
                           </Grid>
                         </Grid>
                       ))}
@@ -323,19 +299,19 @@ export const PackingMaterialPaymentVoucherForm = () => {
                 <TextInput
                   type="number"
                   isRequired={false}
+                  isReadOnly={true}
                   name="totalAmt"
                   label="Total Amount"
-                  value={values.totalAmt}
-                  handleChange={handleChange} />
+                  value={values.totalAmt}/>
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
                   type="text"
                   isRequired={false}
+                  isReadOnly={true}
                   name="amtWords"
                   label="Amount In Words"
-                  value={values.amtWords}
-                  handleChange={handleChange} />
+                  value={values.amtWords} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
@@ -362,12 +338,18 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   isRequired={false}
                   label="is KYC attached? (if available)"
                   name="kyc"
+                  alignment="vertical"
                   value={values.kyc}
                   options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                   handleChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
+              </Grid>
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+                <FormResetBtn label="Reset" handleReset={handleReset} />
+                <FormPreviewBtn onClick={() => { dispatch(setPreviewPMPVoucher(values)); dispatch(setPreview(true)) }} />
               </Grid>
             </Grid>
           </form>

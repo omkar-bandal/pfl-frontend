@@ -29,6 +29,7 @@ export declare const rootReducer: import('redux').Reducer<{
         selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | null | undefined;
         productCat: import('../../../../../api/admin_api/src/index.ts').GetProductCategory[];
         productSubCat: import('../../../../../api/admin_api/src/index.ts').GetProductSubcategory[];
+        productPartialData: import('../../../../../api/admin_api/src/index.ts').ProductPartialData[];
     };
     uomData: {
         allUOMs: import('../../../../../api/admin_api/src/index.ts').GetUOM[];
@@ -81,12 +82,12 @@ export declare const rootReducer: import('redux').Reducer<{
     tp_voucher: {
         tpVouchers: import('../../../../../api/purchase_api/src/index.ts').GetTPvoucher[];
         selectedTPVoucher: import('../../../../../api/purchase_api/src/index.ts').GetTPvoucher | undefined;
-        previewTPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostTPvoucher | undefined;
+        previewTPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostTPvoucher | import('../../../../../api/purchase_api/src/index.ts').GetTPvoucher | undefined;
     };
     pmp_voucher: {
         pmpVouchers: import('../../../../../api/purchase_api/src/index.ts').GetPMPvoucher[];
         selectedPMPVoucher: import('../../../../../api/purchase_api/src/index.ts').GetPMPvoucher | undefined;
-        previewPMPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostPMPvoucher | undefined;
+        previewPMPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostPMPvoucher | import('../../../../../api/purchase_api/src/index.ts').GetPMPvoucher | undefined;
     };
     delivery_challan: {
         dcs: import('../../../../../api/purchase_api/src/index.ts').GetDeliveryChallan[];
@@ -143,6 +144,7 @@ export declare const rootReducer: import('redux').Reducer<{
         selectedProduct: import('../../../../../api/admin_api/src/index.ts').GetProduct | null | undefined;
         productCat: import('../../../../../api/admin_api/src/index.ts').GetProductCategory[];
         productSubCat: import('../../../../../api/admin_api/src/index.ts').GetProductSubcategory[];
+        productPartialData: import('../../../../../api/admin_api/src/index.ts').ProductPartialData[];
     } | undefined;
     uomData: {
         allUOMs: import('../../../../../api/admin_api/src/index.ts').GetUOM[];
@@ -195,12 +197,12 @@ export declare const rootReducer: import('redux').Reducer<{
     tp_voucher: {
         tpVouchers: import('../../../../../api/purchase_api/src/index.ts').GetTPvoucher[];
         selectedTPVoucher: import('../../../../../api/purchase_api/src/index.ts').GetTPvoucher | undefined;
-        previewTPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostTPvoucher | undefined;
+        previewTPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostTPvoucher | import('../../../../../api/purchase_api/src/index.ts').GetTPvoucher | undefined;
     } | undefined;
     pmp_voucher: {
         pmpVouchers: import('../../../../../api/purchase_api/src/index.ts').GetPMPvoucher[];
         selectedPMPVoucher: import('../../../../../api/purchase_api/src/index.ts').GetPMPvoucher | undefined;
-        previewPMPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostPMPvoucher | undefined;
+        previewPMPVoucher: import('../../../../../api/purchase_api/src/index.ts').PostPMPvoucher | import('../../../../../api/purchase_api/src/index.ts').GetPMPvoucher | undefined;
     } | undefined;
     delivery_challan: {
         dcs: import('../../../../../api/purchase_api/src/index.ts').GetDeliveryChallan[];

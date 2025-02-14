@@ -8,6 +8,7 @@ import { LPVoucherPreview } from './labor-payment-voucher.preview'
 import { setPreview } from '@prime-fresh/modules'
 import { useNavigate, useParams } from 'react-router-dom'
 import { appendFormData } from '@prime-fresh/shared/utils'
+import { useGetCompanyNames } from '@prime-fresh/shared/modules'
 
 export const LabourPaymentVoucherUpdate = () => {
     const navigate = useNavigate();
@@ -16,6 +17,9 @@ export const LabourPaymentVoucherUpdate = () => {
     //Get Id from URL
     const { voucherid } = useParams();
     const voucherId = voucherid ? voucherid : '';
+
+    const { data: companies } = useGetCompanyNames();
+    const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
     //Get all GRN numbers
     const { data: grnNums } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
@@ -43,12 +47,12 @@ export const LabourPaymentVoucherUpdate = () => {
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePatch(formData).then(() => {
-            toast.success(Res ? Res.message : "Voucher created");
+            toast.success(Res ? Res.message : "Voucher updated");
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER);
             }, 2500);
         }).catch(() => {
-            toast.error(error ? error.message : "Error while creating voucher")
+            toast.error(error ? error.message : "Error while updating voucher")
         });;
     };
 
@@ -73,13 +77,8 @@ export const LabourPaymentVoucherUpdate = () => {
                         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                 <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                                    <Grid item xs={12} md={6}>
-                                        <Typography variant='h4'>Labour Payment Voucher</Typography>
-                                    </Grid>
-                                    <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                        <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Update" />
-                                        <FormResetBtn label="Reset" handleReset={handleReset} />
-                                        <FormPreviewBtn onClick={() => { dispatch(setPreviewLPVoucher(values)); dispatch(setPreview(true)) }} />
+                                    <Grid item xs={12} marginBottom={2}>
+                                        <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Labour Payment Voucher</Typography>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
                                         <SelectInput
@@ -95,7 +94,7 @@ export const LabourPaymentVoucherUpdate = () => {
                                             isRequired={true}
                                             label="Company Name"
                                             name="companyName"
-                                            options={PURCHASE_ARRAYS.companyNames}
+                                            options={companyNames}
                                             value={values.companyName}
                                             handleChange={handleChange} />
                                     </Grid>
@@ -126,16 +125,7 @@ export const LabourPaymentVoucherUpdate = () => {
                                             value={values.payReceivedFrom}
                                             handleChange={handleChange} />
                                     </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <TextInput
-                                            type='text'
-                                            isRequired={true}
-                                            name="workLocation"
-                                            label="Location of Labour Work"
-                                            value={values.workLocation}
-                                            handleChange={handleChange} />
-                                    </Grid>
-                                    <Grid item xs={12} md={2}>
+                                    <Grid item xs={12} md={3}>
                                         <TextInput
                                             type='date'
                                             isRequired={true}
@@ -144,7 +134,7 @@ export const LabourPaymentVoucherUpdate = () => {
                                             value={values.loadingDate}
                                             handleChange={handleChange} />
                                     </Grid>
-                                    <Grid item xs={12} md={2}>
+                                    <Grid item xs={12} md={3}>
                                         <TextInput
                                             type='text'
                                             isRequired={true}
@@ -154,7 +144,7 @@ export const LabourPaymentVoucherUpdate = () => {
                                             handleChange={handleChange}
                                             onBlur={() => calculateAmounts(values, setFieldValue)} />
                                     </Grid>
-                                    <Grid item xs={12} md={2}>
+                                    <Grid item xs={12} md={3}>
                                         <TextInput
                                             type='number'
                                             isRequired={true}
@@ -164,7 +154,7 @@ export const LabourPaymentVoucherUpdate = () => {
                                             handleChange={handleChange}
                                             onBlur={() => calculateAmounts(values, setFieldValue)} />
                                     </Grid>
-                                    <Grid item xs={12} md={2}>
+                                    <Grid item xs={12} md={3}>
                                         <TextInput
                                             type='number'
                                             isRequired={false}
@@ -242,12 +232,18 @@ export const LabourPaymentVoucherUpdate = () => {
                                             isRequired={true}
                                             label="is Labour KYC Attached ? (If available) :"
                                             name="kyc"
+                                            alignment='vertical'
                                             value={values.kyc}
                                             options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                                             handleChange={handleChange} />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
+                                    </Grid>
+                                    <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                        <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
+                                        <FormResetBtn label="Reset" handleReset={handleReset} />
+                                        <FormPreviewBtn onClick={() => { dispatch(setPreviewLPVoucher(values)); dispatch(setPreview(true)) }} />
                                     </Grid>
                                 </Grid>
                             </form>)}

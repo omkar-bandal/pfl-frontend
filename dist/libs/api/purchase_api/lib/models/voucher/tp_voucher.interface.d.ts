@@ -29,8 +29,14 @@ export interface GetTPvoucher {
     requestedBy: RequestedBy;
     requestingDepartment: string;
     voucherNo: string;
-    grnNo: string;
-    companyName: string;
+    grnNo: {
+        id: string;
+        grnNo: string;
+    };
+    companyName: {
+        id: string;
+        companyName: string;
+    };
     debitCreditTo: string;
     payReceivedFrom: string;
     location: string;

@@ -1,30 +1,27 @@
 import { Formik } from "formik";
-import { ADMIN_API_URL, useCreateProductCat, useGetAllProductClassification, useGetAProductCat, useUpdateProductCat } from "@prime-fresh/admin_api";
 import { FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, initValProductCat, productCategorySchema } from "@prime-fresh/admin/modules";
-import { appendFormData } from "@prime-fresh/shared/utils";
+import { ADMIN_ROUTES, initValProductCat, productCategorySchema, useCreateProductCategory, useGetAllProductClassifications, useGetProductCategoryById, useUpdateProductCategoryById } from "@prime-fresh/admin/modules";
 
 export function ProductCatForm() {
     const { id } = useParams<{ id: string }>();
     const productCatId = id ? id : "";
-    const { data: cat, isLoading } = useGetAProductCat(ADMIN_API_URL.GET_A_PRODUCT_CATEGORY, productCatId);
-    const category = cat ? { name: cat.name, productClassification: cat.productClassification.id } : { name: '', productClassification: '' };
+    const { data: cat, isLoading } = useGetProductCategoryById(productCatId);
+    const category = cat !== null && cat?.data ? { name: cat.data.name, productClassification: cat.data.productClassification.id } : { name: '', productClassification: '' };
     const productCatVal = productCatId ? category : initValProductCat;
 
-    const { data: classifications } = useGetAllProductClassification(ADMIN_API_URL.GET_ALL_PRODUCT_CLASSIFICATION);
-
-    const { mutateAsync: postProductCategory, error: postError, data: postRes } = useCreateProductCat(ADMIN_API_URL.CREATE_PRODUCT_CATEGORY);
-    const { mutateAsync: patchProductCategory, error: patchError, data: patchRes } = useUpdateProductCat(ADMIN_API_URL.UPDATE_PRODUCT_CATEGORY, productCatId);
+    const { data } = useGetAllProductClassifications();
+    const classifications = data !== null && data?.data ? mapToValueLabelArray(data.data, 'id', 'name') : [];
+   
+    const { mutateAsync: postProductCategory, error: postError, data: postRes } = useCreateProductCategory();
+    const { mutateAsync: patchProductCategory, error: patchError, data: patchRes } = useUpdateProductCategoryById(productCatId);
 
     const navigate = useNavigate();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
-        productCatId === "" ? (postProductCategory(formData).then(() => {
+        productCatId === "" ? (postProductCategory(values).then(() => {
             toast.success(postRes ? postRes.message : "Product category created successfully.")
             setTimeout(() => {
                 navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CAT);
@@ -32,7 +29,7 @@ export function ProductCatForm() {
         }).catch(() => {
             toast.error(postError ? postError.message : "Error while creating product category.");
         }))
-            : (patchProductCategory(formData).then(() => {
+            : (patchProductCategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Product category updated successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CAT);
@@ -69,7 +66,7 @@ export function ProductCatForm() {
                             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
                                     label={productCatId === "" ? "Create" : "Update"}
-                                    isError={productCatId === "" ? !postError : !patchError}
+                                    isError={productCatId === "" ? postError : patchError}
                                     isSubmitting={isSubmitting} />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>
@@ -87,7 +84,7 @@ export function ProductCatForm() {
                                     isRequired={true}
                                     label="Product Classification"
                                     name="productClassification"
-                                    options={mapToValueLabelArray(classifications ? classifications : [{ id: '', name: '' }], 'id', 'name')}
+                                    options={classifications}
                                     value={values.productClassification}
                                     handleChange={handleChange} />
                             </Grid>

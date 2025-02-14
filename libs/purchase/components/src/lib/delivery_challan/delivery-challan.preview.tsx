@@ -34,13 +34,13 @@ export const DeliveryChallanPreview = ( ) => {
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    From Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.fromLocation}
+                    From Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.fromLocation?.toString()}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    To Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.toLocation}
+                    To Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.toLocation?.toString()}
                     </Typography>
                 </Typography>
             </Grid>
@@ -75,15 +75,15 @@ export const DeliveryChallanPreview = ( ) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {previewDC?.items.map((product, index: number) => (
+                            {previewDC?.deliveryChallanProducts.map((product, index: number) => (
                                 <TableRow
                                     key={index}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemName}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemQty}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.rate}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amt}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.productName}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.quantity}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amount}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

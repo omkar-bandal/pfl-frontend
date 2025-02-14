@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
-import { FormControl, Grid, MenuItem, Select, Typography, SelectProps, FormHelperText, SelectChangeEvent } from '@mui/material';
+import { FormControl, Grid, MenuItem, Select, SelectProps, FormHelperText, SelectChangeEvent } from '@mui/material';
 import { useField } from 'formik';
+import { Label } from './label';
 
 type SelectInputProps = SelectProps & {
   isRequired: boolean;
@@ -8,6 +9,7 @@ type SelectInputProps = SelectProps & {
   name: string;
   value: string | number | undefined | null;
   options: Array<{ label: string | number; value: string | number }> | undefined;
+  noOptionsMessage?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleChange?: ((event: SelectChangeEvent<unknown>, child: ReactNode) => void) | undefined | any
 };
@@ -27,7 +29,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   label,
   name,
   value,
-  options,
+  options = [],
+  noOptionsMessage = "No options available",
   handleChange,
   ...otherProps
 }) => {
@@ -35,14 +38,11 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   return (
     <Grid container direction="column">
       <Grid item xs={12}>
-        {isRequired && (
-          <Typography variant="body1" component="span" color="error" sx={{ fontWeight: 600 }}>
-            *{' '}
-          </Typography>
-        )}
-        <Typography variant="body2" component="span">
-          {label}
-        </Typography>
+        <Label
+          isRequired={isRequired}
+          isError={meta.touched && Boolean(meta.error)}
+          name={name}
+          label={label} />
       </Grid>
       <Grid item xs={12}>
         <FormControl fullWidth error={meta.touched && Boolean(meta.error)} >
@@ -50,21 +50,24 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             {...field}
             id={name}
             size="small"
-            value={value}
+            value={value || ""}
             onChange={handleChange}
             MenuProps={MenuProps}
             {...otherProps}
           >
-            {options ? (options.map((option, index: number) => (
-              <MenuItem key={index} value={option.value}>
-                {option.label}
+            {options.length > 0 ? (
+              options.map((option, index) => (
+                <MenuItem key={index} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem value="" disabled>
+                {noOptionsMessage}
               </MenuItem>
-            ))) : (<MenuItem value="">
-              {""}
-            </MenuItem>)}
+            )}
           </Select>
-          {/* Display error message */}
-          {meta.touched && Boolean(meta.error) && (
+          {meta.touched && meta.error && (
             <FormHelperText>{meta.error}</FormHelperText>
           )}
         </FormControl>

@@ -55,4 +55,6 @@ export declare const inventoryRouteConstants: {
     CREATE_EOD_REPORT: string;
     VIEW_EOD_REPORT: string;
     UPDATE_EOD_REPORT: string;
+    PROFORMA_INVOICES: string;
+    GET_ALL_PROFORMA_INVOICES: string;
 };

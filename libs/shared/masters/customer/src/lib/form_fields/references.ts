@@ -9,10 +9,11 @@ export const references = {
         },
         {
             "name": "ref1FName",
-            "label": "*First Name",
+            "label": "First Name",
             "type": "text",
             "placeholder": "First Name",
-            "length": 4
+            "length": 4,
+            "isRequired": true
         },
         {
             "name": "ref1MName",
@@ -23,31 +24,34 @@ export const references = {
         },
         {
             "name": "ref1LName",
-            "label": "*Last Name",
+            "label": "Last Name",
             "type": "text",
             "placeholder": "Last Name",
-            "length": 4
+            "length": 4,
+            "isRequired": true
         },
         {
             "name": "ref1ContactNo",
-            "label": "*Mobile No",
+            "label": "Mobile No",
             "type": "text",
             "placeholder": "+91----------",
-            "length": 5
+            "length": 5,
+            "isRequired": true
         },
         {
             "name": "ref1Email",
-            "label": "*Email",
+            "label": "Email",
             "type": "email",
             "placeholder": "xxxxxxxx@host_name.domain_name",
             "length": 7
         },
         {
             "name": "ref1Address.address1",
-            "label": "*Address 1",
+            "label": "Address 1",
             "type": "text",
             "placeholder": "Enter Street Name, Area",
-            "length": 12
+            "length": 12,
+            "isRequired": true
         },
         {
             "name": "ref1Address.address2",
@@ -58,31 +62,35 @@ export const references = {
         },
         {
             "name": "ref1Address.location",
-            "label": "*Location",
+            "label": "Location",
             "type": "text",
             "placeholder": "Enter location name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ref1Address.city",
-            "label": "*District",
+            "label": "District",
             "type": "text",
             "placeholder": "Enter city name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ref1Address.state",
-            "label": "*State",
+            "label": "State",
             "type": "text",
             "placeholder": "Enter state name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ref1Address.pincode",
-            "label": "*Pincode",
+            "label": "Pincode",
             "type": "text",
             "placeholder": "Enter pincode",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "",
@@ -91,10 +99,11 @@ export const references = {
         },
         {
             "name": "ref2FName",
-            "label": "*First Name",
+            "label": "First Name",
             "type": "text",
             "placeholder": "First Name",
-            "length": 4
+            "length": 4,
+            "isRequired": true
         },
         {
             "name": "ref2MName",
@@ -105,31 +114,34 @@ export const references = {
         },
         {
             "name": "ref2LName",
-            "label": "*Last Name",
+            "label": "Last Name",
             "type": "text",
             "placeholder": "Last Name",
-            "length": 4
+            "length": 4,
+            "isRequired": true
         },
         {
             "name": "ref2ContactNo",
-            "label": "*Mobile No",
+            "label": "Mobile No",
             "type": "text",
             "placeholder": "+91----------",
-            "length": 5
+            "length": 5,
+            "isRequired": true
         },
         {
             "name": "ref2Email",
-            "label": "*Email",
+            "label": "Email",
             "type": "email",
             "placeholder": "xxxxxxxx@host_name.domain_name",
             "length": 7
         },
         {
             "name": "ref2Address.address1",
-            "label": "*Address 1",
+            "label": "Address 1",
             "type": "text",
             "placeholder": "Enter Street Name, Area",
-            "length": 12
+            "length": 12,
+            "isRequired": true
         },
         {
             "name": "ref2Address.address2",
@@ -140,31 +152,35 @@ export const references = {
         },
         {
             "name": "ref2Address.location",
-            "label": "*Location",
+            "label": "Location",
             "type": "text",
             "placeholder": "Enter location name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ref2Address.city",
-            "label": "*District",
+            "label": "District",
             "type": "text",
             "placeholder": "Enter city name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ref2Address.state",
-            "label": "*State",
+            "label": "State",
             "type": "text",
             "placeholder": "Enter state name",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
         {
             "name": "ref2Address.pincode",
-            "label": "*Pincode",
+            "label": "Pincode",
             "type": "text",
             "placeholder": "Enter pincode",
-            "length": 3
+            "length": 3,
+            "isRequired": true
         },
     ]
 }

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { addressSchema } from './address.schema';
+import { addressSchema } from '@prime-fresh/shared/modules';
 
 export const farmerValidationSchema = Yup.object().shape({
     farmerfName: Yup.string().required('First Name is required').min(3, 'Minimum 3 characters required.'),

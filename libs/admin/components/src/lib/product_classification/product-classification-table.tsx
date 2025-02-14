@@ -1,24 +1,26 @@
+import { useEffect } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-// import { useDispatch } from "react-redux";
-import { ADMIN_API_URL, useGetAllProductClassification } from "@prime-fresh/admin_api";
-import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
+import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
 import { ProductClassificationListCols } from "./product-classification.columns";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
-import { useDispatch } from "react-redux";
-import { hideNotification } from "@prime-fresh/modules";
+import { ADMIN_ROUTES, useGetAllProductClassifications } from "@prime-fresh/admin/modules";
 
 export function ProductClassTable() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { data: ProductClassification, isLoading } = useGetAllProductClassification(ADMIN_API_URL.GET_ALL_PRODUCT_CLASSIFICATION);
   const apiRef = useGridApiRef();
+  
+  const { data, isLoading, error, isError } = useGetAllProductClassifications();
+  const productClassification = data !== null && data?.data ? data.data : [];
 
-  const handleCreate = () => {
-    dispatch(setOpenFor('create'));
-    dispatch(hideNotification());
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || 'Error occured please refresh the page.'); 
+    }
+  }, [isError, error]); 
+
+  const handleNavigate = () => {
     navigate(ADMIN_ROUTES.CREATE_PRODUCT_CLASS);
   }
 
@@ -31,7 +33,7 @@ export function ProductClassTable() {
           startIcon={<Add />}
           sx={{ marginY: 2 }}
           fullWidth={false}
-          onClick={handleCreate}
+          onClick={handleNavigate}
         >
           Add Classification
         </Button>
@@ -40,7 +42,7 @@ export function ProductClassTable() {
       <DataTable
         loading={isLoading}
         apiRef={apiRef}
-        rows={ProductClassification}
+        rows={productClassification}
         columns={ProductClassificationListCols()}
       />
     </Box>

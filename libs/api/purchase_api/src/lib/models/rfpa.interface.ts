@@ -27,7 +27,9 @@ export interface Payment_Info {
 export interface PostRFPA {
     companyName: string | null;
     purchaseLocation: string | null;
-    purchaseForWhich: string | null;
+    otherPurchaseLoc: string | null;
+    purchaseForSalesLocation: string | null;
+    otherPurchaseForSalesLoc: string | null;
     specialReq: string | null;
     source: "vendor" | "farmer";
     selectedParty: string | null;
@@ -46,9 +48,11 @@ export interface GetRFPA {
     requestedBy?: RequestedBy;
     requestingDepartment?: string;
     baseLocation?: string;
-    companyName: string;
+    companyName: { id: string, companyName: string };
     purchaseLocation: string;
-    purchaseForWhich: string;
+    otherPurchaseLoc: string
+    purchaseForSalesLocation: string;
+    otherPurchaseForSalesLoc: string
     specialReq: string;
     source: "vendor" | "farmer";
     selectedParty: string | null;

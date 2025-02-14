@@ -1,17 +1,24 @@
+import { useEffect } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 import { VendorSubcategoryListCols } from "./vendor-subcategory.columns";
 import { Add } from "@mui/icons-material";
-import { ADMIN_API_URL, useGetAllVendorSubCat } from "@prime-fresh/admin_api";
-import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
+import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, useGetAllVendorSubcategories } from "@prime-fresh/admin/modules";
 
 export function VendorSubcatTable() {
   const navigate = useNavigate();
-  const { data: VendorSubcat, isLoading } = useGetAllVendorSubCat(ADMIN_API_URL.GET_ALL_VENDOR_SUBCAT);
-  console.log(VendorSubcat);
   const apiRef = useGridApiRef();
+  
+  const { data, isLoading, isError, error } = useGetAllVendorSubcategories();
+  const VendorSubcat = data?.data ? data.data : [];
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || 'Error occured please refresh the page.');
+    }
+  }, [isError, error]);
   
   return (
       <Box sx={{ flex: 1 }}>

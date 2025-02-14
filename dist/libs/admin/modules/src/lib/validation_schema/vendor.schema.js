@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Yup = require("yup");
-const address_schema_1 = require("./address.schema");
+const modules_1 = require("@prime-fresh/shared/modules");
 // Vendor validation schema
 const vendorValidationSchema = Yup.object().shape({
     companyName: Yup.string().required('Party Name is required'),
@@ -9,7 +9,7 @@ const vendorValidationSchema = Yup.object().shape({
     subcategory: Yup.string().required('Please select subcategory of vendor'),
     inFandVBusinessSince: Yup.string(),
     dateOfIncorporation: Yup.string(),
-    officeAddress: address_schema_1.addressSchema,
+    officeAddress: modules_1.addressSchema,
     officeContactNo: Yup.string().matches(/^\d{10}$/, 'Contact number must be 10 digits'),
     // website: Yup.string().notRequired(),
     // email: Yup.string().email('Invalid email format').required('Email is required'),

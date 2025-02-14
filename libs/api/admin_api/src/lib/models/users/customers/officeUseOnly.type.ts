@@ -14,13 +14,13 @@ export type PostOfficeUseOnly = {
     creditWorthinessDue: string,
     keyAccountPersonAssigned: string,
     sinceWhen: string,
-    ledgerCreatedDate: Date,
+    ledgerCreatedDate: string | null,
     ledgerCreatedBy: string,
     ledgerVerifiedApprovedBy: string,
     additionalNotes: string
     customerCode: string,
     createdBy: string,
-    createdDate: Date,
+    createdDate: string | null,
 }
 
 export type GetOfficeUseOnly = {
@@ -40,11 +40,11 @@ export type GetOfficeUseOnly = {
     creditWorthinessDue: string,
     keyAccountPersonAssigned: string,
     sinceWhen: string,
-    ledgerCreatedDate: Date,
+    ledgerCreatedDate: string,
     ledgerCreatedBy: string,
     ledgerVerifiedApprovedBy: string,
     additionalNotes: string
     customerCode: string,
     createdBy: string,
-    createdDate: Date,
+    createdDate: string,
 }

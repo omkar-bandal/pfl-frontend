@@ -27,7 +27,9 @@ const initValPaymentInfo = {
 exports.initValRFPA = {
     companyName: null,
     purchaseLocation: null,
-    purchaseForWhich: null,
+    otherPurchaseLoc: null,
+    purchaseForSalesLocation: null,
+    otherPurchaseForSalesLoc: null,
     specialReq: null,
     source: "vendor",
     selectedParty: null,

@@ -45,29 +45,7 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => {
-                return value ? `${value.firstName || ''} ${value.lastName || ''}` : '-';
-            }
-        },
-        {
-            field: "requestingDepartment",
-            headerName: "Department",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
-        {
-            field: "grnNo",
-            headerName: "GRN Number",
-            width: 130,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: RequestedBy) => value ? `${value.firstName || ''} ${value.lastName || ''}` : '-',
         },
         {
             field: "companyName",
@@ -75,9 +53,7 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "partyName",
@@ -85,39 +61,31 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
-        {
-            field: "fromLocation",
-            headerName: "From Location",
-            width: 200,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
-        {
-            field: "toLocation",
-            headerName: "To Location",
-            width: 200,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
+        // {
+        //     field: "fromLocation",
+        //     headerName: "From Location",
+        //     width: 200,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     valueGetter: (value: string) => value ? value : '-',
+        // },
+        // {
+        //     field: "toLocation",
+        //     headerName: "To Location",
+        //     width: 200,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     valueGetter: (value: string) => value ? value : '-',
+        // },
         {
             field: "driverName",
             headerName: "Driver Name",
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "vehicleNo",
@@ -125,45 +93,29 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value.toUpperCase() : '-',
         },
-        {
-            field: "totAmt",
-            headerName: "Total Amount",
-            width: 120,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
+        // {
+        //     field: "totAmt",
+        //     headerName: "Total Amount",
+        //     width: 120,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     valueGetter: (value: number) => value ? value : '-',
+        // },
         {
             field: "receiverName",
             headerName: "Receiver Name",
             width: 120,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
-        // {
-        //     field: "anyAttachment",
-        //     headerName: "Attachment",
-        //     width: 100,
-        //     align: "center",
-        //     headerAlign: "center",
-        //     renderCell: (params: GridRenderCellParams) => (
-        //         <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
-        //             <DownloadOutlined />
-        //         </IconButton>
-        //     ),
-        // },
         {
             field: "approvalStatus",
             headerName: "Status",
+            headerAlign: "center",
+            align: "center",
             width: 130,
             renderCell: (params: GridRenderCellParams) => {
                 switch (params.row.approvalStatus) {
@@ -174,23 +126,24 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
                 }
             }
         },
-        {
-            field: "approvalNote",
-            headerName: "Reason",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                if (value === null)
-                    return '';
-                else
-                    return value;
-            }
-        },
+        // {
+        //     field: "approvalNote",
+        //     headerName: "Reason",
+        //     width: 100,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     valueGetter: (value: string) => {
+        //         if (value === null)
+        //             return '';
+        //         else
+        //             return value;
+        //     }
+        // },
         {
             field: 'edit',
             headerName: 'Edit',
-            width: 50,
+            headerAlign: "center",
+            width: 80,
             sortable: false,
             filterable: false,
             isMobileVisible: this,
@@ -203,7 +156,8 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
         {
             field: 'view',
             headerName: 'View',
-            width: 50,
+            headerAlign: "center",
+            width: 80,
             sortable: false,
             filterable: false,
             isMobileVisible: true,

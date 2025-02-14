@@ -1,61 +1,40 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
-import { Box, Button, Grid, IconButton, LinearProgress, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Button, Grid, IconButton, LinearProgress, Typography } from '@mui/material'
 import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, rfpaSchema, setPreviewRFPA } from '@prime-fresh/purchase/modules';
-import { GetRFPA, PostRFPA, RFPA_Items, useGetRFPA, useUpdateRFPA } from '@prime-fresh/purchase_api';
-import { setPreview, useAppSelector } from '@prime-fresh/modules';
+import { GetRFPA, useGetRFPA, useUpdateRFPA } from '@prime-fresh/purchase_api';
+import { setPreview } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA } from '@prime-fresh/purchase/modules';
-import { productsDataState, uomsDataState, setProducts, setUOMs, setSelectedProduct } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
+import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
 import { PURCHASE_API_URL } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './rfpa.preview';
 import { appendFormData } from '@prime-fresh/shared/utils';
+import { mapToValueLabelArray, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
+import { calculateDueDate, calculateTotoalPrice, getProductCode } from './helper-functions';
 
 export const RFPAUpdate = () => {
     const { id } = useParams<{ id: string }>();
     const rfpaId = id ? id : '';
     const { data, isLoading } = useGetRFPA(PURCHASE_API_URL.GET_A_RFPA, rfpaId);
+    console.log("RFPA: ", data);
     const rfpaValues = data ? data : initValRFPA;
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-    const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
 
+    const { data: companies } = useGetCompanyNames();
+    const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+    const { data: products } = useGetProductsPartialData();
+    const Products = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
+    const { data: uom } = useGetUOMPartialData();
+    const UOMs = uom?.data ? mapToValueLabelArray(uom.data, 'id', 'unit') : [];
     const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
     const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
     const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
-
-    const { allProducts, selectedProduct } = useAppSelector(productsDataState);
-    const { allUOMs } = useAppSelector(uomsDataState);
-
-    React.useEffect(() => {
-        dispatch(setProducts(Products ? Products : []));
-        dispatch(setUOMs(UOMs ? UOMs : []));
-    }, [dispatch, Products, UOMs]);
-
-    const handleProductNameChange = (dataId: string) => {
-        const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
-        dispatch(setSelectedProduct(selectedProduct));
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const calculateTotoalPrice = (values: PostRFPA, setFieldValue: (field: string, value: any) => void) => {
-        const updatedrfpaproducts = values.rfpaProducts.map((product: RFPA_Items) => ({
-            ...product,
-            totalVal: product.quantity * product.unitPrice,
-        }))
-        setFieldValue("rfpaProducts", updatedrfpaproducts);
-    }
-    const calculateDueDate = (paymentDate: string, paymentTerms: number): string => {
-        if (!paymentDate || !paymentTerms) return "";
-        const date = new Date(paymentDate);
-        date.setDate(date.getDate() + paymentTerms);
-        return date.toISOString().split("T")[0];
-    };
 
     const { mutateAsync: mutatePatch, error, data: Res } = useUpdateRFPA(PURCHASE_API_URL.UPDATE_RFPA, rfpaId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,7 +45,7 @@ export const RFPAUpdate = () => {
             toast.success(Res ? Res.message : "RFPA Updated");
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
-            }, 2500);
+            }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while updating");
         });;
@@ -94,16 +73,11 @@ export const RFPAUpdate = () => {
                     {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={1} padding={1}>
-                                <Grid item xs={12} md={6}>
-                                    <Typography variant='h4'>Request For Purchase Approval</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
-                                    <FormResetBtn label="Reset" handleReset={handleReset} />
-                                    <FormPreviewBtn onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }} />
+                                <Grid item xs={12} marginBottom={2}>
+                                    <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Request For Purchase Approval</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} />
+                                    <SelectInput isRequired={true} label="Company Name" name="companyName" options={companyNames} value={typeof values.companyName !== 'string' ? values.companyName?.id : values.companyName} handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <AutoCompleteInput
@@ -112,31 +86,43 @@ export const RFPAUpdate = () => {
                                         label="Purchase Location"
                                         options={allPurchaseLocation}
                                         handleChange={(event, newValue) => {
-                                            if (newValue) {
-                                                setFieldValue(`purchaseLocation`, newValue.value);
-                                                handleProductNameChange(newValue.value || '');
-                                            } else {
-                                                setFieldValue(`purchaseLocation`, '');
-                                                handleProductNameChange('');
-                                            }
+                                            if (newValue !== null) {
+                                                if (typeof newValue === 'string')
+                                                    setFieldValue(`purchaseLocation`, null);
+                                                else {
+                                                    setFieldValue(`purchaseLocation`, newValue.value);
+                                                    setFieldValue(`otherPurchaseLoc`, null);
+                                                }
+                                            } else
+                                                setFieldValue('purchaseLocation', null);
                                         }} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <AutoCompleteInput
                                         isRequired={true}
-                                        name="purchaseForWhich"
-                                        label="Purchase For Which Location"
+                                        name="purchaseForSalesLocation"
+                                        label="Purchase For Sales Location"
                                         options={allPurchaseForEachLocations}
                                         handleChange={(event, newValue) => {
-                                            if (newValue) {
-                                                setFieldValue(`purchaseForWhich`, newValue.value);
-                                                handleProductNameChange(newValue.value || '');
-                                            } else {
-                                                setFieldValue(`purchaseForWhich`, '');
-                                                handleProductNameChange('');
-                                            }
+                                            if (newValue !== null) {
+                                                if (typeof newValue === 'string')
+                                                    setFieldValue(`purchaseForSalesLocation`, null);
+                                                else {
+                                                    setFieldValue(`purchaseForSalesLocation`, newValue.value);
+                                                    setFieldValue(`otherPurchaseForSalesLoc`, null);
+                                                }
+                                            } else
+                                                setFieldValue('purchaseForSalesLocation', null);
                                         }} />
                                 </Grid>
+                                {(values.otherPurchaseLoc !== null && values.purchaseLocation === null) &&
+                                    <Grid item xs={12}>
+                                        <TextInput isRequired={true} type="text" name="otherPurchaseLoc" label='Other Purchase Location' value={values.otherPurchaseLoc} handleChange={handleChange} />
+                                    </Grid>}
+                                {(values.otherPurchaseForSalesLoc !== null && values.purchaseForSalesLocation === null) &&
+                                    <Grid item xs={12}>
+                                        <TextInput isRequired={true} type="text" name="otherPurchaseForSalesLoc" label='Other Purchase For Sales Location' value={values.otherPurchaseForSalesLoc} handleChange={handleChange} />
+                                    </Grid>}
                                 <Grid item xs={12}>
                                     <TextInput isRequired={false} type="text" label="Special Request" name="specialReq" value={values.specialReq} handleChange={handleChange} />
                                 </Grid>
@@ -157,11 +143,11 @@ export const RFPAUpdate = () => {
 
                                                     <Grid container spacing={1} key={index} padding={1} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
                                                         <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-                                                            <Typography variant="body1">Product : {index + 1}</Typography>
+                                                            <Typography variant="caption">Product : {index + 1}</Typography>
                                                         </Grid>
                                                         <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-                                                            <IconButton color='error' size='medium'
-                                                                onClick={() => remove(index)}><Close /></IconButton>
+                                                            {values.rfpaProducts.length > 0 && <IconButton color='error' size='medium'
+                                                                onClick={() => remove(index)}><Close /></IconButton>}
                                                         </Grid>
                                                         <Grid item xs={12} md={4}>
                                                             <SelectInput
@@ -169,38 +155,35 @@ export const RFPAUpdate = () => {
                                                                 name={`rfpaProducts.${index}.product`}
                                                                 label='Product Name'
                                                                 value={values.rfpaProducts[index].product}
-                                                                options={mapToValueLabelArray(allProducts, 'id', 'name')}
-                                                                handleChange={(event: SelectChangeEvent<unknown>) => {
-                                                                    const value = event.target.value;
-                                                                    if (value) {
-                                                                        setFieldValue(`rfpaProducts.${index}.product`, value);
-                                                                        handleProductNameChange(typeof value === 'string' ? value : '');
-                                                                    } else {
-                                                                        setFieldValue(`rfpaProducts.${index}.product`, '');
-                                                                        handleProductNameChange('');
-                                                                    }
-                                                                }}
-
-
-                                                            />
+                                                                options={Products}
+                                                                handleChange={(event: any, newValue: any) => {
+                                                                    if (newValue !== null) {
+                                                                        if (typeof newValue === 'string')
+                                                                            setFieldValue(`rfpaProducts.${index}.product`, null);
+                                                                        else {
+                                                                            setFieldValue(`rfpaProducts.${index}.product`, newValue.value);
+                                                                        }
+                                                                    } else
+                                                                        setFieldValue(`rfpaProducts.${index}.product`, null);
+                                                                }} />
                                                         </Grid>
                                                         <Grid item xs={12} md={4}>
-                                                            <TextInput isRequired={false} name="productCode" label="Product Code" value={selectedProduct?.productCode} isReadOnly={true} />
+                                                            <TextInput isRequired={false} name="productCode" label="Product Code" value={getProductCode(values.rfpaProducts[index].product, products?.data) || ''} isReadOnly={true} />
                                                         </Grid>
                                                         <Grid item xs={12} md={2}>
                                                             <TextInput isRequired={false} id={`rfpaProducts.${index}.grade`} name={`rfpaProducts.${index}.grade`} label="Product Grade" value={values.rfpaProducts[index].grade} onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs={12} md={2}>
-                                                            <SelectInput isRequired={false} id={`rfpaProducts.${index}.uom`} name={`rfpaProducts.${index}.uom`} label="UOM" value={values.rfpaProducts[index].uom} options={mapToValueLabelArray(allUOMs, 'id', 'unit')} onChange={handleChange} />
+                                                            <SelectInput isRequired={false} id={`rfpaProducts.${index}.uom`} name={`rfpaProducts.${index}.uom`} label="UOM" value={values.rfpaProducts[index].uom} options={UOMs} onChange={handleChange} />
                                                         </Grid>
                                                         <Grid item xs={4} md={3}>
-                                                            <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.quantity`} name={`rfpaProducts.${index}.quantity`} label="Quantity" value={values.rfpaProducts[index].quantity} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, setFieldValue)} />
+                                                            <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.quantity`} name={`rfpaProducts.${index}.quantity`} label="Quantity" value={values.rfpaProducts[index].quantity} handleChange={(event) => calculateTotoalPrice(event, index, setFieldValue, values)} />
                                                         </Grid>
                                                         <Grid item xs={4} md={3}>
-                                                            <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.unitPrice`} name={`rfpaProducts.${index}.unitPrice`} label="Unit Price" value={values.rfpaProducts[index].unitPrice} onChange={handleChange} onBlur={() => calculateTotoalPrice(values, setFieldValue)} />
+                                                            <TextInput isRequired={true} type="number" id={`rfpaProducts.${index}.unitPrice`} name={`rfpaProducts.${index}.unitPrice`} label="Unit Price" value={values.rfpaProducts[index].unitPrice} handleChange={(event) => calculateTotoalPrice(event, index, setFieldValue, values)} />
                                                         </Grid>
                                                         <Grid item xs={4} md={3}>
-                                                            <TextInput isRequired={false} type="number" id={`rfpaProducts.${index}.totalVal`} name={`rfpaProducts.${index}.totalVal`} label="Total Price" value={values.rfpaProducts[index].totalVal} />
+                                                            <TextInput isRequired={false} isReadOnly={true} type="number" id={`rfpaProducts.${index}.totalVal`} name={`rfpaProducts.${index}.totalVal`} label="Total Price" value={values.rfpaProducts[index].totalVal} />
                                                         </Grid>
                                                         <Grid item xs={12} md={3}>
                                                             <TextInput isRequired={true} id={`rfpaProducts.${index}.deliveryLocation`} name={`rfpaProducts.${index}.deliveryLocation`} label="Delivery Location" value={values.rfpaProducts[index].deliveryLocation} onChange={handleChange} />
@@ -296,7 +279,7 @@ export const RFPAUpdate = () => {
                                         }} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextInput isRequired={false} type="date" label="Due Date" id="paymentInfo.dueDate" name="paymentInfo.dueDate" value={values.paymentInfo.dueDate} />
+                                    <TextInput isRequired={false} isReadOnly={true} type="date" label="Due Date" id="paymentInfo.dueDate" name="paymentInfo.dueDate" value={values.paymentInfo.dueDate} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextInput isRequired={true} label="Delivery Receiving Person" id="deliveryReceivingPerson" name="deliveryReceivingPerson" value={values.deliveryReceivingPerson} onChange={handleChange} />
@@ -306,6 +289,11 @@ export const RFPAUpdate = () => {
                                 </Grid>
                                 <Grid item xs={12} md={12}>
                                     <TextInput isRequired={false} label="Remark" id="remark" name="remark" value={values.remark} onChange={handleChange} />
+                                </Grid>
+                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
+                                    <FormResetBtn label="Reset" handleReset={handleReset} />
+                                    <FormPreviewBtn onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }} />
                                 </Grid>
                             </Grid>
                         </form>)}

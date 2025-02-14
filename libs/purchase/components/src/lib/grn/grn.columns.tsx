@@ -77,12 +77,12 @@ export const GRNListCols = (): CustomGridColDef[] => {
             valueGetter: (value: string) => value ? value : '-',
         },
         {
-            field: "purchaseForWhich",
+            field: "purchaseForSalesLocation",
             headerName: "Destination",
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value ? value : '-',
+            valueGetter: (value: string) => value? value :'-',
         },
         {
             field: "source",

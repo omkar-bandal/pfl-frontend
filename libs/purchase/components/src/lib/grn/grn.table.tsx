@@ -13,6 +13,7 @@ export const GRNTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
     const { data: allGRN, isLoading, isError, error } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
+    console.log("All GRNs :",allGRN);
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')

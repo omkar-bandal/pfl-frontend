@@ -6,3 +6,4 @@ export * from './lib/eod-report';
 export * from './lib/inward-register';
 export * from './lib/labor-register';
 export * from './lib/second-sale-register';
+export * from './lib/proforma-invoice';

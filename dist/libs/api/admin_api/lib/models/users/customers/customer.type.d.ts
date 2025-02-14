@@ -8,7 +8,7 @@ import { CustomerTypes } from './customerTypes.type';
 import { CustomerCategory } from './customerCategory.type';
 import { GetBillingDetails, PostBillingDetails } from './billingDetails.type';
 import { GetBankDetails, PostBankDetails } from './bankDetails.type';
-import { Address, GetAddress } from '../../address.type';
+import { Address, GetAddress } from '../../../../../../common_api/src/index.ts';
 
 export type GetCustomer = {
     id: string;
@@ -51,4 +51,12 @@ export type PostCustomer = {
     productSpecification: PostProductSpecification[];
     paymentTerms: PostPaymentTerms;
     officeUseOnly: PostOfficeUseOnly;
+};
+export type GetCustomerDataPartial = {
+    id: string;
+    organisationName: string;
+    billingAddress: Address;
+    deliveryAddress: Address;
+    gstNumber: string;
+    panNumber: string;
 };

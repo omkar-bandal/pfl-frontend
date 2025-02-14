@@ -130,16 +130,6 @@ export const LPVoucherListCols = (): CustomGridColDef[] => {
             }
         },
         {
-            field: "workLocation",
-            headerName: "Work Location",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
-        {
             field: "totalAmt",
             headerName: "Total Amount",
             width: 100,

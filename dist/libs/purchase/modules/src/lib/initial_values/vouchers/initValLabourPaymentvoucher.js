@@ -9,7 +9,6 @@ exports.initValLabourPaymentvoucher = {
     location: null,
     noOfLabours: 0,
     loadingDate: null,
-    workLocation: null,
     contactNo: null,
     altContactNo: null,
     products: null,

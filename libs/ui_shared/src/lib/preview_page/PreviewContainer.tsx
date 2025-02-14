@@ -32,18 +32,20 @@ export const PreviewContainer: React.FC<PreviewContainerPropTypes> = ({ title, c
         >
             <Box sx={{ flex: 1, padding: 1 }}>
                 <Grid container direction="column" rowSpacing={1}>
-                    <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
-                        <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
+                    <Grid container item xs={12}>
+                        <Grid item xs={11}>
                             <Typography variant="h4" component="div">{title}</Typography>
+                        </Grid>
+                        <Grid item xs={1}>
                             <IconButton
                                 edge="start"
                                 color="error"
                                 onClick={() => dispatch(setPreview(false))}
                                 aria-label="close"
                             >
-                                <Close fontSize='large' />
+                                <Close fontSize='small' />
                             </IconButton>
-                        </Stack>
+                        </Grid>
                     </Grid>
                     {children}
                 </Grid>

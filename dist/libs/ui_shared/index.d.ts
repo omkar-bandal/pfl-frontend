@@ -1,4 +1,6 @@
 export * from './lib/data_table/DataTable';
+export * from './lib/data_table/data-table';
+export * from './lib/data_table/use-data-table';
 export * from './lib/data_table/models/columntype.interface';
 export * from './lib/data_table/components/TableToolBar';
 export * from './lib/error_page/ErrorPage';

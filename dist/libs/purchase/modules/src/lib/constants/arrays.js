@@ -23,7 +23,7 @@ exports.PURCHASE_ARRAYS = {
     ],
     deliveryChallanType: [
         { value: "customer", label: "Customer" },
-        { value: "stock transfer (internal)", label: "Stock Transfer (Internal)" },
+        { value: "cc-dc stock transfer", label: "CC-DC Stock Transfer" },
         { value: "dc-dc stock transfer", label: "DC-DC Stock Transfer" },
         { value: "other", label: "Other" },
     ],

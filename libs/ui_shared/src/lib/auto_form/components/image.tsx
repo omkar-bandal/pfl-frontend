@@ -2,6 +2,7 @@ import React from 'react';
 import { useField, useFormikContext } from 'formik';
 import { Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { Close, CloudUploadOutlined } from '@mui/icons-material';
+import { Label } from './label';
 
 interface ImageUploadProps {
   isRequired: boolean;
@@ -42,19 +43,15 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ isRequired, name, labe
   return (
     <Grid container direction="column">
       <Grid item xs={12}>
-        {isRequired && (
-          <Typography variant="body1" component="span" color="error" sx={{ fontWeight: 600 }}>
-            *{" "}
-          </Typography>
-        )}
-        <Typography variant="body2" component="span">
-          {label}
-        </Typography>
+        <Label
+          isRequired={isRequired}
+          isError={meta.touched && Boolean(meta.error)}
+          name={name}
+          label={label} />
       </Grid>
       <Grid item xs={12} sx={{ display: "flex", alignItems: "start", justifyContent: "center", border: '1px solid #BDBDBD', borderRadius: 2, padding: 1 }}>
         <Box
           sx={{
-            // border: '1px dashed grey',
             borderRadius: '8px',
             width: '200px',
             height: '200px',

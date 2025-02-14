@@ -1,5 +1,5 @@
 import { GetRole } from './role.type';
-import { Address, GetAddress } from '../../address.type';
+import { Address, GetAddress } from '../../../../../../common_api/src/index.ts';
 
 export type GetEmployee = {
     id: string;

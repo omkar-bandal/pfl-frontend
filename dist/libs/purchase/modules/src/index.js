@@ -10,4 +10,5 @@ tslib_1.__exportStar(require("./lib/hooks/useAppSelector"), exports);
 tslib_1.__exportStar(require("./lib/theme/purchase.muitheme"), exports);
 tslib_1.__exportStar(require("./lib/utils"), exports);
 tslib_1.__exportStar(require("./lib/store/purchase.reducer"), exports);
+tslib_1.__exportStar(require("./lib/hooks"), exports);
 //# sourceMappingURL=index.js.map

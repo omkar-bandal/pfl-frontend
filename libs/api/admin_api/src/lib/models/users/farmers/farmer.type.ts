@@ -1,4 +1,4 @@
-import { Address } from "../../address.type";
+import { Address } from "@prime-fresh/common_api";
 import { PostCrops } from "./crop.type";
 
 export type PostFarmer = {

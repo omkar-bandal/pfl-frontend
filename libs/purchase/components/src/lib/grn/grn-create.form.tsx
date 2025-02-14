@@ -1,71 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
-import { grnSchema, initValGRN, initValRFPAItems, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewGRN } from '@prime-fresh/purchase/modules';
-import { useActions, useAppSelector } from '@prime-fresh/modules';
+import { grnSchema, initValGRN, initValGRNProducts, PURCHASE_ARRAYS, PURCHASE_ROUTES, purchaseOptionsConstants, setPreviewGRN } from '@prime-fresh/purchase/modules';
+import { useActions } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
-import { productsDataState, setSelectedProduct, STRINGS } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
+import { removeProductPartialData, STRINGS } from '@prime-fresh/admin/modules';
+import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
 import { PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlipNums } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './grn.preview';
 import { appendFormData } from '@prime-fresh/shared/utils';
+import { useGetProductsPartialData, useGetCompanyNames, useGetUOMPartialData } from '@prime-fresh/shared/modules';
+import { calculateTotalAmount, getProductCount, getProductOrigin, getProductSizes, handleGRNProductsChange } from './helper-functions';
 
 export const GRNForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { setPreview } = useActions();
+  const { data: companies } = useGetCompanyNames();
+  console.log(companies);
+  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+  console.log("Company names", companyNames)
   const { data: dsNums } = useGetAllDealSlipNums(PURCHASE_API_URL.GET_ALL_DEAL_SLIP_NO);
   const dealSlipNums = dsNums ? mapToValueLabelArray(dsNums, 'id', 'dealSlipNo') : [];
-  const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-  const allProducts = Products? mapToValueLabelArray(Products, 'id', 'name') : [];
-  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const allUOMs = UOMs? mapToValueLabelArray(UOMs, 'id', 'unit') : [];
+  const { data: products } = useGetProductsPartialData();
+  const allProducts = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
+  const { data: UOMs } = useGetUOMPartialData();
+  const allUOMs = UOMs?.data ? mapToValueLabelArray(UOMs.data, 'id', 'unit') : [];
 
-  const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+  const { data: Locations, isLoading: loadingLocations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
   const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
   const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
 
-  const { selectedProduct } = useAppSelector(productsDataState);
 
- 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const debounce = (func: (...args: any[]) => void, delay: number) => {
-    let timeout: NodeJS.Timeout;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (...args: any[]) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), delay);
-    };
-  };
-  
-  const handleProductNameChange = React.useCallback(
-    debounce((dataId: string | null) => {
-      const selectedProduct = Products?.find((products) => products.id === dataId)
-      dispatch(setSelectedProduct(selectedProduct));
-    }, 300), // Adjust debounce time (e.g., 300ms)
-    [Products, dispatch]
-  );
- 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const calculateAmounts = React.useCallback((values: any, setFieldValue: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updatedProducts = values.products.map((product: any) => ({
-      ...product,
-      amt: product.quantity * product.rate,
-    }));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const subTotalAmt = updatedProducts.reduce((acc: any, product: any) => acc + product.amt, 0);  // Calculate subtotal from the product amounts
-    const totalAmt = subTotalAmt + values.freight + values.otherCharges;     // Calculate total (subtotal + freight + other charges)
-    const amtWords = numToWords(totalAmt); // Convert total amount to words
-    // Update form fields with calculated values
-    setFieldValue("products", updatedProducts);
-    setFieldValue("subTotalAmt", subTotalAmt);
-    setFieldValue("totalAmt", totalAmt);
-    setFieldValue("amtWords", amtWords);
-  }, [])
 
   const { mutateAsync: mutatePost, data, error } = useCreateGRN(PURCHASE_API_URL.POST_GRN);
 
@@ -90,37 +60,42 @@ export const GRNForm = () => {
         validateOnBlur={true}
         validateOnChange={true}
         onSubmit={(values) => {
-          console.log(values);
+          console.log("Submitted GRN: ", values);
           handleSubmit(values);
         }}>
-        {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
+        {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting, touched }) => (
           <form onSubmit={handleSubmit} encType='multipart/form-data'>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} md={6}>
-                <Typography variant='h4'>Goods Received Note</Typography>
+              <Grid item xs={12} marginBottom={2}>
+                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Goods Received Note</Typography>
               </Grid>
-              <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }} />
-              </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={3}>
                 <RadioGroupInput
                   isRequired={true}
                   label="Type of GRN"
                   name="grnType"
-                  alignment="horizontal"
-                  options={PURCHASE_ARRAYS.grnType}
+                  alignment="vertical"
+                  options={purchaseOptionsConstants.grnType}
                   value={values.grnType}
                   handleChange={handleChange} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={2}>
+                <RadioGroupInput
+                  isRequired={true}
+                  label="Location Type"
+                  name="locationType"
+                  alignment="vertical"
+                  options={purchaseOptionsConstants.locationTypes}
+                  value={values.locationType}
+                  handleChange={handleChange} />
+              </Grid>
+              <Grid item xs={12} md={7}>
                 <RadioGroupInput
                   isRequired={true}
                   label="Purchase Type"
                   name="purchaseType"
-                  alignment="horizontal"
-                  options={PURCHASE_ARRAYS.purchaseType}
+                  alignment="vertical"
+                  options={purchaseOptionsConstants.purchaseType}
                   value={values.purchaseType}
                   handleChange={handleChange} />
               </Grid>
@@ -134,7 +109,7 @@ export const GRNForm = () => {
                   handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={6}>
-                <SelectInput isRequired={true} label="Company Name" name="companyName" options={PURCHASE_ARRAYS.companyNames} value={values.companyName} handleChange={handleChange} />
+                <SelectInput isRequired={true} label="Company Name" name="companyName" options={companyNames} value={values.companyName} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput isRequired={true} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange} />
@@ -147,15 +122,17 @@ export const GRNForm = () => {
                   isRequired={true}
                   name="purchaseLocation"
                   label="Purchase Location"
+                  loading={loadingLocations}
                   options={allPurchaseLocation}
                   handleChange={(event, newValue) => {
-                    if (newValue) {
-                      setFieldValue(`purchaseLocation`, newValue.value);
-                      handleProductNameChange(newValue.value || '');
-                    } else {
-                      setFieldValue(`purchaseLocation`, '');
-                      handleProductNameChange('');
-                    }
+                    if (newValue !== null) {
+                      if (typeof newValue === 'string')
+                        setFieldValue(`purchaseLocation`, null);
+                      else {
+                        setFieldValue(`purchaseLocation`, newValue.value);
+                      }
+                    } else
+                      setFieldValue('purchaseLocation', null);
                   }} />
               </Grid>
               <Grid item xs={12} md={4}>
@@ -163,17 +140,27 @@ export const GRNForm = () => {
                   isRequired={true}
                   name="purchaseForSalesLocation"
                   label="Purchase For Sales Location"
+                  loading={loadingLocations}
                   options={allPurchaseForEachLocations}
                   handleChange={(event, newValue) => {
-                    if (newValue) {
-                      setFieldValue(`purchaseForSalesLocation`, newValue.value);
-                      handleProductNameChange(newValue.value || '');
-                    } else {
-                      setFieldValue(`purchaseForSalesLocation`, '');
-                      handleProductNameChange('');
-                    }
+                    if (newValue !== null) {
+                      if (typeof newValue === 'string')
+                        setFieldValue(`purchaseForSalesLocation`, null);
+                      else {
+                        setFieldValue(`purchaseForSalesLocation`, newValue.value);
+                      }
+                    } else
+                      setFieldValue('purchaseForSalesLocation', null);
                   }} />
               </Grid>
+              {touched.purchaseLocation === true && values.purchaseLocation === '' &&
+                <Grid item xs={12}>
+                  <TextInput isRequired={true} type="text" name="otherPurchaseLoc" label='Other Purchase Location' value={values.otherPurchaseLoc} handleChange={handleChange} />
+                </Grid>}
+              {touched.purchaseForSalesLocation === true && values.purchaseForSalesLocation === '' &&
+                <Grid item xs={12}>
+                  <TextInput isRequired={true} type="text" name="otherPurchaseForSalesLoc" label='Other Purchase For Sales Location' value={values.otherPurchaseForSalesLoc} handleChange={handleChange} />
+                </Grid>}
               <Grid item xs={12}>
                 <TextInput isRequired={false} type="text" name="specialReq" label='Special Request' value={values.specialReq} handleChange={handleChange} />
               </Grid>
@@ -187,91 +174,154 @@ export const GRNForm = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} padding={1}>
-                <FieldArray name="products">
+                <FieldArray name="grnProducts">
                   {({ push, remove }) => (
                     <>
-                      {values.products.map((_, index) => (
+                      {values.grnProducts.map((_, index) => (
                         <Grid container spacing={1} key={index} padding={1} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
                           <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
                             <Typography variant="body1">Product : {index + 1}</Typography>
                           </Grid>
                           <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-                            {values.products.length > 1 && <IconButton color='error' size='medium'
-                              onClick={() => remove(index)}><Close /></IconButton>}
+                            {values.grnProducts.length > 1 && <IconButton color='error' size='medium'
+                              onClick={() => { dispatch(removeProductPartialData(index)); remove(index) }}><Close /></IconButton>}
                           </Grid>
                           <Grid item xs={12} md={4}>
                             <AutoCompleteInput
                               isRequired={true}
-                              name={`products.${index}.product`}
+                              name={`grnProducts.${index}.productName`}
                               label="Product Name"
                               options={allProducts}
                               handleChange={(event, newValue) => {
-                                if (newValue) {
-                                  setFieldValue(`products.${index}.product`, newValue.value);
-                                  handleProductNameChange(newValue.value)
-                                } else {
-                                  setFieldValue(`products.${index}.product`, '');
-                                  handleProductNameChange(null)
-                                }
+                                if (newValue !== null) {
+                                  if (typeof newValue === 'string')
+                                    setFieldValue(`grnProducts.${index}.productName`, null);
+                                  else {
+                                    setFieldValue(`grnProducts.${index}.productName`, newValue.value);
+                                  }
+                                } else
+                                  setFieldValue(`grnProducts.${index}.productName`, null);
                               }}
                             />
                           </Grid>
-                          <Grid item xs={4} md={2}>
-                            <TextInput isRequired={false} name="productOrigin" label="Origin" value={selectedProduct?.productOrigin ? selectedProduct?.productOrigin : ''} isReadOnly={true} />
+                          <Grid item xs={6} md={2}>
+                            <TextInput
+                              isRequired={false}
+                              isReadOnly={true}
+                              name="productOrigin"
+                              label="Origin"
+                              value={getProductOrigin(values.grnProducts[index].productName, products?.data)} />
                           </Grid>
-                          <Grid item xs={4} md={3}>
+                          <Grid item xs={6} md={2}>
                             <SelectInput
                               isRequired={true}
-                              id={`products.${index}.count`}
+                              id={`grnProducts.${index}.size`}
+                              name={`grnProducts.${index}.size`}
+                              label="Size"
+                              options={getProductSizes(values.grnProducts[index].productName, products?.data)}
+                              value={values.grnProducts[index].size}
+                              handleChange={handleChange} />
+                          </Grid>
+                          <Grid item xs={6} md={2}>
+                            <SelectInput
+                              isRequired={true}
+                              id={`grnProducts.${index}.count`}
+                              name={`grnProducts.${index}.count`}
                               label="Count"
-                              name={`products.${index}.count`}
-                              value={values.products[index].count}
-                              options={selectedProduct?.count ? selectedProduct?.count.map((count) => ({ value: count, label: count })) : []}
+                              value={values.grnProducts[index].count}
+                              options={getProductCount(values.grnProducts[index].productName, products?.data)}
                               handleChange={handleChange}
                             />
                           </Grid>
-                          <Grid item xs={4} md={3}>
-                            <SelectInput isRequired={false} label="Unit" name={`products.${index}.uom`} options={allUOMs} value={values.products[index].uom} handleChange={handleChange} />
+                          <Grid item xs={6} md={2}>
+                            <SelectInput
+                              isRequired={false}
+                              id={`grnProducts.${index}.uom`}
+                              name={`grnProducts.${index}.uom`}
+                              label="Unit"
+                              options={allUOMs}
+                              value={values.grnProducts[index].uom}
+                              handleChange={handleChange} />
                           </Grid>
-                          <Grid item xs={4} md={4}>
-                            <TextInput isRequired={true} label='Quantity' name={`products.${index}.quantity`} type='number' value={values.products[index].quantity}
-                              handleChange={(e) => {
-                                handleChange(e);
-                                setFieldValue(`products.${index}.quantity`, parseFloat(e.target.value) || 0);
-                              }}
-                              onBlur={() => calculateAmounts(values, setFieldValue)}
+                          <Grid item xs={6} md={4}>
+                            <TextInput
+                              isRequired={true}
+                              label='Quantity'
+                              name={`grnProducts.${index}.quantity`}
+                              type='number'
+                              value={values.grnProducts[index].quantity || ""}
+                              handleChange={(event) => handleGRNProductsChange(index, "quantity", event.target.value, values, setFieldValue)}
                             />
                           </Grid>
-                          <Grid item xs={4} md={4}>
-                            <TextInput isRequired={true} label='Rate' name={`products.${index}.rate`} type='number' value={values.products[index].rate}
-                              handleChange={(e) => {
-                                handleChange(e);
-                                setFieldValue(`products.${index}.rate`, parseFloat(e.target.value) || 0);
-                              }}
-                              onBlur={() => calculateAmounts(values, setFieldValue)}
+                          <Grid item xs={6} md={4}>
+                            <TextInput
+                              isRequired={true}
+                              type='number'
+                              label='Rate'
+                              id={`grnProducts.${index}.unitPrice`}
+                              name={`grnProducts.${index}.unitPrice`}
+                              value={values.grnProducts[index].unitPrice || ""}
+                              handleChange={(event) => handleGRNProductsChange(index, "unitPrice", event.target.value, values, setFieldValue)}
                             />
                           </Grid>
-                          <Grid item xs={4} md={4}>
-                            <TextInput isRequired={false} label='Amount' name={`products.${index}.amt`} type='number' value={values.products[index].amt} handleChange={handleChange} />
+                          <Grid item xs={12} md={4}>
+                            <TextInput
+                              isRequired={false}
+                              isReadOnly={true}
+                              type='number'
+                              label='Amount'
+                              id={`grnProducts.${index}.amount`}
+                              name={`grnProducts.${index}.amount`}
+                              value={values.grnProducts[index].amount || ""} />
+                          </Grid>
+                          <Grid item xs={6} md={4}>
+                            <TextInput
+                              type="number"
+                              isRequired={true}
+                              id={`grnProducts.${index}.packingMaterialWeight`}
+                              name={`grnProducts.${index}.packingMaterialWeight`}
+                              label="Packing Material Weight (in grams)"
+                              value={values.grnProducts[index].packingMaterialWeight || ""}
+                              handleChange={(event) => handleGRNProductsChange(index, "packingMaterialWeight", event.target.value, values, setFieldValue)} />
+                          </Grid>
+                          <Grid item xs={6} md={4}>
+                            <TextInput
+                              type="number"
+                              isRequired={true}
+                              id={`grnProducts.${index}.grossWeight`}
+                              name={`grnProducts.${index}.grossWeight`}
+                              label="Gross Weight (in kg)"
+                              value={values.grnProducts[index].grossWeight || ""}
+                              handleChange={(event) => handleGRNProductsChange(index, "grossWeight", event.target.value, values, setFieldValue)} />
+                          </Grid>
+                          <Grid item xs={12} md={4}>
+                            <TextInput
+                              type="number"
+                              isRequired={false}
+                              isReadOnly={true}
+                              id={`grnProducts.${index}.netWeight`}
+                              name={`grnProducts.${index}.netWeight`}
+                              label="Net Weight (in kg)"
+                              value={values.grnProducts[index].netWeight} />
                           </Grid>
                           <Grid item xs={12} md={3}>
-                            <TextInput isRequired={false} label='Purchase Date' name={`products.${index}.purchaseDate`} type='date' value={values.products[index].purchaseDate} handleChange={handleChange} />
+                            <TextInput isRequired={false} label='Purchase Date' name={`grnProducts.${index}.purchaseDate`} type='date' value={values.grnProducts[index].purchaseDate} handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={12} md={3}>
-                            <TextInput isRequired={false} label='Dispatch Date' name={`products.${index}.dispatchDate`} type='date' value={values.products[index].dispatchDate} handleChange={handleChange} />
+                            <TextInput isRequired={false} label='Dispatch Date' name={`grnProducts.${index}.dispatchDate`} type='date' value={values.grnProducts[index].dispatchDate} handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={12} md={3}>
-                            <TextInput isRequired={false} label='Delivery Date' name={`products.${index}.deliveryDate`} type='date' value={values.products[index].deliveryDate} handleChange={handleChange} />
+                            <TextInput isRequired={false} label='Delivery Date' name={`grnProducts.${index}.deliveryDate`} type='date' value={values.grnProducts[index].deliveryDate} handleChange={handleChange} />
                           </Grid>
                           {values.source === "farmer" ?
                             (<Grid item xs={12} md={3}>
-                              <TextInput isRequired={false} label='Expected Harvest Date' name={`products.${index}.expectedHarvestDate`} type='date' value={values.products[index].expectedHarvestDate} handleChange={handleChange} />
+                              <TextInput isRequired={false} label='Expected Harvest Date' name={`grnProducts.${index}.expectedHarvestDate`} type='date' value={values.grnProducts[index].expectedHarvestDate} handleChange={handleChange} />
                             </Grid>) : ('')}
                           <Grid item xs={12} md={3}>
-                            <TextInput isRequired={false} label='Delivery Location' name={`products.${index}.deliveryLocation`} type='text' value={values.products[index].deliveryLocation} handleChange={handleChange} />
+                            <TextInput isRequired={false} label='Delivery Location' name={`grnProducts.${index}.deliveryLocation`} type='text' value={values.grnProducts[index].deliveryLocation} handleChange={handleChange} />
                           </Grid>
                           <Grid item xs={12} md={9}>
-                            <RadioGroupInput isRequired={true} label="RTV" name={`products.${index}.rtv`} options={[{ label: "Yes", value: "yes" }, { label: "No", value: "no" }]} value={values.products[index].rtv} onChange={handleChange} />
+                            <RadioGroupInput isRequired={true} label="RTV" name={`grnProducts.${index}.rtv`} options={[{ label: "Yes", value: true }, { label: "No", value: false }]} value={values.grnProducts[index].rtv} onChange={handleChange} />
                           </Grid>
                         </Grid>
                       ))}
@@ -282,8 +332,9 @@ export const GRNForm = () => {
                           color='success'
                           size='large'
                           sx={{ width: 150 }}
-                          onClick={() => push(initValRFPAItems)}>
+                          onClick={() => push(initValGRNProducts)}>
                           Add More
+
                         </Button>
                       </Box>
                     </>
@@ -294,10 +345,10 @@ export const GRNForm = () => {
                 <TextInput isRequired={false} isReadOnly={true} label="Subtotal" name="subTotalAmt" type='number' value={values.subTotalAmt} />
               </Grid>
               <Grid item xs={12} md={3}>
-                <TextInput isRequired={false} label="Freight" name="freight" type='number' value={values.freight} handleChange={handleChange} onBlur={() => calculateAmounts(values, setFieldValue)} />
+                <TextInput isRequired={false} label="Freight" name="freight" type='number' value={values.freight || ""} handleChange={e => calculateTotalAmount("freight", e.target.value, values, setFieldValue)} />
               </Grid>
               <Grid item xs={12} md={3}>
-                <TextInput isRequired={false} label="Other Charges" name="otherCharges" type='number' value={values.otherCharges} handleChange={handleChange} onBlur={() => calculateAmounts(values, setFieldValue)} />
+                <TextInput isRequired={false} label="Other Charges" name="otherCharges" type='number' value={values.otherCharges || ""} handleChange={e => calculateTotalAmount("otherCharges", e.target.value, values, setFieldValue)} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput isRequired={false} isReadOnly={true} label="Total Amount" name="totalAmt" type='number' value={values.totalAmt} />
@@ -334,6 +385,11 @@ export const GRNForm = () => {
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name='billImage' label='Bill Image' />
+              </Grid>
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+                <FormResetBtn label="Reset" handleReset={handleReset} />
+                <FormPreviewBtn onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }} />
               </Grid>
             </Grid>
           </form>)}

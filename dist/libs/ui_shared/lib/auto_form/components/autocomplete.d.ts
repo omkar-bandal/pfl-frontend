@@ -8,10 +8,11 @@ type AutoCompleteInputProps = {
     isRequired?: boolean;
     label: string;
     name: string;
+    loading?: boolean;
     options: AutoCompleteOption[];
     value?: AutoCompleteOption | null;
     handleBlur?: any;
-    handleChange?: (event: React.SyntheticEvent, newValue: AutoCompleteOption | null) => void;
+    handleChange?: (event: React.SyntheticEvent, newValue: AutoCompleteOption | string | null) => void;
 };
 export declare const AutoCompleteInput: React.FC<AutoCompleteInputProps>;
 export {};

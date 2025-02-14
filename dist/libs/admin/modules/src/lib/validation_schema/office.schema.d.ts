@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 export declare const officeValidationSchema: Yup.ObjectSchema<{
     name: string;
     address: {
-        address2?: string | undefined;
+        address2?: string | null | undefined;
         address1: string;
         location: string;
         city: string;

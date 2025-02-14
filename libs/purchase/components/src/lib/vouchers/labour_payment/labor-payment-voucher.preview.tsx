@@ -46,7 +46,7 @@ export const LPVoucherPreview = () => {
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Day of Loading / Unloading : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.loadingDate.toLocaleString()}
+                    Day of Loading / Unloading : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.loadingDate?.toLocaleString()}
                     </Typography>
                 </Typography>
             </Grid>

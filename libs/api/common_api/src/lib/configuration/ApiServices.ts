@@ -27,7 +27,7 @@ class ApiServices<Req, Res> {
   }
 
   // Get an Data by ID
-  async getDataById(url: string, id: string): Promise<Res> {
+  async getDataById(url: string, id: string | null): Promise<Res> {
     try {
       const response: AxiosResponse = await axiosInstance.get(`${url}/${id}`);
       console.log(response.data.data);

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfficeInitialValues = void 0;
-const address_initial_value_1 = require("./address.initial-value");
+const modules_1 = require("@prime-fresh/shared/modules");
 exports.OfficeInitialValues = {
     name: null,
-    address: address_initial_value_1.initValAddress,
+    address: modules_1.initValAddress,
     cFirstName: null,
     cMiddleName: null,
     cLastName: null,

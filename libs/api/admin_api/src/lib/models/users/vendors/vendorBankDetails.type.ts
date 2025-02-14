@@ -1,4 +1,4 @@
-import { Address } from "../../address.type";
+import { Address } from "@prime-fresh/common_api";
 
 export type PostVendorBankDetails = {
     beneficiaryFName: string | null;

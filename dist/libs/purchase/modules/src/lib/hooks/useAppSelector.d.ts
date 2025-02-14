@@ -29,12 +29,12 @@ export declare const useAppSelector: import("react-redux").UseSelector<{
     tp_voucher: {
         tpVouchers: import("@prime-fresh/purchase_api").GetTPvoucher[];
         selectedTPVoucher: import("@prime-fresh/purchase_api").GetTPvoucher | undefined;
-        previewTPVoucher: import("@prime-fresh/purchase_api").PostTPvoucher | undefined;
+        previewTPVoucher: import("@prime-fresh/purchase_api").PostTPvoucher | import("@prime-fresh/purchase_api").GetTPvoucher | undefined;
     };
     pmp_voucher: {
         pmpVouchers: import("@prime-fresh/purchase_api").GetPMPvoucher[];
         selectedPMPVoucher: import("@prime-fresh/purchase_api").GetPMPvoucher | undefined;
-        previewPMPVoucher: import("@prime-fresh/purchase_api").PostPMPvoucher | undefined;
+        previewPMPVoucher: import("@prime-fresh/purchase_api").PostPMPvoucher | import("@prime-fresh/purchase_api").GetPMPvoucher | undefined;
     };
     delivery_challan: {
         dcs: import("@prime-fresh/purchase_api").GetDeliveryChallan[];

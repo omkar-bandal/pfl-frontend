@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { addressSchema } from '@prime-fresh/shared/modules';
 
 export const employeeValidationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -31,18 +32,7 @@ export const employeeValidationSchema = Yup.object().shape({
     companyEmail: Yup.string()
         .required('Company email is required')
         .email('Invalid email format'),
-    address: Yup.object().shape({
-        street: Yup.string()
-            .required('Street address is required'),
-        city: Yup.string()
-            .required('City is required'),
-        state: Yup.string()
-            .required('State is required'),
-        country: Yup.string()
-            .required('Country is required'),
-        postalCode: Yup.string()
-            .required('Postal Code is required'),
-    }),
+    address: addressSchema,
     joiningDate: Yup.string()
     .required('Joining date is required'),
     relocationDate: Yup.string().optional(),

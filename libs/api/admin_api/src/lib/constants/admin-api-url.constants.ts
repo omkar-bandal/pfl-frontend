@@ -1,0 +1,129 @@
+export const adminApiUrlConstants = {
+    
+    //roles
+    GET_ALL_ROLES: "/roles/",
+
+    //Employee
+    GET_ALL_EMPLOYEES: "/employee/",
+    CREATE_EMPLOYEE: "/employee/",
+    GET_AN_EMPLOYEE: "/employee",
+    UPDATE_AN_EMPLOYEE: "/employee",
+    DELETE_EMPLOYEE: "/employee/",
+    CHANGE_EMPLOYEE_STATUS: "/employeeCredential/",
+
+    //Customers
+    GET_ALL_CUSTOMERS: "/customers/",
+    POST_CUSTOMER: "/customers/",
+    CREATE_CUSTOMER: "/customers/",
+    DELETE_CUSTOMER: "/customers/",
+    UPDATE_CUSTOMER: "/customers",
+    GET_A_CUSTOMER: "/customers",
+    GET_CUSTOMER_NAMES: "/customers/names/all",
+    GET_CUSTOMER_PARTIAL_DATA: "/customers/partial/all",
+
+    GET_ALL_CUSTOMER_TYPE: "/customerType/",
+    GET_ALL_CUSTOMER_CATEGORY: "/customerCategory/ ",
+
+    //Farmers
+    GET_ALL_FARMERS: "/farmers/",
+    GET_A_FARMER: "/farmers",
+    POST_FARMER: "/farmers/",
+    CREATE_FARMER: "/farmers/",
+    UPDATE_FARMER: "/farmers",
+    DELETE_FARMER: "/farmers",
+
+    GET_ALL_FARMERS_FILTERED: "/farmers/filterFarmer/all",
+
+
+    //Vendors
+    GET_ALL_VENDORS: "/vendors/",
+    GET_A_VENDOR: "/vendors",
+    POST_VENDOR: "/vendors/",
+    CREATE_VENDOR: "/vendors/",
+    UPDATE_VENDOR: "/vendors",
+    DELETE_VENDOR: "/vendors",
+
+
+    GET_ALL_VENDORS_FILTERED: "/vendors/filterVendor/all",
+
+    GET_ALL_VENDOR_CAT: "/vendor-categories/",
+    CREATE_VENDOR_CAT: "/vendor-categories/",
+    GET_A_VENDOR_CAT: "/vendor-categories",
+    UPDATE_VENDOR_CAT: "/vendor-categories",
+    DELETE_VENDOR_CAT: "/vendor-categories",
+
+    GET_ALL_VENDOR_SUBCAT: "/vendor-subcategories/",
+    CREATE_VENDOR_SUBCAT: "/vendor-subcategories/",
+    GET_A_VENDOR_SUBCAT: "/vendor-subcategories",
+    UPDATE_VENDOR_SUBCAT: "/vendor-subcategories",
+    DELETE_VENDOR_SUBCAT: "/vendor-subcategories",
+
+    GET_VENDOR_SUBCAT_BY_QUERY: "/vendor-subcategories/getSubcategories",
+    GET_VENDOR_BY_QUERY: "/vendors/bysearch/getvendors",
+    
+    //Prooducts
+    GET_ALL_PRODUCTS: "/products/",
+    GET_A_PRODUCTS: "/products",
+    CREATE_PRODUCTS: "/products/",
+    UPDATE_PRODUCTS: "/products",
+    DELETE_PRODUCT: "/products",
+    GET_PRODUCTS_PARTIAL: "/products/partial/data",
+
+    GET_ALL_PRODUCT_CATEGORY: "/productCategory/",
+    GET_A_PRODUCT_CATEGORY: "/productCategory",
+    CREATE_PRODUCT_CATEGORY: "/productCategory",
+    UPDATE_PRODUCT_CATEGORY: "/productCategory",
+    DELETE_PRODUCT_CATEGORY: "/productCategory",
+
+    GET_ALL_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    GET_A_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    CREATE_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    UPDATE_PRODUCT_SUBCATEGORY: "/productSubcategory",
+    DELETE_PRODUCT_SUBCATEGORY: "/productSubcategory",
+
+    GET_ALL_PRODUCT_CLASSIFICATION: "/productClassification",
+    GET_A_PRODUCT_CLASSIFICATION: "/productClassification",
+    CREATE_PRODUCT_CLASSIFICATION: "/productClassification",
+    UPDATE_PRODUCT_CLASSIFICATION: "/productClassification",
+    DELETE_PRODUCT_CLASSIFICATION: "/productClassification",
+
+    GET_ALL_UOM: "/uoms/",
+    CREATE_UOM: "/uoms/",
+    GET_A_UOM: "/uoms",
+    UPDATE_UOM: "/uoms",
+    DELETE_UOM: "/uoms",
+
+    GET_ALL_UOM_CONVERSION: "/uom-conversion-matrix/",
+    GET_A_UOM_CONVERSION: "/uom-conversion-matrix",
+    CREATE_UOM_CONVERSION: "/uom-conversion-matrix/",
+    UPDATE_UOM_CONVERSION: "/uom-conversion-matrix",
+    DELETE_UOM_CONVERSION: "/uom-conversion-matrix",
+
+    //Locations
+    //Offices
+    GET_ALL_REGI_OFFICES: "/location_offices/REGISTERED_OFFICE",
+    GET_ALL_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
+    GET_A_REGI_OFFICES: "/location_offices/REGISTERED_OFFICE",
+    GET_A_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
+    POST_REGI_OFFICES: "/location_offices/REGISTERED_OFFICE",
+    POST_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
+    UPDATE_REGI_OFFICES: "/location_offices/REGISTERED_OFFICE",
+    UPDATE_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
+    
+    //Offices
+    GET_ALL_OFFICES: "/location-offices",
+    GET_A_OFFICE: "/location-offices",
+    CREATE_OFFICE: "/location-offices",
+    UPDATE_OFFICE: "/location-offices",
+    DELETE_OFFICE: "/location-offices",
+    
+    
+    //Branches
+    GET_ALL_BRANCHES: "/location-branches",
+    GET_A_BRANCH:"/location-branches",
+    CREATE_BRANCH: "/location-branches",
+    UPDATE_BRANCH: "/location-branches",
+    DELETE_BRANCH: "/location-branches",
+
+    GET_ALL_BRANCHES_FILTERED: "/location-branches/filterData/filter/all",
+}

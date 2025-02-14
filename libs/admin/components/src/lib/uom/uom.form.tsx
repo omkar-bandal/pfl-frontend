@@ -1,20 +1,19 @@
-import { ADMIN_ROUTES, initValUOM, uomSchema } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, PostUOM, useCreateUOM, useGetAUOM, useUpdateUOM } from "@prime-fresh/admin_api";
+import { Formik } from "formik";
+import { ADMIN_ROUTES, initValUOM, uomSchema, useCreateUOM, useGetUOMById, useUpdateUOMById } from "@prime-fresh/admin/modules";
+import { PostUOM } from "@prime-fresh/admin_api";
 import { FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import { appendFormData } from "@prime-fresh/shared/utils";
-import { Formik } from "formik";
 
 export const UOMForm = () => {
     const { id } = useParams<{ id: string }>();
     const uomId = id ? id : '';
-    const { data, isLoading } = useGetAUOM(ADMIN_API_URL.GET_A_UOM, uomId);
-    const uom = data ?
+    const { data, isLoading } = useGetUOMById(uomId);
+    const uom = data !== null && data?.data ?
         {
-            unit: data.unit,
-            abbreviation: data.abbreviation,
-            description: data.description,
+            unit: data.data.unit,
+            abbreviation: data.data.abbreviation,
+            description: data.data.description,
         } :
         {
             unit: '',
@@ -23,25 +22,22 @@ export const UOMForm = () => {
         };
     const UOMsInitValue = uomId === '' ? initValUOM : uom;
 
-    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateUOM(ADMIN_API_URL.CREATE_UOM);
-    const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateUOM(ADMIN_API_URL.UPDATE_UOM, uomId);
+    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateUOM();
+    const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateUOMById(uomId);
 
     const navigate = useNavigate();
 
     const handleSubmit = (values: PostUOM) => {
-        console.log(values);
-        const formData = new FormData();
-        appendFormData(formData, values);
         uomId === '' ?
-            (mutatePost(formData).then(() => {
+            (mutatePost(values).then(() => {
                 toast.success(postRes ? postRes.message : "UOM created successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_UOMs);
-                }, 2400);
+                }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating UOM");
             }))
-            : (mutatePatch(formData).then(() => {
+            : (mutatePatch(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "UOM updated successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_UOMs);
@@ -77,7 +73,7 @@ export const UOMForm = () => {
                             <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
                                     label={uomId === "" ? "Create" : "Update"}
-                                    isError={uomId === "" ? !postError : !patchError}
+                                    isError={uomId === "" ? postError : patchError}
                                     isSubmitting={isSubmitting} />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
                             </Grid>

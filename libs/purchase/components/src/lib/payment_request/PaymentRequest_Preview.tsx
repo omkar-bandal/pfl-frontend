@@ -9,12 +9,6 @@ export const PaymentRequestPreview = () => {
         <PreviewContainer title='Payment Request'>
         <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPaymentReq?.refGRN}
-                </Typography>
-            </Typography>
-        </Grid>
-        <Grid item>
-            <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                 Party Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPaymentReq?.partyName}
                 </Typography>
             </Typography>
@@ -75,7 +69,7 @@ export const PaymentRequestPreview = () => {
         </Grid>
         <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                Contact Person : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPaymentReq?.contactperson}
+                Contact Person : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPaymentReq?.contactpersonRec}
                 </Typography>
             </Typography>
         </Grid>

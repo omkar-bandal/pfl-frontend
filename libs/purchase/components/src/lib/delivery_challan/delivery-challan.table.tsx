@@ -12,6 +12,7 @@ export const DeliveryChallanTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
     const { data: allDCs, isLoading, isError, error } = useGetAllDeliveryChallan(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN);
+    console.log("all DCs", allDCs);
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')

@@ -1,9 +1,9 @@
-import { Address, GetAddress } from "../../address.type"
+import { Address, GetAddress } from "@prime-fresh/common_api";
 
 export type PostDeliveryDetails = {
     deliveryAddress: Address,
     deliveryAddressProofCopy: string
-    deliveryTime: Date,
+    deliveryTime: string | null,
     receivingPersonFName: string,
     receivingPersonMName: string,
     receivingPersonLName: string,
@@ -17,7 +17,7 @@ export type GetDeliveryDetails = {
     id: string,
     deliveryAddress: GetAddress,
     deliveryAddressProofCopy: string
-    deliveryTime: Date,
+    deliveryTime: string,
     receivingPersonFName: string,
     receivingPersonMName: string,
     receivingPersonLName: string,

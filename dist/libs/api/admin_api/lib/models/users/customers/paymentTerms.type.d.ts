@@ -12,10 +12,10 @@ export type PostPaymentTerms = {
     securityDepoAmt: number;
     IELinAmt: number;
     IELRecommendedBy: string;
-    IELRecommendedDate: Date;
+    IELRecommendedDate: string | null;
     RELinAmt: number;
     RELRecommendedBy: string;
-    RELRecommendedDate: Date;
+    RELRecommendedDate: string | null;
     reason: string;
     docEvidenceCopy: File | null;
 };
@@ -34,10 +34,10 @@ export type GetPaymentTerms = {
     securityDepoAmt: number;
     IELinAmt: number;
     IELRecommendedBy: string;
-    IELRecommendedDate: Date;
+    IELRecommendedDate: string;
     RELinAmt: number;
     RELRecommendedBy: string;
-    RELRecommendedDate: Date;
+    RELRecommendedDate: string;
     reason: string;
     docEvidenceCopy: string;
 };

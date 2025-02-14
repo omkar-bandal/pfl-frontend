@@ -1,21 +1,43 @@
-import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { PURCHASE_API_URL, useGetDeliveryChallan } from "@prime-fresh/purchase_api";
-import { useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
-import { smallLogo } from "@prime-fresh/ui_shared";
+import { toast } from "@prime-fresh/ui_shared";
+import { axiosInstance, COM_API_URL, SHARED_API_URL, useGetCompanyNames } from "@prime-fresh/common_api";
+import { ADMIN_API_URL, useGetAllCustomerNames, useGetAllFilteredBranches } from "@prime-fresh/admin_api";
+import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { images } from "@prime-fresh/assets";
 
 export const DeliveryChallanView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
+    const { data: companies } = useGetCompanyNames(SHARED_API_URL.COMPANY_NAMES);
+    const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+    const { data: customerlist } = useGetAllCustomerNames(ADMIN_API_URL.GET_CUSTOMER_NAMES);
+    const customerList = customerlist ? mapToValueLabelArray(customerlist, 'id', 'organisationName') : [];
     const reactToPrintFn = useReactToPrint({ contentRef });
     // const navigate = useNavigate();
-    const [reason, setReason] = useState<string>("");
-    const [approval, setApproval] = useState<string>("");
+    // const [reason, setReason] = useState<string>("");
+    // const [approval, setApproval] = useState<string>("");
     const { id } = useParams<{ id: string }>();
     const dcId = id ? id : '';
     console.log(dcId);
     const { data: dcData, isLoading } = useGetDeliveryChallan(PURCHASE_API_URL.GET_A_DELIVERY_CHALLAN, dcId);
     console.log("Data: ", dcData);
+    const selectedCompany = useMemo(() => companies?.find(company => company.id === dcData?.companyName), [companies, dcData])
+    const handleDownload = async () => {
+        try {
+            const response = await axiosInstance.post(`${COM_API_URL.BASE_URL}/invoice/generate/profarma/${dcId}`);
+            const pdfUrl = response.data.invoiceurl;
+            if (pdfUrl) {
+                toast.success("Invoice created Successfully")
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Error fetching the PDF URL');
+        }
+    };
+
     return (
         <Container maxWidth="xl">
             {isLoading ?
@@ -29,39 +51,36 @@ export const DeliveryChallanView = () => {
                                 <Typography variant="h4" component="div" sx={{ fontWeight: 700 }}>Delivery Challan Details</Typography>
                             </Grid>
                             <Grid xs={12} md={6}>
-                                <Grid container columnSpacing={2}>
+                                <Grid container sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                                     <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED") }}>Approve</Button>
+                                        <Button fullWidth variant="contained" color="success" size="medium" sx={{ width: 130, height: 40, marginRight: 20 }} onClick={() => reactToPrintFn()}>Print</Button>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved") }}>Not Approve</Button>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
-                                    </Grid>
+                                    {dcData?.deliveryCType === "customer" &&
+                                        <Grid item xs={4}>
+                                            <Button fullWidth variant="contained" color="info" size="medium" sx={{ width: 130, height: 40 }} onClick={handleDownload}>Invoice</Button>
+                                        </Grid>}
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
                                 <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                         <Box sx={{ flex: 1, padding: 1 }} ref={contentRef}>
                             <Box sx={{ width: '100%', marginY: 1, padding: 2, border: `1px solid #000000` }}>
                                 <Grid container marginBottom={2}>
+                                    <Grid item xs={10} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start" }}>
+                                        <Typography variant="h6" component="div" textAlign="end" sx={{ fontWeight: 700 }}>DELIVERY CHALLAN</Typography>
+                                        <Typography variant="h4" component="div" textAlign="end" sx={{ fontWeight: 700 }}>{selectedCompany?.name.toUpperCase()}</Typography>
+                                    </Grid>
                                     <Grid item xs={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Box sx={{ width: 250, height: 100, padding: 1 }}>
                                             <img
-                                                src={smallLogo}
+                                                src={images.sidebarlogo}
                                                 alt="prime-fresh-logo"
                                                 style={{ width: `100%`, height: `100%` }}
                                             />
                                         </Box>
-                                    </Grid>
-                                    <Grid item xs={10} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "end" }}>
-                                        <Typography variant="h6" component="div" textAlign="end" sx={{ fontWeight: 700 }}>DELIVERY CHALLAN</Typography>
-                                        <Typography variant="h4" component="div" textAlign="end" sx={{ fontWeight: 700 }}>PRIME FRESH LIMITED</Typography>
-                                        <Typography variant="body1" component="div" textAlign="end" sx={{ fontWeight: 700 }}>{`( FORMERLY KNOWN AS PRIME CUSTOMER SERVICES  LIMITED )`}</Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container padding={1} rowSpacing={1} sx={{ border: '1px solid black' }}>
@@ -73,12 +92,6 @@ export const DeliveryChallanView = () => {
                                         <Typography variant="body2" component="div">Ph.:+91-79-40320244, Email: info@primefreshlimited.com, Web: www.primefreshlirnited.corn</Typography>
                                     </Grid>
                                     <Grid item xs={2}>
-                                        <Typography variant="body2" component="div">Naroda Shop:</Typography>
-                                    </Grid>
-                                    <Grid item xs={10}>
-                                        <Typography variant="body2" component="div"> Mini Shed No. 3, Anar Estate, Nr. K.D.Market, Naroda Fruit Market, Naroda, Ahrnedabad.</Typography>
-                                    </Grid>
-                                    <Grid item xs={2}>
                                         <Typography variant="body2" component="div">Mumbai Office:</Typography>
                                     </Grid>
                                     <Grid item xs={10}>
@@ -88,12 +101,30 @@ export const DeliveryChallanView = () => {
                                 <Grid container marginY={1}>
                                     <Grid item xs={7} sx={{ border: `1px solid black` }}>
                                         <Grid container padding={1}>
-                                            <Grid item xs={3}>
-                                                <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>M/s. </Typography>
-                                            </Grid>
-                                            <Grid item xs={9}>
-                                                <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{dcData?.partyName}</Typography>
-                                            </Grid>
+                                            {dcData?.deliveryCType === "customer" ?
+                                                (<>
+                                                    <Grid item xs={3}>
+                                                        <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>Customer Name: </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={9}>
+                                                        <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{customerList.find(customer => customer.value === dcData?.partyName)?.label}</Typography>
+                                                    </Grid>
+                                                </>) :
+                                                (<>
+                                                    <Grid item xs={3}>
+                                                        <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>From Location </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={9}>
+                                                        <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{Locations?.find(location => location.id === dcData?.fromLocation)?.name}</Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <Typography variant="subtitle1" component="div" sx={{ color: "#555" }}>To Location </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={9}>
+                                                        <Typography variant="subtitle1" component="div" sx={{ color: "#000000", fontWeight: 700 }}>{Locations?.find(location => location.id === dcData?.toLocation)?.name}</Typography>
+                                                    </Grid>
+                                                </>)
+                                            }
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={5} sx={{ border: `1px solid black` }}>
@@ -120,25 +151,27 @@ export const DeliveryChallanView = () => {
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>No.</TableCell>
-                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>PARTICUKARS</TableCell>
+                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>PARTICULARS</TableCell>
+                                                    <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>UOM</TableCell>
                                                     <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>QTY</TableCell>
                                                     <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>RATE</TableCell>
                                                     <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: "bold" }}>Amount (Rs)</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {dcData?.items.map((row, index) => (
-                                                    <TableRow key={row.itemName}>
+                                                {dcData?.deliveryChallanProducts.map((row, index) => (
+                                                    <TableRow key={row.productName.id}>
                                                         <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{index + 1}</TableCell>
-                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.itemName}</TableCell>
-                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.itemQty}</TableCell>
-                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.rate}</TableCell>
-                                                        <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.amt}</TableCell>
+                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.productName.name}</TableCell>
+                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.uom.unit}</TableCell>
+                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.quantity}</TableCell>
+                                                        <TableCell align="left" sx={{ borderBottom: `1px solid #000000`, borderRight: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.unitPrice}</TableCell>
+                                                        <TableCell align="center" sx={{ borderBottom: `1px solid #000000`, fontSize: 17, fontWeight: 500 }}>{row.amount}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>
                                             <TableRow>
-                                                <TableCell colSpan={5} align="left">
+                                                <TableCell colSpan={6} align="left">
                                                     GST No. (Gujarat) : 24AAECP2124P1ZD / GST No. (Maharashtra) : 27AAECP2124P1Z7 / CIN : L51109GJ2007PLC050404
                                                 </TableCell>
                                             </TableRow>

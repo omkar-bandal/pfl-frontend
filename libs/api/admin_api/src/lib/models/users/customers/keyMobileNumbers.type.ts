@@ -1,4 +1,4 @@
-import { Address } from "../../address.type";
+import { Address, GetAddress } from "@prime-fresh/common_api";
 
 export type PostKeyMobileNumbers = {
     accDeptFName: string;
@@ -66,13 +66,13 @@ export type GetKeyMobileNumbers = {
     ref1FName: string;
     ref1MName: string;
     ref1LName: string;
-    ref1Address: Address;
+    ref1Address: GetAddress;
     ref1ContactNo: string;
     ref1Email: string;
     ref2FName: string;
     ref2MName: string;
     ref2LName: string;
-    ref2Address: Address;
+    ref2Address: GetAddress;
     ref2ContactNo: string;
     ref2Email: string;
   }

@@ -1,30 +1,55 @@
+import { useCallback, useMemo } from "react";
 import { FieldArray, Formik } from "formik";
 import { initValProduct } from "./initValProduct";
 import { Box, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
 import { FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, MultipleTextInput, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
-import { ADMIN_API_URL, PostProduct, useCreateProduct, useGetAllProductClassification, useGetAllProductsCat, useGetAllProductSubCat, useGetAllUOMs } from "@prime-fresh/admin_api";
+import { PostProduct } from "@prime-fresh/admin_api";
 import { appendFormData } from '@prime-fresh/shared/utils';
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, useCreateProduct, useGetAllProductCategories, useGetAllProductClassifications, useGetAllProductSubcategories, useGetAllUOMs } from "@prime-fresh/admin/modules";
 import { Add, Close } from "@mui/icons-material";
 
 export const ProductCreateForm = () => {
     const navigate = useNavigate();
-    const { data: classifications } = useGetAllProductClassification(ADMIN_API_URL.GET_ALL_PRODUCT_CLASSIFICATION);
-    const { data: categories } = useGetAllProductsCat(ADMIN_API_URL.GET_ALL_PRODUCT_CATEGORY);
-    const { data: subcategories } = useGetAllProductSubCat(ADMIN_API_URL.GET_ALL_PRODUCT_SUBCATEGORY);
-    console.log(subcategories);
-    const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+    const { data: productclass } = useGetAllProductClassifications();
+    const classifications = useMemo(() => {
+        return productclass !== null && productclass?.data
+            ? mapToValueLabelArray(productclass.data, 'id', 'name')
+            : [];
+    }, [productclass]);
+
+    const { data: productcat } = useGetAllProductCategories();
+    const categories = useMemo(() => {
+        return productcat !== null && productcat?.data
+            ? mapToValueLabelArray(productcat.data, 'id', 'name')
+            : [];
+    }, [productcat]);
+
+    const { data: productsubcategories } = useGetAllProductSubcategories();
+    const subcategories = useMemo(() => {
+        return productsubcategories !== null && productsubcategories?.data
+            ? mapToValueLabelArray(productsubcategories.data, 'id', 'name')
+            : [];
+    }, [productsubcategories]);
+
+    const { data: units } = useGetAllUOMs();
+    const uoms = useMemo(() => {
+        return units !== null && units?.data
+            ? mapToValueLabelArray(units.data, 'id', 'unit')
+            : [];
+    }, [units]);
+
     const qcParamsType = ["good", "bad"].map(type => { return { value: type, label: type } });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleGetCategoryAndClassification = (values: PostProduct, setFieldValue: (field: string, value: any) => void) => {
-        const subcategory = subcategories?.find(subcategory => subcategory.id === values.subcategory);
+    const handleGetCategoryAndClassification = useCallback((values: PostProduct, setFieldValue: (field: string, value: any) => void) => {
+        const subcategory = productsubcategories?.data?.find(subcategory => subcategory.id === values.subcategory);
         setFieldValue("category", subcategory?.category.id);
         setFieldValue("classification", subcategory?.classification.id);
-    }
+    }, [productsubcategories?.data])
 
-    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateProduct(ADMIN_API_URL.CREATE_PRODUCTS);
+    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateProduct();
+
     const handleSubmit = (values: PostProduct) => {
         const formData = new FormData();
         appendFormData(formData, values);
@@ -51,12 +76,8 @@ export const ProductCreateForm = () => {
             {({ values, handleChange, handleReset, handleSubmit, setFieldValue, isSubmitting }) => (
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <Grid container spacing={1} padding={1}>
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="h4">Product</Typography>
-                        </Grid>
-                        <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={postError} label="Create" />
-                            <FormResetBtn label="Reset" handleReset={handleReset} />
+                        <Grid item xs={12}>
+                            <Typography variant="h4">Create Product</Typography>
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <TextInput
@@ -93,7 +114,7 @@ export const ProductCreateForm = () => {
                                 isRequired={true}
                                 label="UOM"
                                 name="uom"
-                                options={mapToValueLabelArray(uoms ? uoms : [], 'id', 'unit')}
+                                options={uoms}
                                 value={values.uom}
                                 handleChange={handleChange} />
                         </Grid>
@@ -142,7 +163,7 @@ export const ProductCreateForm = () => {
                                 isRequired={true}
                                 label="Subcategory"
                                 name="subcategory"
-                                options={mapToValueLabelArray(subcategories ? subcategories : [], 'id', 'name')}
+                                options={subcategories}
                                 value={values.subcategory}
                                 handleChange={handleChange}
                                 onBlur={() => handleGetCategoryAndClassification(values, setFieldValue)} />
@@ -152,7 +173,7 @@ export const ProductCreateForm = () => {
                                 isRequired={true}
                                 label="Category"
                                 name="category"
-                                options={mapToValueLabelArray(categories ? categories : [], 'id', 'name')}
+                                options={categories}
                                 value={values.category}
                                 handleChange={handleChange} />
                         </Grid>
@@ -161,7 +182,7 @@ export const ProductCreateForm = () => {
                                 isRequired={true}
                                 label="Classification"
                                 name="classification"
-                                options={mapToValueLabelArray(classifications ? classifications : [], 'id', 'name')}
+                                options={classifications}
                                 value={values.classification}
                                 handleChange={handleChange} />
                         </Grid>
@@ -248,6 +269,10 @@ export const ProductCreateForm = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <ImageUpload isRequired={false} name="image" label="Product Image" />
+                        </Grid>
+                        <Grid item xs={12} marginY={2} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+                            <FormSubmitBtn isSubmitting={isSubmitting} isError={postError} label="Create" />
+                            <FormResetBtn label="Reset" handleReset={handleReset} />
                         </Grid>
                     </Grid>
                 </form>

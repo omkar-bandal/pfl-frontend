@@ -36,7 +36,14 @@ export interface GetPMPvoucher {
     requestedBy: RequestedBy;
     requestingDepartment: string;
     voucherNo: string;
-    grnNo: string;
+    grnNo: {
+        id: string;
+        grnNo: string;
+    };
+    companyName: {
+        id: string;
+        companyName: string;
+    };
     debitCreditTo: string;
     payReceivedFrom: string;
     location: string;
@@ -49,7 +56,6 @@ export interface GetPMPvoucher {
     totalAmt: number;
     amtWords: string;
     receivedBy: string;
-    companyName: string;
     materials: {
         id: string;
         itemName: string;

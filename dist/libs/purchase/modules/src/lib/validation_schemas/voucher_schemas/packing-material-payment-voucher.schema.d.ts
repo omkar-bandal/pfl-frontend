@@ -18,9 +18,9 @@ export declare const packingMaterialPaymentVoucherSchema: yup.ObjectSchema<{
     receiverName: string;
     materials: {
         uom: string;
-        rate: number;
         itemName: string;
         itemQty: number;
+        rate: number;
     }[] | undefined;
 }, yup.AnyObject, {
     companyName: undefined;

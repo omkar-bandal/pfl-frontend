@@ -10,7 +10,7 @@ export declare const initValCustomer: {
     };
     organisationType: string;
     otherType: string;
-    customerAddress: import("@prime-fresh/admin_api").Address;
+    customerAddress: Address;
     primaryContactNo: string;
     secondaryContactNo: string;
     emailPrimary: string;
@@ -42,13 +42,13 @@ export declare const initValCustomer: {
         ref1FName: string;
         ref1MName: string;
         ref1LName: string;
-        ref1Address: import("@prime-fresh/admin_api").Address;
+        ref1Address: Address;
         ref1ContactNo: string;
         ref1Email: string;
         ref2FName: string;
         ref2MName: string;
         ref2LName: string;
-        ref2Address: import("@prime-fresh/admin_api").Address;
+        ref2Address: Address;
         ref2ContactNo: string;
         ref2Email: string;
     };
@@ -58,7 +58,7 @@ export declare const initValCustomer: {
         contactPersonMName: string;
         contactPersonLName: string;
         commonlyKnownAs: string;
-        billingAddress: import("@prime-fresh/admin_api").Address;
+        billingAddress: Address;
         billingAddressProofCopy: string;
         primaryContactNo: string;
         secondaryContactNo: string;
@@ -67,7 +67,7 @@ export declare const initValCustomer: {
         billingFormatCopy: string;
     };
     deliveryDetails: {
-        deliveryAddress: import("@prime-fresh/admin_api").Address;
+        deliveryAddress: Address;
         deliveryAddressProofCopy: string;
         deliveryTime: Date;
         receivingPersonFName: string;
@@ -107,7 +107,7 @@ export declare const initValCustomer: {
         bankBranch: string;
         bankAccNo: string;
         ifscCode: string;
-        bankAddress: import("@prime-fresh/admin_api").Address;
+        bankAddress: Address;
     };
     productSpecification: {
         articleName: string;

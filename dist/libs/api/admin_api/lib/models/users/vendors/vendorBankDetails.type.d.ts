@@ -1,4 +1,4 @@
-import { Address } from '../../address.type';
+import { Address } from '../../../../../../common_api/src/index.ts';
 
 export type PostVendorBankDetails = {
     beneficiaryFName: string | null;

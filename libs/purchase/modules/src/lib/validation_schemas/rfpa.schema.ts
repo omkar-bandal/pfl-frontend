@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 
 export const rfpaSchema = yup.object().shape({
-    companyName: yup.string().required('Company Name is required'),
-    purchaseLocation: yup.string().required('Purchase Location is required'),
-    purchaseForWhich: yup.string().required('Purchase For Which is required'),
+    // companyName: yup.string().required('Company Name is required'),
+    // purchaseLocation: yup.string().required('Purchase Location is required'),
+    // purchaseForWhich: yup.string().required('Purchase For Which is required'),
     selectedParty: yup.string().required('Please select one option'),
     rfpaProducts: yup.array().of(
         yup.object().shape({
@@ -24,5 +24,5 @@ export const rfpaSchema = yup.object().shape({
         paymentDate: yup.date().required('Payment Date is required'),
         paymentTerms: yup.number().required('Payment Terms is required').positive('Payment Terms must be positive'),
     }).required('Payment Information is required'),
-    deliveryReceivingPerson: yup.string().required('Delivery Receiving Person is required'),
+    deliveryReceivingPerson: yup.string().matches(/^[a-zA-Z ]+$/, "Please enter a valid name").required('Delivery Receiving Person is required'),
 })

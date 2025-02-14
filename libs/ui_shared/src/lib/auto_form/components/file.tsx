@@ -2,6 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import { AttachFile } from '@mui/icons-material';
 import { Grid, Typography, Box, IconButton, styled } from '@mui/material';
+import { Label } from './label';
 
 interface FileUploadProps {
     isRequired?: boolean;
@@ -45,14 +46,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({ isRequired, label, name 
     return (
         <Grid container direction="column">
             <Grid item xs={12}>
-                {isRequired && (
-                    <Typography variant="body1" component="span" color="error" sx={{ fontWeight: 600 }}>
-                        *{' '}
-                    </Typography>
-                )}
-                <Typography variant="body2" component="span">
-                    {label}
-                </Typography>
+                <Label
+                    isRequired={isRequired}
+                    isError={meta.touched && Boolean(meta.error)}
+                    name={name}
+                    label={label} />
             </Grid>
             <Grid item xs={12}>
                 <Box
@@ -75,7 +73,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ isRequired, label, name 
                         onChange={handleFileChange}
                     />
                 </Box>
-                {meta.touched && meta.error && (
+                {meta.touched && Boolean(meta.error) && (
                     <Typography variant="caption" color="error">
                         {meta.error}
                     </Typography>

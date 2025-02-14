@@ -1,4 +1,4 @@
-import { LoggedInUserInfoRes } from './loggedInUserInfoRes.type';
+import { LoggedInUserInfoRes } from './auth.model';
 
 export type AuthState = {
     isLoggedIn: boolean;

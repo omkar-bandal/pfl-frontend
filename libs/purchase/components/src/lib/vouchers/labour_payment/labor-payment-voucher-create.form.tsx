@@ -8,6 +8,7 @@ import { LPVoucherPreview } from './labor-payment-voucher.preview'
 import { setPreview } from '@prime-fresh/modules'
 import { appendFormData } from '@prime-fresh/shared/utils'
 import { useNavigate } from 'react-router-dom'
+import { useGetCompanyNames } from '@prime-fresh/shared/modules'
 
 export const LabourPaymentVoucherForm = () => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ export const LabourPaymentVoucherForm = () => {
   const { data } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
   const allGRNNums = data ? mapToValueLabelArray(data, 'id', 'grnNo') : [];
 
+  const { data: companies } = useGetCompanyNames();
+  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateAmounts = (values: PostLPvoucher, setFieldValue: (field: string, value: any,) => void) => {
     const totalAmt = values.noOfLabours * values.ratePerLabour;
@@ -23,6 +26,7 @@ export const LabourPaymentVoucherForm = () => {
     setFieldValue("amtWords", amtWords);
   };
   const { mutateAsync: mutatePost, error, data: Res } = useCreateLPVoucher(PURCHASE_API_URL.POST_LP_VOUCHER);
+ 
   const handleSubmit = (values: PostLPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -30,7 +34,7 @@ export const LabourPaymentVoucherForm = () => {
       toast.success(Res ? Res.message : "Voucher created.")
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER);
-      }, 2400);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating voucher")
     });
@@ -51,13 +55,8 @@ export const LabourPaymentVoucherForm = () => {
         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} md={6}>
-                <Typography variant='h4'>Labour Payment Voucher</Typography>
-              </Grid>
-              <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={!error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewLPVoucher(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginBottom={2}>
+                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Labour Payment Voucher</Typography>
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
@@ -73,7 +72,7 @@ export const LabourPaymentVoucherForm = () => {
                   isRequired={true}
                   label="Company Name"
                   name="companyName"
-                  options={PURCHASE_ARRAYS.companyNames}
+                  options={companyNames}
                   value={values.companyName}
                   handleChange={handleChange} />
               </Grid>
@@ -106,15 +105,6 @@ export const LabourPaymentVoucherForm = () => {
               </Grid>
               <Grid item xs={12} md={3}>
                 <TextInput
-                  type='text'
-                  isRequired={true}
-                  name="workLocation"
-                  label="Location of Labour Work"
-                  value={values.workLocation}
-                  handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <TextInput
                   type='date'
                   isRequired={true}
                   name="loadingDate"
@@ -122,33 +112,33 @@ export const LabourPaymentVoucherForm = () => {
                   value={values.loadingDate}
                   handleChange={handleChange} />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} md={3}>
                 <TextInput
-                  type='text'
+                  type='number'
                   isRequired={true}
                   name="noOfLabours"
                   label="No of Labours"
-                  value={values.noOfLabours}
+                  value={values.noOfLabours || ''}
                   handleChange={handleChange}
                   onBlur={() => calculateAmounts(values, setFieldValue)} />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} md={3}>
                 <TextInput
                   type='number'
                   isRequired={true}
                   name="ratePerLabour"
                   label="Per Day of Labour"
-                  value={values.ratePerLabour}
+                  value={values.ratePerLabour || ''}
                   handleChange={handleChange}
                   onBlur={() => calculateAmounts(values, setFieldValue)} />
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12} md={3}>
                 <TextInput
-                  type='number'
+                  isReadOnly={true}
                   isRequired={false}
                   name="totalAmt"
                   label="Total Amount"
-                  value={values.totalAmt} />
+                  value={values.totalAmt || ''} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
@@ -161,7 +151,7 @@ export const LabourPaymentVoucherForm = () => {
               </Grid>
               <Grid item xs={12} md={9}>
                 <TextInput
-                  type='text'
+                  isReadOnly={true}
                   isRequired={false}
                   name="amtWords"
                   label="Amount In Words"
@@ -220,12 +210,18 @@ export const LabourPaymentVoucherForm = () => {
                   isRequired={true}
                   label="is Labour KYC Attached ? (If available) :"
                   name="kyc"
+                  alignment='vertical'
                   value={values.kyc}
                   options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                   handleChange={handleChange} />
               </Grid>
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
+              </Grid>
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+                <FormResetBtn label="Reset" handleReset={handleReset} />
+                <FormPreviewBtn onClick={() => { dispatch(setPreviewLPVoucher(values)); dispatch(setPreview(true)) }} />
               </Grid>
             </Grid>
           </form>)}

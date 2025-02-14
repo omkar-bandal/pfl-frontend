@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.employeeValidationSchema = void 0;
 const Yup = require("yup");
+const modules_1 = require("@prime-fresh/shared/modules");
 exports.employeeValidationSchema = Yup.object().shape({
     firstName: Yup.string()
         .required('First name is required')
@@ -33,18 +34,7 @@ exports.employeeValidationSchema = Yup.object().shape({
     companyEmail: Yup.string()
         .required('Company email is required')
         .email('Invalid email format'),
-    address: Yup.object().shape({
-        street: Yup.string()
-            .required('Street address is required'),
-        city: Yup.string()
-            .required('City is required'),
-        state: Yup.string()
-            .required('State is required'),
-        country: Yup.string()
-            .required('Country is required'),
-        postalCode: Yup.string()
-            .required('Postal Code is required'),
-    }),
+    address: modules_1.addressSchema,
     joiningDate: Yup.string()
         .required('Joining date is required'),
     relocationDate: Yup.string().optional(),

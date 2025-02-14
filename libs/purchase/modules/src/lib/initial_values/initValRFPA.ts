@@ -26,7 +26,9 @@ const initValPaymentInfo: Payment_Info = {
 export const initValRFPA: PostRFPA= {
     companyName: null,
     purchaseLocation: null,
-    purchaseForWhich: null,
+    otherPurchaseLoc: null,
+    purchaseForSalesLocation: null,
+    otherPurchaseForSalesLoc: null,
     specialReq: null,
     source: "vendor",
     selectedParty: null,

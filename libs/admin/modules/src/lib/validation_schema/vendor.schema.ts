@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { addressSchema } from './address.schema';
+import { addressSchema } from '@prime-fresh/shared/modules';
 
 // Vendor validation schema
 const vendorValidationSchema = Yup.object().shape({

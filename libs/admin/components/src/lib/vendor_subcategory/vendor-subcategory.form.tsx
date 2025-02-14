@@ -1,11 +1,11 @@
-import { ADMIN_API_URL, GetVendorCategory, PostVendorSubcategory, useCreateVendorSubCat, useGetAllVendorCat, useGetAVendorSubCat, useUpdateVendorSubCat } from "@prime-fresh/admin_api";
-import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import * as Yup from 'yup';
-import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { Box, Grid, LinearProgress, Typography } from "@mui/material";
+import { PostVendorSubcategory } from "@prime-fresh/admin_api";
+import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { ADMIN_ROUTES, useCreateVendorSubategory, useGetAllVendorCategories, useGetVendorSubcategoryById, useUpdateVendorSubcategoryById } from "@prime-fresh/admin/modules";
+import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 const initValVendorSubcat: PostVendorSubcategory = {
     name: '',
@@ -21,34 +21,30 @@ export function VendorSubcatForm() {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const subcategoryId = id ? id : "";
-    const { data: subcat, isLoading } = useGetAVendorSubCat(ADMIN_API_URL.GET_A_VENDOR_SUBCAT, subcategoryId);
-    const subcategory = subcat? {name: subcat.name , category: subcat?.category.id} : {name: "", category: ""};
-    const vendorSubcatVal = subcategoryId? subcategory : initValVendorSubcat;
+    const { data: subcat, isLoading } = useGetVendorSubcategoryById(subcategoryId);
+    const subcategory = subcat?.data ? { name: subcat?.data.name, category: subcat?.data.category.id } : { name: "", category: "" };
+    const vendorSubcatVal = subcategoryId ? subcategory : initValVendorSubcat;
 
-    const { mutateAsync: postVendorSubcategory, error: postError, data: postRes } = useCreateVendorSubCat(ADMIN_API_URL.CREATE_VENDOR_SUBCAT);
-    const { mutateAsync: patchVendorSubcategory, error: patchError, data: patchRes } = useUpdateVendorSubCat(ADMIN_API_URL.UPDATE_VENDOR_SUBCAT, subcategoryId);
+    const { mutateAsync: postVendorSubcategory, error: postError, data: postRes } = useCreateVendorSubategory();
+    const { mutateAsync: patchVendorSubcategory, error: patchError, data: patchRes } = useUpdateVendorSubcategoryById(subcategoryId);
 
-    const { data } = useGetAllVendorCat(ADMIN_API_URL.GET_ALL_VENDOR_CAT);
-    const vendorCat = data ? data : [];
-    console.log(vendorCat);
+    const { data } = useGetAllVendorCategories();
+    const vendorCat = data?.data ? mapToValueLabelArray(data?.data, 'id', 'name') : [];
 
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
-        console.log("Form Data:", values);
-        const formData = new FormData();
-        appendFormData(formData, values);
         subcategoryId === "" ?
-            (postVendorSubcategory(formData).then(() => {
+            (postVendorSubcategory(values).then(() => {
                 console.log("Response", postRes);
-                toast.success(postRes? postRes.message : "Vendor subcategory created successfully.")
+                toast.success(postRes ? postRes.message : "Vendor subcategory created successfully.")
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT);
                 }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating vendor subcategory")
             })) :
-            (patchVendorSubcategory(formData).then(() => {
+            (patchVendorSubcategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Vendor subcategory updated successfully.")
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT);
@@ -104,7 +100,7 @@ export function VendorSubcatForm() {
                                     isRequired={true}
                                     label="Vendor Categories"
                                     name="category"
-                                    options={mapToValueLabelArray<GetVendorCategory>(vendorCat, 'id', 'name')}
+                                    options={vendorCat}
                                     value={values.category}
                                     handleChange={handleChange} />
                             </Grid>

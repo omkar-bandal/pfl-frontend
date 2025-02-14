@@ -25,11 +25,10 @@ export const LabourPaymentVoucherView = () => {
         createData(1, "No of Labours", lpVoucher?.noOfLabours, "", ""),
         createData(2, "Day of Loading/Unloading", lpVoucher?.loadingDate, "", ""),
         createData(3, "Per Day Rs.", lpVoucher?.ratePerLabour, "", ""),
-        createData(4, "Location of Labour Work", lpVoucher?.workLocation, "", ""),
-        createData(5, "Paymetn Mode", lpVoucher?.paymentMode, "", ""),
-        createData(6, "Labour KYC Attached", lpVoucher?.kyc === true? "Yes" : "No", "", ""),
-        createData(7, "Mobile No of Any 1 or 2", lpVoucher?.contactNo, "", ""),
-        createData(8, "Product", lpVoucher?.products, "", ""),
+        createData(4, "Paymetn Mode", lpVoucher?.paymentMode, "", ""),
+        createData(5, "Labour KYC Attached", lpVoucher?.kyc === true? "Yes" : "No", "", ""),
+        createData(6, "Mobile No of Any 1 or 2", lpVoucher?.contactNo, "", ""),
+        createData(7, "Product", lpVoucher?.products, "", ""),
     ];
     const handleStatusChange = async () => {
         try {

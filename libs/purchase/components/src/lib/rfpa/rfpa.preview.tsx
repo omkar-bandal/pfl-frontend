@@ -66,7 +66,7 @@ export const RFPAPreview = () => {
                     </Grid>
                     <Grid item>
                         <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                            Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.email}
+                            Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.officeEmail}
                             </Typography>
                         </Typography>
                     </Grid>
@@ -143,9 +143,9 @@ export const RFPAPreview = () => {
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.uom}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.totalVal}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate.toLocaleString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate.toLocaleString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate.toLocaleString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate?.toLocaleString() || ""}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate?.toLocaleString() || ""}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate?.toLocaleString()|| ""}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryLocation}</TableCell>
                                     {previewRFPA?.source === "farmer" ? <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.expectedHarvestDate?.toLocaleString()}</TableCell> : ''}
                                 </TableRow>
@@ -163,7 +163,7 @@ export const RFPAPreview = () => {
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Payment Date: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewRFPA?.paymentInfo.paymentDate.toLocaleString()}
+                    Payment Date: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewRFPA?.paymentInfo.paymentDate?.toLocaleString() || ""}
                     </Typography>
                 </Typography>
             </Grid>

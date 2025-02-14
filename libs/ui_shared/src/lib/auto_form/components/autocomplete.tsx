@@ -88,9 +88,9 @@ import {
   createFilterOptions,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useField } from "formik";
+import { Label } from "./label";
 
 type AutoCompleteOption = {
   label: string;
@@ -101,13 +101,14 @@ type AutoCompleteInputProps = {
   isRequired?: boolean;
   label: string;
   name: string;
+  loading?: boolean;
   options: AutoCompleteOption[];
   value?: AutoCompleteOption | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleBlur?: any;
   handleChange?: (
     event: React.SyntheticEvent,
-    newValue: AutoCompleteOption | null
+    newValue: AutoCompleteOption | string | null
   ) => void;
 };
 
@@ -115,6 +116,7 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
   isRequired = false,
   label,
   name,
+  loading = false,
   options = [],
   handleChange,
   handleBlur,
@@ -124,33 +126,22 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
 
   return (
     <Grid container direction="column">
-      {/* Label Section */}
-      {label && (
         <Grid item>
-          <Typography variant="body2" component="label" htmlFor={name}>
-            {isRequired && (
-              <Typography
-                component="span"
-                variant="body2"
-                color="error"
-                sx={{ fontWeight: 600 }}
-              >
-                *
-              </Typography>
-            )}
-            {label}
-          </Typography>
+          <Label 
+          isRequired={isRequired}
+          isReadOnly={false}
+          isError={meta.touched && Boolean(meta.error)}
+          name={name}
+          label={label} />
         </Grid>
-      )}
-
-      {/* Autocomplete Section */}
       <Grid item>
         <Autocomplete
           id={name}
           size="small"
           fullWidth
+          loading={loading}
           options={options}
-          getOptionLabel={(option) => option.label || ""}
+          getOptionLabel={(option) => typeof option !== 'string' ? option.label : option}
           isOptionEqualToValue={(option, value) => option?.value === value?.value}
           value={options.find((option) => option.value === field.value) || null}
           onChange={handleChange}
@@ -159,8 +150,8 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
             const filtered = filter(opts, params);
             if (params.inputValue) {
               filtered.push({
-                value: params.inputValue,
-                label: `Add ${params.inputValue}`,
+                value: '',
+                label: `Add other`,
               });
             }
             return filtered;

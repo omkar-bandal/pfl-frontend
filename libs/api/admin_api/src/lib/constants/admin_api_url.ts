@@ -17,6 +17,8 @@ export const ADMIN_API_URL = {
     DELETE_CUSTOMER: "/customers/",
     UPDATE_CUSTOMER: "/customers",
     GET_A_CUSTOMER: "/customers",
+    GET_CUSTOMER_NAMES: "/customers/names/all",
+    GET_CUSTOMER_PARTIAL_DATA: "/customers/partial/all",
 
     GET_ALL_CUSTOMER_TYPE: "/customerType/",
     GET_ALL_CUSTOMER_CATEGORY: "/customerCategory/ ",

@@ -1,6 +1,6 @@
 import { GetVendorSalesContact, PostVendorSalesContact } from './vendorSalesContact.type';
 import { GetVendorBankDetails, PostVendorBankDetails } from './vendorBankDetails.type';
-import { Address, GetAddress } from '../../address.type';
+import { Address, GetAddress } from '../../../../../../common_api/src/index.ts';
 
 export type GetVendor = {
     id: string | null;

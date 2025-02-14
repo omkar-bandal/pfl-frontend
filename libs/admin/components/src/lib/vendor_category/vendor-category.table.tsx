@@ -1,24 +1,29 @@
+import { useEffect } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 import { VendorCategoryListCols } from "./vendor-category.columns";
 import { Add } from "@mui/icons-material";
-import { ADMIN_API_URL, useGetAllVendorCat } from "@prime-fresh/admin_api";
-import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
+import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
-import { useDispatch } from "react-redux";
-import { hideNotification } from "@prime-fresh/modules";
+import { ADMIN_ROUTES, useGetAllVendorCategories } from "@prime-fresh/admin/modules";
 
 export function VendorCatTable() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { data: VendorCat, isLoading } = useGetAllVendorCat(ADMIN_API_URL.GET_ALL_VENDOR_CAT);
   const apiRef = useGridApiRef();
+
+  const { data, isLoading, isError, error } = useGetAllVendorCategories();
+  const VendorCat = data?.data ? data.data : [];
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || 'Error occured please refresh the page.');
+    }
+  }, [isError, error]);
+
   const handleCreate = () => { 
-    dispatch(setOpenFor("create"));
-    dispatch(hideNotification());
     navigate(ADMIN_ROUTES.CREATE_VENDORS_CAT); 
   }
+  
   return (
     <Box sx={{ flex: 1 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">

@@ -1,4 +1,5 @@
 import { initValAddress } from '@prime-fresh/admin/modules';
+import { PostBankDetails, PostBillingDetails, PostDeliveryDetails, PostKeyMobileNumbers, PostOfficeUseOnly, PostPaymentTerms, PostProductSpecification, PostStatutoryDetails } from '@prime-fresh/admin_api';
 
 const initCustomerTypes = {
     id: '',
@@ -10,7 +11,7 @@ const initCustomerCategory = {
     name: '',
 };
 
-const initKeyMobileNumbers = {
+const initKeyMobileNumbers: PostKeyMobileNumbers = {
     accDeptFName: '',
     accDeptMName: '',
     accDeptLName: '',
@@ -20,19 +21,19 @@ const initKeyMobileNumbers = {
     ownerLName: '',
     ownerMobileNo: '',
     mandiLicenceNo: '',
-    mandiLicenceCopy: '',
+    mandiLicenceCopy: null,
     regiNo: '',
-    regiCopy: '',
+    regiCopy: null,
     electricityBill: '',
     consumenrNo: '',
-    electricityBillCopy: '',
+    electricityBillCopy: null,
     notElectricityBillReason: '',
     customerBlacklisted: '',
     ifBlacklistedReason: '',
     blackListedBy: '',
     visitingCard: '',
     visitinContactNo: '',
-    visitingCardCopy: '',
+    visitingCardCopy: null,
     notVisitingCardReason: '',
     ref1FName: '',
     ref1MName: '',
@@ -48,25 +49,25 @@ const initKeyMobileNumbers = {
     ref2Email: '',
 };
 
-const initBillingDetails = {
+const initBillingDetails: PostBillingDetails = {
     billingName: '',
     contactPersonFName: '',
     contactPersonMName: '',
     contactPersonLName: '',
     commonlyKnownAs: '',
     billingAddress: initValAddress,
-    billingAddressProofCopy: '',
+    billingAddressProofCopy: null,
     primaryContactNo: '',
     secondaryContactNo: '',
     emailPrimary: '',
     emailSecondary: '',
-    billingFormatCopy: '',
+    billingFormatCopy: null,
 };
 
-const initDeliveryDetails = {
+const initDeliveryDetails: PostDeliveryDetails = {
     deliveryAddress: initValAddress,
     deliveryAddressProofCopy:'',
-    deliveryTime: new Date(2023, 11, 25),
+    deliveryTime: null,
     receivingPersonFName: '',
     receivingPersonMName: '',
     receivingPersonLName: '',
@@ -76,29 +77,29 @@ const initDeliveryDetails = {
     emailSecondary: '',
 };
 
-const initStatutoryDetails = {
+const initStatutoryDetails: PostStatutoryDetails = {
     panNo: '',
-    panCopy: '',
+    panCopy: null,
     aadharNo: '',
-    addharCopy: '',
+    addharCopy: null,
     gstn: '',
-    regiCertificateCopy: '',
-    billBookCopy: '',
+    regiCertificateCopy: null,
+    billBookCopy: null,
     certificationsDetails: '',
     otherCertifications: '',
     corpRegiDetails: '',
     otherCorpRegiDetails: '',
-    incorpoCertificateCopy: '',
+    incorpoCertificateCopy: null,
     cinNo: '',
 };
 
-const initBankDetails = {
+const initBankDetails: PostBankDetails = {
     ifCancelledCheque: '',
     notCancelledChequeReason: '',
-    cancelledChequeCopy: '',
+    cancelledChequeCopy: null,
     accType: '',
     otherAccType: '',
-    bankStatementCopy: '',
+    bankStatementCopy: null,
     bankAccHolderFName: '',
     bankAccHolderMName: '',
     bankAccHolderLName: '',
@@ -109,7 +110,7 @@ const initBankDetails = {
     bankAddress: initValAddress,
 };
 
-const initProductSpecification = [
+const initProductSpecification: PostProductSpecification[] = [
     {
         articleName: '',
         specifications: '',
@@ -120,7 +121,7 @@ const initProductSpecification = [
     },
 ];
 
-const initPaymentTerms = {
+const initPaymentTerms: PostPaymentTerms = {
     paymentMade: '',
     otherPaymentMade: '',
     paymentMode: '',
@@ -134,15 +135,15 @@ const initPaymentTerms = {
     securityDepoAmt: 0,
     IELinAmt: 0,
     IELRecommendedBy: '',
-    IELRecommendedDate: new Date(2023, 11, 25),
+    IELRecommendedDate: null,
     RELinAmt: 0,
     RELRecommendedBy: '',
-    RELRecommendedDate: new Date(2023, 11, 25),
+    RELRecommendedDate: null,
     reason: '',
-    docEvidenceCopy: '',
+    docEvidenceCopy: null,
 };
 
-const initOfficeUseOnly = {
+const initOfficeUseOnly: PostOfficeUseOnly = {
     proposerBDName: '',
     pflCoordinator: '',
     recommendedBy: '',
@@ -158,13 +159,13 @@ const initOfficeUseOnly = {
     creditWorthinessDue: '',
     keyAccountPersonAssigned: '',
     sinceWhen: '',
-    ledgerCreatedDate: new Date(2023, 11, 25),
+    ledgerCreatedDate: null,
     ledgerCreatedBy: '',
     ledgerVerifiedApprovedBy: '',
     additionalNotes: '',
     customerCode: '',
     createdBy: '',
-    createdDate: new Date(2023, 11, 25),
+    createdDate: null,
 };
 
 export const initValCustomer = {

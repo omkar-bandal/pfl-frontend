@@ -19,7 +19,7 @@ export const DumpRegisterCreateForm = () => {
   // Fetch Data
   const { data: grns } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
   const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-  const allProducts = products? mapToValueLabelArray(products, 'id', 'name') : [];
+  const allProducts = products ? mapToValueLabelArray(products, 'id', 'name') : [];
   const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
 

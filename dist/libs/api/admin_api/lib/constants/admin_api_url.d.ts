@@ -11,6 +11,8 @@ export declare const ADMIN_API_URL: {
     DELETE_CUSTOMER: string;
     UPDATE_CUSTOMER: string;
     GET_A_CUSTOMER: string;
+    GET_CUSTOMER_NAMES: string;
+    GET_CUSTOMER_PARTIAL_DATA: string;
     GET_ALL_CUSTOMER_TYPE: string;
     GET_ALL_CUSTOMER_CATEGORY: string;
     GET_ALL_FARMERS: string;

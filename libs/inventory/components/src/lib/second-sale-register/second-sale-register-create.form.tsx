@@ -31,7 +31,7 @@ export const SecondSaleRegisterCreateForm = () => {
       toast.success(data ? data.message : "Second Sale Register Created Successfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_SECOND_SALE_REGISTER);
-      }, 2500);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating second sale register");
     })

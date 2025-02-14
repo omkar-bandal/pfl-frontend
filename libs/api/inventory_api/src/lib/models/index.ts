@@ -6,3 +6,4 @@ export * from './vehicle-dispatch-register.type';
 export * from './second-sale-register.type';
 export * from './eod-report.type';
 export * from './aqr.type';
+export * from './proforma-invoice.type';

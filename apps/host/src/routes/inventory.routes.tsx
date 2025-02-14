@@ -21,7 +21,8 @@ import {
     DumpRegisterUpdateForm,
     InwardRegisterUpdateForm,
     SecondSaleRegisterUpdateForm,
-    VehicleDispatchRegisterUpdateForm
+    VehicleDispatchRegisterUpdateForm,
+    ProformaInvoicesTable
 } from "@prime-fresh/inventory/components";
 import { Outlet } from "react-router-dom";
 import { DeliveryChallanForm, DeliveryChallanTable, GRNForm, GRNTable } from "@prime-fresh/purchase/components";
@@ -188,6 +189,16 @@ export const InventoryRoutes = [
             {
                 path: inventoryRouteConstants.GET_ALL_EOD_REPORT,
                 element: <EODReportTable />
+            }
+        ]
+    },
+    {
+        path: inventoryRouteConstants.PROFORMA_INVOICES,
+        element: <Outlet />,
+        children: [
+            {
+                path: inventoryRouteConstants.GET_ALL_PROFORMA_INVOICES,
+                element: <ProformaInvoicesTable />
             }
         ]
     },

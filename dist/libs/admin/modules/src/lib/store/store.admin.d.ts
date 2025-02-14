@@ -29,6 +29,7 @@ export declare const storeAdmin: import("@reduxjs/toolkit").EnhancedStore<{
         selectedProduct: import("@prime-fresh/admin_api").GetProduct | null | undefined;
         productCat: import("@prime-fresh/admin_api").GetProductCategory[];
         productSubCat: import("@prime-fresh/admin_api").GetProductSubcategory[];
+        productPartialData: import("@prime-fresh/admin_api").ProductPartialData[];
     };
     uomData: {
         allUOMs: import("@prime-fresh/admin_api").GetUOM[];
@@ -83,6 +84,7 @@ export declare const storeAdmin: import("@reduxjs/toolkit").EnhancedStore<{
             selectedProduct: import("@prime-fresh/admin_api").GetProduct | null | undefined;
             productCat: import("@prime-fresh/admin_api").GetProductCategory[];
             productSubCat: import("@prime-fresh/admin_api").GetProductSubcategory[];
+            productPartialData: import("@prime-fresh/admin_api").ProductPartialData[];
         };
         uomData: {
             allUOMs: import("@prime-fresh/admin_api").GetUOM[];

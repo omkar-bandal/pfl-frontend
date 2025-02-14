@@ -1,5 +1,5 @@
 import { PostBranches } from "@prime-fresh/admin_api";
-import { initValAddress } from "./address.initial-value";
+import {initValAddress} from "@prime-fresh/shared/modules";
 
 export const BranchesInitialValues: PostBranches = {
     name:  null,

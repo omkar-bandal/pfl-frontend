@@ -1,8 +1,3 @@
-import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
-export declare const initValMaterials: {
-    itemName: null;
-    itemQty: number;
-    rate: number;
-    amt: number;
-};
+import { DeliveryChallanProducts, PostDeliveryChallan } from "@prime-fresh/purchase_api";
+export declare const initValMaterials: DeliveryChallanProducts;
 export declare const initValDeliveryChallan: PostDeliveryChallan;

@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { BranchColumns } from "./branch.columns";
-import { ADMIN_API_URL, useGetAllBranches } from "@prime-fresh/admin_api";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-import { DataTable, TableToolbar } from "@prime-fresh/ui_shared";
+import { ADMIN_ROUTES, useGetAllBranches } from "@prime-fresh/admin/modules";
+import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
 
 export function BranchTable() {
     const navigate = useNavigate();
@@ -16,8 +15,14 @@ export function BranchTable() {
     const type = branchType? branchType : "";
     console.log(type);
 
-    const { data: branches, isLoading } = useGetAllBranches(ADMIN_API_URL.GET_ALL_BRANCHES, type);
-    console.log(branches);
+    const { data , isLoading, isError, error } = useGetAllBranches(type);
+    const branches = data?.data ? data.data : [];
+
+    useEffect(() => {
+        if (isError) {
+          toast.error(error?.message || 'Error occured please refresh the page.');
+        }
+      }, [isError, error]);
    
     const handleCreate = () => {
         navigate(`${ADMIN_ROUTES.CREATE_BRANCHES}/${type}`);

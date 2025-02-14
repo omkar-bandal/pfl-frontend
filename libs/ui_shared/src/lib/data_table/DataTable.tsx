@@ -17,9 +17,10 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
   const mobileColumns = isMobile ? columns.filter((col) => col.isMobileVisible) : columns;
 
   return (
-    <Box sx={{ 
-      height: isMobile ? '100%' : 440, 
-      width: '100%'}} >
+    <Box sx={{
+      height: isMobile ? '100%' : 440,
+      width: '100%'
+    }} >
       <DataGrid
         loading={loading}
         columns={mobileColumns}
@@ -30,11 +31,13 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         disableRowSelectionOnClick
         pageSizeOptions={[5, 7, 10]}
         disableColumnMenu={true}
-        disableColumnSorting={true}
+        columnHeaderHeight={40}
+        rowHeight={50}
+       
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: isMobile ? 10 : 5,
+              pageSize: isMobile ? 10 : 10,
             },
           },
           columns: {
@@ -48,13 +51,20 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
           noRowsOverlay: CustomNoRowsOverlay,
         }}
         sx={{
-          "& .MuiDataGrid-columnHeaders": {
-            fontSize: 15,
-            background: "#81C784",
+          '& .MuiDataGrid-columnHeader': { // Target all column headers
+            backgroundColor: " #00cc66",
+            height: 10,
+          },
+          '& .MuiDataGrid-columnHeaderTitle': { // Target the header title specifically
+            fontSize: '15px',
+            fontWeight: 'bold',
+            color: "#FFFFFF"         // Example font weight
+            // Example font size
           },
           "& .MuiDataGrid-cell": {
-            color: "#555",
+            color: "#595959",
             fontSize: 14,
+            fontWeight: 600
             // padding: isMobile ? '8px' : '16px',
           },
           "--DataGrid-overlayHeight": "300px",

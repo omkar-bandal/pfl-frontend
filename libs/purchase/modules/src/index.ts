@@ -7,3 +7,4 @@ export * from './lib/hooks/useAppSelector';
 export * from './lib/theme/purchase.muitheme';
 export * from './lib/utils';
 export * from './lib/store/purchase.reducer';
+export * from './lib/hooks';

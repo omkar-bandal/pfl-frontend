@@ -1,5 +1,5 @@
 import { PostCrops } from './crop.type';
-import { Address } from '../../address.type';
+import { Address } from '../../../../../../common_api/src/index.ts';
 
 export type PostFarmer = {
     farmerfName: string;

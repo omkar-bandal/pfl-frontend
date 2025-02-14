@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initValCustomer = void 0;
-const address_initial_value_1 = require("./address.initial-value");
+const modules_1 = require("@prime-fresh/shared/modules");
 const initCustomerTypes = {
     id: '',
     name: '',
@@ -37,13 +37,13 @@ const initKeyMobileNumbers = {
     ref1FName: '',
     ref1MName: '',
     ref1LName: '',
-    ref1Address: address_initial_value_1.initValAddress,
+    ref1Address: modules_1.initValAddress,
     ref1ContactNo: '',
     ref1Email: '',
     ref2FName: '',
     ref2MName: '',
     ref2LName: '',
-    ref2Address: address_initial_value_1.initValAddress,
+    ref2Address: modules_1.initValAddress,
     ref2ContactNo: '',
     ref2Email: '',
 };
@@ -53,7 +53,7 @@ const initBillingDetails = {
     contactPersonMName: '',
     contactPersonLName: '',
     commonlyKnownAs: '',
-    billingAddress: address_initial_value_1.initValAddress,
+    billingAddress: modules_1.initValAddress,
     billingAddressProofCopy: '',
     primaryContactNo: '',
     secondaryContactNo: '',
@@ -62,7 +62,7 @@ const initBillingDetails = {
     billingFormatCopy: '',
 };
 const initDeliveryDetails = {
-    deliveryAddress: address_initial_value_1.initValAddress,
+    deliveryAddress: modules_1.initValAddress,
     deliveryAddressProofCopy: '',
     deliveryTime: new Date(2023, 11, 25),
     receivingPersonFName: '',
@@ -102,7 +102,7 @@ const initBankDetails = {
     bankBranch: '',
     bankAccNo: '',
     ifscCode: '',
-    bankAddress: address_initial_value_1.initValAddress,
+    bankAddress: modules_1.initValAddress,
 };
 const initProductSpecification = [
     {
@@ -165,7 +165,7 @@ exports.initValCustomer = {
     customerCategory: initCustomerCategory,
     organisationType: '',
     otherType: '',
-    customerAddress: address_initial_value_1.initValAddress,
+    customerAddress: modules_1.initValAddress,
     primaryContactNo: '',
     secondaryContactNo: '',
     emailPrimary: '',

@@ -32,6 +32,7 @@ const authSlice = createSlice({
         setLoggedInUserInfo: (state, action: PayloadAction<LoggedInUserInfoRes>) => {
             localStorage.setItem('role', action.payload.role);
             localStorage.setItem('department', action.payload.department);
+            localStorage.setItem('userName', action.payload.userName)
             state.loggedInUserInfo = action.payload;
         },
     },

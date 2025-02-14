@@ -1,6 +1,7 @@
-import { Analytics, Assessment, DeleteSweep, FormatIndentDecrease, FormatIndentIncrease, FormatListBulleted, GridViewOutlined, Group, LocalShipping, Remove } from "@mui/icons-material";
+import { Analytics, Article, Assessment, DeleteSweep, FormatIndentDecrease, FormatIndentIncrease, FormatListBulleted, GridViewOutlined, Group, LocalShipping, Remove } from "@mui/icons-material";
 import { Navigations, stringConstants } from "@prime-fresh/modules";
 import {inventoryRouteConstants} from "@prime-fresh/inventory/modules";
+import { SALES_ROUTES } from "@prime-fresh/sales/modules";
 
 export const inventoryNavigations: Navigations[] = [
     {
@@ -88,4 +89,26 @@ export const inventoryNavigations: Navigations[] = [
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_INVENTORY],
     },
+    {
+        name: "Sales Orders",
+        logo: <Article />,
+        path: SALES_ROUTES.GET_ALL_SALES_ORDER,
+        roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+        depts: [stringConstants.DEPT_INVENTORY]
+    },
+    {
+        name: "Return By Customer",
+        logo: <FormatListBulleted />,
+        path: SALES_ROUTES.GET_ALL_RBC,
+        roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+        depts: [stringConstants.DEPT_INVENTORY]
+    },
+    {
+        name: "Proforma Invoices",
+        logo: <Analytics />,
+        path: inventoryRouteConstants.GET_ALL_PROFORMA_INVOICES,
+        roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+        depts: [stringConstants.DEPT_INVENTORY]
+    },
+   
 ]

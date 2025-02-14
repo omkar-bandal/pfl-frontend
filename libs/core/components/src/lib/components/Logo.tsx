@@ -1,15 +1,15 @@
 import React from 'react';
-import { Toolbar } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 import {images} from "@prime-fresh/assets";
 
 const Logo: React.FC = () => (
-  <Toolbar sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+  <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", padding:1}}>
     <img
       src={images.sidebarlogo}
-      style={{ width: "100px", height: "50px" }}
+      style={{ width: "100px", height: "70px" }}
       alt="logo"
     />
-  </Toolbar>
+  </Box>
 );
 
 export default Logo;

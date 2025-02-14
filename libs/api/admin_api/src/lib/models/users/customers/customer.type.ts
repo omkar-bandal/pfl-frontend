@@ -1,4 +1,4 @@
-import { Address, GetAddress } from "../../address.type"
+import { Address, GetAddress } from "@prime-fresh/common_api";
 import { GetBankDetails, PostBankDetails } from "./bankDetails.type"
 import { GetBillingDetails, PostBillingDetails } from "./billingDetails.type"
 import { CustomerCategory } from "./customerCategory.type"
@@ -51,4 +51,13 @@ export type PostCustomer = {
     productSpecification: PostProductSpecification[],
     paymentTerms: PostPaymentTerms,
     officeUseOnly: PostOfficeUseOnly,
+}
+
+export type GetCustomerDataPartial = {
+    id:string,
+    organisationName:string,
+    billingAddress: Address,
+    deliveryAddress:Address,
+    gstNumber: string,
+    panNumber: string
 }

@@ -1,4 +1,6 @@
-export const initValLabourPaymentvoucher = {
+import { PostLPvoucher } from "@prime-fresh/purchase_api";
+
+export const initValLabourPaymentvoucher: PostLPvoucher = {
     grnNo: null,
     companyName: null,
     debitCreditTo: null,
@@ -6,7 +8,6 @@ export const initValLabourPaymentvoucher = {
     location: null,
     noOfLabours: 0,
     loadingDate: null,
-    workLocation: null,
     contactNo: null,
     altContactNo: null,
     products: null,

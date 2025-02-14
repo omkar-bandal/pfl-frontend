@@ -1,5 +1,5 @@
 import React from "react";
-import {Grid, Typography, Box, LinearProgress, SelectChangeEvent } from "@mui/material";
+import { Grid, Typography, Box, LinearProgress, SelectChangeEvent } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
@@ -90,15 +90,11 @@ export const DealSlipUpdate = () => {
                         handleSubmit(values);
                     }}
                 >
-                    {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting}) => (
+                    {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
                         <form onSubmit={handleSubmit}>
                             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                                <Grid item xs={12} md={6}>
-                                    <Typography variant='h4'>Deal Slip</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                                    <FormResetBtn label="Reset" handleReset={handleReset} />
+                                <Grid item xs={12} marginBottom={2}>
+                                    <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Deal Slip</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <SelectInput
@@ -135,9 +131,9 @@ export const DealSlipUpdate = () => {
                                 <Grid item xs={12} md={3}>
                                     <TextInput
                                         isRequired={false}
-                                        label="Purchase For Which Location"
-                                        name="purchaseForWhich"
-                                        value={selectedRFPA?.purchaseForWhich}
+                                        label="Purchase For Sales Location"
+                                        name="purchaseForSalesLocation"
+                                        value={selectedRFPA?.purchaseForSalesLocation}
                                         isReadOnly={true}
                                     />
                                 </Grid>
@@ -147,7 +143,7 @@ export const DealSlipUpdate = () => {
                                         label="Loading Location"
                                         name="loadingLocation"
                                         value={values.loadingLocation}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <TextInput
@@ -155,7 +151,7 @@ export const DealSlipUpdate = () => {
                                         label="Lot Number"
                                         name="lotNo"
                                         value={values.lotNo}
-                                        handleChange={handleChange}/>
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={8}>
                                     <TextInput
@@ -206,7 +202,7 @@ export const DealSlipUpdate = () => {
                                             isRequired={false}
                                             label="Contact Person"
                                             name="contactperson"
-                                            value={`${selectedVendor?.fullName}`}
+                                            value={`${selectedVendor?.contactPersonName}`}
                                             isReadOnly={true}
                                         />
                                     </Grid>}
@@ -224,7 +220,7 @@ export const DealSlipUpdate = () => {
                                         isRequired={false}
                                         name="email"
                                         label="Email"
-                                        value={selectedRFPA?.source === "vendor" ? selectedVendor?.email : selectedFarmer?.email}
+                                        value={selectedRFPA?.source === "vendor" ? selectedVendor?.officeEmail : selectedFarmer?.email}
                                         isReadOnly={true}
                                     />
                                 </Grid>
@@ -293,6 +289,10 @@ export const DealSlipUpdate = () => {
                                             </Grid>
                                         )}
                                     </FieldArray>
+                                </Grid>
+                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
+                                    <FormResetBtn label="Reset" handleReset={handleReset} />
                                 </Grid>
                             </Grid >
                         </form >)

@@ -4,6 +4,7 @@ exports.grnSchema = void 0;
 const yup = require("yup");
 exports.grnSchema = yup.object().shape({
     grnType: yup.string().required('Type of GRN is required'),
+    purchaseType: yup.string().required('Type of purchase is required'),
     companyName: yup.string().required('Company Name is required'),
     billNo: yup.string().required("Bill number is required"),
     serialNo: yup.string().required("Serial number is required"),
