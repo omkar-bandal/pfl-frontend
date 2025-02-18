@@ -22,7 +22,7 @@ export function useDeleteProductSubcategoryById(id: string):
     UseMutationResult<ResultModel, ErrorModel, unknown, unknown> {
     return useMutation<ResultModel, ErrorModel, unknown, unknown>({
         mutationKey: ['delete-product-subcategory-by-id'],
-        mutationFn: () => ProductSubcategoryService.getInstance().deleteProdctSubcategoryById(id),
+        mutationFn: () => ProductSubcategoryService.getInstance().deleteProductSubcategoryById(id),
     });
 }
 

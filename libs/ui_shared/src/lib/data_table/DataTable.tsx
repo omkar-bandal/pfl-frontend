@@ -32,7 +32,7 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         pageSizeOptions={[5, 7, 10]}
         disableColumnMenu={true}
         columnHeaderHeight={40}
-        rowHeight={50}
+        rowHeight={40}
        
         initialState={{
           pagination: {

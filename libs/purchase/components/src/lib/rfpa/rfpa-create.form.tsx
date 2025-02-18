@@ -2,17 +2,15 @@ import React from 'react';
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
-import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewRFPA } from '@prime-fresh/purchase/modules';
+import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewRFPA, useCreateRFPA } from '@prime-fresh/purchase/modules';
 import { PostRFPA } from '@prime-fresh/purchase_api';
 import { setPreview } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA, rfpaSchema } from '@prime-fresh/purchase/modules';
 import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
-import { PURCHASE_API_URL, useCreateRFPA } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './rfpa.preview';
-import { appendFormData } from '@prime-fresh/shared/utils';
 import { calculateDueDate, calculateTotoalPrice, getProductCode } from './helper-functions';
 import { mapToValueLabelArray, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
 
@@ -29,13 +27,10 @@ export const RFPAForm = () => {
     const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
     const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
 
-    const { mutateAsync: mutatePost, error, data: Res } = useCreateRFPA(PURCHASE_API_URL.POST_RFPA);
+    const { mutateAsync: mutatePost, error, data: Res } = useCreateRFPA();
 
     const handleSubmit = (values: PostRFPA) => {
-        console.log(values);
-        const formData = new FormData();
-        appendFormData(formData, values);
-        mutatePost(formData).then(() => {
+        mutatePost(values).then(() => {
             console.log(Res);
             toast.success(Res ? Res.message : "RFPA Created")
             setTimeout(() => {

@@ -4522,14 +4522,14 @@ ce.getAdapter = ao.getAdapter;
 ce.HttpStatusCode = Cn;
 ce.default = ce;
 const lo = {
-  BASE_URL: "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com"
-  // BASE_URL: "https://af11-182-156-141-17.ngrok-free.app",
+  BASE_URL: "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com"
+  // BASE_URL: "https://e3bd-182-156-141-17.ngrok-free.app",
 }, Ie = ce.create({
   baseURL: lo.BASE_URL,
   withCredentials: !0,
   headers: {
-    // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "ngrok-skip-browser-warning": "true"
+    // 'Content-Type': 'multipart/form-data',
   }
 }), $a = () => localStorage.getItem("access_token"), Ba = () => localStorage.getItem("refresh_token");
 Ie.interceptors.request.use(
@@ -4660,7 +4660,7 @@ const Ha = (t) => {
   GET_FARMERS_PARTIAL: "/farmers/filterFarmer/all",
   GET_UOM_PARTIAL: "/uoms/getAll/partialdata",
   GET_BRANCHES_PARTIAL: "/location-branches/filterData/filter/all"
-}, fo = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Wa = () => ce.create({
+}, fo = "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com", Wa = () => ce.create({
   baseURL: fo,
   withCredentials: !0,
   headers: {

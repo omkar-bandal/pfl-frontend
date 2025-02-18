@@ -1,5 +1,13 @@
 import { SHARED_API_URL, sharedApiUrlConstants } from "../constants";
-import { ApiBaseState, BranchPartialData, CompanyNamesData, FarmerPartialData, ProductPartialData, UOMPartialData, VendorPartialData } from "../models";
+import {
+    ApiBaseState,
+    BranchPartialData,
+    CompanyNamesData,
+    FarmerPartialData,
+    ProductPartialData,
+    UOMPartialData,
+    VendorPartialData
+} from "../models";
 import { BaseService } from "./base.service";
 
 export class SharedService extends BaseService {

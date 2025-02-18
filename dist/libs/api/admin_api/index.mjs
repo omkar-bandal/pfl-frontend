@@ -4714,14 +4714,14 @@ fe.getAdapter = ho.getAdapter;
 fe.HttpStatusCode = Fn;
 fe.default = fe;
 const mo = {
-  BASE_URL: "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com"
-  // BASE_URL: "https://af11-182-156-141-17.ngrok-free.app",
+  BASE_URL: "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com"
+  // BASE_URL: "https://e3bd-182-156-141-17.ngrok-free.app",
 }, je = fe.create({
   baseURL: mo.BASE_URL,
   withCredentials: !0,
   headers: {
-    // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "ngrok-skip-browser-warning": "true"
+    // 'Content-Type': 'multipart/form-data',
   }
 }), qa = () => localStorage.getItem("access_token"), Ha = () => localStorage.getItem("refresh_token");
 je.interceptors.request.use(
@@ -4843,7 +4843,7 @@ const Ie = (t) => {
 }, Mr = (t, e, r) => {
   const n = new $t();
   return In({ queryKey: r, queryFn: () => n.getDataByQuery(t, e), enabled: !!e });
-}, _o = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", za = () => fe.create({
+}, _o = "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com", za = () => fe.create({
   baseURL: _o,
   withCredentials: !0,
   headers: {
@@ -5001,7 +5001,7 @@ class pc extends J {
     const n = `${b.UPDATE_PRODUCT_CLASSIFICATION}/${e}`;
     return this.patch(n, r);
   }
-  deleteProdctClassificationById(e) {
+  deleteProductClassificationById(e) {
     const r = `${b.DELETE_PRODUCT_CLASSIFICATION}/${e}`;
     return this.delete(r);
   }
@@ -5026,7 +5026,7 @@ class Ec extends J {
     const n = `${b.UPDATE_PRODUCT_CATEGORY}/${e}`;
     return this.patch(n, r);
   }
-  deleteProdctCategoryById(e) {
+  deleteProductCategoryById(e) {
     const r = `${b.DELETE_PRODUCT_CATEGORY}/${e}`;
     return this.delete(r);
   }
@@ -5051,7 +5051,7 @@ class mc extends J {
     const n = `${b.UPDATE_PRODUCT_SUBCATEGORY}/${e}`;
     return this.patch(n, r);
   }
-  deleteProdctSubcategoryById(e) {
+  deleteProductSubcategoryById(e) {
     const r = `${b.DELETE_PRODUCT_SUBCATEGORY}/${e}`;
     return this.delete(r);
   }

@@ -22,7 +22,7 @@ function useUpdateProductClassification(id) {
 function useDeleteProductClassificationById(id) {
     return (0, react_query_1.useMutation)({
         mutationKey: ['delete-product-classification-by-id'],
-        mutationFn: () => admin_api_1.ProductClassificationService.getInstance().deleteProdctClassificationById(id),
+        mutationFn: () => admin_api_1.ProductClassificationService.getInstance().deleteProductClassificationById(id),
     });
 }
 function useGetAllProductClassifications() {

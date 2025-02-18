@@ -29,7 +29,7 @@ export class ProductClassificationService extends BaseService {
         return this.patch(url, data);
     }
 
-    deleteProdctClassificationById(id: string): Promise<ResultModel> {
+    deleteProductClassificationById(id: string): Promise<ResultModel> {
         const url = `${adminApiUrlConstants.DELETE_PRODUCT_CLASSIFICATION}/${id}`;
         return this.delete(url);
     }

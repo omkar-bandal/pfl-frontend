@@ -22,7 +22,7 @@ export function Layout({ children, role }: {
             paddingX: 1,
             width: { lg: `calc(100% - ${drawerWidth}px)` },
           }}>
-          <Toolbar />
+          <Toolbar variant='dense' />
           {children}
         </Box>
       </Box>

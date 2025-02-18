@@ -5,22 +5,22 @@ import { useGridApiRef } from "@mui/x-data-grid"
 import { GRNListCols } from "./grn.columns"
 import { PURCHASE_API_URL, GetGRN, useGetAllGRN } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules"
-import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
-import {inventoryRouteConstants} from "@prime-fresh/inventory/modules";
+import { DataTable, toast } from "@prime-fresh/ui_shared";
+import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import React from "react"
 
 export const GRNTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
     const { data: allGRN, isLoading, isError, error } = useGetAllGRN(PURCHASE_API_URL.GET_ALL_GRN);
-    console.log("All GRNs :",allGRN);
+    console.log("All GRNs :", allGRN);
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
         }
     }, [isError, error])
-    const handleCreate = async() => {
-        const route = localStorage.getItem("department") === "Inventory" ? inventoryRouteConstants.CREATE_GRN : PURCHASE_ROUTES.CREATE_GRN; 
+    const handleCreate = async () => {
+        const route = localStorage.getItem("department") === "Inventory" ? inventoryRouteConstants.CREATE_GRN : PURCHASE_ROUTES.CREATE_GRN;
         await navigate(route);
     }
     return (
@@ -28,15 +28,13 @@ export const GRNTable = () => {
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Button
                     variant="outlined"
-                    size="medium"
+                    size="small"
                     startIcon={<Add />}
-                    sx={{ marginY: 2 }}
-                    fullWidth={false}
+                    sx={{ marginY: 1, textTransform: 'none', fontWeight: 600 }}
                     onClick={handleCreate}
                 >
-                    Add GRN
+                    Add New
                 </Button>
-                <TableToolbar apiRef={apiRef} />
             </Stack>
             <DataTable<GetGRN>
                 loading={isLoading}

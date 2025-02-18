@@ -8,5 +8,5 @@ export declare class ProductCategoryService extends BaseService {
     getAllProductCategories(): Promise<ApiBaseState<GetProductCategory[]>>;
     getProductCategoryById(id: string): Promise<ApiBaseState<GetProductCategory>>;
     updateProductCategory(id: string, data: GetProductCategory): Promise<ResultModel>;
-    deleteProdctCategoryById(id: string): Promise<ResultModel>;
+    deleteProductCategoryById(id: string): Promise<ResultModel>;
 }

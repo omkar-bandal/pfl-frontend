@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useGridApiRef } from "@mui/x-data-grid"
 import { PURCHASE_API_URL, GetDealSlip, useGetAllDealSlip } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules"
-import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
+import { DataTable, toast } from "@prime-fresh/ui_shared";
 import { DealSlipListCols } from "./deal-slip.columns"
 import React from "react"
 
@@ -25,15 +25,13 @@ export const DealSlipTable = () => {
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Button
                     variant="outlined"
-                    size="medium"
+                    size="small"
                     startIcon={<Add />}
-                    sx={{ marginY: 2 }}
-                    fullWidth={false}
+                    sx={{ marginY: 1, textTransform: 'none', fontWeight: 600 }}
                     onClick={handleCreate}
                 >
-                    Add Deal Slip
+                    Add New
                 </Button>
-                <TableToolbar apiRef={apiRef} />
             </Stack>
             <DataTable<GetDealSlip>
                 loading={isLoading}

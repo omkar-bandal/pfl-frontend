@@ -22,7 +22,7 @@ function useUpdateProductCategoryById(id) {
 function useDeleteProductCategoryById(id) {
     return (0, react_query_1.useMutation)({
         mutationKey: ['delete-product-category-by-id'],
-        mutationFn: () => admin_api_1.ProductCategoryService.getInstance().deleteProdctCategoryById(id),
+        mutationFn: () => admin_api_1.ProductCategoryService.getInstance().deleteProductCategoryById(id),
     });
 }
 function useGetAllProductCategories() {

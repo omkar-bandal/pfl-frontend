@@ -4408,14 +4408,14 @@ fe.getAdapter = Pi.getAdapter;
 fe.HttpStatusCode = Ln;
 fe.default = fe;
 const $i = {
-  BASE_URL: "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com"
-  // BASE_URL: "https://af11-182-156-141-17.ngrok-free.app",
+  BASE_URL: "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com"
+  // BASE_URL: "https://e3bd-182-156-141-17.ngrok-free.app",
 }, Un = fe.create({
   baseURL: $i.BASE_URL,
   withCredentials: !0,
   headers: {
-    // 'ngrok-skip-browser-warning': 'true',
-    "Content-Type": "multipart/form-data"
+    "ngrok-skip-browser-warning": "true"
+    // 'Content-Type': 'multipart/form-data',
   }
 }), _u = () => localStorage.getItem("access_token"), Ru = () => localStorage.getItem("refresh_token");
 Un.interceptors.request.use(
@@ -4454,7 +4454,7 @@ const Su = {
   GET_FARMERS_PARTIAL: "/farmers/filterFarmer/all",
   GET_UOM_PARTIAL: "/uoms/getAll/partialdata",
   GET_BRANCHES_PARTIAL: "/location-branches/filterData/filter/all"
-}, Ii = "http://ec2-13-127-33-137.ap-south-1.compute.amazonaws.com", Ou = () => fe.create({
+}, Ii = "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com", Ou = () => fe.create({
   baseURL: Ii,
   withCredentials: !0,
   headers: {

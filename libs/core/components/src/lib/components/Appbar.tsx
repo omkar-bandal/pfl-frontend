@@ -37,6 +37,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
         bgcolor: "#FFFFFF",
         boxShadow: "none",
         boxSizing: 'border-box',
+        border: `2px solid red`
       }}
     >
       <Box width='100%' height='100%' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2 }}>

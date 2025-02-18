@@ -22,7 +22,7 @@ function useUpdateProductSubcategoryById(id) {
 function useDeleteProductSubcategoryById(id) {
     return (0, react_query_1.useMutation)({
         mutationKey: ['delete-product-subcategory-by-id'],
-        mutationFn: () => admin_api_1.ProductSubcategoryService.getInstance().deleteProdctSubcategoryById(id),
+        mutationFn: () => admin_api_1.ProductSubcategoryService.getInstance().deleteProductSubcategoryById(id),
     });
 }
 function useGetAllProductSubcategories() {

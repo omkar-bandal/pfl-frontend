@@ -29,7 +29,7 @@ export class ProductCategoryService extends BaseService {
         return this.patch(url, data);
     }
 
-    deleteProdctCategoryById(id: string): Promise<ResultModel> {
+    deleteProductCategoryById(id: string): Promise<ResultModel> {
         const url = `${adminApiUrlConstants.DELETE_PRODUCT_CATEGORY}/${id}`;
         return this.delete(url);
     }

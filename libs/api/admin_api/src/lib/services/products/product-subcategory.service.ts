@@ -28,7 +28,7 @@ export class ProductSubcategoryService extends BaseService {
         const url = `${adminApiUrlConstants.UPDATE_PRODUCT_SUBCATEGORY}/${id}`;
         return this.patch(url, data);
     }
-    deleteProdctSubcategoryById(id: string): Promise<ResultModel> {
+    deleteProductSubcategoryById(id: string): Promise<ResultModel> {
         const url = `${adminApiUrlConstants.DELETE_PRODUCT_SUBCATEGORY}/${id}`;
         return this.delete(url);
     }

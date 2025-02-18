@@ -1,0 +1,6 @@
+export * from "./inward-register.rq";
+export * from "./dump-register.rq";
+export * from "./second-sale-register.rq";
+export * from "./vehicle-dispatch-register.rq";
+export * from "./aqr.rq";
+export * from "./eod-report.rq";
