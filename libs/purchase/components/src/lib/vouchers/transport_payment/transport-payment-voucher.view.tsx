@@ -3,7 +3,7 @@ import { PURCHASE_API_URL, useGetTPVoucher } from "@prime-fresh/purchase_api";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
-import { smallLogo } from "@prime-fresh/ui_shared";
+import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 
 export const TransportPaymentVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -28,7 +28,7 @@ export const TransportPaymentVoucherView = () => {
         createData(5, "Destination", tpVoucher?.destinationLocation, "", ""),
         createData(5, "Product", tpVoucher?.products, "", ""),
         createData(7, "Freight Amount (Box, Crates x )", tpVoucher?.freightAmt, "", ""),
-        createData(8, "KYC : Driver Lic. / RC Book / PAN", tpVoucher?.kyc === true? "Yes" : "No", "", ""),
+        createData(8, "KYC : Driver Lic. / RC Book / PAN", tpVoucher?.kyc === true ? "Yes" : "No", "", ""),
     ];
 
     return (
@@ -41,15 +41,15 @@ export const TransportPaymentVoucherView = () => {
                     <Box sx={{ flex: 1 }}>
                         <Grid container rowSpacing={1}>
                             <Grid xs={12} md={6}>
-                                <Typography variant="h4" component="div" sx={{fontWeight: 700}}>Transport Payment Voucher Details</Typography>
+                                <PageTitle pagetitle="Transport Payment Voucher" />
                             </Grid>
                             <Grid xs={12} md={6}>
                                 <Grid container columnSpacing={2}>
                                     <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED")}}>Approve</Button>
+                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED") }}>Approve</Button>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved")}}>Not Approve</Button>
+                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved") }}>Not Approve</Button>
                                     </Grid>
                                     <Grid item xs={4}>
                                         <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
@@ -179,7 +179,7 @@ export const TransportPaymentVoucherView = () => {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={2} sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                        <Grid item xs={2} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                             <Box sx={{ width: 100, height: 100, border: '1px solid #000000' }}></Box>
                                             <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Receiver Sign</Typography>
                                         </Grid>
@@ -187,16 +187,16 @@ export const TransportPaymentVoucherView = () => {
                                 </Box>
                                 <Grid container marginY={1}>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${tpVoucher?.requestedBy.firstName} ${tpVoucher?.requestedBy.lastName})`}</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Passed By</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Approved By</Typography>
                                     </Grid>
                                 </Grid>

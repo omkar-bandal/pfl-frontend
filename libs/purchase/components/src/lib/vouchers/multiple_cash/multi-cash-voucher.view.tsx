@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { PURCHASE_API_URL, useGetMCVoucher } from "@prime-fresh/purchase_api";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
-import { smallLogo } from "@prime-fresh/ui_shared";
+import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
+import { useGetMultiCashVoucherById } from "@prime-fresh/purchase/modules";
 
 export const MultipleCashVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -13,7 +13,8 @@ export const MultipleCashVoucherView = () => {
     const [approval, setApproval] = useState<string>("");
     const { voucherid } = useParams<{ voucherid: string }>();
     const mcVoucherId = voucherid ? voucherid : '';
-    const { data: mcVoucher, isLoading } = useGetMCVoucher(PURCHASE_API_URL.GET_A_MC_VOUCHER, mcVoucherId);
+    const { data, isLoading } = useGetMultiCashVoucherById(mcVoucherId);
+    const mcVoucher = data?.data ? data.data : null;
     console.log(mcVoucher)
     return (
         <Container maxWidth="xl">
@@ -25,8 +26,7 @@ export const MultipleCashVoucherView = () => {
                     <Box sx={{ flex: 1, marginY: 1 }}>
                         <Grid container rowSpacing={1}>
                             <Grid xs={12} md={6}>
-                                <Typography variant="h4" component="div" sx={{ fontWeight: 700 }}>Multiple Cash Voucher Details</Typography>
-                            </Grid>
+                                <PageTitle pagetitle='Multiple Cash Voucher' />                            </Grid>
                             <Grid xs={12} md={6}>
                                 <Grid container columnSpacing={2}>
                                     <Grid item xs={4}>

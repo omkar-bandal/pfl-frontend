@@ -1,32 +1,30 @@
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import { PURCHASE_API_URL, useGetAllGRNNums, useGetTPVoucher, useUpdateTPVoucher } from "@prime-fresh/purchase_api";
-import { initValTransportPaymentVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewTPVoucher } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { Box, Grid, LinearProgress } from "@mui/material";
+import { initValTransportPaymentVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewTPVoucher, useGetTransportPaymentVoucherById, useUpdateTransportPaymentVoucherById } from "@prime-fresh/purchase/modules";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./transport-payment-voucher.preview";
 import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
-import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { useGetAllGRNNums, useGetCompanyNames } from "@prime-fresh/shared/modules";
 import { handleAmountChange } from "./helper-function";
-import { ChangeEvent } from "react";
 
 export const TransportPaymentVoucherUpdate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { voucherid } = useParams<{ voucherid: string }>();
   const tpVoucherId = voucherid ? voucherid : '';
-  const { data: tpVoucherData, isLoading } = useGetTPVoucher(PURCHASE_API_URL.GET_A_TP_VOUCHER, tpVoucherId);
-  const tpVoucherValues = tpVoucherData ? tpVoucherData : initValTransportPaymentVoucher;
+  const { data: tpVoucherData, isLoading } = useGetTransportPaymentVoucherById(tpVoucherId);
+  const tpVoucherValues = tpVoucherData?.data ? tpVoucherData.data : initValTransportPaymentVoucher;
 
   const { data: companies } = useGetCompanyNames();
   const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
-  const { data: grnNums } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-  const allGRNNumbers = grnNums ? grnNums : [];
+  const { data: grnNums } = useGetAllGRNNums();
+  const allGRNNumbers = grnNums?.data ? mapToValueLabelArray(grnNums.data, 'id', 'grnNo') : [];
 
-  const { mutateAsync: mutatePatch, error, data: Res } = useUpdateTPVoucher(PURCHASE_API_URL.UPDATE_TP_VOUCHER, tpVoucherId);
+  const { mutateAsync: mutatePatch, error, data: Res } = useUpdateTransportPaymentVoucherById(tpVoucherId);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = (values: any) => {
@@ -58,16 +56,16 @@ export const TransportPaymentVoucherUpdate = () => {
             <form onSubmit={handleSubmit}>
               <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                 <Grid item xs={12} marginBottom={2}>
-                  <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Transport Payment Voucher</Typography>
+                  <PageTitle pagetitle="Transport Payment Voucher" />
                 </Grid>
                 <Grid item xs={12} md={3}>
                   <SelectInput
                     isRequired={false}
                     label="Select GRN"
                     name="grnNo"
-                    options={mapToValueLabelArray(allGRNNumbers, 'id', 'grnNo')}
+                    options={allGRNNumbers}
                     value={typeof values.grnNo !== 'string' ? values.grnNo?.id : values.grnNo}
-                    handleChange={handleChange}/>
+                    handleChange={handleChange} />
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <SelectInput

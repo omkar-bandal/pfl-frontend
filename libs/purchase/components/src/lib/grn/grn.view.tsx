@@ -2,15 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { useNavigate, useParams } from "react-router-dom";
 import { AxiosResponse } from "axios";
-import { ChangeStatusResponse, PURCHASE_API_URL, useGetGRN } from "@prime-fresh/purchase_api";
-import { displayAddress, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { ChangeStatusResponse, PURCHASE_API_URL } from "@prime-fresh/purchase_api";
+import { displayAddress, PURCHASE_ROUTES, useGetGRNById } from "@prime-fresh/purchase/modules";
 import { axiosInstance, handleError } from "@prime-fresh/common_api";
 import { useReactToPrint } from "react-to-print";
-import { smallLogo } from "@prime-fresh/ui_shared";
-import { ADMIN_API_URL, useGetAllFarmers, useGetAllFilteredBranches, useGetAllFilteredFarmerData, useGetAllFilteredVendorData, useGetAllProducts, useGetAllUOMs, useGetAllVendors } from "@prime-fresh/admin_api";
+import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux";
-import { farmersDataState, productsDataState, setProducts, setSelectedFarmer, setSelectedVendor, setUOMs, uomsDataState, vendorsDataState } from "@prime-fresh/admin/modules";
+import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
 import { useAppSelector } from "@prime-fresh/modules";
+import { useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
 export const GRNView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -20,16 +20,21 @@ export const GRNView = () => {
   const [approval, setApproval] = useState<string>("");
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
-  const { data: grn, isLoading } = useGetGRN(PURCHASE_API_URL.GET_A_GRN, grnId);
-  const borderColor = grn?.grnType === "cc"? `2px solid green` : `2px solid red`;
-  const textColor = grn?.grnType === "cc"? `success` : `error`;
-  const { data: Vendors } = useGetAllFilteredVendorData(ADMIN_API_URL.GET_ALL_VENDORS_FILTERED);
-  const { data: Farmers } = useGetAllFilteredFarmerData(ADMIN_API_URL.GET_ALL_FARMERS_FILTERED);
-  const { data: Products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-  const products = Products ? Products : [];
-  const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const uoms = UOMs ? UOMs : [];
+  const { data, isLoading } = useGetGRNById(grnId);
+  const grn = data?.data ? data.data : null;
+  const borderColor = grn?.locationType === "cc" ? `2px solid green` : `2px solid red`;
+  const textColor = grn?.locationType === "cc" ? `success` : `error`;
+  const { data: vendors } = useGetVendorsPartialData();
+  const Vendors = vendors?.data ? vendors.data : [];
+  const { data: farmers } = useGetFarmersPartialData();
+  const Farmers = farmers?.data ? farmers.data : [];
+  const { data: products } = useGetProductsPartialData();
+  const Products = products?.data ? products.data : [];
+  const { data: locations } = useGetBranchesPartialData();
+  const Locations = locations?.data ? locations.data : [];
+  const { data: uoms } = useGetUOMPartialData();
+  const UOMs = uoms?.data ? uoms.data : [];
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (grn?.source === "vendor") {
@@ -39,13 +44,10 @@ export const GRNView = () => {
       const farmer = Farmers?.find(farmer => farmer.id === grn?.selectedParty);
       dispatch(setSelectedFarmer(farmer));
     }
-    dispatch(setProducts(products));
-    dispatch(setUOMs(uoms));
   })
   const { selectedVendor } = useAppSelector(vendorsDataState);
   const { selectedFarmer } = useAppSelector(farmersDataState);
-  const { allProducts } = useAppSelector(productsDataState);
-  const { allUOMs } = useAppSelector(uomsDataState);
+
 
   const role = localStorage.getItem('role');
   const handleStatusChange = async () => {
@@ -73,7 +75,7 @@ export const GRNView = () => {
           <Box sx={{ flex: 1 }}>
             <Grid container rowSpacing={1}>
               <Grid item xs={12} md={4}>
-                <Typography variant="h4" component="span">GRN Details</Typography>
+                <PageTitle pagetitle='Goods Received Note' />
               </Grid>
               <Grid item xs={12} md={8}>
                 {role === 'MANAGER' && (
@@ -164,7 +166,7 @@ export const GRNView = () => {
                     <Typography variant="subtitle1" component="span" color={textColor}> Purchase for which location</Typography>
                   </Grid>
                   <Grid item xs={2} sx={{ borderBottom: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{Locations?.find(location => location.id === grn?.purchaseForWhich)?.name}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{Locations?.find(location => location.id === grn?.purchaseForSalesLocation)?.name}</Typography>
                   </Grid>
                   <Grid item xs={2} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" color={textColor}>Source</Typography>
@@ -194,7 +196,7 @@ export const GRNView = () => {
                     <Typography variant="subtitle1" component="span" color={textColor}>Email</Typography>
                   </Grid>
                   <Grid item xs={8} sx={{ borderBottom: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.email : selectedFarmer?.email}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.officeEmail : selectedFarmer?.email}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" color={textColor}>{grn?.source === "vendor" ? "Office" : "Farm"} Address</Typography>
@@ -216,27 +218,27 @@ export const GRNView = () => {
                       <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="center" color={textColor} sx={{ width: 100, fontWeight: "bold", fontSize: 18, color:textColor, borderBottom: borderColor, borderRight: borderColor }}>Sr. No.</TableCell>
-                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color:textColor, borderBottom: borderColor, borderRight: borderColor }}>Product</TableCell>
-                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color:textColor, borderBottom: borderColor, borderRight: borderColor }}>Quantity</TableCell>
-                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color:textColor, borderBottom: borderColor, borderRight: borderColor }}>Unit</TableCell>
-                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color:textColor, borderBottom: borderColor, borderRight: borderColor }}>Rate</TableCell>
-                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color:textColor, borderBottom: borderColor }}>Amount</TableCell>
+                            <TableCell align="center" color={textColor} sx={{ width: 100, fontWeight: "bold", fontSize: 18, color: textColor, borderBottom: borderColor, borderRight: borderColor }}>Sr. No.</TableCell>
+                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color: textColor, borderBottom: borderColor, borderRight: borderColor }}>Product</TableCell>
+                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color: textColor, borderBottom: borderColor, borderRight: borderColor }}>Quantity</TableCell>
+                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color: textColor, borderBottom: borderColor, borderRight: borderColor }}>Unit</TableCell>
+                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color: textColor, borderBottom: borderColor, borderRight: borderColor }}>Rate</TableCell>
+                            <TableCell align="center" color={textColor} sx={{ fontWeight: "bold", fontSize: 18, color: textColor, borderBottom: borderColor }}>Amount</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {grn?.products.map((product, index) => (
+                          {grn?.grnProducts.map((product, index) => (
                             <TableRow
                               key={index}
                               sx={{ borderBottom: borderColor }}
                             >
 
                               <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{index + 1}</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{allProducts.find(item => item.id === product.product)?.name}</TableCell>
+                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{Products.find(item => item.id === product.productName)?.name}</TableCell>
                               <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{product.quantity ? product.quantity : ''}</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{allUOMs.find(item => item.id === product.uom)?.unit}</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{product.rate ? product.rate : ''}</TableCell>
-                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor }}>{product.amt ? product.amt : ''}</TableCell>
+                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{UOMs.find(item => item.id === product.uom)?.unit}</TableCell>
+                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor, borderRight: borderColor }}>{product.unitPrice ? product.unitPrice : ''}</TableCell>
+                              <TableCell align="center" sx={{ fontWeight: 600, fontSize: 16, borderBottom: borderColor }}>{product.amount ? product.amount : ''}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

@@ -29,15 +29,16 @@ export function useDeleteBranchById(id: string, branchType: string):
 export function useGetAllBranches(branchType: string):
     UseQueryResult<ApiBaseState<GetBranches[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetBranches[]>, ErrorModel>({
-        queryKey: ['get-all-branchs'],
+        queryKey: ['get-all-branchs', branchType],
         queryFn: () => BranchService.getInstance().getAllBranches(branchType),
+        enabled: !!branchType
     });
 }
 
 export function useGetBranchById(id: string):
     UseQueryResult<ApiBaseState<GetBranches>, ErrorModel> {
     return useQuery<ApiBaseState<GetBranches>, ErrorModel>({
-        queryKey: ['get-branch-by-id'],
+        queryKey: ['get-branch-by-id', id],
         queryFn: () => BranchService.getInstance().getBranchById(id),
         enabled: !!id,
     });

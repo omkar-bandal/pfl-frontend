@@ -1,16 +1,15 @@
 import { Button, Grid, IconButton, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValPackingMaterials, initValPackingMaterialVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPMPVoucher } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { PostPMPvoucher, PURCHASE_API_URL, useCreatePMPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
-import { ADMIN_API_URL, useGetAllUOMs } from "@prime-fresh/admin_api";
+import { initValPackingMaterials, initValPackingMaterialVoucher, packingMaterialPaymentVoucherSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPMPVoucher, useCreatePackingMeterialPaymentVoucher } from "@prime-fresh/purchase/modules";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { PostPMPvoucher } from "@prime-fresh/purchase_api";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
 import { PMPVoucherPreview } from "./packing-material-payment-voucher.preview";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
-import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { useGetCompanyNames, useGetAllGRNNums, useGetUOMPartialData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { calculateAmounts } from "./helper-functions";
 
 export const PackingMaterialPaymentVoucherForm = () => {
@@ -20,14 +19,14 @@ export const PackingMaterialPaymentVoucherForm = () => {
   const { data: companies } = useGetCompanyNames();
   const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
-  const { data } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-  const allGRNNumbers = data ? data : [];
+  const { data: grnnos } = useGetAllGRNNums();
+  const allGRNNumbers = grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [];
 
-  const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const allUOMS = UOMs ? UOMs : [];
+  const { data: UOMs } = useGetUOMPartialData();
+  const allUOMS = UOMs?.data ? mapToValueLabelArray(UOMs.data, 'id', 'unit') : [];
 
-  const { mutateAsync: mutatePost, error, data: Res } = useCreatePMPVoucher(PURCHASE_API_URL.POST_PMP_VOUCHER);
-  
+  const { mutateAsync: mutatePost, error, data: Res } = useCreatePackingMeterialPaymentVoucher();
+
   const handleSubmit = (values: PostPMPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -46,7 +45,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
       <Formik
         enableReinitialize={true}
         initialValues={initValPackingMaterialVoucher}
-        // validationSchema={packingMaterialPaymentVoucherSchema}
+        validationSchema={packingMaterialPaymentVoucherSchema}
         validateOnBlur={true}
         validateOnChange={true}
         onSubmit={(values) => {
@@ -58,14 +57,14 @@ export const PackingMaterialPaymentVoucherForm = () => {
           <form onSubmit={handleSubmit}>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} marginBottom={2}>
-                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Packing Material Payment Voucher</Typography>
+                <PageTitle pagetitle='Packing Material Payment Voucher' />
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
                   isRequired={false}
                   label="Select GRN"
                   name="grnNo"
-                  options={mapToValueLabelArray(allGRNNumbers, 'id', 'grnNo')}
+                  options={allGRNNumbers}
                   value={values.grnNo}
                   handleChange={handleChange} />
               </Grid>
@@ -232,7 +231,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
                               isRequired={true}
                               label="Unit"
                               name={`materials.${index}.itemUom`}
-                              options={mapToValueLabelArray(allUOMS, 'id', 'unit')}
+                              options={allUOMS}
                               value={item.itemUom}
                               handleChange={handleChange} />
                           </Grid>
@@ -261,7 +260,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
                               isReadOnly={true}
                               name={`item.${index}.amt`}
                               label="Amount"
-                              value={item.amt}/>
+                              value={item.amt} />
                           </Grid>
                         </Grid>
                       ))}
@@ -302,7 +301,7 @@ export const PackingMaterialPaymentVoucherForm = () => {
                   isReadOnly={true}
                   name="totalAmt"
                   label="Total Amount"
-                  value={values.totalAmt}/>
+                  value={values.totalAmt} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput

@@ -10,7 +10,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 
-const Accordion = styled((props: AccordionProps) => (
+export const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -22,7 +22,7 @@ const Accordion = styled((props: AccordionProps) => (
     },
 }));
 
-const AccordionSummary = styled((props: AccordionSummaryProps) => (
+export const AccordionSummary = styled((props: AccordionSummaryProps) => (
     <MuiAccordionSummary
         expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
         {...props}
@@ -42,7 +42,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     }),
 }));
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+export const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
     padding: theme.spacing(2),
     borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Button, Grid, LinearProgress, Typography } from "@mui/material"
-import { PURCHASE_API_URL, useGetDealSlip} from '@prime-fresh/purchase_api';
 import { useParams } from 'react-router-dom';
+import { useGetDealSlipById } from '@prime-fresh/purchase/modules';
 
 export const DealSlipView = () => {
   const { id } = useParams<{ id: string }>();
   const dealslipId = id ? id : '';
-  const { data: dealSlip, isLoading } = useGetDealSlip(PURCHASE_API_URL.GET_A_DEAL_SLIP, dealslipId);
+  const { data, isLoading } = useGetDealSlipById(dealslipId);
+  const dealSlip = data?.data ? data.data : null;
   console.log(dealSlip);
 
   return (

@@ -108,9 +108,4 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
     preview: {
         preview: boolean;
     };
-    notification: {
-        isOpen: boolean;
-        severity: "success" | "error";
-        message: string;
-    };
 }>;

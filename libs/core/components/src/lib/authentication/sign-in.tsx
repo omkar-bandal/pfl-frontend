@@ -2,8 +2,8 @@
 import React, { useCallback } from "react";
 import { Formik } from "formik";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, CircularProgress, Container, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
-import { SignInRequest, useSignIn} from "@prime-fresh/auth_api";
+import { Box, Button, CircularProgress, Container, Grid, IconButton, InputAdornment, TextField, Typography, useTheme } from "@mui/material";
+import { SignInRequest, useSignIn } from "@prime-fresh/auth_api";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
@@ -18,6 +18,7 @@ const InitValSignIn: SignInRequest = {
 }
 
 export const SignIn = () => {
+    const theme = useTheme();
     //react-router-dom hook to navigate 
     const navigate = useNavigate();
 
@@ -62,13 +63,13 @@ export const SignIn = () => {
 
     //custom hook for sign in
     const { mutateAsync, isError, error } = useSignIn();
-   
+
     //submit function of sign in form.
     const handleSignIn = (values: SignInRequest) => {
-    mutateAsync(values).then((result) =>{
-           toast.success("Signed In Successfully.")
-           setTimeout(() => {
-               if (result) {
+        mutateAsync(values).then((result) => {
+            toast.success("Signed In Successfully.")
+            setTimeout(() => {
+                if (result) {
                     if (result.department === stringConstants.DEPT_ADMIN) {
                         navigate(ADMIN_ROUTES.DASHBOARD_ADMIN);
                     } else if (result.department === stringConstants.DEPT_PURCHASE) {
@@ -85,51 +86,58 @@ export const SignIn = () => {
     }
     return (
         <Container maxWidth="xl" sx={{ height: "90vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Box sx={{ width: 800 }}>
+            <Box sx={{ width: 800, border: `1px solid ${theme.palette.primary.main}`, borderRadius: 5, padding: 2, marginTop: 5 }}>
                 <Grid container>
-                    <Grid item sm={6} xs={12} padding={2}>
+                    <Grid item sm={7} xs={12} padding={3}>
                         <img
                             src={images.signuplogo}
                             width="100%"
                             alt="prime-fresh-logo"
                         />
                     </Grid>
-                    <Grid item sm={6} xs={12}>
+                    <Grid item sm={5} xs={12}>
                         <Formik
                             initialValues={InitValSignIn}
                             validationSchema={SignInSchema(signinMethod)}
                             validateOnBlur={true}
                             validateOnChange={true}
                             onSubmit={(values) => handleSignIn(values)}>
-                            {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
+                            {({ values, handleChange, handleSubmit, handleReset, isSubmitting, touched, errors }) => (
                                 <>
                                     <form onSubmit={handleSubmit}>
-                                        <Grid container direction="column" spacing={2} padding={1}>
+                                        <Grid container direction="column" rowSpacing={1} padding={1}>
                                             <Grid item xs={12}>
-                                                <Typography variant='h5' component="div" textAlign="center" sx={{ fontWeight: 600, marginBottom: 2 }}>Sign In</Typography>
+                                                <Typography variant='h4' component="div" textAlign="center" color="primary" sx={{ fontWeight: 600, marginBottom: 2 }}>Sign In</Typography>
                                             </Grid>
-                                            <Grid item xs={12}>
-                                                <TextInput
-                                                    type={signinMethod === "email" ? "email" : "text"}
-                                                    name="uid"
-                                                    label={signinMethod === "email" ? stringConstants.EMAIL : stringConstants.MOB_NO}
-                                                    isRequired={true}
-                                                    value={values.uid}
-                                                    handleChange={handleChange}
+                                            <Grid item xs={12} marginY={1}>
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
                                                     autoComplete="off"
                                                     autoCorrect="off"
+                                                    name="uid"
+                                                    type={signinMethod === "email" ? "email" : "text"}
+                                                    label={signinMethod === "email" ? stringConstants.EMAIL : stringConstants.MOB_NO}
+                                                    value={values.uid}
+                                                    onChange={handleChange}
+                                                    error={touched.uid && Boolean(errors.uid)}
+                                                    helperText={touched.uid && errors ? errors.uid : ""}
+                                                    sx={{ backgroundColor: theme.palette.primary.light }}
                                                 />
                                             </Grid>
-                                            <Grid item xs={12}>
-                                                <TextInput
-                                                    type={showPassword ? 'text' : 'password'}
-                                                    isRequired={true}
-                                                    name="password"
-                                                    label="Password"
-                                                    value={values.password}
-                                                    handleChange={handleChange}
+                                            <Grid item xs={12} marginY={1}>
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
                                                     autoComplete="off"
                                                     autoCorrect="off"
+                                                    name="password"
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    label="Password"
+                                                    value={values.password}
+                                                    onChange={handleChange}
+                                                    error={touched.password && Boolean(errors.password)}
+                                                    helperText={touched.password && errors ? errors.password : ""}
                                                     slotProps={{
                                                         input: {
                                                             endAdornment: <InputAdornment position="end">
@@ -141,19 +149,22 @@ export const SignIn = () => {
                                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                                                 </IconButton>
                                                             </InputAdornment>,
-                                                        },
-                                                    }} />
+                                                        }
+                                                    }}
+                                                    sx={{ backgroundColor: theme.palette.primary.light }}
+                                                />
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={12} marginY={2}>
                                                 <Button
                                                     type="submit"
                                                     color="primary"
                                                     variant="contained"
+                                                    size="small"
                                                     fullWidth
                                                     sx={{
-                                                        my: 2, textTransform: 'none', fontSize: 15, fontWeight: 'bold', '&:disabled': {
-                                                            backgroundColor: "#A5D6A7",
-                                                        },
+                                                        textTransform: 'none',
+                                                        fontSize: 15,
+                                                        fontWeight: 'bold',
                                                     }}
                                                     disableElevation
                                                     disabled={isSubmitting && !isError}
@@ -163,12 +174,14 @@ export const SignIn = () => {
                                             </Grid>
                                         </Grid>
                                     </form>
+                                    <Typography variant="body2" component="div" color="primary" textAlign="center" sx={{ fontWeight: "bold" }}>Or</Typography>
                                     <Button
                                         fullWidth
                                         variant='text'
+                                        color="primary"
                                         sx={{
-                                            textTransform: 'none', '&:hover':
-                                            {
+                                            textTransform: 'none',
+                                            '&:hover': {
                                                 backgroundColor: 'transparent',
                                             }
                                         }}

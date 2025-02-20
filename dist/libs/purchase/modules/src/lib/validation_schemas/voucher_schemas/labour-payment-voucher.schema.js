@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.labourPaymentVoucherSchema = void 0;
 const yup = require("yup");
 const contactNo_schema_1 = require("../contactNo.schema");
+const modules_1 = require("@prime-fresh/shared/modules");
 exports.labourPaymentVoucherSchema = yup.object().shape({
     companyName: yup.string().required('Company name is required'),
     debitCreditTo: yup.string().required('Name required for debit / credit to.'),
@@ -12,7 +13,8 @@ exports.labourPaymentVoucherSchema = yup.object().shape({
     ratePerLabour: yup.number().required('Rate is required').positive('Rate cannot be negative'),
     loadingDate: yup.date().required('Loading date is required'),
     contactNo: contactNo_schema_1.contactNoSchema,
+    altContactNo: yup.string().nullable().matches(modules_1.REGEX.IS_NUMBER, "Please enter valid contact number."),
     paymentMode: yup.string().required('Payment mode is required'),
-    receiverName: yup.string().required('Receiver name is required'),
+    receiverName: yup.string().required('Receiver name is required').matches(modules_1.REGEX.IS_STRING, "Name should only contains alphabets."),
 });
 //# sourceMappingURL=labour-payment-voucher.schema.js.map

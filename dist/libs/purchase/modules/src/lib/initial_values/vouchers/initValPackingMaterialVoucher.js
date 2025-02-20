@@ -4,14 +4,14 @@ exports.initValPackingMaterialVoucher = exports.initValPackingMaterials = void 0
 const initValAddress_1 = require("../initValAddress");
 exports.initValPackingMaterials = {
     itemName: null,
-    itemQty: 0,
+    itemQty: null,
     itemUom: null,
-    rate: 0,
+    rate: null,
     amt: 0,
 };
 exports.initValPackingMaterialVoucher = {
     grnNo: null,
-    companyName: '',
+    companyName: null,
     debitCreditTo: null,
     payReceivedFrom: null,
     location: null,

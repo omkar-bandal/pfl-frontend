@@ -6,7 +6,7 @@ interface DataGridProps<T> {
   columns: CustomGridColDef[];
   rows: T[] | undefined;
   loading: boolean
-  apiRef: React.MutableRefObject<GridApi>
+  apiRef?: React.MutableRefObject<GridApi>
 }
 export const DataTable = <T extends { id: string | number }>({ columns, rows, apiRef, loading, ...rest }: DataGridProps<T>) => {
   const theme = useTheme();
@@ -33,7 +33,6 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         disableColumnMenu={true}
         columnHeaderHeight={40}
         rowHeight={40}
-       
         initialState={{
           pagination: {
             paginationModel: {

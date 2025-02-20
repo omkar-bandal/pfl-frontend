@@ -8,7 +8,13 @@ import {
     FarmerPartialData,
     ProductPartialData,
     VendorPartialData,
-    BranchPartialData
+    BranchPartialData,
+    GetAllRFPANums,
+    GetAllGRNNums,
+    GetAllDealSlipNums,
+    GetAllDeliveryChallanNums,
+    CustomerPartialData,
+    CustomerNames
 } from '@prime-fresh/common_api';
 
 export function useGetCompanyNames():
@@ -24,6 +30,23 @@ export function useGetFarmersPartialData():
     return useQuery<ApiBaseState<FarmerPartialData[]>, ErrorModel>({
         queryKey: ['get-farmers-partial-data'],
         queryFn: () => SharedService.getInstance().getFarmersPatrialData(),
+    });
+}
+
+export function useGetCustomerPartialData(customerId: string):
+    UseQueryResult<ApiBaseState<CustomerPartialData>, ErrorModel> {
+    return useQuery<ApiBaseState<CustomerPartialData>, ErrorModel>({
+        queryKey: ['get-customers-partial-data', customerId],
+        queryFn: () => SharedService.getInstance().getCustomerPatrialData(customerId),
+        enabled: !!customerId
+    });
+}
+
+export function useGetCustomerNames():
+    UseQueryResult<ApiBaseState<CustomerNames[]>, ErrorModel> {
+    return useQuery<ApiBaseState<CustomerNames[]>, ErrorModel>({
+        queryKey: ['get-customer-names'],
+        queryFn: () => SharedService.getInstance().getAllCustomerNames(),
     });
 }
 
@@ -58,4 +81,36 @@ export function useGetBranchesPartialData():
         queryKey: ['get-branches-partial-data'],
         queryFn: () => SharedService.getInstance().getBranchPartialData(),
     });
+}
+
+export function useGetAllRFPANums():
+    UseQueryResult<ApiBaseState<GetAllRFPANums[]>, ErrorModel> {
+    return useQuery<ApiBaseState<GetAllRFPANums[]>, ErrorModel>({
+        queryKey: ['get-rfpa-nums'],
+        queryFn: () => SharedService.getInstance().getRFPANums(),
+    })
+}
+
+export function useGetAllGRNNums():
+    UseQueryResult<ApiBaseState<GetAllGRNNums[]>, ErrorModel> {
+    return useQuery<ApiBaseState<GetAllGRNNums[]>, ErrorModel>({
+        queryKey: ['get-grn-nums'],
+        queryFn: () => SharedService.getInstance().getGRNNums(),
+    })
+}
+
+export function useGetAllDealSlipNums():
+    UseQueryResult<ApiBaseState<GetAllDealSlipNums[]>, ErrorModel> {
+    return useQuery<ApiBaseState<GetAllDealSlipNums[]>, ErrorModel>({
+        queryKey: ['get-deal-slip-nums'],
+        queryFn: () => SharedService.getInstance().getDealSlipNums(),
+    })
+}
+
+export function useGetAllDeliveryChallanNums():
+    UseQueryResult<ApiBaseState<GetAllDeliveryChallanNums[]>, ErrorModel> {
+    return useQuery<ApiBaseState<GetAllDeliveryChallanNums[]>, ErrorModel>({
+        queryKey: ['get-delivery-challan-nums'],
+        queryFn: () => SharedService.getInstance().getDeliveryChallanNums(),
+    })
 }

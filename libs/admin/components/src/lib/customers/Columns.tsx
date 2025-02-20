@@ -3,18 +3,12 @@ import { Preview } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-// import { useDispatch } from "react-redux";
 import { Address, CustomerCategory, CustomerTypes } from '@prime-fresh/admin_api';
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
 export const CustomerListCols = (): CustomGridColDef[] => {
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const handleEdit = (id: string) => {
-  //   dispatch(setDataId(id));
-  //   dispatch(setOpenFor('update'));
-  // }
   return ([
     { field: "id", type: "string", headerName: "ID", width: 30 },
     {

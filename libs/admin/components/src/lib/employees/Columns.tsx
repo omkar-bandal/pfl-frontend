@@ -11,10 +11,6 @@ export const EmployeeListCols = (): CustomGridColDef[] => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const handleEdit = (id: string) => {
-  //   dispatch(setDataId(id));
-  //   dispatch(setOpenFor('update'));
-  // }
   const handleEmployeeStatus = (id: string) => {
     dispatch(setDataId(id));
   }

@@ -2,22 +2,22 @@ import { RequestedBy } from "../requestedBy.interface";
 
 export interface Particulars {
     id?: string,
-    description: string,
-    amt: number,
+    description: string | null,
+    amt: number | null,
 }
 export interface PostMCvoucher {
-    grnNo: string,
-    challanNo: string,
-    companyName: string;
-    debitCreditTo: string,
-    payReceivedFrom: string,
-    location: string,
+    grnNo: string | null,
+    challanNo: string | null,
+    companyName: string | null;
+    debitCreditTo: string | null,
+    payReceivedFrom: string | null,
+    location: string | null,
     particulars: Particulars[],
     totalAmt: number,
-    amtWords: string,
-    paymentMode: string,
-    receiverName: string,
-    remark: string,
+    amtWords: string | null,
+    paymentMode: string | null,
+    receiverName: string | null,
+    remark: string | null,
     anyAttachment: File | null,
 }
 export interface GetMCvoucher {

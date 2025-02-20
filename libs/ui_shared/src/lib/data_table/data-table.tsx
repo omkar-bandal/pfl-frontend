@@ -1,6 +1,5 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import { DataGrid, GridApi, GridCallbackDetails, GridFilterModel, GridPaginationModel, GridSortModel } from "@mui/x-data-grid";
-import { useMemo, useRef, useState } from "react";
+import { DataGrid, GridApi, GridFilterModel, GridPaginationModel, GridSortModel } from "@mui/x-data-grid";
 import { CustomGridColDef } from "./models/columntype.interface";
 import { CustomNoRowsOverlay } from "./components";
 
@@ -8,16 +7,16 @@ interface DataGridProps<T> {
     columns: CustomGridColDef[];
     rows: T[] | undefined;
     mode: "server" | "client";
-    initialPageSize: number;
-    totalRows: number;
-    paginationModel: GridPaginationModel;
-    onPaginationModelChange: (newPaginationModel: GridPaginationModel) => void;
+    initialPageSize?: number;
+    totalRows?: number;
+    paginationModel?: GridPaginationModel;
+    onPaginationModelChange?: (newPaginationModel: GridPaginationModel) => void;
     sortModel?: GridSortModel;
     onSortModelChange?: (newSortModel: GridSortModel) => void;
     filterModel?: GridFilterModel;
-    onFilterModelChange: (newFilterModel: GridFilterModel) => void;
+    onFilterModelChange?: (newFilterModel: GridFilterModel) => void;
     loading: boolean;
-    apiRef: React.MutableRefObject<GridApi>
+    apiRef?: React.MutableRefObject<GridApi>
 }
 export const DataGridTable = <T extends { id: string | number }>(props: DataGridProps<T>) => {
     const { rows, columns, mode, apiRef, loading, totalRows,
@@ -58,17 +57,23 @@ export const DataGridTable = <T extends { id: string | number }>(props: DataGrid
                 filterModel={filterModel}
                 onFilterModelChange={onFilterModelChange}
                 // disableColumnSorting={true}
-                rowHeight={50}
-                autoHeight
+                rowHeight={40}
                 slots={{ noRowsOverlay: CustomNoRowsOverlay }}
                 sx={{
-                    "& .MuiDataGrid-columnHeaders": {
-                        fontSize: 15,
-                        background: "#F6FFF7",
+                    '& .MuiDataGrid-columnHeader': { // Target all column headers
+                        backgroundColor: " #00cc66",
+                        height: 10,
+                    },
+                    '& .MuiDataGrid-columnHeaderTitle': { // Target the header title specifically
+                        fontSize: '15px',
+                        fontWeight: 'bold',
+                        color: "#FFFFFF"         // Example font weight
+                        // Example font size
                     },
                     "& .MuiDataGrid-cell": {
-                        color: "#555",
+                        color: "#595959",
                         fontSize: 14,
+                        fontWeight: 600
                         // padding: isMobile ? '8px' : '16px',
                     },
                     "--DataGrid-overlayHeight": "300px",

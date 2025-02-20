@@ -1,18 +1,13 @@
 import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
-import { hideNotification } from "@prime-fresh/modules";
+import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const UOMListCols = (): CustomGridColDef[] => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const handleEdit = (rowId: string) => {
-    dispatch(hideNotification());
-    dispatch(setOpenFor('update'));
     navigate(`${ADMIN_ROUTES.UPDATE_UOM}/${rowId}`);
   }
   return [

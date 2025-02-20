@@ -1,22 +1,22 @@
 import { FC, memo, useMemo } from "react";
 import { Grid} from "@mui/material";
-import { ADMIN_API_URL, GetFilteredBranchData, useGetCustomerPartialData } from "@prime-fresh/admin_api";
 import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
 import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import { AutoCompleteInput, FormAccordion, TextInput } from "@prime-fresh/ui_shared";
 import { useFormikContext } from "formik";
 import { displayAddress } from "@prime-fresh/purchase/modules";
-
+import { useGetCustomerPartialData } from "@prime-fresh/shared/modules";
+import {BranchPartialData} from "@prime-fresh/common_api";
 type ToLocationProps = {
-    locations: GetFilteredBranchData[];
+    locations: BranchPartialData[];
 };
 
 export const ToLocation: FC<ToLocationProps> = memo(({ locations }) => {
     const { values, setFieldValue, handleChange } = useFormikContext<PostDeliveryChallan>();
     const { deliveryCType, partyName, toLocation, toLocationInput } = values;
     const customerId = deliveryCType === "customer" ? partyName : null
-    const { data: customer } = useGetCustomerPartialData(ADMIN_API_URL.GET_CUSTOMER_PARTIAL_DATA, customerId);
-
+    const { data } = useGetCustomerPartialData(customerId || "");
+    const customer = data?.data ? data.data : null;
     const allDCLocations = useMemo(() =>
         locations ? mapToValueLabelArray(locations.filter(loc => loc.type === "distribution-center"), "id", "name") : [],
         [locations]
@@ -44,7 +44,7 @@ export const ToLocation: FC<ToLocationProps> = memo(({ locations }) => {
                     label="To Location"
                     options={allDCLocations}
                     handleChange={(event, newValue) =>
-                        setFieldValue("toLocation", newValue ? newValue.value : "")
+                        setFieldValue("toLocation", newValue ? newValue : "")
                     }
                 />
             </Grid>

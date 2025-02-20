@@ -64,5 +64,8 @@ exports.PURCHASE_ROUTES = {
     GET_A_DELIVERY_CHALLAN: "/purchase/delivery-challan/get",
     VIEW_DELIVERY_CHALLAN: "/purchase/delivery-challan/view",
     UPDATE_DELIVERY_CHALLAN: "/purchase/delivery-challan/update",
+    //Reports
+    REPORTS: "/purchase/reports",
+    PURCHASE_REPORTS: "/purchase/reports/procurements"
 };
 //# sourceMappingURL=routes.js.map

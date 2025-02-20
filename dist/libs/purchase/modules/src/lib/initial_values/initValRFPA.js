@@ -4,9 +4,9 @@ exports.initValRFPA = exports.initValRFPAItems = void 0;
 exports.initValRFPAItems = {
     product: null,
     grade: null,
-    quantity: 0,
+    quantity: null,
     uom: null,
-    unitPrice: 0,
+    unitPrice: null,
     totalVal: 0,
     description: null,
     deliveryLocation: null,
@@ -18,10 +18,10 @@ exports.initValRFPAItems = {
 const initValPaymentInfo = {
     paymentMode: null,
     paymentDate: null,
-    paymentTerms: 0,
+    paymentTerms: null,
     dueDate: null,
-    advancePaidAmt: 0,
-    creditPeriod: 0,
+    advancePaidAmt: null,
+    creditPeriod: null,
     validityofQuote: null,
 };
 exports.initValRFPA = {

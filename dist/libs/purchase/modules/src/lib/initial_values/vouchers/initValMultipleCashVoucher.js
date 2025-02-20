@@ -2,22 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initValMMultipleCashVoucher = exports.initValParticulars = void 0;
 exports.initValParticulars = {
-    description: "",
-    amt: 0,
+    description: null,
+    amt: null,
 };
 exports.initValMMultipleCashVoucher = {
-    grnNo: "",
-    challanNo: "",
+    grnNo: null,
+    challanNo: null,
     companyName: '',
-    debitCreditTo: "",
-    payReceivedFrom: "",
-    location: "",
+    debitCreditTo: null,
+    payReceivedFrom: null,
+    location: null,
     particulars: [exports.initValParticulars],
     totalAmt: 0,
-    amtWords: "",
-    paymentMode: "",
-    receiverName: "",
-    remark: "",
+    amtWords: null,
+    paymentMode: null,
+    receiverName: null,
+    remark: null,
     anyAttachment: null,
 };
 //# sourceMappingURL=initValMultipleCashVoucher.js.map

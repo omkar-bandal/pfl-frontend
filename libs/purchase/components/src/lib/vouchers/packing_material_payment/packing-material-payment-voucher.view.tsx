@@ -1,10 +1,9 @@
 import { useRef, useState } from "react";
-import { Box, Button, Grid, LinearProgress, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import { displayAddress } from "@prime-fresh/purchase/modules";
-import { PURCHASE_API_URL, useGetPMPVoucher } from "@prime-fresh/purchase_api";
+import { Box, Button, Grid, LinearProgress, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { displayAddress, useGetPackingMeterialPaymentVoucherById } from "@prime-fresh/purchase/modules";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
-import { smallLogo } from "@prime-fresh/ui_shared";
+import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 
 export const PackingMaterialPaymentVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -14,7 +13,8 @@ export const PackingMaterialPaymentVoucherView = () => {
     const [approval, setApproval] = useState<string>("");
     const { voucherid } = useParams<{ voucherid: string }>();
     const pmpVoucherId = voucherid ? voucherid : '';
-    const { data: pmpVoucher, isLoading } = useGetPMPVoucher(PURCHASE_API_URL.GET_A_PMP_VOUCHER, pmpVoucherId);
+    const { data, isLoading } = useGetPackingMeterialPaymentVoucherById(pmpVoucherId);
+    const pmpVoucher = data?.data ? data.data : null;
     console.log("pmpVoucher : ", pmpVoucher)
     return (
         <Box sx={{ flex: 1, padding: 1 }}>
@@ -26,7 +26,7 @@ export const PackingMaterialPaymentVoucherView = () => {
                     <Box sx={{ flex: 1, marginY: 1 }}>
                         <Grid container rowSpacing={1}>
                             <Grid xs={12} md={6}>
-                                <Typography variant="h4" component="div" sx={{ fontWeight: 700 }}>Packing Material Payment Voucher Details</Typography>
+                                <PageTitle pagetitle="Packing Material Payment Voucher Details" />
                             </Grid>
                             <Grid xs={12} md={6}>
                                 <Grid container columnSpacing={2}>
@@ -60,7 +60,7 @@ export const PackingMaterialPaymentVoucherView = () => {
                                     </Grid>
                                     <Grid item xs={8} sx={{ textAlign: "center" }}>
                                         <Typography variant="subtitle1" component="span" textAlign="center" sx={{ fontWeight: 700, borderBottom: '1px solid #000000' }}>PACKING MATERIAL  PAYMENT  VOUCHER</Typography>
-                                        <Typography variant="h4" component="div" textAlign="center" sx={{ fontWeight: 700 }}>PRIME FRESH LIMITED</Typography>
+                                        <Typography variant="h4" component="div" textAlign="center" sx={{ fontWeight: 700 }}>{pmpVoucher?.companyName.companyName || "Prime Fresh Limited"}</Typography>
                                         <Typography variant="caption" component="div" textAlign="center">102, Sanskar-ll, Nr. Ketav Petrol Pump, Polytechnic Road, Ambawadi, Ahmedabad-380015.</Typography>
                                         <Typography variant="caption" component="div" textAlign="center"> Ph.:+91-79-40320244, Email: info@primecustomer.co.in, Web: www.primecustomer.co.in</Typography>
                                     </Grid>

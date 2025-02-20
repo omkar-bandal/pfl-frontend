@@ -46,14 +46,14 @@ const SidebarList: React.FC<SidebarListProps> = ({
         <React.Fragment key={child.name}>
           {child.path ? (
             <NavLink to={child.path}>
-              <ListItemButton
+              <ListItemButton dense={true}
                 selected={selectedItem === child.name}
                 onClick={() => {
                   dispatch(setMobileOpen(false));
                   setSelectedItem(child.name);
                 }}
                 sx={listItemStyles}>
-                <ListItemIcon sx={{fontSize: "small", color: selectedItem === child.name ? "#FFFFFF" : "#595959"}}>
+                <ListItemIcon sx={{ fontSize: "small", color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>
                   <Remove />
                 </ListItemIcon>
                 <ListItemText
@@ -63,11 +63,11 @@ const SidebarList: React.FC<SidebarListProps> = ({
             </NavLink>
           ) : child.grandChildren ? (
             <>
-              <ListItemButton
+              <ListItemButton dense={true}
                 onClick={() => handleToggle(`${parentName}-${child.name}`)}
                 sx={listItemStyles}
               >
-                <ListItemIcon sx={{fontSize: "10px", color: selectedItem === child.name ? "#FFFFFF" : "#595959"}}>
+                <ListItemIcon sx={{ fontSize: "10px", color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>
                   <Remove />
                 </ListItemIcon>
                 <ListItemText
@@ -97,19 +97,19 @@ const SidebarList: React.FC<SidebarListProps> = ({
     });
 
   return (
-    <List>
+    <List dense={true}>
       {navigations.map((item) => {
         if (!item.depts?.includes(dept)) return null;
         return item.path ? (
           <NavLink to={item.path} key={item.name}>
-            <ListItemButton
+            <ListItemButton dense={true}
               selected={selectedItem === item.name}
               onClick={() => {
                 dispatch(setMobileOpen(false));
                 setSelectedItem(item.name);
               }}
               sx={listItemStyles}>
-              <ListItemIcon sx={{fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959"}}>{item.logo}</ListItemIcon>
+              <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
               <ListItemText
                 primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>}
               />
@@ -117,8 +117,8 @@ const SidebarList: React.FC<SidebarListProps> = ({
           </NavLink>
         ) : item.children ? (
           <React.Fragment key={item.name}>
-            <ListItemButton onClick={() => handleToggle(item.name)} sx={listItemStyles}>
-              <ListItemIcon sx={{fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959"}}>{item.logo}</ListItemIcon>
+            <ListItemButton dense={true} onClick={() => handleToggle(item.name)} sx={listItemStyles}>
+              <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
               <ListItemText primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>} />
               <ListItemIcon>
                 {openItems[item.name] ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}

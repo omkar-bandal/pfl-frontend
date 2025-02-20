@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 export declare const rfpaSchema: yup.ObjectSchema<{
+    companyName: string;
     selectedParty: string;
     rfpaProducts: {
         expectedHarvestDate?: Date | null | undefined;
@@ -13,6 +14,7 @@ export declare const rfpaSchema: yup.ObjectSchema<{
         unitPrice: number;
     }[];
     paymentInfo: {
+        advancePaidAmt?: number | null | undefined;
         paymentMode: string;
         creditPeriod: number;
         paymentDate: Date;
@@ -20,10 +22,12 @@ export declare const rfpaSchema: yup.ObjectSchema<{
     };
     deliveryReceivingPerson: string;
 }, yup.AnyObject, {
+    companyName: undefined;
     selectedParty: undefined;
     rfpaProducts: "";
     paymentInfo: {
         paymentMode: undefined;
+        advancePaidAmt: undefined;
         creditPeriod: undefined;
         paymentDate: undefined;
         paymentTerms: undefined;

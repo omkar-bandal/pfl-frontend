@@ -1,31 +1,35 @@
 import { Box, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { GetMCvoucher, Particulars, PostMCvoucher, PURCHASE_API_URL, useGetAllDeliveryChallanNums, useGetAllGRNNums, useGetMCVoucher, useUpdateMCVoucher } from "@prime-fresh/purchase_api";
+import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher, useGetMultiCashVoucherById, useUpdateMultiCashVoucherById } from "@prime-fresh/purchase/modules";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { GetMCvoucher, Particulars, PostMCvoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData } from "@prime-fresh/shared/utils";
-import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { useGetAllDeliveryChallanNums, useGetAllGRNNums, useGetCompanyNames } from "@prime-fresh/shared/modules";
 
 export const MultipleCashVoucherUpdate = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { voucherid } = useParams();
     const voucherId = voucherid ? voucherid : '';
-    const { data: mcVoucher, isLoading } = useGetMCVoucher(PURCHASE_API_URL.GET_A_MC_VOUCHER, voucherId);
-    const mcVoucherValues = mcVoucher ? mcVoucher : initValMMultipleCashVoucher;
+
+    const { data: mcVoucher, isLoading } = useGetMultiCashVoucherById(voucherId);
+    const mcVoucherValues = mcVoucher?.data ? mcVoucher.data : initValMMultipleCashVoucher;
+
     console.log(mcVoucherValues);
-    const { data: grnNums } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-    const allGRNNumbers = grnNums ? grnNums : [];
+
+    const { data: grnnos } = useGetAllGRNNums();
+    const allGRNNums = grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [];
 
     const { data: companies } = useGetCompanyNames();
-  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
-    const { data: dcnos } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-    const allDCNums = dcnos ? dcnos : [];
+    const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+
+    const { data: dcnos } = useGetAllDeliveryChallanNums();
+    const allDCNums = dcnos?.data ? mapToValueLabelArray(dcnos.data, 'id', 'challanNo') : [];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const calculateAmounts = (values: PostMCvoucher | GetMCvoucher, setFieldValue: (field: string, value: any,) => void) => {
@@ -36,7 +40,7 @@ export const MultipleCashVoucherUpdate = () => {
         setFieldValue("amtWords", amtWords);
     };
 
-    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateMCVoucher(PURCHASE_API_URL.UPDATE_MC_VOUCHER, voucherId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateMultiCashVoucherById(voucherId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
@@ -69,15 +73,14 @@ export const MultipleCashVoucherUpdate = () => {
                         <form onSubmit={handleSubmit} encType="multipart/form-data">
                             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                                 <Grid item xs={12} marginBottom={2}>
-                                    <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Multiple Cash Voucher</Typography>
-                                </Grid>
+                                    <PageTitle pagetitle='Multiple Cash Voucher' />                                </Grid>
                                 <Grid item xs={12} md={3}>
                                     <SelectInput
                                         isRequired={false}
                                         label="Select GRN"
                                         name="grnNo"
-                                        options={mapToValueLabelArray(allGRNNumbers, 'id', 'grnNo')}
-                                        value={allGRNNumbers.find(nums => nums.grnNo === values.grnNo)?.id}
+                                        options={allGRNNums}
+                                        value={typeof values.grnNo !== "string" ? values.grnNo.id : values.grnNo}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -85,8 +88,8 @@ export const MultipleCashVoucherUpdate = () => {
                                         isRequired={false}
                                         label="Select Challan"
                                         name="challanNo"
-                                        options={mapToValueLabelArray(allDCNums, 'id', 'challanNo')}
-                                        value={values.challanNo}
+                                        options={allDCNums}
+                                        value={typeof values.challanNo !== "string" ? values.challanNo.id : values.challanNo}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -95,7 +98,7 @@ export const MultipleCashVoucherUpdate = () => {
                                         label="Company Name"
                                         name="companyName"
                                         options={companyNames}
-                                        value={values.companyName}
+                                        value={typeof values.companyName !== "string" ? values.companyName.id : values.companyName}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={5}>

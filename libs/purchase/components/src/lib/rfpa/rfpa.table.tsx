@@ -1,12 +1,11 @@
 import React from "react"
-import { Box, Button, Stack, Typography } from "@mui/material"
-import { Add } from "@mui/icons-material"
+import { Box, Grid2 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { useGridApiRef } from "@mui/x-data-grid"
 import { RFPAListCols } from "./rfpa.columns"
 import { GetRFPA } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES, useGetAllRFPAs } from "@prime-fresh/purchase/modules";
-import { DataTable, toast } from "@prime-fresh/ui_shared";
+import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
 
 export const RFPATable = () => {
     const navigate = useNavigate();
@@ -23,18 +22,14 @@ export const RFPATable = () => {
     }, [isError, error]);
     return (
         <Box sx={{ flex: 1 }}>
-            <Typography component="div" variant="h5" sx={{fontWeight: 700, color: "#595959"}}>Request For Purchase Approval</Typography>
-            <Stack direction="row" justifyContent="flex-end" alignItems="center">
-                <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<Add />}
-                    sx={{ marginY: 1, textTransform: 'none', fontWeight: 600 }}
-                    onClick={handleCreate}
-                >
-                    Add New
-                </Button>
-            </Stack>
+            <Grid2 container marginY={1}>
+                <Grid2 size={{ xs: 12, md: 8 }}>
+                    <PageTitle pagetitle='Request For Purchase Approval' />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+                    <AddNewButton handleClick={handleCreate} />
+                </Grid2>
+            </Grid2>
             <DataTable<GetRFPA>
                 loading={isLoading}
                 rows={allRFPAs}

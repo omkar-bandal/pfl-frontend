@@ -1,38 +1,37 @@
-import { Box, Button, Stack } from "@mui/material"
-import { Add } from "@mui/icons-material"
+import React from "react"
+import { Box, Grid2 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { useGridApiRef } from "@mui/x-data-grid"
-import { PURCHASE_API_URL, GetDealSlip, useGetAllDealSlip } from "@prime-fresh/purchase_api"
-import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules"
-import { DataTable, toast } from "@prime-fresh/ui_shared";
+import { GetDealSlip } from "@prime-fresh/purchase_api"
+import { PURCHASE_ROUTES, useGetAllDealSlips } from "@prime-fresh/purchase/modules"
+import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
 import { DealSlipListCols } from "./deal-slip.columns"
-import React from "react"
 
 export const DealSlipTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allDealSlip, isLoading, isError, error } = useGetAllDealSlip(PURCHASE_API_URL.GET_ALL_DEAL_SLIP);
+    const { data, isLoading, isError, error } = useGetAllDealSlips();
+    const allDealSlip = data?.data ? data.data : [];
+
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
         }
     }, [isError, error])
+
     const handleCreate = () => {
         navigate(PURCHASE_ROUTES.CREATE_DEAL_SLIP);
     }
     return (
         <Box sx={{ flex: 1 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<Add />}
-                    sx={{ marginY: 1, textTransform: 'none', fontWeight: 600 }}
-                    onClick={handleCreate}
-                >
-                    Add New
-                </Button>
-            </Stack>
+            <Grid2 container marginY={1}>
+                <Grid2 size={{ xs: 12, md: 8 }}>
+                    <PageTitle pagetitle='Deal Slip' />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+                    <AddNewButton handleClick={handleCreate} />
+                </Grid2>
+            </Grid2>
             <DataTable<GetDealSlip>
                 loading={isLoading}
                 rows={allDealSlip}

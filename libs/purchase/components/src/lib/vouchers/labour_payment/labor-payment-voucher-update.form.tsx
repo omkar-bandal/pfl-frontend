@@ -1,14 +1,13 @@
-import { Box, Grid, LinearProgress, Typography } from '@mui/material'
-import { PURCHASE_API_URL, useGetAllGRNNums, useGetLPVoucher, useUpdateLPVoucher } from '@prime-fresh/purchase_api'
-import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher } from '@prime-fresh/purchase/modules'
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Box, Grid, LinearProgress } from '@mui/material'
+import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher, useGetLaborPaymentVoucherById, useUpdateLaborPaymentVoucherById } from '@prime-fresh/purchase/modules'
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { LPVoucherPreview } from './labor-payment-voucher.preview'
 import { setPreview } from '@prime-fresh/modules'
 import { useNavigate, useParams } from 'react-router-dom'
 import { appendFormData } from '@prime-fresh/shared/utils'
-import { useGetCompanyNames } from '@prime-fresh/shared/modules'
+import { useGetCompanyNames, useGetAllGRNNums } from '@prime-fresh/shared/modules'
 
 export const LabourPaymentVoucherUpdate = () => {
     const navigate = useNavigate();
@@ -22,12 +21,12 @@ export const LabourPaymentVoucherUpdate = () => {
     const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
     //Get all GRN numbers
-    const { data: grnNums } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-    const allGRNNumbers = grnNums ? grnNums : [];
+    const { data: grnNums } = useGetAllGRNNums();
+    const allGRNNumbers = grnNums?.data ? grnNums.data : [];
 
     //Get labour payment voucher data by id
-    const { data: lpVoucherData, isLoading } = useGetLPVoucher(PURCHASE_API_URL.GET_A_LP_VOUCHER, voucherId);
-    const lpVoucherValues = lpVoucherData ? lpVoucherData : initValLabourPaymentvoucher;
+    const { data, isLoading } = useGetLaborPaymentVoucherById(voucherId);
+    const lpVoucherValues = data?.data ? data.data : initValLabourPaymentvoucher;
 
     //Function to calculate total amount and convert it to the words
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,7 +38,7 @@ export const LabourPaymentVoucherUpdate = () => {
     };
 
     //React Query to update labour payment voucher
-    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateLPVoucher(PURCHASE_API_URL.UPDATE_LP_VOUCHER, voucherId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateLaborPaymentVoucherById(voucherId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUpdate = (values: any) => {
@@ -78,7 +77,7 @@ export const LabourPaymentVoucherUpdate = () => {
                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                 <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                                     <Grid item xs={12} marginBottom={2}>
-                                        <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Labour Payment Voucher</Typography>
+                                        <PageTitle pagetitle='Labor Payment Voucher' />
                                     </Grid>
                                     <Grid item xs={12} md={3}>
                                         <SelectInput
@@ -95,7 +94,7 @@ export const LabourPaymentVoucherUpdate = () => {
                                             label="Company Name"
                                             name="companyName"
                                             options={companyNames}
-                                            value={values.companyName}
+                                            value={typeof values.companyName !== "string" ? values.companyName?.id : values.companyName}
                                             handleChange={handleChange} />
                                     </Grid>
                                     <Grid item xs={12} md={3}>

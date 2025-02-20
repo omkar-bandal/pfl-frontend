@@ -1,17 +1,18 @@
 import React from 'react'
-import { Add } from '@mui/icons-material'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Grid2 } from '@mui/material'
 import { useGridApiRef } from '@mui/x-data-grid'
-import { GetMCvoucher, PURCHASE_API_URL, useGetAllMCVoucher } from '@prime-fresh/purchase_api'
-import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules'
-import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
+import { GetMCvoucher } from '@prime-fresh/purchase_api'
+import { PURCHASE_ROUTES, useGetAllMultiCashVouchers } from '@prime-fresh/purchase/modules'
+import { AddNewButton, DataTable, PageTitle, toast } from '@prime-fresh/ui_shared'
 import { useNavigate } from 'react-router-dom'
 import { MCVoucherListCols } from './multi-cash-voucher.columns'
 
 export const MultipleCashVoucherTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allMCVouchers, isLoading, isError, error } = useGetAllMCVoucher(PURCHASE_API_URL.GET_ALL_MC_VOUCHER);
+    const { data, isLoading, isError, error } = useGetAllMultiCashVouchers();
+    const allMCVouchers = data?.data ? data.data : [];
+    
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -22,19 +23,14 @@ export const MultipleCashVoucherTable = () => {
     }
     return (
         <Box sx={{ flex: 1 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Button
-                    variant="outlined"
-                    size="medium"
-                    startIcon={<Add />}
-                    sx={{ marginY: 2 }}
-                    fullWidth={false}
-                    onClick={handleCreate}
-                >
-                    Add Voucher
-                </Button>
-                <TableToolbar apiRef={apiRef} />
-            </Stack>
+            <Grid2 container marginY={1}>
+                <Grid2 size={{ xs: 12, md: 8 }}>
+                    <PageTitle pagetitle='Multiple Cash Voucher' />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+                    <AddNewButton handleClick={handleCreate} />
+                </Grid2>
+            </Grid2>
             <DataTable<GetMCvoucher>
                 loading={isLoading}
                 rows={allMCVouchers}

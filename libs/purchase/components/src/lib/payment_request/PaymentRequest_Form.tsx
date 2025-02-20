@@ -1,8 +1,8 @@
 import React from 'react'
 import { Grid, Typography } from '@mui/material';
-import { setPreview, showNotification } from '@prime-fresh/modules';
+import { setPreview } from '@prime-fresh/modules';
 import { initValPaymentRequest, paymentRequestSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPaymentReq } from '@prime-fresh/purchase/modules';
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, Notification, RadioGroupInput, SelectInput, TextInput } from '@prime-fresh/ui_shared';
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { PostPaymentRequest, PURCHASE_API_URL, useCreatePaymentRequest } from '@prime-fresh/purchase_api';
@@ -20,17 +20,16 @@ export const PaymentRequestForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutateAsync(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: Res ? Res.message : "Payment Request created successfully !!!" }));
+      toast(Res ? Res.message : "Payment Request created successfully !!!" );
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_GRN);
-      }, 3000);
+      }, 2000);
     }).catch(() => {
-      dispatch(showNotification({ severity: 'error', message: 'Error: ' + error?.message }));
+      toast(error ? error.message : "Failed to create payment request." );
     });
   }
   return (
     <>
-      <Notification />
       <Formik
         initialValues={initValPaymentRequest}
         validationSchema={paymentRequestSchema}

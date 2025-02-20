@@ -27,13 +27,14 @@ function useDeleteBranchById(id, branchType) {
 }
 function useGetAllBranches(branchType) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-branchs'],
+        queryKey: ['get-all-branchs', branchType],
         queryFn: () => admin_api_1.BranchService.getInstance().getAllBranches(branchType),
+        enabled: !!branchType
     });
 }
 function useGetBranchById(id) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-branch-by-id'],
+        queryKey: ['get-branch-by-id', id],
         queryFn: () => admin_api_1.BranchService.getInstance().getBranchById(id),
         enabled: !!id,
     });

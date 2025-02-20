@@ -57,6 +57,7 @@ export interface GetDeliveryChallan {
     otherCType: string | null;
     grnNo: string | null;
     companyName: string | null;
+    offices: string | null;
     poNumber: string | null;
     partyName: string | null;
     fromLocation: string | Address | null;

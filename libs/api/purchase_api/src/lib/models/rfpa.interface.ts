@@ -4,10 +4,10 @@ import { RequestedBy } from "./requestedBy.interface";
 export interface RFPA_Items {
     product: string | null;
     grade: string | null;
-    quantity: number;
+    quantity: number | null;
     uom: string | null;
-    unitPrice: number;
-    totalVal: number;
+    unitPrice: number | null;
+    totalVal: number | null;
     description: string | null;
     purchaseDate: string | null;
     dispatchDate: string | null;
@@ -17,11 +17,11 @@ export interface RFPA_Items {
 }
 export interface Payment_Info {
     paymentMode: string | null;
-    creditPeriod: number;
+    creditPeriod: number | null;
     paymentDate: string | null;
-    paymentTerms: number;
+    paymentTerms: number | null;
     dueDate: string | null;
-    advancePaidAmt: number;
+    advancePaidAmt: number | null;
     validityofQuote: string | null;
 }
 export interface PostRFPA {

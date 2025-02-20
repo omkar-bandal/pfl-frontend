@@ -7,12 +7,11 @@ import { PostRFPA } from '@prime-fresh/purchase_api';
 import { setPreview } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA, rfpaSchema } from '@prime-fresh/purchase/modules';
-import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
 import { useNavigate } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './rfpa.preview';
 import { calculateDueDate, calculateTotoalPrice, getProductCode } from './helper-functions';
-import { mapToValueLabelArray, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
+import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
 
 export const RFPAForm = () => {
     const navigate = useNavigate();
@@ -23,9 +22,9 @@ export const RFPAForm = () => {
     const Products = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
     const { data: uom } = useGetUOMPartialData();
     const UOMs = uom?.data ? mapToValueLabelArray(uom.data, 'id', 'unit') : [];
-    const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
-    const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
+    const { data: Locations } = useGetBranchesPartialData();
+    const allPurchaseLocation = Locations?.data ? mapToValueLabelArray(Locations.data, 'id', 'name') : [];
+    const allPurchaseForEachLocations = Locations?.data ? mapToValueLabelArray(Locations?.data.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
 
     const { mutateAsync: mutatePost, error, data: Res } = useCreateRFPA();
 
@@ -35,7 +34,7 @@ export const RFPAForm = () => {
             toast.success(Res ? Res.message : "RFPA Created")
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
-            }, 2400);
+            }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while creating RFPA")
         });;
@@ -56,8 +55,7 @@ export const RFPAForm = () => {
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={1} padding={1}>
                             <Grid item xs={12} marginBottom={2}>
-                                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Request For Purchase Approval</Typography>
-                            </Grid>
+                                <PageTitle pagetitle='Request For Purchase Approval' />                            </Grid>
                             <Grid item xs={12} md={6}>
                                 <SelectInput
                                     isRequired={true}

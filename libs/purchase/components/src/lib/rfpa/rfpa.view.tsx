@@ -1,22 +1,24 @@
 import { Box, Button, Divider, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { useNavigate, useParams } from "react-router-dom";
 import { AxiosResponse } from "axios";
-import { ChangeStatusResponse, PURCHASE_API_URL, useGetRFPA } from "@prime-fresh/purchase_api";
-import { displayAddress, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { ChangeStatusResponse } from "@prime-fresh/purchase_api";
+import { PURCHASE_ROUTES, useGetRFPAById } from "@prime-fresh/purchase/modules";
 import { axiosInstance, handleError } from "@prime-fresh/common_api";
+import { PageTitle } from "@prime-fresh/ui_shared";
 
 export const RFPAView = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const rfpaId = id ? id : '';
-    const { data: rfpa, isLoading } = useGetRFPA(PURCHASE_API_URL.GET_A_RFPA, rfpaId);
+    const { data, isLoading } = useGetRFPAById(rfpaId);
+    const rfpa = data?.data;
     console.log(rfpa)
     const role = localStorage.getItem('role');
     console.log(role);
     const handleStatusChange = async () => {
         try {
-            const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_RFPA}${rfpaId}`, 
-                {approvalNote: "-", approvalStatus: "approved"});
+            const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(``,
+                { approvalNote: "-", approvalStatus: "approved" });
             console.log(response.data);
             if (response.status === 200)
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
@@ -34,8 +36,7 @@ export const RFPAView = () => {
                 (
                     <Grid container direction="column" rowSpacing={1}>
                         <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
-                            <Typography variant="h4" component="span">RFPA Details</Typography>
-                            {role === 'MANAGER' &&
+                            <PageTitle pagetitle='Request For Purchase Approval' />                            {role === 'MANAGER' &&
                                 (<Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }} onClick={handleStatusChange}>Approve</Button>)}
                         </Grid>
                         <Grid item>
@@ -82,7 +83,7 @@ export const RFPAView = () => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Purchase for which location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{rfpa?.purchaseForWhich}
+                                Purchase for which location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{rfpa?.purchaseForSalesLocation}
                                 </Typography>
                             </Typography>
                         </Grid>
@@ -98,7 +99,7 @@ export const RFPAView = () => {
                                 </Typography>
                             </Typography>
                         </Grid>
-                        <Divider textAlign="left" sx={{ marginY: 2 }}>Vendor / Farmer Information</Divider>
+                        {/* <Divider textAlign="left" sx={{ marginY: 2 }}>Vendor / Farmer Information</Divider>
                         {rfpa?.source === "vendor" ? (
                             <>
                                 <Grid item>
@@ -171,7 +172,7 @@ export const RFPAView = () => {
                                     </Typography>
                                 </Grid>
                             </>
-                        )}
+                        )} */}
                         <Divider textAlign="left" sx={{ marginY: 2 }}>Products Information</Divider>
                         <Grid item>
                             <TableContainer component={Box}>
@@ -204,9 +205,9 @@ export const RFPAView = () => {
                                                 <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.uom}</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.totalVal}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate.toLocaleString()}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate.toLocaleString()}</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate.toLocaleString()}</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate !== null ? product.purchaseDate.toLocaleString() : ""}</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate !== null ? product.dispatchDate.toLocaleString() : ""}</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate !== null ? product.deliveryDate.toLocaleString() : ""}</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryLocation}</TableCell>
                                                 {rfpa?.source === "farmer" ? <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.expectedHarvestDate?.toLocaleString()}</TableCell> : ''}
                                             </TableRow>
@@ -224,7 +225,7 @@ export const RFPAView = () => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Payment Date: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{rfpa?.paymentInfo.paymentDate.toLocaleString()}
+                                Payment Date: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{rfpa?.paymentInfo.paymentDate !== null ? rfpa?.paymentInfo.paymentDate.toLocaleString() : ""}
                                 </Typography>
                             </Typography>
                         </Grid>

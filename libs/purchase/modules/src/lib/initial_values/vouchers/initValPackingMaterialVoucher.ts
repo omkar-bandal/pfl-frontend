@@ -1,16 +1,16 @@
-import { PostPMPvoucher } from "@prime-fresh/purchase_api";
+import { Materials, PostPMPvoucher } from "@prime-fresh/purchase_api";
 import { initValAddress } from "../initValAddress";
 
-export const initValPackingMaterials = {
+export const initValPackingMaterials: Materials = {
     itemName: null,
-    itemQty: 0,
+    itemQty: null,
     itemUom: null,
-    rate: 0,
+    rate: null,
     amt: 0,
   };
   export const initValPackingMaterialVoucher: PostPMPvoucher = {
     grnNo: null,
-    companyName: '',
+    companyName: null,
     debitCreditTo: null,
     payReceivedFrom: null,
     location: null,

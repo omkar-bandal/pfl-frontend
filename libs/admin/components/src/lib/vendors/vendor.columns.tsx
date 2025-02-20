@@ -6,7 +6,6 @@ import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { Address, GetVendorCategory, GetVendorSubcategory } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { displayAddress } from "@prime-fresh/purchase/modules";
-// import { VendorCategory, VendorSubcategory } from "../../api/admin/models";
 
 export const VendorListCols = (): CustomGridColDef[] => {
   const navigate = useNavigate();

@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { PURCHASE_API_URL, useGetLPVoucher } from "@prime-fresh/purchase_api";
+import { PURCHASE_API_URL } from "@prime-fresh/purchase_api";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance, handleError } from "@prime-fresh/common_api";
-import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { PURCHASE_ROUTES, useGetLaborPaymentVoucherById } from "@prime-fresh/purchase/modules";
 import { useReactToPrint } from "react-to-print";
-import { smallLogo } from "@prime-fresh/ui_shared";
+import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 
 export const LabourPaymentVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -15,7 +15,8 @@ export const LabourPaymentVoucherView = () => {
     const [approval, setApproval] = useState<string>("");
     const { voucherid } = useParams<{ voucherid: string }>();
     const lpVoucherId = voucherid ? voucherid : '';
-    const { data: lpVoucher, isLoading } = useGetLPVoucher(PURCHASE_API_URL.GET_A_LP_VOUCHER, lpVoucherId);
+    const { data, isLoading } = useGetLaborPaymentVoucherById(lpVoucherId);
+    const lpVoucher = data?.data ? data.data : null;
     console.log(lpVoucher)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function createData(srNo: number, title: string, value: any, rs: string, ps: string) {
@@ -26,7 +27,7 @@ export const LabourPaymentVoucherView = () => {
         createData(2, "Day of Loading/Unloading", lpVoucher?.loadingDate, "", ""),
         createData(3, "Per Day Rs.", lpVoucher?.ratePerLabour, "", ""),
         createData(4, "Paymetn Mode", lpVoucher?.paymentMode, "", ""),
-        createData(5, "Labour KYC Attached", lpVoucher?.kyc === true? "Yes" : "No", "", ""),
+        createData(5, "Labour KYC Attached", lpVoucher?.kyc === true ? "Yes" : "No", "", ""),
         createData(6, "Mobile No of Any 1 or 2", lpVoucher?.contactNo, "", ""),
         createData(7, "Product", lpVoucher?.products, "", ""),
     ];
@@ -52,7 +53,7 @@ export const LabourPaymentVoucherView = () => {
                     <Box sx={{ flex: 1, marginY: 1 }}>
                         <Grid container rowSpacing={1}>
                             <Grid xs={12} md={6}>
-                                <Typography variant="h4" component="div" sx={{fontWeight: 700}}>Labour Payment Voucher Details</Typography>
+                                <PageTitle pagetitle='Labor Payment Voucher' />
                             </Grid>
                             <Grid xs={12} md={6}>
                                 <Grid container columnSpacing={2}>
@@ -190,7 +191,7 @@ export const LabourPaymentVoucherView = () => {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={2} sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                        <Grid item xs={2} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                             <Box sx={{ width: 100, height: 100, border: '1px solid #000000' }}></Box>
                                             <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Receiver Sign</Typography>
                                         </Grid>
@@ -198,16 +199,16 @@ export const LabourPaymentVoucherView = () => {
                                 </Box>
                                 <Grid container marginY={1}>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
-                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000"}}>{`(${lpVoucher?.requestedBy.firstName} ${lpVoucher?.requestedBy.lastName})`}</Typography>
+                                        <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${lpVoucher?.requestedBy.firstName} ${lpVoucher?.requestedBy.lastName})`}</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Passed By</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>
-                                        <Box sx={{width: '100%', height: 50}}></Box>
+                                        <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Approved By</Typography>
                                     </Grid>
                                 </Grid>

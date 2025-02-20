@@ -3,9 +3,9 @@ import { RFPA_Items, Payment_Info, PostRFPA } from "@prime-fresh/purchase_api";
 export const initValRFPAItems: RFPA_Items = {
     product: null,
     grade: null,
-    quantity: 0,
+    quantity: null,
     uom: null,
-    unitPrice: 0,
+    unitPrice: null,
     totalVal: 0,
     description: null,
     deliveryLocation: null,
@@ -17,10 +17,10 @@ export const initValRFPAItems: RFPA_Items = {
 const initValPaymentInfo: Payment_Info = {
     paymentMode: null,
     paymentDate: null,
-    paymentTerms: 0,
+    paymentTerms: null,
     dueDate: null,
-    advancePaidAmt: 0,
-    creditPeriod: 0,
+    advancePaidAmt: null,
+    creditPeriod: null,
     validityofQuote: null,
 }
 export const initValRFPA: PostRFPA= {

@@ -3,26 +3,23 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from '@mui/material'
-import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, rfpaSchema, setPreviewRFPA } from '@prime-fresh/purchase/modules';
-import { GetRFPA, useGetRFPA, useUpdateRFPA } from '@prime-fresh/purchase_api';
+import { initValRFPAItems, PURCHASE_ARRAYS, PURCHASE_ROUTES, rfpaSchema, setPreviewRFPA, useGetRFPAById, useUpdateRFPAById } from '@prime-fresh/purchase/modules';
+import { GetRFPA } from '@prime-fresh/purchase_api';
 import { setPreview } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA } from '@prime-fresh/purchase/modules';
-import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
-import { PURCHASE_API_URL } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './rfpa.preview';
-import { appendFormData } from '@prime-fresh/shared/utils';
-import { mapToValueLabelArray, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
+import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
 import { calculateDueDate, calculateTotoalPrice, getProductCode } from './helper-functions';
 
 export const RFPAUpdate = () => {
     const { id } = useParams<{ id: string }>();
     const rfpaId = id ? id : '';
-    const { data, isLoading } = useGetRFPA(PURCHASE_API_URL.GET_A_RFPA, rfpaId);
+    const { data, isLoading } = useGetRFPAById(rfpaId);
     console.log("RFPA: ", data);
-    const rfpaValues = data ? data : initValRFPA;
+    const rfpaValues = data?.data ? data.data : initValRFPA;
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -32,23 +29,22 @@ export const RFPAUpdate = () => {
     const Products = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
     const { data: uom } = useGetUOMPartialData();
     const UOMs = uom?.data ? mapToValueLabelArray(uom.data, 'id', 'unit') : [];
-    const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
-    const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
+    const { data: Locations } = useGetBranchesPartialData();
+    const allPurchaseLocation = Locations?.data ? mapToValueLabelArray(Locations.data, 'id', 'name') : [];
+    const allPurchaseForEachLocations = Locations?.data ? mapToValueLabelArray(Locations?.data.filter(loc => loc.type === "distribution-center"), 'id', 'name') : [];
 
-    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateRFPA(PURCHASE_API_URL.UPDATE_RFPA, rfpaId);
+    const { mutateAsync: mutatePatch, error, data: Res } = useUpdateRFPAById(rfpaId);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
-        mutatePatch(formData).then(() => {
+        mutatePatch(values).then(() => {
             toast.success(Res ? Res.message : "RFPA Updated");
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
             }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while updating");
-        });;
+        });
     }
     return (
         isLoading ?
@@ -74,10 +70,16 @@ export const RFPAUpdate = () => {
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={1} padding={1}>
                                 <Grid item xs={12} marginBottom={2}>
-                                    <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Request For Purchase Approval</Typography>
+                                    <PageTitle pagetitle='Request For Purchase Approval' />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <SelectInput isRequired={true} label="Company Name" name="companyName" options={companyNames} value={typeof values.companyName !== 'string' ? values.companyName?.id : values.companyName} handleChange={handleChange} />
+                                    <SelectInput
+                                        isRequired={true}
+                                        label="Company Name"
+                                        name="companyName"
+                                        options={companyNames}
+                                        value={typeof values.companyName !== 'string' ? values.companyName?.id : values.companyName}
+                                        handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <AutoCompleteInput
@@ -150,13 +152,12 @@ export const RFPAUpdate = () => {
                                                                 onClick={() => remove(index)}><Close /></IconButton>}
                                                         </Grid>
                                                         <Grid item xs={12} md={4}>
-                                                            <SelectInput
+                                                            <AutoCompleteInput
                                                                 isRequired={true}
                                                                 name={`rfpaProducts.${index}.product`}
-                                                                label='Product Name'
-                                                                value={values.rfpaProducts[index].product}
+                                                                label="Product Name"
                                                                 options={Products}
-                                                                handleChange={(event: any, newValue: any) => {
+                                                                handleChange={(event, newValue) => {
                                                                     if (newValue !== null) {
                                                                         if (typeof newValue === 'string')
                                                                             setFieldValue(`rfpaProducts.${index}.product`, null);

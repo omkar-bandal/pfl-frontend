@@ -1,14 +1,14 @@
-import { Grid, Typography } from "@mui/material";
-import { PostTPvoucher, PURCHASE_API_URL, useCreateTPVoucher, useGetAllGRNNums } from "@prime-fresh/purchase_api";
-import { initValTransportPaymentVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewTPVoucher, transportPaymentVoucherSchema } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { Grid } from "@mui/material";
+import { PostTPvoucher } from "@prime-fresh/purchase_api";
+import { initValTransportPaymentVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewTPVoucher, transportPaymentVoucherSchema, useCreateTransportPaymentVoucher } from "@prime-fresh/purchase/modules";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
 import { TPVoucherPreview } from "./transport-payment-voucher.preview";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
-import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { useGetCompanyNames, useGetAllGRNNums, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { handleAmountChange } from "./helper-function";
 
 export const TransportPaymentVoucherForm = () => {
@@ -18,13 +18,11 @@ export const TransportPaymentVoucherForm = () => {
   const { data: companies } = useGetCompanyNames();
   const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
-  const { data: grnnos } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-  const allGRNNums = grnnos ? grnnos : [];
-  // const calculateAmounts = (values: PostTPvoucher, setFieldValue: (field: string, value: any,) => void) => {
-  //   const amtWords = numToWords(values.totalAmt);
-  //   setFieldValue("amtWords", amtWords);
-  // };
-  const { mutateAsync: mutatePost, error, data: Res } = useCreateTPVoucher(PURCHASE_API_URL.POST_TP_VOUCHER);
+  const { data: grnnos } = useGetAllGRNNums();
+  const allGRNNums = grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [];
+
+  const { mutateAsync: mutatePost, error, data: Res } = useCreateTransportPaymentVoucher();
+
   const handleSubmit = (values: PostTPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -53,14 +51,14 @@ export const TransportPaymentVoucherForm = () => {
           <form onSubmit={handleSubmit}>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} marginBottom={2}>
-                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Transport Payment Voucher</Typography>
+                <PageTitle pagetitle="Transport Payment Voucher" />
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
                   isRequired={false}
                   label="Select GRN"
                   name="grnNo"
-                  options={mapToValueLabelArray(allGRNNums, 'id', 'grnNo')}
+                  options={allGRNNums}
                   value={values.grnNo}
                   handleChange={handleChange} />
               </Grid>

@@ -1,67 +1,65 @@
 import { Formik } from "formik";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Grid, Typography, Box } from "@mui/material";
-import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, useCreateDealSlip, useGetRFPAById } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
-import {  PostDealSlip, PURCHASE_API_URL, useCreateDealSlip, useGetAllRFPANums, useGetRFPA } from "@prime-fresh/purchase_api";
+import { PostDealSlip } from "@prime-fresh/purchase_api";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate } from "react-router-dom";
-import { FarmerReadOnlyFields, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
-import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
-import { ADMIN_API_URL, useGetAllFilteredBranches } from "@prime-fresh/admin_api";
+import { FarmerReadOnlyFields, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
 import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
-import { useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
+import { mapToValueLabelArray, useGetAllRFPANums, useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
 export const DealSlipForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [RFPAid, setRFPAid] = useState<string>();
-    const { data: RFPA } = useGetAllRFPANums(PURCHASE_API_URL.GET_ALL_RFPA_NO);
-    const rfpas = RFPA ? mapToValueLabelArray(RFPA, 'id', 'rfpaId') : [];
 
-    
+    const { data: RFPA } = useGetAllRFPANums();
+    const rfpas = RFPA?.data ? mapToValueLabelArray(RFPA.data, 'id', 'rfpaId') : [];
+
+
     const { data: Farmers } = useGetFarmersPartialData();
     const { data: Vendors } = useGetVendorsPartialData();
     const { data: products } = useGetProductsPartialData();
     const Products = products?.data ? products.data : [];
     const { data: uom } = useGetUOMPartialData();
     const UOMs = uom?.data ? uom.data : [];
-    const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const allPurchaseLocation = Locations ? Locations : [];
+    const { data: Locations } = useGetBranchesPartialData();
+    const allPurchaseLocation = Locations?.data ? Locations.data : [];
     const { selectedFarmer } = useAppSelector(farmersDataState);
     const { selectedVendor } = useAppSelector(vendorsDataState);
 
-    
-    const handleRFPANoChange =useCallback((value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
+
+    const handleRFPANoChange = useCallback((value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
         console.log("Object Id:", value);
         setRFPAid("");
         if (value) {
             value ? setFieldValue("rfpa", value) : setFieldValue("rfpa", '');
             setRFPAid(value);
         }
-    },[]);
+    }, []);
     console.log("Changed RFPA Id", RFPAid);
-    const { data: rfpa } = useGetRFPA(PURCHASE_API_URL.GET_A_RFPA, RFPAid ? RFPAid : "");
-    
+    const { data } = useGetRFPAById(RFPAid ? RFPAid : "");
+    const rfpa = data?.data ? data.data : null;
+
     useEffect(() => {
         rfpa?.source === "vendor" ?
             dispatch(setSelectedVendor(Vendors?.data?.find(vendor => vendor.id === rfpa?.selectedParty))) :
             dispatch(setSelectedFarmer(Farmers?.data?.find(farmer => farmer.id === rfpa?.selectedParty)));
     }, [rfpa, dispatch, Farmers?.data, Vendors?.data, selectedFarmer, selectedVendor])
 
-    const { mutateAsync: mutatePost, error, data: Res } = useCreateDealSlip(PURCHASE_API_URL.POST_DEAL_SLIP);
+    const { mutateAsync: mutatePost, error, data: Res } = useCreateDealSlip();
 
     const handleSubmit = (values: PostDealSlip) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
-        mutatePost(formData).then(() => {
+        mutatePost(values).then(() => {
             toast.success(Res ? Res.message : "Deal Slip Created")
             setTimeout(() => {
                 navigate(PURCHASE_ROUTES.GET_ALL_DEAL_SLIP);
             }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while creating deal slip.")
-        });;
+        });
     }
 
     return (
@@ -81,7 +79,7 @@ export const DealSlipForm = () => {
                 <form onSubmit={handleSubmit}>
                     <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                         <Grid item xs={12} marginBottom={2}>
-                            <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Deal Slip</Typography>
+                            <PageTitle pagetitle='Deal Slip' />
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <SelectInput
@@ -174,7 +172,7 @@ export const DealSlipForm = () => {
                         </Grid>
                         <Grid item xs={12} padding={1}>
                             <Grid container spacing={1} padding={1}>
-                                {rfpa?.rfpaProducts.length !== 0 ?
+                                {rfpa?.rfpaProducts.length !== 0 && rfpa !== null ?
                                     (rfpa?.rfpaProducts.map((product, index) => (
                                         <Grid container columnSpacing={1} padding={1} key={index} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
                                             <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>

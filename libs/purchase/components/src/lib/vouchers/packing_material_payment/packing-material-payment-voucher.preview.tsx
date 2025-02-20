@@ -10,13 +10,13 @@ export const PMPVoucherPreview = () => {
         <PreviewContainer title='Packing Material Payment Voucher Preview'>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.grnNo}
+                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewPMPVoucher?.grnNo !== "string"? previewPMPVoucher?.grnNo?.grnNo : previewPMPVoucher?.grnNo}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.companyName}
+                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewPMPVoucher?.companyName !== "string"? previewPMPVoucher?.companyName?.companyName : previewPMPVoucher?.companyName}
                     </Typography>
                 </Typography>
             </Grid>
@@ -82,7 +82,7 @@ export const PMPVoucherPreview = () => {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemName}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemUom}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{typeof product.itemUom !== "string"? product.itemUom?.unit : product.itemUom }</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.itemQty}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.rate}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amt}</TableCell>
@@ -107,12 +107,6 @@ export const PMPVoucherPreview = () => {
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                     Payment Mode : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.paymentMode}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Received By : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewPMPVoucher?.receivedBy}
                     </Typography>
                 </Typography>
             </Grid>

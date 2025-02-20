@@ -1,32 +1,34 @@
-import { Grid, Typography } from '@mui/material'
-import { PostLPvoucher, PURCHASE_API_URL, useCreateLPVoucher, useGetAllGRNNums } from '@prime-fresh/purchase_api'
-import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher } from '@prime-fresh/purchase/modules'
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Grid } from '@mui/material'
+import { PostLPvoucher } from '@prime-fresh/purchase_api'
+import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher, useCreateLaborPaymentVoucher } from '@prime-fresh/purchase/modules'
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { LPVoucherPreview } from './labor-payment-voucher.preview'
 import { setPreview } from '@prime-fresh/modules'
 import { appendFormData } from '@prime-fresh/shared/utils'
 import { useNavigate } from 'react-router-dom'
-import { useGetCompanyNames } from '@prime-fresh/shared/modules'
+import { useGetAllGRNNums, useGetCompanyNames } from '@prime-fresh/shared/modules'
 
 export const LabourPaymentVoucherForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-  const allGRNNums = data ? mapToValueLabelArray(data, 'id', 'grnNo') : [];
+  const { data } = useGetAllGRNNums();
+  const allGRNNums = data?.data ? mapToValueLabelArray(data.data, 'id', 'grnNo') : [];
 
   const { data: companies } = useGetCompanyNames();
   const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateAmounts = (values: PostLPvoucher, setFieldValue: (field: string, value: any,) => void) => {
-    const totalAmt = values.noOfLabours * values.ratePerLabour;
-    const amtWords = numToWords(totalAmt);
-    setFieldValue("totalAmt", totalAmt);
-    setFieldValue("amtWords", amtWords);
+    if (values.noOfLabours !== null && values.ratePerLabour !== null) {
+      const totalAmt = values.noOfLabours * values.ratePerLabour;
+      const amtWords = numToWords(totalAmt);
+      setFieldValue("totalAmt", totalAmt);
+      setFieldValue("amtWords", amtWords);
+    }
   };
-  const { mutateAsync: mutatePost, error, data: Res } = useCreateLPVoucher(PURCHASE_API_URL.POST_LP_VOUCHER);
- 
+  const { mutateAsync: mutatePost, error, data: Res } = useCreateLaborPaymentVoucher();
+
   const handleSubmit = (values: PostLPvoucher) => {
     const formData = new FormData();
     appendFormData(formData, values);
@@ -56,7 +58,7 @@ export const LabourPaymentVoucherForm = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} marginBottom={2}>
-                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Labour Payment Voucher</Typography>
+                <PageTitle pagetitle='Labor Payment Voucher' />
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput

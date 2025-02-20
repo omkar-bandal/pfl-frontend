@@ -11,19 +11,18 @@ export function BranchTable() {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
 
-    const {branchType} = useParams<{branchType: string}>();
-    const type = branchType? branchType : "";
-    console.log(type);
+    const { branchType } = useParams<{ branchType: string }>();
+    const type = branchType ? branchType : "";
 
-    const { data , isLoading, isError, error } = useGetAllBranches(type);
+    const { data, isLoading, isError, error } = useGetAllBranches(type);
     const branches = data?.data ? data.data : [];
 
     useEffect(() => {
         if (isError) {
-          toast.error(error?.message || 'Error occured please refresh the page.');
+            toast.error(error?.message || 'Error occured please refresh the page.');
         }
-      }, [isError, error]);
-   
+    }, [isError, error]);
+
     const handleCreate = () => {
         navigate(`${ADMIN_ROUTES.CREATE_BRANCHES}/${type}`);
     };

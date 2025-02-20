@@ -1,4 +1,4 @@
-import { Article, FormatListBulleted, GridViewOutlined, Handshake, LocalShipping, Payment, Remove } from "@mui/icons-material";
+import { Article, Assessment, FormatListBulleted, GridViewOutlined, Handshake, LocalShipping, Payment, Remove, Report } from "@mui/icons-material";
 import { Navigations } from "@prime-fresh/modules";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { stringConstants } from "@prime-fresh/modules";
@@ -74,6 +74,21 @@ export const purchaseNavigations: Navigations[] = [
         path: PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_PURCHASE]
+    },
+    {
+        name: "Reports",
+        logo: <Assessment />,
+        roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+        depts: [stringConstants.DEPT_PURCHASE],
+        children: [
+            {
+                name: "Purchase Reports",
+                logo: <Remove />,
+                path: PURCHASE_ROUTES.PURCHASE_REPORTS,
+                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+                depts: [stringConstants.DEPT_PURCHASE],
+            },
+        ]
     },
 
 ]

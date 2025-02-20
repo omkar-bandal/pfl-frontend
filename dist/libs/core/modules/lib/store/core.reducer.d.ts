@@ -8,9 +8,4 @@ export declare const coreReducer: {
     preview: import('redux').Reducer<{
         preview: boolean;
     }>;
-    notification: import('redux').Reducer<{
-        isOpen: boolean;
-        severity: "success" | "error";
-        message: string;
-    }>;
 };

@@ -6,7 +6,7 @@ export declare const packingMaterialPaymentVoucherSchema: yup.ObjectSchema<{
     location: string;
     sellerName: string;
     address: {
-        address2?: string | undefined;
+        address2?: string | null | undefined;
         location: string;
         address1: string;
         city: string;
@@ -14,12 +14,13 @@ export declare const packingMaterialPaymentVoucherSchema: yup.ObjectSchema<{
         pincode: string;
     };
     contactNo: string;
+    altContactNo: string | null | undefined;
     paymentMode: string;
     receiverName: string;
     materials: {
-        uom: string;
         itemName: string;
         itemQty: number;
+        itemUom: string;
         rate: number;
     }[] | undefined;
 }, yup.AnyObject, {
@@ -37,6 +38,7 @@ export declare const packingMaterialPaymentVoucherSchema: yup.ObjectSchema<{
         pincode: undefined;
     };
     contactNo: undefined;
+    altContactNo: undefined;
     paymentMode: undefined;
     receiverName: undefined;
     materials: "";

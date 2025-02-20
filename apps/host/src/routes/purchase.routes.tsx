@@ -33,6 +33,7 @@ import {
     TransportPaymentVoucherUpdate,
     TransportPaymentVoucherView,
     RFPAUpdate,
+    PurchaseReports
 } from "@prime-fresh/purchase/components";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { Outlet } from "react-router-dom";
@@ -96,7 +97,7 @@ export const PurchaseRoutes = [
             },
             {
                 path: PURCHASE_ROUTES.CREATE_GRN,
-                element:  <GRNForm />
+                element: <GRNForm />
             },
             {
                 path: `${PURCHASE_ROUTES.VIEW_GRN}/:id`,
@@ -222,4 +223,15 @@ export const PurchaseRoutes = [
             },
         ]
     },
+    {
+        path: PURCHASE_ROUTES.REPORTS,
+        element: <Outlet />,
+        children: [
+            {
+                path: PURCHASE_ROUTES.PURCHASE_REPORTS,
+                element: <PurchaseReports />,
+            },
+        ]
+
+    }
 ]

@@ -8,6 +8,7 @@ export declare const labourPaymentVoucherSchema: yup.ObjectSchema<{
     ratePerLabour: number;
     loadingDate: Date;
     contactNo: string;
+    altContactNo: string | null | undefined;
     paymentMode: string;
     receiverName: string;
 }, yup.AnyObject, {
@@ -19,6 +20,7 @@ export declare const labourPaymentVoucherSchema: yup.ObjectSchema<{
     ratePerLabour: undefined;
     loadingDate: undefined;
     contactNo: undefined;
+    altContactNo: undefined;
     paymentMode: undefined;
     receiverName: undefined;
 }, "">;

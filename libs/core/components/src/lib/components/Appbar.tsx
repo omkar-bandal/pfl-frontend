@@ -2,12 +2,17 @@ import * as React from 'react';
 import { AppBar, Typography, IconButton, Box, Avatar, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch } from 'react-redux';
-import { isClosingState, mobileOpenState, setMobileOpen, useAppSelector } from '@prime-fresh/modules';
+import { authRouteConstants, isClosingState, mobileOpenState, setMobileOpen, useAppSelector } from '@prime-fresh/modules';
 import { convertInTitleCase } from '@prime-fresh/shared/utils';
-import { Logout } from '@mui/icons-material';
+import { Logout, Settings } from '@mui/icons-material';
+import { SignOutRequest, useSignOut } from '@prime-fresh/auth_api';
+import { getAccessToken, getRefreshToken } from '@prime-fresh/common_api';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isClosing = useAppSelector(isClosingState);
   const mobileOpen = useAppSelector(mobileOpenState);
   const user = localStorage.getItem("userName");
@@ -27,17 +32,39 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
     setAnchorEl(null);
   };
 
+  const tokens: SignOutRequest = {
+    access_token: getAccessToken() || '',
+    refresh_token: getRefreshToken() || '',
+  }
+  const { mutateAsync, isError, error } = useSignOut();
+
+  const handleLogout = () => {
+    if (tokens)
+      mutateAsync(tokens).then(() => {
+        handleClose();
+        localStorage.clear();
+        navigate(authRouteConstants.SIGN_IN);
+      }
+      ).catch(() => {
+        if (isError) {
+          localStorage.clear();
+          toast.error(error ? error.message : "Error while logout");
+          navigate(authRouteConstants.SIGN_IN)
+        }
+      }
+      )
+  }
+
   return (
     <AppBar
       position="fixed"
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
-        height: 40,
+        height: 30,
         ml: { sm: `${drawerWidth}px` },
         bgcolor: "#FFFFFF",
         boxShadow: "none",
         boxSizing: 'border-box',
-        border: `2px solid red`
       }}
     >
       <Box width='100%' height='100%' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2 }}>
@@ -59,7 +86,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 30, height: 30, background: "#00cc66" }}>{username.charAt(0)}</Avatar>
+            <Settings fontSize='small' />
           </IconButton>
         </Box>
         <Menu
@@ -102,8 +129,8 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           <Typography variant="body1" noWrap component="div" textAlign="center" sx={{ color: "#000", fontWeight: 600, padding: 1 }}>
             {username}
           </Typography>
-          <Divider/>
-          <MenuItem onClick={handleClose}>
+          <Divider />
+          <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

@@ -10,13 +10,13 @@ export const TPVoucherPreview = () => {
         <PreviewContainer title='Transport Payment Voucher Preview'>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.grnNo}
+                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewTPVoucher?.grnNo !== "string" ? previewTPVoucher?.grnNo?.grnNo : previewTPVoucher.grnNo}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.companyName}
+                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewTPVoucher?.companyName !== "string" ? previewTPVoucher?.companyName?.companyName : previewTPVoucher.companyName}
                     </Typography>
                 </Typography>
             </Grid>
@@ -89,12 +89,6 @@ export const TPVoucherPreview = () => {
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                     Payment Mode : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.paymentMode}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Received By : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.receivedBy}
                     </Typography>
                 </Typography>
             </Grid>

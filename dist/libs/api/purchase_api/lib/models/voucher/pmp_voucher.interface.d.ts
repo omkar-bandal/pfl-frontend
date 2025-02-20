@@ -4,9 +4,9 @@ import { Address } from '../address.interface';
 export interface Materials {
     id?: string;
     itemName: string | null;
-    itemQty: number;
+    itemQty: number | null;
     itemUom: string | null;
-    rate: number;
+    rate: number | null;
     amt: number;
 }
 export interface PostPMPvoucher {
@@ -60,7 +60,10 @@ export interface GetPMPvoucher {
         id: string;
         itemName: string;
         itemQty: number;
-        itemUom: string;
+        itemUom: {
+            id: string;
+            unit: string;
+        };
         rate: number;
         amt: number;
     }[];

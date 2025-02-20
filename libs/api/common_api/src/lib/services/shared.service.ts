@@ -1,9 +1,15 @@
-import { SHARED_API_URL, sharedApiUrlConstants } from "../constants";
+import { sharedApiUrlConstants } from "../constants";
 import {
     ApiBaseState,
     BranchPartialData,
     CompanyNamesData,
+    CustomerNames,
+    CustomerPartialData,
     FarmerPartialData,
+    GetAllDealSlipNums,
+    GetAllDeliveryChallanNums,
+    GetAllGRNNums,
+    GetAllRFPANums,
     ProductPartialData,
     UOMPartialData,
     VendorPartialData
@@ -18,8 +24,7 @@ export class SharedService extends BaseService {
     }
 
     getCompanyNames(): Promise<ApiBaseState<CompanyNamesData[]>> {
-        // const url = sharedApiUrlConstants.GET_COMPANY_NAMES;
-        const url = SHARED_API_URL.COMPANY_NAMES;
+        const url = sharedApiUrlConstants.GET_COMPANY_NAMES;
         return this.get(url);
     }
 
@@ -38,6 +43,16 @@ export class SharedService extends BaseService {
         return this.get(url);
     }
 
+    getCustomerPatrialData(customerId: string): Promise<ApiBaseState<CustomerPartialData>> {
+        const url = `${sharedApiUrlConstants.GET_CUSTOMERS_PARTIAL}/${customerId}`;
+        return this.get(url);
+    }
+
+    getAllCustomerNames(): Promise<ApiBaseState<CustomerNames[]>> {
+        const url = sharedApiUrlConstants.GET_CUSTOMER_NAMESL;
+        return this.get(url);
+    }
+
     getUOMPartialData(): Promise<ApiBaseState<UOMPartialData[]>> {
         const url = sharedApiUrlConstants.GET_UOM_PARTIAL;
         return this.get(url);
@@ -48,5 +63,22 @@ export class SharedService extends BaseService {
         return this.get(url);
     }
 
+    getRFPANums(): Promise<ApiBaseState<GetAllRFPANums[]>> {
+        const url = sharedApiUrlConstants.GET_ALL_RFPA_NO;
+        return this.get(url);
+    }
+    getGRNNums(): Promise<ApiBaseState<GetAllGRNNums[]>> {
+        const url = sharedApiUrlConstants.GET_ALL_GRN_NO;
+        return this.get(url);
+    }
 
+    getDealSlipNums(): Promise<ApiBaseState<GetAllDealSlipNums[]>> {
+        const url = sharedApiUrlConstants.GET_ALL_DEAL_SLIP_NO;
+        return this.get(url);
+    }
+
+    getDeliveryChallanNums(): Promise<ApiBaseState<GetAllDeliveryChallanNums[]>> {
+        const url = sharedApiUrlConstants.GET_ALL_DELIVERY_CHALLAN_NO;
+        return this.get(url);
+    }
 }

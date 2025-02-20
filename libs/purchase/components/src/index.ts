@@ -5,3 +5,4 @@ export * from './lib/grn/index';
 export * from './lib/vouchers';
 export * from './lib/delivery_challan';
 export * from './lib/payment_request';
+export * from './lib/reports';

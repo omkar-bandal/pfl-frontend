@@ -3,17 +3,16 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
-import { grnSchema, initValGRN, initValGRNProducts, PURCHASE_ARRAYS, PURCHASE_ROUTES, purchaseOptionsConstants, setPreviewGRN } from '@prime-fresh/purchase/modules';
+import { grnSchema, initValGRN, initValGRNProducts, PURCHASE_ROUTES, purchaseOptionsConstants, setPreviewGRN, useCreateGRN } from '@prime-fresh/purchase/modules';
 import { useActions } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { removeProductPartialData, STRINGS } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
-import { PostGRN, PURCHASE_API_URL, useCreateGRN, useGetAllDealSlipNums } from '@prime-fresh/purchase_api';
+import { PostGRN } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './grn.preview';
 import { appendFormData } from '@prime-fresh/shared/utils';
-import { useGetProductsPartialData, useGetCompanyNames, useGetUOMPartialData } from '@prime-fresh/shared/modules';
+import { useGetProductsPartialData, useGetCompanyNames, useGetUOMPartialData, useGetBranchesPartialData, mapToValueLabelArray, useGetAllDealSlipNums } from '@prime-fresh/shared/modules';
 import { calculateTotalAmount, getProductCount, getProductOrigin, getProductSizes, handleGRNProductsChange } from './helper-functions';
 
 export const GRNForm = () => {
@@ -21,23 +20,18 @@ export const GRNForm = () => {
   const dispatch = useDispatch();
   const { setPreview } = useActions();
   const { data: companies } = useGetCompanyNames();
-  console.log(companies);
   const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
-  console.log("Company names", companyNames)
-  const { data: dsNums } = useGetAllDealSlipNums(PURCHASE_API_URL.GET_ALL_DEAL_SLIP_NO);
-  const dealSlipNums = dsNums ? mapToValueLabelArray(dsNums, 'id', 'dealSlipNo') : [];
+  const { data: dsNums } = useGetAllDealSlipNums();
+  const dealSlipNums = dsNums?.data ? mapToValueLabelArray(dsNums.data, 'id', 'dealSlipNo') : [];
   const { data: products } = useGetProductsPartialData();
   const allProducts = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
   const { data: UOMs } = useGetUOMPartialData();
   const allUOMs = UOMs?.data ? mapToValueLabelArray(UOMs.data, 'id', 'unit') : [];
+  const { data: Locations, isLoading: loadingLocations } = useGetBranchesPartialData();
+  const allPurchaseLocation = Locations?.data ? mapToValueLabelArray(Locations.data, 'id', 'name') : [];
+  const allPurchaseForEachLocations = Locations?.data ? mapToValueLabelArray(Locations.data.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
 
-  const { data: Locations, isLoading: loadingLocations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
-  const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
-
-
-
-  const { mutateAsync: mutatePost, data, error } = useCreateGRN(PURCHASE_API_URL.POST_GRN);
+  const { mutateAsync: mutatePost, data, error } = useCreateGRN();
 
   const handleSubmit = (values: PostGRN) => {
     const formData = new FormData();
@@ -56,7 +50,7 @@ export const GRNForm = () => {
       <Formik
         enableReinitialize={true}
         initialValues={initValGRN}
-        // validationSchema={grnSchema}
+        validationSchema={grnSchema}
         validateOnBlur={true}
         validateOnChange={true}
         onSubmit={(values) => {
@@ -67,7 +61,7 @@ export const GRNForm = () => {
           <form onSubmit={handleSubmit} encType='multipart/form-data'>
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} marginBottom={2}>
-                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Goods Received Note</Typography>
+                <PageTitle pagetitle='Goods Received Note' />
               </Grid>
               <Grid item xs={12} md={3}>
                 <RadioGroupInput
@@ -112,7 +106,7 @@ export const GRNForm = () => {
                 <SelectInput isRequired={true} label="Company Name" name="companyName" options={companyNames} value={values.companyName} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={3}>
-                <TextInput isRequired={true} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange} />
+                <TextInput isRequired={false} type="text" name='billNo' label='Bill Number' value={values.billNo} handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
                 <TextInput isRequired={true} type="text" name='purchaseInstructionsBy' label='Purchase Instructions By' value={values.purchaseInstructionsBy} handleChange={handleChange} />
@@ -214,7 +208,7 @@ export const GRNForm = () => {
                           </Grid>
                           <Grid item xs={6} md={2}>
                             <SelectInput
-                              isRequired={true}
+                              isRequired={false}
                               id={`grnProducts.${index}.size`}
                               name={`grnProducts.${index}.size`}
                               label="Size"
@@ -224,7 +218,7 @@ export const GRNForm = () => {
                           </Grid>
                           <Grid item xs={6} md={2}>
                             <SelectInput
-                              isRequired={true}
+                              isRequired={false}
                               id={`grnProducts.${index}.count`}
                               name={`grnProducts.${index}.count`}
                               label="Count"
@@ -249,7 +243,7 @@ export const GRNForm = () => {
                               label='Quantity'
                               name={`grnProducts.${index}.quantity`}
                               type='number'
-                              value={values.grnProducts[index].quantity || ""}
+                              value={values.grnProducts[index].quantity || null}
                               handleChange={(event) => handleGRNProductsChange(index, "quantity", event.target.value, values, setFieldValue)}
                             />
                           </Grid>
@@ -260,7 +254,7 @@ export const GRNForm = () => {
                               label='Rate'
                               id={`grnProducts.${index}.unitPrice`}
                               name={`grnProducts.${index}.unitPrice`}
-                              value={values.grnProducts[index].unitPrice || ""}
+                              value={values.grnProducts[index].unitPrice || null}
                               handleChange={(event) => handleGRNProductsChange(index, "unitPrice", event.target.value, values, setFieldValue)}
                             />
                           </Grid>

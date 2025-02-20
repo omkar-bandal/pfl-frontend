@@ -108,11 +108,6 @@ export declare const rootReducer: import('redux').Reducer<{
     preview: {
         preview: boolean;
     };
-    notification: {
-        isOpen: boolean;
-        severity: "success" | "error";
-        message: string;
-    };
 }, import('redux').UnknownAction, Partial<{
     formContainer: {
         openDrawer: boolean;
@@ -222,10 +217,5 @@ export declare const rootReducer: import('redux').Reducer<{
     } | undefined;
     preview: {
         preview: boolean;
-    } | undefined;
-    notification: {
-        isOpen: boolean;
-        severity: "success" | "error";
-        message: string;
     } | undefined;
 }>>;

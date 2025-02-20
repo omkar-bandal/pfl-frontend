@@ -29,16 +29,17 @@ export function useDeleteOfficeById(id: string, officeType: string):
 export function useGetAllOffices(officeType: string):
     UseQueryResult<ApiBaseState<GetOffices[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetOffices[]>, ErrorModel>({
-        queryKey: ['get-all-offices'],
+        queryKey: ['get-all-offices', officeType],
         queryFn: () => OfficeService.getInstance().getAllOffice(officeType),
+        enabled: !!officeType,
     });
 }
 
 export function useGetOfficeById(id: string, officeType: string):
     UseQueryResult<ApiBaseState<GetOffices>, ErrorModel> {
     return useQuery<ApiBaseState<GetOffices>, ErrorModel>({
-        queryKey: ['get-office-by-id'],
+        queryKey: ['get-office-by-id', id, officeType],
         queryFn: () => OfficeService.getInstance().getOfficeById(id, officeType),
-        enabled: !!id,
+        enabled: !!id && !!officeType,
     });
 }

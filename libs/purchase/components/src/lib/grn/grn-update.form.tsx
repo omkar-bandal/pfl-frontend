@@ -3,43 +3,42 @@ import { FieldArray, Formik } from 'formik';
 import { useDispatch } from 'react-redux'
 import { Add, Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from '@mui/material'
-import { initValGRN, initValGRNProducts, PURCHASE_ARRAYS, PURCHASE_ROUTES, purchaseOptionsConstants, setPreviewGRN } from '@prime-fresh/purchase/modules';
-import { STRINGS, useGetAllUOMs } from '@prime-fresh/admin/modules';
-import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
-import { PostGRN, PURCHASE_API_URL, useGetAllDealSlipNums, useGetGRN, useUpdateGRN } from '@prime-fresh/purchase_api';
+import { initValGRN, initValGRNProducts, PURCHASE_ROUTES, purchaseOptionsConstants, setPreviewGRN, useGetGRNById, useUpdateGRNById } from '@prime-fresh/purchase/modules';
+import { STRINGS } from '@prime-fresh/admin/modules';
+import { PostGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { setPreview } from '@prime-fresh/modules';
 import { appendFormData } from "@prime-fresh/shared/utils";
-import { SHARED_API_URL, useGetCompanyNames } from '@prime-fresh/common_api';
 import { calculateTotalAmount, getProductCount, getProductSizes, handleGRNProductsUpdateChange } from './helper-functions';
-import { useGetProductsPartialData } from '@prime-fresh/shared/modules';
+import { useGetAllDealSlipNums, useGetBranchesPartialData, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
 
 export const GRNUpdate = () => {
     const { grnid } = useParams<{ grnid: string }>();
     const grnId = grnid ? grnid : '';
 
-    const { data: grn, isLoading } = useGetGRN(PURCHASE_API_URL.GET_A_GRN, grnId);
-    const selectedGRN = grn ? grn : initValGRN;
+    const { data: grn, isLoading } = useGetGRNById(grnId);
+    const selectedGRN = grn?.data ? grn.data : initValGRN;
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     console.log("GRN API DATA : ", selectedGRN);
 
-    const { data: companies } = useGetCompanyNames(SHARED_API_URL.COMPANY_NAMES);
-    const companyNames = companies ? mapToValueLabelArray(companies, 'id', 'name') : [];
-
-    const { data: dsNums } = useGetAllDealSlipNums(PURCHASE_API_URL.GET_ALL_DEAL_SLIP_NO);
-    const dealSlipNums = dsNums ? mapToValueLabelArray(dsNums, 'id', 'dealSlipNo') : [];
+    const { data: companies } = useGetCompanyNames();
+    const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+    const { data: dsNums } = useGetAllDealSlipNums();
+    const dealSlipNums = dsNums?.data ? mapToValueLabelArray(dsNums.data, 'id', 'dealSlipNo') : [];
     const { data: products } = useGetProductsPartialData();
     const allProducts = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
-    const { data: UOMs } = useGetAllUOMs();
+    const { data: UOMs } = useGetUOMPartialData();
     const allUOMs = UOMs?.data ? mapToValueLabelArray(UOMs.data, 'id', 'unit') : [];
-    const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const allPurchaseLocation = Locations ? mapToValueLabelArray(Locations, 'id', 'name') : [];
-    const allPurchaseForEachLocations = Locations ? mapToValueLabelArray(Locations.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
+    const { data: Locations, isLoading: loadingLocations } = useGetBranchesPartialData();
+    const allPurchaseLocation = Locations?.data ? mapToValueLabelArray(Locations.data, 'id', 'name') : [];
+    const allPurchaseForEachLocations = Locations?.data ? mapToValueLabelArray(Locations.data.filter(loc => loc.type === STRINGS.DC), 'id', 'name') : [];
 
-    const { mutateAsync: mutatePatch, error, data } = useUpdateGRN(PURCHASE_API_URL.UPDATE_GRN, grnId);
+
+    const { mutateAsync: mutatePatch, error, data } = useUpdateGRNById(grnId);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
         const formData = new FormData();
@@ -72,7 +71,7 @@ export const GRNUpdate = () => {
                         <form onSubmit={handleSubmit} encType='multipart/form-data'>
                             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
                                 <Grid item xs={12} marginBottom={2}>
-                                    <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Goods Received Note</Typography>
+                                    <PageTitle pagetitle='Goods Received Note' />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <RadioGroupInput
@@ -127,6 +126,7 @@ export const GRNUpdate = () => {
                                         isRequired={true}
                                         name="purchaseLocation"
                                         label="Purchase Location"
+                                        loading={loadingLocations}
                                         options={allPurchaseLocation}
                                         handleChange={(event, newValue) => {
                                             if (newValue !== null) {

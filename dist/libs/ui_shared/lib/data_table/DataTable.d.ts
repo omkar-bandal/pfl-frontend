@@ -5,7 +5,7 @@ interface DataGridProps<T> {
     columns: CustomGridColDef[];
     rows: T[] | undefined;
     loading: boolean;
-    apiRef: React.MutableRefObject<GridApi>;
+    apiRef?: React.MutableRefObject<GridApi>;
 }
 export declare const DataTable: <T extends {
     id: string | number;

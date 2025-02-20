@@ -1,19 +1,14 @@
 import { Edit } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { ADMIN_ROUTES, setOpenFor } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { GetVendorCategory } from "@prime-fresh/admin_api";
-import { hideNotification } from "@prime-fresh/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const VendorCategoryListCols = (): CustomGridColDef[] => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleEdit = (rowId: string) => {
-        dispatch(hideNotification());
-        dispatch(setOpenFor('update'));
         navigate(`${ADMIN_ROUTES.UPDATE_VENDORS_CAT}/${rowId}`);
     }
     return [

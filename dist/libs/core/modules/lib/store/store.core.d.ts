@@ -108,11 +108,6 @@ export declare const coreStore: import('@reduxjs/toolkit').EnhancedStore<{
     preview: {
         preview: boolean;
     };
-    notification: {
-        isOpen: boolean;
-        severity: "success" | "error";
-        message: string;
-    };
 }, import('redux').UnknownAction, import('@reduxjs/toolkit').Tuple<[import('redux').StoreEnhancer<{
     dispatch: import('redux-thunk').ThunkDispatch<{
         formContainer: {
@@ -223,11 +218,6 @@ export declare const coreStore: import('@reduxjs/toolkit').EnhancedStore<{
         };
         preview: {
             preview: boolean;
-        };
-        notification: {
-            isOpen: boolean;
-            severity: "success" | "error";
-            message: string;
         };
     }, undefined, import('redux').UnknownAction>;
 }>, import('redux').StoreEnhancer]>>;

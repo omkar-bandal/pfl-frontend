@@ -31,14 +31,14 @@ export interface PostGRN {
     subTotalAmt: number;
     totalAmt: number;
     amtWords: string | null;
-    freight: number;
-    otherCharges: number;
+    freight: number | null;
+    otherCharges: number | null;
     purchasedBy: string | null;
     receivedThrough: string | null;
     securityPerson: string | null;
     vehicleNo: string | null;
     timeIn: string | null;
-    cratesIn: number;
+    cratesIn: number | null;
     rmn: string | null;
     remark: string | null;
     billImage: File | null;

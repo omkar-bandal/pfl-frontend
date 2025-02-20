@@ -10,13 +10,13 @@ export const LPVoucherPreview = () => {
         <PreviewContainer title='Labour Payment Voucher Preview'>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.grnNo}
+                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewLPVoucher?.grnNo !== "string" ? previewLPVoucher?.grnNo?.id : previewLPVoucher.grnNo}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.companyName}
+                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewLPVoucher?.companyName !== "string" ? previewLPVoucher?.companyName?.id : previewLPVoucher.companyName}
                     </Typography>
                 </Typography>
             </Grid>
@@ -35,12 +35,6 @@ export const LPVoucherPreview = () => {
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
                     Pay To / Received From : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.payReceivedFrom}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Location of Work : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewLPVoucher?.workLocation}
                     </Typography>
                 </Typography>
             </Grid>

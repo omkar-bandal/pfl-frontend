@@ -49,4 +49,6 @@ export declare const PURCHASE_ROUTES: {
     GET_A_DELIVERY_CHALLAN: string;
     VIEW_DELIVERY_CHALLAN: string;
     UPDATE_DELIVERY_CHALLAN: string;
+    REPORTS: string;
+    PURCHASE_REPORTS: string;
 };

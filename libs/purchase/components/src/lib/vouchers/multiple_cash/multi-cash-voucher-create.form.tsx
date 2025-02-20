@@ -1,37 +1,62 @@
-import { Grid, IconButton, Typography } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Grid, IconButton } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { Particulars, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher, useGetAllDeliveryChallanNums, useGetAllGRNNums } from "@prime-fresh/purchase_api";
+import { initValParticulars, initValMMultipleCashVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher } from "@prime-fresh/purchase/modules";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { Particulars, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
-import { useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { useGetCompanyNames, useGetAllGRNNums, useGetAllDeliveryChallanNums, mapToValueLabelArray, numToWords } from "@prime-fresh/shared/modules";
+import { ChangeEvent, useCallback } from "react";
 
 export const MultipleCashVoucherForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: grnnos } = useGetAllGRNNums(PURCHASE_API_URL.GET_ALL_GRN_NO);
-  const allGRNNums = grnnos ? grnnos : [];
+  const { data: grnnos } = useGetAllGRNNums();
+  const allGRNNums = grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [];
 
   const { data: companies } = useGetCompanyNames();
   const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
 
-  const { data: dcnos } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-  const allDCNums = dcnos ? dcnos : [];
+  const { data: dcnos } = useGetAllDeliveryChallanNums();
+  const allDCNums = dcnos?.data ? mapToValueLabelArray(dcnos.data, 'id', 'challanNo') : [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const calculateAmounts = (values: PostMCvoucher, setFieldValue: (field: string, value: any,) => void) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const totalAmt = values.particulars.reduce((acc: any, product: Particulars) => acc + product.amt, 0);
-    const amtWords = numToWords(totalAmt);
-    setFieldValue("totalAmt", totalAmt);
-    setFieldValue("amtWords", amtWords);
-  };
+  const recalcTotal = useCallback((particulars: Particulars[]): number => {
+    return particulars.reduce((acc, item) => acc + (Number(item.amt) || 0), 0);
+  },[]);
+
+  const handleRemove = useCallback((index: number, values: PostMCvoucher, setFieldValue: any) => {
+    const updatedParticulars = values.particulars.filter((_, i) => i !== index);
+    const total = recalcTotal(updatedParticulars);
+    setFieldValue("particulars", updatedParticulars, false);
+    setFieldValue("totalAmt", total, true);
+    setFieldValue("amtWords", numToWords(total), true);
+  }, [recalcTotal]);
+
+  const handlePush = useCallback((newItem: Particulars, values: PostMCvoucher, setFieldValue: any) => {
+    const updatedParticulars = [...values.particulars, newItem];
+    const total = recalcTotal(updatedParticulars);
+    setFieldValue("particulars", updatedParticulars, false);
+    setFieldValue("totalAmt", total, true);
+    setFieldValue("amtWords", numToWords(total), true);
+  }, [recalcTotal]);
+
+  const handleAmountChange = useCallback((e: ChangeEvent<HTMLInputElement>, index: number, values: PostMCvoucher, setFieldValue: any) => {
+    const newAmount = Number(e.target.value);
+    const updatedParticulars = values.particulars.map((item, i) =>
+      i === index ? { ...item, amt: newAmount } : item
+    );
+    const total = recalcTotal(updatedParticulars);
+    setFieldValue(`particulars.${index}.amt`, newAmount, false);
+    setFieldValue("totalAmt", total, true);
+    setFieldValue("amtWords", numToWords(total), true);
+  }, [recalcTotal]);
+
 
   const { mutateAsync: mutatePost, error, data: Res } = useCreateMCVoucher(PURCHASE_API_URL.POST_MC_VOUCHER);
 
@@ -65,14 +90,14 @@ export const MultipleCashVoucherForm = () => {
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid item xs={12} marginBottom={2}>
-                <Typography variant='h4' component="div" sx={{ fontWeight: 600 }}>Multiple Cash Voucher</Typography>
+                <PageTitle pagetitle='Multiple Cash Voucher' />
               </Grid>
               <Grid item xs={12} md={3}>
                 <SelectInput
                   isRequired={false}
                   label="Select GRN"
                   name="grnNo"
-                  options={mapToValueLabelArray(allGRNNums, 'id', 'grnNo')}
+                  options={allGRNNums}
                   value={values.grnNo}
                   handleChange={handleChange}
                 />
@@ -82,7 +107,7 @@ export const MultipleCashVoucherForm = () => {
                   isRequired={false}
                   label="Select Challan"
                   name="challanNo"
-                  options={mapToValueLabelArray(allDCNums, 'id', 'challanNo')}
+                  options={allDCNums}
                   value={values.challanNo}
                   handleChange={handleChange}
                 />
@@ -156,17 +181,19 @@ export const MultipleCashVoucherForm = () => {
                               isRequired={true}
                               name={`particulars.${index}.amt`}
                               label="Amount"
-                              value={values.particulars[index].amt || ""}
-                              handleChange={handleChange}
-                              onBlur={() => calculateAmounts(values, setFieldValue)}
+                              value={values.particulars[index].amt || null}
+                              handleChange={e => {
+                                handleChange(e);
+                                handleAmountChange(e, index, values, setFieldValue)
+                              }}
                             />
                           </Grid>
                           <Grid item xs={12} md={1} sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                             {values.particulars.length > 1 &&
-                              <IconButton color="error" size="large" sx={{ marginTop: 2 }} onClick={() => remove(index)}>
+                              <IconButton color="error" size="large" sx={{ marginTop: 2 }} onClick={() => handleRemove(index, values, setFieldValue)}>
                                 <Close />
                               </IconButton>}
-                            <IconButton color="primary" size="large" sx={{ marginTop: 2 }} onClick={() => push(initValParticulars)}>
+                            <IconButton color="primary" size="large" sx={{ marginTop: 2 }} onClick={() => handlePush(initValParticulars, values, setFieldValue)}>
                               <Add />
                             </IconButton>
                           </Grid>
@@ -188,21 +215,21 @@ export const MultipleCashVoucherForm = () => {
               </Grid>
               <Grid item xs={12} md={2}>
                 <TextInput
-                  isReadOnly={true}
                   isRequired={false}
+                  isReadOnly={true}
                   name="totalAmt"
                   label="Total Amount"
-                  value={values.totalAmt || ""}
+                  value={values.totalAmt || null}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextInput
                   type="text"
                   isRequired={false}
+                  isReadOnly={true}
                   name="amtWords"
                   label="Amount In Words"
                   value={values.amtWords}
-                  handleChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} md={2}>

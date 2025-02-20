@@ -1,17 +1,14 @@
-import { DynamicForm, Notification } from '@prime-fresh/ui_shared';
+import { DynamicForm, toast } from '@prime-fresh/ui_shared';
 import { FarmerFormFields } from './farmerFormField';
-import { ADMIN_ROUTES} from '@prime-fresh/admin/modules';
+import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { useCreateFarmer, ADMIN_API_URL, PostFarmer } from '@prime-fresh/admin_api';
 import { initValFarmer } from './initValFarmer';
 import { useNavigate } from 'react-router-dom';
 import { appendFormData } from "@prime-fresh/shared/utils";
-import { useDispatch } from 'react-redux';
-import { showNotification } from '@prime-fresh/modules';
 import { farmerValidationSchema } from './farmer.schema';
 
 export const FarmerCreateForm = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   // const { openFor } = useAppSelector(formContainerState);
 
   // const Farmers = useAppSelector(farmersState);
@@ -25,22 +22,19 @@ export const FarmerCreateForm = () => {
     const formData = new FormData();
     appendFormData(formData, values);
     mutatePost(formData).then(() => {
-      dispatch(showNotification({ severity: 'success', message: postRes ? postRes.message : "Farmer created successfully !!!" }));
+      toast(postRes ? postRes.message : "Farmer created successfully !!!");
       setTimeout(() => {
         navigate(ADMIN_ROUTES.GET_ALL_FARMERS);
       }, 2000);
     }).catch(() => {
-      dispatch(showNotification({ severity: 'error', message: 'Error: ' + postError?.message }));
+      toast(postError ? postError.message : "Error while creating farmer data");
     })
   };
   return (
-    <>
-      <Notification />
-      <DynamicForm<PostFarmer>
-        schema={FarmerFormFields()}
-        initialValues={initValFarmer}
-        validationSchema={farmerValidationSchema}
-        handleSubmit={handleSubmit} />
-    </>
+    <DynamicForm<PostFarmer>
+      schema={FarmerFormFields()}
+      initialValues={initValFarmer}
+      validationSchema={farmerValidationSchema}
+      handleSubmit={handleSubmit} />
   )
 }

@@ -4625,13 +4625,13 @@ fe.HttpStatusCode = Ln;
 fe.default = fe;
 const Eo = {
   BASE_URL: "http://ec2-13-233-15-253.ap-south-1.compute.amazonaws.com"
-  // BASE_URL: "https://e3bd-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://7785-182-156-141-17.ngrok-free.app",
 }, je = fe.create({
   baseURL: Eo.BASE_URL,
   withCredentials: !0,
   headers: {
-    "ngrok-skip-browser-warning": "true"
-    // 'Content-Type': 'multipart/form-data',
+    // 'ngrok-skip-browser-warning': 'true',
+    "Content-Type": "multipart/form-data"
   }
 }), qa = () => localStorage.getItem("access_token"), Ha = () => localStorage.getItem("refresh_token");
 je.interceptors.request.use(

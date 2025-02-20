@@ -1,17 +1,17 @@
 import React from 'react'
-import { Add } from '@mui/icons-material'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Grid2 } from '@mui/material'
 import { useGridApiRef } from '@mui/x-data-grid'
-import {GetTPvoucher, PURCHASE_API_URL, useGetAllTPVoucher } from '@prime-fresh/purchase_api'
-import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules'
-import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared'
+import { GetTPvoucher } from '@prime-fresh/purchase_api'
+import { PURCHASE_ROUTES, useGetAllTransportPaymentVouchers } from '@prime-fresh/purchase/modules'
+import { AddNewButton, DataTable, PageTitle, toast } from '@prime-fresh/ui_shared'
 import { useNavigate } from 'react-router-dom'
 import { TPVoucherListCols } from './transport-payment-voucher.columns'
 
 export const TransportPaymentVoucherTable = () => {
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
-    const { data: allTPVouchers, isLoading, isError, error } = useGetAllTPVoucher(PURCHASE_API_URL.GET_ALL_TP_VOUCHER);
+    const { data, isLoading, isError, error } = useGetAllTransportPaymentVouchers();
+    const allTPVouchers = data?.data ? data.data : [];
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -22,19 +22,14 @@ export const TransportPaymentVoucherTable = () => {
     }
     return (
         <Box sx={{ flex: 1 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Button
-                    variant="outlined"
-                    size="medium"
-                    startIcon={<Add />}
-                    sx={{ marginY: 2 }}
-                    fullWidth={false}
-                    onClick={handleCreate}
-                >
-                    Add Voucher
-                </Button>
-                <TableToolbar apiRef={apiRef} />
-            </Stack>
+            <Grid2 container marginY={1}>
+                <Grid2 size={{ xs: 12, md: 8 }}>
+                    <PageTitle pagetitle='Transport Payment Voucher' />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+                    <AddNewButton handleClick={handleCreate} />
+                </Grid2>
+            </Grid2>
             <DataTable<GetTPvoucher>
                 loading={isLoading}
                 rows={allTPVouchers}
