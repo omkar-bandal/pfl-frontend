@@ -1,49 +1,43 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Grid2 } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
-import { Add } from "@mui/icons-material";
 import { VendorListCols } from "./vendor.columns";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_API_URL, useGetAllVendors } from "@prime-fresh/admin_api";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
+import { ADMIN_ROUTES, useGetAllVendors } from "@prime-fresh/admin/modules";
+import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
+import { useEffect } from "react";
 
 export function VendorTable() {
   const navigate = useNavigate()
   const apiRef = useGridApiRef();
-  const { data: Vendors, isError, isLoading, error } = useGetAllVendors(ADMIN_API_URL.GET_ALL_VENDORS);
+  const { data, isError, isLoading, error } = useGetAllVendors();
+  const Vendors = data?.data ? data.data : [];
 
-  const handleCreate = ()  => {
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || 'Error occured please refresh the page.')
+    }
+  }, [isError, error])
+
+  const handleCreate = () => {
     navigate(ADMIN_ROUTES.CREATE_VENDOR);
   };
   console.log(Vendors);
   return (
-    <>
-     {isError && toast.error(error?.message)}
-      <Box sx={{ flex: 1 }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Button
-            variant="outlined"
-            size="medium"
-            startIcon={<Add />}
-            sx={{ marginY: 2 }}
-            fullWidth={false}
-            onClick={() => handleCreate()}
-          >
-            Add Vendor
-          </Button>
-          <TableToolbar apiRef={apiRef} />
-        </Stack>
-        <DataTable
+    <Box sx={{ flex: 1 }}>
+      <Grid2 container marginY={1}>
+        <Grid2 size={{ xs: 12, md: 8 }}>
+          <PageTitle pagetitle='Vendors' />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+          <AddNewButton handleClick={handleCreate} />
+        </Grid2>
+      </Grid2>
+      <DataTable
         loading={isLoading}
-          apiRef={apiRef}
-          rows={Vendors}
-          columns={VendorListCols()}
-        />
-      </Box>
-    </>
+        apiRef={apiRef}
+        rows={Vendors}
+        columns={VendorListCols()}
+      />
+    </Box>
   );
 }

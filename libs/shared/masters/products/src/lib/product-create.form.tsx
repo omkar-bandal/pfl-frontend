@@ -2,12 +2,12 @@ import { useCallback, useMemo } from "react";
 import { FieldArray, Formik } from "formik";
 import { initValProduct } from "./initValProduct";
 import { Box, Grid, IconButton, InputAdornment, Typography } from "@mui/material";
-import { FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, MultipleTextInput, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { FormResetBtn, FormSubmitBtn, ImageUpload, MultipleTextInput, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PostProduct } from "@prime-fresh/admin_api";
-import { appendFormData } from '@prime-fresh/shared/utils';
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES, useCreateProduct, useGetAllProductCategories, useGetAllProductClassifications, useGetAllProductSubcategories, useGetAllUOMs } from "@prime-fresh/admin/modules";
 import { Add, Close } from "@mui/icons-material";
+import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export const ProductCreateForm = () => {
     const navigate = useNavigate();

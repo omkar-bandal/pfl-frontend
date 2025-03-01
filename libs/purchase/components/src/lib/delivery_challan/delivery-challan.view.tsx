@@ -4,17 +4,22 @@ import { useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "@prime-fresh/ui_shared";
-import { axiosInstance, COM_API_URL, SHARED_API_URL, useGetCompanyNames } from "@prime-fresh/common_api";
-import { ADMIN_API_URL, useGetAllCustomerNames, useGetAllFilteredBranches } from "@prime-fresh/admin_api";
-import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { axiosInstance, COM_API_URL, } from "@prime-fresh/common_api";
 import { images } from "@prime-fresh/assets";
+import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames, useGetCustomerNames } from "@prime-fresh/shared/modules";
 
 export const DeliveryChallanView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
-    const { data: companies } = useGetCompanyNames(SHARED_API_URL.COMPANY_NAMES);
-    const { data: Locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const { data: customerlist } = useGetAllCustomerNames(ADMIN_API_URL.GET_CUSTOMER_NAMES);
-    const customerList = customerlist ? mapToValueLabelArray(customerlist, 'id', 'organisationName') : [];
+
+    const { data: Companies } = useGetCompanyNames();
+    
+    const { data: locations } = useGetBranchesPartialData();
+    const Locations = locations?.data ? locations.data : [];
+
+    const { data: customerlist } = useGetCustomerNames();
+    const customerList = customerlist?.data ? mapToValueLabelArray(customerlist.data, 'id', 'organisationName') : [];
+
+
     const reactToPrintFn = useReactToPrint({ contentRef });
     // const navigate = useNavigate();
     // const [reason, setReason] = useState<string>("");
@@ -23,8 +28,8 @@ export const DeliveryChallanView = () => {
     const dcId = id ? id : '';
     console.log(dcId);
     const { data: dcData, isLoading } = useGetDeliveryChallan(PURCHASE_API_URL.GET_A_DELIVERY_CHALLAN, dcId);
+    const selectedCompany = useMemo(() => Companies?.data ? Companies.data.find(company => company.id === dcData?.companyName): null, [Companies, dcData])
     console.log("Data: ", dcData);
-    const selectedCompany = useMemo(() => companies?.find(company => company.id === dcData?.companyName), [companies, dcData])
     const handleDownload = async () => {
         try {
             const response = await axiosInstance.post(`${COM_API_URL.BASE_URL}/invoice/generate/profarma/${dcId}`);

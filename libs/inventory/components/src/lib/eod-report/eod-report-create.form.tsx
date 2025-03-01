@@ -1,34 +1,33 @@
-import React from 'react'
-import { arrayConstants, eodReportInitialValue, eodReportProductsInitialValue, inventoryRouteConstants } from '@prime-fresh/inventory/modules'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useMemo } from 'react'
+import { arrayConstants, eodReportInitialValue, eodReportProductsInitialValue, inventoryRouteConstants, useCreateEODReport } from '@prime-fresh/inventory/modules'
 import { FieldArray, Formik } from 'formik'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { Add, Remove } from '@mui/icons-material'
-import { ADMIN_API_URL, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api'
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils'
-import { INVENTORY_API_URL, useCreateEODReport } from '@prime-fresh/inventory_api'
 import { useNavigate } from 'react-router-dom'
+import { mapToValueLabelArray, useGetBranchesPartialData, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules'
 
 export const EODReportCreateForm = () => {
   const navigate = useNavigate();
-  const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const allUOMs = uoms? mapToValueLabelArray(uoms || [], 'id', 'unit') : [];
-  const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-  const allProducts = products? mapToValueLabelArray(products || [], 'id', 'name') : [];
-  const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  const allLocations = locations? mapToValueLabelArray(locations || [], 'id', 'name') : [];
 
-  const { mutateAsync, error, data } = useCreateEODReport(INVENTORY_API_URL.POST_EOD_REPORT);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: uoms } = useGetUOMPartialData();
+  const allUOMs = useMemo(() => uoms?.data ? mapToValueLabelArray(uoms.data, 'id', 'unit') : [], [uoms]);
+
+  const { data: products } = useGetProductsPartialData();
+  const allProducts = useMemo(() => products?.data ? mapToValueLabelArray(products?.data, 'id', 'name') : [], [products]);
+
+  const { data: locations } = useGetBranchesPartialData();
+  const allLocations = useMemo(() => locations?.data ? mapToValueLabelArray(locations?.data, 'id', 'name') : [], [locations]);
+
+  const { mutateAsync, error, data } = useCreateEODReport();
+
   const handleCreate = (values: any) => {
-    const formData = new FormData();
-    appendFormData(formData, values);
-    mutateAsync(formData).then(() => {
+    mutateAsync(values).then(() => {
       toast.success(data ? data.message : "EOD report created sucessfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_EOD_REPORT);
-      }, 2500);
+      }, 2000);
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating EOD report.");
     })
@@ -53,8 +52,8 @@ export const EODReportCreateForm = () => {
                 isRequired={true}
                 name="location"
                 label="Location"
-                options={allLocations}
-                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />            </Grid>
+                options={allLocations} />
+            </Grid>
             <Grid item xs={12} md={4}>
               <TextInput isRequired={true} type="date" label="Stock Date" name="stockDate" value={values.stockDate} handleChange={handleChange} />
             </Grid>
@@ -73,8 +72,7 @@ export const EODReportCreateForm = () => {
                               isRequired={true}
                               name={`eodProducts.${index}.sku`}
                               label={`SKU ${index + 1}`}
-                              options={allProducts}
-                              handleChange={(event, newValue) => newValue ? setFieldValue(`eodProducts.${index}.sku`, newValue.value) : setFieldValue(`eodProducts.${index}.sku`, '')} />
+                              options={allProducts} />
                           </Grid>
                           <Grid item xs={12} md={2}>
                             <SelectInput

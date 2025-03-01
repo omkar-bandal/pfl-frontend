@@ -1,7 +1,7 @@
 import { FC, memo, useMemo } from "react";
 import { Grid} from "@mui/material";
 import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
-import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { AutoCompleteInput, FormAccordion, TextInput } from "@prime-fresh/ui_shared";
 import { useFormikContext } from "formik";
 import { displayAddress } from "@prime-fresh/purchase/modules";
@@ -12,7 +12,7 @@ type ToLocationProps = {
 };
 
 export const ToLocation: FC<ToLocationProps> = memo(({ locations }) => {
-    const { values, setFieldValue, handleChange } = useFormikContext<PostDeliveryChallan>();
+    const { values, handleChange } = useFormikContext<PostDeliveryChallan>();
     const { deliveryCType, partyName, toLocation, toLocationInput } = values;
     const customerId = deliveryCType === "customer" ? partyName : null
     const { data } = useGetCustomerPartialData(customerId || "");
@@ -43,9 +43,6 @@ export const ToLocation: FC<ToLocationProps> = memo(({ locations }) => {
                     name="toLocation"
                     label="To Location"
                     options={allDCLocations}
-                    handleChange={(event, newValue) =>
-                        setFieldValue("toLocation", newValue ? newValue : "")
-                    }
                 />
             </Grid>
         );

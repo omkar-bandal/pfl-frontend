@@ -6,14 +6,15 @@ import { PurchaseRoutes } from "./purchase.routes";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { AdminRoutes } from "./admin.routes";
 import { CustomerForm } from "@prime-fresh/shared/masters/customer";
-import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
-import { FarmerCreateForm } from "@prime-fresh/shared/masters/farmer";
+// import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
+// import { FarmerCreateForm } from "@prime-fresh/shared/masters/farmer";
 import { ProductCreateForm } from "@prime-fresh/shared/masters/products";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { InventoryRoutes } from "./inventory.routes";
 import { ErrorBoundary, ErrorFallback } from "@prime-fresh/ui_shared";
 import { SALES_ROUTES } from "@prime-fresh/sales/modules";
 import { SalesRoutes } from "./sales.routes";
+import { VendorRegistrationForm, FarmerRegistrationForm } from "@prime-fresh/shared/components";
 
 export const HostRoutes = createBrowserRouter([
     {
@@ -34,7 +35,7 @@ export const HostRoutes = createBrowserRouter([
         element:
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                    <VendorCreateForm />
+                    <VendorRegistrationForm />
                 </ErrorBoundary>
             </Layout>),
     },
@@ -43,7 +44,7 @@ export const HostRoutes = createBrowserRouter([
         element:
             (<Layout role={stringConstants.ROLE_ADMIN}>
                 <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                    <FarmerCreateForm />
+                    <FarmerRegistrationForm />
                 </ErrorBoundary>
             </Layout>),
     },

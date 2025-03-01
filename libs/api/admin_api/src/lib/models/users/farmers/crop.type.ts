@@ -1,10 +1,10 @@
 export type PostCrops = {
-    crop: string,
-    variety: string,
-    noOfPlants: number,
-    pruningDate: string,
-    expectedHarvestDate: string,
-    expectedQuantityInTonnes: number
+    crop: string | null,
+    variety: string | null,
+    noOfPlants: number | null,
+    pruningDate: string | null,
+    expectedHarvestDate: string | null,
+    expectedQuantityInTonnes: number | null,
 }
 
-export type GetCrops = {id: string} & PostCrops;
+export type GetCrops = {id: string | null} & PostCrops;

@@ -1,6 +1,6 @@
-import { PostVehicleDispatchRegister } from "@prime-fresh/inventory_api";
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { addressInitialValue } from "@prime-fresh/shared/utils";
+import { PostVehicleDispatchRegister } from "@prime-fresh/inventory_api";
+import {initValAddress} from "@prime-fresh/shared/modules";
 
 export const vehicleDispatchRegisterInitialValues: PostVehicleDispatchRegister = {
     date: "",
@@ -12,7 +12,7 @@ export const vehicleDispatchRegisterInitialValues: PostVehicleDispatchRegister =
     transportationBillAmt: 0,
     advancePaid: 0,
     clientName: "",
-    clientAddress: addressInitialValue,
+    clientAddress: initValAddress,
     receivingPerson: "",
     outTime: "",
     reachingTime: "",

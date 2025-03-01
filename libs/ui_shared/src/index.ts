@@ -7,7 +7,6 @@ export * from './lib/error_page/ErrorPage';
 export * from './lib/auto_form/components';
 export * from './lib/auto_form/Form';
 export * from './lib/auto_form/old_components/models';
-export * from './lib/auto_form/utils';
 export * from './lib/auto_form/old_components';
 export * from './lib/preview_page';
 export * from './assets';

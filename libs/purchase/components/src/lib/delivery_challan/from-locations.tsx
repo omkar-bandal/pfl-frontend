@@ -2,7 +2,7 @@ import { FC, memo, useMemo, useCallback } from "react";
 import { Grid } from "@mui/material";
 import { GetFilteredBranchData } from "@prime-fresh/admin_api";
 import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
-import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { AutoCompleteInput, FormAccordion, TextInput } from "@prime-fresh/ui_shared";
 import { useFormikContext } from "formik";
 
@@ -11,7 +11,7 @@ type FromLocationProps = {
 };
 
 export const FromLocation: FC<FromLocationProps> = memo(({ locations }) => {
-    const { values, setFieldValue, handleChange } = useFormikContext<PostDeliveryChallan>();
+    const { values, handleChange } = useFormikContext<PostDeliveryChallan>();
     const { deliveryCType, fromLocation, fromLocationInput } = values;
 
     const allLocations = useMemo(() =>
@@ -50,9 +50,6 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations }) => {
                     name="fromLocation"
                     label="From Location"
                     options={getFromLocations(deliveryCType) || []}
-                    handleChange={(event, newValue) =>
-                        setFieldValue("fromLocation", newValue ? newValue.value : "")
-                    }
                 />
             </Grid>
         );

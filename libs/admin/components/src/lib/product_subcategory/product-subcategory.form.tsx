@@ -2,7 +2,6 @@ import { Formik } from "formik";
 import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import {
     ADMIN_ROUTES,
     initValProductSubcat,
@@ -12,6 +11,7 @@ import {
     useGetProductSubcategoryById,
     useUpdateProductSubcategoryById
 } from "@prime-fresh/admin/modules";
+import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export function ProductSubcatForm() {
     const { id } = useParams<{ id: string }>();

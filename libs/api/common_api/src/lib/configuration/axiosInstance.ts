@@ -3,9 +3,9 @@ import { COM_API_URL } from "../constants/common_api_url";
 
 export const axiosInstance = axios.create({
   baseURL: COM_API_URL.BASE_URL,
-  withCredentials: true,
+  // withCredentials: true,
   headers: {
-    // 'ngrok-skip-browser-warning': 'true',
+    'ngrok-skip-browser-warning': 'true',
     'Content-Type': 'multipart/form-data',
   },
 });

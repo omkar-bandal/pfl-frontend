@@ -1,1 +1,0 @@
-export * from './use-get-vendor-or-farmer';

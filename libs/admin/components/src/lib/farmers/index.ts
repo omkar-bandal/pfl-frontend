@@ -1,2 +1,2 @@
-export * from './Farmer_Table';
-export * from './Farmer_View';
+export * from './farmer-table';
+export * from './farmer-view';

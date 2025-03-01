@@ -5,3 +5,4 @@ export * from './lib/store/slices';
 export * from './lib/store/store.core';
 export * from './lib/query_client/queryClient';
 export * from './lib/validation_schema/signin.schema';
+export * from './lib/theme';

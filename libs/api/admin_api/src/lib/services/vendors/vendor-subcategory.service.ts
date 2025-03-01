@@ -14,13 +14,18 @@ export class VendorSubcategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllVendorSubcategories():Promise<ApiBaseState<GetVendorSubcategory[]>> {
+    getAllVendorSubcategories(): Promise<ApiBaseState<GetVendorSubcategory[]>> {
         const url = adminApiUrlConstants.GET_ALL_VENDOR_SUBCAT;
         return this.get(url);
     }
 
     getVendorSubcategoryById(id: string): Promise<ApiBaseState<GetVendorSubcategory>> {
         const url = `${adminApiUrlConstants.GET_A_VENDOR_SUBCAT}/${id}`;
+        return this.get(url);
+    }
+
+    getVendorSubcategoryByQuery(query: string): Promise<ApiBaseState<GetVendorSubcategory[]>> {
+        const url = `${adminApiUrlConstants.GET_VENDOR_SUBCAT_BY_QUERY}?search=${query}`;
         return this.get(url);
     }
 

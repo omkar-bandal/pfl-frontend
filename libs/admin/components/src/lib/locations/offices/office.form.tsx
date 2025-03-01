@@ -1,34 +1,31 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, OfficeInitialValues } from "@prime-fresh/admin/modules";
-import { FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
-import { ADMIN_API_URL, useCreateOffice, useGetAOffice, useUpdateOffice } from "@prime-fresh/admin_api";
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import { appendFormData } from "@prime-fresh/shared/utils";
 import { Formik } from "formik";
+import { useNavigate, useParams } from "react-router-dom";
+import { ADMIN_ROUTES, OfficeInitialValues, useCreateOffice, useGetOfficeById, useUpdateOfficeById } from "@prime-fresh/admin/modules";
+import { FormResetBtn, FormSubmitBtn, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
+import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 
 export const OfficeForm = () => {
-    const { id, type } = useParams<{ id: string, type: string }>();
+    const { id, officeType } = useParams<{ id: string, officeType: string }>();
     const officeId = id ? id : '';
-    const officeType = type ? type : '';
+    const OfficeType = officeType ? officeType : '';
+    console.log("Office Type:", OfficeType);
     const navigate = useNavigate();
 
 
-    const { data, isLoading } = useGetAOffice(ADMIN_API_URL.GET_A_OFFICE, officeId);
-    const officeData = data ? data : OfficeInitialValues;
+    const { data, isLoading } = useGetOfficeById(officeId, OfficeType);
+    const officeData = data?.data ? data.data : OfficeInitialValues;
     const officeInitialValue = officeId ? officeData : OfficeInitialValues;
 
     //To create new office Data
-    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateOffice(`${ADMIN_API_URL.CREATE_OFFICE}/${officeType}`);
+    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateOffice(OfficeType);
 
     //To update existing office Data
-    const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateOffice(`${ADMIN_API_URL.UPDATE_OFFICE}/${officeType}`, officeId);
+    const { mutateAsync: mutatePatch, data: patchRes, error: patchError } = useUpdateOfficeById(officeId, OfficeType);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
         officeId ?
-            (mutatePatch(formData).then(() => {
+            (mutatePatch(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Office location updated successfully.");
                 setTimeout(() => {
                     navigate(`${ADMIN_ROUTES.GET_ALL_OFFICES}/${officeType}`);
@@ -36,7 +33,7 @@ export const OfficeForm = () => {
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while creating new office.");
             })) :
-            (mutatePost(formData).then(() => {
+            (mutatePost(values).then(() => {
                 toast.success(postRes ? postRes.message : "Office location created successfully.");
                 setTimeout(() => {
                     navigate(`${ADMIN_ROUTES.GET_ALL_OFFICES}/${officeType}`);
@@ -65,9 +62,7 @@ export const OfficeForm = () => {
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12}>
-                                <Typography variant='h4'>Office</Typography>
-                            </Grid>
+                            <PageTitle pagetitle="Office" />
                         </Grid>
                         <Grid container spacing={1} padding={1}>
                             <Grid item xs={12}>
@@ -101,17 +96,20 @@ export const OfficeForm = () => {
                                     <Typography variant='body2' sx={{ fontWeight: 600 }}>Contact Person Details</Typography>
                                 </Box>
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={4}>
                                 <TextInput isRequired={false} label="First Name" name="cFirstName" value={values.cFirstName} handleChange={handleChange} />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={4}>
                                 <TextInput isRequired={false} label="Middle Name" name="cMiddleName" value={values.cMiddleName} handleChange={handleChange} />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={4}>
                                 <TextInput isRequired={false} label="Last Name" name="cLastName" value={values.cLastName} handleChange={handleChange} />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={5}>
                                 <TextInput isRequired={false} label="Contact Number" name="contactNumber" value={values.contactNumber} handleChange={handleChange} />
+                            </Grid>
+                            <Grid item xs={12} md={7}>
+                                <TextInput isRequired={false} label="Email" name="officeEmail" value={values.officeEmail} handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextInput multiline maxRows={4} isRequired={false} label="Notes" name="notes" value={values.notes} handleChange={handleChange} />

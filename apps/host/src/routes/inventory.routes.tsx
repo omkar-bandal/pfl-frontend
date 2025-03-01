@@ -2,7 +2,7 @@ import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import {
     DashboardInventory,
     AQRCreateForm,
-    DumpRegisterCreateForm,
+    // DumpRegisterCreateForm,
     EODReportCreateForm,
     InwardRegisterCreateForm,
     LabourRegistrationCreateForm,
@@ -18,7 +18,7 @@ import {
     LaborAttendanceUpdateForm,
     EODReportTable,
     AQRTable,
-    DumpRegisterUpdateForm,
+    DumpRegisterForm,
     InwardRegisterUpdateForm,
     SecondSaleRegisterUpdateForm,
     VehicleDispatchRegisterUpdateForm,
@@ -130,7 +130,7 @@ export const InventoryRoutes = [
         children: [
             {
                 path: inventoryRouteConstants.CREATE_DUMP_REGISTER,
-                element: <DumpRegisterCreateForm />
+                element: <DumpRegisterForm />
             },
             {
                 path: inventoryRouteConstants.GET_ALL_DUMP_REGISTERS,
@@ -138,7 +138,7 @@ export const InventoryRoutes = [
             },
             {
                 path: `${inventoryRouteConstants.UPDATE_DUMP_REGISTER}/:id`,
-                element: <DumpRegisterUpdateForm />
+                element: <DumpRegisterForm />
             },
         ]
     },

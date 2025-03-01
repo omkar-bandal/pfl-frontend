@@ -26,7 +26,7 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
 }) => {
     const [field, meta] = useField(name);
     return (
-        <Grid container direction={alignment === "vertical" ? "column" : "row"} sx={{flex: 1, alignItems: alignment === "vertical" ? "flex-start" : "center", justifyContent: "center"}}>
+        <Grid container direction={alignment === "vertical" ? "column" : "row"} sx={{ flex: 1, alignItems: alignment === "vertical" ? "flex-start" : "center", justifyContent: "center" }}>
             <Grid item xs={12} md={alignment === "vertical" ? 12 : 2}>
                 <Label
                     isRequired={isRequired}
@@ -36,7 +36,11 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
             </Grid>
             <Grid item xs={12} md={alignment === "vertical" ? 12 : 10}>
                 <FormControl component="fieldset">
-                    <RadioGroup row name={name} value={value} onChange={handleChange} {...otherProps}>
+                    <RadioGroup row name={name} value={value} onChange={handleChange} {...otherProps} sx={{
+                        '& .MuiSvgIcon-root': {
+                            fontSize: 15,
+                        },
+                    }}>
                         {options.map((option) => (
                             <FormControlLabel
                                 {...field}
@@ -44,6 +48,7 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
                                 control={<Radio />}
                                 label={option.label}
                                 value={option.value}
+                                sx={{fontSize: 10}}
                             />
                         ))}
                     </RadioGroup>

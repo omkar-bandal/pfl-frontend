@@ -89,7 +89,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 import { Label } from "./label";
 
 type AutoCompleteOption = {
@@ -122,18 +122,19 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
   handleBlur,
 }) => {
   const [field, meta] = useField(name);
+  const {setFieldValue} = useFormikContext();
   const filter = createFilterOptions<AutoCompleteOption>();
 
   return (
     <Grid container direction="column">
-        <Grid item>
-          <Label 
+      <Grid item>
+        <Label
           isRequired={isRequired}
           isReadOnly={false}
           isError={meta.touched && Boolean(meta.error)}
           name={name}
           label={label} />
-        </Grid>
+      </Grid>
       <Grid item>
         <Autocomplete
           id={name}
@@ -144,7 +145,20 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
           getOptionLabel={(option) => typeof option !== 'string' ? option.label : option}
           isOptionEqualToValue={(option, value) => option?.value === value?.value}
           value={options.find((option) => option.value === field.value) || null}
-          onChange={handleChange}
+          onChange={(event, newValue) => {
+            if (handleChange) {
+              handleChange(event, newValue);
+            } else {
+              if (newValue !== null) {
+                if (typeof newValue === 'string')
+                  setFieldValue(name, null);
+                else {
+                  setFieldValue(name, newValue.value);
+                }
+              } else
+                setFieldValue(name, null);
+            }
+          }}
           onBlur={handleBlur}
           filterOptions={(opts, params) => {
             const filtered = filter(opts, params);

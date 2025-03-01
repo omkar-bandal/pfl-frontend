@@ -1,12 +1,12 @@
 import { CustomerCategory, CustomerTypes } from "@prime-fresh/admin_api";
 
-export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, CustomerCategory: CustomerCategory[] | undefined) => {
-    function mapToValueLabelArray<T>(arr: T[], valuekey: keyof T, labelkey: keyof T): { value: string, label: string }[] {
-        return arr.map((item) => ({
-            value: String(item[valuekey]),
-            label: String(item[labelkey]),
-        }))
-    }
+export const Empanelment = () => {
+    // function mapToValueLabelArray<T>(arr: T[], valuekey: keyof T, labelkey: keyof T): { value: string, label: string }[] {
+    //     return arr.map((item) => ({
+    //         value: String(item[valuekey]),
+    //         label: String(item[labelkey]),
+    //     }))
+    // }
     return ({
         "tabname": "Empanelment",
         "value": 0,
@@ -23,7 +23,7 @@ export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, Customer
                 "name": "customerTypes",
                 "label": "Type of Customer",
                 "type": "select",
-                "options": CustomerTypes ? mapToValueLabelArray<CustomerTypes>(CustomerTypes, 'id', 'name') : [],
+                // "options": CustomerTypes ? mapToValueLabelArray<CustomerTypes>(CustomerTypes, 'id', 'name') : [],
                 "length": 3,
                 "isRequired": true
             },
@@ -31,7 +31,7 @@ export const Empanelment = (CustomerTypes: CustomerTypes[] | undefined, Customer
                 "name": "customerCategory",
                 "label": "Category of Customer",
                 "type": "select",
-                "options": CustomerCategory ? mapToValueLabelArray<CustomerCategory>(CustomerCategory, 'id', 'name') : [],
+                // "options": CustomerCategory ? mapToValueLabelArray<CustomerCategory>(CustomerCategory, 'id', 'name') : [],
                 "length": 3,
                 "isRequired": true
             },

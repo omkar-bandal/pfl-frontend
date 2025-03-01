@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from "react";
-import { Button, Grid, IconButton, Typography } from "@mui/material";
+import { Button, Grid, IconButton } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC, useCreateDeliveryChallan } from "@prime-fresh/purchase/modules";
@@ -8,12 +8,11 @@ import { AutoCompleteInput, FormAccordion, FormPreviewBtn, FormResetBtn, FormSub
 import { DeliveryChallanPreview } from "./delivery-challan.preview";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
-import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
 import { FromLocation } from "./from-locations";
 import { ToLocation } from "./to-locations";
 import { useGetAllOffices } from "@prime-fresh/admin/modules";
-import { useGetAllGRNNums, useGetBranchesPartialData, useGetCompanyNames, useGetCustomerNames, useGetProductsPartialData, useGetUOMPartialData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { useGetAllGRNNums, useGetBranchesPartialData, useGetCompanyNames, useGetCustomerNames, useGetProductsPartialData, useGetUOMPartialData, mapToValueLabelArray, appendFormData } from "@prime-fresh/shared/modules";
 import { DeliveryChallanProducts, PostDeliveryChallan } from "@prime-fresh/purchase_api";
 
 export const DeliveryChallanForm = () => {
@@ -31,16 +30,16 @@ export const DeliveryChallanForm = () => {
 
   const { data: customerlist } = useGetCustomerNames();
   const customerList = customerlist?.data ? mapToValueLabelArray(customerlist.data, 'id', 'organisationName') : [];
-  
+
   const { data: Products } = useGetProductsPartialData();
   const allProducts = useMemo(() => Products?.data ? mapToValueLabelArray(Products.data, 'id', 'name') : [], [Products]);
-  
+
   const { data: UOMs } = useGetUOMPartialData();
   const allUOMs = useMemo(() => UOMs?.data ? mapToValueLabelArray(UOMs.data, 'id', 'unit') : [], [UOMs]);
-  
+
   const { data: Locations } = useGetBranchesPartialData();
   const allLocations = Locations?.data ? Locations.data : [];
-  
+
   const { mutateAsync: mutatePost, error, data: Res } = useCreateDeliveryChallan();
 
   const handleProductChange = (
@@ -184,10 +183,7 @@ export const DeliveryChallanForm = () => {
                     name="partyName"
                     label="Customer Name"
                     isRequired={true}
-                    options={customerList}
-                    handleChange={(e, newValue) => {
-                      newValue ? setFieldValue("partyName", newValue) : setFieldValue("partyName", "")
-                    }} />
+                    options={customerList}/>
                 </Grid>
               </>) : (
                 <Grid item xs={12} md={8}>
@@ -222,13 +218,6 @@ export const DeliveryChallanForm = () => {
                                 name={`deliveryChallanProducts.${index}.productName`}
                                 label="Product Name"
                                 options={allProducts}
-                                handleChange={(event, newValue) => {
-                                  if (newValue) {
-                                    setFieldValue(`deliveryChallanProducts.${index}.productName`, newValue);
-                                  } else {
-                                    setFieldValue(`deliveryChallanProducts.${index}.productName`, '');
-                                  }
-                                }}
                               />
                             </Grid>
                             <Grid item xs={12} md={2}>

@@ -11,8 +11,7 @@ import { PostGRN } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
 import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './grn.preview';
-import { appendFormData } from '@prime-fresh/shared/utils';
-import { useGetProductsPartialData, useGetCompanyNames, useGetUOMPartialData, useGetBranchesPartialData, mapToValueLabelArray, useGetAllDealSlipNums } from '@prime-fresh/shared/modules';
+import { useGetProductsPartialData, useGetCompanyNames, useGetUOMPartialData, useGetBranchesPartialData, mapToValueLabelArray, useGetAllDealSlipNums, appendFormData } from '@prime-fresh/shared/modules';
 import { calculateTotalAmount, getProductCount, getProductOrigin, getProductSizes, handleGRNProductsChange } from './helper-functions';
 
 export const GRNForm = () => {

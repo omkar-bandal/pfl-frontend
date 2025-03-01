@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { AppBar, Typography, IconButton, Box, Avatar, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material';
+import { AppBar, Typography, IconButton, Box, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch } from 'react-redux';
 import { authRouteConstants, isClosingState, mobileOpenState, setMobileOpen, useAppSelector } from '@prime-fresh/modules';
-import { convertInTitleCase } from '@prime-fresh/shared/utils';
 import { Logout, Settings } from '@mui/icons-material';
 import { SignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { getAccessToken, getRefreshToken } from '@prime-fresh/common_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { convertInTitleCase } from '@prime-fresh/shared/modules';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useDispatch();

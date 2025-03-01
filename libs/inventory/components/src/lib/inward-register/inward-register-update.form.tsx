@@ -1,12 +1,10 @@
 import { Add, Close } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
 import { productsDataState, setProducts, setSelectedProduct } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, GetProduct, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { arrayConstants, inventoryRouteConstants, InwardProductInitialValue, InwardRegisterInitialValue } from "@prime-fresh/inventory/modules";
 import { GetInwardRegister, INVENTORY_API_URL, PostInwardRegister, useGetAInwardRegister, useUpdateInwardRegister } from "@prime-fresh/inventory_api";
 import { useAppSelector } from "@prime-fresh/modules";
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from "@prime-fresh/ui_shared";
 import { FieldArray, Formik } from "formik";
 import React, { useCallback, useMemo } from "react";
@@ -20,21 +18,21 @@ export const InwardRegisterUpdateForm = () => {
     const initialValueInwardRegister = inwardData ? inwardData : InwardRegisterInitialValue;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-    const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-    const allUOMs = useMemo(() => mapToValueLabelArray(UOMs ? UOMs : [], 'id', 'unit'), [UOMs]);
-    const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const allLocations = useMemo(() => mapToValueLabelArray(locations ? locations : [], 'id', 'name'), [locations]);
-    const { allProducts, selectedProduct } = useAppSelector(productsDataState);
+    // const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+    // const { data: UOMs } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+    // const allUOMs = useMemo(() => mapToValueLabelArray(UOMs ? UOMs : [], 'id', 'unit'), [UOMs]);
+    // const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+    // const allLocations = useMemo(() => mapToValueLabelArray(locations ? locations : [], 'id', 'name'), [locations]);
+    // const { allProducts, selectedProduct } = useAppSelector(productsDataState);
 
-    React.useEffect(() => {
-        dispatch(setProducts(products ? products : []));
-    }, [dispatch, products, inwardData]);
+    // React.useEffect(() => {
+    //     dispatch(setProducts(products ? products : []));
+    // }, [dispatch, products, inwardData]);
 
-    const handleProductNameChange = useCallback((dataId: string) => {
-        const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
-        dispatch(setSelectedProduct(selectedProduct));
-    }, [dispatch, allProducts]);
+    // const handleProductNameChange = useCallback((dataId: string) => {
+    //     const selectedProduct: GetProduct | undefined = allProducts.find((products) => products.id === dataId);
+    //     dispatch(setSelectedProduct(selectedProduct));
+    // }, [dispatch, allProducts]);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const calculateNetWeight = useCallback((values: PostInwardRegister | GetInwardRegister, setFieldValue: (field: any, value: any | undefined) => void) => {
@@ -129,12 +127,11 @@ export const InwardRegisterUpdateForm = () => {
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={4}>
-                                    <AutoCompleteInput
+                                    {/* <AutoCompleteInput
                                         isRequired={true}
                                         name="location"
                                         label="Location"
-                                        options={allLocations}
-                                        handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />
+                                        options={allLocations}/> */}
                                 </Grid>
                                 <Grid item xs={12} md={4}>
                                     <TextInput
@@ -147,7 +144,7 @@ export const InwardRegisterUpdateForm = () => {
                                 </Grid>
                                 <VendorFarmerInfo<PostInwardRegister> />
                                 <Grid item xs={12}>
-                                    <FieldArray name="inwardProducts">
+                                    {/* <FieldArray name="inwardProducts">
                                         {({ remove, push }) => (
                                             <>
                                                 {values.inwardProducts.map((_, index) => (
@@ -179,12 +176,16 @@ export const InwardRegisterUpdateForm = () => {
                                                                 label="Product Name"
                                                                 options={mapToValueLabelArray(allProducts, 'id', 'name')}
                                                                 handleChange={(event, newValue) => {
-                                                                    if (newValue) {
-                                                                        setFieldValue(`inwardProducts.${index}.product`, newValue.value);
-                                                                    } else {
-                                                                        setFieldValue(`inwardProducts.${index}.product`, '');
+                                                                    if (newValue !== null) {
+                                                                        if (typeof newValue === 'string')
+                                                                          setFieldValue(`inwardProducts.${index}.product`, null);
+                                                                        else {
+                                                                          setFieldValue(`inwardProducts.${index}.product`, newValue.value);
+                                                                        }
+                                                                      } else
+                                                                        setFieldValue(`inwardProducts.${index}.product`, null);
                                                                     }
-                                                                }}
+                                                            }
                                                                 handleBlur={handleProductNameChange(values.inwardProducts[index].product)}
                                                             />
                                                         </Grid>
@@ -306,7 +307,7 @@ export const InwardRegisterUpdateForm = () => {
                                                 </Grid>
                                             </>
                                         )}
-                                    </FieldArray>
+                                    </FieldArray> */}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <TextInput

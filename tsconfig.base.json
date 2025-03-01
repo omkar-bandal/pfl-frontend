@@ -46,11 +46,7 @@
       "@prime-fresh/shared/masters/products": [
         "libs/shared/masters/products/src/index.ts"
       ],
-      "@prime-fresh/shared/masters/vendor": [
-        "libs/shared/masters/vendor/src/index.ts"
-      ],
       "@prime-fresh/shared/modules": ["libs/shared/modules/src/index.ts"],
-      "@prime-fresh/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@prime-fresh/ui_shared": ["libs/ui_shared/src/index.ts"]
     }
   },

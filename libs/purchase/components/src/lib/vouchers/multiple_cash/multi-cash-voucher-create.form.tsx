@@ -8,9 +8,9 @@ import { Particulars, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher } from
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
-import { appendFormData } from "@prime-fresh/shared/utils";
+import { } from '@prime-fresh/shared/modules'
 import { useNavigate } from "react-router-dom";
-import { useGetCompanyNames, useGetAllGRNNums, useGetAllDeliveryChallanNums, mapToValueLabelArray, numToWords } from "@prime-fresh/shared/modules";
+import { useGetCompanyNames, useGetAllGRNNums, useGetAllDeliveryChallanNums, numToWords, appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { ChangeEvent, useCallback } from "react";
 
 export const MultipleCashVoucherForm = () => {
@@ -28,7 +28,7 @@ export const MultipleCashVoucherForm = () => {
 
   const recalcTotal = useCallback((particulars: Particulars[]): number => {
     return particulars.reduce((acc, item) => acc + (Number(item.amt) || 0), 0);
-  },[]);
+  }, []);
 
   const handleRemove = useCallback((index: number, values: PostMCvoucher, setFieldValue: any) => {
     const updatedParticulars = values.particulars.filter((_, i) => i !== index);

@@ -3,7 +3,7 @@ import { GetVendorBankDetails, PostVendorBankDetails } from "./vendorBankDetails
 import { GetVendorSalesContact, PostVendorSalesContact } from "./vendorSalesContact.type";
 
 export type GetVendor = {
-    id: string | null;
+    id: string;
     companyName: string | null;
     category: string | null;
     subcategory: string | null;

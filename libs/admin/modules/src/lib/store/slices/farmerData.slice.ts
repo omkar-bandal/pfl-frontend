@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetAllFilteredFarmerData, GetFarmer } from "@prime-fresh/admin_api";
+import { GetFarmer } from "@prime-fresh/admin_api";
+import { FarmerPartialData } from "@prime-fresh/common_api";
 
 type farmerDataState = {
     allFarmers: GetFarmer[];
-    allFarmersFiltered: GetAllFilteredFarmerData[],
-    selectedFarmer: GetAllFilteredFarmerData | null | undefined;
+    allFarmersPartialData : FarmerPartialData[];
+    selectedFarmerPartialData : FarmerPartialData | null | undefined;
 }
 const initialState : farmerDataState = {
     allFarmers: [],
-    allFarmersFiltered: [],
-    selectedFarmer: null,
+   allFarmersPartialData: [],
+   selectedFarmerPartialData: null,
 }
 const farmerDataSlice = createSlice({
     name: 'farmerData',
@@ -19,16 +20,16 @@ const farmerDataSlice = createSlice({
         setFarmerData: (state, action: PayloadAction<GetFarmer[]>) => {
             state.allFarmers = action.payload;
         },
-        setFilteredFarmerData: (state, action: PayloadAction<GetAllFilteredFarmerData[]>) => {
-            state.allFarmersFiltered = action.payload
+        setAllFarmersPartialData: (state, action: PayloadAction<FarmerPartialData[]>) => {
+            state.allFarmersPartialData = action.payload
         },
-        setSelectedFarmer: (state, action: PayloadAction<GetAllFilteredFarmerData | null | undefined>) => {
-            state.selectedFarmer = action.payload;
+        setSelectedFarmerPartialData: (state, action: PayloadAction<FarmerPartialData | null | undefined>) => {
+            state.selectedFarmerPartialData = action.payload;
         }
     }
 })
 
-export const {setFarmerData, setFilteredFarmerData, setSelectedFarmer} = farmerDataSlice.actions;
+export const {setFarmerData, setAllFarmersPartialData, setSelectedFarmerPartialData} = farmerDataSlice.actions;
 
 export const farmersDataState = (state: RootState) => state.farmerData;
 

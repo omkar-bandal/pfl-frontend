@@ -1,14 +1,14 @@
-import { Box, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
+import { Box, Grid, IconButton, LinearProgress } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher, useGetMultiCashVoucherById, useUpdateMultiCashVoucherById } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, mapToValueLabelArray, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { GetMCvoucher, Particulars, PostMCvoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { appendFormData } from "@prime-fresh/shared/utils";
+import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { useGetAllDeliveryChallanNums, useGetAllGRNNums, useGetCompanyNames } from "@prime-fresh/shared/modules";
 
 export const MultipleCashVoucherUpdate = () => {
@@ -80,7 +80,7 @@ export const MultipleCashVoucherUpdate = () => {
                                         label="Select GRN"
                                         name="grnNo"
                                         options={allGRNNums}
-                                        value={typeof values.grnNo !== "string" ? values.grnNo.id : values.grnNo}
+                                        value={values.grnNo !== null && typeof values.grnNo !== "string" ? values.grnNo.id : values.grnNo}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -89,7 +89,7 @@ export const MultipleCashVoucherUpdate = () => {
                                         label="Select Challan"
                                         name="challanNo"
                                         options={allDCNums}
-                                        value={typeof values.challanNo !== "string" ? values.challanNo.id : values.challanNo}
+                                        value={values.challanNo !== null && typeof values.challanNo !== "string" ? values.challanNo.id : values.challanNo}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -98,7 +98,7 @@ export const MultipleCashVoucherUpdate = () => {
                                         label="Company Name"
                                         name="companyName"
                                         options={companyNames}
-                                        value={typeof values.companyName !== "string" ? values.companyName.id : values.companyName}
+                                        value={values.companyName !== null && typeof values.companyName !== "string" ? values.companyName.id : values.companyName}
                                         handleChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} md={5}>

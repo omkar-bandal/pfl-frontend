@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { useEffect } from "react";
+import { Box, Grid2 } from "@mui/material";
 import { useGridApiRef } from "@mui/x-data-grid";
-import { Add } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { BranchColumns } from "./branch.columns";
 import { ADMIN_ROUTES, useGetAllBranches } from "@prime-fresh/admin/modules";
-import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
+import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
 
 export function BranchTable() {
     const navigate = useNavigate();
@@ -29,22 +28,14 @@ export function BranchTable() {
 
     return (
         <Box sx={{ flex: 1 }}>
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            >
-                <Button
-                    variant="outlined"
-                    size="medium"
-                    startIcon={<Add />}
-                    sx={{ marginY: 2 }}
-                    fullWidth={false}
-                    onClick={() => handleCreate()}>
-                    Add Branch
-                </Button>
-                <TableToolbar apiRef={apiRef} />
-            </Stack>
+            <Grid2 container marginY={1}>
+                <Grid2 size={{ xs: 12, md: 8 }}>
+                    <PageTitle pagetitle='Branches' />
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+                    <AddNewButton handleClick={handleCreate} />
+                </Grid2>
+            </Grid2>
             <DataTable
                 apiRef={apiRef}
                 loading={isLoading}

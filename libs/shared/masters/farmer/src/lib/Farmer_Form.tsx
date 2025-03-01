@@ -4,8 +4,8 @@ import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { useCreateFarmer, ADMIN_API_URL, PostFarmer } from '@prime-fresh/admin_api';
 import { initValFarmer } from './initValFarmer';
 import { useNavigate } from 'react-router-dom';
-import { appendFormData } from "@prime-fresh/shared/utils";
 import { farmerValidationSchema } from './farmer.schema';
+import { appendFormData } from '@prime-fresh/shared/modules';
 
 export const FarmerCreateForm = () => {
   const navigate = useNavigate();

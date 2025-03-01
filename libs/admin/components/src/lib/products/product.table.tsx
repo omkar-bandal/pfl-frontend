@@ -9,7 +9,7 @@ import { ProductListCols } from "./product.columns";
 import { GetProduct, ProductPartialData } from "@prime-fresh/admin_api";
 import { axiosInstance, COM_API_URL } from "@prime-fresh/common_api";
 import { useQuery } from "@tanstack/react-query";
-import { debounce } from "@prime-fresh/shared/utils";
+import { debounce } from "@prime-fresh/shared/modules";
 
 export function ProductTable() {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export function ProductTable() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchFilteredProducts = async (query: string): Promise<ProductPartialData[]> => {
-    if (!query.trim()) return []; // Avoid unnecessary API calls
+    if (!query.trim()) return []; 
 
     try {
       const response = await axiosInstance.get(`${COM_API_URL.BASE_URL}/products/productname/?search=${query}`);
@@ -50,7 +50,6 @@ export function ProductTable() {
     }
   };
 
-  // Use React Query for API calls
   const { data: products = [], isFetching } = useQuery({
     queryKey: ['products', searchInput],
     queryFn: () => fetchFilteredProducts(searchInput),

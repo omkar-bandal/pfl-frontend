@@ -1,3 +1,5 @@
 export * from './address.schema';
+export * from './vendor.schema';
+export * from './farmer.schema';
 export * from './contactNo.schema';
 export * from './regex';

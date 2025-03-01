@@ -1,28 +1,28 @@
 import React from 'react'
 import { Add, Close } from '@mui/icons-material';
 import { Button, Grid, IconButton, Typography } from '@mui/material';
-import { ADMIN_API_URL, GetFilteredBranchData, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
+// import { ADMIN_API_URL, GetFilteredBranchData, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
 import { inventoryRouteConstants, SecondSaleProductsInitialValue, SecondSaleRegisterInitialValue } from '@prime-fresh/inventory/modules';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { FieldArray, Formik } from 'formik';
 import { INVENTORY_API_URL, PostSecondSaleRegister, useCreateSecondSaleRegister } from '@prime-fresh/inventory_api';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData } from '@prime-fresh/shared/utils';
 import { useNavigate } from 'react-router-dom';
 import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/purchase_api';
+import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/modules';
 
 export const SecondSaleRegisterCreateForm = () => {
   const navigate = useNavigate();
   const { data: dcNo } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
   const dcNumbers = React.useMemo(() => dcNo ? mapToValueLabelArray(dcNo, 'id', 'challanNo') : [], [dcNo]);
-  const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  const Locations = locations ? locations : [];
-  const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-  const allProducts = products ? products : [];
-  const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-  const allUOMs = uoms ? uoms : [];
+  // const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+  // const Locations = locations ? locations : [];
+  // const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
+  // const allProducts = products ? products : [];
+  // const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
+  // const allUOMs = uoms ? uoms : [];
   const { mutateAsync, error, data } = useCreateSecondSaleRegister(INVENTORY_API_URL.POST_SECOND_SALE_REGISTER);
+ 
   const handleSubmit = (values: PostSecondSaleRegister) => {
     console.log(values);
     const formData = new FormData();
@@ -55,12 +55,12 @@ export const SecondSaleRegisterCreateForm = () => {
               <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <AutoCompleteInput
+              {/* <AutoCompleteInput
                 isRequired={true}
                 name="location"
                 label="Location"
-                options={mapToValueLabelArray<GetFilteredBranchData>(Locations, 'id', 'name')}
-                handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />
+                options={mapToValueLabelArray<GetFilteredBranchData>(Locations, 'id', 'name')}/>
+             */}
             </Grid>
             <Grid item xs={12} md={4}>
               <SelectInput
@@ -140,28 +140,21 @@ export const SecondSaleRegisterCreateForm = () => {
                             </IconButton>}
                         </Grid>
                         <Grid item xs={12} md={4}>
-                          <AutoCompleteInput
+                          {/* <AutoCompleteInput
                             isRequired={true}
                             name={`secondSaleProducts.${index}.product`}
                             label="Product Name"
                             options={mapToValueLabelArray(allProducts, 'id', 'name')}
-                            handleChange={(event, newValue) => {
-                              if (newValue) {
-                                setFieldValue(`secondSaleProducts.${index}.product`, newValue.value);
-                              } else {
-                                setFieldValue(`secondSaleProducts.${index}.product`, '');
-                              }
-                            }}
-                          />
+                          /> */}
                         </Grid>
                         <Grid item xs={12} md={2}>
-                          <SelectInput
+                          {/* <SelectInput
                             isRequired={true}
                             label="UOM"
                             name={`secondSaleProducts.${index}.uom`}
                             options={mapToValueLabelArray(allUOMs, 'id', 'unit')}
                             value={values.secondSaleProducts[index].uom}
-                            handleChange={handleChange} />
+                            handleChange={handleChange} /> */}
                         </Grid>
                         <Grid item xs={4} md={2}>
                           <TextInput isRequired={true} label='Quantity' name={`secondSaleProducts.${index}.qty`} type='number' value={values.secondSaleProducts[index].qty}

@@ -8,7 +8,7 @@ import { axiosInstance, handleError } from "@prime-fresh/common_api";
 import { useReactToPrint } from "react-to-print";
 import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux";
-import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
+import { farmersDataState, setSelectedFarmerPartialData, setSelectedVendorPartialData, vendorsDataState } from "@prime-fresh/admin/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
@@ -39,14 +39,14 @@ export const GRNView = () => {
   useEffect(() => {
     if (grn?.source === "vendor") {
       const vendor = Vendors?.find(vendor => vendor.id === grn.selectedParty);
-      dispatch(setSelectedVendor(vendor));
+      dispatch(setSelectedVendorPartialData(vendor));
     } else {
       const farmer = Farmers?.find(farmer => farmer.id === grn?.selectedParty);
-      dispatch(setSelectedFarmer(farmer));
+      dispatch(setSelectedFarmerPartialData(farmer));
     }
   })
-  const { selectedVendor } = useAppSelector(vendorsDataState);
-  const { selectedFarmer } = useAppSelector(farmersDataState);
+  const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
+  const { selectedFarmerPartialData } = useAppSelector(farmersDataState);
 
 
   const role = localStorage.getItem('role');
@@ -178,31 +178,31 @@ export const GRNView = () => {
                     <Typography variant="subtitle1" component="span" color={textColor}>{grn?.source === "vendor" ? "Vendor" : "Farmer"} Name</Typography>
                   </Grid>
                   <Grid item xs={6} sx={{ borderBottom: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.companyName : selectedFarmer?.fullName}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendorPartialData?.companyName : selectedFarmerPartialData?.fullName}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" color={textColor}>{grn?.source === "vendor" ? "Vendor" : "Farmer"} Code</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.vendorCode : selectedFarmer?.farmerCode}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendorPartialData?.vendorCode : selectedFarmerPartialData?.farmerCode}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" color={textColor}>Contact No</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.officeContactNo : selectedFarmer?.primaryMobileNo}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendorPartialData?.officeContactNo : selectedFarmerPartialData?.primaryMobileNo}</Typography>
                   </Grid>
                   <Grid item xs={4} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" color={textColor}>Email</Typography>
                   </Grid>
                   <Grid item xs={8} sx={{ borderBottom: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendor?.officeEmail : selectedFarmer?.email}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? selectedVendorPartialData?.officeEmail : selectedFarmerPartialData?.email}</Typography>
                   </Grid>
                   <Grid item xs={3} sx={{ borderBottom: borderColor, borderRight: borderColor, paddingX: 1 }}>
                     <Typography variant="subtitle1" component="span" color={textColor}>{grn?.source === "vendor" ? "Office" : "Farm"} Address</Typography>
                   </Grid>
                   <Grid item xs={9} sx={{ borderBottom: borderColor, paddingX: 1 }}>
-                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? displayAddress(selectedVendor?.officeAddress) : displayAddress(selectedFarmer?.farmAddress)}</Typography>
+                    <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{grn?.source === "vendor" ? displayAddress(selectedVendorPartialData?.officeAddress) : displayAddress(selectedFarmerPartialData?.farmAddress)}</Typography>
                   </Grid>
                   {grn?.source === "farmer" && (
                     <>
@@ -210,7 +210,7 @@ export const GRNView = () => {
                         <Typography variant="subtitle1" component="span" color={textColor}>Residential Address</Typography>
                       </Grid>
                       <Grid item xs={9} sx={{ paddingX: 1 }}>
-                        <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmer?.residensialAddress)}</Typography>
+                        <Typography variant="subtitle1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmerPartialData?.residensialAddress)}</Typography>
                       </Grid></>
                   )}
                   <Grid item xs={12}>

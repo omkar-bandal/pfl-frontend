@@ -1,6 +1,6 @@
-import { PostLaborBankDetails, PostLaborFamilyDetails, PostLaborRegistration, PostLaborWorkExperience } from "@prime-fresh/inventory_api";
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { addressInitialValue } from "@prime-fresh/shared/utils";
+import { PostLaborBankDetails, PostLaborFamilyDetails, PostLaborRegistration, PostLaborWorkExperience } from "@prime-fresh/inventory_api";
+import { initValAddress } from "@prime-fresh/shared/modules";
 
 export const laborBankDetailsInitialValue: PostLaborBankDetails = {
     bankName: "",
@@ -32,8 +32,8 @@ export const laborRegistrationInitialValue: PostLaborRegistration = {
     laborName: "",
     nameAsPerAadhar: "",
     nameAsPerBank: "",
-    presentAddress: addressInitialValue,
-    permanentAddress: addressInitialValue,
+    presentAddress: initValAddress,
+    permanentAddress: initValAddress,
     mobileNumber: "",
     emergencyContactNo: "",
     emergencyContactName: "",

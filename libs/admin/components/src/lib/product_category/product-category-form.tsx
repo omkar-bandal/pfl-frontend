@@ -1,8 +1,9 @@
 import { Formik } from "formik";
-import { FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { ADMIN_ROUTES, initValProductCat, productCategorySchema, useCreateProductCategory, useGetAllProductClassifications, useGetProductCategoryById, useUpdateProductCategoryById } from "@prime-fresh/admin/modules";
+import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export function ProductCatForm() {
     const { id } = useParams<{ id: string }>();
@@ -25,7 +26,7 @@ export function ProductCatForm() {
             toast.success(postRes ? postRes.message : "Product category created successfully.")
             setTimeout(() => {
                 navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CAT);
-            }, 2400);
+            }, 2000);
         }).catch(() => {
             toast.error(postError ? postError.message : "Error while creating product category.");
         }))
@@ -33,7 +34,7 @@ export function ProductCatForm() {
                 toast.success(patchRes ? patchRes.message : "Product category updated successfully.");
                 setTimeout(() => {
                     navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CAT);
-                }, 2400);
+                }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating product category.");
             }))

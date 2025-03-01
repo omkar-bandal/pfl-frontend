@@ -1,25 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { FieldArray, Formik } from 'formik'
-import { ADMIN_API_URL, useGetAllProducts } from '@prime-fresh/admin_api'
 import { useDispatch } from 'react-redux'
 // import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '@prime-fresh/modules'
-import { productsDataState, setSelectedProduct } from '@prime-fresh/admin/modules'
+import { productsDataState, setSelectedProduct, useGetAllProducts } from '@prime-fresh/admin/modules'
 import { Grid, InputAdornment, Typography } from '@mui/material'
-import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/purchase_api'
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils'
-import { AQRinitalValues } from '@prime-fresh/inventory/modules'
-import { AQRParameters, INVENTORY_API_URL, PostAQR, useCreateAQR } from '@prime-fresh/inventory_api'
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { AQRinitalValues, useCreateAQR } from '@prime-fresh/inventory/modules'
+import { AQRParameters, PostAQR } from '@prime-fresh/inventory_api'
+import { mapToValueLabelArray, useGetAllDeliveryChallanNums } from '@prime-fresh/shared/modules'
 
 export const AQRCreateForm = () => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
-  const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-  const allProducts = products ? products : [];
-  const { data: dcNums } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
+  const { data: products } = useGetAllProducts();
+  const allProducts = products?.data ? products.data : [];
+  const productList = mapToValueLabelArray(allProducts, 'id', 'name');
+  const { data: dcnums } = useGetAllDeliveryChallanNums();
+  const dcNums = dcnums?.data ? mapToValueLabelArray(dcnums.data, 'id', 'challanNo') : [];
   const { selectedProduct } = useAppSelector(productsDataState);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,11 +50,9 @@ export const AQRCreateForm = () => {
     setFieldValue("totalQty", totalQty);
     setFieldValue("totalpercent", totalPercent);
   };
-  const { mutateAsync, error, data } = useCreateAQR(INVENTORY_API_URL.POST_AQR);
+  const { mutateAsync, error, data } = useCreateAQR();
   const handleSubmit = (values: PostAQR) => {
-    const formData = new FormData();
-    appendFormData(formData, values);
-    mutateAsync(formData).then(() => {
+    mutateAsync(values).then(() => {
       toast.success(data ? data.message : "AQR created successfully.")
     }).catch(() => {
       toast.error(error ? error.message : "Error while creating AQR.")
@@ -71,12 +68,8 @@ export const AQRCreateForm = () => {
       {({ values, handleChange, handleReset, handleSubmit, setFieldValue, isSubmitting }) => (
         <form onSubmit={handleSubmit}>
           <Grid container rowSpacing={1} columnSpacing={1} padding={1}>
-            <Grid item xs={12} md={6}>
-              <Typography variant='h4' component="div">Arrival QC Report</Typography>
-            </Grid>
-            <Grid item xs={12} md={6} sx={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
-              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-              <FormResetBtn label="Reset" handleReset={handleReset} />
+            <Grid item xs={12} marginBottom={2}>
+              <PageTitle pagetitle='Goods Received Note' />
             </Grid>
             <Grid item xs={12} md={3}>
               <SelectInput
@@ -84,7 +77,7 @@ export const AQRCreateForm = () => {
                 label="Challan Number"
                 name="dcNo"
                 value={values.dcNo}
-                options={mapToValueLabelArray(dcNums ? dcNums : [], 'id', 'challanNo')}
+                options={dcNums}
                 handleChange={handleChange} />
             </Grid>
             <Grid item xs={12} md={3}>
@@ -137,13 +130,16 @@ export const AQRCreateForm = () => {
                 isRequired={true}
                 name="product"
                 label="Product Name"
-                options={mapToValueLabelArray(allProducts, 'id', 'name')}
+                options={productList}
                 handleChange={(event, newValue) => {
-                  if (newValue) {
-                    setFieldValue("product", newValue.value);
-                  } else {
-                    setFieldValue("product", '');
-                  }
+                  if (newValue !== null) {
+                    if (typeof newValue === 'string')
+                      setFieldValue("product", null);
+                    else {
+                      setFieldValue("product", newValue.value);
+                    }
+                  } else
+                    setFieldValue("product", null);
                 }}
                 handleBlur={() => handleProductNameChange(values.product, setFieldValue)}
               />
@@ -271,6 +267,10 @@ export const AQRCreateForm = () => {
                 name="remark"
                 value={values.remark}
                 handleChange={handleChange} />
+            </Grid>
+            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
+              <FormResetBtn label="Reset" handleReset={handleReset} />
             </Grid>
           </Grid>
         </form>

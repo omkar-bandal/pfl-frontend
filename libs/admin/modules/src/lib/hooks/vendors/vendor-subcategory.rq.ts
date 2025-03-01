@@ -42,3 +42,12 @@ export function useGetVendorSubcategoryById(id: string):
         enabled: !!id,
     });
 }
+
+export function useGetVendorSubcategoriesByQuery(query: string):
+    UseQueryResult<ApiBaseState<GetVendorSubcategory[]>, ErrorModel> {
+    return useQuery<ApiBaseState<GetVendorSubcategory[]>, ErrorModel>({
+        queryKey: ['get-vendor-subcategories-by-query'],
+        queryFn: () => VendorSubcategoryService.getInstance().getVendorSubcategoryByQuery(query),
+        enabled: !!query,
+    });
+}

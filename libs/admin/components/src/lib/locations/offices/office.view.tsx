@@ -1,13 +1,14 @@
 // import { CircularProgress } from "@mui/material"
 import { Box, LinearProgress } from "@mui/material";
-import { ADMIN_API_URL, useGetAOffice } from "@prime-fresh/admin_api";
+import { useGetOfficeById } from "@prime-fresh/admin/modules";
 import { DataDisplay } from "@prime-fresh/ui_shared";
 import { useParams } from "react-router-dom";
 
 export const OfficeView = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, officeType } = useParams<{ id: string, officeType: string }>();
   const officeId = id ? id : '';
-  const { data: Office, isLoading } = useGetAOffice(ADMIN_API_URL.GET_A_OFFICE, officeId);
+  const officetype = officeType ? officeType : '';
+  const { data: Office, isLoading } = useGetOfficeById(officeId, officetype);
   const office = Office ? Office : {};
 
   return (

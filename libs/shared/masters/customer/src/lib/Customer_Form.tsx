@@ -1,12 +1,12 @@
-import { ADMIN_ROUTES, customersState, formContainerState } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, PostCustomer, useCreateCustomer, useUpdateCustomer } from "@prime-fresh/admin_api";
+import { ADMIN_ROUTES, customersState, formContainerState, useCreateCustomer, useUpdateCustomerById } from "@prime-fresh/admin/modules";
+import { ADMIN_API_URL, PostCustomer } from "@prime-fresh/admin_api";
 import {  useAppSelector } from "@prime-fresh/modules";
 import { CustomerFormFields } from "./customerFormField";
 import { customerValidationSchema } from "./customer.schema";
 import { DynamicForm, toast } from '@prime-fresh/ui_shared';
 import { initValCustomer } from "./initValCustomer";
-import { appendFormData } from "@prime-fresh/shared/utils";
 import { useNavigate } from "react-router-dom";
+import { appendFormData } from "@prime-fresh/shared/modules";
 
 export const CustomerForm = () => {
     const navigate = useNavigate();
@@ -15,9 +15,9 @@ export const CustomerForm = () => {
 
     const Customers = useAppSelector(customersState);
 
-    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateCustomer(ADMIN_API_URL.POST_CUSTOMER);
+    const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateCustomer();
 
-    const { mutate: mutatePatch } = useUpdateCustomer(ADMIN_API_URL.UPDATE_CUSTOMER, dataId);
+    const { mutate: mutatePatch } = useUpdateCustomerById(dataId);
 
     const CustomerInitValue = openFor === 'update' && dataId ? Customers.find(item => item.id === dataId) : initValCustomer;
 

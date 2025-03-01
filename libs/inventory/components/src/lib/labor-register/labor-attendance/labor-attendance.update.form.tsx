@@ -6,9 +6,8 @@ import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@pri
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { Add, Remove } from '@mui/icons-material';
 import { INVENTORY_API_URL, useGetALaborAttendance, useUpdateLaborAttendance } from '@prime-fresh/inventory_api';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData } from '@prime-fresh/shared/utils';
 import { useNavigate, useParams } from 'react-router-dom';
+import { appendFormData } from '@prime-fresh/shared/modules';
 
 export const LaborAttendanceUpdateForm = () => {
     const navigate = useNavigate();

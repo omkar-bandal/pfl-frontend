@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetAllFilteredVendorData, GetVendor } from "@prime-fresh/admin_api";
+import { GetVendor } from "@prime-fresh/admin_api";
+import { VendorPartialData } from "@prime-fresh/common_api";
 
 type vendorDataState = {
     allVendors: GetVendor[] | [];
-    allVendorsFiltered: GetAllFilteredVendorData[];
-    selectedVendor: GetAllFilteredVendorData | null | undefined;
+    allVendorssPartialData : VendorPartialData[];
+    selectedVendorPartialData : VendorPartialData | null | undefined;
 }
 const initialState: vendorDataState = {
     allVendors: [],
-    allVendorsFiltered: [],
-    selectedVendor: null,
+    allVendorssPartialData: [],
+   selectedVendorPartialData: null,
 }
 const vendorDataSlice = createSlice({
     name: 'vendorData',
@@ -19,16 +20,16 @@ const vendorDataSlice = createSlice({
         setVendorData: (state, action: PayloadAction<GetVendor[]>) => {
             state.allVendors = action.payload;
         },
-        setFilteredVendorData: (state, action: PayloadAction<GetAllFilteredVendorData[]>) => {
-            state.allVendorsFiltered = action.payload
+        setAllVendorsPartialData: (state, action: PayloadAction<VendorPartialData[]>) => {
+            state.allVendorssPartialData = action.payload
         },
-        setSelectedVendor: (state, action: PayloadAction<GetAllFilteredVendorData | null | undefined>) =>{
-            state.selectedVendor = action.payload;
+        setSelectedVendorPartialData: (state, action: PayloadAction<VendorPartialData | null | undefined>) => {
+            state.selectedVendorPartialData = action.payload;
         }
     }
 })
 
-export const { setVendorData, setFilteredVendorData, setSelectedVendor } = vendorDataSlice.actions;
+export const { setVendorData, setAllVendorsPartialData, setSelectedVendorPartialData } = vendorDataSlice.actions;
 
 export const vendorsDataState = (state: RootState) => state.vendorData;
 

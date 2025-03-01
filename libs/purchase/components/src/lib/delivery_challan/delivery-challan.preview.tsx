@@ -80,7 +80,7 @@ export const DeliveryChallanPreview = ( ) => {
                                     key={index}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.productName}</TableCell>
+                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{typeof product.productName !== "string"? product.productName?.name : product.productName}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.quantity}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
                                     <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amount}</TableCell>
@@ -92,7 +92,7 @@ export const DeliveryChallanPreview = ( ) => {
             </Grid>
             <Grid item>
                 <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Total Amount : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.totAmt}
+                    Total Amount : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.totalAmt}
                     </Typography>
                 </Typography>
             </Grid>

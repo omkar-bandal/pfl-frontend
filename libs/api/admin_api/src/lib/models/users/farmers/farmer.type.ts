@@ -2,40 +2,39 @@ import { Address } from "@prime-fresh/common_api";
 import { PostCrops } from "./crop.type";
 
 export type PostFarmer = {
-    //Farmer Details
-    farmerfName: string,
-    farmermName: string,
-    farmerlName: string,
+    farmerfName: string | null,
+    farmermName: string | null,
+    farmerlName: string | null,
     residensialAddress: Address,
-    primaryMobileNo: string,
-    secondaryMobileNo: string,
-    email: string,
-    gender: string,
-    dob: string,
-    idProofNo: string;
+    primaryMobileNo: string | null,
+    secondaryMobileNo: string | null,
+    email: string | null,
+    gender: string | null,
+    dob: string | null,
+    idProofNo: string | null;
     idProofCopy: File | null;
-    howDoYouSell: string;
+    howDoYouSell: string | null;
     //Farm Details
-    landHoldingStatus: string;
-    landStatus: string;
+    landHoldingStatus: string | null;
+    landStatus: string | null;
     farmAddress: Address;
-    totalLandArea: number;
-    cultivationArea: number;
-    sevenTwelveNo: string;
-    sevenTwelveCopy: string;
+    totalLandArea: number | null;
+    cultivationArea: number | null;
+    sevenTwelveNo: string | null;
+    sevenTwelveCopy: string | null;
     farmerPhoto: File | null;
     farmPhoto: File | null;
     crops: PostCrops[];
-    dateOfVisit: string;
-    registerBy: string;
-    registerDate: string;
+    dateOfVisit: string | null;
+    registerBy: string | null;
+    registerDate: string | null;
 }
 
 export type GetFarmer = {
     id: string,
-    farmerCode: string;
-    farmerGrading: string;
-    farmerType: string;
+    farmerCode: string,
+    farmerGrading: string,
+    farmerType: string,
 } & PostFarmer;
 
 export type GetAllFilteredFarmerData = {

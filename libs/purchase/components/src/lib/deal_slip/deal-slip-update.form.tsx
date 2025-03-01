@@ -7,7 +7,7 @@ import { displayAddress } from "@prime-fresh/purchase/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
+import { farmersDataState, setSelectedFarmerPartialData, setSelectedVendorPartialData, vendorsDataState } from "@prime-fresh/admin/modules";
 import { mapToValueLabelArray, useGetFarmersPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
 export const DealSlipUpdate = () => {
@@ -30,8 +30,8 @@ export const DealSlipUpdate = () => {
     const { data: farmers } = useGetFarmersPartialData();
     const { data: vendors } = useGetVendorsPartialData();
     const { rfpa: allrfpa, selectedRFPA } = useAppSelector(rfpaDataState);
-    const { selectedVendor } = useAppSelector(vendorsDataState);
-    const { selectedFarmer } = useAppSelector(farmersDataState);
+    const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
+    const { selectedFarmerPartialData } = useAppSelector(farmersDataState);
 
     React.useEffect(() => {
         const rfpaData = allrfpas?.data ? allrfpas.data : [];
@@ -43,8 +43,8 @@ export const DealSlipUpdate = () => {
             dispatch(setRFPAData([]))
         );
         dealSlipRFPA?.source === "vendor" ?
-            dispatch(setSelectedVendor(vendors?.data && vendors.data.find(vendor => vendor.id === dealSlipRFPA?.selectedParty))) :
-            dispatch(setSelectedFarmer(farmers?.data && farmers.data.find(farmer => farmer.id === dealSlipRFPA?.selectedParty)))
+            dispatch(setSelectedVendorPartialData(vendors?.data && vendors.data.find(vendor => vendor.id === dealSlipRFPA?.selectedParty))) :
+            dispatch(setSelectedFarmerPartialData(farmers?.data && farmers.data.find(farmer => farmer.id === dealSlipRFPA?.selectedParty)))
     }, [allrfpas, dispatch, dealSlipData, dealSlipRFPA, vendors, farmers]);
 
 
@@ -179,7 +179,7 @@ export const DealSlipUpdate = () => {
                                     isRequired={false}
                                     name="selectedParty"
                                     label={selectedRFPA?.source === "vendor" ? "Vendor Company Name" : "Farmer Name"}
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendor?.companyName : `${selectedFarmer?.fullName}`}
+                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.companyName : `${selectedFarmerPartialData?.fullName}`}
                                     isReadOnly={true} />
                             </Grid>
                             <Grid item xs={12} md={4}>
@@ -187,7 +187,7 @@ export const DealSlipUpdate = () => {
                                     isRequired={false}
                                     name="code"
                                     label={`${selectedRFPA?.source === "vendor" ? "Vendor" : "Farmer"} Code`}
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendor?.vendorCode : selectedFarmer?.farmerCode}
+                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.vendorCode : selectedFarmerPartialData?.farmerCode}
                                     isReadOnly={true}
                                 />
                             </Grid>
@@ -197,7 +197,7 @@ export const DealSlipUpdate = () => {
                                         isRequired={false}
                                         label="Contact Person"
                                         name="contactperson"
-                                        value={`${selectedVendor?.contactPersonName}`}
+                                        value={`${selectedVendorPartialData?.contactPersonName}`}
                                         isReadOnly={true}
                                     />
                                 </Grid>}
@@ -206,7 +206,7 @@ export const DealSlipUpdate = () => {
                                     isRequired={false}
                                     name="address"
                                     label={`${selectedRFPA?.source === "vendor" ? "Company" : "Residential"} Address`}
-                                    value={displayAddress(selectedRFPA?.source === "vendor" ? selectedVendor?.officeAddress : selectedFarmer?.residensialAddress)}
+                                    value={displayAddress(selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.officeAddress : selectedFarmerPartialData?.residensialAddress)}
                                     isReadOnly={true}
                                 />
                             </Grid>
@@ -215,7 +215,7 @@ export const DealSlipUpdate = () => {
                                     isRequired={false}
                                     name="email"
                                     label="Email"
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendor?.officeEmail : selectedFarmer?.email}
+                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.officeEmail : selectedFarmerPartialData?.email}
                                     isReadOnly={true}
                                 />
                             </Grid>
@@ -224,7 +224,7 @@ export const DealSlipUpdate = () => {
                                     isRequired={false}
                                     name="contactno"
                                     label="Contact No"
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendor?.officeContactNo : selectedFarmer?.primaryMobileNo}
+                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.officeContactNo : selectedFarmerPartialData?.primaryMobileNo}
                                     isReadOnly={true}
                                 />
                             </Grid>

@@ -24,9 +24,13 @@ export const PURCHASE_ARRAYS = {
         { value: "dc-dc stock transfer", label: "DC-DC Stock Transfer" },
         { value: "other", label: "Other" }, 
     ],
-    grnType: [
+    locationType: [
         {value: "cc", label: "CC"},
         {value: "dc", label: "DC"}
+    ],
+    grnType: [
+        {value: "purchase", label: "Purchase"},
+        {value: "transfer", label: "Transfer"}
     ],
     purchaseType: [
         {value: "fixed price sales", label: "Fixed Price Sales"}, 

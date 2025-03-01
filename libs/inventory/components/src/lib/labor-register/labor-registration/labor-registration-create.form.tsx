@@ -5,15 +5,13 @@ import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { Add, Close } from '@mui/icons-material';
 import { INVENTORY_API_URL, PostLaborRegistration, useCreateLaborData } from '@prime-fresh/inventory_api';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils';
+import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/modules';
 import { useNavigate } from 'react-router-dom';
-import { ADMIN_API_URL, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
 
 export const LabourRegistrationCreateForm = () => {
   const navigate = useNavigate();
-  const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-  const allLocations = locations? mapToValueLabelArray(locations || [], 'id', 'name') : [];
+  // const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+  // const allLocations = locations ? mapToValueLabelArray(locations || [], 'id', 'name') : [];
 
   const { mutateAsync, error, data } = useCreateLaborData(INVENTORY_API_URL.POST_LABOR_REGISTRATION);
 
@@ -62,12 +60,11 @@ export const LabourRegistrationCreateForm = () => {
                 handleChange={handleChange} />
             </Grid>
             <Grid item xs={12} md={5}>
-              <AutoCompleteInput
+              {/* <AutoCompleteInput
                 isRequired={true}
                 name="siteName"
                 label="Site Name"
-                options={allLocations}
-                handleChange={(event, newValue) => newValue ? setFieldValue('siteName', newValue.value) : setFieldValue('siteName', '')} />
+                options={allLocations} /> */}
             </Grid>
             <Grid item xs={12} md={2}>
               <SelectInput

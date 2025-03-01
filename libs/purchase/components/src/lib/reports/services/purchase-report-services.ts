@@ -11,7 +11,7 @@ export class PurchaseReportServices extends BaseService{
     }
 
     getPurchaseReportData(filterParams: Record<string, any> | null):Promise<GRNFilterData> {
-        const url = buildUrl(filterParams, "/grns/all/getreports")
+        const url = buildUrl(filterParams, "/api/procurment/all/getreports")
         return this.get(url);
     }
 }

@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 import { FieldArray, Formik } from 'formik'
 import { arrayConstants, inventoryRouteConstants, laborAttendanceInitialValue, laborAttendanceSchema, laborsDetailsInitialValue } from '@prime-fresh/inventory/modules'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { Add, Remove } from '@mui/icons-material';
 import { INVENTORY_API_URL, PostLaborDetails, useCreateLaborAttendance, useCreateTempLaborData, useGetAllLaborData, useGetAllTempLaborData } from '@prime-fresh/inventory_api';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData } from '@prime-fresh/shared/utils';
+import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/modules';
 import { useNavigate } from 'react-router-dom';
-import { ADMIN_API_URL, GetFilteredBranchData, useGetAllFilteredBranches } from '@prime-fresh/admin_api';
 
 export const LaborAttendanceForm = () => {
     const [open, setOpen] = useState<boolean>();
@@ -20,8 +18,8 @@ export const LaborAttendanceForm = () => {
     const permanentLabors = pLabors ? mapToValueLabelArray(pLabors, 'id', 'laborName') : [];
     const { data: tLabors } = useGetAllTempLaborData(INVENTORY_API_URL.GET_ALL_TEMP_LABORS);
     const temporaryLabors = tLabors ? mapToValueLabelArray(tLabors, 'id', 'laborName') : [];
-    const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const Locations = locations ? mapToValueLabelArray<GetFilteredBranchData>(locations, 'id', 'name') : [];
+    // const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
+    // const Locations = locations ? mapToValueLabelArray<GetFilteredBranchData>(locations, 'id', 'name') : [];
     const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateLaborAttendance(INVENTORY_API_URL.POST_LABOR_ATTENDANCE);
     const { mutateAsync, error } = useCreateTempLaborData(INVENTORY_API_URL.POST_A_TEMP_LABOR);
 
@@ -77,12 +75,11 @@ export const LaborAttendanceForm = () => {
                                     handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <AutoCompleteInput
+                                {/* <AutoCompleteInput
                                     isRequired={true}
                                     name="location"
                                     label="Location"
-                                    options={Locations}
-                                    handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />
+                                    options={Locations} /> */}
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <TextInput
@@ -114,21 +111,6 @@ export const LaborAttendanceForm = () => {
                                                             label="Labor Name"
                                                             name={`labourDetails.${index}.labourName`}
                                                             options={values.labourDetails[index].laborType === "parmanent" ? permanentLabors : temporaryLabors}
-                                                           handleChange={(event, newValue) => {
-                                                                if (newValue) {
-                                                                    if (newValue.label.startsWith('Add ')) {
-                                                                        if (values.labourDetails[index].laborType === "parmanent") {
-                                                                            navigate(inventoryRouteConstants.CREATE_LABOUR_REGISTER);
-                                                                        } else {
-                                                                            setOpen(true);
-                                                                        }
-                                                                    } else {
-                                                                        setFieldValue(`labourDetails.${index}.labourName`, newValue.value);
-                                                                    }
-                                                                } else {
-                                                                    setFieldValue(`labourDetails.${index}.labourName`, '');
-                                                                }
-                                                            }}
                                                         />
                                                     </Grid>
                                                     <Grid item xs={12} md={2}>

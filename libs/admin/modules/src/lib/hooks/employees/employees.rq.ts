@@ -36,9 +36,10 @@ export function useGetAllEmployees():
 
 export function useGetEmployeeById(id: string):
     UseQueryResult<ApiBaseState<GetEmployee>, ErrorModel> {
+        const employeeId = id.length > 1 ? id : null;
     return useQuery<ApiBaseState<GetEmployee>, ErrorModel>({
-        queryKey: ['get-employee-by-id'],
+        queryKey: ['get-employee-by-id', employeeId],
         queryFn: () => EmployeesService.getInstance().getEmployeeById(id),
-        enabled: !!id,
+        enabled: !!employeeId,
     });
 }

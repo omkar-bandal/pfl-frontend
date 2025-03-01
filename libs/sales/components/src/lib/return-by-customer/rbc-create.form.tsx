@@ -1,17 +1,17 @@
+import React from "react";
 import { Add, Close } from "@mui/icons-material";
 import { Grid, IconButton, Typography } from "@mui/material";
-import { ADMIN_API_URL, useGetAllProducts, useGetAllUOMs } from "@prime-fresh/admin_api";
 import { PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
 import { rbcInitialValues, returnedProductsInitialValues } from "@prime-fresh/sales/modules";
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, mapToValueLabelArray, SelectInput, TextInput } from "@prime-fresh/ui_shared";
+import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { FieldArray, Formik } from "formik";
-import React from "react";
+import { mapToValueLabelArray, useGetProductsPartialData, useGetUOMPartialData } from "@prime-fresh/shared/modules";
 
 export const RBCCreateForm = () => {
-    const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-    const allProducts = products ? mapToValueLabelArray(products, 'id', 'name') : [];
-    const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-    const allUOMs = React.useMemo(() => mapToValueLabelArray(uoms || [], 'id', 'unit'), [uoms]);
+    const { data: products } = useGetProductsPartialData();
+    const allProducts = products?.data ? mapToValueLabelArray(products.data, 'id', 'name') : [];
+    const { data: uoms } = useGetUOMPartialData();
+    const allUOMs = uoms?.data? mapToValueLabelArray(uoms.data || [], 'id', 'unit'): [];
 
     return (
         <Formik
@@ -71,13 +71,7 @@ export const RBCCreateForm = () => {
                                                         name={`returnedProducts.${index}.productName`}
                                                         label="Product Name"
                                                         options={allProducts}
-                                                        handleChange={(event, newValue) => {
-                                                            if (newValue) {
-                                                                setFieldValue(`returnedProducts.${index}.productName`, newValue.value);
-                                                            } else {
-                                                                setFieldValue(`returnedProducts.${index}.productName`, '');
-                                                            }
-                                                        }} />
+                                                        />
                                                 </Grid>
                                                 <Grid item xs={12} md={2}>
                                                     <SelectInput

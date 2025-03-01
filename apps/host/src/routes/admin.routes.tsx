@@ -35,7 +35,7 @@ import {
     BranchView
 } from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
-import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
+import { VendorRegistrationForm } from "@prime-fresh/shared/components";
 
 export const AdminRoutes = [
     {
@@ -52,6 +52,10 @@ export const AdminRoutes = [
             },
             {
                 path: ADMIN_ROUTES.CREATE_EMPLOYEE,
+                element: <EmployeeForm />,
+            },
+            {
+                path: `${ADMIN_ROUTES.EDIT_EMPLOYEE}/:id`,
                 element: <EmployeeForm />,
             },
             {
@@ -76,7 +80,7 @@ export const AdminRoutes = [
             },
             {
                 path: `${ADMIN_ROUTES.EDIT_VENDOR}/:id`,
-                element: <VendorCreateForm />,
+                element: <VendorRegistrationForm />,
             },
             {
                 path: ADMIN_ROUTES.CREATE_VENDORS_CAT,
@@ -108,7 +112,7 @@ export const AdminRoutes = [
             },
             // {
             //     path: ADMIN_ROUTES.CREATE_FARMER,
-            //     element: <CreateFarmer />,
+            //     element: <FarmerRegistrationForm />,
             // },
             {
                 path: `${ADMIN_ROUTES.VIEW_FARMER}/:id`,

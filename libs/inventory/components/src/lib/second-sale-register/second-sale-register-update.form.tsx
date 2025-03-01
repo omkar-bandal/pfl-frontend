@@ -1,41 +1,38 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useMemo } from "react";
 import { Add, Close } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
-import { ADMIN_API_URL, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from "@prime-fresh/admin_api";
-import { inventoryRouteConstants, SecondSaleProductsInitialValue, SecondSaleRegisterInitialValue } from "@prime-fresh/inventory/modules";
-import { INVENTORY_API_URL, useGetASecondSaleRegister, useUpdateSecondSaleRegister } from "@prime-fresh/inventory_api";
+import { inventoryRouteConstants, SecondSaleProductsInitialValue, SecondSaleRegisterInitialValue, useGetSecondSaleRegisterById, useUpdateSecondSaleRegister } from "@prime-fresh/inventory/modules";
 import { PURCHASE_ARRAYS } from "@prime-fresh/purchase/modules";
-import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from "@prime-fresh/purchase_api";
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/utils";
 import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { FieldArray, Formik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
+import { mapToValueLabelArray, useGetAllDeliveryChallanNums, useGetBranchesPartialData, useGetProductsPartialData, useGetUOMPartialData } from "@prime-fresh/shared/modules";
 
 export const SecondSaleRegisterUpdateForm = () => {
     const { id } = useParams<{ id: string }>();
     const Id = id ? id : "";
-    const { data: secondSale, isLoading } = useGetASecondSaleRegister(INVENTORY_API_URL.GET_A_SECOND_SALE_REGISTER, Id);
-    const initialValueSecondSale = secondSale ? secondSale : SecondSaleRegisterInitialValue;
+    const { data: secondSale, isLoading } = useGetSecondSaleRegisterById(Id);
+    const initialValueSecondSale = secondSale?.data ? secondSale.data : SecondSaleRegisterInitialValue;
 
     const navigate = useNavigate();
-    const { data: dcNo } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-    const dcNumbers = React.useMemo(() => dcNo ? mapToValueLabelArray(dcNo, 'id', 'challanNo') : [], [dcNo]);
-    const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
-    const allLocations = React.useMemo(() => locations ? mapToValueLabelArray(locations, 'id', 'name') : [], [locations]);
-    const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
-    const allProducts = React.useMemo(() => products ? mapToValueLabelArray(products, 'id', 'name') : [], [products]);
-    const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
-    const allUOMs = uoms ? uoms : [];
 
-    const { mutateAsync, error, data } = useUpdateSecondSaleRegister(INVENTORY_API_URL.UPDATE_SECOND_SALE_REGISTER, Id);
+    const { data: dcNo } = useGetAllDeliveryChallanNums();
+    const dcNumbers = useMemo(() => dcNo?.data ? mapToValueLabelArray(dcNo.data, 'id', 'challanNo') : [], [dcNo]);
+    
+    const { data: uoms } = useGetUOMPartialData();
+    const allUOMs = useMemo(() => uoms?.data ? mapToValueLabelArray(uoms.data, 'id', 'unit') : [], [uoms]);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: products } = useGetProductsPartialData();
+    const allProducts = useMemo(() => products?.data ? mapToValueLabelArray(products?.data, 'id', 'name') : [], [products]);
+
+    const { data: locations } = useGetBranchesPartialData();
+    const allLocations = useMemo(() => locations?.data ? mapToValueLabelArray(locations?.data, 'id', 'name') : [], [locations]);
+
+    const { mutateAsync, error, data } = useUpdateSecondSaleRegister(Id);
+
     const handleUpdate = (values: any) => {
-        console.log(values);
-        const formData = new FormData();
-        appendFormData(formData, values);
-        mutateAsync(formData).then(() => {
+        mutateAsync(values).then(() => {
             toast.success(data ? data.message : "Second Sale Register Created Successfully.");
             setTimeout(() => {
                 navigate(inventoryRouteConstants.GET_ALL_SECOND_SALE_REGISTER);
@@ -72,8 +69,7 @@ export const SecondSaleRegisterUpdateForm = () => {
                                     isRequired={true}
                                     name="location"
                                     label="Location"
-                                    options={allLocations}
-                                    handleChange={(event, newValue) => newValue ? setFieldValue('location', newValue.value) : setFieldValue('location', '')} />
+                                    options={allLocations}/>
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <SelectInput
@@ -157,17 +153,14 @@ export const SecondSaleRegisterUpdateForm = () => {
                                                             isRequired={true}
                                                             name={`secondSaleProducts.${index}.product`}
                                                             label="Product Name"
-                                                            options={allProducts}
-                                                            handleChange={(event, newValue) => newValue ?
-                                                                setFieldValue(`secondSaleProducts.${index}.product`, newValue.value) :
-                                                                setFieldValue(`secondSaleProducts.${index}.product`, '')} />
+                                                            options={allProducts}/>
                                                     </Grid>
                                                     <Grid item xs={12} md={2}>
                                                         <SelectInput
                                                             isRequired={true}
                                                             label="UOM"
                                                             name={`secondSaleProducts.${index}.uom`}
-                                                            options={mapToValueLabelArray(allUOMs, 'id', 'unit')}
+                                                            options={allUOMs}
                                                             value={values.secondSaleProducts[index].uom}
                                                             handleChange={handleChange} />
                                                     </Grid>

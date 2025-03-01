@@ -1,0 +1,16 @@
+import { Grid2 } from '@mui/material'
+import { ImageUpload } from '@prime-fresh/ui_shared'
+import React from 'react'
+
+export const FarmerImageSection = () => {
+    return (
+        <Grid2 container spacing={1} padding={1}>
+            <Grid2 size={{ xs: 12 }}>
+                <ImageUpload isRequired={false} name="farmerPhoto" label="Farmer Photo" />
+            </Grid2>
+            <Grid2 size={{ xs: 12 }}>
+                <ImageUpload isRequired={false} name="farmPhoto" label="Farm Photo" />
+            </Grid2>
+        </Grid2>
+    )
+}

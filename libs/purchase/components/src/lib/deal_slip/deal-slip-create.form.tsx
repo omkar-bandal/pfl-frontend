@@ -7,7 +7,7 @@ import { PostDealSlip } from "@prime-fresh/purchase_api";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate } from "react-router-dom";
 import { FarmerReadOnlyFields, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
-import { farmersDataState, setSelectedFarmer, setSelectedVendor, vendorsDataState } from "@prime-fresh/admin/modules";
+import { farmersDataState, setSelectedFarmerPartialData, setSelectedVendorPartialData, vendorsDataState } from "@prime-fresh/admin/modules";
 import { mapToValueLabelArray, useGetAllRFPANums, useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
 export const DealSlipForm = () => {
@@ -27,8 +27,8 @@ export const DealSlipForm = () => {
     const UOMs = uom?.data ? uom.data : [];
     const { data: Locations } = useGetBranchesPartialData();
     const allPurchaseLocation = Locations?.data ? Locations.data : [];
-    const { selectedFarmer } = useAppSelector(farmersDataState);
-    const { selectedVendor } = useAppSelector(vendorsDataState);
+    const { selectedFarmerPartialData } = useAppSelector(farmersDataState);
+    const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
 
 
     const handleRFPANoChange = useCallback((value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
@@ -45,9 +45,9 @@ export const DealSlipForm = () => {
 
     useEffect(() => {
         rfpa?.source === "vendor" ?
-            dispatch(setSelectedVendor(Vendors?.data?.find(vendor => vendor.id === rfpa?.selectedParty))) :
-            dispatch(setSelectedFarmer(Farmers?.data?.find(farmer => farmer.id === rfpa?.selectedParty)));
-    }, [rfpa, dispatch, Farmers?.data, Vendors?.data, selectedFarmer, selectedVendor])
+            dispatch(setSelectedVendorPartialData(Vendors?.data?.find(vendor => vendor.id === rfpa?.selectedParty))) :
+            dispatch(setSelectedFarmerPartialData(Farmers?.data?.find(farmer => farmer.id === rfpa?.selectedParty)));
+    }, [rfpa, dispatch, Farmers?.data, Vendors?.data, selectedFarmerPartialData, selectedVendorPartialData])
 
     const { mutateAsync: mutatePost, error, data: Res } = useCreateDealSlip();
 
@@ -159,10 +159,10 @@ export const DealSlipForm = () => {
                         </Grid>
                         {rfpa?.source === "vendor" ?
                             (<Grid item xs={12}>
-                                <TextInput isRequired={false} name="companyName" label="Vendor Company Name" value={selectedVendor?.companyName} isReadOnly={true} />
+                                <TextInput isRequired={false} name="companyName" label="Vendor Company Name" value={selectedVendorPartialData?.companyName} isReadOnly={true} />
                             </Grid>) :
                             (<Grid item xs={12}>
-                                <TextInput isRequired={false} name="farmerName" label="Farmer Name" value={selectedFarmer?.fullName} isReadOnly={true} />
+                                <TextInput isRequired={false} name="farmerName" label="Farmer Name" value={selectedFarmerPartialData?.fullName} isReadOnly={true} />
                             </Grid>)}
                         {rfpa?.source === "vendor" ? <VendorReadOnlyFields /> : <FarmerReadOnlyFields />}
                         <Grid item xs={12} marginY={2}>

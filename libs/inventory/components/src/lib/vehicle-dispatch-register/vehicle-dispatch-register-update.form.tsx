@@ -1,35 +1,31 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import React from 'react'
-import { inventoryRouteConstants, vehicleDispatchRegisterInitialValues } from '@prime-fresh/inventory/modules'
 import { Formik } from 'formik'
-import { Box, Grid, LinearProgress, Typography } from '@mui/material'
-import { FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
-import { INVENTORY_API_URL, useGetAVehicleDispatchRegister, useUpdateVehicleDispatchRegister } from '@prime-fresh/inventory_api'
-import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/utils'
+import { inventoryRouteConstants, useGetVehicleDispatchRegisterById, useUpdateVehicleDispatchRegister, vehicleDispatchRegisterInitialValues } from '@prime-fresh/inventory/modules'
+import { Box, Grid2, LinearProgress } from '@mui/material'
+import { FormResetBtn, FormSubmitBtn, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { useNavigate, useParams } from 'react-router-dom'
-import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/purchase_api'
+import { mapToValueLabelArray, useGetAllDeliveryChallanNums } from '@prime-fresh/shared/modules'
 
 export const VehicleDispatchRegisterUpdateForm = () => {
     const { id } = useParams<{ id: string }>();
     const Id = id ? id : "";
-    const { data: vehicleDispatch, isLoading } = useGetAVehicleDispatchRegister(INVENTORY_API_URL.GET_A_VEHICLE_DISPATCH_REGISTER, Id);
-    const initialValueVehicleDispatch = vehicleDispatch ? vehicleDispatch : vehicleDispatchRegisterInitialValues;
+    const { data: vehicleDispatch, isLoading } = useGetVehicleDispatchRegisterById(Id);
+    const initialValueVehicleDispatch = vehicleDispatch?.data ? vehicleDispatch.data : vehicleDispatchRegisterInitialValues;
 
     const navigate = useNavigate();
-    const { data: dcs } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-    const dcNums = React.useMemo(() => mapToValueLabelArray(dcs || [], 'id', 'challanNo'), [dcs]);
+    const { data: dcs } = useGetAllDeliveryChallanNums();
+    const dcNums = React.useMemo(() => dcs?.data ? mapToValueLabelArray(dcs.data, 'id', 'challanNo') : [], [dcs]);
 
-    const { mutateAsync, error, data } = useUpdateVehicleDispatchRegister(INVENTORY_API_URL.UPDATE_VEHICLE_DISPATCH_REGISTER, Id);
+    const { mutateAsync, error, data } = useUpdateVehicleDispatchRegister(Id);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUpdate = (values: any) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
-        mutateAsync(formData).then(() => {
+        mutateAsync(values).then(() => {
             toast.success(data ? data.message : "Vehicle dispatch register updated sucessfully.");
             setTimeout(() => {
                 navigate(inventoryRouteConstants.GET_ALL_VEHILCE_DISPATCH_REGISTER);
-            }, 2500);
+            }, 2000);
         }).catch(() => {
             toast.error(error ? error.message : "Error while updating vehicle dispatch register.");
         })
@@ -51,15 +47,11 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} md={6}>
-                                <Typography variant="h4">Vehicle Dispatch Register</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                        <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                            <Grid2 size={{ xs: 12 }}>
+                                <PageTitle pagetitle='Vehicle Dispatch Register' />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="date"
                                     isRequired={true}
@@ -67,8 +59,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Date"
                                     value={values.date}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -76,8 +68,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Vehicle Number"
                                     value={values.vehicleNo}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -85,8 +77,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Vehicle Type"
                                     value={values.vehicleType}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={5}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 5 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -94,8 +86,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Driver Name"
                                     value={values.driverName}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -103,8 +95,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Driver Mob. No."
                                     value={values.driverMobNo}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="number"
                                     isRequired={true}
@@ -112,8 +104,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Payment Discussed"
                                     value={values.paymentDiscussed}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="number"
                                     isRequired={true}
@@ -121,8 +113,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Transportation Bill Amount"
                                     value={values.transportationBillAmt}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="number"
                                     isRequired={true}
@@ -130,8 +122,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Advance If Paid To Transporter"
                                     value={values.advancePaid}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={8}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 8 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -139,8 +131,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Client Name"
                                     value={values.clientName}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -148,8 +140,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Client GRN No"
                                     value={values.clientGRNNo}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -157,8 +149,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Client Address Line 1"
                                     value={values.clientAddress.address1}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -166,8 +158,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Client Address Line 2"
                                     value={values.clientAddress.address2}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -175,8 +167,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Location"
                                     value={values.clientAddress.location}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -184,8 +176,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="City"
                                     value={values.clientAddress.city}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -193,8 +185,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="State"
                                     value={values.clientAddress.state}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -202,8 +194,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Pincode"
                                     value={values.clientAddress.pincode}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -211,8 +203,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Receiving Person At Location"
                                     value={values.receivingPerson}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="time"
                                     isRequired={true}
@@ -220,8 +212,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Reaching Time"
                                     value={values.reachingTime}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="time"
                                     isRequired={true}
@@ -229,8 +221,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Out Time"
                                     value={values.outTime}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                                 <RadioGroupInput
                                     isRequired={true}
                                     name="accDeptVerification"
@@ -238,8 +230,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     value={values.accDeptVerification}
                                     options={[{ value: true, label: "Yes" }, { value: false, label: "No" }]}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -249,8 +241,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     maxRows={2}
                                     value={values.remarksPFL}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -260,8 +252,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     maxRows={2}
                                     value={values.feedbackbyTransporterOwner}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <SelectInput
                                     isRequired={true}
                                     name="dcNumber"
@@ -269,8 +261,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     value={values.dcNumber}
                                     options={dcNums}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     isRequired={false}
                                     type="number"
@@ -278,8 +270,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Net Inward Quantity"
                                     value={values.netInwardQty}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     isRequired={false}
                                     type="text"
@@ -287,8 +279,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Payment Terms"
                                     value={values.paymentTerms}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     isRequired={false}
                                     type="number"
@@ -296,8 +288,8 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Rejection (If any)"
                                     value={values.rejection}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     isRequired={false}
                                     type="number"
@@ -305,8 +297,12 @@ export const VehicleDispatchRegisterUpdateForm = () => {
                                     label="Shrinkage Dump (If any)"
                                     value={values.shrinkageDump}
                                     handleChange={handleChange} />
-                            </Grid>
-                        </Grid>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+                                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
+                                <FormResetBtn label="Reset" handleReset={handleReset} />
+                            </Grid2>
+                        </Grid2>
                     </form>
                 )}
             </Formik>

@@ -3,7 +3,7 @@ import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@pri
 import { ADMIN_ROUTES, initValUOMConversionMatrix, uomConversionMatrixSchema, useCreateUOMConversionMatrix, useGetAllUOMs, useGetUOMConversionMatrixById, useUpdateUOMConversionMatrixById } from "@prime-fresh/admin/modules";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
-import { mapToValueLabelArray } from "@prime-fresh/shared/utils";
+import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export const UOMConvMatrixForm = () => {
     const { oid } = useParams<{ oid: string }>();
