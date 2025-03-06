@@ -20,25 +20,19 @@ export const DealSlipListCols = (): CustomGridColDef[] => {
             isMobileVisible: true,
         },
         {
-            field: "createdAt",
+            field: "createdDate",
             headerName: "Created Date",
             width: 120,
             align: "center",
             headerAlign: "center"
         },
-        // {
-        //     field: "createdTime",
-        //     headerName: "Time",
-        //     width: 90,
-        //     align: "center",
-        //     headerAlign: "center",
-        //     valueGetter: (value: string) => {
-        //         if (value)
-        //             return value.split('.', 1);
-        //         else
-        //             return '';
-        //     }
-        // },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
         {
             field: "requestedBy",
             headerName: "Requested By",

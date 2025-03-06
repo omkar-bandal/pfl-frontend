@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { convertInTitleCase } from "@prime-fresh/shared/modules";
 
 export const MCVoucherListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
@@ -17,14 +18,22 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : "-",
         },
-        // {
-            //     field: "createdAt",
-            //     headerName: "Created Date",
-            //     width: 120,
-        //     align: "center",
-        //     headerAlign: "center"
-        // },
+        {
+            field: "createdDate",
+            headerName: "Created Date",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
         {
             field: "requestedBy",
             headerName: "Requested By",
@@ -32,7 +41,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: RequestedBy) => {
-               return value ? `${value.firstName || ''} ${value.lastName || ''}` : '-';
+                return value ? `${value.firstName || ''} ${value.lastName || ''}` : '-';
             }
         },
         {
@@ -41,9 +50,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : "-",
         },
         {
             field: "grnNo",
@@ -51,9 +58,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : "-",
         },
         {
             field: "companyName",
@@ -61,9 +66,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "debitCreditTo",
@@ -71,9 +74,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 200,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         {
             field: "payReceivedFrom",
@@ -81,9 +82,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 200,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         {
             field: "location",
@@ -91,9 +90,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         {
             field: "totalAmt",
@@ -101,9 +98,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 120,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: number) => value ? value : 0,
         },
         {
             field: "amtWords",
@@ -111,9 +106,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 120,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         {
             field: "paymentMode",
@@ -121,12 +114,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                if (value === null)
-                    return '-';
-                else
-                    return value;
-            }
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         // {
         //     field: "receivedBy",
@@ -172,12 +160,7 @@ export const MCVoucherListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                if (value === null)
-                    return '';
-                else
-                    return value;
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: 'edit',

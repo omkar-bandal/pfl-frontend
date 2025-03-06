@@ -1,6 +1,5 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { Layout, SignIn } from "@prime-fresh/components";
-import { stringConstants } from "@prime-fresh/modules";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { PurchaseRoutes } from "./purchase.routes";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
@@ -22,76 +21,67 @@ export const HostRoutes = createBrowserRouter([
         element: <SignIn />,
     },
     {
-        path: ADMIN_ROUTES.CREATE_CUSTOMER,
-        element:
-            (<Layout role={stringConstants.ROLE_ADMIN}>
-                <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                    <CustomerForm />
-                </ErrorBoundary>
-            </Layout>),
-    },
-    {
-        path: ADMIN_ROUTES.CREATE_VENDOR,
-        element:
-            (<Layout role={stringConstants.ROLE_ADMIN}>
-                <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                    <VendorRegistrationForm />
-                </ErrorBoundary>
-            </Layout>),
-    },
-    {
-        path: ADMIN_ROUTES.CREATE_FARMER,
-        element:
-            (<Layout role={stringConstants.ROLE_ADMIN}>
-                <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                    <FarmerRegistrationForm />
-                </ErrorBoundary>
-            </Layout>),
-    },
-    {
-        path: ADMIN_ROUTES.CREATE_PRODUCT,
-        element:
-            (<Layout role={stringConstants.ROLE_ADMIN}>
-                <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                    <ProductCreateForm/>
-                </ErrorBoundary>
-            </Layout>),
-    },
-    {
-        path: ADMIN_ROUTES.ADMIN,
-        element:
-            (<Layout role={stringConstants.ROLE_ADMIN}>
-                <ErrorBoundary FallbackCompnent={ErrorFallback}>
+        path: "/",
+        element: <Layout />,
+        children: [
+            {
+                path: ADMIN_ROUTES.CREATE_CUSTOMER,
+                element:
+                    (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                        <CustomerForm />
+                    </ErrorBoundary>),
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_VENDOR,
+                element:
+                    (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                        <VendorRegistrationForm />
+                    </ErrorBoundary>),
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_FARMER,
+                element:
+                    (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                        <FarmerRegistrationForm />
+                    </ErrorBoundary>),
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_PRODUCT,
+                element:
+                    (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                        <ProductCreateForm />
+                    </ErrorBoundary>),
+            },
+            {
+                path: ADMIN_ROUTES.ADMIN,
+                element:
+                    (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                        <Outlet />
+                    </ErrorBoundary>),
+                children: AdminRoutes
+            },
+            {
+                path: PURCHASE_ROUTES.PURCHASE,
+                element: (<ErrorBoundary FallbackCompnent={ErrorFallback}>
                     <Outlet />
-                </ErrorBoundary>
-            </Layout>),
-        children: AdminRoutes
+                </ErrorBoundary>),
+                children: PurchaseRoutes,
+            },
+            {
+                path: SALES_ROUTES.SALES,
+                element: (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                    <Outlet />
+                </ErrorBoundary>),
+                children: SalesRoutes,
+            },
+            {
+                path: inventoryRouteConstants.INVENTORY,
+                element: (<ErrorBoundary FallbackCompnent={ErrorFallback}>
+                    <Outlet />
+                </ErrorBoundary>),
+                children: InventoryRoutes,
+            }
+        ]
     },
-    {
-        path: PURCHASE_ROUTES.PURCHASE,
-        element: (<Layout role={stringConstants.ROLE_EMPLOYEE}>
-            <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                <Outlet />
-            </ErrorBoundary>
-        </Layout>),
-        children: PurchaseRoutes,
-    },
-    {
-        path: SALES_ROUTES.SALES,
-        element: (<Layout role={stringConstants.ROLE_EMPLOYEE}>
-            <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                <Outlet />
-            </ErrorBoundary>
-        </Layout>),
-        children: SalesRoutes,
-    },
-    {
-        path: inventoryRouteConstants.INVENTORY,
-        element: (<Layout role={stringConstants.ROLE_EMPLOYEE}>
-            <ErrorBoundary FallbackCompnent={ErrorFallback}>
-                <Outlet />
-            </ErrorBoundary>
-        </Layout>),
-        children: InventoryRoutes,
-    }
+
 ])

@@ -310,55 +310,35 @@ export const GRNView = () => {
                       <Grid item xs={8} sx={{ borderRight: borderColor }}>
                         <Grid container>
                           <Grid item xs={12} sx={{ borderBottom: borderColor }}>
-                            <Typography variant="h6" component="div" textAlign="center" sx={{ fontWeight: 600 }}>FOR COMMERCIAL & ADMIN </Typography>
+                            <Typography variant="h6" component="div" textAlign="center" sx={{ fontWeight: 600 }}>PAYMENT TERMS</Typography>
                           </Grid>
-                          <Grid item xs={2} sx={{ borderRight: borderColor }}>
+                          <Grid item xs={4} sx={{ borderRight: borderColor }}>
                             <Grid container direction="column">
                               <Grid item sx={{ borderBottom: borderColor }}>
-                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Bill No.</Typography>
+                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Payment Mode</Typography>
                               </Grid>
                               <Grid item>
                                 <Box sx={{ width: `100%`, height: 40 }}></Box>
                               </Grid>
                             </Grid>
                           </Grid>
-                          <Grid item xs={2} sx={{ borderRight: borderColor }}>
+                          <Grid item xs={4} sx={{ borderRight: borderColor }}>
                             <Grid container direction="column">
                               <Grid item sx={{ borderBottom: borderColor }}>
-                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Date</Typography>
+                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Payment Date</Typography>
                               </Grid>
                               <Grid item>
                                 <Box sx={{ width: `100%`, height: 40 }}></Box>
                               </Grid>
                             </Grid>
                           </Grid>
-                          <Grid item xs={2} sx={{ borderRight: borderColor }}>
+                          <Grid item xs={4} sx={{ borderRight: borderColor }}>
                             <Grid container direction="column">
                               <Grid item sx={{ borderBottom: borderColor }}>
-                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Amount</Typography>
+                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Paymet Status</Typography>
                               </Grid>
                               <Grid item>
-                                <Box sx={{ width: `100%`, height: 40 }}></Box>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid item xs={3} sx={{ borderRight: borderColor }}>
-                            <Grid container direction="column">
-                              <Grid item sx={{ borderBottom: borderColor }}>
-                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Busy Entry No</Typography>
-                              </Grid>
-                              <Grid item>
-                                <Box sx={{ width: `100%`, height: 40 }}></Box>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid item xs={3}>
-                            <Grid container direction="column">
-                              <Grid item sx={{ borderBottom: borderColor }}>
-                                <Typography variant="subtitle1" component="div" color={textColor} textAlign="center">Admin Signature</Typography>
-                              </Grid>
-                              <Grid item>
-                                <Box sx={{ width: `100%`, height: 40 }}></Box>
+                                <Box sx={{ width: `100%`, height: 40 }}>{grn?.approvalStatus}</Box>
                               </Grid>
                             </Grid>
                           </Grid>

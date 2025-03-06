@@ -2,7 +2,7 @@ import { Box, Grid, IconButton, LinearProgress } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValParticulars, initValMMultipleCashVoucher, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher, useGetMultiCashVoucherById, useUpdateMultiCashVoucherById } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormButtonGroup, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { GetMCvoucher, Particulars, PostMCvoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 import { useGetAllDeliveryChallanNums, useGetAllGRNNums, useGetCompanyNames } from "@prime-fresh/shared/modules";
+import { useMemo } from "react";
 
 export const MultipleCashVoucherUpdate = () => {
     const navigate = useNavigate();
@@ -23,13 +24,14 @@ export const MultipleCashVoucherUpdate = () => {
     console.log(mcVoucherValues);
 
     const { data: grnnos } = useGetAllGRNNums();
-    const allGRNNums = grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [];
+    const allGRNNums = useMemo(() => grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [], [grnnos?.data]);
 
     const { data: companies } = useGetCompanyNames();
-    const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+    const companyNames = useMemo(() => companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [], [companies?.data]);
 
     const { data: dcnos } = useGetAllDeliveryChallanNums();
-    const allDCNums = dcnos?.data ? mapToValueLabelArray(dcnos.data, 'id', 'challanNo') : [];
+    const allDCNums = useMemo(() => dcnos?.data ? mapToValueLabelArray(dcnos.data, 'id', 'challanNo') : [], [dcnos?.data]);
+
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const calculateAmounts = (values: PostMCvoucher | GetMCvoucher, setFieldValue: (field: string, value: any,) => void) => {
@@ -220,10 +222,18 @@ export const MultipleCashVoucherUpdate = () => {
                                 <Grid item xs={12}>
                                     <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
                                 </Grid>
-                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
-                                    <FormResetBtn label="Reset" handleReset={handleReset} />
-                                    <FormPreviewBtn onClick={() => { dispatch(setPreviewMCVoucher(values)); dispatch(setPreview(true)) }} />
+                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <FormButtonGroup
+                                        submitLabel='Update'
+                                        isSubmitting={isSubmitting}
+                                        isSubmitError={error}
+                                        resetLabel='Reset'
+                                        onReset={handleReset}
+                                        previewLabel='Preview'
+                                        onPreview={() => {
+                                            dispatch(setPreviewMCVoucher(values));
+                                            dispatch(setPreview(true))
+                                        }} />
                                 </Grid>
                             </Grid>
                         </form>)}

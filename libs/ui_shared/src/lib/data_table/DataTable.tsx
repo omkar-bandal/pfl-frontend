@@ -32,7 +32,7 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         pageSizeOptions={[5, 7, 10]}
         disableColumnMenu={true}
         columnHeaderHeight={40}
-        rowHeight={40}
+        rowHeight={35}
         initialState={{
           pagination: {
             paginationModel: {
@@ -63,7 +63,7 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
           "& .MuiDataGrid-cell": {
             color: "#595959",
             fontSize: 14,
-            fontWeight: 600
+            fontWeight: 500
             // padding: isMobile ? '8px' : '16px',
           },
           "--DataGrid-overlayHeight": "300px",

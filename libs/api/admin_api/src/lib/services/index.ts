@@ -5,3 +5,5 @@ export * from './vendors';
 export * from './customers';
 export * from './farmers';
 export * from './employees';
+export * from './department.service';
+export * from './levels.service';

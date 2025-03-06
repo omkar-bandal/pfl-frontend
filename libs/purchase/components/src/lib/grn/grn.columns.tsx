@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { convertInTitleCase } from "@prime-fresh/shared/modules";
 
 export const GRNListCols = (): CustomGridColDef[] => {
     const navigate = useNavigate();
     const handlePaymentReq = (status: string, id: string) => {
-        if(status === "approved")
-            navigate(`${PURCHASE_ROUTES.CREATE_PAYMENT_REQ}/${id}`)
+        navigate(`${PURCHASE_ROUTES.CREATE_PAYMENT_REQ}/${id}`)
     }
     return ([
         { field: "id", headerName: "ID", width: 30 },
@@ -21,6 +21,21 @@ export const GRNListCols = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
+            valueGetter: (value: string) => value? value.toUpperCase() : "",
+        },
+        {
+            field: "createdDate",
+            headerName: "Created Date",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
         },
         {
             field: "grnType",
@@ -29,6 +44,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
+            valueGetter: (value: string) => value? convertInTitleCase(value) : "",
         },
         {
             field: "billNo",
@@ -36,7 +52,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value === null? '-' : value,
+            valueGetter: (value: string) => value? value.toUpperCase() : "",
         },
         {
             field: "requestedBy",
@@ -44,7 +60,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => value !== null ? `${value.firstName || ''} ${value.lastName || ''}` : "-",
+            valueGetter: (value: RequestedBy) => value !== null ? convertInTitleCase(`${value.firstName || ''} ${value.lastName || ''}`) : "-",
         },
         {
             field: "requestingDepartment",
@@ -82,7 +98,7 @@ export const GRNListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value? value :'-',
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "source",

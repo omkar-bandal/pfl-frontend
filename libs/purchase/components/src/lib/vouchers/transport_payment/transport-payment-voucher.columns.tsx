@@ -19,6 +19,20 @@ export const TPVoucherListCols = (): CustomGridColDef[] => {
             isMobileVisible: true,
         },
         {
+            field: "createdDate",
+            headerName: "Created Date",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
             field: "debitCreditTo",
             headerName: "Debit From / Credit To",
             width: 150,

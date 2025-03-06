@@ -19,13 +19,20 @@ export const PMPVoucherListCols = (): CustomGridColDef[] => {
             headerAlign: "center",
             isMobileVisible: true,
         },
-        // {
-        //     field: "createdAt",
-        //     headerName: "Created Date",
-        //     width: 120,
-        //     align: "center",
-        //     headerAlign: "center"
-        // },
+        {
+            field: "createdDate",
+            headerName: "Created Date",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
         {
             field: "requestedBy",
             headerName: "Requested By",

@@ -15,4 +15,6 @@ export const sharedApiUrlConstants = {
     GET_ALL_DEAL_SLIP_NO: "/dealSlip/dealslipno/getAlldealslipNo",
     GET_ALL_GRN_NO: "/grns/grnnumbers/getAllgrnNo",
     GET_ALL_DELIVERY_CHALLAN_NO: "/deliveryChallan/challanNos/getAllChallanNo",
+
+    GET_DEPARTMENT_BY_ID: "/departments",
 }

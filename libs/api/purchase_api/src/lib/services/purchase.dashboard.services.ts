@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiBaseState, BaseService } from "@prime-fresh/common_api";
-import { DateRangeWiseData, PurchaseQtyAmt } from "../models";
+import { DashboardData, DateRangeWiseData, PurchaseQtyAmt } from "../models";
+import { buildUrl } from "@prime-fresh/shared/modules";
 
 export class PurchaseDashboardServices extends BaseService {
     private static _instance: PurchaseDashboardServices;
@@ -55,4 +57,9 @@ export class PurchaseDashboardServices extends BaseService {
         }
     }
 
+    getDashboardData(filterParams: Record<string, any> | null): Promise<ApiBaseState<DashboardData>> {
+        const url = buildUrl(filterParams, "/api/management/getGrns/management");
+        console.log("dashboard data url: ", url);
+        return this.get(url);
+    }
 }

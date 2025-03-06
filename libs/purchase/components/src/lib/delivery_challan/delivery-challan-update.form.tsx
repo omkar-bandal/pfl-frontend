@@ -4,7 +4,7 @@ import { Box, Button, Grid, IconButton, LinearProgress } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC, useGetDeliveryChallanById, useUpdateDeliveryChallanById } from "@prime-fresh/purchase/modules";
-import { AutoCompleteInput, FormAccordion, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { AutoCompleteInput, FormAccordion, FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { DeliveryChallanPreview } from "./delivery-challan.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useNavigate, useParams } from "react-router-dom";
@@ -450,10 +450,18 @@ export const DeliveryChallanUpdate = () => {
                                     <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                                <FormPreviewBtn onClick={() => { dispatch(setPreviewDC(values)); dispatch(setPreview(true)) }} />
+                            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <FormButtonGroup
+                                    submitLabel='Update'
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={error}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                    previewLabel='Preview'
+                                    onPreview={() => {
+                                        dispatch(setPreviewDC(values));
+                                        dispatch(setPreview(true))
+                                    }} />
                             </Grid>
                         </form>
                     )}

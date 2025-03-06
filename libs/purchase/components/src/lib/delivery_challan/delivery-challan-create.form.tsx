@@ -4,7 +4,7 @@ import { Button, Grid, IconButton } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC, useCreateDeliveryChallan } from "@prime-fresh/purchase/modules";
-import { AutoCompleteInput, FormAccordion, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { AutoCompleteInput, FormAccordion, FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { DeliveryChallanPreview } from "./delivery-challan.preview";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
@@ -183,7 +183,7 @@ export const DeliveryChallanForm = () => {
                     name="partyName"
                     label="Customer Name"
                     isRequired={true}
-                    options={customerList}/>
+                    options={customerList} />
                 </Grid>
               </>) : (
                 <Grid item xs={12} md={8}>
@@ -206,7 +206,7 @@ export const DeliveryChallanForm = () => {
                     {({ remove, push }) => (
                       <>
                         {values.deliveryChallanProducts.map((item, index) => (
-                          <Grid container columnSpacing={1} key={index} alignItems="center" marginY={1} padding={1} sx={{ border: `1px solid #ccc`, borderRadius: 5 }}>
+                          <Grid container spacing={1} key={index} alignItems="center" marginY={1} padding={1} sx={{ border: `1px solid #ccc`, borderRadius: 5 }}>
                             <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                               {values.deliveryChallanProducts.length > 1 ? (<IconButton color="error" size="small" onClick={() => remove(index)}>
                                 <Close />
@@ -423,10 +423,18 @@ export const DeliveryChallanForm = () => {
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
               </Grid>
             </Grid>
-            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-              <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-              <FormResetBtn label="Reset" handleReset={handleReset} />
-              <FormPreviewBtn onClick={() => { dispatch(setPreviewDC(values)); dispatch(setPreview(true)) }} />
+            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <FormButtonGroup
+                submitLabel='Create'
+                isSubmitting={isSubmitting}
+                isSubmitError={error}
+                resetLabel='Reset'
+                onReset={handleReset}
+                previewLabel='Preview'
+                onPreview={() => {
+                  dispatch(setPreviewDC(values));
+                  dispatch(setPreview(true))
+                }} />
             </Grid>
           </form>
         )}

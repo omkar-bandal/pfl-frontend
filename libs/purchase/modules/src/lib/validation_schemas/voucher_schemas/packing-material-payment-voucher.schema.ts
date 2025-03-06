@@ -11,7 +11,7 @@ export const packingMaterialPaymentVoucherSchema = yup.object().shape({
     contactNo: yup.string().required("Contact number is required.").matches(REGEX.CONTACT_NO, "Please enter valid contact number."),
     altContactNo: yup.string().nullable().matches(REGEX.CONTACT_NO, "Please enter valid contact number."),
     paymentMode: yup.string().required('Payment mode is required'),
-    receiverName: yup.string().required('Receiver name is required'),
+    receiverName: yup.string().required('Receiver name is required').matches(REGEX.IS_STRING, "Name should only contains alphabets."),
     materials: yup.array().of(
         yup.object().shape({
             itemName: yup.string().required('Item name is required'),

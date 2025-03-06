@@ -7,8 +7,8 @@ import { PreviewContainer } from '@prime-fresh/ui_shared';
 
 export const GRNPreview = () => {
   const { previewGRN } = useAppSelector(grnDataState);
-  const { selectedVendor } = useAppSelector(vendorsDataState);
-  const { selectedFarmer } = useAppSelector(farmersDataState);
+  const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
+  const { selectedFarmerPartialData } = useAppSelector(farmersDataState);
   const { selectedProduct } = useAppSelector(productsDataState);
 
   return (
@@ -27,7 +27,7 @@ export const GRNPreview = () => {
       </Grid>
       <Grid item>
         <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-          Purchase for which location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewGRN?.purchaseForWhich}
+          Purchase for which location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewGRN?.purchaseForSalesLocation}
           </Typography>
         </Typography>
       </Grid>
@@ -48,31 +48,31 @@ export const GRNPreview = () => {
         <>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Company Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.companyName}
+              Company Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendorPartialData?.companyName}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Vendor Code: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.vendorCode}
+              Vendor Code: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendorPartialData?.vendorCode}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Office Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedVendor?.officeAddress)}
+              Office Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedVendorPartialData?.officeAddress)}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Office Contact No: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.officeContactNo}
+              Office Contact No: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendorPartialData?.officeContactNo}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendor?.email}
+              Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedVendorPartialData?.officeEmail}
               </Typography>
             </Typography>
           </Grid>
@@ -81,37 +81,37 @@ export const GRNPreview = () => {
         <>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Farmer Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.farmerfName} {selectedFarmer?.farmerlName}
+              Farmer Name: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmerPartialData?.fullName}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Farmer Code: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.farmerCode}
+              Farmer Code: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmerPartialData?.farmerCode}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Residential Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmer?.residensialAddress)}
+              Residential Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmerPartialData?.residensialAddress)}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Farm Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmer?.farmAddress)}
+              Farm Address: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{displayAddress(selectedFarmerPartialData?.farmAddress)}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Contact No: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.primaryMobileNo}
+              Contact No: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmerPartialData?.primaryMobileNo}
               </Typography>
             </Typography>
           </Grid>
           <Grid item>
             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-              Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmer?.email}
+              Email: <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{selectedFarmerPartialData?.email}
               </Typography>
             </Typography>
           </Grid>
@@ -134,18 +134,18 @@ export const GRNPreview = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {previewGRN?.products.map((product, index: number) => (
+              {previewGRN?.grnProducts.map((product, index: number) => (
                 <TableRow
                   key={index}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{selectedProduct?.name}</TableCell>
                   <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.quantity}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.rate}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amt}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate.toLocaleString()}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate.toLocaleString()}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate.toLocaleString()}</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amount}</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.purchaseDate?.toLocaleString()}</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.dispatchDate?.toLocaleString()}</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryDate?.toLocaleString()}</TableCell>
                   <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.deliveryLocation}</TableCell>
                 </TableRow>
               ))}

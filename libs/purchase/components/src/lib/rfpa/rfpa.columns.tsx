@@ -20,12 +20,26 @@ export const RFPAListCols = (): CustomGridColDef[] => {
             isMobileVisible: true,
         },
         {
+            field: "createdDate",
+            headerName: "Created Date",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
+            field: "createdTime",
+            headerName: "Created Time",
+            width: 120,
+            align: "center",
+            headerAlign: "center"
+        },
+        {
             field: "requestedBy",
             headerName: "Requested By",
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => value? `${value.firstName || ''} ${value.lastName || ''}` : "",
+            valueGetter: (value: RequestedBy) => value ? `${value.firstName || ''} ${value.lastName || ''}` : "",
         },
         {
             field: "requestingDepartment",
@@ -69,7 +83,7 @@ export const RFPAListCols = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value? value.charAt(0).toUpperCase() + value.slice(1) : '-',
+            valueGetter: (value: string) => value ? value.charAt(0).toUpperCase() + value.slice(1) : '-',
         },
         {
             field: "approvalStatus",

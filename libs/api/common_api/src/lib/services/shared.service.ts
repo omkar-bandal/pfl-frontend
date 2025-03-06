@@ -10,6 +10,7 @@ import {
     GetAllDeliveryChallanNums,
     GetAllGRNNums,
     GetAllRFPANums,
+    GetDepartment,
     ProductPartialData,
     UOMPartialData,
     VendorPartialData
@@ -80,5 +81,10 @@ export class SharedService extends BaseService {
     getDeliveryChallanNums(): Promise<ApiBaseState<GetAllDeliveryChallanNums[]>> {
         const url = sharedApiUrlConstants.GET_ALL_DELIVERY_CHALLAN_NO;
         return this.get(url);
+    }
+
+    getDepartmentById(deptId: string): Promise<ApiBaseState<GetDepartment>> {
+        const url = `${sharedApiUrlConstants.GET_DEPARTMENT_BY_ID}/${deptId}`;
+        return this.get(url)
     }
 }

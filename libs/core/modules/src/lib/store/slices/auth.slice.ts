@@ -7,6 +7,7 @@ const initialState: AuthState = {
     isLoggedIn: false,
     showPassword: false,
     signinMethod: 'email',
+    deptId: '',
     loggedInUserInfo: null,
 };
 
@@ -25,20 +26,20 @@ const authSlice = createSlice({
             localStorage.setItem('refresh_token', action.payload.refresh_token);
             state.isLoggedIn = !!action.payload;
         },
+        setDeptId: (state, action: PayloadAction<string>) => {
+            state.deptId = action.payload;
+        },
         checkAuth: (state) => {
             const isLoggedIn = localStorage.getItem('access_token');
             state.isLoggedIn = !!isLoggedIn;
         },
-        setLoggedInUserInfo: (state, action: PayloadAction<LoggedInUserInfoRes>) => {
-            localStorage.setItem('role', action.payload.role);
-            localStorage.setItem('department', action.payload.department);
-            localStorage.setItem('userName', action.payload.userName)
+        setLoggedInUserInfo: (state, action: PayloadAction<LoggedInUserInfoRes | null>) => {
             state.loggedInUserInfo = action.payload;
         },
     },
 });
 
-export const {setShowPassword, setSigninMethod, checkAuth, setTokens, setLoggedInUserInfo } = authSlice.actions;
+export const {setShowPassword, setSigninMethod, checkAuth, setDeptId, setTokens, setLoggedInUserInfo } = authSlice.actions;
 export const authState = (state: RootState) => state.auth;
-export const authActionCreators = {setShowPassword, setSigninMethod, checkAuth, setTokens, setLoggedInUserInfo };
+export const authActionCreators = {setShowPassword, setSigninMethod, checkAuth, setTokens, setLoggedInUserInfo, setDeptId };
 export const authReducer = authSlice.reducer;

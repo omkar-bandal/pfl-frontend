@@ -7,7 +7,7 @@ import { initValGRN, initValGRNProducts, PURCHASE_ROUTES, purchaseOptionsConstan
 import { STRINGS } from '@prime-fresh/admin/modules';
 import { PostGRN } from '@prime-fresh/purchase_api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { setPreview } from '@prime-fresh/modules';
 import { calculateTotalAmount, getProductCount, getProductSizes, handleGRNProductsUpdateChange } from './helper-functions';
 import { appendFormData, mapToValueLabelArray, useGetAllDealSlipNums, useGetBranchesPartialData, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
@@ -407,10 +407,18 @@ export const GRNUpdate = () => {
                                 <Grid item xs={12}>
                                     <ImageUpload isRequired={false} name='billImage' label='Bill Image' />
                                 </Grid>
-                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
-                                    <FormResetBtn label="Reset" handleReset={handleReset} />
-                                    <FormPreviewBtn onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }} />
+                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <FormButtonGroup
+                                        submitLabel='Update'
+                                        isSubmitting={isSubmitting}
+                                        isSubmitError={error}
+                                        resetLabel='Reset'
+                                        onReset={handleReset}
+                                        previewLabel='Preview'
+                                        onPreview={() => {
+                                            dispatch(setPreviewGRN(values));
+                                            dispatch(setPreview(true))
+                                        }} />
                                 </Grid>
                             </Grid>
                         </form>)}

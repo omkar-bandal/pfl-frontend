@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiBaseState, ErrorModel } from "@prime-fresh/common_api";
-import { DateRangeWiseData, PurchaseDashboardServices, PurchaseQtyAmt } from "@prime-fresh/purchase_api";
+import { DashboardData, DateRangeWiseData, PurchaseDashboardServices, PurchaseQtyAmt } from "@prime-fresh/purchase_api";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export function useGetPurchaseQtyAmtData(
@@ -80,4 +81,13 @@ export function useGetSaleQtyAmtDateRangeWise(
       ),
     enabled,
   });
+}
+
+export function useGetDashboardData(filterParams: Record<string, any> | null):
+    UseQueryResult<ApiBaseState<DashboardData>>, ErrorModel> {
+    return useQuery<ApiBaseState<DashboardData>>, ErrorModel>({
+        queryKey: ['get-dashboard-data', filterParams],
+        queryFn: () => PurchaseDashboardServices.getInstance().getDashboardData(filterParams),
+        enabled: !!filterParams
+    });
 }

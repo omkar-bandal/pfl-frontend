@@ -1,7 +1,21 @@
 export const adminApiUrlConstants = {
-    
+
     //roles
     GET_ALL_ROLES: "/roles/",
+
+    //Department
+    GET_ALL_DEPARTMENT: "/departments/",
+    GET_DEPARTMENT_BY_ID: "/departments",
+    CREATE_DEPARTMENT: "/departments/",
+    UPDATE_DEPARTMENT: "/departments",
+    DELETE_DEPARTMENT: "/departments",
+
+    //Level
+    GET_ALL_LEVEL: "/levels/",
+    GET_LEVEL_BY_ID: "/levels",
+    CREATE_LEVEL: "/levels/",
+    UPDATE_LEVEL: "/levels",
+    DELETE_LEVEL: "/levels",
 
     //Employee
     GET_ALL_EMPLOYEES: "/employee/",
@@ -60,7 +74,7 @@ export const adminApiUrlConstants = {
 
     GET_VENDOR_SUBCAT_BY_QUERY: "/vendor-subcategories/getSubcategories",
     GET_VENDOR_BY_QUERY: "/vendors/bysearch/getvendors",
-    
+
     //Prooducts
     GET_ALL_PRODUCTS: "/products/",
     GET_A_PRODUCTS: "/products",
@@ -109,18 +123,18 @@ export const adminApiUrlConstants = {
     POST_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
     UPDATE_REGI_OFFICES: "/location_offices/REGISTERED_OFFICE",
     UPDATE_CORP_OFFICES: "/location_offices/CORPORATE_OFFICE",
-    
+
     //Offices
     GET_ALL_OFFICES: "/location-offices",
     GET_A_OFFICE: "/location-offices",
     CREATE_OFFICE: "/location-offices",
     UPDATE_OFFICE: "/location-offices",
     DELETE_OFFICE: "/location-offices",
-    
-    
+
+
     //Branches
     GET_ALL_BRANCHES: "/location-branches",
-    GET_A_BRANCH:"/location-branches",
+    GET_A_BRANCH: "/location-branches",
     CREATE_BRANCH: "/location-branches",
     UPDATE_BRANCH: "/location-branches",
     DELETE_BRANCH: "/location-branches",

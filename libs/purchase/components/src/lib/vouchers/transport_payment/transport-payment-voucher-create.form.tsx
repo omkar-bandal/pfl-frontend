@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import { PostTPvoucher } from "@prime-fresh/purchase_api";
 import { initValTransportPaymentVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewTPVoucher, transportPaymentVoucherSchema, useCreateTransportPaymentVoucher } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { setPreview } from "@prime-fresh/modules";
@@ -176,7 +176,7 @@ export const TransportPaymentVoucherForm = () => {
                   isRequired={false}
                   name="freightAmt"
                   label="Freight Amount"
-                  value={values.freightAmt}
+                  value={values.freightAmt || ""}
                   handleChange={handleChange} />
               </Grid>
               <Grid item xs={12} md={4}>
@@ -185,7 +185,7 @@ export const TransportPaymentVoucherForm = () => {
                   isRequired={true}
                   name="totalAmt"
                   label="Total Amount"
-                  value={values.totalAmt}
+                  value={values.totalAmt || ""}
                   handleChange={e => handleAmountChange(e, setFieldValue)} />
               </Grid>
               <Grid item xs={12} md={9}>
@@ -230,10 +230,18 @@ export const TransportPaymentVoucherForm = () => {
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
               </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewTPVoucher(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <FormButtonGroup
+                  submitLabel='Create'
+                  isSubmitting={isSubmitting}
+                  isSubmitError={error}
+                  resetLabel='Reset'
+                  onReset={handleReset}
+                  previewLabel='Preview'
+                  onPreview={() => {
+                    dispatch(setPreviewTPVoucher(values));
+                    dispatch(setPreview(true))
+                  }} />
               </Grid>
             </Grid>
           </form>

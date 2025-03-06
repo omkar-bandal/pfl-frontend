@@ -23,7 +23,7 @@ export const DeliveryChallanTable = () => {
     }
     return (
         <Box sx={{ flex: 1 }}>
-            <Grid2 container marginY={1}>
+            <Grid2 container marginY={2}>
                 <Grid2 size={{ xs: 12, md: 8 }}>
                     <PageTitle pagetitle='Delivery Challan' />
                 </Grid2>

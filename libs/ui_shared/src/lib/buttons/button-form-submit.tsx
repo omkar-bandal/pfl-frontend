@@ -15,7 +15,10 @@ export const FormSubmitBtn: React.FC<FormSubmitBtnProps> = ({ label, isSubmittin
             size="large"
             disabled={isSubmitting && !isError} 
             sx={{
-                width: 150, textTransform: 'none', '&:disabled': {
+                width: 150, 
+                textTransform: 'none',
+                margin: 2, 
+                '&:disabled': {
                     backgroundColor: "#A5D6A7",
                 },
             }}>

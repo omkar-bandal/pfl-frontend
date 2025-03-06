@@ -45,9 +45,20 @@ export const calculateTotoalPrice = (
     setFieldValue(`rfpaProducts.${index}.totalVal`, product.totalVal);
 }
 
-export const calculateDueDate = (paymentDate: string | null, paymentTerms: number): string => {
-    if (!paymentDate || !paymentTerms) return "";
+// export const calculateDueDate = (paymentDate: string | null, paymentTerms: number): string => {
+//     if (!paymentDate || !paymentTerms) return "";
+//     const date = new Date(paymentDate);
+//     date.setDate(date.getDate() + paymentTerms);
+//     return date.toISOString().split("T")[0];
+// };
+export const calculateDueDate = (paymentDate: string | null, paymentTerms: number | null): string => {
+    if (!paymentDate) return "";
+
     const date = new Date(paymentDate);
-    date.setDate(date.getDate() + paymentTerms);
+
+    if (paymentTerms !== null && paymentTerms !== undefined) {
+        date.setDate(date.getDate() + paymentTerms);
+    }
+
     return date.toISOString().split("T")[0];
 };

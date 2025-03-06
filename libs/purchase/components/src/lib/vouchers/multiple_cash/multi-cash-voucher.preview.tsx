@@ -9,32 +9,32 @@ export const MCVoucherPreview = () => {
     return (
         <PreviewContainer title='Multiple Cash Voucher Preview'>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewMCVoucher?.grnNo !== "string" ? previewMCVoucher?.grnNo.grnNo : previewMCVoucher.grnNo}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    GRN No : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewMCVoucher?.grnNo !== "string" && previewMCVoucher?.grnNo !== null ? previewMCVoucher?.grnNo.grnNo : previewMCVoucher.grnNo}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewMCVoucher?.companyName !== "string" ? previewMCVoucher?.companyName.companyName : previewMCVoucher.companyName}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Company Name : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewMCVoucher?.companyName !== "string" && previewMCVoucher?.companyName !== null ? previewMCVoucher?.companyName.companyName : previewMCVoucher.companyName}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.location}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Location : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.location}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Debit From / Credit To : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.debitCreditTo}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Debit From / Credit To : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.debitCreditTo}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Pay To / Received From : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.payReceivedFrom}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Pay To / Received From : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.payReceivedFrom}
                     </Typography>
                 </Typography>
             </Grid>
@@ -63,32 +63,32 @@ export const MCVoucherPreview = () => {
                 </TableContainer>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Total Amount : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.totalAmt}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Total Amount : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.totalAmt}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Total Amount in Words : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.amtWords}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Total Amount in Words : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.amtWords}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Payment Mode : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.paymentMode}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Payment Mode : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.paymentMode}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Received By : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.receiverName}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Received By : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.receiverName}
                     </Typography>
                 </Typography>
             </Grid>
             <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Remark : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.remark}
+                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
+                    Remark : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewMCVoucher?.remark}
                     </Typography>
                 </Typography>
             </Grid>

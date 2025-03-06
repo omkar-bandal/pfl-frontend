@@ -9,7 +9,7 @@ import { setPreview } from '@prime-fresh/modules';
 import { FieldArray, Formik } from 'formik';
 import { initValRFPA } from '@prime-fresh/purchase/modules';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormButtonGroup, PageTitle, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './rfpa.preview';
 import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules';
 import { calculateDueDate, calculateTotoalPrice, getProductCode } from './helper-functions';
@@ -291,10 +291,18 @@ export const RFPAUpdate = () => {
                                 <Grid item xs={12} md={12}>
                                     <TextInput isRequired={false} label="Remark" id="remark" name="remark" value={values.remark} onChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
-                                    <FormResetBtn label="Reset" handleReset={handleReset} />
-                                    <FormPreviewBtn onClick={() => { dispatch(setPreviewRFPA(values)); dispatch(setPreview(true)) }} />
+                                <Grid item xs={12} marginY={2}>
+                                <FormButtonGroup
+                                    submitLabel='Update'
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={error}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                    previewLabel='Preview'
+                                    onPreview={() => {
+                                        dispatch(setPreviewRFPA(values));
+                                        dispatch(setPreview(true))
+                                    }} />
                                 </Grid>
                             </Grid>
                         </form>)}

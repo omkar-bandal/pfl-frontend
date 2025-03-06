@@ -9,7 +9,7 @@ import { FieldArray, Formik } from 'formik';
 import { removeProductPartialData, STRINGS } from '@prime-fresh/admin/modules';
 import { PostGRN } from '@prime-fresh/purchase_api';
 import { useNavigate } from 'react-router-dom';
-import { AutoCompleteInput, FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
+import { AutoCompleteInput, FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast, VendorFarmerInfo } from '@prime-fresh/ui_shared';
 import { GRNPreview } from './grn.preview';
 import { useGetProductsPartialData, useGetCompanyNames, useGetUOMPartialData, useGetBranchesPartialData, mapToValueLabelArray, useGetAllDealSlipNums, appendFormData } from '@prime-fresh/shared/modules';
 import { calculateTotalAmount, getProductCount, getProductOrigin, getProductSizes, handleGRNProductsChange } from './helper-functions';
@@ -379,10 +379,18 @@ export const GRNForm = () => {
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name='billImage' label='Bill Image' />
               </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewGRN(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <FormButtonGroup
+                submitLabel='Create'
+                isSubmitting={isSubmitting}
+                isSubmitError={error}
+                resetLabel='Reset'
+                onReset={handleReset}
+                previewLabel='Preview'
+                onPreview={() => {
+                  dispatch(setPreviewGRN(values));
+                  dispatch(setPreview(true))
+                }} />
               </Grid>
             </Grid>
           </form>)}

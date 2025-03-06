@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material'
 import { PostLPvoucher } from '@prime-fresh/purchase_api'
 import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher, useCreateLaborPaymentVoucher } from '@prime-fresh/purchase/modules'
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { LPVoucherPreview } from './labor-payment-voucher.preview'
@@ -220,10 +220,18 @@ export const LabourPaymentVoucherForm = () => {
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
               </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewLPVoucher(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <FormButtonGroup
+                  submitLabel='Create'
+                  isSubmitting={isSubmitting}
+                  isSubmitError={error}
+                  resetLabel='Reset'
+                  onReset={handleReset}
+                  previewLabel='Preview'
+                  onPreview={() => {
+                    dispatch(setPreviewLPVoucher(values));
+                    dispatch(setPreview(true))
+                  }} />
               </Grid>
             </Grid>
           </form>)}

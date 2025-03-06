@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Collapse,
   List,
@@ -12,7 +12,7 @@ import { NavLink } from "react-router-dom";
 import { Navigations, setMobileOpen, SidebarListProps } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
 
-const SidebarList: React.FC<SidebarListProps> = ({
+const SidebarList: React.FC<SidebarListProps> = memo(({
   dept,
   selectedItem,
   setSelectedItem,
@@ -134,6 +134,6 @@ const SidebarList: React.FC<SidebarListProps> = ({
       })}
     </List>
   );
-};
+});
 
 export default SidebarList;

@@ -5,7 +5,6 @@ export type TokenRes = {
 
 export type LoggedInUserInfoRes = {
     department: string;
-    role: string;
     userName: string;
 }
 

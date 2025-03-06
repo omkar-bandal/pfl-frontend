@@ -12,7 +12,7 @@ export const MultipleCashVoucherTable = () => {
     const apiRef = useGridApiRef();
     const { data, isLoading, isError, error } = useGetAllMultiCashVouchers();
     const allMCVouchers = data?.data ? data.data : [];
-    
+
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -23,7 +23,7 @@ export const MultipleCashVoucherTable = () => {
     }
     return (
         <Box sx={{ flex: 1 }}>
-            <Grid2 container marginY={1}>
+            <Grid2 container marginY={2}>
                 <Grid2 size={{ xs: 12, md: 8 }}>
                     <PageTitle pagetitle='Multiple Cash Voucher' />
                 </Grid2>

@@ -2,10 +2,9 @@ import * as React from 'react';
 import { AppBar, Typography, IconButton, Box, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch } from 'react-redux';
-import { authRouteConstants, isClosingState, mobileOpenState, setMobileOpen, useAppSelector } from '@prime-fresh/modules';
+import { authRouteConstants, authState, isClosingState, mobileOpenState, setMobileOpen, useActions, useAppSelector } from '@prime-fresh/modules';
 import { Logout, Settings } from '@mui/icons-material';
 import { SignOutRequest, useSignOut } from '@prime-fresh/auth_api';
-import { getAccessToken, getRefreshToken } from '@prime-fresh/common_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
@@ -15,8 +14,9 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const navigate = useNavigate();
   const isClosing = useAppSelector(isClosingState);
   const mobileOpen = useAppSelector(mobileOpenState);
-  const user = localStorage.getItem("userName");
-  const username = convertInTitleCase(user || "");
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || "");
+  const { setLoggedInUserInfo } = useActions();
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
@@ -32,27 +32,38 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
     setAnchorEl(null);
   };
 
-  const tokens: SignOutRequest = {
-    access_token: getAccessToken() || '',
-    refresh_token: getRefreshToken() || '',
-  }
   const { mutateAsync, isError, error } = useSignOut();
 
   const handleLogout = () => {
-    if (tokens)
-      mutateAsync(tokens).then(() => {
-        handleClose();
-        localStorage.clear();
-        navigate(authRouteConstants.SIGN_IN);
+
+    const accessToken = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+
+    if (accessToken && refreshToken) {
+
+      const tokens: SignOutRequest = {
+        access_token: accessToken,
+        refresh_token: refreshToken,
       }
-      ).catch(() => {
-        if (isError) {
+
+      mutateAsync(tokens)
+        .then(() => {
           localStorage.clear();
-          toast.error(error ? error.message : "Error while logout");
-          navigate(authRouteConstants.SIGN_IN)
-        }
-      }
-      )
+          setLoggedInUserInfo(null);
+          handleClose();
+          navigate(authRouteConstants.SIGN_IN);
+        })
+        .catch(() => {
+          if (isError) {
+            localStorage.clear();
+            setLoggedInUserInfo(null);
+            toast.error(error ? error.message : "Error while logout");
+            navigate(authRouteConstants.SIGN_IN)
+          }
+        })
+    } else {
+      throw new Error("Unable to logout please refresh the page.")
+    }
   }
 
   return (

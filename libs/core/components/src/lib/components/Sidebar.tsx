@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Box, Drawer } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {mobileOpenState, Navigations, setIsClosing, setMobileOpen, SidebarProps, useAppSelector } from '@prime-fresh/modules';
+import { mobileOpenState, Navigations, setIsClosing, setMobileOpen, SidebarProps, useAppSelector } from '@prime-fresh/modules';
 import Logo from "./Logo";
 import SidebarList from "./SidebarList";
 import { adminNavigations, inventoryNavigations, purchaseNavigations, salesNavigations } from "../navigations";
+import { useGetDepartmentById } from "@prime-fresh/shared/modules";
 
 
-export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
+export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
   const dispatch = useDispatch();
 
   const mobileOpen = useAppSelector(mobileOpenState);
@@ -21,7 +22,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
     "default": [],
   };
 
-  const dept = localStorage.getItem("department");
+  const deptId = localStorage.getItem("department");
+  const { data } = useGetDepartmentById(deptId || '')
+  const dept = data?.data ? data.data.name.toLowerCase() : "";
   const navigations = navigationMap[dept ? dept : "Default"] || [];
 
   const handleDrawerClose = () => {
@@ -86,5 +89,5 @@ export const Sidebar: React.FC<SidebarProps> = ({ drawerWidth }) => {
       </Drawer>
     </Box>
   );
-};
+});
 

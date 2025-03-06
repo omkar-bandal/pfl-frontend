@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { REGEX } from "@prime-fresh/shared/modules";
+import { dateSchema, REGEX } from "@prime-fresh/shared/modules";
 
 export const grnSchema = yup.object().shape({
     // locationType: "cc" | "dc",
@@ -22,9 +22,9 @@ export const grnSchema = yup.object().shape({
             unitPrice: yup.number().required("Unit price is required").positive("Price can't be negative"),
             grossWeight: yup.number().required("Gross weight is required").positive("Weight can't be negative"),
             packingMaterialWeight: yup.number().required("Packing material weight is required").positive("Weight can't be negative"),
-            purchaseDate: yup.date().required('Purchase Date is required'),
-            dispatchDate: yup.date().required('Dispatch Date is required'),
-            deliveryDate: yup.date().required('Delivery Date is required'),
+            purchaseDate: dateSchema.required('Purchase Date is required'),
+            dispatchDate: dateSchema.required('Dispatch Date is required'),
+            deliveryDate: dateSchema.required('Delivery Date is required'),
             deliveryLocation: yup.string().required('Delivery Location is required'),
             expectedHarvestDate: yup.date().nullable(),
             rtv: yup.boolean().required("Select is product rtv or not"),

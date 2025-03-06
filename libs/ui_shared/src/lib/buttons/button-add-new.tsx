@@ -5,20 +5,22 @@ import { Button, ButtonProps, styled } from '@mui/material'
 type AddNewButtonProps = ButtonProps & {
     handleClick: () => void;
 }
-const StyledButton = styled(Button)({
+const StyledButton = styled(Button)(({ theme }) => ({
     textTransform: 'none',
     fontWeight: 600,
+    backgroundColor: theme.palette.primary.main,
+    boxShadow: 'none',
     '&:hover': {
-        backgroundColor: '#00cc66',
+        backgroundColor: theme.palette.primary.dark,
         borderColor: '#00cc66',
         boxShadow: 'none',
         color: "#ffffff"
     },
-});
+}));
 export const AddNewButton: FC<AddNewButtonProps> = ({ handleClick }) => {
     return (
         <StyledButton
-            variant="outlined"
+            variant="contained"
             size="small"
             startIcon={<Add />}
             onClick={handleClick}>

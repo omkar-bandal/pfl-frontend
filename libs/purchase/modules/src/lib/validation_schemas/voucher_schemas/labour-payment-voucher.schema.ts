@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import { contactNoSchema } from '../contactNo.schema';
 import { REGEX } from '@prime-fresh/shared/modules';
 
 export const labourPaymentVoucherSchema = yup.object().shape({
@@ -10,7 +9,7 @@ export const labourPaymentVoucherSchema = yup.object().shape({
     noOfLabours: yup.number().required('Number of labour is required').positive('Number of labours cannot be negative'),
     ratePerLabour: yup.number().required('Rate is required').positive('Rate cannot be negative'), 
     loadingDate: yup.date().required('Loading date is required'),
-    contactNo: contactNoSchema,
+    contactNo: yup.string().required('Contact number is required.').matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
     altContactNo: yup.string().nullable().matches(REGEX.IS_NUMBER, "Please enter valid contact number."),
     paymentMode: yup.string().required('Payment mode is required'),
     receiverName: yup.string().required('Receiver name is required').matches(REGEX.IS_STRING, "Name should only contains alphabets."),

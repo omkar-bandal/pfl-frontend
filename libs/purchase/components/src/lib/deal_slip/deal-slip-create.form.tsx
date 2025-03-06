@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { PostDealSlip } from "@prime-fresh/purchase_api";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate } from "react-router-dom";
-import { FarmerReadOnlyFields, FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
+import { FarmerReadOnlyFields, FormButtonGroup, PageTitle, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
 import { farmersDataState, setSelectedFarmerPartialData, setSelectedVendorPartialData, vendorsDataState } from "@prime-fresh/admin/modules";
 import { mapToValueLabelArray, useGetAllRFPANums, useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
@@ -222,9 +222,14 @@ export const DealSlipForm = () => {
                                     )}
                             </Grid>
                         </Grid >
-                        <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                            <FormResetBtn label="Reset" handleReset={handleReset} />
+                        <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <FormButtonGroup
+                                    submitLabel='Create'
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={error}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                    />
                         </Grid>
                     </Grid>
                 </form >

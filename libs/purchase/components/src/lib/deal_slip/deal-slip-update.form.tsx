@@ -1,14 +1,13 @@
-import React from "react";
-import { Grid, Typography, Box, LinearProgress, SelectChangeEvent } from "@mui/material";
-import { FieldArray, Formik } from "formik";
-import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, rfpaDataState, setRFPAData, setSelectedRFPA, useGetAllRFPAs, useGetDealSlipById, useUpdateDealSlipById } from "@prime-fresh/purchase/modules";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { Grid, Typography, Box, LinearProgress, } from "@mui/material";
+import { Formik } from "formik";
+import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, useGetDealSlipById, useGetRFPAById, useUpdateDealSlipById } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
-import { displayAddress } from "@prime-fresh/purchase/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FarmerReadOnlyFields, FormButtonGroup, PageTitle, SelectInput, TextInput, toast, VendorReadOnlyFields } from "@prime-fresh/ui_shared";
 import { farmersDataState, setSelectedFarmerPartialData, setSelectedVendorPartialData, vendorsDataState } from "@prime-fresh/admin/modules";
-import { mapToValueLabelArray, useGetFarmersPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
+import { mapToValueLabelArray, useGetAllRFPANums, useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
 
 export const DealSlipUpdate = () => {
     //Get Dealslip id
@@ -18,42 +17,45 @@ export const DealSlipUpdate = () => {
     //Get Dealslip by id
     const { data: dealSlip, isLoading } = useGetDealSlipById(dealSlipId);
     const dealSlipData = dealSlip?.data ? dealSlip.data : initValDealSlip;
+    // console.log("Deal Slip: ", dealSlipData);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [RFPAid, setRFPAid] = useState<string>();
 
-    //Get RFPA data to populate fields
-    const { data: allrfpas } = useGetAllRFPAs();
-    const approvedRfpa = allrfpas?.data ? allrfpas.data?.filter(item => item.approvalStatus === "approved") : [];
-    const dealSlipRFPA = dealSlipData && allrfpas?.data?.find(item => item.id === dealSlipData.rfpa);
+    const { data: RFPA } = useGetAllRFPANums();
+    const rfpas = useMemo(() => RFPA?.data ? mapToValueLabelArray(RFPA.data, 'id', 'rfpaId') : [], [RFPA?.data]);
 
-    const { data: farmers } = useGetFarmersPartialData();
-    const { data: vendors } = useGetVendorsPartialData();
-    const { rfpa: allrfpa, selectedRFPA } = useAppSelector(rfpaDataState);
-    const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
+
+    const { data: Farmers } = useGetFarmersPartialData();
+    const { data: Vendors } = useGetVendorsPartialData();
+    const { data: products } = useGetProductsPartialData();
+    const Products = useMemo(() => products?.data ? products.data : [], [products?.data]);
+    const { data: uom } = useGetUOMPartialData();
+    const UOMs = useMemo(() => uom?.data ? uom.data : [], [uom?.data]);
+    const { data: Locations } = useGetBranchesPartialData();
+    const allPurchaseLocation = useMemo(() => Locations?.data ? Locations.data : [], [Locations?.data]);
     const { selectedFarmerPartialData } = useAppSelector(farmersDataState);
-
-    React.useEffect(() => {
-        const rfpaData = allrfpas?.data ? allrfpas.data : [];
-        allrfpas ? (
-            dispatch(setSelectedRFPA(allrfpas?.data?.find(rfpa => rfpa.id === dealSlipData.rfpa))) &&
-            dispatch(setRFPAData(rfpaData))
-        ) : (
-            dispatch(setSelectedRFPA()) &&
-            dispatch(setRFPAData([]))
-        );
-        dealSlipRFPA?.source === "vendor" ?
-            dispatch(setSelectedVendorPartialData(vendors?.data && vendors.data.find(vendor => vendor.id === dealSlipRFPA?.selectedParty))) :
-            dispatch(setSelectedFarmerPartialData(farmers?.data && farmers.data.find(farmer => farmer.id === dealSlipRFPA?.selectedParty)))
-    }, [allrfpas, dispatch, dealSlipData, dealSlipRFPA, vendors, farmers]);
+    const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
 
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleRFPANoChange = (value: any, setFieldValue: (field: string, value: string | undefined) => void) => {
-        setFieldValue("rfpa", value);
-        const selectedRFPA = allrfpa.find(item => item.id === value);
-        dispatch(setSelectedRFPA(selectedRFPA));
-    }
+    const handleRFPANoChange = (value: string, setFieldValue: (field: string, value: string | undefined) => void) => {
+        if (value) {
+            value ? setFieldValue("rfpa", value) : setFieldValue("rfpa", '');
+            setRFPAid(value);
+        }
+    };
+    console.log("Changed RFPA Id", RFPAid);
+    const { data } = useGetRFPAById(RFPAid || '');
+    const rfpa = data?.data ? data.data : null;
+    console.log("RFPA: ", rfpa);
+
+    useEffect(() => {
+        setRFPAid(dealSlipData.rfpa);
+        rfpa?.source === "vendor" ?
+            dispatch(setSelectedVendorPartialData(Vendors?.data?.find(vendor => vendor.id === rfpa?.selectedParty))) :
+            dispatch(setSelectedFarmerPartialData(Farmers?.data?.find(farmer => farmer.id === rfpa?.selectedParty)));
+    }, [rfpa, dispatch, Farmers?.data, setRFPAid, dealSlipData.rfpa, Vendors?.data, selectedFarmerPartialData, selectedVendorPartialData])
 
     //Hook to update Dealslip
     const { mutateAsync: mutatePatch, error, data: Res } = useUpdateDealSlipById(dealSlipId);
@@ -91,44 +93,39 @@ export const DealSlipUpdate = () => {
                             <Grid item xs={12} marginBottom={2}>
                                 <PageTitle pagetitle='Deal Slip' />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={4}>
                                 <SelectInput
-                                    isRequired={false}
+                                    isRequired={true}
                                     label="Select RFPA"
                                     name="rfpa"
-                                    defaultValue={selectedRFPA?.id}
                                     value={values.rfpa}
-                                    options={mapToValueLabelArray(approvedRfpa, 'id', 'rfpaId')}
-                                    handleChange={(e: SelectChangeEvent<unknown>) => {
-                                        const value = e.target.value;
-                                        handleRFPANoChange(value, setFieldValue)
-                                    }}
-                                />
+                                    options={rfpas}
+                                    handleChange={(e: ChangeEvent<HTMLInputElement>) => handleRFPANoChange(e.target.value, setFieldValue)} />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={8}>
                                 <TextInput
                                     isRequired={false}
                                     label="Company Name"
                                     name="companyName"
-                                    value={selectedRFPA?.companyName.id}
+                                    value={rfpa?.companyName.companyName || ""}
                                     isReadOnly={true}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={6}>
                                 <TextInput
                                     isRequired={false}
                                     label="Purchase Location"
                                     name="purchaseLocation"
-                                    value={selectedRFPA?.purchaseLocation}
+                                    value={allPurchaseLocation.find(loc => loc.id === rfpa?.purchaseLocation)?.name || rfpa?.otherPurchaseLoc || ""}
                                     isReadOnly={true}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={3}>
+                            <Grid item xs={12} md={6}>
                                 <TextInput
                                     isRequired={false}
                                     label="Purchase For Sales Location"
                                     name="purchaseForSalesLocation"
-                                    value={selectedRFPA?.purchaseForSalesLocation}
+                                    value={allPurchaseLocation.find(loc => loc.id === rfpa?.purchaseForSalesLocation)?.name || rfpa?.otherPurchaseForSalesLoc || ""}
                                     isReadOnly={true}
                                 />
                             </Grid>
@@ -154,8 +151,7 @@ export const DealSlipUpdate = () => {
                                     label="Special Request"
                                     name="specialRequest"
                                     value={values.specialRequest}
-                                    handleChange={handleChange}
-                                />
+                                    handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextInput
@@ -163,8 +159,7 @@ export const DealSlipUpdate = () => {
                                     label="Remark"
                                     name="remark"
                                     value={values.remark}
-                                    handleChange={handleChange}
-                                />
+                                    handleChange={handleChange} />
                             </Grid>
                             <Grid item xs={12} marginY={2}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
@@ -172,126 +167,85 @@ export const DealSlipUpdate = () => {
                                 </Box>
                             </Grid>
                             <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-                                <Typography variant='body2' component="span">Source : {selectedRFPA?.source}</Typography>
+                                <Typography variant='body2' component="span" sx={{ fontWeight: 700 }}>Source : {rfpa?.source ? rfpa?.source.charAt(0).toUpperCase() + rfpa?.source.slice(1).toLowerCase() : ''}</Typography>
                             </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextInput
-                                    isRequired={false}
-                                    name="selectedParty"
-                                    label={selectedRFPA?.source === "vendor" ? "Vendor Company Name" : "Farmer Name"}
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.companyName : `${selectedFarmerPartialData?.fullName}`}
-                                    isReadOnly={true} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextInput
-                                    isRequired={false}
-                                    name="code"
-                                    label={`${selectedRFPA?.source === "vendor" ? "Vendor" : "Farmer"} Code`}
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.vendorCode : selectedFarmerPartialData?.farmerCode}
-                                    isReadOnly={true}
-                                />
-                            </Grid>
-                            {selectedRFPA?.source === "vendor" &&
-                                <Grid item xs={12} md={4}>
-                                    <TextInput
-                                        isRequired={false}
-                                        label="Contact Person"
-                                        name="contactperson"
-                                        value={`${selectedVendorPartialData?.contactPersonName}`}
-                                        isReadOnly={true}
-                                    />
-                                </Grid>}
-                            <Grid item xs={12}>
-                                <TextInput
-                                    isRequired={false}
-                                    name="address"
-                                    label={`${selectedRFPA?.source === "vendor" ? "Company" : "Residential"} Address`}
-                                    value={displayAddress(selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.officeAddress : selectedFarmerPartialData?.residensialAddress)}
-                                    isReadOnly={true}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextInput
-                                    isRequired={false}
-                                    name="email"
-                                    label="Email"
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.officeEmail : selectedFarmerPartialData?.email}
-                                    isReadOnly={true}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextInput
-                                    isRequired={false}
-                                    name="contactno"
-                                    label="Contact No"
-                                    value={selectedRFPA?.source === "vendor" ? selectedVendorPartialData?.officeContactNo : selectedFarmerPartialData?.primaryMobileNo}
-                                    isReadOnly={true}
-                                />
-                            </Grid>
-                            <Grid item xs={12} marginY={1}>
+                            {rfpa?.source === "vendor" ?
+                                (<Grid item xs={12}>
+                                    <TextInput isRequired={false} name="companyName" label="Vendor Company Name" value={selectedVendorPartialData?.companyName} isReadOnly={true} />
+                                </Grid>) :
+                                (<Grid item xs={12}>
+                                    <TextInput isRequired={false} name="farmerName" label="Farmer Name" value={selectedFarmerPartialData?.fullName} isReadOnly={true} />
+                                </Grid>)}
+                            {rfpa?.source === "vendor" ? <VendorReadOnlyFields /> : <FarmerReadOnlyFields />}
+                            <Grid item xs={12} marginY={2}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
                                     <Typography variant='body2' sx={{ fontWeight: 600 }}>Product Required</Typography>
                                 </Box>
                             </Grid>
-                            <Grid item xs={12}>
-                                <FieldArray name="dealSlipItems">
-                                    {() => (
-                                        <Grid container spacing={1} padding={1}>
-                                            {selectedRFPA?.rfpaProducts.map((product, index) => (
-                                                <Grid container columnSpacing={1} padding={1} key={index} sx={{ display: "flex", border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
-                                                    <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-                                                        <Typography variant="body1">Product : {index + 1}</Typography>
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextInput isRequired={false} label="Product Name" name="productname" value={product.product} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={6} md={3}>
-                                                        <TextInput isRequired={false} label="Product Grade" name="productgrade" value={product.grade} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={6} md={3}>
-                                                        <TextInput isRequired={false} label="UOM" name="uom" value={product.uom} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={4} md={3}>
-                                                        <TextInput isRequired={false} label="Quantity" name="qty" value={product.quantity} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={4} md={3}>
-                                                        <TextInput isRequired={false} label="Unit Price" name="uprice" value={product.unitPrice} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={4} md={3}>
-                                                        <TextInput isRequired={false} label="Total Price" name="tprice" value={product.totalVal} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={false} label="Delivery Location" name="deliveryLoctn" value={product.deliveryLocation} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={12}>
-                                                        <TextInput multiline maxRows={2} isRequired={false} label="Description" name="description" value={product.description} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={false} type="date" label="Purchase Date" name="purchaseDate" value={product.purchaseDate} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={false} type="date" label="Dispatch Date" name="dispatchDate" value={product.dispatchDate} isReadOnly={true} />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={3}>
-                                                        <TextInput isRequired={false} type="date" label="Delivery Date" name="deliveryDate" value={product.deliveryDate} isReadOnly={true} />
-                                                    </Grid>
-                                                    {selectedRFPA?.source === "farmer" &&
-                                                        (<Grid item xs={3}>
-                                                            <TextInput isRequired={false} type="date" label="Expected Harvest Date" name="expectedHarvestDate" value={product.expectedHarvestDate} isReadOnly={true} />
-                                                        </Grid>)}
+                            <Grid item xs={12} padding={1}>
+                                <Grid container spacing={1} padding={1}>
+                                    {rfpa?.rfpaProducts.length !== 0 && rfpa !== null ?
+                                        (rfpa?.rfpaProducts.map((product, index) => (
+                                            <Grid container columnSpacing={1} padding={1} key={index} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
+                                                <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
+                                                    <Typography variant="body1">Product : {index + 1}</Typography>
                                                 </Grid>
-                                            ))}
-                                        </Grid>
-                                    )}
-                                </FieldArray>
+                                                <Grid item xs={12} md={6}>
+                                                    <TextInput isRequired={false} label="Product Name" name="productname" value={Products?.find(products => products.id === product.product)?.name || ''} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={6} md={3}>
+                                                    <TextInput isRequired={false} label="Product Grade" name="productgrade" value={product.grade} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={6} md={3}>
+                                                    <TextInput isRequired={false} label="UOM" name="uom" value={UOMs?.find(uom => uom.id === product.uom)?.unit} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={4} md={3}>
+                                                    <TextInput isRequired={false} label="Quantity" name="qty" value={product.quantity} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={4} md={3}>
+                                                    <TextInput isRequired={false} label="Unit Price" name="uprice" value={product.unitPrice} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={4} md={3}>
+                                                    <TextInput isRequired={false} label="Total Price" name="tprice" value={product.totalVal} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={12} md={3}>
+                                                    <TextInput isRequired={false} label="Delivery Location" name="deliveryLoctn" value={product.deliveryLocation} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextInput multiline maxRows={2} isRequired={false} label="Description" name="description" value={product.description} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={12} md={3}>
+                                                    <TextInput isRequired={false} type="date" label="Purchase Date" name="purchaseDate" value={product.purchaseDate} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={12} md={3}>
+                                                    <TextInput isRequired={false} type="date" label="Dispatch Date" name="dispatchDate" value={product.dispatchDate} isReadOnly={true} />
+                                                </Grid>
+                                                <Grid item xs={12} md={3}>
+                                                    <TextInput isRequired={false} type="date" label="Delivery Date" name="deliveryDate" value={product.deliveryDate} isReadOnly={true} />
+                                                </Grid>
+                                                {rfpa?.source === "farmer" &&
+                                                    (<Grid item xs={12} md={3}>
+                                                        <TextInput isRequired={false} type="date" label="Expected Harvest Date" name="expectedHarvestDate" value={product.expectedHarvestDate} isReadOnly={true} />
+                                                    </Grid>)}
+                                            </Grid>
+                                        ))) :
+                                        (
+                                            <Typography variant="body2" component="data" color="error">Product not found in selected RFPA</Typography>
+                                        )}
+                                </Grid>
+                            </Grid >
+                            <Grid item xs={12} marginY={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <FormButtonGroup
+                                    submitLabel='Create'
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={error}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                />
                             </Grid>
-                            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Update" />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
-                        </Grid >
-                    </form >)
-                }
+                        </Grid>
+                    </form >
+                )}
             </Formik >)
     );
 };

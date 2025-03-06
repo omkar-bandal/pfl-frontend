@@ -3,28 +3,27 @@ import { Grid, IconButton } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValParticulars, initValMMultipleCashVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher } from "@prime-fresh/purchase/modules";
-import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormButtonGroup, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Particulars, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher } from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
-import { } from '@prime-fresh/shared/modules'
 import { useNavigate } from "react-router-dom";
 import { useGetCompanyNames, useGetAllGRNNums, useGetAllDeliveryChallanNums, numToWords, appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, useMemo } from "react";
 
 export const MultipleCashVoucherForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { data: grnnos } = useGetAllGRNNums();
-  const allGRNNums = grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [];
+  const allGRNNums = useMemo(() => grnnos?.data ? mapToValueLabelArray(grnnos.data, 'id', 'grnNo') : [], [grnnos?.data]);
 
   const { data: companies } = useGetCompanyNames();
-  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
+  const companyNames = useMemo(() => companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [], [companies?.data]);
 
   const { data: dcnos } = useGetAllDeliveryChallanNums();
-  const allDCNums = dcnos?.data ? mapToValueLabelArray(dcnos.data, 'id', 'challanNo') : [];
+  const allDCNums = useMemo(() => dcnos?.data ? mapToValueLabelArray(dcnos.data, 'id', 'challanNo') : [], [dcnos?.data]);
 
   const recalcTotal = useCallback((particulars: Particulars[]): number => {
     return particulars.reduce((acc, item) => acc + (Number(item.amt) || 0), 0);
@@ -257,10 +256,18 @@ export const MultipleCashVoucherForm = () => {
               <Grid item xs={12}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
               </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
-                <FormResetBtn label="Reset" handleReset={handleReset} />
-                <FormPreviewBtn onClick={() => { dispatch(setPreviewMCVoucher(values)); dispatch(setPreview(true)) }} />
+              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <FormButtonGroup
+                  submitLabel='Create'
+                  isSubmitting={isSubmitting}
+                  isSubmitError={error}
+                  resetLabel='Reset'
+                  onReset={handleReset}
+                  previewLabel='Preview'
+                  onPreview={() => {
+                    dispatch(setPreviewMCVoucher(values));
+                    dispatch(setPreview(true))
+                  }} />
               </Grid>
             </Grid>
           </form>

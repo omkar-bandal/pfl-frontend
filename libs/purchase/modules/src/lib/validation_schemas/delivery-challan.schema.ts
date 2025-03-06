@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { contactNoSchema } from './contactNo.schema';
+import { REGEX } from '@prime-fresh/shared/modules';
 
 export const deliveryChallanSchema = yup.object().shape({
     deliveryCType: yup.string().required('Challan type is required'),
@@ -7,16 +7,20 @@ export const deliveryChallanSchema = yup.object().shape({
     partyName: yup.string().required('Party name is required'),
     fromLocation: yup.string().required('Location is required'),
     toLocation: yup.string().notRequired(),
-    driverName: yup.string().required('Driver name is required'),
-    contactNo: contactNoSchema,
-    vehicleNo: yup.string().required('Vehicle number is required'),
-    receiverName: yup.string().required('Receiver name is required'),
-    rmn: yup.string().required('RM name is required'),
+    driverName: yup.string().required('Driver name is required').matches(REGEX.IS_STRING, 'Name should only contain alphabets.'),
+    contactNo: yup.string().required('Driver contact number is required.').matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
+    altContactNo: yup.string().nullable().matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
+    vehicleNo: yup.string().required('Vehicle number is required').matches(REGEX.IS_VEHICLE_NO, 'Please enter valid vehicle number.'),
+    receiverName: yup.string().required('Receiver name is required').matches(REGEX.IS_STRING, 'Name should only contain alphabets.'),
+    rmn: yup.string().required('RM name is required').matches(REGEX.IS_STRING, 'Name should only contain alphabets.'),
     items: yup.array().of(
         yup.object().shape({
-            itemName: yup.string().required('Item name is required'),
-            itemQty: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
-            rate: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
+            productName: yup.string().required('Product name is required'),
+            uom: yup.string().required('UOM is required'),
+            quantity: yup.number().required('Quantity is required').positive('Quantity cannot be negative'),
+            unitPrice: yup.number().required('Unit price is required').positive('Price cannot be negative'),
+            grossWeight: yup.number().required('Gross weight is required').positive('Weight cannot be negative'),
+            packingMaterialWeight: yup.number().required('Packing material weight is required').positive('Weight cannot be negative'),
         })
     ),
     anyAttachment: yup.mixed().nullable()

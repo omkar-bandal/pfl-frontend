@@ -6,23 +6,30 @@ import { RFPAListCols } from "./rfpa.columns"
 import { GetRFPA } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES, useGetAllRFPAs } from "@prime-fresh/purchase/modules";
 import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
+import { useDispatch } from "react-redux"
+import { setPreview } from "@prime-fresh/modules"
 
 export const RFPATable = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const apiRef = useGridApiRef();
     const { data, isLoading, error, isError } = useGetAllRFPAs();
     const allRFPAs = data?.data ? data.data : [];
+
     const handleCreate = () => {
+        dispatch(setPreview(false))
         navigate(PURCHASE_ROUTES.CREATE_RFPA);
     }
+
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.');
         }
     }, [isError, error]);
+
     return (
         <Box sx={{ flex: 1 }}>
-            <Grid2 container marginY={1}>
+            <Grid2 container marginY={2}>
                 <Grid2 size={{ xs: 12, md: 8 }}>
                     <PageTitle pagetitle='Request For Purchase Approval' />
                 </Grid2>

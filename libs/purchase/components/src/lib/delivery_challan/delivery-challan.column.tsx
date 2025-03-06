@@ -93,7 +93,7 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value ? value.toUpperCase() : '-',
+            valueGetter: (value: string) => value!== null ? value : '-',
         },
         // {
         //     field: "totAmt",

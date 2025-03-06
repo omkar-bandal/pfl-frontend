@@ -14,7 +14,8 @@ import {
     GetAllDealSlipNums,
     GetAllDeliveryChallanNums,
     CustomerPartialData,
-    CustomerNames
+    CustomerNames,
+    GetDepartment
 } from '@prime-fresh/common_api';
 
 export function useGetCompanyNames():
@@ -112,5 +113,14 @@ export function useGetAllDeliveryChallanNums():
     return useQuery<ApiBaseState<GetAllDeliveryChallanNums[]>, ErrorModel>({
         queryKey: ['get-delivery-challan-nums'],
         queryFn: () => SharedService.getInstance().getDeliveryChallanNums(),
+    })
+}
+export function useGetDepartmentById(deptId: string):
+    UseQueryResult<ApiBaseState<GetDepartment>, ErrorModel> {
+        const enabled = deptId.length > 1 ? true : false;
+    return useQuery<ApiBaseState<GetDepartment>, ErrorModel>({
+        queryKey: ['get-department-by-id'],
+        queryFn: () => SharedService.getInstance().getDepartmentById(deptId),
+        enabled: enabled,
     })
 }

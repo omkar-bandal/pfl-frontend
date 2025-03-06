@@ -1,4 +1,4 @@
-import { REGEX } from '@prime-fresh/shared/modules';
+import { dateSchema, REGEX } from '@prime-fresh/shared/modules';
 import * as yup from 'yup';
 
 export const rfpaSchema = yup.object().shape({
@@ -13,9 +13,9 @@ export const rfpaSchema = yup.object().shape({
             grade: yup.string().required('Grade is required'),
             quantity: yup.number().required('Quantity is required').positive('Quantity must be positive'),
             unitPrice: yup.number().required('Unit Price is required').positive('Unit Price must be positive'),
-            purchaseDate: yup.date().required('Purchase Date is required'),
-            dispatchDate: yup.date().required('Dispatch Date is required'),
-            deliveryDate: yup.date().required('Delivery Date is required'),
+            purchaseDate: dateSchema.required('Purchase Date is required'),
+            dispatchDate: dateSchema.required('Dispatch Date is required'),
+            deliveryDate: dateSchema.required('Delivery Date is required'),
             deliveryLocation: yup.string().required('Delivery Location is required'),
             expectedHarvestDate: yup.date().nullable(),
         })
@@ -23,8 +23,8 @@ export const rfpaSchema = yup.object().shape({
     paymentInfo: yup.object().shape({
         paymentMode: yup.string().required('Payment Mode is required'),
         advancePaidAmt: yup.number().nullable().positive('Amount must be positive'),
-        creditPeriod: yup.number().required('Credit Period is required').positive('Credit Period must be positive'),
-        paymentDate: yup.date().required('Payment Date is required'),
+        creditPeriod: yup.number().min(0,'Credit Period must be positive').required('Credit Period is required'),
+        paymentDate: dateSchema.required('Payment Date is required'),
         paymentTerms: yup.number().required('Payment Terms is required').positive('Payment Terms must be positive'),
     }).required('Payment Information is required'),
     deliveryReceivingPerson: yup.string().matches(REGEX.IS_STRING, "Please enter a valid name").required('Delivery Receiving Person is required'),

@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, ButtonProps } from "@mui/material"
 
 type FormResetBtnProps = ButtonProps & {
     label: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleReset: (e?: React.SyntheticEvent<any>) => void
 }
 export const FormResetBtn: React.FC<FormResetBtnProps> = ({ label, handleReset }) => {
@@ -12,7 +12,11 @@ export const FormResetBtn: React.FC<FormResetBtnProps> = ({ label, handleReset }
             variant="contained"
             color="secondary"
             size="large"
-            sx={{ width: 150, textTransform: "none" }}
+            sx={{
+                width: 150,
+                textTransform: "none",
+                margin: 2
+            }}
             onClick={handleReset}>
             {label}
         </Button>

@@ -36,9 +36,10 @@ export function useGetAllRFPAs():
 
 export function useGetRFPAById(id: string):
     UseQueryResult<ApiBaseState<GetRFPA>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetRFPA>, ErrorModel>({
         queryKey: ['get-rfpa-by-id'],
         queryFn: () => RFPAServices.getInstance().getRFPAById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }
