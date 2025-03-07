@@ -83,9 +83,16 @@ export function useGetSaleQtyAmtDateRangeWise(
   });
 }
 
+<<<<<<< HEAD
 export function useGetDashboardData(filterParams: Record<string, any> | null):
     UseQueryResult<ApiBaseState<DashboardData>>, ErrorModel> {
     return useQuery<ApiBaseState<DashboardData>>, ErrorModel>({
+=======
+
+export function useGetDashboardData(filterParams: Record<string, any> | null):
+    UseQueryResult<ApiBaseState<DashboardData>, ErrorModel> {
+    return useQuery<ApiBaseState<DashboardData>, ErrorModel>({
+>>>>>>> master
         queryKey: ['get-dashboard-data', filterParams],
         queryFn: () => PurchaseDashboardServices.getInstance().getDashboardData(filterParams),
         enabled: !!filterParams

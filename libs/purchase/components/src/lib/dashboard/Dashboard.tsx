@@ -54,7 +54,11 @@ export const DashboardPurchase = () => {
               label="Duration"
               onChange={e => handleChange(e)}
               sx={{
+<<<<<<< HEAD
                 height: '36px',
+=======
+                height: '40px',
+>>>>>>> master
                 fontSize: '14px',
                 '& .MuiSelect-select': { padding: '6px 10px' },
               }}
@@ -79,7 +83,11 @@ export const DashboardPurchase = () => {
               label="Company"
               onChange={e => handleChange(e)}
               sx={{
+<<<<<<< HEAD
                 height: '36px',
+=======
+                height: '40px',
+>>>>>>> master
                 fontSize: '14px',
                 '& .MuiSelect-select': { padding: '6px 10px' },
               }}
@@ -104,7 +112,11 @@ export const DashboardPurchase = () => {
               label="Locations"
               onChange={e => handleChange(e)}
               sx={{
+<<<<<<< HEAD
                 height: '36px',
+=======
+                height: '40px',
+>>>>>>> master
                 fontSize: '14px',
                 '& .MuiSelect-select': { padding: '6px 10px' },
               }}
@@ -118,6 +130,7 @@ export const DashboardPurchase = () => {
           </FormControl>
         </Grid2>
       </Grid2>
+<<<<<<< HEAD
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, md: 3 }}>
           <MetricCard title='No of GRN' value={dashboardData?.grns.totalGRNs ? dashboardData?.grns.totalGRNs.toString() : ''} percentage={10} />
@@ -130,6 +143,66 @@ export const DashboardPurchase = () => {
         </Grid2>
       </Grid2>
 
+=======
+      <Grid2 container spacing={1} marginY={1}>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <MetricCard
+            cardColor='#009933'
+            title='Total Purchase'
+            quantity={dashboardData?.grns.totalPurchase.totalQuantityInKg || 0}
+            amount={dashboardData?.grns.totalPurchase.totalAmount || 0}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <MetricCard
+            cardColor='#66cc66'
+            title='Purchase By Farmer'
+            quantity={dashboardData?.grns.totalPurchaseByFarmer.totalQuantityInKg || 0}
+            percQuantity={((dashboardData?.grns.totalPurchaseByFarmer.totalQuantityInKg || 1) / (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) * 100}
+            amount={dashboardData?.grns.totalPurchaseByFarmer.totalAmount || 0}
+            percAmount={((dashboardData?.grns.totalPurchaseByFarmer.totalAmount || 1) / (dashboardData?.grns.totalPurchase.totalAmount || 1)) * 100}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <MetricCard
+            cardColor='#66cc66'
+            title='Purchase By Vendor'
+            quantity={dashboardData?.grns.totalpurchaseByVendor.totalQuantityInKg || 0}
+            percQuantity={((dashboardData?.grns.totalpurchaseByVendor.totalQuantityInKg || 1) / (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) * 100}
+            amount={dashboardData?.grns.totalpurchaseByVendor.totalAmount || 0}
+            percAmount={((dashboardData?.grns.totalpurchaseByVendor.totalAmount || 1) / (dashboardData?.grns.totalPurchase.totalAmount || 1)) * 100}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <MetricCard
+            cardColor=' #0044cc'
+            title='Total Sales'
+            quantity={dashboardData?.deliverychallan.totalSaleQtyAndAmount.totalQuantityInKg || 0}
+            amount={dashboardData?.deliverychallan.totalSaleQtyAndAmount.totalAmount || 0}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <MetricCard
+            cardColor='#a3a3c2'
+            title='Total Dump'
+            quantity={dashboardData?.dump.totalQuantity || 0}
+            percQuantity={((dashboardData?.dump.totalQuantity || 1) / (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) * 100}
+            amount={dashboardData?.dump.totalAmount || 0}
+            percAmount={((dashboardData?.dump.totalAmount || 1) / (dashboardData?.grns.totalPurchase.totalAmount || 1)) * 100}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <MetricCard
+            cardColor='#ff3333'
+            title='Total Rejection'
+            quantity={dashboardData?.rejection.totalQuantity || 0}
+            percQuantity={((dashboardData?.rejection.totalQuantity || 1) / (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) * 100}
+            amount={dashboardData?.rejection.totalAmount || 0}
+            percAmount={((dashboardData?.rejection.totalAmount || 1) / (dashboardData?.grns.totalPurchase.totalAmount || 1)) * 100}
+          />
+        </Grid2>
+      </Grid2>
+>>>>>>> master
     </Box >)
   )
 }
