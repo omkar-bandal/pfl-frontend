@@ -1,0 +1,9 @@
+{
+  "name": "sales_api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/sales_api/src",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:sales"],
+  "// targets": "to see all targets run: nx show project sales_api --web",
+  "targets": {}
+}

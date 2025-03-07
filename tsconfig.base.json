@@ -1,0 +1,54 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@prime-fresh/admin/components": ["libs/admin/components/src/index.ts"],
+      "@prime-fresh/admin/modules": ["libs/admin/modules/src/index.ts"],
+      "@prime-fresh/admin_api": ["libs/api/admin_api/src/index.ts"],
+      "@prime-fresh/assets": ["libs/assets/src/index.ts"],
+      "@prime-fresh/auth_api": ["libs/api/auth_api/src/index.ts"],
+      "@prime-fresh/common_api": ["libs/api/common_api/src/index.ts"],
+      "@prime-fresh/components": ["libs/core/components/src/index.ts"],
+      "@prime-fresh/inventory/components": [
+        "libs/inventory/components/src/index.ts"
+      ],
+      "@prime-fresh/inventory/modules": ["libs/inventory/modules/src/index.ts"],
+      "@prime-fresh/inventory_api": ["libs/api/inventory_api/src/index.ts"],
+      "@prime-fresh/modules": ["libs/core/modules/src/index.ts"],
+      "@prime-fresh/purchase/components": [
+        "libs/purchase/components/src/index.ts"
+      ],
+      "@prime-fresh/purchase/modules": ["libs/purchase/modules/src/index.ts"],
+      "@prime-fresh/purchase_api": ["libs/api/purchase_api/src/index.ts"],
+      "@prime-fresh/sales/components": ["libs/sales/components/src/index.ts"],
+      "@prime-fresh/sales/modules": ["libs/sales/modules/src/index.ts"],
+      "@prime-fresh/sales_api": ["libs/api/sales_api/src/index.ts"],
+      "@prime-fresh/shared/components": ["libs/shared/components/src/index.ts"],
+      "@prime-fresh/shared/masters/customer": [
+        "libs/shared/masters/customer/src/index.ts"
+      ],
+      "@prime-fresh/shared/masters/farmer": [
+        "libs/shared/masters/farmer/src/index.ts"
+      ],
+      "@prime-fresh/shared/masters/products": [
+        "libs/shared/masters/products/src/index.ts"
+      ],
+      "@prime-fresh/shared/modules": ["libs/shared/modules/src/index.ts"],
+      "@prime-fresh/ui_shared": ["libs/ui_shared/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

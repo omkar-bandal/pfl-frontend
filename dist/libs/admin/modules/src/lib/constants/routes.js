@@ -1,0 +1,97 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADMIN_ROUTES = void 0;
+exports.ADMIN_ROUTES = {
+    //Admin
+    ADMIN: "/admin",
+    //Dashboard
+    DASHBOARD_ADMIN: "/admin/dashboard",
+    //Users
+    USERS: "/admin/users",
+    //Employee
+    EMPLOYEE: "/admin/users/employee",
+    GET_ALL_EMPLOYEES: "/admin/users/employee/getall",
+    CREATE_EMPLOYEE: "/admin/users/employee/create",
+    VIEW_EMPLOYEE: "/admin/users/employee/view",
+    EDIT_EMPLOYEE: "/admin/users/employee/update",
+    //Customer
+    CUSTOMER: "/admin/users/customer",
+    GET_ALL_CUSTOMERS: "/admin/users/customers/getall",
+    VIEW_CUSTOMER: "/admin/users/customer/view",
+    EDIT_CUSTOMER: "/admin/users/customer/update",
+    //Vendor
+    VENDOR: "/admin/users/vendor",
+    GET_ALL_VENDORS: "/admin/users/vendors/getall",
+    VIEW_VENDOR: "/admin/users/vendor/view",
+    EDIT_VENDOR: "/admin/users/vendor/update",
+    GET_ALL_VENDORS_CAT: "/admin/users/vendors/vendor-categories/getall",
+    CREATE_VENDORS_CAT: "/admin/users/vendors/category/create",
+    UPDATE_VENDORS_CAT: "/admin/users/vendors/category/update",
+    GET_ALL_VENDORS_SUBCAT: "/admin/users/vendors/vendor-subcategories/getall",
+    CREATE_VENDORS_SUBCAT: "/admin/users/vendors/subcategory/create",
+    UPDATE_VENDORS_SUBCAT: "/admin/users/vendors/subcategory/update",
+    //Farmer
+    FARMER: "/admin/users/farmer",
+    GET_ALL_FARMERS: "/admin/users/farmers/getall",
+    VIEW_FARMER: "/admin/users/farmer/view",
+    EDIT_FARMER: "/admin/users/farmer/update",
+    //Products
+    PRODUCTS: "/admin/products",
+    GET_ALL_PRODUCTS: "/admin/products/products/getall",
+    GET_A_PRODUCT: "/admin/products/products/view",
+    UPDATE_PRODUCT: "/admin/products/product/update",
+    GET_ALL_PRODUCT_CLASS: "/admin/products/products-classification/getall",
+    GET_A_PRODUCT_CLASS: "/admin/products/products-classification/view",
+    CREATE_PRODUCT_CLASS: "/admin/products/products-classification/create",
+    UPDATE_PRODUCT_CLASS: "/admin/products/products-classification/update",
+    GET_ALL_PRODUCT_CAT: "/admin/products/products-category/getall",
+    GET_A_PRODUCT_CAT: "/admin/products/products-category/view",
+    CREATE_PRODUCT_CAT: "/admin/products/products-category/create",
+    UPDATE_PRODUCT_CAT: "/admin/products/products-category/update",
+    GET_ALL_PRODUCT_SUBCAT: "/admin/products/products_subcategory/getall",
+    GET_A_PRODUCT_SUBCAT: "/admin/products/products_subcategory/view",
+    CREATE_PRODUCT_SUBCAT: "/admin/products/products_subcategory/create",
+    UPDATE_PRODUCT_SUBCAT: "/admin/products/products_subcategory/update",
+    //UOMs
+    UOM: "/admin/uom",
+    GET_ALL_UOMs: "/admin/uom/getall",
+    CREATE_UOM: "/admin/uom/create",
+    UPDATE_UOM: "/admin/uom/edit",
+    VIEW_UOM: "/admin/uom/view",
+    GET_ALL_UOMs_CONV_MATRIX: "/admin/uom/uom-conversion-matrix/getall",
+    CREATE_UOMs_CONV_MATRIX: "/admin/uom/uom-conversion-matrix/create",
+    UPDATE_UOMs_CONV_MATRIX: "/admin/uom/uom-conversion-matrix/edit",
+    VIEW_UOMs_CONV_MATRIX: "/admin/uom/uom-conversion-matrix/view",
+    //Locations
+    LOCATIONS: "/admin/locations",
+    LOCATIONS_REGISTERED_OFFICE: "/admin/locations/registered-office/getall",
+    LOCATIONS_CORPORATE_OFFICE: "/admin/locations/corporate-office/getall",
+    CREATE_REGISTERED_OFFICE: "/admin/locations/registered-office/create",
+    CREATE_CORPORATE_OFFICE: "/admin/locations/corporate-office/create",
+    EDIT_REGISTERED_OFFICE: "/admin/locations/registered-office/edit",
+    EDIT_CORPORATE_OFFICE: "/admin/locations/corporate-office/edit",
+    VIEW_REGISTERED_OFFICE: "/admin/locations/registered-office/view",
+    VIEW_CORPORATE_OFFICE: "/admin/locations/corporate-office/view",
+    GET_REGISTERED_OFFICE: "/admin/locations/registered-office/getall",
+    GET_CORPORATE_OFFICE: "/admin/locations/corporate-office/getall",
+    GET_ALL_OFFICES: "/admin/locations/office/getall",
+    CREATE_OFFICE: "/admin/locations/office/create",
+    EDIT_OFFICE: "/admin/locations/office/edit",
+    VIEW_OFFICE: "/admin/locations/office/view",
+    //Branches
+    BRANCHES: "/admin/locations/branches",
+    GET_ALL_CC: "/admin/locations/branches/collection-center/getall",
+    GET_ALL_DC: "/admin/locations/branches/distribution-center/getall",
+    GET_ALL_SEASONAL_CC: "/admin/locations/branches/seasonal-collection-center/getall",
+    GET_ALL_WAREHOUSES_WH: "/admin/locations/branches/warehouses/getall",
+    GET_ALL_BRANCHES: "/admin/locations/branches/getall",
+    CREATE_BRANCHES: "/admin/locations/branches/create",
+    EDIT_BRANCHES: "/admin/locations/branches/edit",
+    VIEW_BRANCHES: "/admin/locations/branches/view",
+    //Registeration
+    CREATE_CUSTOMER: "/create/customers",
+    CREATE_VENDOR: "/create/vendor",
+    CREATE_FARMER: "/create/farmer",
+    CREATE_PRODUCT: "/create/product",
+};
+//# sourceMappingURL=routes.js.map
