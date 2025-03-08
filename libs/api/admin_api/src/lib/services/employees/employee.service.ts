@@ -11,7 +11,7 @@ export class EmployeesService extends BaseService {
 
     createEmployee(data: FormData): Promise<ResultModel> {
         const url = adminApiUrlConstants.CREATE_EMPLOYEE;
-        return this.postFormData(url, data);
+        return this.post(url, data);
     }
 
     getAllEmployees(): Promise<ApiBaseState<GetEmployee[]>> {

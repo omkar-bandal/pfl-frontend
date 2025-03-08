@@ -7,7 +7,7 @@ export const stringConstants = {
     ROLE_MANAGER: "MANAGER",
 
     //Department
-    DEPT_ADMIN:"admin",
+    DEPT_ADMIN:"administrator",
     DEPT_PURCHASE:"purchase",
     DEPT_INVENTORY: "inventory",
     DEPT_SALES: "sales",

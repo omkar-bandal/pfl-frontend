@@ -1,5 +1,5 @@
 import { ApiBaseState, BaseService, Level, GetLevel, ResultModel } from "@prime-fresh/common_api";
-import { adminApiUrlConstants } from "../constants";
+import { adminApiUrlConstants } from "../../constants";
 
 export class LevelsService extends BaseService {
     public static _instance: LevelsService;

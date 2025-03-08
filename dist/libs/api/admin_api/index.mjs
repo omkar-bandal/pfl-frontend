@@ -1906,7 +1906,7 @@ A.HttpStatusCode = ue;
 A.default = A;
 const tt = {
   BASE_URL: "http://ec2-35-154-13-187.ap-south-1.compute.amazonaws.com"
-  // BASE_URL: "https://9345-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://4ab7-182-156-141-17.ngrok-free.app",
 }, le = A.create({
   baseURL: tt.BASE_URL,
   withCredentials: !0,
@@ -2388,7 +2388,7 @@ class Zr extends R {
   }
   createEmployee(e) {
     const r = u.CREATE_EMPLOYEE;
-    return this.postFormData(r, e);
+    return this.post(r, e);
   }
   getAllEmployees() {
     const e = u.GET_ALL_EMPLOYEES;
@@ -2409,7 +2409,11 @@ class Zr extends R {
 }
 class en extends R {
   static getInstance() {
-    return this._instance || this._instance == new this();
+    return this._instance || (this._instance = new this());
+  }
+  createDepartment(e) {
+    const r = u.CREATE_DEPARTMENT;
+    return this.postFormData(r, e);
   }
   getAllDepartments() {
     const e = u.GET_ALL_DEPARTMENT;
@@ -2419,15 +2423,11 @@ class en extends R {
     const r = `${u.GET_DEPARTMENT_BY_ID}/${e}`;
     return this.get(r);
   }
-  createDepartment(e) {
-    const r = u.CREATE_DEPARTMENT;
-    return this.post(r, e);
-  }
   updateDepartment(e, r) {
     const n = `${u.UPDATE_DEPARTMENT}/${e}`;
-    return this.patch(n, r);
+    return this.patchFormData(n, r);
   }
-  deleteDepartment(e) {
+  deleteDepartmentById(e) {
     const r = `${u.DELETE_DEPARTMENT}/${e}`;
     return this.delete(r);
   }

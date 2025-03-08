@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { images } from "@prime-fresh/assets";
 import { authRouteConstants, authState, SignInSchema, stringConstants, useActions, useAppSelector } from "@prime-fresh/modules";
 import { toast } from "@prime-fresh/ui_shared";
-import { useGetDepartmentById } from "@prime-fresh/shared/modules";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
@@ -54,13 +53,10 @@ export const SignIn = () => {
     //custom hook for sign in
     const { mutateAsync, isError, error } = useSignIn();
 
-    const { data } = useGetDepartmentById(loggedInUserInfo?.department || '')
-    const dept = data?.data ? data.data : "";
-
     useEffect(() => {
-        console.log("useEffect Running...");
+        const dept = localStorage.getItem('department');
         if (dept && loggedInUserInfo) {
-            const departmentName = dept.name.toLowerCase();
+            const departmentName = dept.toLowerCase();
             console.log(departmentName);
             // Navigate based on department name
             switch (departmentName) {
@@ -80,7 +76,7 @@ export const SignIn = () => {
                     navigate(authRouteConstants.SIGN_IN);
             }
         }
-    }, [dept, loggedInUserInfo, navigate]);
+    }, [loggedInUserInfo, navigate]);
 
     //submit function of sign in form.
     const handleSignIn = (values: SignInRequest) => {
@@ -89,6 +85,22 @@ export const SignIn = () => {
             setTimeout(() => {
                 if (result) {
                     setLoggedInUserInfo({ department: result.department, userName: result.userName })
+                    switch (result.department.toLowerCase()) {
+                        case stringConstants.DEPT_ADMIN:
+                            navigate(ADMIN_ROUTES.DASHBOARD_ADMIN);
+                            break;
+                        case stringConstants.DEPT_PURCHASE:
+                            navigate(PURCHASE_ROUTES.DASHBOARD_PURCHASE);
+                            break;
+                        case stringConstants.DEPT_INVENTORY:
+                            navigate(inventoryRouteConstants.DASHBOARD_INVENTORY);
+                            break;
+                        case stringConstants.DEPT_SALES:
+                            navigate(SALES_ROUTES.DASHBOARD_SALES);
+                            break;
+                        default:
+                            navigate(authRouteConstants.SIGN_IN);
+                    }
                 }
             }, 2000);
         }).catch(() => {

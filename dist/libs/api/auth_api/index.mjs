@@ -4045,7 +4045,7 @@ oe.HttpStatusCode = Ur;
 oe.default = oe;
 const fo = {
   BASE_URL: "http://ec2-35-154-13-187.ap-south-1.compute.amazonaws.com"
-  // BASE_URL: "https://9345-182-156-141-17.ngrok-free.app",
+  // BASE_URL: "https://4ab7-182-156-141-17.ngrok-free.app",
 }, Mr = oe.create({
   baseURL: fo.BASE_URL,
   withCredentials: !0,

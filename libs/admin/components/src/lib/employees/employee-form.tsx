@@ -1,22 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ADMIN_ROUTES, initValEmployee, useCreateEmployee, useGetEmployeeById, useUpdateEmployeeById } from '@prime-fresh/admin/modules';
+import { ADMIN_ROUTES, initValEmployee, useCreateEmployee, useGetAllDepartments, useGetAllEmployees, useGetDepartmentById, useGetEmployeeById, useUpdateEmployeeById } from '@prime-fresh/admin/modules';
 import { FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Grid2, LinearProgress, Typography } from '@mui/material';
+import { Box, Grid2, LinearProgress, SelectChangeEvent, Typography } from '@mui/material';
 import { Formik } from 'formik';
+import { mapToValueLabelArray } from '@prime-fresh/shared/modules';
+import { useMemo, useState } from 'react';
 
 export const EmployeeForm = () => {
     const { id } = useParams<{ id: string }>();
     const employeeId = id ? id : "";
     const navigate = useNavigate();
+    const [deptId, setDeptId] = useState("");
 
-    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateEmployee();
-
-    const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateEmployeeById(employeeId);
 
     const { data, isLoading } = useGetEmployeeById(employeeId);
     const employeeData = data?.data ? data.data : null;
     const EmployeeInitValue = employeeId.length > 1 && employeeData !== null ? employeeData : initValEmployee;
+
+    const { data: depts } = useGetAllDepartments();
+    const departments = useMemo(() => depts?.data ? mapToValueLabelArray(depts.data, 'id', 'name') : [], [depts]);
+    
+    const { data: dept } = useGetDepartmentById(deptId || '');
+    console.log(dept);
+    const levels = useMemo(() => dept?.data ? mapToValueLabelArray(dept.data.levels, 'id', 'name') : [], [dept]);
+    
+    const { data: emps } = useGetAllEmployees();
+    const employees = useMemo(() => emps?.data ? mapToValueLabelArray(emps.data, 'id', 'firstName') : [], [emps]);
+
+    const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateEmployee();
+    const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateEmployeeById(employeeId);
 
     const handleSubmit = (values: any) => {
         employeeId === "" ? (mutatePost(values).then(() => {
@@ -36,6 +49,7 @@ export const EmployeeForm = () => {
                 toast.error(patchError ? patchError.message : "Error while updating employee data.");
             }))
     }
+
     return (
         isLoading ? (
             <Box sx={{ flex: 1 }}>
@@ -46,14 +60,13 @@ export const EmployeeForm = () => {
                 key={id || "create-employee"}
                 enableReinitialize={true}
                 initialValues={EmployeeInitValue}
-                // validationSchema={productCategorySchema}
                 validateOnChange={true}
                 validateOnBlur={true}
                 onSubmit={(values) => {
                     console.log(values);
                     handleSubmit(values);
                 }}>
-                {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
+                {({ values, handleSubmit, handleReset, handleChange, setFieldValue, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid2 container padding={1}>
                             <PageTitle pagetitle="Employee" />
@@ -105,15 +118,19 @@ export const EmployeeForm = () => {
                                 <TextInput isRequired={true} type="date" label="Joining Date" name="joiningDate" value={values.joiningDate} handleChange={handleChange} />
                             </Grid2>
                             <Grid2 size={{ xs: 12, md: 3 }} >
-                                <SelectInput isRequired={true} label="Department" name="selectDepartment" options={[]} value={values.selectDepartment} handleChange={handleChange} />
+                                <SelectInput isRequired={true} label="Department" name="selectDepartment" options={departments} value={values.selectDepartment}
+                                    handleChange={(e: SelectChangeEvent) => {
+                                        setFieldValue("selectDepartment", e.target.value);
+                                        setDeptId(e.target.value);
+                                    }} />
                             </Grid2>
                             <Grid2 size={{ xs: 12, md: 3 }} >
-                                <SelectInput isRequired={true} label="Level" name="level" options={[]} value={values.level} handleChange={handleChange} />
+                                <SelectInput isRequired={true} label="Level" name="level" options={levels} value={values.level} handleChange={handleChange} />
                             </Grid2>
                             <Grid2 size={{ xs: 12, md: 3 }} >
-                                <SelectInput isRequired={true} label="Reporting Manager" name="reportingManager" options={[]} value={values.reportingManager} handleChange={handleChange} />
+                                <SelectInput isRequired={true} label="Reporting Manager" name="reportingManager" options={employees} value={values.reportingManager} handleChange={handleChange} />
                             </Grid2>
-                            <Grid2 size={{ xs: 12}} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn
                                     label={employeeId === "" ? "Create" : "Update"}
                                     isError={employeeId === "" ? postError : patchError}
@@ -123,16 +140,6 @@ export const EmployeeForm = () => {
                         </Grid2>
                     </form>
                 )}
-            </Formik>
+            </Formik >
     )
-
-    // return (
-    //     <DynamicForm<PostEmployee>
-    //         schema={EmployeeFormFields()}
-    //         initialValues={
-    //             EmployeeInitValue ? EmployeeInitValue : generateInitialValues(EmployeeFormFields().fields)
-    //         }
-    //         validationSchema={employeeValidationSchema}
-    //         handleSubmit={openFor === 'update' ? handleUpdate : handleSubmit} />
-    // )
 }

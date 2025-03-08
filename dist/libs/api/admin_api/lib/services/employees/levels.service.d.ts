@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, Level, GetLevel, ResultModel } from '../../../../common_api/src/index.ts';
+import { ApiBaseState, BaseService, Level, GetLevel, ResultModel } from '../../../../../common_api/src/index.ts';
 
 export declare class LevelsService extends BaseService {
     static _instance: LevelsService;

@@ -1,2 +1,2 @@
 export * from './employee.type';
-export * from './role.type';
+export * from './department.type';

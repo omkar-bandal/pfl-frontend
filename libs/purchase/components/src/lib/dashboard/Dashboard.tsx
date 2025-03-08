@@ -54,11 +54,7 @@ export const DashboardPurchase = () => {
               label="Duration"
               onChange={e => handleChange(e)}
               sx={{
-<<<<<<< HEAD
-                height: '36px',
-=======
                 height: '40px',
->>>>>>> master
                 fontSize: '14px',
                 '& .MuiSelect-select': { padding: '6px 10px' },
               }}
@@ -83,11 +79,7 @@ export const DashboardPurchase = () => {
               label="Company"
               onChange={e => handleChange(e)}
               sx={{
-<<<<<<< HEAD
-                height: '36px',
-=======
                 height: '40px',
->>>>>>> master
                 fontSize: '14px',
                 '& .MuiSelect-select': { padding: '6px 10px' },
               }}
@@ -112,11 +104,7 @@ export const DashboardPurchase = () => {
               label="Locations"
               onChange={e => handleChange(e)}
               sx={{
-<<<<<<< HEAD
-                height: '36px',
-=======
                 height: '40px',
->>>>>>> master
                 fontSize: '14px',
                 '& .MuiSelect-select': { padding: '6px 10px' },
               }}
@@ -130,20 +118,6 @@ export const DashboardPurchase = () => {
           </FormControl>
         </Grid2>
       </Grid2>
-<<<<<<< HEAD
-      <Grid2 container spacing={2}>
-        <Grid2 size={{ xs: 12, md: 3 }}>
-          <MetricCard title='No of GRN' value={dashboardData?.grns.totalGRNs ? dashboardData?.grns.totalGRNs.toString() : ''} percentage={10} />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
-          <MetricCard title='Purchase Quantity' value={`${dashboardData?.grns.totalPurchase.totalQuantityInKg.toString()} Kg`} percentage={10} />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 3 }}>
-          <MetricCard title='Purchase Amount' value={`Rs ${dashboardData?.grns.totalPurchase.totalAmount.toString()}`} percentage={10} />
-        </Grid2>
-      </Grid2>
-
-=======
       <Grid2 container spacing={1} marginY={1}>
         <Grid2 size={{ xs: 12, md: 4 }}>
           <MetricCard
@@ -202,7 +176,6 @@ export const DashboardPurchase = () => {
           />
         </Grid2>
       </Grid2>
->>>>>>> master
     </Box >)
   )
 }

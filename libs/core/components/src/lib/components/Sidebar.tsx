@@ -5,7 +5,6 @@ import { mobileOpenState, Navigations, setIsClosing, setMobileOpen, SidebarProps
 import Logo from "./Logo";
 import SidebarList from "./SidebarList";
 import { adminNavigations, inventoryNavigations, purchaseNavigations, salesNavigations } from "../navigations";
-import { useGetDepartmentById } from "@prime-fresh/shared/modules";
 
 
 export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
@@ -15,16 +14,16 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
   const [selectedItem, setSelectedItem] = useState("");
 
   const navigationMap: { [key: string]: Navigations[] } = {
-    "admin": adminNavigations,
+    "administrator": adminNavigations,
     "purchase": purchaseNavigations,
     "inventory": inventoryNavigations,
     "sales": salesNavigations,
     "default": [],
   };
 
-  const deptId = localStorage.getItem("department");
-  const { data } = useGetDepartmentById(deptId || '')
-  const dept = data?.data ? data.data.name.toLowerCase() : "";
+  const department = localStorage.getItem("department");
+  const dept = department?.toLowerCase();
+  
   const navigations = navigationMap[dept ? dept : "Default"] || [];
 
   const handleDrawerClose = () => {
