@@ -3,21 +3,33 @@ import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const DumpRegisterColumns = (): CustomGridColDef[] => {
+export const useDumpRegisterColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
+        { 
+            field: "createdDate", 
+            headerName: "Created Date", 
+            width: 130,
+            align: 'center',
+            valueGetter: (value: string) => value? value : '-', 
+        },
+        { 
+            field: "createdTime", 
+            headerName: "Created Time", 
+            width: 130,
+            align: 'center',
+            valueGetter: (value: string) => value? value : '-', 
+        },
         {
             field: "companyName",
             headerName: "Company",
             width: 200,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : 'Prime Fresh Ltd.';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "location",
@@ -26,9 +38,7 @@ export const DumpRegisterColumns = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "date",
@@ -61,5 +71,5 @@ export const DumpRegisterColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate])
 }

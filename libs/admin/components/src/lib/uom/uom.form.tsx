@@ -1,9 +1,9 @@
 import { Formik } from "formik";
 import { ADMIN_ROUTES, initValUOM, uomSchema, useCreateUOM, useGetUOMById, useUpdateUOMById } from "@prime-fresh/admin/modules";
 import { PostUOM } from "@prime-fresh/admin_api";
-import { FormResetBtn, FormSubmitBtn, TextInput, toast } from "@prime-fresh/ui_shared";
+import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
+import { Box, Grid2, LinearProgress } from "@mui/material";
 
 export const UOMForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -66,18 +66,11 @@ export const UOMForm = () => {
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} md={6}>
-                                <Typography variant='h4'>Unit of Measurement</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn
-                                    label={uomId === "" ? "Create" : "Update"}
-                                    isError={uomId === "" ? postError : patchError}
-                                    isSubmitting={isSubmitting} />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                            <Grid2 size={{ xs: 12 }}>
+                                <PageTitle pagetitle='Unit of Measures' />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type='text'
                                     isRequired={true}
@@ -85,8 +78,8 @@ export const UOMForm = () => {
                                     label="Name of Unit of Measurement"
                                     value={values.unit}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type='text'
                                     isRequired={true}
@@ -94,8 +87,8 @@ export const UOMForm = () => {
                                     label="Abbreviation of Unit of Measurement"
                                     value={values.abbreviation}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type='text'
                                     isRequired={false}
@@ -105,8 +98,17 @@ export const UOMForm = () => {
                                     label="Description of Unit of Measurement"
                                     value={values.description}
                                     handleChange={handleChange} />
-                            </Grid>
-                        </Grid>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <FormButtonGroup
+                                    submitLabel={uomId === "" ? "Create" : "Update"}
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={uomId === "" ? postError : patchError}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                />
+                            </Grid2>
+                        </Grid2>
                     </form>
                 )}
             </Formik>

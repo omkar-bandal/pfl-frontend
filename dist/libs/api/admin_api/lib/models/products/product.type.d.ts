@@ -1,3 +1,7 @@
+export type QCParameters = {
+    name: string;
+    type: "good" | "bad";
+};
 export type PostProduct = {
     name: string;
     image: File | null;

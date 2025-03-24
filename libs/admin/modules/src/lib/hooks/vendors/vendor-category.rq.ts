@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { VendorCategoryService, GetVendorCategory, PostVendorCategory } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -22,15 +22,15 @@ export function useDeleteVendorCategoryById(id: string):
     UseMutationResult<ResultModel, ErrorModel, unknown, unknown> {
     return useMutation<ResultModel, ErrorModel, unknown, unknown>({
         mutationKey: ['delete-vendor-category-by-id'],
-        mutationFn: () => VendorCategoryService.getInstance().deleteProdctCategoryById(id),
+        mutationFn: () => VendorCategoryService.getInstance().deleteVendorCategoryById(id),
     });
 }
 
-export function useGetAllVendorCategories():
+export function useGetAllVendorCategories(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetVendorCategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVendorCategory[]>, ErrorModel>({
-        queryKey: ['get-all-vendor-categories'],
-        queryFn: () => VendorCategoryService.getInstance().getAllVendorCategories(),
+        queryKey: ['get-all-vendor-categories', queryParams],
+        queryFn: () => VendorCategoryService.getInstance().getAllVendorCategories(queryParams),
     });
 }
 

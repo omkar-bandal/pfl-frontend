@@ -25,17 +25,18 @@ function useDeleteProductById(id) {
         mutationFn: () => admin_api_1.ProductsService.getInstance().deleteProductById(id),
     });
 }
-function useGetAllProducts() {
+function useGetAllProducts(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-products'],
-        queryFn: () => admin_api_1.ProductsService.getInstance().getAllProducts(),
+        queryKey: ['get-all-products', queryParams],
+        queryFn: () => admin_api_1.ProductsService.getInstance().getAllProducts(queryParams),
     });
 }
 function useGetProductById(id) {
+    const enabled = id.length > 1 ? true : false;
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-product-by-id'],
+        queryKey: ['get-product-by-id', id],
         queryFn: () => admin_api_1.ProductsService.getInstance().getProductById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }
 //# sourceMappingURL=products.rq.js.map

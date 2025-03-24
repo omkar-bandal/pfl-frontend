@@ -4,6 +4,7 @@ export * from './productClassification.schema';
 export * from './productCategory.schema';
 export * from './productSubcategory.schema';
 export * from './office.schema';
+export * from './branch.schema';
 export * from './customer.schema';
 export * from './vendor.schema';
 export * from './farmer.schema';

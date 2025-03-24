@@ -3,13 +3,13 @@ import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const SecondSaleRegisterColumns = (): CustomGridColDef[] => {
+export const useSecondSaleRegisterColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
 
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
         {
             field: "location",
             headerName: "Location",
@@ -76,5 +76,5 @@ export const SecondSaleRegisterColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate])
 }

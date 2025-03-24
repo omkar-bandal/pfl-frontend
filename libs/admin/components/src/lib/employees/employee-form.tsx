@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ADMIN_ROUTES, initValEmployee, useCreateEmployee, useGetAllDepartments, useGetAllEmployees, useGetDepartmentById, useGetEmployeeById, useUpdateEmployeeById } from '@prime-fresh/admin/modules';
-import { FormResetBtn, FormSubmitBtn, PageTitle, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { ADMIN_ROUTES, employeeValidationSchema, initValEmployee, useCreateEmployee, useGetAllDepartments, useGetAllEmployees, useGetDepartmentById, useGetEmployeeById, useUpdateEmployeeById } from '@prime-fresh/admin/modules';
+import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Grid2, LinearProgress, SelectChangeEvent, Typography } from '@mui/material';
 import { Formik } from 'formik';
@@ -20,12 +20,12 @@ export const EmployeeForm = () => {
 
     const { data: depts } = useGetAllDepartments();
     const departments = useMemo(() => depts?.data ? mapToValueLabelArray(depts.data, 'id', 'name') : [], [depts]);
-    
+
     const { data: dept } = useGetDepartmentById(deptId || '');
     console.log(dept);
     const levels = useMemo(() => dept?.data ? mapToValueLabelArray(dept.data.levels, 'id', 'name') : [], [dept]);
-    
-    const { data: emps } = useGetAllEmployees();
+    const page = 1; const limit = 1; const sort = '';
+    const { data: emps } = useGetAllEmployees({ page, limit, sort });
     const employees = useMemo(() => emps?.data ? mapToValueLabelArray(emps.data, 'id', 'firstName') : [], [emps]);
 
     const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateEmployee();
@@ -60,6 +60,7 @@ export const EmployeeForm = () => {
                 key={id || "create-employee"}
                 enableReinitialize={true}
                 initialValues={EmployeeInitValue}
+                validationSchema={employeeValidationSchema}
                 validateOnChange={true}
                 validateOnBlur={true}
                 onSubmit={(values) => {
@@ -130,12 +131,14 @@ export const EmployeeForm = () => {
                             <Grid2 size={{ xs: 12, md: 3 }} >
                                 <SelectInput isRequired={true} label="Reporting Manager" name="reportingManager" options={employees} value={values.reportingManager} handleChange={handleChange} />
                             </Grid2>
-                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn
-                                    label={employeeId === "" ? "Create" : "Update"}
-                                    isError={employeeId === "" ? postError : patchError}
-                                    isSubmitting={isSubmitting} />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <FormButtonGroup
+                                    submitLabel={employeeId === "" ? "Create" : "Update"}
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={employeeId === "" ? postError : patchError}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                />
                             </Grid2>
                         </Grid2>
                     </form>

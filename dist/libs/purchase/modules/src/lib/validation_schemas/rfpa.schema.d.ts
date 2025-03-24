@@ -4,12 +4,12 @@ export declare const rfpaSchema: yup.ObjectSchema<{
     selectedParty: string;
     rfpaProducts: {
         expectedHarvestDate?: Date | null | undefined;
+        grade?: string | null | undefined;
         purchaseDate: string;
         dispatchDate: string;
         deliveryDate: string;
         deliveryLocation: string;
         product: string;
-        grade: string;
         quantity: number;
         unitPrice: number;
     }[];

@@ -1,18 +1,14 @@
 import { useRef, useState } from "react";
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { PURCHASE_API_URL } from "@prime-fresh/purchase_api";
-import { useNavigate, useParams } from "react-router-dom";
-import { axiosInstance, handleError } from "@prime-fresh/common_api";
-import { PURCHASE_ROUTES, useGetLaborPaymentVoucherById } from "@prime-fresh/purchase/modules";
+import {  useParams } from "react-router-dom";
+import { useGetLaborPaymentVoucherById } from "@prime-fresh/purchase/modules";
 import { useReactToPrint } from "react-to-print";
 import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 
 export const LabourPaymentVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
     const reactToPrintFn = useReactToPrint({ contentRef });
-    const navigate = useNavigate();
     const [reason, setReason] = useState<string>("");
-    const [approval, setApproval] = useState<string>("");
     const { voucherid } = useParams<{ voucherid: string }>();
     const lpVoucherId = voucherid ? voucherid : '';
     const { data, isLoading } = useGetLaborPaymentVoucherById(lpVoucherId);
@@ -31,18 +27,18 @@ export const LabourPaymentVoucherView = () => {
         createData(6, "Mobile No of Any 1 or 2", lpVoucher?.contactNo, "", ""),
         createData(7, "Product", lpVoucher?.products, "", ""),
     ];
-    const handleStatusChange = async () => {
-        try {
-            const response = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${lpVoucherId}`,
-                { approvalNote: `${reason}`, approvalStatus: `${approval}` });
-            console.log(response.data);
-            if (response.status === 200)
-                navigate(PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER);
-            return response.data;
-        } catch (error) {
-            handleError(error);
-        }
-    }
+    // const handleStatusChange = async () => {
+    //     try {
+    //         const response = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${lpVoucherId}`,
+    //             { approvalNote: `${reason}`, approvalStatus: `${approval}` });
+    //         console.log(response.data);
+    //         if (response.status === 200)
+    //             navigate(PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER);
+    //         return response.data;
+    //     } catch (error) {
+    //         handleError(error);
+    //     }
+    // }
     return (
         <Container maxWidth="xl">
             {isLoading ?
@@ -57,12 +53,6 @@ export const LabourPaymentVoucherView = () => {
                             </Grid>
                             <Grid xs={12} md={6}>
                                 <Grid container columnSpacing={2}>
-                                    <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED"); handleStatusChange(); }}>Approve</Button>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Button fullWidth variant="contained" color='secondary' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("notApproved"); handleStatusChange(); }}>Not Approve</Button>
-                                    </Grid>
                                     <Grid item xs={4}>
                                         <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
                                     </Grid>

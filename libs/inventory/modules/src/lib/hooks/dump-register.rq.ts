@@ -38,7 +38,7 @@ export function useGetDumpRegisterById(id: string):
     UseQueryResult<ApiBaseState<GetDumpRegister>, ErrorModel> {
         const enable = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetDumpRegister>, ErrorModel>({
-        queryKey: ['get-dump-register-by-id'],
+        queryKey: ['get-dump-register-by-id', id],
         queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterById(id),
         enabled: enable,
     });

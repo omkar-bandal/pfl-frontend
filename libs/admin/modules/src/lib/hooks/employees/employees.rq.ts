@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { EmployeesService, GetEmployee } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,17 +26,17 @@ export function useDeleteEmployeeById(id: string):
     });
 }
 
-export function useGetAllEmployees():
+export function useGetAllEmployees(queryParams: QueryParams):
     UseQueryResult<ApiBaseState<GetEmployee[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetEmployee[]>, ErrorModel>({
-        queryKey: ['get-all-employees'],
-        queryFn: () => EmployeesService.getInstance().getAllEmployees(),
+        queryKey: ['get-all-employees', queryParams],
+        queryFn: () => EmployeesService.getInstance().getAllEmployees(queryParams),
     });
 }
 
 export function useGetEmployeeById(id: string):
     UseQueryResult<ApiBaseState<GetEmployee>, ErrorModel> {
-        const employeeId = id.length > 1 ? id : null;
+    const employeeId = id.length > 1 ? id : null;
     return useQuery<ApiBaseState<GetEmployee>, ErrorModel>({
         queryKey: ['get-employee-by-id', employeeId],
         queryFn: () => EmployeesService.getInstance().getEmployeeById(id),

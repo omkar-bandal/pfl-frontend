@@ -1,44 +1,54 @@
 import React from 'react'
-import { Add } from '@mui/icons-material';
-import { Box, Button } from '@mui/material';
-import { useGridApiRef } from '@mui/x-data-grid';
-import { inventoryRouteConstants } from '@prime-fresh/inventory/modules';
-import { DataTable, TableToolbar, toast } from '@prime-fresh/ui_shared';
+import { Box, Grid2 } from '@mui/material';
+import { inventoryRouteConstants, useGetAllSecondSaleRegisters } from '@prime-fresh/inventory/modules';
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom';
-import { INVENTORY_API_URL, useGetAllSecondSaleRegisters, GetSecondSaleRegister } from '@prime-fresh/inventory_api';
-import { SecondSaleRegisterColumns } from './second-sale-register.column';
+import { GetSecondSaleRegister } from '@prime-fresh/inventory_api';
+import { useSecondSaleRegisterColumns } from './second-sale-register.column';
 
 export const SecondSaleRegisterTable = () => {
   const navigate = useNavigate();
-  const apiRef = useGridApiRef();
-  const { data, isLoading, isError, error } = useGetAllSecondSaleRegisters(INVENTORY_API_URL.GET_ALL_SECOND_SALE_REGISTERS);
+  const secondSaleRegisterColumns = useSecondSaleRegisterColumns()
+  const {
+    columnVisibilityModel,
+    displayColumnVisibilityPanel,
+    handleColumnVisibilityModelChange,
+    handleCloseColumnVisibilityPanel,
+    handleOpenColumnVisibilityPanel
+  } = useDataTable({columnDef: secondSaleRegisterColumns});
+  const { data, isLoading, isError, error } = useGetAllSecondSaleRegisters();
+  const secondSales = data?.data ? data.data : [];
   React.useEffect(() => {
     if (isError) {
-        toast.error(error?.message || 'Error occured please refresh the page.')
+      toast.error(error?.message || 'Error occured please refresh the page.')
     }
-}, [isError, error])
-  const handleCreate = () => {
-    navigate(inventoryRouteConstants.CREATE_SECOND_SALE_REGISTER);
-  }
+  }, [isError, error])
+  const handleCreate = () => navigate(inventoryRouteConstants.CREATE_SECOND_SALE_REGISTER);
   return (
     <Box sx={{ flex: 1 }}>
-      <Box marginY={2} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Button
-          variant="outlined"
-          size="medium"
-          startIcon={<Add />}
-          fullWidth={false}
-          onClick={handleCreate}
-        >
-          Add Second Sale Register
-        </Button>
-        <TableToolbar apiRef={apiRef} />
-      </Box>
-      <DataTable<GetSecondSaleRegister>
+      <Grid2 container marginY={1}>
+        <Grid2 size={{ xs: 12, md: 8 }}>
+          <PageTitle pagetitle='Second Sale Register' />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+          <AddNewButton handleClick={handleCreate} />
+          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnVisibilityPanel
+            popoverId="second-sales-col-def"
+            columns={secondSaleRegisterColumns}
+            columnVisibilityModel={columnVisibilityModel}
+            displayColumnVisibilityModel={displayColumnVisibilityPanel}
+            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+          />
+        </Grid2>
+      </Grid2>
+      <DataGridTable<GetSecondSaleRegister>
+        mode="client"
         loading={isLoading}
-        rows={data}
-        columns={SecondSaleRegisterColumns()}
-        apiRef={apiRef}
+        rows={secondSales}
+        columns={secondSaleRegisterColumns}
+        columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
   )

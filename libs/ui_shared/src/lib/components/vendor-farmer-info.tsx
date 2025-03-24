@@ -1,79 +1,72 @@
-import React, { useMemo, useCallback } from 'react';
-import { Grid, Box, Typography, Button } from '@mui/material';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
+import { Grid2, Box, Typography, Button } from '@mui/material';
 import { useFormikContext } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { ADMIN_ROUTES, setAllFarmersPartialData, setAllVendorsPartialData, setSelectedFarmerPartialData, setSelectedVendorPartialData} from '@prime-fresh/admin/modules';
-import { AutoCompleteInput, RadioGroupInput } from '../auto_form/components';
+import { ADMIN_ROUTES, setSelectedFarmerPartialData, setSelectedVendorPartialData } from '@prime-fresh/admin/modules';
+import { FormikAutocomplete, RadioGroupInput } from '../auto_form/components';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { VendorReadOnlyFields } from './vendor-readonly-fields';
 import { FarmerReadOnlyFields } from './farmer-readonly-fields';
-import { mapToValueLabelArray, useGetFarmersPartialData, useGetVendorsPartialData } from '@prime-fresh/shared/modules';
+import { debounce, useGetFarmersPartialDataById, useGetVendorsPartialDataById, useSearchFarmerData, useSearchVendorData } from '@prime-fresh/shared/modules';
+import { FarmerPartialData, VendorPartialData } from '@prime-fresh/common_api';
 
 export const VendorFarmerInfo = <T extends { source: 'vendor' | 'farmer'; selectedParty: string | null }>({
   source,
   selectedParty,
 }: {
-  source?: string;
+  source?: 'vendor' | 'farmer';
   selectedParty?: string;
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { values, setFieldValue } = useFormikContext<T>();
+  const { values, handleChange } = useFormikContext<T>();
+  const [vendorSearchQuery, setVendorSearchQuery] = useState('');
+  const [farmerSearchQuery, setFarmerSearchQuery] = useState('');
 
-  const { data: vendors } = useGetVendorsPartialData();
-  const allVendors = useMemo(() => vendors?.data ? mapToValueLabelArray(vendors.data, 'id', 'companyName') : [], [vendors]);
+  const { data: vendors, isFetching: isFetchingVendors, error: errorVendors } = useSearchVendorData(vendorSearchQuery);
+  const foundVedors = useMemo(() => vendors?.data ? vendors.data : [], [vendors]);
 
-  const { data: farmers } = useGetFarmersPartialData();
-  const allFarmers = useMemo(() => farmers?.data ? mapToValueLabelArray(farmers.data, 'id', 'fullName') : [], [farmers]);
+  const { data: farmers, isFetching: isFetchingFarmers, error: errorFarmers } = useSearchFarmerData(farmerSearchQuery);
+  const foundFarmers = useMemo(() => farmers?.data ? farmers.data : [], [farmers]);
 
-  React.useEffect(() => {
+  const { data: vendor } = useGetVendorsPartialDataById(selectedParty || '', source);
+  const selectedVendor = useMemo(() => vendor?.data ? vendor.data : null, [vendor]);
+  const { data: farmer } = useGetFarmersPartialDataById(selectedParty || '', source);
+  const selectedFarmer = useMemo(() => farmer?.data ? farmer.data : null, [farmer]);
+
+  useEffect(() => {
     dispatch(setSelectedVendorPartialData(null));
     dispatch(setSelectedFarmerPartialData(null));
-    if (source === 'farmer') {
-      dispatch(setSelectedFarmerPartialData(farmers?.data?.find((farmer) => farmer.id === selectedParty)));
-    } else {
-      dispatch(setSelectedVendorPartialData(vendors?.data?.find((vendor) => vendor.id === selectedParty)));
+    if (source === 'vendor' && selectedVendor !== null) {
+      setVendorSearchQuery(selectedVendor.companyName);
+      dispatch(setSelectedVendorPartialData(selectedVendor))
+    } else if (source === 'farmer' && selectedFarmer !== null) {
+      setFarmerSearchQuery(selectedFarmer?.fullName);
+      dispatch(setSelectedFarmerPartialData(selectedFarmer))
     }
-  }, [dispatch, selectedParty, source, farmers, vendors]);
+  }, [source, selectedVendor, selectedFarmer, dispatch])
 
-  const handleSourceChange = useCallback(
-    (value: string) => {
-      setFieldValue('source', value);
-      if (value === 'vendor') {
-        dispatch(setAllVendorsPartialData(vendors?.data || []));
-      } else {
-        dispatch(setAllFarmersPartialData(farmers?.data || []));
-      }
-    },
-    [dispatch, setFieldValue, vendors, farmers]
-  );
+  const debouncedVendorChange = useCallback(
+    debounce((value: string) => {
+      setVendorSearchQuery(value);
+    }, 2000), [setVendorSearchQuery])
 
-  const handlePartyNameChange = useCallback(
-    (dataId: string) => {
-      if (values.source === 'vendor') {
-        const selectedVendor = vendors?.data !== null ? vendors?.data.find((vendor) => vendor.id === dataId) : null;
-        if (selectedVendor) {
-          dispatch(setSelectedVendorPartialData(selectedVendor));
-        }
-      } else if (values.source === 'farmer') {
-        const selectedFarmer = farmers?.data !== null ? farmers?.data.find((farmer) => farmer.id === dataId) : null;
-        dispatch(setSelectedFarmerPartialData(selectedFarmer));
-      }
-    },
-    [dispatch, values.source, vendors, farmers]
-  );
+  const debouncedFarmerChange = useCallback(
+    debounce((value: string) => {
+      setFarmerSearchQuery(value);
+    }, 2000), [setFarmerSearchQuery]);
 
   return (
     <>
-      <Grid item xs={12} marginY={2}>
+      <Grid2 size={{ xs: 12 }} marginY={2}>
         <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
             Vendor / Farmer Information
           </Typography>
         </Box>
-      </Grid>
-      <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+      </Grid2>
+      <Grid2 size={{ xs: 12 }} sx={{ display: 'flex', alignItems: 'center' }}>
         <RadioGroupInput
           isRequired
           label="Source : "
@@ -81,32 +74,41 @@ export const VendorFarmerInfo = <T extends { source: 'vendor' | 'farmer'; select
           alignment="horizontal"
           options={PURCHASE_ARRAYS.source}
           value={values.source}
-          handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            handleSourceChange(event.target.value);
-          }}
+          handleChange={handleChange}
         />
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <AutoCompleteInput
-          isRequired
-          name="selectedParty"
-          label={values.source === 'vendor' ? 'Vendor Company Name' : 'Farmer Name'}
-          options={values.source === 'vendor' ? allVendors : allFarmers}
-          handleChange={(event, newValue) => {
-            if (newValue !== null) {
-              if (typeof newValue === 'string')
-                setFieldValue(`selectedParty`, null);
-              else {
-                setFieldValue(`selectedParty`, newValue.value);
-                handlePartyNameChange(newValue.value);
-              }
-            } else
-              setFieldValue('selectedParty', null);
-          }}
-        />
-      </Grid>
+      </Grid2>
+      <Grid2 size={{ xs: 12, md: 4 }}>
+        {values.source === 'vendor' ?
+          (<FormikAutocomplete<VendorPartialData>
+            isRequired={true}
+            optionValueKey="id"
+            name="selectedParty"
+            label="Vendor Company Name"
+            options={foundVedors}
+            isLoading={isFetchingVendors}
+            noOptionsText={errorVendors ? errorVendors.message : 'Enter name'}
+            onInputChange={(value) => debouncedVendorChange(value)}
+            getOptionLabel={(option) => option.companyName}
+            onOptionSelected={selectedVendor => {
+              dispatch(setSelectedVendorPartialData(null))
+              dispatch(setSelectedVendorPartialData(selectedVendor))
+            }}
+          />) :
+          (<FormikAutocomplete<FarmerPartialData>
+            isRequired={true}
+            optionValueKey="id"
+            name="selectedParty"
+            label="Farmer Name"
+            options={foundFarmers}
+            isLoading={isFetchingFarmers}
+            noOptionsText={errorFarmers ? errorFarmers.message : 'Enter Name'}
+            onInputChange={(value) => debouncedFarmerChange(value)}
+            getOptionLabel={(option) => option.fullName}
+            onOptionSelected={selectedFarmer => dispatch(setSelectedFarmerPartialData(selectedFarmer))}
+          />)}
+      </Grid2>
       {values.source === 'vendor' ? <VendorReadOnlyFields /> : <FarmerReadOnlyFields />}
-      <Grid item xs={12} marginY={2}>
+      <Grid2 size={{ xs: 12 }} marginY={2}>
         <Box sx={{ width: '100%' }}>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
             If {values.source === 'vendor' ? 'Vendor' : 'Farmer'} Not Found{' '}
@@ -118,7 +120,7 @@ export const VendorFarmerInfo = <T extends { source: 'vendor' | 'farmer'; select
             </Button>
           </Typography>
         </Box>
-      </Grid>
+      </Grid2>
     </>
   );
 };

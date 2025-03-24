@@ -4,12 +4,12 @@ import { Edit, Preview } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 // import { RequestedBy } from "@prime-fresh/purchase_api";
 
-export const TPVoucherListCols = (): CustomGridColDef[] => {
+export const useTPVoucherColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
         {
             field: "voucherNo",
             headerName: "Voucher Number",
@@ -194,5 +194,5 @@ export const TPVoucherListCols = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate])
 }

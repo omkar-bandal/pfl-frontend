@@ -11,6 +11,7 @@ import {
     GetAllGRNNums,
     GetAllRFPANums,
     GetDepartment,
+    GetProduct,
     ProductPartialData,
     UOMPartialData,
     VendorPartialData
@@ -29,21 +30,60 @@ export class SharedService extends BaseService {
         return this.get(url);
     }
 
+    //Product Partial Data
     getProductsPatrialData(): Promise<ApiBaseState<ProductPartialData[]>> {
         const url = sharedApiUrlConstants.GET_PRODUCTS_PARTIAL;
         return this.get(url);
     }
 
+    getProductsPatrialDataById(id: string): Promise<ApiBaseState<ProductPartialData>> {
+        const url = `${sharedApiUrlConstants.GET_PRODUCTS_PARTIAL_BY_ID}/${id}`;
+        return this.get(url);
+    }
+
+    searchProductDataByQuery(query: string): Promise<ApiBaseState<ProductPartialData[]>> {
+        const url = `${sharedApiUrlConstants.SEARCH_PRODUCT}${query}`;
+        return this.get(url);
+    };
+
+    searchProductAllDataByQuery(query: string): Promise<ApiBaseState<GetProduct[]>> {
+        const url = `${sharedApiUrlConstants.SEARCH_PRODUCT_ALL_DATA}${query}`;
+        return this.get(url);
+    };
+
+    //Vendor Partial Data
     getVendorsPatrialData(): Promise<ApiBaseState<VendorPartialData[]>> {
         const url = sharedApiUrlConstants.GET_VENDORS_PARTIAL;
         return this.get(url);
     }
-
+    
+    getVendorsPatrialDataById(id: string): Promise<ApiBaseState<VendorPartialData>> {
+        const url = `${sharedApiUrlConstants.GET_VENDORS_PARTIAL_BY_ID}/${id}`;
+        return this.get(url);
+    }
+    
+    searchVendorDataByQuery(query: string): Promise<ApiBaseState<VendorPartialData[]>> {
+        const url = `${sharedApiUrlConstants.SEARCH_VENDOR}${query}`;
+        return this.get(url);
+    };
+    
+    //Farmer Partial Data
     getFarmersPatrialData(): Promise<ApiBaseState<FarmerPartialData[]>> {
         const url = sharedApiUrlConstants.GET_FARMERS_PARTIAL;
         return this.get(url);
     }
+    
+    getFarmersPatrialDataById(id: string): Promise<ApiBaseState<FarmerPartialData>> {
+        const url = `${sharedApiUrlConstants.GET_FARMERS_PARTIAL_BY_ID}/${id}`;
+        return this.get(url);
+    }
 
+    searchFarmerDataByQuery(query: string): Promise<ApiBaseState<FarmerPartialData[]>> {
+        const url = `${sharedApiUrlConstants.SEARCH_FARMER}${query}`;
+        return this.get(url);
+    };
+
+    //Customer
     getCustomerPatrialData(customerId: string): Promise<ApiBaseState<CustomerPartialData>> {
         const url = `${sharedApiUrlConstants.GET_CUSTOMERS_PARTIAL}/${customerId}`;
         return this.get(url);
@@ -54,16 +94,7 @@ export class SharedService extends BaseService {
         return this.get(url);
     }
 
-    getUOMPartialData(): Promise<ApiBaseState<UOMPartialData[]>> {
-        const url = sharedApiUrlConstants.GET_UOM_PARTIAL;
-        return this.get(url);
-    }
-
-    getBranchPartialData(): Promise<ApiBaseState<BranchPartialData[]>> {
-        const url = sharedApiUrlConstants.GET_BRANCHES_PARTIAL;
-        return this.get(url);
-    }
-
+    //Numbers
     getRFPANums(): Promise<ApiBaseState<GetAllRFPANums[]>> {
         const url = sharedApiUrlConstants.GET_ALL_RFPA_NO;
         return this.get(url);
@@ -83,8 +114,19 @@ export class SharedService extends BaseService {
         return this.get(url);
     }
 
+    getUOMPartialData(): Promise<ApiBaseState<UOMPartialData[]>> {
+        const url = sharedApiUrlConstants.GET_UOM_PARTIAL;
+        return this.get(url);
+    }
+
+    getBranchPartialData(): Promise<ApiBaseState<BranchPartialData[]>> {
+        const url = sharedApiUrlConstants.GET_BRANCHES_PARTIAL;
+        return this.get(url);
+    }
+    
     getDepartmentById(deptId: string): Promise<ApiBaseState<GetDepartment>> {
         const url = `${sharedApiUrlConstants.GET_DEPARTMENT_BY_ID}/${deptId}`;
         return this.get(url)
     }
+
 }

@@ -25,10 +25,10 @@ function useDeleteProductSubcategoryById(id) {
         mutationFn: () => admin_api_1.ProductSubcategoryService.getInstance().deleteProductSubcategoryById(id),
     });
 }
-function useGetAllProductSubcategories() {
+function useGetAllProductSubcategories(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-product-subcategories'],
-        queryFn: () => admin_api_1.ProductSubcategoryService.getInstance().getAllProductSubcategories(),
+        queryKey: ['get-all-product-subcategories', queryParams],
+        queryFn: () => admin_api_1.ProductSubcategoryService.getInstance().getAllProductSubcategories(queryParams),
     });
 }
 function useGetProductSubcategoryById(id) {

@@ -26,7 +26,7 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
 }) => {
     const [field, meta] = useField(name);
     return (
-        <Grid container direction={alignment === "vertical" ? "column" : "row"} sx={{ flex: 1, alignItems: alignment === "vertical" ? "flex-start" : "center", justifyContent: "center" }}>
+        <Grid container direction={alignment === "vertical" ? "column" : "row"} sx={{ flex: 1, alignItems: alignment === "vertical" ? "flex-start" : "center", justifyContent: "center"}}>
             <Grid item xs={12} md={alignment === "vertical" ? 12 : 2}>
                 <Label
                     isRequired={isRequired}

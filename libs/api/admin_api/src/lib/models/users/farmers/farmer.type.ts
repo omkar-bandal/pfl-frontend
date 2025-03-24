@@ -47,3 +47,4 @@ export type GetAllFilteredFarmerData = {
     residensialAddress: Address,
     farmAddress: Address,
 }
+

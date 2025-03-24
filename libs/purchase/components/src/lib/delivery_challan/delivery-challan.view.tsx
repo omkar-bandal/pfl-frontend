@@ -1,12 +1,11 @@
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { PURCHASE_API_URL, useGetDeliveryChallan } from "@prime-fresh/purchase_api";
 import { useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "@prime-fresh/ui_shared";
-import { axiosInstance, COM_API_URL, } from "@prime-fresh/common_api";
 import { images } from "@prime-fresh/assets";
 import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames, useGetCustomerNames } from "@prime-fresh/shared/modules";
+import { useCreateProformaInvoice, useGetDeliveryChallanById } from "@prime-fresh/purchase/modules";
 
 export const DeliveryChallanView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -27,20 +26,32 @@ export const DeliveryChallanView = () => {
     const { id } = useParams<{ id: string }>();
     const dcId = id ? id : '';
     console.log(dcId);
-    const { data: dcData, isLoading } = useGetDeliveryChallan(PURCHASE_API_URL.GET_A_DELIVERY_CHALLAN, dcId);
+    const { data, isLoading } = useGetDeliveryChallanById(dcId);
+    const dcData = data?.data ? data.data : null;
     const selectedCompany = useMemo(() => Companies?.data ? Companies.data.find(company => company.id === dcData?.companyName): null, [Companies, dcData])
     console.log("Data: ", dcData);
-    const handleDownload = async () => {
-        try {
-            const response = await axiosInstance.post(`${COM_API_URL.BASE_URL}/invoice/generate/profarma/${dcId}`);
-            const pdfUrl = response.data.invoiceurl;
+
+    const {mutateAsync, error, data: Res } = useCreateProformaInvoice(dcId);
+    
+    const handleDownload = () => {
+        mutateAsync(dcId).then(() => {
+            const pdfUrl = Res?.invoiceurl;
             if (pdfUrl) {
                 toast.success("Invoice created Successfully")
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Error fetching the PDF URL');
-        }
+            } 
+        }).catch(() => {
+            toast.error(error?.message);
+        })
+        // try {
+        //     const response = await axiosInstance.post(`${COM_API_URL.BASE_URL}/invoice/generate/profarma/${dcId}`);
+        //     const pdfUrl = response.data.invoiceurl;
+        //     if (pdfUrl) {
+        //         toast.success("Invoice created Successfully")
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        //     toast.error('Error fetching the PDF URL');
+        // }
     };
 
     return (

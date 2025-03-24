@@ -1,7 +1,7 @@
 "use strict";
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productDataReducer = exports.productPartialDataState = exports.productSubCatState = exports.productCatState = exports.productsState = exports.productsDataState = exports.removeProductPartialData = exports.addProductPartialData = exports.setSelectedProduct = exports.setProductSubCat = exports.setProductCat = exports.setProducts = void 0;
+exports.productDataReducer = exports.productPartialDataState = exports.productSubCatState = exports.productCatState = exports.productsState = exports.productsDataState = exports.clearProductPartialData = exports.removeProductPartialData = exports.addorupdateProductPartialData = exports.setSelectedProduct = exports.setProductSubCat = exports.setProductCat = exports.setProducts = void 0;
 const toolkit_1 = require("@reduxjs/toolkit");
 const initialState = {
     allProducts: [],
@@ -26,18 +26,27 @@ const productDataSlice = (0, toolkit_1.createSlice)({
         setProductSubCat: (state, action) => {
             state.productSubCat = action.payload;
         },
-        addProductPartialData: (state, action) => {
-            console.log("payload", action.payload);
-            if (action.payload !== null)
-                state.productPartialData.push(action.payload);
-            console.log("state:", state.productPartialData);
+        clearProductPartialData: (state) => {
+            state.productPartialData = [];
+        },
+        addorupdateProductPartialData: (state, action) => {
+            const { index, object } = action.payload;
+            // If an object exists at the given index, replace it
+            if (state.productPartialData[index] !== undefined) {
+                state.productPartialData[index] = object;
+            }
+            else {
+                // Otherwise, insert the new object at the specified index
+                state.productPartialData.splice(index, 0, object);
+            }
         },
         removeProductPartialData: (state, action) => {
-            state.productPartialData.splice(action.payload, 1);
+            const index = action.payload;
+            state.productPartialData.splice(index, 1);
         },
     }
 });
-_a = productDataSlice.actions, exports.setProducts = _a.setProducts, exports.setProductCat = _a.setProductCat, exports.setProductSubCat = _a.setProductSubCat, exports.setSelectedProduct = _a.setSelectedProduct, exports.addProductPartialData = _a.addProductPartialData, exports.removeProductPartialData = _a.removeProductPartialData;
+_a = productDataSlice.actions, exports.setProducts = _a.setProducts, exports.setProductCat = _a.setProductCat, exports.setProductSubCat = _a.setProductSubCat, exports.setSelectedProduct = _a.setSelectedProduct, exports.addorupdateProductPartialData = _a.addorupdateProductPartialData, exports.removeProductPartialData = _a.removeProductPartialData, exports.clearProductPartialData = _a.clearProductPartialData;
 const productsDataState = (state) => state.productData;
 exports.productsDataState = productsDataState;
 const productsState = (state) => state.productData.allProducts;

@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetVendorCategory, PostVendorCategory } from "../../models";
 
@@ -14,8 +14,9 @@ export class VendorCategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllVendorCategories():Promise<ApiBaseState<GetVendorCategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_VENDOR_CAT;
+    getAllVendorCategories(queryParams? : QueryParams):Promise<ApiBaseState<GetVendorCategory[]>> {
+        const url = adminApiUrlConstants.GET_ALL_VENDOR_CAT(queryParams);
+        console.log(url);
         return this.get(url);
     }
 
@@ -29,7 +30,7 @@ export class VendorCategoryService extends BaseService {
         return this.patch(url, data);
     }
 
-    deleteProdctCategoryById(id: string): Promise<ResultModel> {
+    deleteVendorCategoryById(id: string): Promise<ResultModel> {
         const url = `${adminApiUrlConstants.DELETE_VENDOR_CAT}/${id}`;
         return this.delete(url);
     }

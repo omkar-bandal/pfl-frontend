@@ -1,15 +1,21 @@
 import React from "react";
 import { Box, Grid2 } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
 import { inventoryRouteConstants, useGetAllAQRs } from "@prime-fresh/inventory/modules";
 import { GetAQR } from "@prime-fresh/inventory_api";
-import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
-import { AQRColumns } from "./aqr.columns";
+import { useAQRColumns } from "./aqr.columns";
 
 export const AQRTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const aqrColumns = useAQRColumns();
+    const {
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable({ columnDef: aqrColumns });
     const { data, isLoading, isError, error } = useGetAllAQRs();
     const aqrs = data?.data ? data.data : [];
     React.useEffect(() => {
@@ -28,13 +34,23 @@ export const AQRTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="aqrs-col-def"
+                        columns={aqrColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetAQR>
+            <DataGridTable<GetAQR>
+                mode="client"
                 loading={isLoading}
                 rows={aqrs}
-                columns={AQRColumns()}
-                apiRef={apiRef}
+                columns={aqrColumns}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box >
     )

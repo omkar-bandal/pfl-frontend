@@ -1,7 +1,3 @@
-export * from './lib/data_table/DataTable';
-export * from './lib/data_table/data-table';
-export * from './lib/data_table/use-data-table';
-export * from './lib/data_table/models/columntype.interface';
 export * from './lib/data_table/components/TableToolBar';
 export * from './lib/error_page/ErrorPage';
 export * from './lib/auto_form/components';
@@ -16,3 +12,4 @@ export * from './lib/buttons';
 export * from './lib/components';
 export * from './lib/error-boundary/error-boundary';
 export * from './lib/fallbacks';
+export * from './lib/data_table';

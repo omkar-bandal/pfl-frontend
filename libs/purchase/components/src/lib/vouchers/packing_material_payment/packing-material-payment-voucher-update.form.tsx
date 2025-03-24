@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton, LinearProgress, Typography } from "@mui/material";
+import { Box, Button, Grid2, IconButton, LinearProgress, Typography } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { initValPackingMaterials, initValPackingMaterialVoucher, packingMaterialPaymentVoucherSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPMPVoucher, useGetPackingMeterialPaymentVoucherById, useUpdatePackingMeterialPaymentVoucherById } from "@prime-fresh/purchase/modules";
@@ -66,11 +66,11 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                 >
                     {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
                         <form onSubmit={handleSubmit}>
-                            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                                <Grid item xs={12} marginBottom={2}>
+                            <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                                <Grid2 size={{xs: 12 }} marginBottom={2}>
                                     <PageTitle pagetitle='Packing Material Payment Voucher' />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <SelectInput
                                         isRequired={false}
                                         label="Select GRN"
@@ -78,8 +78,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         options={allGRNNumbers}
                                         value={typeof values.grnNo !== "string" ? values.grnNo?.id : values.grnNo}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <SelectInput
                                         isRequired={true}
                                         label="Company Name"
@@ -87,8 +87,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         options={companyNames}
                                         value={typeof values.companyName !== "string" ? values.companyName?.id : values.companyName}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -96,8 +96,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Location"
                                         value={values.location}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 6 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -105,8 +105,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Debit / Credit To"
                                         value={values.debitCreditTo}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 6 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -114,8 +114,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Pay To / Received From"
                                         value={values.payReceivedFrom}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -123,8 +123,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Seller Name"
                                         value={values.sellerName}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -132,8 +132,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Contact No"
                                         value={values.contactNo}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={false}
@@ -141,8 +141,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Alternate Contact No"
                                         value={values.altContactNo}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 6 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -150,8 +150,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Address1"
                                         value={values.address.address1 || ''}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 6 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={false}
@@ -159,8 +159,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Address2"
                                         value={values.address.address2 || ''}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 3 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -168,8 +168,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Location"
                                         value={values.address.location || ''}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 3 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -177,8 +177,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="City"
                                         value={values.address.city || ''}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 3 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -186,8 +186,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="State"
                                         value={values.address.state || ''}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 3 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -195,8 +195,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Pincode"
                                         value={values.address.pincode || ''}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={12}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={false}
@@ -204,13 +204,13 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Purpose"
                                         value={values.purpose}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }}>
                                     <FieldArray name="materials">
                                         {({ remove, push }) => (
                                             <>
                                                 {values.materials.map((item, index) => (
-                                                    <Grid
+                                                    <Grid2
                                                         container
                                                         columnSpacing={1}
                                                         key={index}
@@ -222,13 +222,13 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                             borderRadius: 2,
                                                         }}
                                                     >
-                                                        <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                                        <Grid2 size={{xs: 12 }} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                                             <Typography variant="caption" component="div">Product: {index + 1}</Typography>
                                                             {values.materials.length > 1 && <IconButton color="error" size="small" onClick={() => remove(index)}>
                                                                 <Close />
                                                             </IconButton>}
-                                                        </Grid>
-                                                        <Grid item xs={12} md={4}>
+                                                        </Grid2>
+                                                        <Grid2 size={{xs: 12, md: 4 }}>
                                                             <TextInput
                                                                 type="text"
                                                                 isRequired={true}
@@ -236,8 +236,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                 label="Name"
                                                                 value={values.materials[index].itemName}
                                                                 handleChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs={12} md={2}>
+                                                        </Grid2>
+                                                        <Grid2 size={{xs: 12, md: 2 }}>
                                                             <SelectInput
                                                                 isRequired={true}
                                                                 label="Unit"
@@ -245,8 +245,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                 options={allUOMS}
                                                                 value={typeof values.materials[index].itemUom !== "string" ? values.materials[index].itemUom?.id : values.materials[index].itemUom}
                                                                 handleChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs={12} md={2}>
+                                                        </Grid2>
+                                                        <Grid2 size={{xs: 12, md: 2 }}>
                                                             <TextInput
                                                                 type="text"
                                                                 isRequired={true}
@@ -254,8 +254,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                 label="Quantity"
                                                                 value={values.materials[index].itemQty}
                                                                 handleChange={e => calculateAmounts(index, "itemQty", e.target.value, values, setFieldValue)} />
-                                                        </Grid>
-                                                        <Grid item xs={12} md={2}>
+                                                        </Grid2>
+                                                        <Grid2 size={{xs: 12, md: 2 }}>
                                                             <TextInput
                                                                 type="text"
                                                                 isRequired={true}
@@ -264,8 +264,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                 value={values.materials[index].rate}
                                                                 handleChange={e => calculateAmounts(index, "rate", e.target.value, values, setFieldValue)} />
 
-                                                        </Grid>
-                                                        <Grid item xs={12} md={2}>
+                                                        </Grid2>
+                                                        <Grid2 size={{xs: 12, md: 2 }}>
                                                             <TextInput
                                                                 type="text"
                                                                 isRequired={false}
@@ -273,12 +273,10 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                                 name={`item.${index}.amt`}
                                                                 label="Amount"
                                                                 value={values.materials[index].amt} />
-                                                        </Grid>
-                                                    </Grid>
+                                                        </Grid2>
+                                                    </Grid2>
                                                 ))}
-                                                <Grid
-                                                    item
-                                                    xs={12}
+                                                <Grid2 size={{xs: 12 }}
                                                     sx={{
                                                         display: "flex",
                                                         alignItems: "center",
@@ -293,12 +291,12 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                                     >
                                                         Add More
                                                     </Button>
-                                                </Grid>
+                                                </Grid2>
                                             </>
                                         )}
                                     </FieldArray>
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <SelectInput
                                         isRequired={true}
                                         label="Payment Mode"
@@ -306,8 +304,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         options={PURCHASE_ARRAYS.paymentMode}
                                         value={values.paymentMode}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={true}
@@ -315,8 +313,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Receiver Name"
                                         value={values.receiverName}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12, md: 4 }}>
                                     <TextInput
                                         type="number"
                                         isRequired={false}
@@ -324,8 +322,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         name="totalAmt"
                                         label="Total Amount"
                                         value={values.totalAmt} />
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }}>
                                     <TextInput
                                         type="text"
                                         isRequired={false}
@@ -333,8 +331,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         name="amtWords"
                                         label="Amount In Words"
                                         value={values.amtWords} />
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }}>
                                     <TextInput
                                         type="text"
                                         multiline
@@ -344,8 +342,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         label="Remark"
                                         value={values.remark}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }}>
                                     <RadioGroupInput
                                         isRequired={false}
                                         label="is KYC attached? (if available)"
@@ -354,11 +352,11 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                         value={values.kyc}
                                         options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }}>
                                     <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
-                                </Grid>
-                                <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                </Grid2>
+                                <Grid2 size={{xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <FormButtonGroup
                                         submitLabel='Update'
                                         isSubmitting={isSubmitting}
@@ -370,8 +368,8 @@ export const PackingMaterialPaymentVoucherUpdate = () => {
                                             dispatch(setPreviewPMPVoucher(values));
                                             dispatch(setPreview(true))
                                         }} />
-                                </Grid>
-                            </Grid>
+                                </Grid2>
+                            </Grid2>
                         </form>
                     )}
                 </Formik>)}

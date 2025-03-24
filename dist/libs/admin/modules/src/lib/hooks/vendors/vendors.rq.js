@@ -25,10 +25,10 @@ function useDeleteVendorById(id) {
         mutationFn: () => admin_api_1.VendorsService.getInstance().deleteVendorById(id),
     });
 }
-function useGetAllVendors() {
+function useGetAllVendors(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-vendors'],
-        queryFn: () => admin_api_1.VendorsService.getInstance().getAllVendors(),
+        queryKey: ['get-all-vendors', queryParams],
+        queryFn: () => admin_api_1.VendorsService.getInstance().getAllVendors(queryParams),
     });
 }
 function useGetVendorById(id) {

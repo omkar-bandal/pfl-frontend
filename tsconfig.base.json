@@ -40,12 +40,6 @@
       "@prime-fresh/shared/masters/customer": [
         "libs/shared/masters/customer/src/index.ts"
       ],
-      "@prime-fresh/shared/masters/farmer": [
-        "libs/shared/masters/farmer/src/index.ts"
-      ],
-      "@prime-fresh/shared/masters/products": [
-        "libs/shared/masters/products/src/index.ts"
-      ],
       "@prime-fresh/shared/modules": ["libs/shared/modules/src/index.ts"],
       "@prime-fresh/ui_shared": ["libs/ui_shared/src/index.ts"]
     }

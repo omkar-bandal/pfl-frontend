@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initValProduct = void 0;
+exports.initValProduct = exports.initValProductQCParams = void 0;
+exports.initValProductQCParams = {
+    name: '',
+    type: 'good',
+};
 exports.initValProduct = {
     name: '',
     productOrigin: '',
@@ -16,7 +20,10 @@ exports.initValProduct = {
     packingType: '',
     shelfLife: 0,
     storageTemp: 0,
-    qualityParameters: [{ name: '', type: 'good' }],
+    qualityParameters: [{
+            name: '',
+            type: 'good',
+        }],
     image: null,
 };
 //# sourceMappingURL=initValProduct.js.map

@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid2 } from "@mui/material";
 import { PostTPvoucher } from "@prime-fresh/purchase_api";
 import { initValTransportPaymentVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewTPVoucher, transportPaymentVoucherSchema, useCreateTransportPaymentVoucher } from "@prime-fresh/purchase/modules";
 import { FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
@@ -48,11 +48,11 @@ export const TransportPaymentVoucherForm = () => {
       >
         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
           <form onSubmit={handleSubmit}>
-            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} marginBottom={2}>
+            <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+              <Grid2 size={{xs: 12 }} marginBottom={2}>
                 <PageTitle pagetitle="Transport Payment Voucher" />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <SelectInput
                   isRequired={false}
                   label="Select GRN"
@@ -60,8 +60,8 @@ export const TransportPaymentVoucherForm = () => {
                   options={allGRNNums}
                   value={values.grnNo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 6 }}>
                 <SelectInput
                   isRequired={true}
                   label="Company Name"
@@ -69,8 +69,8 @@ export const TransportPaymentVoucherForm = () => {
                   options={companyNames}
                   value={values.companyName}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -78,8 +78,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Location"
                   value={values.location}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 6 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -87,8 +87,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Debit / Credit To"
                   value={values.debitCreditTo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 6 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -96,8 +96,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Pay To / Received From"
                   value={values.payReceivedFrom}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 4 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -105,8 +105,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Driver Name"
                   value={values.driverName}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 4 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -114,8 +114,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Contact No"
                   value={values.contactNo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 4 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -124,8 +124,8 @@ export const TransportPaymentVoucherForm = () => {
                   value={values.altContactNo}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -133,8 +133,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Vehicle No"
                   value={values.vehicleNo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -142,8 +142,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Dispatch Location"
                   value={values.dispatchLocation}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -151,8 +151,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Destination Location"
                   value={values.destinationLocation}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -160,8 +160,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Products"
                   value={values.products}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 4 }}>
                 <SelectInput
                   isRequired={true}
                   label="Payment Mode"
@@ -169,8 +169,8 @@ export const TransportPaymentVoucherForm = () => {
                   options={PURCHASE_ARRAYS.paymentMode}
                   value={values.paymentMode}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 4 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -178,8 +178,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Freight Amount"
                   value={values.freightAmt || ""}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 4 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -187,8 +187,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Total Amount"
                   value={values.totalAmt || ""}
                   handleChange={e => handleAmountChange(e, setFieldValue)} />
-              </Grid>
-              <Grid item xs={12} md={9}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 9 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -196,8 +196,8 @@ export const TransportPaymentVoucherForm = () => {
                   name="amtWords"
                   label="Amount In Words"
                   value={values.amtWords} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -205,8 +205,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Receiver Name"
                   value={values.receiverName}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{xs: 12 }}>
                 <TextInput
                   type="text"
                   multiline
@@ -216,8 +216,8 @@ export const TransportPaymentVoucherForm = () => {
                   label="Remark"
                   value={values.remark}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{xs: 12 }}>
                 <RadioGroupInput
                   isRequired={false}
                   label="is KYC attached? (Driver Lic. / RC Book / PAN)"
@@ -226,11 +226,11 @@ export const TransportPaymentVoucherForm = () => {
                   value={values.kyc}
                   options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{xs: 12 }}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
-              </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              </Grid2>
+              <Grid2 size={{xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <FormButtonGroup
                   submitLabel='Create'
                   isSubmitting={isSubmitting}
@@ -242,8 +242,8 @@ export const TransportPaymentVoucherForm = () => {
                     dispatch(setPreviewTPVoucher(values));
                     dispatch(setPreview(true))
                   }} />
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </form>
         )}
       </Formik>

@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { Address, CustomerCategory, CustomerTypes } from '@prime-fresh/admin_api';
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 
-export const CustomerListCols = (): CustomGridColDef[] => {
+export const useCustomerColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
 
-  return ([
-    { field: "id", type: "string", headerName: "ID", width: 30 },
+  return useMemo(() => [
     {
       field: 'organisationName',
       headerName: "Name",
@@ -27,26 +27,26 @@ export const CustomerListCols = (): CustomGridColDef[] => {
       field: 'organisationType',
       headerName: "Organisation Type",
       width: 170,
-      valueGetter: (value: string) => value? value : "-",
+      valueGetter: (value: string) => value ? value : "-",
     },
     {
       field: "customerType",
       headerName: "Type",
       width: 100,
-      valueGetter: (value: CustomerTypes) => value? value.name : '-',
+      valueGetter: (value: CustomerTypes) => value ? value.name : '-',
     },
     {
       field: "customerCategory",
       headerName: "Category",
       width: 100,
-      valueGetter: (value: CustomerCategory) => value? value.name : '-',
-      
+      valueGetter: (value: CustomerCategory) => value ? value.name : '-',
+
     },
     {
       field: "primaryContactNo",
       headerName: "Contact No",
       width: 150,
-      valueGetter: (value: string) => value? value : '-',
+      valueGetter: (value: string) => value ? value : '-',
     },
     {
       field: "emailPrimary",
@@ -58,7 +58,7 @@ export const CustomerListCols = (): CustomGridColDef[] => {
       headerName: "Address",
       width: 300,
       valueGetter: (value: Address) => {
-        return value? `${value.address1 || ''}, ${value.address2 || ''}, ${value.location || ''}, ${value.city || ''}, ${value.state || ''}, ${value.pincode || ''}` : '-';
+        return value ? `${value.address1 || ''}, ${value.address2 || ''}, ${value.location || ''}, ${value.city || ''}, ${value.state || ''}, ${value.pincode || ''}` : '-';
       }
     },
     {
@@ -116,5 +116,5 @@ export const CustomerListCols = (): CustomGridColDef[] => {
         </IconButton>
       ),
     },
-  ])
+  ], [navigate])
 };

@@ -1,10 +1,10 @@
 import { Edit, Preview } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 
-export const EODReportColumns = (): CustomGridColDef[] => {
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+export const useEODReportColumns = (): CustomGridColDef[] => {
+    return useMemo(() => [
         {
             field: "location",
             headerName: "Location",
@@ -66,5 +66,5 @@ export const EODReportColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [])
 }

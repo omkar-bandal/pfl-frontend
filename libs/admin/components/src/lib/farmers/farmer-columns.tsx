@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Preview } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
@@ -5,18 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { Address } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
-// import { Address } from "../../api/admin/models";
+import { formatAddress } from "@prime-fresh/shared/modules";
 
-export const FarmerListCols = (): CustomGridColDef[] => {
+export const useFarmerColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
-  return [
-    { field: "id", headerName: "ID", width: 30 },
+  return useMemo(() => [
     {
       field: "farmerName",
       headerName: "Name",
       width: 250,
       isMobileVisible: true,
-      valueGetter: (value, row)=>{
+      valueGetter: (value, row) => {
         console.log(value);
         return `${row.farmerfName || ''} ${row.farmermName || ''} ${row.farmerlName || ''}`
       }
@@ -34,13 +34,7 @@ export const FarmerListCols = (): CustomGridColDef[] => {
       field: "farmAddress",
       headerName: "Farm Address",
       width: 500,
-      valueGetter: (value: Address) => {
-       if( value !== null ){
-         return `${value.address1 || ''}, ${value.address2 || ''}, ${value.location || ''}, ${value.city || ''}, ${value.state || ''}, ${value.pincode || ''}`
-        } else { 
-          return "-";
-        }
-      }
+      valueGetter: (value: Address) => value ? formatAddress(value) : '-',
     },
     {
       field: "primaryMobileNo",
@@ -127,10 +121,10 @@ export const FarmerListCols = (): CustomGridColDef[] => {
       filterable: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
-          <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_FARMER}/${params.row.id}`)}>
-            <Preview color="primary" />
-          </IconButton>
+        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_FARMER}/${params.row.id}`)}>
+          <Preview color="primary" />
+        </IconButton>
       ),
     },
-  ];
+  ], [navigate]);
 };

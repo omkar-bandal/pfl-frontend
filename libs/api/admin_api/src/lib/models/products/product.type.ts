@@ -1,3 +1,7 @@
+export type QCParameters = {
+    name: string, 
+    type: "good" | "bad"
+}
 export type PostProduct = {
     name: string,
     image: File | null,
@@ -14,7 +18,10 @@ export type PostProduct = {
     packingType: string,                                      
     shelfLife: number,                                     
     storageTemp: number,
-    qualityParameters:{name: string, type: "good" | "bad"}[],
+    qualityParameters:{
+        name: string, 
+        type: "good" | "bad"
+    }[],
 }
 
 export type GetProduct = {
@@ -35,5 +42,6 @@ export type GetProduct = {
     packingType: string,                                      
     shelfLife: number,                                     
     storageTemp: number,
-    qualityParameters:{id: string, name: string, type: "good" | "bad"}[],
+    qualityParameters:{id: string,  name: string, 
+        type: "good" | "bad"}[],
 }

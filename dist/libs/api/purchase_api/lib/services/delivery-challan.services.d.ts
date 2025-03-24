@@ -9,4 +9,7 @@ export declare class DeliveryChallanServices extends BaseService {
     getDeliveryChallanById(id: string): Promise<ApiBaseState<GetDeliveryChallan>>;
     updateDeliveryChallan(id: string, data: FormData): Promise<ResultModel>;
     deleteDeliveryChallanById(id: string): Promise<ResultModel>;
+    createProformaInvoice(id: string): Promise<{
+        invoiceurl: string;
+    }>;
 }

@@ -4,12 +4,12 @@ import { GridRenderCellParams } from "@mui/x-data-grid";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const DeliveryChallanListCols = (): CustomGridColDef[] => {
+export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
         {
             field: "challanNo",
             headerName: "Challan Number",
@@ -93,7 +93,7 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value!== null ? value : '-',
+            valueGetter: (value: string) => value !== null ? value : '-',
         },
         // {
         //     field: "totAmt",
@@ -167,5 +167,5 @@ export const DeliveryChallanListCols = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate])
 }

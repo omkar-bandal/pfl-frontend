@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { FieldArray, Formik } from "formik";
 import { Box, Grid2, IconButton, InputAdornment, Typography } from "@mui/material";
-import { FormResetBtn, FormSubmitBtn, ImageUpload, MultipleTextInput, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { FormButtonGroup, ImageUpload, MultipleTextInput, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PostProduct } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES, useCreateProduct, useGetAllProductCategories, useGetAllProductClassifications, useGetAllProductSubcategories, useGetAllUOMs } from "@prime-fresh/admin/modules";
@@ -237,6 +237,7 @@ export const ProductCreateForm = () => {
                                                     <Grid2 size={{ xs: 12, md: 3 }}>
                                                         <RadioGroupInput
                                                             isRequired={true}
+                                                            alignment="vertical"
                                                             name={`qualityParameters.${index}.type`}
                                                             label="Parameter Type"
                                                             value={values.qualityParameters[index].type}
@@ -269,9 +270,14 @@ export const ProductCreateForm = () => {
                         <Grid2 size={{ xs: 12 }}>
                             <ImageUpload isRequired={false} name="image" label="Product Image" />
                         </Grid2>
-                        <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={postError} label="Create" />
-                            <FormResetBtn label="Reset" handleReset={handleReset} />
+                        <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <FormButtonGroup
+                                submitLabel='Create'
+                                isSubmitting={isSubmitting}
+                                isSubmitError={postError}
+                                resetLabel='Reset'
+                                onReset={handleReset}
+                            />
                         </Grid2>
                     </Grid2>
                 </form>

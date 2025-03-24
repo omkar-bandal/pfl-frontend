@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Grid, Typography, Box, LinearProgress, } from "@mui/material";
+import { Grid2, Typography, Box, LinearProgress, } from "@mui/material";
 import { Formik } from "formik";
 import { dealSlipSchema, initValDealSlip, PURCHASE_ROUTES, useGetDealSlipById, useGetRFPAById, useUpdateDealSlipById } from "@prime-fresh/purchase/modules";
 import { useDispatch } from "react-redux";
@@ -89,11 +89,11 @@ export const DealSlipUpdate = () => {
             >
                 {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} marginBottom={2}>
+                        <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                            <Grid2 size={{ xs: 12 }} marginBottom={2}>
                                 <PageTitle pagetitle='Deal Slip' />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="Select RFPA"
@@ -101,8 +101,8 @@ export const DealSlipUpdate = () => {
                                     value={values.rfpa}
                                     options={rfpas}
                                     handleChange={(e: ChangeEvent<HTMLInputElement>) => handleRFPANoChange(e.target.value, setFieldValue)} />
-                            </Grid>
-                            <Grid item xs={12} md={8}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 8 }}>
                                 <TextInput
                                     isRequired={false}
                                     label="Company Name"
@@ -110,8 +110,8 @@ export const DealSlipUpdate = () => {
                                     value={rfpa?.companyName.companyName || ""}
                                     isReadOnly={true}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     isRequired={false}
                                     label="Purchase Location"
@@ -119,8 +119,8 @@ export const DealSlipUpdate = () => {
                                     value={allPurchaseLocation.find(loc => loc.id === rfpa?.purchaseLocation)?.name || rfpa?.otherPurchaseLoc || ""}
                                     isReadOnly={true}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     isRequired={false}
                                     label="Purchase For Sales Location"
@@ -128,113 +128,113 @@ export const DealSlipUpdate = () => {
                                     value={allPurchaseLocation.find(loc => loc.id === rfpa?.purchaseForSalesLocation)?.name || rfpa?.otherPurchaseForSalesLoc || ""}
                                     isReadOnly={true}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                                 <TextInput
                                     isRequired={true}
                                     label="Loading Location"
                                     name="loadingLocation"
                                     value={values.loadingLocation}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                                 <TextInput
                                     isRequired={true}
                                     label="Lot Number"
                                     name="lotNo"
                                     value={values.lotNo}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={8}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 8 }}>
                                 <TextInput
                                     isRequired={false}
                                     label="Special Request"
                                     name="specialRequest"
                                     value={values.specialRequest}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     isRequired={false}
                                     label="Remark"
                                     name="remark"
                                     value={values.remark}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} marginY={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
                                     <Typography variant='body2' sx={{ fontWeight: 600 }}>Vendor / Farmer Information</Typography>
                                 </Box>
-                            </Grid>
-                            <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} sx={{ display: "flex", alignItems: "center" }}>
                                 <Typography variant='body2' component="span" sx={{ fontWeight: 700 }}>Source : {rfpa?.source ? rfpa?.source.charAt(0).toUpperCase() + rfpa?.source.slice(1).toLowerCase() : ''}</Typography>
-                            </Grid>
+                            </Grid2>
                             {rfpa?.source === "vendor" ?
-                                (<Grid item xs={12}>
+                                (<Grid2 size={{ xs: 12 }}>
                                     <TextInput isRequired={false} name="companyName" label="Vendor Company Name" value={selectedVendorPartialData?.companyName} isReadOnly={true} />
-                                </Grid>) :
-                                (<Grid item xs={12}>
+                                </Grid2>) :
+                                (<Grid2 size={{ xs: 12 }}>
                                     <TextInput isRequired={false} name="farmerName" label="Farmer Name" value={selectedFarmerPartialData?.fullName} isReadOnly={true} />
-                                </Grid>)}
+                                </Grid2>)}
                             {rfpa?.source === "vendor" ? <VendorReadOnlyFields /> : <FarmerReadOnlyFields />}
-                            <Grid item xs={12} marginY={2}>
+                            <Grid2 size={{ xs: 12 }} marginY={2}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
                                     <Typography variant='body2' sx={{ fontWeight: 600 }}>Product Required</Typography>
                                 </Box>
-                            </Grid>
-                            <Grid item xs={12} padding={1}>
-                                <Grid container spacing={1} padding={1}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} padding={1}>
+                                <Grid2 container spacing={1} padding={1}>
                                     {rfpa?.rfpaProducts.length !== 0 && rfpa !== null ?
                                         (rfpa?.rfpaProducts.map((product, index) => (
-                                            <Grid container columnSpacing={1} padding={1} key={index} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
-                                                <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
+                                            <Grid2 container columnSpacing={1} padding={1} key={index} sx={{ border: '1px solid #BDBDBD', borderRadius: 2, marginX: "auto", marginY: 1 }}>
+                                                <Grid2 size={{ xs: 12 }} sx={{ display: "flex", alignItems: "center" }}>
                                                     <Typography variant="body1">Product : {index + 1}</Typography>
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 12, md: 6 }}>
                                                     <TextInput isRequired={false} label="Product Name" name="productname" value={Products?.find(products => products.id === product.product)?.name || ''} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={6} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 6, md: 3 }}>
                                                     <TextInput isRequired={false} label="Product Grade" name="productgrade" value={product.grade} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={6} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 6, md: 3 }}>
                                                     <TextInput isRequired={false} label="UOM" name="uom" value={UOMs?.find(uom => uom.id === product.uom)?.unit} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={4} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 4, md: 3 }}>
                                                     <TextInput isRequired={false} label="Quantity" name="qty" value={product.quantity} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={4} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 4, md: 3 }}>
                                                     <TextInput isRequired={false} label="Unit Price" name="uprice" value={product.unitPrice} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={4} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 4, md: 3 }}>
                                                     <TextInput isRequired={false} label="Total Price" name="tprice" value={product.totalVal} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 12, md: 3 }}>
                                                     <TextInput isRequired={false} label="Delivery Location" name="deliveryLoctn" value={product.deliveryLocation} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 12 }}>
                                                     <TextInput multiline maxRows={2} isRequired={false} label="Description" name="description" value={product.description} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 12, md: 3 }}>
                                                     <TextInput isRequired={false} type="date" label="Purchase Date" name="purchaseDate" value={product.purchaseDate} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 12, md: 3 }}>
                                                     <TextInput isRequired={false} type="date" label="Dispatch Date" name="dispatchDate" value={product.dispatchDate} isReadOnly={true} />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
+                                                </Grid2>
+                                                <Grid2 size={{ xs: 12, md: 3 }}>
                                                     <TextInput isRequired={false} type="date" label="Delivery Date" name="deliveryDate" value={product.deliveryDate} isReadOnly={true} />
-                                                </Grid>
+                                                </Grid2>
                                                 {rfpa?.source === "farmer" &&
-                                                    (<Grid item xs={12} md={3}>
+                                                    (<Grid2 size={{ xs: 12, md: 3 }}>
                                                         <TextInput isRequired={false} type="date" label="Expected Harvest Date" name="expectedHarvestDate" value={product.expectedHarvestDate} isReadOnly={true} />
-                                                    </Grid>)}
-                                            </Grid>
+                                                    </Grid2>)}
+                                            </Grid2>
                                         ))) :
                                         (
                                             <Typography variant="body2" component="data" color="error">Product not found in selected RFPA</Typography>
                                         )}
-                                </Grid>
-                            </Grid >
-                            <Grid item xs={12} marginY={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                </Grid2>
+                            </Grid2 >
+                            <Grid2 size={{ xs: 12 }} marginY={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <FormButtonGroup
                                     submitLabel='Create'
                                     isSubmitting={isSubmitting}
@@ -242,8 +242,8 @@ export const DealSlipUpdate = () => {
                                     resetLabel='Reset'
                                     onReset={handleReset}
                                 />
-                            </Grid>
-                        </Grid>
+                            </Grid2>
+                        </Grid2>
                     </form >
                 )}
             </Formik >)

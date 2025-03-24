@@ -1,10 +1,10 @@
 import { Edit, Preview } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 
-export const AQRColumns = (): CustomGridColDef[] => {
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+export const useAQRColumns = (): CustomGridColDef[] => {
+    return useMemo(()=>[
         {
             field: "supplierName",
             headerName: "Supplier Name",
@@ -87,5 +87,5 @@ export const AQRColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ],[])
 }

@@ -1,4 +1,12 @@
-import { PostAQR } from "@prime-fresh/inventory_api";
+import { PostAQR, AQRParameters } from "@prime-fresh/inventory_api";
+
+export const AQRQualityParams: AQRParameters = {
+  qualityParameterId: '',
+  qualityParameterType: 'good',
+  qualityParameterName: '',
+  quantity: 0,
+  percentage: 0,
+}
 
 export const AQRinitalValues: PostAQR = {
   dcNo: '',
@@ -17,9 +25,5 @@ export const AQRinitalValues: PostAQR = {
   supplierLocation: '',
   remark: '',
   product: '',
-  parameters: [{
-    quantity: 0,
-    percentage: 0,
-    qualityParameter: ''
-  }]
+  parameters: [AQRQualityParams]
 }

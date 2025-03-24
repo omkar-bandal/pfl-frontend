@@ -1,18 +1,37 @@
+import React from "react";
 import { Box, Grid2 } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
-import { VendorListCols } from "./vendor.columns";
+import { useVendorColumns } from "./vendor.columns";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES, useGetAllVendors } from "@prime-fresh/admin/modules";
-import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
-import { useEffect } from "react";
+import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
 
 export function VendorTable() {
   const navigate = useNavigate()
-  const apiRef = useGridApiRef();
-  const { data, isError, isLoading, error } = useGetAllVendors();
-  const Vendors = data?.data ? data.data : [];
+  const vendorColumns = useVendorColumns();
+  const {
+    paginationModel,
+    sortModel,
+    handleSortingChange,
+    handlePaginationChange,
+    queryParams,
+    columnVisibilityModel,
+    displayColumnVisibilityPanel,
+    handleColumnVisibilityModelChange,
+    handleCloseColumnVisibilityPanel,
+    handleOpenColumnVisibilityPanel
+  } = useDataTable({ columnDef: vendorColumns, initialPageSize: 10 });
 
-  useEffect(() => {
+  const { data, isError, isLoading, error } = useGetAllVendors(queryParams);
+  const allVendors = data ? data : null;
+  const rowCountRef = React.useRef(allVendors?.totalvendors || 0);
+  const rowCount = React.useMemo(() => {
+    if (allVendors?.totalvendors !== undefined) {
+      rowCountRef.current = allVendors.totalvendors;
+    }
+    return rowCountRef.current;
+  }, [allVendors]);
+
+  React.useEffect(() => {
     if (isError) {
       toast.error(error?.message || 'Error occured please refresh the page.')
     }
@@ -21,7 +40,7 @@ export function VendorTable() {
   const handleCreate = () => {
     navigate(ADMIN_ROUTES.CREATE_VENDOR);
   };
-  console.log(Vendors);
+
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
@@ -30,13 +49,29 @@ export function VendorTable() {
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
           <AddNewButton handleClick={handleCreate} />
+          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnVisibilityPanel
+            popoverId="vendors-col-def"
+            columns={vendorColumns}
+            columnVisibilityModel={columnVisibilityModel}
+            displayColumnVisibilityModel={displayColumnVisibilityPanel}
+            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+          />
         </Grid2>
       </Grid2>
-      <DataTable
+      <DataGridTable
         loading={isLoading}
-        apiRef={apiRef}
-        rows={Vendors}
-        columns={VendorListCols()}
+        rows={allVendors?.data}
+        columns={vendorColumns}
+        mode="server"
+        initialPageSize={10}
+        totalRows={rowCount}
+        paginationModel={paginationModel}
+        onPaginationModelChange={handlePaginationChange}
+        sortModel={sortModel}
+        onSortModelChange={handleSortingChange}
+        columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
   );

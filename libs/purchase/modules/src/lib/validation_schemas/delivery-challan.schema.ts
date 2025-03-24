@@ -4,7 +4,7 @@ import { REGEX } from '@prime-fresh/shared/modules';
 export const deliveryChallanSchema = yup.object().shape({
     deliveryCType: yup.string().required('Challan type is required'),
     companyName: yup.string().required('Company name is required'),
-    partyName: yup.string().required('Party name is required'),
+    partyName: yup.string().required('Name is required'),
     fromLocation: yup.string().required('Location is required'),
     toLocation: yup.string().notRequired(),
     driverName: yup.string().required('Driver name is required').matches(REGEX.IS_STRING, 'Name should only contain alphabets.'),

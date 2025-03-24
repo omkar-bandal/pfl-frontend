@@ -1,22 +1,16 @@
 import { PostBankDetails, PostBillingDetails, PostDeliveryDetails, PostKeyMobileNumbers, PostOfficeUseOnly, PostPaymentTerms, PostProductSpecification, PostStatutoryDetails } from '../../../../../api/admin_api/src/index.ts';
 
 export declare const initValCustomer: {
-    organisationName: string;
-    customerTypes: {
-        id: string;
-        name: string;
-    };
-    customerCategory: {
-        id: string;
-        name: string;
-    };
-    organisationType: string;
-    otherType: string;
+    organisationName: null;
+    customerTypes: null;
+    customerCategory: null;
+    organisationType: null;
+    otherType: null;
     customerAddress: import('../../../../../api/common_api/src/index.ts').Address;
-    primaryContactNo: string;
-    secondaryContactNo: string;
-    emailPrimary: string;
-    emailSecondary: string;
+    primaryContactNo: null;
+    secondaryContactNo: null;
+    emailPrimary: null;
+    emailSecondary: null;
     keyMobileNumbers: PostKeyMobileNumbers;
     billingDetails: PostBillingDetails;
     deliveryDetails: PostDeliveryDetails;

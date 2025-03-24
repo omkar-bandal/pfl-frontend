@@ -3,9 +3,10 @@ import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { GetDeliveryChallan } from "@prime-fresh/purchase_api";
 import { CustomGridColDef, toast } from "@prime-fresh/ui_shared";
+import { useCallback, useMemo } from "react";
 
-export const ProformaInvoiceColumns = (): CustomGridColDef[] => {
-    const downloadProformaInvoice = (pdfUrl: string) => {
+export const useProformaInvoiceColumns = (): CustomGridColDef[] => {
+    const downloadProformaInvoice = useCallback((pdfUrl: string) => {
         if (pdfUrl) {
             // window.open(pdfUrl, '_blank');
             const link = document.createElement('a');
@@ -17,16 +18,15 @@ export const ProformaInvoiceColumns = (): CustomGridColDef[] => {
         } else {
             toast.error('No PDF URL found in the response');
         }
-    }
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    }, [])
+    return useMemo(() => [
         {
             field: "deliveryChallan",
             headerName: "Delivery Challan",
             width: 250,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: GetDeliveryChallan) =>  value ? value.challanNo : '-'
+            valueGetter: (value: GetDeliveryChallan) => value ? value.challanNo : '-'
         },
         {
             field: "invoiceNo",
@@ -70,5 +70,5 @@ export const ProformaInvoiceColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [downloadProformaInvoice])
 }

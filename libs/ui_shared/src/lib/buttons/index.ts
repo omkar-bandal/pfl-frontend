@@ -4,3 +4,4 @@ export * from './button-form-preview';
 export * from './button-add-new';
 export * from './button-download';
 export * from './form-button-group';
+export * from './button-column-visibility';

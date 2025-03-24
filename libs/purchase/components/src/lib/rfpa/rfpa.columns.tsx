@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 
-export const RFPAListCols = (): CustomGridColDef[] => {
+export const useRFPAColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
 
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
         {
             field: "rfpaId",
             headerName: "RFPA Number",
@@ -123,5 +123,5 @@ export const RFPAListCols = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate]);
 }

@@ -10,7 +10,13 @@ export declare const ADMIN_ROUTES: {
     CUSTOMER: string;
     GET_ALL_CUSTOMERS: string;
     VIEW_CUSTOMER: string;
-    EDIT_CUSTOMER: string;
+    UPDATE_CUSTOMER: string;
+    GET_ALL_CUSTOMER_TYPES: string;
+    CREATE_CUSTOMER_TYPE: string;
+    UPDATE_CUSTOMER_TYPE: string;
+    GET_ALL_CUSTOMER_CAT: string;
+    CREATE_CUSTOMER_CAT: string;
+    UPDATE_CUSTOMER_CAT: string;
     VENDOR: string;
     GET_ALL_VENDORS: string;
     VIEW_VENDOR: string;

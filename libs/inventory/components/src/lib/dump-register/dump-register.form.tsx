@@ -3,8 +3,8 @@ import { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FieldArray, Formik } from 'formik'
 import { dumpProductsInitialValue, dumpRegisterInitialValue, dumpRegisterSchema, inventoryRouteConstants, useCreateDumpRegister, useGetDumpRegisterById, useUpdateDumpRegister } from '@prime-fresh/inventory/modules'
-import { Box, Grid, IconButton, LinearProgress, Typography } from '@mui/material'
-import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
+import { Box, Grid2, IconButton, LinearProgress } from '@mui/material'
+import { AutoCompleteInput, FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
 import { Add, Close } from '@mui/icons-material'
 import { mapToValueLabelArray, useGetAllGRNNums, useGetBranchesPartialData, useGetCompanyNames, useGetProductsPartialData, useGetUOMPartialData } from '@prime-fresh/shared/modules'
 
@@ -12,7 +12,7 @@ export const DumpRegisterForm = () => {
     const { id } = useParams<{ id: string }>();
     const dumpRegiId = id ? id : "";
     const navigate = useNavigate();
-    // Fetch Data
+    
     const { data: dumpRecord, isLoading, isError, error } = useGetDumpRegisterById(dumpRegiId);
     const dumpRegi = dumpRecord?.data ? dumpRecord.data : dumpRegisterInitialValue;
     console.log("dump by id: ", dumpRegi)
@@ -44,7 +44,7 @@ export const DumpRegisterForm = () => {
     const { mutateAsync: mutateAsyncPost, error: PostError, data: PostData } = useCreateDumpRegister();
     const { mutateAsync: mutateAsyncPatch, error: PatchError, data: PatchData } = useUpdateDumpRegister(dumpRegiId);
 
-    const handleUpdate = (values: any) => {
+    const handleSubmit = (values: any) => {
         dumpRegiId === "" ?
             (mutateAsyncPost(values).then(() => {
                 toast.success(PostData ? PostData.message : "Dump record created sucessfully.");
@@ -78,19 +78,15 @@ export const DumpRegisterForm = () => {
                 validateOnChange={true}
                 onSubmit={(values) => {
                     console.log(values)
-                    handleUpdate(values);
+                    handleSubmit(values);
                 }}>
                 {({ values, handleChange, handleReset, handleSubmit, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} md={6}>
-                                <Typography variant="h4">Dump Register</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={dumpRegiId === "" ? PostError : PatchError} label={dumpRegiId === "" ? "Create" : "Update"} />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                        <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                            <Grid2 size={{xs:12}}>
+                                <PageTitle pagetitle='Dump Register'/>
+                            </Grid2>
+                            <Grid2 size={{xs:12, md: 6}}>
                                 <SelectInput
                                     isRequired
                                     label="Company Name"
@@ -99,15 +95,15 @@ export const DumpRegisterForm = () => {
                                     value={values.companyName}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{xs:12, md: 4}}>
                                 <AutoCompleteInput
                                     isRequired={true}
                                     name="location"
                                     label="Location"
                                     options={allLocations} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{xs:12, md: 2}}>
                                 <TextInput
                                     type="date"
                                     isRequired
@@ -116,8 +112,8 @@ export const DumpRegisterForm = () => {
                                     value={values.date}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{xs:12, md: 6}}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -126,8 +122,8 @@ export const DumpRegisterForm = () => {
                                     value={values.batchNo}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{xs:12, md: 6}}>
                                 <SelectInput
                                     isRequired={false}
                                     label="Referred GRN"
@@ -136,21 +132,21 @@ export const DumpRegisterForm = () => {
                                     value={values.grn}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{xs:12}}>
                                 <FieldArray name="dumpProducts">
                                     {({ push, remove }) => (
                                         <>
                                             {values.dumpProducts.map((_, index) => (
-                                                <Grid container columnSpacing={1} key={index} alignItems="center" marginY={1}>
-                                                    <Grid item xs={12} md={5}>
+                                                <Grid2 container columnSpacing={1} key={index} alignItems="center" marginY={1}>
+                                                    <Grid2 size={{xs:12, md: 5}}>
                                                         <AutoCompleteInput
                                                             isRequired={true}
                                                             name={`dumpProducts.${index}.product`}
                                                             label="Product Name"
                                                             options={allProducts} />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={2}>
+                                                    </Grid2>
+                                                    <Grid2 size={{xs:12, md: 2}}>
                                                         <SelectInput
                                                             isRequired
                                                             name={`dumpProducts.${index}.uom`}
@@ -159,8 +155,8 @@ export const DumpRegisterForm = () => {
                                                             value={values.dumpProducts[index].uom}
                                                             handleChange={handleChange}
                                                         />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={2}>
+                                                    </Grid2>
+                                                    <Grid2 size={{xs:12, md: 2}}>
                                                         <TextInput
                                                             type="number"
                                                             isRequired
@@ -169,8 +165,8 @@ export const DumpRegisterForm = () => {
                                                             value={values.dumpProducts[index].quantity}
                                                             handleChange={handleChange}
                                                         />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={2}>
+                                                    </Grid2>
+                                                    <Grid2 size={{xs:12, md: 2}}>
                                                         <TextInput
                                                             type="number"
                                                             isRequired
@@ -179,22 +175,22 @@ export const DumpRegisterForm = () => {
                                                             value={values.dumpProducts[index].dumpCost}
                                                             handleChange={handleChange}
                                                         />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={1} sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                                                    </Grid2>
+                                                    <Grid2 size={{xs:12, md: 1}} sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                                                         <IconButton color="success" size="small" sx={{ marginTop: 3 }} onClick={() => push(dumpProductsInitialValue)}>
                                                             <Add />
                                                         </IconButton>
                                                         {values.dumpProducts.length > 1 && (<IconButton color="error" size="small" sx={{ marginTop: 3 }} onClick={() => remove(index)}>
                                                             <Close />
                                                         </IconButton>)}
-                                                    </Grid>
-                                                </Grid>
+                                                    </Grid2>
+                                                </Grid2>
                                             ))}
                                         </>
                                     )}
                                 </FieldArray>
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{xs:12}}>
                                 <TextInput
                                     isRequired={false}
                                     name="remark"
@@ -202,8 +198,17 @@ export const DumpRegisterForm = () => {
                                     value={values.remark}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                        </Grid>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <FormButtonGroup
+                                    submitLabel={dumpRegiId === "" ? "Create" : "Update"}
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={dumpRegiId === "" ? PostError : PatchError}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                />
+                            </Grid2>
+                        </Grid2>
                     </form>
                 )}
             </Formik>

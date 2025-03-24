@@ -2,32 +2,29 @@ import React from 'react'
 import { Add, Close } from '@mui/icons-material';
 import { Button, Grid, IconButton, Typography } from '@mui/material';
 // import { ADMIN_API_URL, GetFilteredBranchData, useGetAllFilteredBranches, useGetAllProducts, useGetAllUOMs } from '@prime-fresh/admin_api';
-import { inventoryRouteConstants, SecondSaleProductsInitialValue, SecondSaleRegisterInitialValue } from '@prime-fresh/inventory/modules';
+import { inventoryRouteConstants, SecondSaleProductsInitialValue, SecondSaleRegisterInitialValue, useCreateSecondSaleRegister } from '@prime-fresh/inventory/modules';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { FieldArray, Formik } from 'formik';
-import { INVENTORY_API_URL, PostSecondSaleRegister, useCreateSecondSaleRegister } from '@prime-fresh/inventory_api';
+import { PostSecondSaleRegister } from '@prime-fresh/inventory_api';
 import { useNavigate } from 'react-router-dom';
-import { PURCHASE_API_URL, useGetAllDeliveryChallanNums } from '@prime-fresh/purchase_api';
-import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/modules';
+import { appendFormData, mapToValueLabelArray, useGetAllDeliveryChallanNums } from '@prime-fresh/shared/modules';
 
 export const SecondSaleRegisterCreateForm = () => {
   const navigate = useNavigate();
-  const { data: dcNo } = useGetAllDeliveryChallanNums(PURCHASE_API_URL.GET_ALL_DELIVERY_CHALLAN_NO);
-  const dcNumbers = React.useMemo(() => dcNo ? mapToValueLabelArray(dcNo, 'id', 'challanNo') : [], [dcNo]);
+  const { data: dcNo } = useGetAllDeliveryChallanNums();
+  const dcNumbers = React.useMemo(() => dcNo?.data ? mapToValueLabelArray(dcNo.data, 'id', 'challanNo') : [], [dcNo]);
   // const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
   // const Locations = locations ? locations : [];
   // const { data: products } = useGetAllProducts(ADMIN_API_URL.GET_ALL_PRODUCTS);
   // const allProducts = products ? products : [];
   // const { data: uoms } = useGetAllUOMs(ADMIN_API_URL.GET_ALL_UOM);
   // const allUOMs = uoms ? uoms : [];
-  const { mutateAsync, error, data } = useCreateSecondSaleRegister(INVENTORY_API_URL.POST_SECOND_SALE_REGISTER);
+  const { mutateAsync, error, data } = useCreateSecondSaleRegister();
  
   const handleSubmit = (values: PostSecondSaleRegister) => {
     console.log(values);
-    const formData = new FormData();
-    appendFormData(formData, values);
-    mutateAsync(formData).then(() => {
+    mutateAsync(values).then(() => {
       toast.success(data ? data.message : "Second Sale Register Created Successfully.");
       setTimeout(() => {
         navigate(inventoryRouteConstants.GET_ALL_SECOND_SALE_REGISTER);

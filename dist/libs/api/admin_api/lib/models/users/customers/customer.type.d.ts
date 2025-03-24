@@ -1,11 +1,11 @@
+import { GetCustomerCategory } from './customer-category.type';
+import { GetCustomerType } from './customer-type.type';
 import { GetStatutoryDetails, PostStatutoryDetails } from './statutoryDetails.type';
 import { GetProductSpecification, PostProductSpecification } from './productSpecification.type';
 import { GetPaymentTerms, PostPaymentTerms } from './paymentTerms.type';
 import { GetOfficeUseOnly, PostOfficeUseOnly } from './officeUseOnly.type';
 import { GetKeyMobileNumbers, PostKeyMobileNumbers } from './keyMobileNumbers.type';
 import { GetDeliveryDetails, PostDeliveryDetails } from './deliveryDetails.type';
-import { CustomerTypes } from './customerTypes.type';
-import { CustomerCategory } from './customerCategory.type';
 import { GetBillingDetails, PostBillingDetails } from './billingDetails.type';
 import { GetBankDetails, PostBankDetails } from './bankDetails.type';
 import { Address, GetAddress } from '../../../../../../common_api/src/index.ts';
@@ -14,8 +14,8 @@ export type GetCustomer = {
     id: string;
     organisationName: string;
     customerCode: string;
-    customerTypes: CustomerTypes;
-    customerCategory: CustomerCategory;
+    customerTypes: GetCustomerType;
+    customerCategory: GetCustomerCategory;
     organisationType: string;
     otherType: string;
     customerAddress: GetAddress;

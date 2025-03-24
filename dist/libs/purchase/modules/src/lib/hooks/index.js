@@ -10,4 +10,5 @@ tslib_1.__exportStar(require("./labor-payment-voucher.rq"), exports);
 tslib_1.__exportStar(require("./transport-payment-voucher.rq"), exports);
 tslib_1.__exportStar(require("./packing-material-payment-voucher.rq"), exports);
 tslib_1.__exportStar(require("./delivery-challan.rq"), exports);
+tslib_1.__exportStar(require("./payment-request.rq"), exports);
 //# sourceMappingURL=index.js.map

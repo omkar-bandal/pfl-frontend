@@ -25,10 +25,10 @@ function useDeleteUOMConversionMatrixById(id) {
         mutationFn: () => admin_api_1.UOMConversionMatrixService.getInstance().deleteUOMConversionMatrixById(id),
     });
 }
-function useGetAllUOMConversionMatrix() {
+function useGetAllUOMConversionMatrix(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-uom-conversion-matrix'],
-        queryFn: () => admin_api_1.UOMConversionMatrixService.getInstance().getAllUOMConversionMatrix(),
+        queryKey: ['get-all-uom-conversion-matrix', queryParams],
+        queryFn: () => admin_api_1.UOMConversionMatrixService.getInstance().getAllUOMConversionMatrix(queryParams),
     });
 }
 function useGetUOMConversionMatrixById(id) {

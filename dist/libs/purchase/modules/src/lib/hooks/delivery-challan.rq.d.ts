@@ -6,3 +6,6 @@ export declare function useUpdateDeliveryChallanById(id: string): UseMutationRes
 export declare function useDeleteDeliveryChallanById(id: string): UseMutationResult<ResultModel, ErrorModel, unknown, unknown>;
 export declare function useGetAllDeliveryChallans(): UseQueryResult<ApiBaseState<GetDeliveryChallan[]>, ErrorModel>;
 export declare function useGetDeliveryChallanById(id: string): UseQueryResult<ApiBaseState<GetDeliveryChallan>, ErrorModel>;
+export declare function useCreateProformaInvoice(id: string): UseMutationResult<{
+    invoiceurl: string;
+}, ErrorModel, unknown, unknown>;

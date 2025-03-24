@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetProductSubcategory, PostProductSubcategory } from "../../models";
 
@@ -14,8 +14,8 @@ export class ProductSubcategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllProductSubcategories():Promise<ApiBaseState<GetProductSubcategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCT_SUBCATEGORY;
+    getAllProductSubcategories(queryParams?: QueryParams):Promise<ApiBaseState<GetProductSubcategory[]>> {
+        const url = adminApiUrlConstants.GET_ALL_PRODUCT_SUBCATEGORY(queryParams);
         return this.get(url);
     }
 

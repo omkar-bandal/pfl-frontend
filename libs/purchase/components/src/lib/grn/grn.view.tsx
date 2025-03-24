@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
-import { useNavigate, useParams } from "react-router-dom";
-import { AxiosResponse } from "axios";
-import { ChangeStatusResponse, PURCHASE_API_URL } from "@prime-fresh/purchase_api";
-import { displayAddress, PURCHASE_ROUTES, useGetGRNById } from "@prime-fresh/purchase/modules";
-import { axiosInstance, handleError } from "@prime-fresh/common_api";
+import { useParams } from "react-router-dom";
+import { displayAddress, useGetGRNById } from "@prime-fresh/purchase/modules";
 import { useReactToPrint } from "react-to-print";
 import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux";
@@ -15,9 +12,7 @@ import { useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPart
 export const GRNView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
-  const navigate = useNavigate();
   const [reason, setReason] = useState<string>("");
-  const [approval, setApproval] = useState<string>("");
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
   const { data, isLoading } = useGetGRNById(grnId);
@@ -48,23 +43,6 @@ export const GRNView = () => {
   const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
   const { selectedFarmerPartialData } = useAppSelector(farmersDataState);
 
-
-  const role = localStorage.getItem('role');
-  const handleStatusChange = async () => {
-    const formData = new FormData();
-    formData.append("approvalNote", reason);
-    formData.append("approvalStatus", approval);
-    try {
-      const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(`${PURCHASE_API_URL.APPROVE_GRN}${grnId}`, formData)
-      // { approvalNote: `${reason}`, approvalStatus: `${approval}` });
-      console.log(response.data);
-      if (response.status === 200)
-        navigate(PURCHASE_ROUTES.GET_ALL_GRN);
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
   return (
     <Container maxWidth="xl">
       {isLoading ?
@@ -78,26 +56,16 @@ export const GRNView = () => {
                 <PageTitle pagetitle='Goods Received Note' />
               </Grid>
               <Grid item xs={12} md={8}>
-                {role === 'MANAGER' && (
-                  <Grid container columnSpacing={2}>
-                    <Grid item xs={4}>
-                      {grn?.approvalStatus === "pending" ?
-                        (<Button fullWidth variant="contained" color='success' size='small' sx={{ height: 40 }} onClick={() => { setApproval("approved"); handleStatusChange(); }}>Approve</Button>) : ''}
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Button fullWidth variant="contained" color='secondary' size='small' sx={{ height: 40 }} onClick={() => { setApproval("notApproved"); handleStatusChange(); }}>Not Approve</Button>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Button fullWidth variant="contained" color="info" size="small" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
-                    </Grid>
+                <Grid container columnSpacing={2}>
+                  <Grid item xs={4}>
+                    <Button fullWidth variant="contained" color="info" size="small" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
                   </Grid>
-                )}
+                </Grid>
               </Grid>
-              {role === 'MANAGER' ?
-                (<Grid item xs={12}>
-                  <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
-                  <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
-                </Grid>) : ''}
+              <Grid item xs={12}>
+                <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
+                <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
+              </Grid>
             </Grid>
             <Box sx={{ flex: 1, padding: 1 }} ref={contentRef}>
               <Box sx={{ width: '100%', marginY: 1, border: borderColor }}>

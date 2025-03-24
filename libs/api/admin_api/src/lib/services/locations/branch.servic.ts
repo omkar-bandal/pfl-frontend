@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetBranches, PostBranches } from "../../models";
 
@@ -14,8 +14,9 @@ export class BranchService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllBranches(branchType: string): Promise<ApiBaseState<GetBranches[]>> {
-        const url = `${adminApiUrlConstants.GET_ALL_BRANCHES}/?search=${branchType}`;
+    getAllBranches(branchType: string, { page, limit, sort }: QueryParams): Promise<ApiBaseState<GetBranches[]>> {
+        const url = adminApiUrlConstants.GET_ALL_BRANCHES(branchType, { page, limit, sort });
+        console.log(url);
         return this.get(url);
     }
 

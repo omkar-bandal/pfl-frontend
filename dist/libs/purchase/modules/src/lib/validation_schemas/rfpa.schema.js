@@ -10,7 +10,7 @@ exports.rfpaSchema = yup.object().shape({
     selectedParty: yup.string().required('Please select one option'),
     rfpaProducts: yup.array().of(yup.object().shape({
         product: yup.string().required('Product is required'),
-        grade: yup.string().required('Grade is required'),
+        grade: yup.string().nullable(),
         quantity: yup.number().required('Quantity is required').positive('Quantity must be positive'),
         unitPrice: yup.number().required('Unit Price is required').positive('Unit Price must be positive'),
         purchaseDate: modules_1.dateSchema.required('Purchase Date is required'),

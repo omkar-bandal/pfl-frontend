@@ -32,19 +32,27 @@ const productDataSlice = createSlice({
         setProductSubCat: (state, action: PayloadAction<GetProductSubcategory[]>) => {
             state.productSubCat = action.payload;
         },
-        addProductPartialData: (state, action: PayloadAction<ProductPartialData | null>) => {
-            console.log("payload", action.payload);
-            if (action.payload !== null)
-                state.productPartialData.push(action.payload);
-            console.log("state:", state.productPartialData);
+        clearProductPartialData: (state) => {
+            state.productPartialData = [];
+        },
+        addorupdateProductPartialData: (state, action: PayloadAction<{ index: number; object: ProductPartialData }>) => {
+            const { index, object } = action.payload;
+            // If an object exists at the given index, replace it
+            if (state.productPartialData[index] !== undefined) {
+                state.productPartialData[index] = object;
+            } else {
+                // Otherwise, insert the new object at the specified index
+                state.productPartialData.splice(index, 0, object);
+            }
         },
         removeProductPartialData: (state, action: PayloadAction<number>) => {
-            state.productPartialData.splice(action.payload, 1);
+            const index = action.payload;
+            state.productPartialData.splice(index, 1);
         },
     }
 });
 
-export const { setProducts, setProductCat, setProductSubCat, setSelectedProduct, addProductPartialData, removeProductPartialData } = productDataSlice.actions;
+export const { setProducts, setProductCat, setProductSubCat, setSelectedProduct, addorupdateProductPartialData, removeProductPartialData, clearProductPartialData } = productDataSlice.actions;
 
 export const productsDataState = (state: RootState) => state.productData;
 export const productsState = (state: RootState) => state.productData.allProducts;

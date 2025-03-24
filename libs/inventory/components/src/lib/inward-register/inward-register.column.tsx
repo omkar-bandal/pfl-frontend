@@ -3,18 +3,32 @@ import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
-export const InwardRegisterColumns = (): CustomGridColDef[] => {
+export const useInwardRegisterColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
     
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
+        { 
+            field: "createdDate", 
+            headerName: "Created Date", 
+            width: 130,
+            align: 'center',
+            valueGetter: (value: string) => value? value : '-', 
+        },
+        { 
+            field: "createdTime", 
+            headerName: "Created Time", 
+            width: 130,
+            align: 'center',
+            valueGetter: (value: string) => value? value : '-', 
+        },
         {
             field: "inwardType",
             headerName: "Inward Type",
-            width: 150,
+            width: 130,
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
@@ -27,7 +41,7 @@ export const InwardRegisterColumns = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => {
-                return value ? value : 'Prime Fresh Ltd.';
+                return value ? value : '-';
             }
         },
         {
@@ -80,5 +94,5 @@ export const InwardRegisterColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate])
 }

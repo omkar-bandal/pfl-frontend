@@ -1,15 +1,21 @@
 import React from "react";
 import { Box, Grid2 } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
 import { PURCHASE_ROUTES, useGetAllDeliveryChallans } from "@prime-fresh/purchase/modules";
 import { GetDeliveryChallan } from "@prime-fresh/purchase_api";
-import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
-import { DeliveryChallanListCols } from "./delivery-challan.column";
+import { useDeliveryChallanColumns } from "./delivery-challan.column";
 
 export const DeliveryChallanTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const deliveryChallanColumns = useDeliveryChallanColumns();
+    const {
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable({ columnDef: deliveryChallanColumns });
     const { data, isLoading, isError, error } = useGetAllDeliveryChallans();
     const allDCs = data?.data ? data.data : [];
     console.log("all DCs", allDCs);
@@ -29,13 +35,23 @@ export const DeliveryChallanTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="dcs-col-def"
+                        columns={deliveryChallanColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetDeliveryChallan>
+            <DataGridTable<GetDeliveryChallan>
+                mode="client"
                 loading={isLoading}
                 rows={allDCs}
-                columns={DeliveryChallanListCols()}
-                apiRef={apiRef}
+                columns={deliveryChallanColumns}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

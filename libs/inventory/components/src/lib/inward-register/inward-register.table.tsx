@@ -1,16 +1,25 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
 import { Box, Grid2 } from "@mui/material";
 import { GetInwardRegister } from "@prime-fresh/inventory_api";
-import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
-import { InwardRegisterColumns } from "./inward-register.column";
+import { useInwardRegisterColumns } from "./inward-register.column";
 import { inventoryRouteConstants, useGetAllInwardRegisters } from "@prime-fresh/inventory/modules";
 import { useNavigate } from "react-router-dom";
-import { useGridApiRef } from "@mui/x-data-grid";
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 
 export const InwardRegisterTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const inwardRegisterColumns = useInwardRegisterColumns();
+    const {
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable();
     const { data, isLoading, isError, error } = useGetAllInwardRegisters();
+    const inwards = data?.data ? data.data : [];
+    console.log(inwards)
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -27,13 +36,23 @@ export const InwardRegisterTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="inwards-col-def"
+                        columns={inwardRegisterColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetInwardRegister>
+            <DataGridTable<GetInwardRegister>
+                mode="client"
                 loading={isLoading}
-                rows={data}
-                columns={InwardRegisterColumns()}
-                apiRef={apiRef}
+                rows={inwards}
+                columns={inwardRegisterColumns}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

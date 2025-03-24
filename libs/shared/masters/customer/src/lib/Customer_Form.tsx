@@ -1,19 +1,26 @@
-import { ADMIN_ROUTES, customersState, formContainerState, useCreateCustomer, useUpdateCustomerById } from "@prime-fresh/admin/modules";
-import { ADMIN_API_URL, PostCustomer } from "@prime-fresh/admin_api";
+import { ADMIN_ROUTES, customersState, formContainerState, useCreateCustomer, useGetAllCustomerCategories, useGetAllCustomerTypes, useUpdateCustomerById } from "@prime-fresh/admin/modules";
+import { PostCustomer } from "@prime-fresh/admin_api";
 import {  useAppSelector } from "@prime-fresh/modules";
 import { CustomerFormFields } from "./customerFormField";
-import { customerValidationSchema } from "./customer.schema";
 import { DynamicForm, toast } from '@prime-fresh/ui_shared';
 import { initValCustomer } from "./initValCustomer";
 import { useNavigate } from "react-router-dom";
-import { appendFormData } from "@prime-fresh/shared/modules";
+import { appendFormData, mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { useMemo } from "react";
+import { customerValidationSchema } from "./customer.schema";
 
-export const CustomerForm = () => {
+export function CustomerForm() {
     const navigate = useNavigate();
 
     const { openFor, dataId } = useAppSelector(formContainerState);
 
     const Customers = useAppSelector(customersState);
+
+    const { data: cat } = useGetAllCustomerCategories();
+    const customerCategory = useMemo(() => cat?.data ? mapToValueLabelArray(cat.data, 'id', 'name') : [],[cat?.data]);
+
+    const { data: types } = useGetAllCustomerTypes();
+    const customerTypes = useMemo(() => types?.data ? mapToValueLabelArray(types.data, 'id', 'name') : [], [types?.data]);
 
     const { mutateAsync: mutatePost, data: postRes, error: postError } = useCreateCustomer();
 
@@ -42,9 +49,10 @@ export const CustomerForm = () => {
 
     return (
         <DynamicForm<PostCustomer>
-            schema={CustomerFormFields()}
+            schema={CustomerFormFields(customerTypes, customerCategory)}
             initialValues={CustomerInitValue ? CustomerInitValue : initValCustomer}
-            // validationSchema={customerValidationSchema}
-            handleSubmit={openFor === 'update' ? handleUpdate : handleSubmit} />
+            validationSchema={customerValidationSchema}
+            handleSubmit={openFor === 'update' ? handleUpdate : handleSubmit}
+            isSubmitError={postError || null} />
     )
 }

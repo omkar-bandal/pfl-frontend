@@ -51,4 +51,5 @@ export declare const purchaseApiUrl: {
     UPDATE_DELIVERY_CHALLAN: string;
     DELETE_DELIVERY_CHALLAN: string;
     GET_ALL_DELIVERY_CHALLAN_NO: string;
+    CREATE_PROFORMA_INVOICE: string;
 };

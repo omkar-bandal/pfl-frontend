@@ -1,22 +1,42 @@
-import { Box, Grid2} from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
+import React, { useEffect, useMemo, useRef } from "react";
+import { Box, Grid2 } from "@mui/material";
 import { ADMIN_ROUTES, useGetAllOffices } from "@prime-fresh/admin/modules";
-import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
-import { OfficeColumns } from "./office.columns";
-import { useEffect } from "react";
+import { useOfficeColumns } from "./office.columns";
 
 export function OfficeTable() {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
 
     const { officeType } = useParams<{ officeType: string }>();
     const type = officeType ? officeType : "";
-    console.log(type);
+    const OfficeTypeLabel = React.useMemo(() => type.split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '), [type]);
+    const officeColumns =  useOfficeColumns();
+    const { paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable({ columnDef: officeColumns, initialPageSize: 10 });
 
-    const { data, isLoading, isError, error } = useGetAllOffices(type);
-    const branches = data?.data ? data.data : [];
-    console.log(branches);
+    const { data, isLoading, isError, error } = useGetAllOffices(type, queryParams);
+    const offices = data ? data : null;
+    console.log(offices);
+    const rowCountRef = useRef(offices?.allRecords || 0);
+    const rowCount = useMemo(() => {
+        if (offices?.allRecords !== undefined) {
+            rowCountRef.current = offices.allRecords;
+        }
+        return rowCountRef.current;
+    }, [offices]);
+
     useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -24,7 +44,7 @@ export function OfficeTable() {
     }, [isError, error])
 
 
-    const handleCreate = () => {
+    const handleNavigate = () => {
         navigate(`${ADMIN_ROUTES.CREATE_OFFICE}/${type}`);
     };
 
@@ -32,17 +52,33 @@ export function OfficeTable() {
         <Box sx={{ flex: 1 }}>
             <Grid2 container marginY={1}>
                 <Grid2 size={{ xs: 12, md: 8 }}>
-                    <PageTitle pagetitle='Offices' />
+                    <PageTitle pagetitle={OfficeTypeLabel} />
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-                    <AddNewButton handleClick={handleCreate} />
+                    <AddNewButton handleClick={handleNavigate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="office-col-def"
+                        columns={officeColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable
-                apiRef={apiRef}
+            <DataGridTable
                 loading={isLoading}
-                rows={branches}
-                columns={OfficeColumns()}
+                rows={offices?.data || []}
+                columns={officeColumns}
+                mode="server"
+                initialPageSize={10}
+                totalRows={rowCount}
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationChange}
+                sortModel={sortModel}
+                onSortModelChange={handleSortingChange}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     );

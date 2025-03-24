@@ -1,13 +1,12 @@
 import React from 'react'
 import { setPreview } from '@prime-fresh/modules';
-import { initValPaymentRequest, paymentRequestSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPaymentReq } from '@prime-fresh/purchase/modules';
+import { initValPaymentRequest, paymentRequestSchema, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewPaymentReq, useCreatePaymentRequest } from '@prime-fresh/purchase/modules';
 import { FormPreviewBtn, FormResetBtn, FormSubmitBtn, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { PostPaymentRequest, PURCHASE_API_URL, useCreatePaymentRequest } from '@prime-fresh/purchase_api';
+import { PostPaymentRequest } from '@prime-fresh/purchase_api';
 import { PaymentRequestPreview } from './PaymentRequest_Preview';
 import { useNavigate, useParams } from 'react-router-dom';
-import { appendFormData } from '@prime-fresh/shared/modules';
 import { Grid2 } from '@mui/material';
 
 export const PaymentRequestForm = () => {
@@ -15,11 +14,9 @@ export const PaymentRequestForm = () => {
   const { grnid } = useParams();
   const grnId = grnid ? grnid : '';
   const dispatch = useDispatch();
-  const { mutateAsync, error, data: Res } = useCreatePaymentRequest(`${PURCHASE_API_URL.POST_PAYMENT_REQ}/${grnId}`);
+  const { mutateAsync, error, data: Res } = useCreatePaymentRequest(grnId);
   const handleSubmit = (values: PostPaymentRequest) => {
-    const formData = new FormData();
-    appendFormData(formData, values);
-    mutateAsync(formData).then(() => {
+    mutateAsync(values).then(() => {
       toast(Res ? Res.message : "Payment Request created successfully !!!");
       setTimeout(() => {
         navigate(PURCHASE_ROUTES.GET_ALL_GRN);

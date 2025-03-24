@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FieldArray, Formik } from "formik";
-import { initValProduct, useGetAllProductClassifications, useGetAllProductSubcategories, useGetProductById, useGetAllUOMs, useUpdateProductById, useGetAllProductCategories } from "@prime-fresh/admin/modules";
-import { Box, Grid, IconButton, InputAdornment, LinearProgress, Typography } from "@mui/material";
-import { FormResetBtn, FormSubmitBtn, ImageUpload, MultipleTextInput, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
-import { PostProduct, } from "@prime-fresh/admin_api";
+import { initValProduct, useGetAllProductClassifications, useGetAllProductSubcategories, useGetProductById, useGetAllUOMs, useUpdateProductById, useGetAllProductCategories, initValProductQCParams } from "@prime-fresh/admin/modules";
+import { Box, Grid2, IconButton, InputAdornment, LinearProgress, Typography } from "@mui/material";
+import { FormButtonGroup, ImageUpload, MultipleTextInput, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { useNavigate, useParams } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { Add, Close } from "@mui/icons-material";
@@ -16,7 +16,16 @@ export const ProductUpdateForm = () => {
 
     const { data, isLoading } = useGetProductById(productId);
     const product = data !== null && data?.data ? data.data : null;
-    const productInitialValue = product ? product : initValProduct;
+    const productInitialValue = product ? {
+        ...product,
+        qualityParameters:
+            product.qualityParameters && product.qualityParameters.length > 0
+                ? product.qualityParameters
+                : [{
+                    name: '',
+                    type: 'good',
+                }],
+    } : initValProduct;
 
     const { data: productclass } = useGetAllProductClassifications();
     const classifications = useMemo(() => {
@@ -48,8 +57,7 @@ export const ProductUpdateForm = () => {
 
     const qcParamsType = ["good", "bad"].map(type => { return { value: type, label: type } });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleGetCategoryAndClassification = useCallback((values: PostProduct, setFieldValue: (field: string, value: any) => void) => {
+    const handleGetCategoryAndClassification = useCallback((values: any, setFieldValue: (field: string, value: any) => void) => {
         const subcategory = productsubcategories?.data?.find(subcategory => subcategory.id === values.subcategory);
         setFieldValue("category", subcategory?.category.id);
         setFieldValue("classification", subcategory?.classification.id);
@@ -57,8 +65,8 @@ export const ProductUpdateForm = () => {
 
     const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateProductById(productId);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmit = (values: any) => {
+        console.log("Product Update: ", values);
         const formData = new FormData();
         appendFormData(formData, values);
         mutatePatch(formData).then(() => {
@@ -87,11 +95,11 @@ export const ProductUpdateForm = () => {
                 }}>
                 {({ values, handleChange, handleReset, handleSubmit, setFieldValue, isSubmitting }) => (
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
-                        <Grid container spacing={1} padding={1}>
-                            <Grid item xs={12}>
-                                <Typography variant="h4">Update Product</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                        <Grid2 container spacing={1} padding={1}>
+                            <Grid2 size={{ xs: 12 }}>
+                                <PageTitle pagetitle="Product" />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -100,8 +108,8 @@ export const ProductUpdateForm = () => {
                                     value={values.name}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -110,8 +118,8 @@ export const ProductUpdateForm = () => {
                                     value={values.productOrigin}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -120,8 +128,8 @@ export const ProductUpdateForm = () => {
                                     value={values.brand}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="UOM"
@@ -129,8 +137,8 @@ export const ProductUpdateForm = () => {
                                     options={uoms}
                                     value={values.uom}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -139,8 +147,8 @@ export const ProductUpdateForm = () => {
                                     value={values.packingType}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={6} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="number"
                                     isRequired={false}
@@ -154,8 +162,8 @@ export const ProductUpdateForm = () => {
                                         },
                                     }}
                                 />
-                            </Grid>
-                            <Grid item xs={6} md={3}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="number"
                                     isRequired={false}
@@ -169,8 +177,8 @@ export const ProductUpdateForm = () => {
                                         },
                                     }}
                                 />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="Subcategory"
@@ -179,8 +187,8 @@ export const ProductUpdateForm = () => {
                                     value={values.subcategory}
                                     handleChange={handleChange}
                                     onBlur={() => handleGetCategoryAndClassification(values, setFieldValue)} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="Category"
@@ -188,8 +196,8 @@ export const ProductUpdateForm = () => {
                                     options={categories}
                                     value={values.category}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="Classification"
@@ -197,32 +205,32 @@ export const ProductUpdateForm = () => {
                                     options={classifications}
                                     value={values.classification}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <MultipleTextInput
                                     isRequired={false}
                                     name="count"
                                     label="Counts of product"
                                     values={values.count}
                                     setFieldValue={setFieldValue} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <MultipleTextInput
                                     isRequired={false}
                                     name="size"
                                     label="Sizes of product"
                                     values={values.size}
                                     setFieldValue={setFieldValue} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <MultipleTextInput
                                     isRequired={false}
                                     name="variety"
                                     label="Varieties of product"
                                     values={values.variety}
                                     setFieldValue={setFieldValue} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type="text"
                                     multiline
@@ -233,60 +241,66 @@ export const ProductUpdateForm = () => {
                                     value={values.description}
                                     handleChange={handleChange}
                                 />
-                            </Grid>
-                            <Grid item xs={12} marginY={1}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={1}>
                                 <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
                                     <Typography variant='body2' sx={{ fontWeight: 600 }}>Quality Check Parameters</Typography>
                                 </Box>
                                 <Typography variant="caption" color="error">These quality check parameters will be use for arrival quality report (AQR)</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <FieldArray name="qualityParameters">
                                     {({ push, remove }) => (
                                         <>
                                             {
                                                 values.qualityParameters.map((_, index) => (
-                                                    <Grid container spacing={1}>
-                                                        <Grid item xs={12} md={3}>
+                                                    <Grid2 container spacing={1}>
+                                                        <Grid2 size={{ xs: 12, md: 3 }}>
                                                             <RadioGroupInput
                                                                 isRequired={true}
                                                                 name={`qualityParameters.${index}.type`}
                                                                 label="Parameter Type"
+                                                                alignment="vertical"
                                                                 value={values.qualityParameters[index].type}
                                                                 options={qcParamsType}
                                                                 handleChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs={12} md={8}>
+                                                        </Grid2>
+                                                        <Grid2 size={{ xs: 12, md: 8 }}>
                                                             <TextInput
                                                                 isRequired={true}
                                                                 name={`qualityParameters.${index}.name`}
                                                                 label="Parameter Name"
-                                                                value={values.qualityParameters[index].name}
+                                                                value={values.qualityParameters[index].name || ''}
                                                                 handleChange={handleChange} />
-                                                        </Grid>
-                                                        <Grid item xs={12} md={1}>
+                                                        </Grid2>
+                                                        <Grid2 size={{ xs: 12, md: 1 }}>
                                                             <IconButton color="success" size="small" sx={{ marginTop: 3 }} onClick={() => push({ name: "", type: "" })}>
                                                                 <Add />
                                                             </IconButton>
                                                             {values.qualityParameters.length > 1 && (<IconButton color="error" size="small" sx={{ marginTop: 3 }} onClick={() => remove(index)}>
                                                                 <Close />
                                                             </IconButton>)}
-                                                        </Grid>
-                                                    </Grid>
+                                                        </Grid2>
+                                                    </Grid2>
                                                 ))
                                             }
                                         </>
                                     )}
                                 </FieldArray>
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <ImageUpload isRequired={false} name="image" label="Product Image" />
-                            </Grid>
-                            <Grid item xs={12} marginY={2} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                                <FormSubmitBtn isSubmitting={isSubmitting} isError={patchError} label="Update" />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
-                        </Grid>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+                                <FormButtonGroup
+                                    submitLabel='Update'
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={patchError}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                />
+                            </Grid2>
+                        </Grid2>
                     </form>
                 )
                 }

@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetUOM, PostUOM } from "../../models";
 
@@ -14,8 +14,8 @@ export class UOMService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllUOMs():Promise<ApiBaseState<GetUOM[]>> {
-        const url = adminApiUrlConstants.GET_ALL_UOM;
+    getAllUOMs({ page, limit, sort }: QueryParams): Promise<ApiBaseState<GetUOM[]>> {
+        const url = adminApiUrlConstants.GET_ALL_UOM({ page, limit, sort });
         return this.get(url);
     }
 

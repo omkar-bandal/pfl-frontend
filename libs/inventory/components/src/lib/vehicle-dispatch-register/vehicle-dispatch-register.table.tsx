@@ -1,15 +1,21 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
 import { GetVehicleDispatchRegister } from '@prime-fresh/inventory_api'
-import { AddNewButton, DataTable, PageTitle, toast } from '@prime-fresh/ui_shared'
-import { VehicleDispatchRegisterColumns } from './vehicle-dispatch-register.column'
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
+import { useVehicleDispatchRegisterColumns } from './vehicle-dispatch-register.column'
 import { inventoryRouteConstants, useGetAllVehicleDispatchRegisters } from '@prime-fresh/inventory/modules'
 import { useNavigate } from 'react-router-dom'
-import { useGridApiRef } from '@mui/x-data-grid'
 
 export const VehicleDispatchRegisterTable = () => {
   const navigate = useNavigate();
-  const apiRef = useGridApiRef();
+  const vehicleDispatchRegisterColumns = useVehicleDispatchRegisterColumns();
+  const {
+    columnVisibilityModel,
+    displayColumnVisibilityPanel,
+    handleColumnVisibilityModelChange,
+    handleCloseColumnVisibilityPanel,
+    handleOpenColumnVisibilityPanel
+  } = useDataTable({ columnDef: vehicleDispatchRegisterColumns });
   const { data, isLoading, isError, error } = useGetAllVehicleDispatchRegisters();
   const dispatchRecords = data?.data ? data.data : [];
 
@@ -18,9 +24,7 @@ export const VehicleDispatchRegisterTable = () => {
       toast.error(error?.message || 'Error occured please refresh the page.')
     }
   }, [isError, error])
-  const handleCreate = () => {
-    navigate(inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER);
-  }
+  const handleCreate = () => navigate(inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER);
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
@@ -29,13 +33,23 @@ export const VehicleDispatchRegisterTable = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
           <AddNewButton handleClick={handleCreate} />
+          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnVisibilityPanel
+            popoverId="vehicle-dispatches-col-def"
+            columns={vehicleDispatchRegisterColumns}
+            columnVisibilityModel={columnVisibilityModel}
+            displayColumnVisibilityModel={displayColumnVisibilityPanel}
+            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+          />
         </Grid2>
       </Grid2>
-      <DataTable<GetVehicleDispatchRegister>
+      <DataGridTable<GetVehicleDispatchRegister>
+        mode="client"
         loading={isLoading}
         rows={dispatchRecords}
-        columns={VehicleDispatchRegisterColumns()}
-        apiRef={apiRef}
+        columns={vehicleDispatchRegisterColumns}
+        columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
   )

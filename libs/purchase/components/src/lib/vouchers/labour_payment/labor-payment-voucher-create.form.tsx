@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Grid2 } from '@mui/material'
 import { PostLPvoucher } from '@prime-fresh/purchase_api'
 import { initValLabourPaymentvoucher, labourPaymentVoucherSchema, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewLPVoucher, useCreateLaborPaymentVoucher } from '@prime-fresh/purchase/modules'
 import { FormButtonGroup, ImageUpload, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared'
@@ -56,11 +56,11 @@ export const LabourPaymentVoucherForm = () => {
       >
         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} marginBottom={2}>
+            <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+              <Grid2 size={{ xs: 12 }} marginBottom={2}>
                 <PageTitle pagetitle='Labor Payment Voucher' />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <SelectInput
                   isRequired={false}
                   label="Select GRN"
@@ -68,8 +68,8 @@ export const LabourPaymentVoucherForm = () => {
                   options={allGRNNums}
                   value={values.grnNo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <SelectInput
                   isRequired={true}
                   label="Company Name"
@@ -77,8 +77,8 @@ export const LabourPaymentVoucherForm = () => {
                   options={companyNames}
                   value={values.companyName}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type='text'
                   isRequired={true}
@@ -86,8 +86,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Location"
                   value={values.location}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextInput
                   type='text'
                   isRequired={true}
@@ -95,8 +95,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Debit / Credit To"
                   value={values.debitCreditTo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextInput
                   type='text'
                   isRequired={true}
@@ -104,8 +104,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Pay To / Received From"
                   value={values.payReceivedFrom}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type='date'
                   isRequired={true}
@@ -113,8 +113,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Day of Loading / Unloading"
                   value={values.loadingDate}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type='number'
                   isRequired={true}
@@ -123,8 +123,8 @@ export const LabourPaymentVoucherForm = () => {
                   value={values.noOfLabours || ''}
                   handleChange={handleChange}
                   onBlur={() => calculateAmounts(values, setFieldValue)} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type='number'
                   isRequired={true}
@@ -133,16 +133,16 @@ export const LabourPaymentVoucherForm = () => {
                   value={values.ratePerLabour || ''}
                   handleChange={handleChange}
                   onBlur={() => calculateAmounts(values, setFieldValue)} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   isReadOnly={true}
                   isRequired={false}
                   name="totalAmt"
                   label="Total Amount"
                   value={values.totalAmt || ''} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <SelectInput
                   isRequired={true}
                   label="Payment Mode"
@@ -150,16 +150,16 @@ export const LabourPaymentVoucherForm = () => {
                   options={PURCHASE_ARRAYS.paymentMode}
                   value={values.paymentMode}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={9}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 9}}>
                 <TextInput
                   isReadOnly={true}
                   isRequired={false}
                   name="amtWords"
                   label="Amount In Words"
                   value={values.amtWords} />
-              </Grid>
-              <Grid item xs={12} md={2}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 2 }}>
                 <TextInput
                   type='text'
                   isRequired={true}
@@ -167,8 +167,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Contact Number"
                   value={values.contactNo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={2}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 2 }}>
                 <TextInput
                   type='text'
                   isRequired={false}
@@ -176,8 +176,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Alternate Contact"
                   value={values.altContactNo}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type='text'
                   isRequired={true}
@@ -185,8 +185,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Receiver Name"
                   value={values.receiverName}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={5}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 5 }}>
                 <TextInput
                   type='text'
                   isRequired={false}
@@ -194,8 +194,8 @@ export const LabourPaymentVoucherForm = () => {
                   label="Products"
                   value={values.products}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <TextInput
                   type="text"
                   multiline
@@ -206,8 +206,8 @@ export const LabourPaymentVoucherForm = () => {
                   value={values.remark}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <RadioGroupInput
                   isRequired={true}
                   label="is Labour KYC Attached ? (If available) :"
@@ -216,11 +216,11 @@ export const LabourPaymentVoucherForm = () => {
                   value={values.kyc}
                   options={[{ label: "Yes", value: true }, { label: "No", value: false }]}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
-              </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <FormButtonGroup
                   submitLabel='Create'
                   isSubmitting={isSubmitting}
@@ -232,8 +232,8 @@ export const LabourPaymentVoucherForm = () => {
                     dispatch(setPreviewLPVoucher(values));
                     dispatch(setPreview(true))
                   }} />
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </form>)}
       </Formik>
       <LPVoucherPreview />

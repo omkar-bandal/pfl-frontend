@@ -1,8 +1,8 @@
 import { Formik } from "formik";
-import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared"
+import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared"
 import { ADMIN_ROUTES, initValUOMConversionMatrix, uomConversionMatrixSchema, useCreateUOMConversionMatrix, useGetAllUOMs, useGetUOMConversionMatrixById, useUpdateUOMConversionMatrixById } from "@prime-fresh/admin/modules";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
+import { Box, Grid2, LinearProgress } from "@mui/material";
 import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export const UOMConvMatrixForm = () => {
@@ -68,18 +68,11 @@ export const UOMConvMatrixForm = () => {
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
-                        <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                            <Grid item xs={12} md={6}>
-                                <Typography variant='h4'>UOM Conversion Matrix</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <FormSubmitBtn
-                                    label={uomConvMatId === "" ? "Create" : "Update"}
-                                    isError={uomConvMatId === "" ? postError : patchError}
-                                    isSubmitting={isSubmitting} />
-                                <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                            <Grid2 size={{ xs: 12 }}>
+                                <PageTitle pagetitle='UoM Conversion Matrix' />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <TextInput
                                     type="number"
                                     isRequired={true}
@@ -87,8 +80,8 @@ export const UOMConvMatrixForm = () => {
                                     label="Conversion Factor"
                                     value={values.conversionFactor}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="From UOM"
@@ -96,8 +89,8 @@ export const UOMConvMatrixForm = () => {
                                     options={mapToValueLabelArray(allUoms ? allUoms : [], 'id', 'unit')}
                                     value={values.fromUOM}
                                     handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
                                 <SelectInput
                                     isRequired={true}
                                     label="To UOM"
@@ -105,8 +98,17 @@ export const UOMConvMatrixForm = () => {
                                     options={mapToValueLabelArray(allUoms ? allUoms : [], 'id', 'unit')}
                                     value={values.toUOM}
                                     handleChange={handleChange} />
-                            </Grid>
-                        </Grid>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <FormButtonGroup
+                                    submitLabel={uomConvMatId === "" ? "Create" : "Update"}
+                                    isSubmitting={isSubmitting}
+                                    isSubmitError={uomConvMatId === "" ? postError : patchError}
+                                    resetLabel='Reset'
+                                    onReset={handleReset}
+                                />
+                            </Grid2>
+                        </Grid2>
                     </form>
                 )}
             </Formik>

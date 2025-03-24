@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetProduct, ProductPartialData } from "../../models";
 import { adminApiUrlConstants } from "../../constants";
 
@@ -14,8 +14,8 @@ export class ProductsService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllProducts():Promise<ApiBaseState<GetProduct[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCTS;
+    getAllProducts({page, limit, sort}: QueryParams):Promise<ApiBaseState<GetProduct[]>> {
+        const url = adminApiUrlConstants.GET_ALL_PRODUCTS({page, limit, sort});
         return this.get(url);
     }
 

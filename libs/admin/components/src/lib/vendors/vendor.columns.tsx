@@ -6,11 +6,11 @@ import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { Address, GetVendorCategory, GetVendorSubcategory } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { displayAddress } from "@prime-fresh/purchase/modules";
+import { useMemo } from "react";
 
-export const VendorListCols = (): CustomGridColDef[] => {
+export const useVendorColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
-  return [
-    { field: "id", headerName: "ID", width: 30 },
+  return useMemo(() => [
     {
       field: "companyName",
       headerName: "Business",
@@ -27,19 +27,19 @@ export const VendorListCols = (): CustomGridColDef[] => {
       field: "category",
       headerName: "Category",
       width: 100,
-      valueGetter: (value: GetVendorCategory) => value? value.name : "",
+      valueGetter: (value: GetVendorCategory) => value ? value.name : "",
     },
     {
       field: "subcategory",
       headerName: "Subcategory",
       width: 100,
-      valueGetter: (value: GetVendorSubcategory) => value? value.name : "",
+      valueGetter: (value: GetVendorSubcategory) => value ? value.name : "",
     },
     {
       field: "officeAddress",
       headerName: "Address",
       width: 300,
-      valueGetter: (value: Address) => value? displayAddress(value) : "",
+      valueGetter: (value: Address) => value ? displayAddress(value) : "",
     },
     {
       field: "officeContactNo",
@@ -106,26 +106,10 @@ export const VendorListCols = (): CustomGridColDef[] => {
       filterable: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
-          <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_VENDOR}/${params.row.id}`)}>
-            <Preview color="primary" />
-          </IconButton>
+        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_VENDOR}/${params.row.id}`)}>
+          <Preview color="primary" />
+        </IconButton>
       ),
     },
-  ];
+  ], [navigate]);
 };
-// {
-//   field: "categoryId",
-//   headerName: "Type",
-//   width: 100,
-//   valueFormatter: (params: VendorCategory) => {
-//     return params.name
-//   }
-// },
-// {
-//   field: "subcategoryId",
-//   headerName: "Category",
-//   width: 100,
-//   valueFormatter: (params: VendorSubcategory) => {
-//     return params.name
-//   }
-// },

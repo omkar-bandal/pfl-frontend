@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from "react";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Button, Grid2, IconButton } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, numToWords, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC, useCreateDeliveryChallan } from "@prime-fresh/purchase/modules";
@@ -28,7 +28,7 @@ export const DeliveryChallanForm = () => {
   const { data } = useGetAllGRNNums();
   const allGRNNumbers = data?.data ? mapToValueLabelArray(data?.data, 'id', 'grnNo') : [];
 
-  const { data: customerlist } = useGetCustomerNames();
+  const { data: customerlist, isLoading: customerLoading } = useGetCustomerNames();
   const customerList = customerlist?.data ? mapToValueLabelArray(customerlist.data, 'id', 'organisationName') : [];
 
   const { data: Products } = useGetProductsPartialData();
@@ -37,7 +37,7 @@ export const DeliveryChallanForm = () => {
   const { data: UOMs } = useGetUOMPartialData();
   const allUOMs = useMemo(() => UOMs?.data ? mapToValueLabelArray(UOMs.data, 'id', 'unit') : [], [UOMs]);
 
-  const { data: Locations } = useGetBranchesPartialData();
+  const { data: Locations, isLoading: locLoading } = useGetBranchesPartialData();
   const allLocations = Locations?.data ? Locations.data : [];
 
   const { mutateAsync: mutatePost, error, data: Res } = useCreateDeliveryChallan();
@@ -118,11 +118,11 @@ export const DeliveryChallanForm = () => {
       >
         {({ values, handleChange, handleSubmit, handleReset, isSubmitting, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
-            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12}>
+            <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+              <Grid2 size={{ xs: 12 }}>
                 <PageTitle pagetitle='Delivery Challan' />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <RadioGroupInput
                   isRequired={true}
                   name="deliveryCType"
@@ -130,18 +130,22 @@ export const DeliveryChallanForm = () => {
                   alignment="horizontal"
                   options={PURCHASE_ARRAYS.deliveryChallanType}
                   value={values.deliveryCType}
-                  handleChange={handleChange} />
-              </Grid>
+                  handleChange={(e: any) => {
+                    handleChange(e);
+                    values.partyName !== null && setFieldValue("partyName", null);
+
+                  }} />
+              </Grid2>
               {values.deliveryCType === "other" ?
-                (<Grid item xs={12}>
+                (<Grid2 size={{ xs: 12 }}>
                   <TextInput
                     isRequired={true}
                     name="otherCType"
                     label="If other please specify "
                     type="text" value={values.otherCType}
                     handleChange={handleChange} />
-                </Grid>) : ('')}
-              <Grid item xs={12} md={6}>
+                </Grid2>) : ('')}
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <SelectInput
                   isRequired={true}
                   name="companyName"
@@ -149,8 +153,8 @@ export const DeliveryChallanForm = () => {
                   value={values.companyName}
                   options={companyNames}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <SelectInput
                   isRequired={true}
                   name="offices"
@@ -158,8 +162,8 @@ export const DeliveryChallanForm = () => {
                   value={values.offices}
                   options={allOffices}
                   handleChange={handleChange} />
-              </Grid>
-              <Grid item xs={12} md={4}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 4 }}>
                 <SelectInput
                   isRequired={false}
                   name="grnNo"
@@ -167,9 +171,9 @@ export const DeliveryChallanForm = () => {
                   value={values.grnNo}
                   options={allGRNNumbers}
                   handleChange={handleChange} />
-              </Grid>
+              </Grid2>
               {values.deliveryCType === "customer" ? (<>
-                <Grid item xs={12} md={4}>
+                <Grid2 size={{ xs: 12, md: 4 }}>
                   <TextInput
                     isRequired={true}
                     name="poNumber"
@@ -177,16 +181,17 @@ export const DeliveryChallanForm = () => {
                     type="text"
                     value={values.poNumber}
                     handleChange={handleChange} />
-                </Grid>
-                <Grid item xs={12} md={4}>
+                </Grid2>
+                <Grid2 size={{ xs: 12, md: 4 }}>
                   <AutoCompleteInput
+                    isRequired={true}
+                    loading={customerLoading}
                     name="partyName"
                     label="Customer Name"
-                    isRequired={true}
                     options={customerList} />
-                </Grid>
+                </Grid2>
               </>) : (
-                <Grid item xs={12} md={8}>
+                <Grid2 size={{ xs: 12, md: 8 }}>
                   <TextInput
                     isRequired={true}
                     name="partyName"
@@ -194,33 +199,33 @@ export const DeliveryChallanForm = () => {
                     type="text"
                     value={values.partyName}
                     handleChange={handleChange} />
-                </Grid>
+                </Grid2>
               )}
 
-              <FromLocation locations={allLocations} />
-              <ToLocation locations={allLocations} />
+              <FromLocation locations={allLocations} loading={locLoading} />
+              <ToLocation locations={allLocations} loading={locLoading} />
 
-              <Grid item xs={12}>
+              <Grid2 size={{ xs: 12 }}>
                 <FormAccordion panel="Products">
                   <FieldArray name="deliveryChallanProducts">
                     {({ remove, push }) => (
                       <>
                         {values.deliveryChallanProducts.map((item, index) => (
-                          <Grid container spacing={1} key={index} alignItems="center" marginY={1} padding={1} sx={{ border: `1px solid #ccc`, borderRadius: 5 }}>
-                            <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                          <Grid2 container spacing={1} key={index} alignItems="center" marginY={1} padding={1} sx={{ border: `1px solid #ccc`, borderRadius: 5 }}>
+                            <Grid2 size={{ xs: 12 }} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                               {values.deliveryChallanProducts.length > 1 ? (<IconButton color="error" size="small" onClick={() => remove(index)}>
                                 <Close />
                               </IconButton>) : ('')}
-                            </Grid>
-                            <Grid item xs={12} md={6}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                               <AutoCompleteInput
                                 isRequired={true}
                                 name={`deliveryChallanProducts.${index}.productName`}
                                 label="Product Name"
                                 options={allProducts}
                               />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                               <SelectInput
                                 isRequired={false}
                                 label="Count"
@@ -228,8 +233,8 @@ export const DeliveryChallanForm = () => {
                                 options={[]}
                                 value={values.deliveryChallanProducts[index].count}
                                 handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                               <SelectInput
                                 isRequired={false}
                                 label="Size"
@@ -237,8 +242,8 @@ export const DeliveryChallanForm = () => {
                                 options={[]}
                                 value={values.deliveryChallanProducts[index].size}
                                 handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={2}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 2 }}>
                               <SelectInput
                                 isRequired={false}
                                 label="Unit"
@@ -246,8 +251,8 @@ export const DeliveryChallanForm = () => {
                                 options={allUOMs}
                                 value={values.deliveryChallanProducts[index].uom}
                                 handleChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                               <TextInput
                                 type="number"
                                 isRequired={true}
@@ -255,8 +260,8 @@ export const DeliveryChallanForm = () => {
                                 label="Packing Material Weight (in grams)"
                                 value={values.deliveryChallanProducts[index].packingMaterialWeight || ""}
                                 handleChange={(event) => handleProductChange(event, index, setFieldValue, values)} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                               <TextInput
                                 type="number"
                                 isRequired={true}
@@ -264,8 +269,8 @@ export const DeliveryChallanForm = () => {
                                 label="Gross Weight (in kg)"
                                 value={values.deliveryChallanProducts[index].grossWeight || ""}
                                 handleChange={(event) => handleProductChange(event, index, setFieldValue, values)} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                               <TextInput
                                 type="number"
                                 isRequired={false}
@@ -273,8 +278,8 @@ export const DeliveryChallanForm = () => {
                                 name={`deliveryChallanProducts.${index}.netWeight`}
                                 label="Net Weight (in kg)"
                                 value={values.deliveryChallanProducts[index].netWeight} />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                               <TextInput
                                 type="number"
                                 isRequired={true}
@@ -283,8 +288,8 @@ export const DeliveryChallanForm = () => {
                                 value={values.deliveryChallanProducts[index].quantity || ""}
                                 handleChange={(event) => handleProductChange(event, index, setFieldValue, values)}
                               />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                               <TextInput
                                 type="number"
                                 isRequired={true}
@@ -293,27 +298,27 @@ export const DeliveryChallanForm = () => {
                                 value={values.deliveryChallanProducts[index].unitPrice || ""}
                                 handleChange={(event) => handleProductChange(event, index, setFieldValue, values)}
                               />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 4 }}>
                               <TextInput
                                 isRequired={false}
                                 isReadOnly={true}
                                 name={`deliveryChallanProducts.${index}.amount`}
                                 label="Amount"
                                 value={values.deliveryChallanProducts[index].amount} />
-                            </Grid>
-                          </Grid>
+                            </Grid2>
+                          </Grid2>
                         ))}
-                        <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                        <Grid2 size={{ xs: 12 }} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                           <Button startIcon={<Add sx={{ fontWeight: 600 }} />} color="primary" size="small" sx={{ fontWeight: 600 }} onClick={() => push(initValMaterials)}>
                             Add More
                           </Button>
-                        </Grid>
+                        </Grid2>
                       </>
                     )}
                   </FieldArray>
-                  <Grid container spacing={1}>
-                    <Grid item xs={12} md={2}>
+                  <Grid2 container spacing={1}>
+                    <Grid2 size={{ xs: 12, md: 2 }}>
                       <TextInput
                         type="number"
                         isRequired={false}
@@ -321,22 +326,22 @@ export const DeliveryChallanForm = () => {
                         label="Total Amount"
                         value={values.totalAmt}
                         handleChange={handleChange} />
-                    </Grid>
-                    <Grid item xs={12} md={10}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 10 }}>
                       <TextInput
                         isRequired={false}
                         isReadOnly={true}
                         name="totalAmtInWords"
                         label="Amount in words"
                         value={values.totalAmtInWords} />
-                    </Grid>
-                  </Grid>
+                    </Grid2>
+                  </Grid2>
                 </FormAccordion>
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <FormAccordion panel="Driver and Vehicle Details">
-                  <Grid container spacing={1}>
-                    <Grid item xs={12} md={4}>
+                  <Grid2 container spacing={1}>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={true}
@@ -344,8 +349,8 @@ export const DeliveryChallanForm = () => {
                         label="Driver Name"
                         value={values.driverName}
                         handleChange={handleChange} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={true}
@@ -353,8 +358,8 @@ export const DeliveryChallanForm = () => {
                         label="Driver's License Number"
                         value={values.licenseNo}
                         handleChange={handleChange} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={true}
@@ -362,8 +367,8 @@ export const DeliveryChallanForm = () => {
                         label="Contact No"
                         value={values.contactNo}
                         handleChange={handleChange} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={false}
@@ -372,8 +377,8 @@ export const DeliveryChallanForm = () => {
                         value={values.altContactNo}
                         handleChange={handleChange}
                       />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={true}
@@ -381,14 +386,14 @@ export const DeliveryChallanForm = () => {
                         label="Vehicle No"
                         value={values.vehicleNo}
                         handleChange={handleChange} />
-                    </Grid>
-                  </Grid>
+                    </Grid2>
+                  </Grid2>
                 </FormAccordion>
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <FormAccordion panel="Other Details">
-                  <Grid container spacing={1}>
-                    <Grid item xs={12} md={4}>
+                  <Grid2 container spacing={1}>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={true}
@@ -396,8 +401,8 @@ export const DeliveryChallanForm = () => {
                         label="Receiver Name"
                         value={values.receiverName}
                         handleChange={handleChange} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                       <TextInput
                         type="text"
                         isRequired={true}
@@ -405,8 +410,8 @@ export const DeliveryChallanForm = () => {
                         label="RM Name"
                         value={values.rmn}
                         handleChange={handleChange} />
-                    </Grid>
-                    <Grid item xs={12}>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12 }}>
                       <TextInput
                         type="text"
                         isRequired={false}
@@ -415,15 +420,15 @@ export const DeliveryChallanForm = () => {
                         value={values.remark}
                         handleChange={handleChange}
                       />
-                    </Grid>
-                  </Grid>
+                    </Grid2>
+                  </Grid2>
                 </FormAccordion>
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
-              </Grid>
-            </Grid>
-            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              </Grid2>
+            </Grid2>
+            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <FormButtonGroup
                 submitLabel='Create'
                 isSubmitting={isSubmitting}
@@ -435,7 +440,7 @@ export const DeliveryChallanForm = () => {
                   dispatch(setPreviewDC(values));
                   dispatch(setPreview(true))
                 }} />
-            </Grid>
+            </Grid2>
           </form>
         )}
       </Formik>

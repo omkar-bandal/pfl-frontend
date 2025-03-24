@@ -1,9 +1,9 @@
 import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import { PURCHASE_API_URL, useGetTPVoucher } from "@prime-fresh/purchase_api";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
+import { useGetTransportPaymentVoucherById } from "@prime-fresh/purchase/modules";
 
 export const TransportPaymentVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -13,7 +13,8 @@ export const TransportPaymentVoucherView = () => {
     const [approval, setApproval] = useState<string>("");
     const { voucherid } = useParams<{ voucherid: string }>();
     const tpVoucherId = voucherid ? voucherid : '';
-    const { data: tpVoucher, isLoading } = useGetTPVoucher(PURCHASE_API_URL.GET_A_TP_VOUCHER, tpVoucherId);
+    const { data, isLoading } = useGetTransportPaymentVoucherById(tpVoucherId);
+    const tpVoucher = data?.data ? data.data : null;
     console.log(tpVoucher)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

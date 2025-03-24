@@ -1,15 +1,22 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
-import { useGridApiRef } from '@mui/x-data-grid'
 import { GetMCvoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES, useGetAllMultiCashVouchers } from '@prime-fresh/purchase/modules'
-import { AddNewButton, DataTable, PageTitle, toast } from '@prime-fresh/ui_shared'
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom'
-import { MCVoucherListCols } from './multi-cash-voucher.columns'
+import { useMCVoucherColumns } from './multi-cash-voucher.columns'
 
 export const MultipleCashVoucherTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const mcVoucherColumns = useMCVoucherColumns();
+    const {
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable({columnDef: mcVoucherColumns});
+
     const { data, isLoading, isError, error } = useGetAllMultiCashVouchers();
     const allMCVouchers = data?.data ? data.data : [];
 
@@ -29,13 +36,23 @@ export const MultipleCashVoucherTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="mc-vouchers-col-def"
+                        columns={mcVoucherColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetMCvoucher>
+            <DataGridTable<GetMCvoucher>
+                mode="client"
                 loading={isLoading}
                 rows={allMCVouchers}
-                columns={MCVoucherListCols()}
-                apiRef={apiRef}
+                columns={mcVoucherColumns}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

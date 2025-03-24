@@ -8,9 +8,10 @@ import { useFormikContext } from "formik";
 
 type FromLocationProps = {
     locations: GetFilteredBranchData[];
+    loading?: boolean;
 };
 
-export const FromLocation: FC<FromLocationProps> = memo(({ locations }) => {
+export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading }) => {
     const { values, handleChange } = useFormikContext<PostDeliveryChallan>();
     const { deliveryCType, fromLocation, fromLocationInput } = values;
 
@@ -47,6 +48,7 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations }) => {
             <Grid item xs={12} md={deliveryCType !== "customer" ? 6 : 3}>
                 <AutoCompleteInput
                     isRequired
+                    loading={loading}
                     name="fromLocation"
                     label="From Location"
                     options={getFromLocations(deliveryCType) || []}

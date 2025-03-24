@@ -36,9 +36,10 @@ export function useGetAllVehicleDispatchRegisters():
 
 export function useGetVehicleDispatchRegisterById(id: string):
     UseQueryResult<ApiBaseState<GetVehicleDispatchRegister>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetVehicleDispatchRegister>, ErrorModel>({
-        queryKey: ['get-vehicle-dispatch-register-by-id'],
+        queryKey: ['get-vehicle-dispatch-register-by-id', id],
         queryFn: () => VehicleDispatchRegisterServices.getInstance().getVehicleDispatchRegisterById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }

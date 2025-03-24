@@ -9,9 +9,12 @@ export declare const officeValidationSchema: Yup.ObjectSchema<{
         state: string;
         pincode: string;
     };
-    contactNumber: string;
-    officeEmail: string;
-    notes: string | undefined;
+    cFirstName: string | null | undefined;
+    cMiddleName: string | null | undefined;
+    cLastName: string | null | undefined;
+    contactNumber: string | null | undefined;
+    officeEmail: string | null | undefined;
+    notes: string | null | undefined;
 }, Yup.AnyObject, {
     name: undefined;
     address: {
@@ -22,6 +25,9 @@ export declare const officeValidationSchema: Yup.ObjectSchema<{
         state: undefined;
         pincode: undefined;
     };
+    cFirstName: undefined;
+    cMiddleName: undefined;
+    cLastName: undefined;
     contactNumber: undefined;
     officeEmail: undefined;
     notes: undefined;

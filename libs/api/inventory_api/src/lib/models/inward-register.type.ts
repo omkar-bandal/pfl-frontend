@@ -35,6 +35,8 @@ export type PostInwardRegister = {
 
 export type GetInwardRegister = {
     id: string,
+    createdDate: string,
+    createdTime: string,
     grnNo: string                    // approved grn id 
     deliveryChallanNo: string,       // approved delivery challan id
     inwardType: string,              // type of inward cc-cc, cc-dc, dc-dc, farm-dc, farm-cc
@@ -42,7 +44,7 @@ export type GetInwardRegister = {
     location: string,
     date: Date,
     batchNo: string,
-    source: string,                  // vendor / farmer
+    source: "vendor" | "farmer",                  // vendor / farmer
     selectedParty: string,            // selected vendor / farmer id         
     inwardProducts: PostInwardProducts[],    // Relation to InwardProduct entity  
     totalWeightInKg: number,

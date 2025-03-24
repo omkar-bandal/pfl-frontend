@@ -25,10 +25,10 @@ function useDeleteEmployeeById(id) {
         mutationFn: () => admin_api_1.EmployeesService.getInstance().deleteEmployeeById(id),
     });
 }
-function useGetAllEmployees() {
+function useGetAllEmployees(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-employees'],
-        queryFn: () => admin_api_1.EmployeesService.getInstance().getAllEmployees(),
+        queryKey: ['get-all-employees', queryParams],
+        queryFn: () => admin_api_1.EmployeesService.getInstance().getAllEmployees(queryParams),
     });
 }
 function useGetEmployeeById(id) {

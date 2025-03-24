@@ -33,6 +33,8 @@ export type PostInwardRegister = {
 };
 export type GetInwardRegister = {
     id: string;
+    createdDate: string;
+    createdTime: string;
     grnNo: string;
     deliveryChallanNo: string;
     inwardType: string;
@@ -40,7 +42,7 @@ export type GetInwardRegister = {
     location: string;
     date: Date;
     batchNo: string;
-    source: string;
+    source: "vendor" | "farmer";
     selectedParty: string;
     inwardProducts: PostInwardProducts[];
     totalWeightInKg: number;

@@ -50,7 +50,7 @@ export const ReportTableCols = (): CustomGridColDef[] => {
             width: 300,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: { id: string, name: string }) => value ? value.name : '-',
+            valueGetter: (value: string) => value ? value : '-',
         },
         // {
         //     field: "purchaseForSalesLocation",

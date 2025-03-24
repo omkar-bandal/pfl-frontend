@@ -25,10 +25,10 @@ function useDeleteBranchById(id, branchType) {
         mutationFn: () => admin_api_1.BranchService.getInstance().deleteBranchById(id, branchType),
     });
 }
-function useGetAllBranches(branchType) {
+function useGetAllBranches(branchType, queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-branchs', branchType],
-        queryFn: () => admin_api_1.BranchService.getInstance().getAllBranches(branchType),
+        queryKey: ['get-all-branchs', branchType, queryParams],
+        queryFn: () => admin_api_1.BranchService.getInstance().getAllBranches(branchType, queryParams),
         enabled: !!branchType
     });
 }

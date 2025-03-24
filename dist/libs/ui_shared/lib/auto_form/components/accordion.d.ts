@@ -12,14 +12,14 @@ export declare const Accordion: import('@emotion/styled').StyledComponent<{
         children?: React.ReactElement<unknown, any>;
     }>;
     TransitionProps?: import('@mui/material/transitions').TransitionProps;
-} & import('@mui/material').AccordionSlotsAndSlotProps & Omit<import('@mui/material').PaperOwnProps, "onChange" | "classes"> & import('@mui/material/OverridableComponent').CommonProps & Omit<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
+} & import('@mui/material').AccordionSlotsAndSlotProps & Omit<import('@mui/material').PaperOwnProps, "classes" | "onChange"> & import('@mui/material/OverridableComponent').CommonProps & Omit<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
     ref?: ((instance: HTMLDivElement | null) => void | React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES[keyof React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES]) | React.RefObject<HTMLDivElement> | null | undefined;
-}, "sx" | "children" | "onChange" | "elevation" | "disabled" | keyof import('@mui/material/OverridableComponent').CommonProps | "variant" | "TransitionComponent" | "TransitionProps" | "disableGutters" | "square" | "expanded" | "defaultExpanded" | keyof import('@mui/material').AccordionSlotsAndSlotProps> & {
+}, "children" | keyof import('@mui/material/OverridableComponent').CommonProps | "disabled" | "sx" | "onChange" | "variant" | "elevation" | "TransitionComponent" | "TransitionProps" | "disableGutters" | "square" | "expanded" | "defaultExpanded" | keyof import('@mui/material').AccordionSlotsAndSlotProps> & {
     component?: React.ElementType;
 } & import('@mui/system').MUIStyledCommonProps<import('@mui/material').Theme>, {}, {}>;
 export declare const AccordionSummary: import('@emotion/styled').StyledComponent<import('@mui/material').AccordionSummaryOwnProps & Omit<import('@mui/material').ButtonBaseOwnProps, "classes"> & import('@mui/material/OverridableComponent').CommonProps & Omit<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
     ref?: ((instance: HTMLDivElement | null) => void | React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES[keyof React.DO_NOT_USE_OR_YOU_WILL_BE_FIRED_CALLBACK_REF_RETURN_VALUES]) | React.RefObject<HTMLDivElement> | null | undefined;
-}, "style" | "sx" | "children" | "className" | "tabIndex" | "disabled" | "action" | "classes" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "onFocusVisible" | "TouchRippleProps" | "touchRippleRef" | "expandIcon"> & {
+}, "children" | "className" | "style" | "classes" | "action" | "centerRipple" | "disabled" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "onFocusVisible" | "sx" | "tabIndex" | "TouchRippleProps" | "touchRippleRef" | "expandIcon"> & {
     component?: React.ElementType;
 } & import('@mui/system').MUIStyledCommonProps<import('@mui/material').Theme>, {}, {}>;
 export declare const AccordionDetails: import('@emotion/styled').StyledComponent<import('@mui/material').AccordionDetailsProps & import('@mui/system').MUIStyledCommonProps<import('@mui/material').Theme>, {}, {}>;

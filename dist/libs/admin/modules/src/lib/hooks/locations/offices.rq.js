@@ -25,11 +25,12 @@ function useDeleteOfficeById(id, officeType) {
         mutationFn: () => admin_api_1.OfficeService.getInstance().deleteOfficeById(id, officeType),
     });
 }
-function useGetAllOffices(officeType) {
+function useGetAllOffices(officeType, queryParams) {
+    const enabled = officeType.length > 1 ? true : false;
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-offices', officeType],
-        queryFn: () => admin_api_1.OfficeService.getInstance().getAllOffice(officeType),
-        enabled: !!officeType,
+        queryKey: ['get-all-offices', officeType, queryParams],
+        queryFn: () => admin_api_1.OfficeService.getInstance().getAllOffice(officeType, queryParams),
+        enabled: enabled,
     });
 }
 function useGetOfficeById(id, officeType) {

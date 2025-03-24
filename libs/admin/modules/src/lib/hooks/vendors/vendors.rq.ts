@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { VendorsService, GetVendor } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteVendorById(id: string):
     });
 }
 
-export function useGetAllVendors():
+export function useGetAllVendors(queryParams: QueryParams):
     UseQueryResult<ApiBaseState<GetVendor[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVendor[]>, ErrorModel>({
-        queryKey: ['get-all-vendors'],
-        queryFn: () => VendorsService.getInstance().getAllVendors(),
+        queryKey: ['get-all-vendors', queryParams],
+        queryFn: () => VendorsService.getInstance().getAllVendors(queryParams),
     });
 }
 

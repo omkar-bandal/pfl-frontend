@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { CustomersService, GetCustomer } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteCustomerById(id: string):
     });
 }
 
-export function useGetAllCustomers():
+export function useGetAllCustomers(queryParams: QueryParams):
     UseQueryResult<ApiBaseState<GetCustomer[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetCustomer[]>, ErrorModel>({
-        queryKey: ['get-all-customers'],
-        queryFn: () => CustomersService.getInstance().getAllCustomers(),
+        queryKey: ['get-all-customers',queryParams],
+        queryFn: () => CustomersService.getInstance().getAllCustomers(queryParams),
     });
 }
 

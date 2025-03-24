@@ -47,4 +47,12 @@ export const sharedData = {
         { value: "irrigated", label: "Irrigated" },
         { value: "non-irrigated", label: "Non-Irrigated" },
     ],
+    organizationType: [
+        {value: "proprietor", label: "Proprietor"},
+        {value: "partnership", label: "Partnership"},
+        {value: "private ltd.", label: "Private Ltd."},
+        {value: "llc", label: "LLC"},
+        {value: "public ltd.", label: "Public Ltd."},
+        {value: "other", label: "Other"},
+    ]
 }

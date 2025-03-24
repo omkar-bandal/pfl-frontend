@@ -5,6 +5,7 @@ exports.useUpdateDeliveryChallanById = useUpdateDeliveryChallanById;
 exports.useDeleteDeliveryChallanById = useDeleteDeliveryChallanById;
 exports.useGetAllDeliveryChallans = useGetAllDeliveryChallans;
 exports.useGetDeliveryChallanById = useGetDeliveryChallanById;
+exports.useCreateProformaInvoice = useCreateProformaInvoice;
 const purchase_api_1 = require("@prime-fresh/purchase_api");
 const react_query_1 = require("@tanstack/react-query");
 function useCreateDeliveryChallan() {
@@ -32,10 +33,17 @@ function useGetAllDeliveryChallans() {
     });
 }
 function useGetDeliveryChallanById(id) {
+    const enabled = id.length > 1 ? true : false;
     return (0, react_query_1.useQuery)({
         queryKey: ['get-delivery-challan-by-id'],
         queryFn: () => purchase_api_1.DeliveryChallanServices.getInstance().getDeliveryChallanById(id),
-        enabled: !!id,
+        enabled: enabled,
+    });
+}
+function useCreateProformaInvoice(id) {
+    return (0, react_query_1.useMutation)({
+        mutationKey: ['create-proforma-invoice'],
+        mutationFn: () => purchase_api_1.DeliveryChallanServices.getInstance().createProformaInvoice(id),
     });
 }
 //# sourceMappingURL=delivery-challan.rq.js.map

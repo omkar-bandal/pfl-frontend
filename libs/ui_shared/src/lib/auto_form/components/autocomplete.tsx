@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import React from 'react';
 // import { Autocomplete, TextField, Grid, Typography, createFilterOptions, FilterOptionsState } from '@mui/material';
 // import { useField } from 'formik';
@@ -104,7 +105,6 @@ type AutoCompleteInputProps = {
   loading?: boolean;
   options: AutoCompleteOption[];
   value?: AutoCompleteOption | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleBlur?: any;
   handleChange?: (
     event: React.SyntheticEvent,

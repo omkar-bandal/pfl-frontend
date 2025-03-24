@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, ButtonProps } from '@mui/material';
+import { ButtonProps } from '@mui/material';
+import { StyledButton } from './styled-button';
 
 type PreviewButtonProps = ButtonProps & {
     label?: string;
@@ -8,14 +9,12 @@ type PreviewButtonProps = ButtonProps & {
 
 export const FormPreviewBtn: React.FC<PreviewButtonProps> = ({ label, onClick }) => {
     return (
-        <Button
+        <StyledButton
             variant="contained"
             color='info'
-            size='large'
-            sx={{ width: 150, textTransform: 'none', margin: 2 }}
             onClick={onClick}>
-            {label? label : 'Preview'}
-        </Button>
+            {label ? label : 'Preview'}
+        </StyledButton>
     );
 };
 

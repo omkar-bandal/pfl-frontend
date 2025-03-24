@@ -7,6 +7,7 @@ tslib_1.__exportStar(require("./productClassification.schema"), exports);
 tslib_1.__exportStar(require("./productCategory.schema"), exports);
 tslib_1.__exportStar(require("./productSubcategory.schema"), exports);
 tslib_1.__exportStar(require("./office.schema"), exports);
+tslib_1.__exportStar(require("./branch.schema"), exports);
 tslib_1.__exportStar(require("./customer.schema"), exports);
 tslib_1.__exportStar(require("./vendor.schema"), exports);
 tslib_1.__exportStar(require("./farmer.schema"), exports);

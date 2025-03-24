@@ -1,15 +1,21 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
-import { useGridApiRef } from '@mui/x-data-grid'
 import { GetPMPvoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES, useGetAllPackingMeterialPaymentVouchers } from '@prime-fresh/purchase/modules'
-import { AddNewButton, DataTable, PageTitle, toast } from '@prime-fresh/ui_shared'
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom'
-import { PMPVoucherListCols } from './packing-material-payment-voucher.columns'
+import { usePMPVoucherColumns } from './packing-material-payment-voucher.columns'
 
 export const PackingMaterialPaymentVoucherTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const pmpVoucherColumns = usePMPVoucherColumns();
+    const {
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable({ columnDef: pmpVoucherColumns });
     const { data, isLoading, isError, error } = useGetAllPackingMeterialPaymentVouchers();
     const allPMPVouchers = data?.data ? data.data : [];
     React.useEffect(() => {
@@ -29,13 +35,23 @@ export const PackingMaterialPaymentVoucherTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="pmp-vouchers-col-def"
+                        columns={pmpVoucherColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetPMPvoucher>
+            <DataGridTable<GetPMPvoucher>
+                mode="client"
                 loading={isLoading}
                 rows={allPMPVouchers}
-                columns={PMPVoucherListCols()}
-                apiRef={apiRef}
+                columns={pmpVoucherColumns}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

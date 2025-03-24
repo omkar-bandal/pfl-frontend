@@ -2,15 +2,13 @@ import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import {
     DashboardInventory,
     AQRCreateForm,
-    // DumpRegisterCreateForm,
-    EODReportCreateForm,
+    EODReportForm,
     InwardRegisterCreateForm,
     LabourRegistrationCreateForm,
-    SecondSaleRegisterCreateForm,
     InwardRegisterTable,
     DumpRegisterTable,
     SecondSaleRegisterTable,
-    VehicleDispatchRegisterCreateForm,
+    VehicleDispatchRegisterForm,
     VehicleDispatchRegisterTable,
     LaborAttendanceForm,
     LaborRegisterTable,
@@ -20,8 +18,7 @@ import {
     AQRTable,
     DumpRegisterForm,
     InwardRegisterUpdateForm,
-    SecondSaleRegisterUpdateForm,
-    VehicleDispatchRegisterUpdateForm,
+    SecondSaleRegisterForm,
     ProformaInvoicesTable
 } from "@prime-fresh/inventory/components";
 import { Outlet } from "react-router-dom";
@@ -148,7 +145,7 @@ export const InventoryRoutes = [
         children: [
             {
                 path: inventoryRouteConstants.CREATE_SECOND_SALE_REGISTER,
-                element: <SecondSaleRegisterCreateForm />
+                element: <SecondSaleRegisterForm />
             },
             {
                 path: inventoryRouteConstants.GET_ALL_SECOND_SALE_REGISTER,
@@ -156,7 +153,7 @@ export const InventoryRoutes = [
             },
             {
                 path: `${inventoryRouteConstants.UPDATE_SECOND_SALE_REGISTER}/:id`,
-                element: <SecondSaleRegisterUpdateForm />
+                element: <SecondSaleRegisterForm />
             }
         ]
     },
@@ -166,7 +163,7 @@ export const InventoryRoutes = [
         children: [
             {
                 path: inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER,
-                element: <VehicleDispatchRegisterCreateForm />
+                element: <VehicleDispatchRegisterForm />
             },
             {
                 path: inventoryRouteConstants.GET_ALL_VEHILCE_DISPATCH_REGISTER,
@@ -174,7 +171,7 @@ export const InventoryRoutes = [
             },
             {
                 path: `${inventoryRouteConstants.UPDATE_VEHILCE_DISPATCH_REGISTER}/:id`,
-                element: <VehicleDispatchRegisterUpdateForm />
+                element: <VehicleDispatchRegisterForm />
             }
         ]
     },
@@ -184,7 +181,11 @@ export const InventoryRoutes = [
         children: [
             {
                 path: inventoryRouteConstants.CREATE_EOD_REPORT,
-                element: <EODReportCreateForm />
+                element: <EODReportForm />
+            },
+            {
+                path: `${inventoryRouteConstants.UPDATE_EOD_REPORT}/:id`,
+                element: <EODReportForm />
             },
             {
                 path: inventoryRouteConstants.GET_ALL_EOD_REPORT,

@@ -3,25 +3,25 @@ import { IconButton } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const UOMListCols = (): CustomGridColDef[] => {
+export const useUOMColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
-  const handleEdit = (rowId: string) => {
-    navigate(`${ADMIN_ROUTES.UPDATE_UOM}/${rowId}`);
-  }
-  return [
-    { field: "id", headerName: "ID", width: 90 },
+
+  return useMemo(() => [
     {
       field: "unit",
-      headerName: "UOM Name",
-      width: 150,
+      headerName: "UoM Name",
+      flex: 1,
+      minWidth: 150,
       isMobileVisible: true,
     },
     {
       field: "abbreviation",
       headerName: "Abbreviation",
-      width: 150,
+      flex: 1,
+      minWidth: 150,
       align: "center",
       headerAlign: "center",
       isMobileVisible: true,
@@ -29,20 +29,21 @@ export const UOMListCols = (): CustomGridColDef[] => {
     {
       field: "description",
       headerName: "Description",
-      width: 470,
+      flex: 1,
+      minWidth: 500,
     },
     {
       field: 'edit',
       headerName: 'Edit',
-      width: 50,
+      width: 70,
       sortable: false,
       filterable: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
+        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.UPDATE_UOM}/${params.row.id}`)}>
           <Edit color="secondary" />
         </IconButton>
       ),
     },
-  ];
+  ], [navigate]);
 }

@@ -31,4 +31,8 @@ export declare const sharedData: {
         value: string;
         label: string;
     }[];
+    organizationType: {
+        value: string;
+        label: string;
+    }[];
 };

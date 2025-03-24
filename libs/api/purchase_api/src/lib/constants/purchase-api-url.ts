@@ -69,4 +69,5 @@ export const purchaseApiUrl = {
     UPDATE_DELIVERY_CHALLAN: "/deliveryChallan",
     DELETE_DELIVERY_CHALLAN: "/deliveryChallan",
     GET_ALL_DELIVERY_CHALLAN_NO: "/deliveryChallan/challanNos/getAllChallanNo",
+    CREATE_PROFORMA_INVOICE: "/invoice/generate/profarma",
 }

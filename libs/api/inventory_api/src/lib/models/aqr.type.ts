@@ -1,7 +1,9 @@
 export type AQRParameters = {
+    qualityParameterId: string,
+    qualityParameterName: string,
+    qualityParameterType: "good" | "bad",
     quantity: number,
     percentage: number,
-    qualityParameter: string
 }
 
 export type PostAQR = {

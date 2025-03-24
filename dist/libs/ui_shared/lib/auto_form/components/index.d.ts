@@ -9,3 +9,4 @@ export * from './tabs';
 export * from './tabpanel';
 export * from './multiple-text-inputs';
 export * from './accordion';
+export * from './search';

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from "react";
-import { Box, Button, Grid, IconButton, LinearProgress } from "@mui/material";
+import { Box, Button, Grid2, IconButton, LinearProgress } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
 import { deliveryChallanSchema, initValDeliveryChallan, initValMaterials, PURCHASE_ARRAYS, PURCHASE_ROUTES, setPreviewDC, useGetDeliveryChallanById, useUpdateDeliveryChallanById } from "@prime-fresh/purchase/modules";
@@ -26,6 +26,7 @@ export const DeliveryChallanUpdate = () => {
     //Get delivery challan data by id
     const { data: dcData, isLoading } = useGetDeliveryChallanById(dcId);
     const dcValues = dcData?.data ? dcData.data : initValDeliveryChallan;
+    console.log("DC values: ", dcValues);
 
     const { data: companies } = useGetCompanyNames();
     const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
@@ -131,11 +132,11 @@ export const DeliveryChallanUpdate = () => {
                 >
                     {({ values, handleChange, handleSubmit, handleReset, isSubmitting, setFieldValue }) => (
                         <form onSubmit={handleSubmit}>
-                            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-                                <Grid item xs={12}>
+                            <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+                                <Grid2 size={{ xs: 12 }}>
                                     <PageTitle pagetitle='Delivery Challan' />
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12 }}>
                                     <RadioGroupInput
                                         isRequired={true}
                                         name="deliveryCType"
@@ -143,18 +144,22 @@ export const DeliveryChallanUpdate = () => {
                                         alignment="horizontal"
                                         options={PURCHASE_ARRAYS.deliveryChallanType}
                                         value={values.deliveryCType}
-                                        handleChange={handleChange} />
-                                </Grid>
+                                        handleChange={(e: any) => {
+                                            handleChange(e);
+                                            values.partyName !== null && setFieldValue("partyName", null);
+
+                                        }} />
+                                </Grid2>
                                 {values.deliveryCType === "other" ?
-                                    (<Grid item xs={12}>
+                                    (<Grid2 size={{ xs: 12 }}>
                                         <TextInput
                                             isRequired={true}
                                             name="otherCType"
                                             label="If other please specify "
                                             type="text" value={values.otherCType}
                                             handleChange={handleChange} />
-                                    </Grid>) : ('')}
-                                <Grid item xs={12} md={6}>
+                                    </Grid2>) : ('')}
+                                <Grid2 size={{ xs: 12, md: 6 }}>
                                     <SelectInput
                                         isRequired={true}
                                         name="companyName"
@@ -162,8 +167,8 @@ export const DeliveryChallanUpdate = () => {
                                         value={values.companyName}
                                         options={companyNames}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12, md: 6 }}>
                                     <SelectInput
                                         isRequired={true}
                                         name="offices"
@@ -171,8 +176,8 @@ export const DeliveryChallanUpdate = () => {
                                         value={values.offices}
                                         options={allOffices}
                                         handleChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={12} md={4}>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12, md: 4 }}>
                                     <SelectInput
                                         isRequired={false}
                                         name="grnNo"
@@ -180,9 +185,9 @@ export const DeliveryChallanUpdate = () => {
                                         value={values.grnNo}
                                         options={allGRNNumbers}
                                         handleChange={handleChange} />
-                                </Grid>
+                                </Grid2>
                                 {values.deliveryCType === "customer" ? (<>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid2 size={{ xs: 12, md: 4 }}>
                                         <TextInput
                                             isRequired={true}
                                             name="poNumber"
@@ -190,8 +195,8 @@ export const DeliveryChallanUpdate = () => {
                                             type="text"
                                             value={values.poNumber}
                                             handleChange={handleChange} />
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
+                                    </Grid2>
+                                    <Grid2 size={{ xs: 12, md: 4 }}>
                                         <AutoCompleteInput
                                             name="partyName"
                                             label="Customer Name"
@@ -200,9 +205,9 @@ export const DeliveryChallanUpdate = () => {
                                             handleChange={(e, newValue) => {
                                                 newValue ? setFieldValue("partyName", newValue) : setFieldValue("partyName", "")
                                             }} />
-                                    </Grid>
+                                    </Grid2>
                                 </>) : (
-                                    <Grid item xs={12} md={8}>
+                                    <Grid2 size={{ xs: 12, md: 8 }}>
                                         <TextInput
                                             isRequired={true}
                                             name="partyName"
@@ -210,25 +215,25 @@ export const DeliveryChallanUpdate = () => {
                                             type="text"
                                             value={values.partyName}
                                             handleChange={handleChange} />
-                                    </Grid>
+                                    </Grid2>
                                 )}
 
                                 <FromLocation locations={allLocations} />
                                 <ToLocation locations={allLocations} />
 
-                                <Grid item xs={12}>
+                                <Grid2 size={{ xs: 12 }}>
                                     <FormAccordion panel="Products">
                                         <FieldArray name="deliveryChallanProducts">
                                             {({ remove, push }) => (
                                                 <>
                                                     {values.deliveryChallanProducts.map((_, index: number) => (
-                                                        <Grid container columnSpacing={1} key={index} alignItems="center" marginY={1} padding={1} sx={{ border: `1px solid #ccc`, borderRadius: 5 }}>
-                                                            <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                                                        <Grid2 container columnSpacing={1} key={index} alignItems="center" marginY={1} padding={1} sx={{ border: `1px solid #ccc`, borderRadius: 5 }}>
+                                                            <Grid2 size={{ xs: 12 }} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                                                                 {values.deliveryChallanProducts.length > 1 ? (<IconButton color="error" size="small" onClick={() => remove(index)}>
                                                                     <Close />
                                                                 </IconButton>) : ('')}
-                                                            </Grid>
-                                                            <Grid item xs={12} md={6}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 6 }}>
                                                                 <AutoCompleteInput
                                                                     isRequired={true}
                                                                     name={`deliveryChallanProducts.${index}.productName`}
@@ -242,8 +247,8 @@ export const DeliveryChallanUpdate = () => {
                                                                         }
                                                                     }}
                                                                 />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={2}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 2 }}>
                                                                 <SelectInput
                                                                     isRequired={false}
                                                                     label="Count"
@@ -251,8 +256,8 @@ export const DeliveryChallanUpdate = () => {
                                                                     options={[]}
                                                                     value={values.deliveryChallanProducts[index].count}
                                                                     handleChange={handleChange} />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={2}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 2 }}>
                                                                 <SelectInput
                                                                     isRequired={false}
                                                                     label="Size"
@@ -260,8 +265,8 @@ export const DeliveryChallanUpdate = () => {
                                                                     options={[]}
                                                                     value={values.deliveryChallanProducts[index].size}
                                                                     handleChange={handleChange} />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={2}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 2 }}>
                                                                 <SelectInput
                                                                     isRequired={false}
                                                                     label="Unit"
@@ -273,8 +278,8 @@ export const DeliveryChallanUpdate = () => {
                                                                             values.deliveryChallanProducts[index].uom.id
                                                                             : values.deliveryChallanProducts[index].uom}
                                                                     handleChange={handleChange} />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={4}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                                 <TextInput
                                                                     type="number"
                                                                     isRequired={true}
@@ -282,8 +287,8 @@ export const DeliveryChallanUpdate = () => {
                                                                     label="Packing Material Weight (in grams)"
                                                                     value={values.deliveryChallanProducts[index].packingMaterialWeight || ""}
                                                                     handleChange={(event) => handleProductChange(event, index, setFieldValue, values)} />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={4}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                                 <TextInput
                                                                     type="number"
                                                                     isRequired={true}
@@ -291,8 +296,8 @@ export const DeliveryChallanUpdate = () => {
                                                                     label="Gross Weight (in kg)"
                                                                     value={values.deliveryChallanProducts[index].grossWeight || ""}
                                                                     handleChange={(event) => handleProductChange(event, index, setFieldValue, values)} />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={4}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                                 <TextInput
                                                                     type="number"
                                                                     isRequired={false}
@@ -300,8 +305,8 @@ export const DeliveryChallanUpdate = () => {
                                                                     name={`deliveryChallanProducts.${index}.netWeight`}
                                                                     label="Net Weight (in kg)"
                                                                     value={values.deliveryChallanProducts[index].netWeight} />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={4}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                                 <TextInput
                                                                     type="number"
                                                                     isRequired={true}
@@ -310,8 +315,8 @@ export const DeliveryChallanUpdate = () => {
                                                                     value={values.deliveryChallanProducts[index].quantity || ""}
                                                                     handleChange={(event) => handleProductChange(event, index, setFieldValue, values)}
                                                                 />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={4}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                                 <TextInput
                                                                     type="number"
                                                                     isRequired={true}
@@ -320,27 +325,27 @@ export const DeliveryChallanUpdate = () => {
                                                                     value={values.deliveryChallanProducts[index].unitPrice || ""}
                                                                     handleChange={(event) => handleProductChange(event, index, setFieldValue, values)}
                                                                 />
-                                                            </Grid>
-                                                            <Grid item xs={12} md={4}>
+                                                            </Grid2>
+                                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                                 <TextInput
                                                                     isRequired={false}
                                                                     isReadOnly={true}
                                                                     name={`deliveryChallanProducts.${index}.amount`}
                                                                     label="Amount"
                                                                     value={values.deliveryChallanProducts[index].amount} />
-                                                            </Grid>
-                                                        </Grid>
+                                                            </Grid2>
+                                                        </Grid2>
                                                     ))}
-                                                    <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                                                    <Grid2 size={{ xs: 12 }} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
                                                         <Button startIcon={<Add sx={{ fontWeight: 600 }} />} color="primary" size="small" sx={{ fontWeight: 600 }} onClick={() => push(initValMaterials)}>
                                                             Add More
                                                         </Button>
-                                                    </Grid>
+                                                    </Grid2>
                                                 </>
                                             )}
                                         </FieldArray>
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={12} md={2}>
+                                        <Grid2 container spacing={1}>
+                                            <Grid2 size={{ xs: 12, md: 2 }}>
                                                 <TextInput
                                                     type="number"
                                                     isRequired={false}
@@ -348,22 +353,22 @@ export const DeliveryChallanUpdate = () => {
                                                     label="Total Amount"
                                                     value={values.totalAmt}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={12} md={10}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12, md: 10 }}>
                                                 <TextInput
                                                     isRequired={false}
                                                     isReadOnly={true}
                                                     name="totalAmtInWords"
                                                     label="Amount in words"
                                                     value={values.totalAmtInWords} />
-                                            </Grid>
-                                        </Grid>
+                                            </Grid2>
+                                        </Grid2>
                                     </FormAccordion>
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12 }}>
                                     <FormAccordion panel="Driver and Vehicle Details">
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={12} md={4}>
+                                        <Grid2 container spacing={1}>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={true}
@@ -371,8 +376,8 @@ export const DeliveryChallanUpdate = () => {
                                                     label="Driver Name"
                                                     value={values.driverName}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={true}
@@ -380,8 +385,8 @@ export const DeliveryChallanUpdate = () => {
                                                     label="Driver's License Number"
                                                     value={values.licenseNo}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={true}
@@ -389,8 +394,8 @@ export const DeliveryChallanUpdate = () => {
                                                     label="Contact No"
                                                     value={values.contactNo}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={false}
@@ -399,8 +404,8 @@ export const DeliveryChallanUpdate = () => {
                                                     value={values.altContactNo}
                                                     handleChange={handleChange}
                                                 />
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={true}
@@ -408,14 +413,14 @@ export const DeliveryChallanUpdate = () => {
                                                     label="Vehicle No"
                                                     value={values.vehicleNo}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                        </Grid>
+                                            </Grid2>
+                                        </Grid2>
                                     </FormAccordion>
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12 }}>
                                     <FormAccordion panel="Other Details">
-                                        <Grid container spacing={1}>
-                                            <Grid item xs={12} md={4}>
+                                        <Grid2 container spacing={1}>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={true}
@@ -423,8 +428,8 @@ export const DeliveryChallanUpdate = () => {
                                                     label="Receiver Name"
                                                     value={values.receiverName}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12, md: 4 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={true}
@@ -432,8 +437,8 @@ export const DeliveryChallanUpdate = () => {
                                                     label="RM Name"
                                                     value={values.rmn}
                                                     handleChange={handleChange} />
-                                            </Grid>
-                                            <Grid item xs={12}>
+                                            </Grid2>
+                                            <Grid2 size={{ xs: 12 }}>
                                                 <TextInput
                                                     type="text"
                                                     isRequired={false}
@@ -442,15 +447,15 @@ export const DeliveryChallanUpdate = () => {
                                                     value={values.remark}
                                                     handleChange={handleChange}
                                                 />
-                                            </Grid>
-                                        </Grid>
+                                            </Grid2>
+                                        </Grid2>
                                     </FormAccordion>
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid2>
+                                <Grid2 size={{ xs: 12 }}>
                                     <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                </Grid2>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <FormButtonGroup
                                     submitLabel='Update'
                                     isSubmitting={isSubmitting}
@@ -462,7 +467,7 @@ export const DeliveryChallanUpdate = () => {
                                         dispatch(setPreviewDC(values));
                                         dispatch(setPreview(true))
                                     }} />
-                            </Grid>
+                            </Grid2>
                         </form>
                     )}
                 </Formik>)}

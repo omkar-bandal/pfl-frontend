@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppBar, Typography, IconButton, Box, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch } from 'react-redux';
-import { authRouteConstants, authState, isClosingState, mobileOpenState, setMobileOpen, useActions, useAppSelector } from '@prime-fresh/modules';
+import { authRouteConstants, isClosingState, mobileOpenState, setMobileOpen, useActions, useAppSelector } from '@prime-fresh/modules';
 import { Logout, Settings } from '@mui/icons-material';
 import { SignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { toast } from 'react-toastify';
@@ -14,8 +14,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const navigate = useNavigate();
   const isClosing = useAppSelector(isClosingState);
   const mobileOpen = useAppSelector(mobileOpenState);
-  const { loggedInUserInfo } = useAppSelector(authState);
-  const username = convertInTitleCase(loggedInUserInfo?.userName || "");
+  const username = convertInTitleCase(localStorage.getItem('userName') || "");
   const { setLoggedInUserInfo } = useActions();
 
   const handleDrawerToggle = () => {

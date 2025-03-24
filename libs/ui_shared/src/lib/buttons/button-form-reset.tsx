@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, ButtonProps } from "@mui/material"
+import { ButtonProps } from "@mui/material"
+import { StyledButton } from "./styled-button"
 
 type FormResetBtnProps = ButtonProps & {
     label: string,
@@ -7,18 +8,12 @@ type FormResetBtnProps = ButtonProps & {
 }
 export const FormResetBtn: React.FC<FormResetBtnProps> = ({ label, handleReset }) => {
     return (
-        <Button
+        <StyledButton
             type="reset"
             variant="contained"
             color="secondary"
-            size="large"
-            sx={{
-                width: 150,
-                textTransform: "none",
-                margin: 2
-            }}
             onClick={handleReset}>
             {label}
-        </Button>
+        </StyledButton>
     )
 }

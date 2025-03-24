@@ -4,7 +4,7 @@ import { arrayConstants, inventoryRouteConstants, laborFamilyDetailsInitialValue
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { AutoCompleteInput, FormResetBtn, FormSubmitBtn, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { Add, Close } from '@mui/icons-material';
-import { INVENTORY_API_URL, PostLaborRegistration, useCreateLaborData } from '@prime-fresh/inventory_api';
+import {PostLaborRegistration} from '@prime-fresh/inventory_api';
 import { appendFormData, mapToValueLabelArray } from '@prime-fresh/shared/modules';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,20 +13,20 @@ export const LabourRegistrationCreateForm = () => {
   // const { data: locations } = useGetAllFilteredBranches(ADMIN_API_URL.GET_ALL_BRANCHES_FILTERED);
   // const allLocations = locations ? mapToValueLabelArray(locations || [], 'id', 'name') : [];
 
-  const { mutateAsync, error, data } = useCreateLaborData(INVENTORY_API_URL.POST_LABOR_REGISTRATION);
+  // const { mutateAsync, error, data } = useCreateLaborData(INVENTORY_API_URL.POST_LABOR_REGISTRATION);
 
-  const handleSubmit = (values: PostLaborRegistration) => {
-    const formData = new FormData();
-    appendFormData(formData, values);
-    mutateAsync(formData).then(() => {
-      toast.success(data ? data.message : "Labor Registered Successfully.");
-      setTimeout(() => {
-        navigate(inventoryRouteConstants.GET_ALL_LABOUR_REGISTER);
-      }, 2000);
-    }).catch(() => {
-      toast.error(error ? error.message : "Error while creating labor data.");
-    })
-  }
+  // const handleSubmit = (values: PostLaborRegistration) => {
+  //   const formData = new FormData();
+  //   appendFormData(formData, values);
+  //   mutateAsync(formData).then(() => {
+  //     toast.success(data ? data.message : "Labor Registered Successfully.");
+  //     setTimeout(() => {
+  //       navigate(inventoryRouteConstants.GET_ALL_LABOUR_REGISTER);
+  //     }, 2000);
+  //   }).catch(() => {
+  //     toast.error(error ? error.message : "Error while creating labor data.");
+  //   })
+  // }
 
   return (
     <Formik
@@ -36,7 +36,7 @@ export const LabourRegistrationCreateForm = () => {
       validateOnChange={true}
       onSubmit={(values) => {
         console.log(values);
-        handleSubmit(values);
+        // handleSubmit(values);
       }}>
       {({ values, handleChange, handleReset, handleSubmit, setFieldValue, isSubmitting }) => (
         <form onSubmit={handleSubmit}>
@@ -46,10 +46,10 @@ export const LabourRegistrationCreateForm = () => {
                 Labor Registration Form
               </Typography>
             </Grid>
-            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+            {/* <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
               <FormSubmitBtn isSubmitting={isSubmitting} isError={error} label="Create" />
               <FormResetBtn label="Reset" handleReset={handleReset} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={5}>
               <TextInput
                 type="text"

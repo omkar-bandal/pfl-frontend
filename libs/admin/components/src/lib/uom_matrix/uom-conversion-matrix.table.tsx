@@ -1,18 +1,35 @@
-import { useEffect } from "react";
-import { Box, Button, Stack } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
-import { UOMMatrixListCols } from "./uom-conversion-matrix.columns";
-import { Add } from "@mui/icons-material";
-import { DataTable, TableToolbar, toast } from "@prime-fresh/ui_shared";
+import { useEffect, useMemo, useRef } from "react";
+import { Box, Grid2 } from "@mui/material";
+import { useUOMMatrixColumns } from "./uom-conversion-matrix.columns";
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES, useGetAllUOMConversionMatrix } from "@prime-fresh/admin/modules";
 
 export function UOMConvMatrixTable() {
-  const apiRef = useGridApiRef();
   const navigate = useNavigate();
+  const uomMatrixColumns = useUOMMatrixColumns();
+  const {
+    paginationModel,
+    sortModel,
+    handleSortingChange,
+    handlePaginationChange,
+    queryParams,
+    columnVisibilityModel,
+    displayColumnVisibilityPanel,
+    handleColumnVisibilityModelChange,
+    handleCloseColumnVisibilityPanel,
+    handleOpenColumnVisibilityPanel
+  } = useDataTable({ columnDef: uomMatrixColumns, initialPageSize: 10 });
 
-  const { data, isLoading, isError, error } = useGetAllUOMConversionMatrix();
-  const uomConvMat = data !== null && data?.data ? data.data : [];
+  const { data, isLoading, isError, error } = useGetAllUOMConversionMatrix(queryParams);
+  const uomConvMat = data ? data : null;
+  const rowCountRef = useRef(uomConvMat?.allRecords || 0);
+  const rowCount = useMemo(() => {
+    if (uomConvMat?.allRecords !== undefined) {
+      rowCountRef.current = uomConvMat.allRecords;
+    }
+    return rowCountRef.current;
+  }, [uomConvMat]);
 
   useEffect(() => {
     if (isError) {
@@ -25,24 +42,35 @@ export function UOMConvMatrixTable() {
   }
   return (
     <Box sx={{ flex: 1 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Button
-          variant="outlined"
-          size="medium"
-          startIcon={<Add />}
-          sx={{ marginY: 2 }}
-          fullWidth={false}
-          onClick={handleNavigate}
-        >
-          Add Conversion
-        </Button>
-        <TableToolbar apiRef={apiRef} />
-      </Stack>
-      <DataTable
-        apiRef={apiRef}
+      <Grid2 container marginY={1}>
+        <Grid2 size={{ xs: 12, md: 8 }}>
+          <PageTitle pagetitle='UoM Conversion Matrix' />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
+          <AddNewButton handleClick={handleNavigate} />
+          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnVisibilityPanel
+            popoverId="uom-conv-mat-col-def"
+            columns={uomMatrixColumns}
+            columnVisibilityModel={columnVisibilityModel}
+            displayColumnVisibilityModel={displayColumnVisibilityPanel}
+            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+          />
+        </Grid2>
+      </Grid2>
+      <DataGridTable
         loading={isLoading}
-        rows={uomConvMat}
-        columns={UOMMatrixListCols()}
+        rows={uomConvMat?.data || []}
+        columns={uomMatrixColumns}
+        mode="server"
+        initialPageSize={10}
+        totalRows={rowCount}
+        paginationModel={paginationModel}
+        onPaginationModelChange={handlePaginationChange}
+        sortModel={sortModel}
+        onSortModelChange={handleSortingChange}
+        columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
   );

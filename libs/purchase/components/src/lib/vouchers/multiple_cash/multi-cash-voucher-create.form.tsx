@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Grid, IconButton } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import { FieldArray, Formik } from "formik";
 import { Add, Close } from "@mui/icons-material";
-import { initValParticulars, initValMMultipleCashVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher } from "@prime-fresh/purchase/modules";
+import { initValParticulars, initValMMultipleCashVoucher, PURCHASE_ARRAYS, PURCHASE_ROUTES, multicashVoucherSchema, setPreviewMCVoucher, useCreateMultiCashVoucher } from "@prime-fresh/purchase/modules";
 import { FormButtonGroup, ImageUpload, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { Particulars, PostMCvoucher, PURCHASE_API_URL, useCreateMCVoucher } from "@prime-fresh/purchase_api";
+import { Particulars, PostMCvoucher} from "@prime-fresh/purchase_api";
 import { MCVoucherPreview } from "./multi-cash-voucher.preview";
 import { setPreview } from "@prime-fresh/modules";
 import { useDispatch } from "react-redux";
@@ -57,7 +57,7 @@ export const MultipleCashVoucherForm = () => {
   }, [recalcTotal]);
 
 
-  const { mutateAsync: mutatePost, error, data: Res } = useCreateMCVoucher(PURCHASE_API_URL.POST_MC_VOUCHER);
+  const { mutateAsync: mutatePost, error, data: Res } = useCreateMultiCashVoucher();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = (values: any) => {
@@ -87,11 +87,11 @@ export const MultipleCashVoucherForm = () => {
       >
         {({ values, handleChange, handleSubmit, setFieldValue, handleReset, isSubmitting }) => (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Grid container columnSpacing={1} rowSpacing={1} padding={1}>
-              <Grid item xs={12} marginBottom={2}>
+            <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
+              <Grid2 size={{ xs: 12 }} marginBottom={2}>
                 <PageTitle pagetitle='Multiple Cash Voucher' />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <SelectInput
                   isRequired={false}
                   label="Select GRN"
@@ -100,8 +100,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.grnNo}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={3}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <SelectInput
                   isRequired={false}
                   label="Select Challan"
@@ -110,8 +110,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.challanNo}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <SelectInput
                   isRequired={true}
                   label="Company Name"
@@ -120,8 +120,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.companyName}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={5}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 5 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -130,8 +130,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.debitCreditTo}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={5}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 5 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -140,8 +140,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.payReceivedFrom}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={2}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 2 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -150,19 +150,19 @@ export const MultipleCashVoucherForm = () => {
                   value={values.location}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <FieldArray name="particulars">
                   {({ remove, push }) => (
                     <>
                       {values.particulars.map((_, index) => (
-                        <Grid
+                        <Grid2
                           container
                           columnSpacing={1}
                           key={index}
                           alignItems="center"
                         >
-                          <Grid item xs={12} md={9}>
+                          <Grid2 size={{ xs: 12, md: 9}}>
                             <TextInput
                               type="text"
                               multiline
@@ -173,8 +173,8 @@ export const MultipleCashVoucherForm = () => {
                               value={values.particulars[index].description}
                               handleChange={handleChange}
                             />
-                          </Grid>
-                          <Grid item xs={12} md={2}>
+                          </Grid2>
+                          <Grid2 size={{ xs: 12, md: 2 }}>
                             <TextInput
                               type="number"
                               isRequired={true}
@@ -186,8 +186,8 @@ export const MultipleCashVoucherForm = () => {
                                 handleAmountChange(e, index, values, setFieldValue)
                               }}
                             />
-                          </Grid>
-                          <Grid item xs={12} md={1} sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
+                          </Grid2>
+                          <Grid2 size={{ xs: 12, md: 1 }} sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                             {values.particulars.length > 1 &&
                               <IconButton color="error" size="large" sx={{ marginTop: 2 }} onClick={() => handleRemove(index, values, setFieldValue)}>
                                 <Close />
@@ -195,14 +195,14 @@ export const MultipleCashVoucherForm = () => {
                             <IconButton color="primary" size="large" sx={{ marginTop: 2 }} onClick={() => handlePush(initValParticulars, values, setFieldValue)}>
                               <Add />
                             </IconButton>
-                          </Grid>
-                        </Grid>
+                          </Grid2>
+                        </Grid2>
                       ))}
                     </>
                   )}
                 </FieldArray>
-              </Grid>
-              <Grid item xs={12} md={2}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 2 }}>
                 <SelectInput
                   isRequired={true}
                   label="Payment Mode"
@@ -211,8 +211,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.paymentMode}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12} md={2}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 2 }}>
                 <TextInput
                   isRequired={false}
                   isReadOnly={true}
@@ -220,8 +220,8 @@ export const MultipleCashVoucherForm = () => {
                   label="Total Amount"
                   value={values.totalAmt || null}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -230,8 +230,8 @@ export const MultipleCashVoucherForm = () => {
                   label="Amount In Words"
                   value={values.amtWords}
                 />
-              </Grid>
-              <Grid item xs={12} md={2}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 2 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
@@ -240,8 +240,8 @@ export const MultipleCashVoucherForm = () => {
                   value={values.receiverName}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <TextInput
                   type="text"
                   multiline
@@ -252,11 +252,11 @@ export const MultipleCashVoucherForm = () => {
                   value={values.remark}
                   handleChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }}>
                 <ImageUpload isRequired={false} name="anyAttachment" label="Any Attachment" />
-              </Grid>
-              <Grid item xs={12} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              </Grid2>
+              <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <FormButtonGroup
                   submitLabel='Create'
                   isSubmitting={isSubmitting}
@@ -268,8 +268,8 @@ export const MultipleCashVoucherForm = () => {
                     dispatch(setPreviewMCVoucher(values));
                     dispatch(setPreview(true))
                   }} />
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </form>
         )
         }

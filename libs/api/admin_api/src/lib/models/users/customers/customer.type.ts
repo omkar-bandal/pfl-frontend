@@ -1,21 +1,21 @@
 import { Address, GetAddress } from "@prime-fresh/common_api";
 import { GetBankDetails, PostBankDetails } from "./bankDetails.type"
 import { GetBillingDetails, PostBillingDetails } from "./billingDetails.type"
-import { CustomerCategory } from "./customerCategory.type"
-import { CustomerTypes } from "./customerTypes.type"
 import { GetDeliveryDetails, PostDeliveryDetails } from "./deliveryDetails.type"
 import { GetKeyMobileNumbers, PostKeyMobileNumbers } from "./keyMobileNumbers.type"
 import { GetOfficeUseOnly, PostOfficeUseOnly } from "./officeUseOnly.type"
 import { GetPaymentTerms, PostPaymentTerms } from "./paymentTerms.type"
 import { GetProductSpecification, PostProductSpecification } from "./productSpecification.type"
 import { GetStatutoryDetails, PostStatutoryDetails } from "./statutoryDetails.type"
+import { GetCustomerType } from "./customer-type.type";
+import { GetCustomerCategory } from "./customer-category.type";
 
 export type GetCustomer = {
     id: string,
     organisationName: string,
     customerCode: string,
-    customerTypes: CustomerTypes,
-    customerCategory: CustomerCategory,
+    customerTypes: GetCustomerType,
+    customerCategory: GetCustomerCategory,
     organisationType: string,
     otherType: string,
     customerAddress: GetAddress,

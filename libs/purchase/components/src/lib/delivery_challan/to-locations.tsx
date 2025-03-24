@@ -9,9 +9,10 @@ import { useGetCustomerPartialData } from "@prime-fresh/shared/modules";
 import {BranchPartialData} from "@prime-fresh/common_api";
 type ToLocationProps = {
     locations: BranchPartialData[];
+    loading?: boolean;
 };
 
-export const ToLocation: FC<ToLocationProps> = memo(({ locations }) => {
+export const ToLocation: FC<ToLocationProps> = memo(({ locations, loading }) => {
     const { values, handleChange } = useFormikContext<PostDeliveryChallan>();
     const { deliveryCType, partyName, toLocation, toLocationInput } = values;
     const customerId = deliveryCType === "customer" ? partyName : null
@@ -40,6 +41,7 @@ export const ToLocation: FC<ToLocationProps> = memo(({ locations }) => {
             <Grid item xs={12} md={6}>
                 <AutoCompleteInput
                     isRequired
+                    loading={loading}
                     name="toLocation"
                     label="To Location"
                     options={allDCLocations}

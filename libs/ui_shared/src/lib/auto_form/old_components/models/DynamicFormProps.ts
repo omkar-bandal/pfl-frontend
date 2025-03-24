@@ -7,4 +7,5 @@ export interface DynamicFormProps<T> {
   schema: FormSchema;
   handleSubmit: (value: T) => void;
   validationSchema?: Yup.ObjectSchema<Yup.AnyObject>;
+  isSubmitError: Error | null;
 }

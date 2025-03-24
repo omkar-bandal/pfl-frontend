@@ -33,4 +33,9 @@ export class DeliveryChallanServices extends BaseService {
         const url = `${purchaseApiUrl.DELETE_DELIVERY_CHALLAN}/${id}`;
         return this.delete(url);
     }
+
+    createProformaInvoice(id: string): Promise<{invoiceurl: string}>{
+        const url = `${purchaseApiUrl.CREATE_PROFORMA_INVOICE}/${id}`;
+        return this.post(url);
+    }
 }

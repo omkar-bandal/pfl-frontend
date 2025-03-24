@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { PostUOMConversionMatrix, GetUOMConversionMatrix, UOMConversionMatrixService } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteUOMConversionMatrixById(id: string):
     });
 }
 
-export function useGetAllUOMConversionMatrix():
+export function useGetAllUOMConversionMatrix(queryParams: QueryParams):
     UseQueryResult<ApiBaseState<GetUOMConversionMatrix[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetUOMConversionMatrix[]>, ErrorModel>({
-        queryKey: ['get-all-uom-conversion-matrix'],
-        queryFn: () => UOMConversionMatrixService.getInstance().getAllUOMConversionMatrix(),
+        queryKey: ['get-all-uom-conversion-matrix', queryParams],
+        queryFn: () => UOMConversionMatrixService.getInstance().getAllUOMConversionMatrix(queryParams),
     });
 }
 

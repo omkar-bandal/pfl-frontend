@@ -1,14 +1,11 @@
 import * as Yup from 'yup';
 export declare const employeeValidationSchema: Yup.ObjectSchema<{
     firstName: string;
-    middleName: string;
     lastName: string;
-    designation: string;
     username: string;
+    password: string;
     phoneNumber: string;
-    cugNo: string;
     email: string;
-    companyEmail: string;
     address: {
         address2?: string | null | undefined;
         address1: string;
@@ -18,22 +15,16 @@ export declare const employeeValidationSchema: Yup.ObjectSchema<{
         pincode: string;
     };
     joiningDate: string;
-    relocationDate: string | undefined;
-    relocationPlace: string | undefined;
-    recommendedBy: string | undefined;
-    role: string;
-    reportingAuthorityFunctional: string | undefined;
-    reportingAuthorityAdministrative: string | undefined;
+    selectDepartment: string;
+    level: string;
+    reportingManager: string | undefined;
 }, Yup.AnyObject, {
     firstName: undefined;
-    middleName: undefined;
     lastName: undefined;
-    designation: undefined;
     username: undefined;
+    password: undefined;
     phoneNumber: undefined;
-    cugNo: undefined;
     email: undefined;
-    companyEmail: undefined;
     address: {
         address1: undefined;
         address2: undefined;
@@ -43,10 +34,7 @@ export declare const employeeValidationSchema: Yup.ObjectSchema<{
         pincode: undefined;
     };
     joiningDate: undefined;
-    relocationDate: undefined;
-    relocationPlace: undefined;
-    recommendedBy: undefined;
-    role: undefined;
-    reportingAuthorityFunctional: undefined;
-    reportingAuthorityAdministrative: undefined;
+    selectDepartment: undefined;
+    level: undefined;
+    reportingManager: undefined;
 }, "">;

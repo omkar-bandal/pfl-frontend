@@ -1,32 +1,32 @@
 export type PostStatutoryDetails = {
-    panNo: string,
+    panNo: string | null,
     panCopy: File | null,
-    aadharNo: string,
+    aadharNo: string | null,
     addharCopy: File | null,
-    gstn: string,
+    gstn: string | null,
     regiCertificateCopy: File | null,
     billBookCopy: File | null,
-    certificationsDetails: string,
-    otherCertifications: string,
-    corpRegiDetails: string,
-    otherCorpRegiDetails: string,
+    certificationsDetails: string | null,
+    otherCertifications: string | null,
+    corpRegiDetails: string | null,
+    otherCorpRegiDetails: string | null,
     incorpoCertificateCopy: File | null,
-    cinNo: string
+    cinNo: string | null
 }
 
 export type GetStatutoryDetails = {
     id: string,
-    panNo: string,
-    panCopy: string,
-    aadharNo: string,
-    addharCopy: string,
-    gstn: string,
-    regiCertificateCopy: string,
-    billBookCopy: string,
-    certificationsDetails: string,
-    otherCertifications: string,
-    corpRegiDetails: string,
-    otherCorpRegiDetails: string,
-    incorpoCertificateCopy: string,
-    cinNo: string
+    panNo: string | null,
+    panCopy: string | null,
+    aadharNo: string | null,
+    addharCopy: string | null,
+    gstn: string | null,
+    regiCertificateCopy: string | null,
+    billBookCopy: string | null,
+    certificationsDetails: string | null,
+    otherCertifications: string | null,
+    corpRegiDetails: string | null,
+    otherCorpRegiDetails: string | null,
+    incorpoCertificateCopy: string | null,
+    cinNo: string | null
 }

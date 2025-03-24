@@ -30,8 +30,7 @@ export type PostEmployee = {
   selectDepartment: string | null,
   level: string | null,
   joiningDate: string | null,
-  relocationDate: string | null,
-  relocationPlace: string | null,
   address: Address,
   reportingManager: string | null,
 }
+

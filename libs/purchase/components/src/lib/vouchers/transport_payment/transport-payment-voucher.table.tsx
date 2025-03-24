@@ -1,15 +1,21 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
-import { useGridApiRef } from '@mui/x-data-grid'
 import { GetTPvoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES, useGetAllTransportPaymentVouchers } from '@prime-fresh/purchase/modules'
-import { AddNewButton, DataTable, PageTitle, toast } from '@prime-fresh/ui_shared'
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom'
-import { TPVoucherListCols } from './transport-payment-voucher.columns'
+import { useTPVoucherColumns } from './transport-payment-voucher.columns'
 
 export const TransportPaymentVoucherTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const tpVoucherColumns = useTPVoucherColumns();
+    const {
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
+    } = useDataTable({ columnDef: tpVoucherColumns });
     const { data, isLoading, isError, error } = useGetAllTransportPaymentVouchers();
     const allTPVouchers = data?.data ? data.data : [];
     React.useEffect(() => {
@@ -28,13 +34,23 @@ export const TransportPaymentVoucherTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="tp-vouchers-col-def"
+                        columns={tpVoucherColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetTPvoucher>
+            <DataGridTable<GetTPvoucher>
+                mode="client"
                 loading={isLoading}
                 rows={allTPVouchers}
-                columns={TPVoucherListCols()}
-                apiRef={apiRef}
+                columns={tpVoucherColumns}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

@@ -3,9 +3,17 @@ export declare const SHARED_API_URL: {
 };
 export declare const sharedApiUrlConstants: {
     GET_COMPANY_NAMES: string;
+    GET_DEPARTMENT_BY_ID: string;
     GET_PRODUCTS_PARTIAL: string;
+    GET_PRODUCTS_PARTIAL_BY_ID: string;
+    SEARCH_PRODUCT: string;
+    SEARCH_PRODUCT_ALL_DATA: string;
     GET_VENDORS_PARTIAL: string;
+    GET_VENDORS_PARTIAL_BY_ID: string;
+    SEARCH_VENDOR: string;
     GET_FARMERS_PARTIAL: string;
+    GET_FARMERS_PARTIAL_BY_ID: string;
+    SEARCH_FARMER: string;
     GET_CUSTOMERS_PARTIAL: string;
     GET_CUSTOMER_NAMESL: string;
     GET_UOM_PARTIAL: string;
@@ -14,5 +22,4 @@ export declare const sharedApiUrlConstants: {
     GET_ALL_DEAL_SLIP_NO: string;
     GET_ALL_GRN_NO: string;
     GET_ALL_DELIVERY_CHALLAN_NO: string;
-    GET_DEPARTMENT_BY_ID: string;
 };

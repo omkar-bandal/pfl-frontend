@@ -2,7 +2,7 @@
 import { Formik } from "formik"
 import { useNavigate } from "react-router-dom"
 import { Grid2 } from "@mui/material"
-import { FormAccordion, FormResetBtn, FormSubmitBtn, PageTitle, toast } from "@prime-fresh/ui_shared"
+import { FormAccordion, FormButtonGroup, PageTitle, toast } from "@prime-fresh/ui_shared"
 import { ADMIN_ROUTES, useCreateFarmer } from "@prime-fresh/admin/modules"
 import { appendFormData, farmerValidationSchema, initValFarmer } from "@prime-fresh/shared/modules"
 import { FarmDetails, FarmerDetails, CropDetails, FarmerImageSection } from "./form-sections";
@@ -53,9 +53,14 @@ export const FarmerRegistrationForm = () => {
                                 <FarmerImageSection />
                             </FormAccordion>
                         </Grid2>
-                        <Grid2 size={{ xs: 12 }} sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-                            <FormSubmitBtn isSubmitting={isSubmitting} isError={postError} label="Create" />
-                            <FormResetBtn label="Reset" handleReset={handleReset} />
+                        <Grid2 size={{ xs: 12 }} marginY={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <FormButtonGroup
+                                submitLabel='Create'
+                                isSubmitting={isSubmitting}
+                                isSubmitError={postError}
+                                resetLabel='Reset'
+                                onReset={handleReset}
+                            />
                         </Grid2>
                     </Grid2>
                 </form>

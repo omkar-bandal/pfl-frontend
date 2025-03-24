@@ -1,12 +1,6 @@
-import { CustomerCategory, CustomerTypes } from "@prime-fresh/admin_api";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const Empanelment = () => {
-    // function mapToValueLabelArray<T>(arr: T[], valuekey: keyof T, labelkey: keyof T): { value: string, label: string }[] {
-    //     return arr.map((item) => ({
-    //         value: String(item[valuekey]),
-    //         label: String(item[labelkey]),
-    //     }))
-    // }
+export const Empanelment = (customerType:any , customerCategory: any) => {
     return ({
         "tabname": "Empanelment",
         "value": 0,
@@ -23,7 +17,7 @@ export const Empanelment = () => {
                 "name": "customerTypes",
                 "label": "Type of Customer",
                 "type": "select",
-                // "options": CustomerTypes ? mapToValueLabelArray<CustomerTypes>(CustomerTypes, 'id', 'name') : [],
+                "options": customerType,
                 "length": 3,
                 "isRequired": true
             },
@@ -31,7 +25,7 @@ export const Empanelment = () => {
                 "name": "customerCategory",
                 "label": "Category of Customer",
                 "type": "select",
-                // "options": CustomerCategory ? mapToValueLabelArray<CustomerCategory>(CustomerCategory, 'id', 'name') : [],
+                "options": customerCategory,
                 "length": 3,
                 "isRequired": true
             },

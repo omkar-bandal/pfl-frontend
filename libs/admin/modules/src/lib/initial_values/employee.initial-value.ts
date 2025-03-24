@@ -12,7 +12,5 @@ export const initValEmployee: PostEmployee = {
     selectDepartment: null,
     level: null,
     joiningDate: null,
-    relocationDate: null,
-    relocationPlace: null,
     reportingManager: null,
   }

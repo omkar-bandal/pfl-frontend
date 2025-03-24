@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button, useTheme } from '@mui/material';
 import { Download } from '@mui/icons-material';
 
 type DownloadButtonProps = {
@@ -23,6 +23,7 @@ const getFileNameFromUrl = (url: string | null): string => {
 };
 
 export const DownloadButton: React.FC<DownloadButtonProps> = ({ fileUrl, fileName }) => {
+    const theme = useTheme();
     // If fileName is not provided, extract it from the URL.
     const resolvedFileName = fileName || getFileNameFromUrl(fileUrl);
 
@@ -36,13 +37,12 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ fileUrl, fileNam
     };
 
     return (
-        <Button 
-        variant="contained" 
-        size="small" 
-        startIcon={<Download fontSize='small' />} 
-        color="primary" 
-        sx={{textTransform: "none", backgroundColor: "blue", width: 120}}
-        onClick={handleDownload}>
+        <Button
+            variant="contained"
+            size="small"
+            startIcon={<Download fontSize='small' />}
+            sx={{ textTransform: "none", backgroundColor: theme.palette.primary.main, width: 120 }}
+            onClick={handleDownload}>
             Download
         </Button>
     );

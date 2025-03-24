@@ -25,10 +25,10 @@ function useDeleteFarmerById(id) {
         mutationFn: () => admin_api_1.FarmersService.getInstance().deleteFarmerById(id),
     });
 }
-function useGetAllFarmers() {
+function useGetAllFarmers(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-farmers'],
-        queryFn: () => admin_api_1.FarmersService.getInstance().getAllFarmers(),
+        queryKey: ['get-all-farmers', queryParams],
+        queryFn: () => admin_api_1.FarmersService.getInstance().getAllFarmers(queryParams),
     });
 }
 function useGetFarmerById(id) {

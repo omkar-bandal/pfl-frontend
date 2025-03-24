@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetVendorSubcategory, PostVendorSubcategory } from "../../models";
 
@@ -14,8 +14,8 @@ export class VendorSubcategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllVendorSubcategories(): Promise<ApiBaseState<GetVendorSubcategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_VENDOR_SUBCAT;
+    getAllVendorSubcategories({ page, limit, sort }: QueryParams): Promise<ApiBaseState<GetVendorSubcategory[]>> {
+        const url = adminApiUrlConstants.GET_ALL_VENDOR_SUBCAT({ page, limit, sort });
         return this.get(url);
     }
 

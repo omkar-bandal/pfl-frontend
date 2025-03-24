@@ -4,7 +4,6 @@ import {
   Groups2,
   LocationOn,
   Scale,
-  MoreHoriz
 } from "@mui/icons-material";
 import { Navigations } from '@prime-fresh/modules';
 import { stringConstants } from "@prime-fresh/modules";
@@ -24,14 +23,69 @@ export const adminNavigations: Navigations[] = [
     roles: [stringConstants.ROLE_ADMIN],
     depts: [stringConstants.DEPT_ADMIN],
     children: [
-      { name: "Employee", path: ADMIN_ROUTES.GET_ALL_EMPLOYEES, roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER], depts:[stringConstants.DEPT_ADMIN] },
-      { name: "Vendors", path: ADMIN_ROUTES.GET_ALL_VENDORS, roles: [stringConstants.ROLE_ADMIN], depts:[stringConstants.DEPT_ADMIN] },
-      { name: "Customers", path: ADMIN_ROUTES.GET_ALL_CUSTOMERS, roles: [stringConstants.ROLE_ADMIN], depts:[stringConstants.DEPT_ADMIN] },
-      { name: "Farmers", path: ADMIN_ROUTES.GET_ALL_FARMERS, roles: [stringConstants.ROLE_ADMIN], depts:[stringConstants.DEPT_ADMIN] },
-    ],
+      { 
+        name: "Employee", 
+        path: ADMIN_ROUTES.GET_ALL_EMPLOYEES, 
+        roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER], 
+        depts:[stringConstants.DEPT_ADMIN] 
+      },
+      { name: "Farmers", 
+        path: ADMIN_ROUTES.GET_ALL_FARMERS, 
+        roles: [stringConstants.ROLE_ADMIN], 
+        depts:[stringConstants.DEPT_ADMIN] 
+      },
+      {
+        name: "Vendors",
+        roles: [stringConstants.ROLE_ADMIN],
+        depts: [stringConstants.DEPT_ADMIN],
+        grandChildren: [
+          { name: "Vendor", 
+            path: ADMIN_ROUTES.GET_ALL_VENDORS, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts:[stringConstants.DEPT_ADMIN] 
+          },
+          {
+            name: "Vendor Category",
+            logo: <Category />,
+            path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
+            roles: [stringConstants.ROLE_ADMIN],
+            depts: [stringConstants.DEPT_ADMIN]
+          },
+          {
+            name: "Vendor Subategory",
+            logo: <Category />,
+            path: ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT,
+            roles: [stringConstants.ROLE_ADMIN],
+            depts: [stringConstants.DEPT_ADMIN]
+          },
+        ]
+      },
+      {
+        name: "Customers",
+        roles: [stringConstants.ROLE_ADMIN],
+        depts: [stringConstants.DEPT_ADMIN],
+        grandChildren: [
+          { name: "Customer", 
+            path: ADMIN_ROUTES.GET_ALL_CUSTOMERS, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts:[stringConstants.DEPT_ADMIN] 
+          },
+          { name: "Customer Type", 
+            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts:[stringConstants.DEPT_ADMIN] 
+          },
+          { name: "Customer Category", 
+            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_CAT, 
+            roles: [stringConstants.ROLE_ADMIN], 
+            depts:[stringConstants.DEPT_ADMIN] 
+          },
+        ]
+      },
+    ]
   },
   {
-    name: "Products",
+    name: "Product",
     logo: <AddShoppingCart />,
     roles: [stringConstants.ROLE_ADMIN],
     depts: [stringConstants.DEPT_ADMIN],
@@ -43,12 +97,12 @@ export const adminNavigations: Navigations[] = [
     ],
   },
   {
-    name: "UOM",
+    name: "UoM",
     logo: <Scale />,
     roles: [stringConstants.ROLE_ADMIN],
     depts: [stringConstants.DEPT_ADMIN],
     children: [
-      { name: "UOM", path: ADMIN_ROUTES.GET_ALL_UOMs, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
+      { name: "Units", path: ADMIN_ROUTES.GET_ALL_UOMs, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
       { name: "UOM Conversion", path: ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
     ],
   },
@@ -102,27 +156,5 @@ export const adminNavigations: Navigations[] = [
         ]
       },
     ]
-  },
-  {
-    name: "Others",
-    logo: <MoreHoriz />,
-    roles: [stringConstants.ROLE_ADMIN],
-    depts: [stringConstants.DEPT_ADMIN],
-    children: [
-      {
-        name: "Vendor Category",
-        logo: <Category />,
-        path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
-        roles: [stringConstants.ROLE_ADMIN],
-        depts: [stringConstants.DEPT_ADMIN]
-      },
-      {
-        name: "Vendor Subategory",
-        logo: <Category />,
-        path: ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT,
-        roles: [stringConstants.ROLE_ADMIN],
-        depts: [stringConstants.DEPT_ADMIN]
-      },
-    ],
   },
 ];

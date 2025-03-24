@@ -22,13 +22,13 @@ function useUpdateVendorCategoryById(id) {
 function useDeleteVendorCategoryById(id) {
     return (0, react_query_1.useMutation)({
         mutationKey: ['delete-vendor-category-by-id'],
-        mutationFn: () => admin_api_1.VendorCategoryService.getInstance().deleteProdctCategoryById(id),
+        mutationFn: () => admin_api_1.VendorCategoryService.getInstance().deleteVendorCategoryById(id),
     });
 }
-function useGetAllVendorCategories() {
+function useGetAllVendorCategories(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-vendor-categories'],
-        queryFn: () => admin_api_1.VendorCategoryService.getInstance().getAllVendorCategories(),
+        queryKey: ['get-all-vendor-categories', queryParams],
+        queryFn: () => admin_api_1.VendorCategoryService.getInstance().getAllVendorCategories(queryParams),
     });
 }
 function useGetVendorCategoryById(id) {

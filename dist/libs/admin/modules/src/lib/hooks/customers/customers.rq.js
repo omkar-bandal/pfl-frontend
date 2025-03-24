@@ -25,10 +25,10 @@ function useDeleteCustomerById(id) {
         mutationFn: () => admin_api_1.CustomersService.getInstance().deleteCustomerById(id),
     });
 }
-function useGetAllCustomers() {
+function useGetAllCustomers(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-customers'],
-        queryFn: () => admin_api_1.CustomersService.getInstance().getAllCustomers(),
+        queryKey: ['get-all-customers', queryParams],
+        queryFn: () => admin_api_1.CustomersService.getInstance().getAllCustomers(queryParams),
     });
 }
 function useGetCustomerById(id) {

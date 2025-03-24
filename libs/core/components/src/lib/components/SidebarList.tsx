@@ -86,7 +86,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
                 timeout="auto"
                 unmountOnExit
               >
-                <List component="div" disablePadding>
+                <List component="div" dense={true} disablePadding>
                   {renderChildItems(child.grandChildren!, `${parentName}-${child.name}`)}
                 </List>
               </Collapse>
@@ -104,11 +104,12 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
           <NavLink to={item.path} key={item.name}>
             <ListItemButton dense={true}
               selected={selectedItem === item.name}
-              onClick={() => {
+              sx={listItemStyles}
+               onClick={() => {
                 dispatch(setMobileOpen(false));
                 setSelectedItem(item.name);
               }}
-              sx={listItemStyles}>
+              >
               <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
               <ListItemText
                 primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>}
@@ -125,7 +126,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
               </ListItemIcon>
             </ListItemButton>
             <Collapse in={openItems[item.name]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
+              <List component="div" dense={true} disablePadding>
                 {renderChildItems(item.children, item.name)}
               </List>
             </Collapse>

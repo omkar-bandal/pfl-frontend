@@ -36,9 +36,19 @@ export function useGetAllDeliveryChallans():
 
 export function useGetDeliveryChallanById(id: string):
     UseQueryResult<ApiBaseState<GetDeliveryChallan>, ErrorModel> {
+    const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetDeliveryChallan>, ErrorModel>({
         queryKey: ['get-delivery-challan-by-id'],
         queryFn: () => DeliveryChallanServices.getInstance().getDeliveryChallanById(id),
-        enabled: !!id,
+        enabled: enabled,
+    });
+}
+
+
+export function useCreateProformaInvoice(id: string):
+    UseMutationResult<{invoiceurl: string}, ErrorModel, unknown, unknown> {
+    return useMutation<{invoiceurl: string}, ErrorModel, unknown, unknown>({
+        mutationKey: ['create-proforma-invoice'],
+        mutationFn: () => DeliveryChallanServices.getInstance().createProformaInvoice(id),
     });
 }

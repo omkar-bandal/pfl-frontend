@@ -8,3 +8,4 @@ export * from './uom-partial-date.model';
 export * from './branch-partial-date.model';
 export * from './get-serial-no.model';
 export * from './department.model';
+export * from './product.model';

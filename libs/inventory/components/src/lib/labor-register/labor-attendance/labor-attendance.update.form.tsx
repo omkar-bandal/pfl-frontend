@@ -5,7 +5,6 @@ import { Box, Button, Grid, LinearProgress, Typography } from '@mui/material';
 import { FormResetBtn, FormSubmitBtn, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { Add, Remove } from '@mui/icons-material';
-import { INVENTORY_API_URL, useGetALaborAttendance, useUpdateLaborAttendance } from '@prime-fresh/inventory_api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { appendFormData } from '@prime-fresh/shared/modules';
 
@@ -14,47 +13,47 @@ export const LaborAttendanceUpdateForm = () => {
     const { id } = useParams();
     const Id = id ? id : "";
 
-    const { data, isLoading } = useGetALaborAttendance(INVENTORY_API_URL.GET_A_LABOR_ATTENDANCE, Id);
-    const laborAttendanceInitialValues = data ? data : laborAttendanceInitialValue;
+    // const { data, isLoading } = useGetALaborAttendance(INVENTORY_API_URL.GET_A_LABOR_ATTENDANCE, Id);
+    // const laborAttendanceInitialValues = data ? data : laborAttendanceInitialValue;
 
-    const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateLaborAttendance(INVENTORY_API_URL.UPDATE_LABOR_ATTENDANCE, Id);
+    // const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateLaborAttendance(INVENTORY_API_URL.UPDATE_LABOR_ATTENDANCE, Id);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleUpdate = (values: any) => {
-        const formData = new FormData();
-        appendFormData(formData, values);
-        mutatePatch(formData).then(() => {
-            toast.success(patchRes ? patchRes.message : "Labor attendance updated");
-            setTimeout(() => {
-                navigate(inventoryRouteConstants.GET_ALL_LABOUR_ATTENDANCE);
-            }, 2500);
-        }).catch(() => {
-            toast.error(patchError ? patchError.message : "Error while updating labor attendance.");
-        })
-    }
+    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // const handleUpdate = (values: any) => {
+    //     const formData = new FormData();
+    //     appendFormData(formData, values);
+    //     mutatePatch(formData).then(() => {
+    //         toast.success(patchRes ? patchRes.message : "Labor attendance updated");
+    //         setTimeout(() => {
+    //             navigate(inventoryRouteConstants.GET_ALL_LABOUR_ATTENDANCE);
+    //         }, 2500);
+    //     }).catch(() => {
+    //         toast.error(patchError ? patchError.message : "Error while updating labor attendance.");
+    //     })
+    // }
 
     return (
-        isLoading ?
-            (<Box sx={{ flex: 1 }} >
-                <LinearProgress />
-            </Box >) :
+        // isLoading ?
+        //     (<Box sx={{ flex: 1 }} >
+        //         <LinearProgress />
+        //     </Box >) :
 
             (<Formik
-                initialValues={laborAttendanceInitialValues}
+                initialValues={laborAttendanceInitialValue}
                 validationSchema={laborAttendanceSchema}
                 validateOnBlur={true}
                 validateOnChange={true}
-                onSubmit={(values) => handleUpdate(values)}>
+                onSubmit={(values) => console.log(values)}>
                 {({ values, handleSubmit, handleChange, handleReset, isSubmitting }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container rowSpacing={1} columnSpacing={1}>
                             <Grid item xs={12} md={6}>
                                 <Typography variant="h4">Daily Labor Attendance</Typography>
                             </Grid>
-                            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                            {/* <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <FormSubmitBtn isSubmitting={isSubmitting} isError={patchError} label="Update" />
                                 <FormResetBtn label="Reset" handleReset={handleReset} />
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12} md={6}>
                                 <SelectInput
                                     isRequired={true}

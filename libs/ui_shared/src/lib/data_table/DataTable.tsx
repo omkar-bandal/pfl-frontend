@@ -1,14 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DataGrid, GridApi } from "@mui/x-data-grid";
 import { CustomNoRowsOverlay } from "./components";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { CustomGridColDef } from "./models/columntype.interface";
+
 interface DataGridProps<T> {
   columns: CustomGridColDef[];
   rows: T[] | undefined;
-  loading: boolean
-  apiRef?: React.MutableRefObject<GridApi>
+  loading: boolean;
+  apiRef?: React.MutableRefObject<GridApi>;
+  visibilityModel?: any;
+  onVisibilityModelChange?: any
 }
-export const DataTable = <T extends { id: string | number }>({ columns, rows, apiRef, loading, ...rest }: DataGridProps<T>) => {
+
+export const DataTable = <T extends { id: string | number }>({ columns, rows, apiRef, loading,visibilityModel, onVisibilityModelChange,   ...rest }: DataGridProps<T>) => {
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -33,6 +38,8 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
         disableColumnMenu={true}
         columnHeaderHeight={40}
         rowHeight={35}
+        columnVisibilityModel={visibilityModel}
+        onColumnVisibilityModelChange={(newModel) => onVisibilityModelChange(newModel)}
         initialState={{
           pagination: {
             paginationModel: {
@@ -50,21 +57,19 @@ export const DataTable = <T extends { id: string | number }>({ columns, rows, ap
           noRowsOverlay: CustomNoRowsOverlay,
         }}
         sx={{
-          '& .MuiDataGrid-columnHeader': { // Target all column headers
+          '& .MuiDataGrid-columnHeader': { 
             backgroundColor: " #00cc66",
             height: 10,
           },
-          '& .MuiDataGrid-columnHeaderTitle': { // Target the header title specifically
+          '& .MuiDataGrid-columnHeaderTitle': { 
             fontSize: '15px',
             fontWeight: 'bold',
-            color: "#FFFFFF"         // Example font weight
-            // Example font size
+            color: "#FFFFFF"        
           },
           "& .MuiDataGrid-cell": {
             color: "#595959",
             fontSize: 14,
             fontWeight: 500
-            // padding: isMobile ? '8px' : '16px',
           },
           "--DataGrid-overlayHeight": "300px",
         }}

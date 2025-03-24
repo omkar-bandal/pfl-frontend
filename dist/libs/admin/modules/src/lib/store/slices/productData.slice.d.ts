@@ -7,7 +7,10 @@ type ProductDataState = {
     productSubCat: GetProductSubcategory[];
     productPartialData: ProductPartialData[];
 };
-export declare const setProducts: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetProduct[], "productData/setProducts">, setProductCat: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetProductCategory[], "productData/setProductCat">, setProductSubCat: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetProductSubcategory[], "productData/setProductSubCat">, setSelectedProduct: import("@reduxjs/toolkit").ActionCreatorWithOptionalPayload<GetProduct | null | undefined, "productData/setSelectedProduct">, addProductPartialData: import("@reduxjs/toolkit").ActionCreatorWithPayload<ProductPartialData | null, "productData/addProductPartialData">, removeProductPartialData: import("@reduxjs/toolkit").ActionCreatorWithPayload<number, "productData/removeProductPartialData">;
+export declare const setProducts: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetProduct[], "productData/setProducts">, setProductCat: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetProductCategory[], "productData/setProductCat">, setProductSubCat: import("@reduxjs/toolkit").ActionCreatorWithPayload<GetProductSubcategory[], "productData/setProductSubCat">, setSelectedProduct: import("@reduxjs/toolkit").ActionCreatorWithOptionalPayload<GetProduct | null | undefined, "productData/setSelectedProduct">, addorupdateProductPartialData: import("@reduxjs/toolkit").ActionCreatorWithPayload<{
+    index: number;
+    object: ProductPartialData;
+}, "productData/addorupdateProductPartialData">, removeProductPartialData: import("@reduxjs/toolkit").ActionCreatorWithPayload<number, "productData/removeProductPartialData">, clearProductPartialData: import("@reduxjs/toolkit").ActionCreatorWithoutPayload<"productData/clearProductPartialData">;
 export declare const productsDataState: (state: RootState) => ProductDataState;
 export declare const productsState: (state: RootState) => GetProduct[];
 export declare const productCatState: (state: RootState) => GetProductCategory[];

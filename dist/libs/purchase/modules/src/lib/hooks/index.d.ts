@@ -7,3 +7,4 @@ export * from './labor-payment-voucher.rq';
 export * from './transport-payment-voucher.rq';
 export * from './packing-material-payment-voucher.rq';
 export * from './delivery-challan.rq';
+export * from './payment-request.rq';

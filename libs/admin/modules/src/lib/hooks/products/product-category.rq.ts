@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { ProductCategoryService, GetProductCategory, PostProductCategory } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteProductCategoryById(id: string):
     });
 }
 
-export function useGetAllProductCategories():
+export function useGetAllProductCategories(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetProductCategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProductCategory[]>, ErrorModel>({
-        queryKey: ['get-all-product-categories'],
-        queryFn: () => ProductCategoryService.getInstance().getAllProductCategories(),
+        queryKey: ['get-all-product-categories', queryParams],
+        queryFn: () => ProductCategoryService.getInstance().getAllProductCategories(queryParams),
     });
 }
 

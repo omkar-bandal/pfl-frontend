@@ -5,12 +5,12 @@ import { RequestedBy } from "@prime-fresh/purchase_api";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { useNavigate } from "react-router-dom";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { useMemo } from "react";
 
-export const DealSlipListCols = (): CustomGridColDef[] => {
+export const useDealSlipColumns = (): CustomGridColDef[] => {
     const navigate = useNavigate();
 
-    return ([
-        { field: "id", headerName: "ID", width: 30 },
+    return useMemo(() => [
         {
             field: "dealSlipNo",
             headerName: "Deal Slip No",
@@ -39,7 +39,7 @@ export const DealSlipListCols = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => value? `${value.firstName || ''} ${value.lastName || ''}` : "",
+            valueGetter: (value: RequestedBy) => value ? `${value.firstName || ''} ${value.lastName || ''}` : "",
         },
         {
             field: "requestingDepartment",
@@ -115,5 +115,5 @@ export const DealSlipListCols = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-    ])
+    ], [navigate])
 }

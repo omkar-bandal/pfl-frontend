@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { FarmersService, GetFarmer } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteFarmerById(id: string):
     });
 }
 
-export function useGetAllFarmers():
+export function useGetAllFarmers(queryParams: QueryParams):
     UseQueryResult<ApiBaseState<GetFarmer[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetFarmer[]>, ErrorModel>({
-        queryKey: ['get-all-farmers'],
-        queryFn: () => FarmersService.getInstance().getAllFarmers(),
+        queryKey: ['get-all-farmers', queryParams],
+        queryFn: () => FarmersService.getInstance().getAllFarmers(queryParams),
     });
 }
 

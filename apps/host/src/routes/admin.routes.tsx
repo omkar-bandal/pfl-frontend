@@ -32,9 +32,14 @@ import {
     ProductUpdateForm,
     OfficeTable,
     OfficeView,
-    BranchView
+    BranchView,
+    CustomerTypeTable,
+    CustomerTypeForm,
+    CustomerCategoryForm,
+    CustomerCategoryTable
 } from "@prime-fresh/admin/components";
 import { Outlet } from "react-router-dom";
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { VendorRegistrationForm } from "@prime-fresh/shared/components";
 
 export const AdminRoutes = [
@@ -69,6 +74,30 @@ export const AdminRoutes = [
             {
                 path: `${ADMIN_ROUTES.VIEW_CUSTOMER}/:id`,
                 element: <ViewCustomer />,
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES,
+                element: <CustomerTypeTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_CUSTOMER_TYPE,
+                element: <CustomerTypeForm />,
+            },
+            {
+                path: `${ADMIN_ROUTES.UPDATE_CUSTOMER_TYPE}/:id`,
+                element: <CustomerTypeForm />,
+            },
+            {
+                path: ADMIN_ROUTES.GET_ALL_CUSTOMER_CAT,
+                element: <CustomerCategoryTable />,
+            },
+            {
+                path: ADMIN_ROUTES.CREATE_CUSTOMER_CAT,
+                element: <CustomerCategoryForm />,
+            },
+            {
+                path: `${ADMIN_ROUTES.UPDATE_CUSTOMER_CAT}/:id`,
+                element: <CustomerCategoryForm />,
             },
             {
                 path: ADMIN_ROUTES.GET_ALL_VENDORS,

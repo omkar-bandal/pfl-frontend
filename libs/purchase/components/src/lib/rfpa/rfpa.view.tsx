@@ -1,32 +1,15 @@
 import { Box, Button, Divider, Grid, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { useNavigate, useParams } from "react-router-dom";
-import { AxiosResponse } from "axios";
-import { ChangeStatusResponse } from "@prime-fresh/purchase_api";
-import { PURCHASE_ROUTES, useGetRFPAById } from "@prime-fresh/purchase/modules";
-import { axiosInstance, handleError } from "@prime-fresh/common_api";
+import { useParams } from "react-router-dom";
+import { useGetRFPAById } from "@prime-fresh/purchase/modules";
 import { PageTitle } from "@prime-fresh/ui_shared";
 
 export const RFPAView = () => {
-    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const rfpaId = id ? id : '';
     const { data, isLoading } = useGetRFPAById(rfpaId);
     const rfpa = data?.data;
-    console.log(rfpa)
     const role = localStorage.getItem('role');
-    console.log(role);
-    const handleStatusChange = async () => {
-        try {
-            const response: AxiosResponse<ChangeStatusResponse> = await axiosInstance.patch(``,
-                { approvalNote: "-", approvalStatus: "approved" });
-            console.log(response.data);
-            if (response.status === 200)
-                navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
-            return response.data;
-        } catch (error) {
-            handleError(error);
-        }
-    }
+
     return (
         <Box sx={{ flex: 1, padding: 1 }}>
             {isLoading ?
@@ -37,7 +20,7 @@ export const RFPAView = () => {
                     <Grid container direction="column" rowSpacing={1}>
                         <Grid item sx={{ display: "flex", alignItem: "center", justifyContent: "space-between" }}>
                             <PageTitle pagetitle='Request For Purchase Approval' />                            {role === 'MANAGER' &&
-                                (<Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }} onClick={handleStatusChange}>Approve</Button>)}
+                                (<Button fullWidth variant="contained" color='success' size='large' sx={{ width: 150 }}>Approve</Button>)}
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>

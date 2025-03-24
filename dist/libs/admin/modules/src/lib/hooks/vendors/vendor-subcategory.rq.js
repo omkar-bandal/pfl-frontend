@@ -26,10 +26,10 @@ function useDeleteVendorSubcategoryById(id) {
         mutationFn: () => admin_api_1.VendorSubcategoryService.getInstance().deleteProdctSubcategoryById(id),
     });
 }
-function useGetAllVendorSubcategories() {
+function useGetAllVendorSubcategories(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-vendor-subcategories'],
-        queryFn: () => admin_api_1.VendorSubcategoryService.getInstance().getAllVendorSubcategories(),
+        queryKey: ['get-all-vendor-subcategories', queryParams],
+        queryFn: () => admin_api_1.VendorSubcategoryService.getInstance().getAllVendorSubcategories(queryParams),
     });
 }
 function useGetVendorSubcategoryById(id) {

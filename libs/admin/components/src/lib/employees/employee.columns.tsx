@@ -4,64 +4,35 @@ import { Edit, Preview } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ADMIN_ROUTES, setDataId } from "@prime-fresh/admin/modules";
-import { GetRole } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
+import { useCallback, useMemo } from "react";
 
-export const EmployeeListCols = (): CustomGridColDef[] => {
+export const useEmployeeColumns = (): CustomGridColDef[] => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEdit = (id: string) => {
-    navigate(`${ADMIN_ROUTES.EDIT_EMPLOYEE}/${id}`);
-  }
-
-  const handleEmployeeStatus = (id: string) => {
+  const handleEmployeeStatus = useCallback((id: string) => {
     dispatch(setDataId(id));
-  }
-  return ([
-    // {
-    //   field: "employeeStatus",
-    //   headerName: "Employee Status",
-    //   width: 100,
-    //   renderCell: (params: GridRenderCellParams) => {
-    //     switch (params.row.employeeStatus) {
-    //       case "active": return <Chip label={params.row.employeeStatus} color="primary" size="small" sx={{ width: 80 }} />;
-    //       case "inactive": return <Chip label={params.row.employeeStatus} color="error" size="small" sx={{ width: 80 }} />;
-    //       default: return <Chip label={params.row.employeeStatus} color="error" size="small" sx={{ width: 80 }} />;
-    //     }
-    //   }
-    // },
+  },[dispatch]);
+  return useMemo(() => [
     {
-      field: "role",
-      headerName: "Role",
-      width: 80,
-      valueFormatter: (params: GetRole) => {
-        if (params) {
-          return (params.name).charAt(0).toUpperCase() + (params.name).slice(1).toLowerCase();
-        }
-        else {
-          return "";
-        }
-      }
+      field: "employeeId",
+      headerName: "Employee ID",
+      width: 150,
     },
-    // {
-    //   field: "firstName",
-    //   headerName: "First Name",
-    //   width: 100,
-    // },
-    // {
-    //   field: "lastName",
-    //   headerName: "Last Name",
-    //   width: 100,
-    // },
     {
       field: 'fullName',
       headerName: "Name",
       width: 170,
       isMobileVisible: true,
       valueGetter: (value, row) => {
-        console.log(value);
-        return `${row.firstName || ''} ${row.middleName || ''} ${row.lastName || ''}`;
+        if (row) {
+          const name = `${row.firstName || ''} ${row.middleName || ''} ${row.lastName || ''}`;
+          return convertInTitleCase(name);
+        } else {
+          return '-';
+        }
       },
     },
     {
@@ -75,43 +46,24 @@ export const EmployeeListCols = (): CustomGridColDef[] => {
       width: 100,
     },
     {
-      field: "cugNo",
-      headerName: "CUG No",
-      width: 100,
-    },
-    {
       field: "email",
       headerName: "Email",
       width: 150,
     },
     {
-      field: "companyEmail",
-      headerName: "Compamy Email",
-      width: 150,
+      field: "address",
+      headerName: "Address",
+      width: 300,
+      valueGetter: (value) => value ? formatAddress(value) : '-',
     },
     {
       field: "joiningDate",
       headerName: "Joining Date",
       width: 100,
     },
-    {
-      field: "relocationDate",
-      headerName: "Relocation Date",
-      width: 100,
-    },
     // {
-    //   field: "recommendedBy",
-    //   headerName: "Recommended By",
-    //   width: 100,
-    // },
-    // {
-    //   field: "reportingAuthorityFunctional",
-    //   headerName: "Reporting Authority (Functional)",
-    //   width: 100,
-    // },
-    // {
-    //   field: "reportingAuthorityAdministrative",
-    //   headerName: "Reporting Authority (Administrative)",
+    //   field: "reportingManager",
+    //   headerName: "Reporting Manager",
     //   width: 100,
     // },
     {
@@ -168,7 +120,7 @@ export const EmployeeListCols = (): CustomGridColDef[] => {
       disableExport: true,
       disableColumnMenu: true,
       renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id)}>
+        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_EMPLOYEE}/${params.row.id}`)}>
           <Edit color="info" />
         </IconButton>
       ),
@@ -185,10 +137,10 @@ export const EmployeeListCols = (): CustomGridColDef[] => {
       disableExport: true,
       disableColumnMenu: true,
       renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_EMPLOYEE}/${params.row.id}`)}>
+        <IconButton aria-label="view" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_EMPLOYEE}/${params.row.id}`)}>
           <Preview color="primary" />
         </IconButton>
       ),
     },
-  ])
+  ],[navigate, handleEmployeeStatus])
 };

@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetUOMConversionMatrix, PostUOMConversionMatrix } from "../../models";
 import { adminApiUrlConstants } from "../../constants";
 
@@ -14,8 +14,8 @@ export class UOMConversionMatrixService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllUOMConversionMatrix():Promise<ApiBaseState<GetUOMConversionMatrix[]>> {
-        const url = adminApiUrlConstants.GET_ALL_UOM_CONVERSION;
+    getAllUOMConversionMatrix({ page, limit, sort }: QueryParams):Promise<ApiBaseState<GetUOMConversionMatrix[]>> {
+        const url = adminApiUrlConstants.GET_ALL_UOM_CONVERSION({ page, limit, sort });
         return this.get(url);
     }
 

@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { UOMService, PostUOM, GetUOM } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteUOMById(id: string):
     });
 }
 
-export function useGetAllUOMs():
+export function useGetAllUOMs(queryParams: QueryParams):
     UseQueryResult<ApiBaseState<GetUOM[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetUOM[]>, ErrorModel>({
-        queryKey: ['get-all-uoms'],
-        queryFn: () => UOMService.getInstance().getAllUOMs(),
+        queryKey: ['get-all-uoms', queryParams],
+        queryFn: () => UOMService.getInstance().getAllUOMs(queryParams),
     });
 }
 

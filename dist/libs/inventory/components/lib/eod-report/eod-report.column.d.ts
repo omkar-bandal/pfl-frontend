@@ -1,3 +1,3 @@
 import { CustomGridColDef } from '../../../../../ui_shared/src/index.ts';
 
-export declare const EODReportColumns: () => CustomGridColDef[];
+export declare const useEODReportColumns: () => CustomGridColDef[];

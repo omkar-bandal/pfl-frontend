@@ -1,63 +1,45 @@
-import { useMemo, useRef } from "react";
+import React from "react";
 import { Box, Grid2 } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
-import { useDispatch } from "react-redux";
-import { FarmerListCols } from "./farmer-columns";
+import { useFarmerColumns } from "./farmer-columns";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, setOpenFor } from '@prime-fresh/admin/modules';
-import { GetFarmer } from "@prime-fresh/admin_api";
-import { AddNewButton, DataGridTable, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
-import { axiosInstance, COM_API_URL, handleError } from "@prime-fresh/common_api";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import { ADMIN_ROUTES, useGetAllFarmers } from '@prime-fresh/admin/modules';
+import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
 
 export function FarmerTable() {
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const apiRef = useGridApiRef();
-  const { paginationModel, sortModel, filterModel, handleSortingChange, handlePaginationChange, handleFiltersChange, queryParams } = useDataTable();
-  // const { data, isLoading } = useGetAllFarmers(ADMIN_API_URL.GET_ALL_FARMERS);
+  const farmerColumns = useFarmerColumns();
+  const { paginationModel,
+    sortModel,
+    handleSortingChange,
+    handlePaginationChange,
+    queryParams,
+    columnVisibilityModel,
+    displayColumnVisibilityPanel,
+    handleColumnVisibilityModelChange,
+    handleCloseColumnVisibilityPanel,
+    handleOpenColumnVisibilityPanel
+  } = useDataTable({ columnDef: farmerColumns, initialPageSize: 10 });
 
-
-  interface GetFarmerData {
-    data: GetFarmer[];
-    totalfarmers: number;
-    totalPages: number;
-    page: number;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const fetchFarmers = async (page: number, limit: number, sort: string): Promise<GetFarmerData> => {
-    let url = `${COM_API_URL.BASE_URL}/farmers/?page=${page + 1}&limit=${limit}`;
-    if (sort && sort.length > 0)
-      url = `${COM_API_URL.BASE_URL}/farmers/?page=${page + 1}&limit=${limit}&sort=${sort}`
-    try {
-      const result: AxiosResponse = await axiosInstance.get(url);
-      console.log("all farmers: ", result.data);
-      return result.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-  const { data, isLoading } = useQuery(
-    {
-      queryKey: ['getFarmers', queryParams],
-      queryFn: () => fetchFarmers(queryParams.page, queryParams.limit, queryParams.sort),
-      keepPreviousData: true, // Add this option
-    } as UseQueryOptions<GetFarmerData, Error, GetFarmerData, (string | number)[]>);
-  const rowCountRef = useRef(data?.totalfarmers || 0);
-
-  const rowCount = useMemo(() => {
-    if (data?.totalfarmers !== undefined) {
-      rowCountRef.current = data.totalfarmers;
+  const { data, isLoading, isError, error } = useGetAllFarmers(queryParams);
+  const allFarmers = data ? data : null;
+  const rowCountRef = React.useRef(allFarmers?.allRecords || 0);
+  const rowCount = React.useMemo(() => {
+    if (allFarmers?.allRecords !== undefined) {
+      rowCountRef.current = allFarmers.allRecords;
     }
     return rowCountRef.current;
-  }, [data?.totalfarmers]);
+  }, [allFarmers]);
+
+  React.useEffect(() => {
+    if (isError) {
+      toast.error(error?.message || 'Error occured please refresh the page.');
+    }
+  }, [isError, error]);
 
   const handleCreate = () => {
-    dispatch(setOpenFor('create'));
     navigate(ADMIN_ROUTES.CREATE_FARMER)
   };
-
 
   return (
     <Box sx={{ flex: 1 }}>
@@ -67,19 +49,21 @@ export function FarmerTable() {
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
           <AddNewButton handleClick={handleCreate} />
+          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnVisibilityPanel
+            popoverId="farmers-col-def"
+            columns={farmerColumns}
+            columnVisibilityModel={columnVisibilityModel}
+            displayColumnVisibilityModel={displayColumnVisibilityPanel}
+            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+          />
         </Grid2>
       </Grid2>
-      {/* <DataTable
-          apiRef={apiRef}
-          loading={isLoading}
-          rows={allFarmers}
-          columns={FarmerListCols()}
-        /> */}
       <DataGridTable
-        apiRef={apiRef}
         loading={isLoading}
-        rows={data?.data}
-        columns={FarmerListCols()}
+        rows={allFarmers?.data || []}
+        columns={farmerColumns}
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
@@ -87,8 +71,7 @@ export function FarmerTable() {
         onPaginationModelChange={handlePaginationChange}
         sortModel={sortModel}
         onSortModelChange={handleSortingChange}
-        filterModel={filterModel}
-        onFilterModelChange={handleFiltersChange}
+        columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
   );

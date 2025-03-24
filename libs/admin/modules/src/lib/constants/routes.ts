@@ -19,7 +19,15 @@ export const ADMIN_ROUTES = {
     CUSTOMER: "/admin/users/customer",
     GET_ALL_CUSTOMERS: "/admin/users/customers/getall",
     VIEW_CUSTOMER: "/admin/users/customer/view",
-    EDIT_CUSTOMER: "/admin/users/customer/update",
+    UPDATE_CUSTOMER: "/admin/users/customer/update",
+
+    GET_ALL_CUSTOMER_TYPES: "/admin/users/customer/types/getall",
+    CREATE_CUSTOMER_TYPE: "/admin/users/customer/type/create",
+    UPDATE_CUSTOMER_TYPE: "/admin/users/customer/type/update",
+
+    GET_ALL_CUSTOMER_CAT: "/admin/users/customer/categories/getall",
+    CREATE_CUSTOMER_CAT: "/admin/users/customer/category/create",
+    UPDATE_CUSTOMER_CAT: "/admin/users/customer/category/update",
     
     //Vendor
     VENDOR: "/admin/users/vendor",

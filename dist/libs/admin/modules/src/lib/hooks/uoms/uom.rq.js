@@ -25,10 +25,10 @@ function useDeleteUOMById(id) {
         mutationFn: () => admin_api_1.UOMService.getInstance().deleteUOMById(id),
     });
 }
-function useGetAllUOMs() {
+function useGetAllUOMs(queryParams) {
     return (0, react_query_1.useQuery)({
-        queryKey: ['get-all-uoms'],
-        queryFn: () => admin_api_1.UOMService.getInstance().getAllUOMs(),
+        queryKey: ['get-all-uoms', queryParams],
+        queryFn: () => admin_api_1.UOMService.getInstance().getAllUOMs(queryParams),
     });
 }
 function useGetUOMById(id) {

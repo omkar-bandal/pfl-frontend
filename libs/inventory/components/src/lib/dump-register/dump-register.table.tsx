@@ -1,15 +1,23 @@
 import React from "react";
 import { Box, Grid2 } from "@mui/material";
-import { useGridApiRef } from "@mui/x-data-grid";
 import { inventoryRouteConstants, useGetAllDumpRegisters } from "@prime-fresh/inventory/modules";
 import { GetDumpRegister } from "@prime-fresh/inventory_api";
-import { AddNewButton, DataTable, PageTitle, toast } from "@prime-fresh/ui_shared";
+import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
-import { DumpRegisterColumns } from "./dump-register.column";
+import { useDumpRegisterColumns } from "./dump-register.column";
 
 export const DumpRegisterTable = () => {
     const navigate = useNavigate();
-    const apiRef = useGridApiRef();
+    const dumpRegisterColumns = useDumpRegisterColumns();
+    const { 
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel,
+        paginationModel,
+        setPaginationModel
+    } = useDataTable({ columnDef: dumpRegisterColumns, initialPageSize: 10 });
     const { data, isLoading, isError, error } = useGetAllDumpRegisters();
     const dumps = data?.data ? data.data : [];
     console.log(dumps);
@@ -31,13 +39,25 @@ export const DumpRegisterTable = () => {
                 </Grid2>
                 <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
                     <AddNewButton handleClick={handleCreate} />
+                    <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+                    <ColumnVisibilityPanel
+                        popoverId="dumps-col-def"
+                        columns={dumpRegisterColumns}
+                        columnVisibilityModel={columnVisibilityModel}
+                        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+                        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+                        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+                    />
                 </Grid2>
             </Grid2>
-            <DataTable<GetDumpRegister>
+            <DataGridTable<GetDumpRegister>
+                mode="client"
                 loading={isLoading}
                 rows={dumps}
-                columns={DumpRegisterColumns()}
-                apiRef={apiRef}
+                columns={dumpRegisterColumns}
+                columnVisibilityModel={columnVisibilityModel}
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
             />
         </Box >
     )

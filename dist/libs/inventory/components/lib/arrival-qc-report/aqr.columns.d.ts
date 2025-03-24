@@ -1,3 +1,3 @@
 import { CustomGridColDef } from '../../../../../ui_shared/src/index.ts';
 
-export declare const AQRColumns: () => CustomGridColDef[];
+export declare const useAQRColumns: () => CustomGridColDef[];
