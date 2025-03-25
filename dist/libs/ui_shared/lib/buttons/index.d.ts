@@ -5,3 +5,4 @@ export * from './button-add-new';
 export * from './button-download';
 export * from './form-button-group';
 export * from './button-column-visibility';
+export * from './button-print';

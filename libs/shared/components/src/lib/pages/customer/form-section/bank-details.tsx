@@ -160,7 +160,7 @@ export const CustomerBankDetails = () => {
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <RadioGroupInput
-                    isRequired={false}
+                    isRequired={true}
                     alignment="vertical"
                     name="bankDetails.ifCancelledCheque"
                     label="Cancel Cheque available?"

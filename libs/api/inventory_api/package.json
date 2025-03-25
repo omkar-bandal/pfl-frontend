@@ -1,7 +1,10 @@
 {
   "name": "@prime-fresh/inventory_api",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "@prime-fresh/admin_api": "0.0.1",
+    "@prime-fresh/common_api": "0.0.1"
+  },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts",

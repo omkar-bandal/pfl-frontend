@@ -1801,7 +1801,7 @@ S.formToJSON = (t) => Ve(a.isHTMLForm(t) ? new FormData(t) : t);
 S.getAdapter = Ye.getAdapter;
 S.HttpStatusCode = ue;
 S.default = S;
-const et = "http://ec2-35-154-13-187.ap-south-1.compute.amazonaws.com", Cn = () => S.create({
+const et = "http://ec2-35-154-225-84.ap-south-1.compute.amazonaws.com", Cn = () => S.create({
   baseURL: et,
   withCredentials: !0,
   headers: {

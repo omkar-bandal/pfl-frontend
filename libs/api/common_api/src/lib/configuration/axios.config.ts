@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// export const BASE_URL = "https://58c8-182-156-141-17.ngrok-free.app";
-export const BASE_URL = "http://ec2-35-154-13-187.ap-south-1.compute.amazonaws.com";
+// export const BASE_URL = "https://8d8e-182-156-141-17.ngrok-free.app";
+export const BASE_URL = "http://ec2-35-154-225-84.ap-south-1.compute.amazonaws.com";
 
 export const createAxiosInstance = () => {
   return axios.create({

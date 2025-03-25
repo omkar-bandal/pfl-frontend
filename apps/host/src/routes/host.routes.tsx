@@ -4,9 +4,6 @@ import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { PurchaseRoutes } from "./purchase.routes";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { AdminRoutes } from "./admin.routes";
-// import { CustomerForm } from "@prime-fresh/shared/masters/customer";
-// import { VendorCreateForm } from "@prime-fresh/shared/masters/vendor";
-// import { FarmerCreateForm } from "@prime-fresh/shared/masters/farmer";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
 import { InventoryRoutes } from "./inventory.routes";
 import { ErrorBoundary, ErrorFallback } from "@prime-fresh/ui_shared";
@@ -14,7 +11,7 @@ import { SALES_ROUTES } from "@prime-fresh/sales/modules";
 import { SalesRoutes } from "./sales.routes";
 import { lazy } from "react";
 
-const CustomerForm = lazy(() => import("@prime-fresh/shared/masters/customer").then(mod => ({ default: mod.CustomerForm })));
+const CustomerForm = lazy(() => import("@prime-fresh/shared/components").then(mod => ({ default: mod.CustomerRegistrationForm })));
 const VendorForm = lazy(() => import("@prime-fresh/shared/components").then(mod => ({ default: mod.VendorRegistrationForm })));
 const FarmerForm = lazy(() => import("@prime-fresh/shared/components").then(mod => ({ default: mod.FarmerRegistrationForm })));
 const ProductForm = lazy(() => import("@prime-fresh/shared/components").then(mod => ({ default: mod.ProductCreateForm })));

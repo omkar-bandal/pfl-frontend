@@ -18,9 +18,6 @@ export type PostOfficeUseOnly = {
     ledgerCreatedBy: string | null;
     ledgerVerifiedApprovedBy: string | null;
     additionalNotes: string | null;
-    customerCode: string | null;
-    createdBy: string | null;
-    createdDate: string | null | null;
 };
 export type GetOfficeUseOnly = {
     id: string;

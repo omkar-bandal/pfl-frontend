@@ -1,8 +1,8 @@
-import { Grid2, Typography } from "@mui/material"
+import { Grid2 } from "@mui/material"
 import { useGetAllCustomerCategories, useGetAllCustomerTypes } from "@prime-fresh/admin/modules";
 import { PostCustomer } from "@prime-fresh/admin_api";
 import { mapToValueLabelArray, sharedData } from "@prime-fresh/shared/modules";
-import { SelectInput, TextInput } from "@prime-fresh/ui_shared"
+import { SectionHeader, SelectInput, TextInput } from "@prime-fresh/ui_shared"
 import { useFormikContext } from "formik";
 import { useMemo } from "react";
 
@@ -16,7 +16,7 @@ export const CustomerEmpanelment = () => {
     const customerTypes = useMemo(() => types?.data ? mapToValueLabelArray(types.data, 'id', 'name') : [], [types?.data]);
     return (
         <Grid2 container spacing={1} padding={1}>
-            <Grid2 size={{ xs: 12, md: 6 }}>
+            <Grid2 size={{ xs: 12 }}>
                 <TextInput
                     type="text"
                     isRequired={true}
@@ -26,7 +26,7 @@ export const CustomerEmpanelment = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <SelectInput
                     isRequired={true}
                     label="Customer Type"
@@ -36,7 +36,7 @@ export const CustomerEmpanelment = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <SelectInput
                     isRequired={true}
                     label="Customer Category"
@@ -48,7 +48,7 @@ export const CustomerEmpanelment = () => {
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
                 <SelectInput
-                    isRequired={false}
+                    isRequired={true}
                     label="Organisation Type"
                     name="organisationType"
                     options={sharedData.organizationType}
@@ -56,23 +56,18 @@ export const CustomerEmpanelment = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 8 }}>
+            {values.organisationType === "other" && <Grid2 size={{ xs: 12 }}>
                 <TextInput
-                    type="date"
+                    type="text"
                     isRequired={false}
                     name="otherType"
                     label="Other Type"
                     value={values.otherType}
                     handleChange={handleChange}
                 />
-            </Grid2>
+            </Grid2>}
             <Grid2 size={{ xs: 12 }} marginY={1}>
-                <Typography
-                    variant='body2'
-                    component="div"
-                    sx={{ width: '100%', borderBottom: '1px solid #BDBDBD', fontWeight: 600 }}>
-                    Customer Address
-                </Typography>
+                <SectionHeader sectionHeader="Customer Address"/>
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextInput
@@ -134,7 +129,7 @@ export const CustomerEmpanelment = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 2.5 }}>
                 <TextInput
                     type="text"
                     isRequired={true}
@@ -144,27 +139,27 @@ export const CustomerEmpanelment = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 8 }}>
+            <Grid2 size={{ xs: 12, md: 3.5 }}>
                 <TextInput
                     type="email"
-                    isRequired={false}
+                    isRequired={true}
                     name="emailPrimary"
                     label="Primary Email"
                     value={values.emailPrimary}
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 2.5 }}>
                 <TextInput
                     type="text"
-                    isRequired={true}
+                    isRequired={false}
                     name="secondaryContactNo"
                     label="Alternate Contact Number"
                     value={values.secondaryContactNo}
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 8 }}>
+            <Grid2 size={{ xs: 12, md: 3.5 }}>
                 <TextInput
                     type="email"
                     isRequired={false}

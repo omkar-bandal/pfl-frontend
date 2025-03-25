@@ -4,9 +4,9 @@ import { Box, Grid2, IconButton, InputAdornment, Typography } from "@mui/materia
 import { FormButtonGroup, ImageUpload, MultipleTextInput, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PostProduct } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useCreateProduct, useGetAllProductCategories, useGetAllProductClassifications, useGetAllProductSubcategories, useGetAllUOMs } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, useCreateProduct, useGetAllProductCategories, useGetAllProductClassifications, useGetAllProductSubcategories } from "@prime-fresh/admin/modules";
 import { Add, Close } from "@mui/icons-material";
-import { appendFormData, initValProduct, mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { appendFormData, initValProduct, mapToValueLabelArray, useGetUOMPartialData } from "@prime-fresh/shared/modules";
 
 export const ProductCreateForm = () => {
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ export const ProductCreateForm = () => {
             : [];
     }, [productsubcategories]);
 
-    const { data: units } = useGetAllUOMs();
+    const { data: units } = useGetUOMPartialData();
     const uoms = useMemo(() => {
         return units !== null && units?.data
             ? mapToValueLabelArray(units.data, 'id', 'unit')

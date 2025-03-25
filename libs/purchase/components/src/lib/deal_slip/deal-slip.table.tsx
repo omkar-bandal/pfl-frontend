@@ -15,7 +15,7 @@ export const DealSlipTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({columnDef: dealSlipColumns});
+    } = useDataTable({columnDef: dealSlipColumns, initialPageSize: 10});
 
     const { data, isLoading, isError, error } = useGetAllDealSlips();
     const allDealSlip = data?.data ? data.data : [];

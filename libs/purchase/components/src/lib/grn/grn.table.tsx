@@ -6,7 +6,6 @@ import { GetGRN } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES, useGetAllGRNs } from "@prime-fresh/purchase/modules"
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
-import { gridVirtualizationColumnEnabledSelector } from "@mui/x-data-grid"
 
 export const GRNTable = () => {
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ export const GRNTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({ columnDef: gridVirtualizationColumnEnabledSelector});
+    } = useDataTable({ columnDef: grnColumns, initialPageSize: 10 });
     const { data, isLoading, isError, error } = useGetAllGRNs();
     const allGRN = data?.data ? data.data : [];
     console.log("All GRNs :", allGRN);

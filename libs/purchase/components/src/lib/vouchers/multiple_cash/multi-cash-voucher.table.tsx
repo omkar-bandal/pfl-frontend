@@ -15,7 +15,7 @@ export const MultipleCashVoucherTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({columnDef: mcVoucherColumns});
+    } = useDataTable({columnDef: mcVoucherColumns, initialPageSize: 10});
 
     const { data, isLoading, isError, error } = useGetAllMultiCashVouchers();
     const allMCVouchers = data?.data ? data.data : [];

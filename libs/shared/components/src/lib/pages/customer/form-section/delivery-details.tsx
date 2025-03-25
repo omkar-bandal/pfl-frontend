@@ -1,7 +1,7 @@
 import { PostCustomer } from '@prime-fresh/admin_api';
 import { useFormikContext } from 'formik';
 import { Grid2 } from '@mui/material';
-import { SectionHeader, TextInput } from '@prime-fresh/ui_shared';
+import { FileUpload, SectionHeader, TextInput } from '@prime-fresh/ui_shared';
 
 export const CustomerDeliveryDetails = () => {
     const { values, handleChange } = useFormikContext<PostCustomer>();
@@ -31,26 +31,35 @@ export const CustomerDeliveryDetails = () => {
             <Grid2 size={{ xs: 12 }} marginY={1}>
                 <SectionHeader sectionHeader="Receiving Person's Details" />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput isRequired={true} name="deliveryDetails.receivingPersonFName" label="First Name" value={values.deliveryDetails.receivingPersonFName} handleChange={handleChange} />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput isRequired={false} name="deliveryDetails.receivingPersonMName" label="Middle Name" value={values.deliveryDetails.receivingPersonMName} handleChange={handleChange} />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput isRequired={true} name="deliveryDetails.receivingPersonLName" label="Last Name" value={values.deliveryDetails.receivingPersonLName} handleChange={handleChange} />
+            </Grid2>
+            <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput isRequired={false} name="deliveryDetails.deliveryTime" label="Delivery Time" type="time" value={values.deliveryDetails.deliveryTime} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 2.5 }}>
                 <TextInput isRequired={true} name="deliveryDetails.primaryContactNo" label="Contact Number" value={values.deliveryDetails.primaryContactNo} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3.5 }}>
-                <TextInput isRequired={false} name="deliveryDetails.emailPrimary" label="Email (Primary)" value={values.deliveryDetails.emailPrimary} handleChange={handleChange} />
+                <TextInput isRequired={true} name="deliveryDetails.emailPrimary" label="Email (Primary)" value={values.deliveryDetails.emailPrimary} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 2.5 }}>
-                <TextInput isRequired={true} name="deliveryDetails.secondaryContactNo" label="Alternate Contact Number" value={values.deliveryDetails.secondaryContactNo} handleChange={handleChange} />
+                <TextInput isRequired={false} name="deliveryDetails.secondaryContactNo" label="Alternate Contact Number" value={values.deliveryDetails.secondaryContactNo} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3.5 }}>
                 <TextInput isRequired={false} name="deliveryDetails.emailSecondary" label="Email (Alternate)" value={values.deliveryDetails.emailSecondary} handleChange={handleChange} />
+            </Grid2>
+            <Grid2 size={{ xs: 12 }}>
+                <FileUpload
+                    isRequired={false}
+                    name="deliveryDetails.deliveryAddressProofCopy"
+                    label="Copy of proof of delivery address" />
             </Grid2>
         </Grid2>
     )

@@ -15,7 +15,7 @@ export const TransportPaymentVoucherTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({ columnDef: tpVoucherColumns });
+    } = useDataTable({ columnDef: tpVoucherColumns, initialPageSize: 10 });
     const { data, isLoading, isError, error } = useGetAllTransportPaymentVouchers();
     const allTPVouchers = data?.data ? data.data : [];
     React.useEffect(() => {

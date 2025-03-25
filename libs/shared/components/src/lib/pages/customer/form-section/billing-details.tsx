@@ -29,10 +29,10 @@ export const CustomerBillingDetails = () => {
                 <TextInput isRequired={true} name="billingDetails.primaryContactNo" label="Contact Number" value={values.billingDetails.primaryContactNo} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3.5 }}>
-                <TextInput isRequired={false} name="billingDetails.emailPrimary" label="Email (Primary)" value={values.billingDetails.emailPrimary} handleChange={handleChange} />
+                <TextInput isRequired={true} name="billingDetails.emailPrimary" label="Email (Primary)" value={values.billingDetails.emailPrimary} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 2.5 }}>
-                <TextInput isRequired={true} name="billingDetails.secondaryContactNo" label="Alternate Contact Number" value={values.billingDetails.secondaryContactNo} handleChange={handleChange} />
+                <TextInput isRequired={false} name="billingDetails.secondaryContactNo" label="Alternate Contact Number" value={values.billingDetails.secondaryContactNo} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3.5 }}>
                 <TextInput isRequired={false} name="billingDetails.emailSecondary" label="Email (Alternate)" value={values.billingDetails.emailSecondary} handleChange={handleChange} />

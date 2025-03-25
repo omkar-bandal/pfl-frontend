@@ -8,13 +8,13 @@ export const CustomerKeyMobileNo = () => {
     const { values, handleChange } = useFormikContext<PostCustomer>();
     return (
         <Grid2 container spacing={1}>
-            <Grid2 size={{ xs: 12 }}>
+            <Grid2 size={{ xs: 12 }} marginY={1}>
                 <SectionHeader sectionHeader="Account Department Person Details" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
-                    isRequired={false}
+                    isRequired={true}
                     name="keyMobileNumbers.accDeptFName"
                     label="First Name"
                     value={values.keyMobileNumbers.accDeptFName}
@@ -34,7 +34,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
-                    isRequired={false}
+                    isRequired={true}
                     name="keyMobileNumbers.accDeptLName"
                     label="Last Name"
                     value={values.keyMobileNumbers.accDeptLName}
@@ -44,20 +44,20 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
-                    isRequired={false}
+                    isRequired={true}
                     name="keyMobileNumbers.accDeptMobileNo"
                     label="Mobile Number"
                     value={values.keyMobileNumbers.accDeptMobileNo}
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12 }}>
+            <Grid2 size={{ xs: 12 }} marginY={1}>
                 <SectionHeader sectionHeader="Owner or decision Maker Details" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
-                    isRequired={false}
+                    isRequired={true}
                     name="keyMobileNumbers.ownerFName"
                     label="First Name"
                     value={values.keyMobileNumbers.ownerFName}
@@ -77,7 +77,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
-                    isRequired={false}
+                    isRequired={true}
                     name="keyMobileNumbers.ownerLName"
                     label="Last Name"
                     value={values.keyMobileNumbers.ownerLName}
@@ -87,7 +87,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
-                    isRequired={false}
+                    isRequired={true}
                     name="keyMobileNumbers.ownerMobileNo"
                     label="Mobile Number"
                     value={values.keyMobileNumbers.ownerMobileNo}
@@ -126,9 +126,9 @@ export const CustomerKeyMobileNo = () => {
                     name="keyMobileNumbers.regiCopy"
                     label="Copy of Est. Cert. (if available)" />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 2 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <RadioGroupInput
-                    isRequired={false}
+                    isRequired={true}
                     alignment="vertical"
                     name="keyMobileNumbers.electricityBill"
                     label="Electricity Bill (recent) available?"
@@ -136,7 +136,7 @@ export const CustomerKeyMobileNo = () => {
                     options={sharedData.fileYesOrNo}
                     handleChange={handleChange} />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 5 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <TextInput
                     type="text"
                     isRequired={false}
@@ -146,7 +146,7 @@ export const CustomerKeyMobileNo = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 5 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <FileUpload
                     isRequired={false}
                     name="keyMobileNumbers.electricityBillCopy"
@@ -162,17 +162,17 @@ export const CustomerKeyMobileNo = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12 }}>
+            <Grid2 size={{ xs: 12, md: 6 }}>
                 <RadioGroupInput
-                    isRequired={false}
-                    alignment="horizontal"
+                    isRequired={true}
+                    alignment="vertical"
                     name="keyMobileNumbers.customerBlacklisted"
                     label="Whether Customer was blacklisted by any company or authority?"
                     value={values.keyMobileNumbers.customerBlacklisted}
                     options={sharedData.fileYesOrNo}
                     handleChange={handleChange} />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextInput
                     type="text"
                     isRequired={false}
@@ -182,7 +182,7 @@ export const CustomerKeyMobileNo = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 8 }}>
+            <Grid2 size={{ xs: 12, md: 12 }}>
                 <TextInput
                     type="text"
                     isRequired={false}
@@ -192,9 +192,9 @@ export const CustomerKeyMobileNo = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 2 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <RadioGroupInput
-                    isRequired={false}
+                    isRequired={true}
                     alignment="vertical"
                     name="keyMobileNumbers.visitingCard"
                     label="Visiting Card Collected?"
@@ -212,17 +212,11 @@ export const CustomerKeyMobileNo = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 6 }}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
                 <FileUpload
                     isRequired={false}
                     name="keyMobileNumbers.visitingCardCopy"
                     label="Copy of Visiting Card" />
-            </Grid2>
-            <Grid2 size={{ xs: 12, md: 5 }}>
-                <FileUpload
-                    isRequired={false}
-                    name="msmeCopy"
-                    label="UDYAM (MSME) Card Copy (if available)" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 12 }}>
                 <TextInput

@@ -37,9 +37,6 @@
       "@prime-fresh/sales/modules": ["libs/sales/modules/src/index.ts"],
       "@prime-fresh/sales_api": ["libs/api/sales_api/src/index.ts"],
       "@prime-fresh/shared/components": ["libs/shared/components/src/index.ts"],
-      "@prime-fresh/shared/masters/customer": [
-        "libs/shared/masters/customer/src/index.ts"
-      ],
       "@prime-fresh/shared/modules": ["libs/shared/modules/src/index.ts"],
       "@prime-fresh/ui_shared": ["libs/ui_shared/src/index.ts"]
     }

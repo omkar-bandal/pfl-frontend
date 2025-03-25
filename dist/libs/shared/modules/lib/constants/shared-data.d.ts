@@ -1,4 +1,5 @@
 export declare const sharedData: {
+    customerFormTabs: string[];
     accTypes: {
         value: string;
         label: string;
@@ -32,6 +33,26 @@ export declare const sharedData: {
         label: string;
     }[];
     organizationType: {
+        value: string;
+        label: string;
+    }[];
+    certificationDetails: {
+        value: string;
+        label: string;
+    }[];
+    corporateRegistrationDetails: {
+        value: string;
+        label: string;
+    }[];
+    paymentToBeMade: {
+        value: string;
+        label: string;
+    }[];
+    paymentMode: {
+        value: string;
+        label: string;
+    }[];
+    creditWorthinessDue: {
         value: string;
         label: string;
     }[];

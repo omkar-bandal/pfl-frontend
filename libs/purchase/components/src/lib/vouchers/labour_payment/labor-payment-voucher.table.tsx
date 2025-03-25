@@ -15,7 +15,7 @@ export const LabourPaymentVoucherTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({columnDef: lpVoucherColumns});
+    } = useDataTable({columnDef: lpVoucherColumns, initialPageSize: 10});
     const { data, isLoading, isError, error } = useGetAllLaborPaymentVouchers();
     const allLPVouchers = data?.data ? data.data : [];
     console.log(allLPVouchers)

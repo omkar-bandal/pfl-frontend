@@ -2,8 +2,9 @@ import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCe
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
-import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
+import { PageTitle, PrintButton } from "@prime-fresh/ui_shared";
 import { useGetTransportPaymentVoucherById } from "@prime-fresh/purchase/modules";
+import { images } from "@prime-fresh/assets";
 
 export const TransportPaymentVoucherView = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -41,11 +42,13 @@ export const TransportPaymentVoucherView = () => {
                 (
                     <Box sx={{ flex: 1 }}>
                         <Grid container rowSpacing={1}>
-                            <Grid xs={12} md={6}>
+                            <Grid xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                                 <PageTitle pagetitle="Transport Payment Voucher" />
                             </Grid>
-                            <Grid xs={12} md={6}>
-                                <Grid container columnSpacing={2}>
+                            <Grid xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <PrintButton label="Print" onClick={() => reactToPrintFn()} />
+
+                                {/* <Grid container columnSpacing={2}>
                                     <Grid item xs={4}>
                                         <Button fullWidth variant="contained" color='success' size='medium' sx={{ height: 40 }} onClick={() => { setApproval("APPROVED") }}>Approve</Button>
                                     </Grid>
@@ -55,12 +58,12 @@ export const TransportPaymentVoucherView = () => {
                                     <Grid item xs={4}>
                                         <Button fullWidth variant="contained" color="info" size="medium" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
                                     </Grid>
-                                </Grid>
+                                </Grid> */}
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
                                 <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                         <Box sx={{ flex: 1, padding: 1 }} ref={contentRef}>
                             <Box sx={{ width: '100%', marginY: 1, padding: 2, border: `1px solid #000000` }}>
@@ -68,7 +71,7 @@ export const TransportPaymentVoucherView = () => {
                                     <Grid item xs={3} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <Box sx={{ width: 250, height: 100, padding: 1 }}>
                                             <img
-                                                src={smallLogo}
+                                                src={images.sidebarlogo}
                                                 alt="prime-fresh-logo"
                                                 style={{ width: `100%`, height: `100%` }}
                                             />

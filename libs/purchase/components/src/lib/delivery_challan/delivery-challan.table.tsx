@@ -15,7 +15,7 @@ export const DeliveryChallanTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({ columnDef: deliveryChallanColumns });
+    } = useDataTable({ columnDef: deliveryChallanColumns, initialPageSize: 10 });
     const { data, isLoading, isError, error } = useGetAllDeliveryChallans();
     const allDCs = data?.data ? data.data : [];
     console.log("all DCs", allDCs);

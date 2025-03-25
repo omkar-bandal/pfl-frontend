@@ -83,7 +83,7 @@ export const CustomerStatutoryDetails = () => {
                     isRequired={false}
                     name="statutoryDetails.certificationsDetails"
                     label="Details of certifications"
-                    options={sharedData.proposedPaymentTerms}
+                    options={sharedData.certificationDetails}
                     value={values.statutoryDetails.certificationsDetails}
                     handleChange={handleChange}
                 />
@@ -103,7 +103,7 @@ export const CustomerStatutoryDetails = () => {
                     isRequired={false}
                     name="statutoryDetails.corpRegiDetails"
                     label="Corporate Registration details"
-                    options={sharedData.proposedPaymentTerms}
+                    options={sharedData.corporateRegistrationDetails}
                     value={values.statutoryDetails.corpRegiDetails}
                     handleChange={handleChange}
                 />

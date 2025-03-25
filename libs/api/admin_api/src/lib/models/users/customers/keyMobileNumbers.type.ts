@@ -13,14 +13,14 @@ export type PostKeyMobileNumbers = {
     mandiLicenceCopy: File | null;
     regiNo: string | null;
     regiCopy: File | null;
-    electricityBill: string | null;
+    electricityBill: boolean | null;
     consumenrNo: string | null;
     electricityBillCopy: File | null;
     notElectricityBillReason: string | null;
-    customerBlacklisted: string | null;
+    customerBlacklisted: boolean | null;
     ifBlacklistedReason: string | null;
     blackListedBy: string | null;
-    visitingCard: string | null;
+    visitingCard: boolean | null;
     visitinContactNo: string | null;
     visitingCardCopy: File | null;
     notVisitingCardReason: string | null;

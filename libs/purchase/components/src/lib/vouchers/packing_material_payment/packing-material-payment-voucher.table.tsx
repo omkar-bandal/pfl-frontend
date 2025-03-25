@@ -15,7 +15,7 @@ export const PackingMaterialPaymentVoucherTable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({ columnDef: pmpVoucherColumns });
+    } = useDataTable({ columnDef: pmpVoucherColumns, initialPageSize: 10 });
     const { data, isLoading, isError, error } = useGetAllPackingMeterialPaymentVouchers();
     const allPMPVouchers = data?.data ? data.data : [];
     React.useEffect(() => {

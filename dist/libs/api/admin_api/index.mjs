@@ -1902,7 +1902,7 @@ C.formToJSON = (r) => Ye(a.isHTMLForm(r) ? new FormData(r) : r);
 C.getAdapter = Xe.getAdapter;
 C.HttpStatusCode = ue;
 C.default = C;
-const et = "http://ec2-35-154-13-187.ap-south-1.compute.amazonaws.com", $r = () => C.create({
+const et = "http://ec2-35-154-225-84.ap-south-1.compute.amazonaws.com", $r = () => C.create({
   baseURL: et,
   withCredentials: !0,
   headers: {

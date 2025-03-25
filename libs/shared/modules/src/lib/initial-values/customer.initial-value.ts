@@ -1,12 +1,12 @@
-import { 
-    PostBankDetails, 
-    PostBillingDetails, 
-    PostDeliveryDetails, 
-    PostKeyMobileNumbers, 
-    PostOfficeUseOnly, 
-    PostPaymentTerms, 
-    PostProductSpecification, 
-    PostStatutoryDetails 
+import {
+    PostBankDetails,
+    PostBillingDetails,
+    PostDeliveryDetails,
+    PostKeyMobileNumbers,
+    PostOfficeUseOnly,
+    PostPaymentTerms,
+    PostProductSpecification,
+    PostStatutoryDetails
 } from '@prime-fresh/admin_api';
 import { initValAddress } from './address.initial-value';
 
@@ -65,7 +65,7 @@ const initBillingDetails: PostBillingDetails = {
 
 const initDeliveryDetails: PostDeliveryDetails = {
     deliveryAddress: initValAddress,
-    deliveryAddressProofCopy:null,
+    deliveryAddressProofCopy: null,
     deliveryTime: null,
     receivingPersonFName: null,
     receivingPersonMName: null,
@@ -109,16 +109,15 @@ const initBankDetails: PostBankDetails = {
     bankAddress: initValAddress,
 }
 
-const initProductSpecification: PostProductSpecification[] = [
-    {
-        articleName: null,
-        specifications: null,
-        parameters: null,
-        packingMaterialSpec: null,
-        rejectionCriteria: null,
-        comment: null,
-    },
-]
+export const initProductSpecification: PostProductSpecification = {
+    articleName: null,
+    specifications: null,
+    parameters: null,
+    packingMaterialSpec: null,
+    rejectionCriteria: null,
+    comment: null,
+}
+
 
 const initPaymentTerms: PostPaymentTerms = {
     paymentMade: null,
@@ -162,9 +161,6 @@ const initOfficeUseOnly: PostOfficeUseOnly = {
     ledgerCreatedBy: null,
     ledgerVerifiedApprovedBy: null,
     additionalNotes: null,
-    customerCode: null,
-    createdBy: null,
-    createdDate: null,
 }
 
 export const initValCustomer = {
@@ -183,7 +179,7 @@ export const initValCustomer = {
     deliveryDetails: initDeliveryDetails,
     statutoryDetails: initStatutoryDetails,
     bankDetails: initBankDetails,
-    productSpecification: initProductSpecification,
+    productSpecification: [initProductSpecification],
     paymentTerms: initPaymentTerms,
     officeUseOnly: initOfficeUseOnly
 }

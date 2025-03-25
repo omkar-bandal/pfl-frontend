@@ -3,11 +3,12 @@ import { Box, Button, Container, Grid, LinearProgress, Table, TableBody, TableCe
 import { useParams } from "react-router-dom";
 import { displayAddress, useGetGRNById } from "@prime-fresh/purchase/modules";
 import { useReactToPrint } from "react-to-print";
-import { PageTitle, smallLogo } from "@prime-fresh/ui_shared";
+import { PageTitle, PrintButton } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux";
 import { farmersDataState, setSelectedFarmerPartialData, setSelectedVendorPartialData, vendorsDataState } from "@prime-fresh/admin/modules";
 import { useAppSelector } from "@prime-fresh/modules";
 import { useGetBranchesPartialData, useGetFarmersPartialData, useGetProductsPartialData, useGetUOMPartialData, useGetVendorsPartialData } from "@prime-fresh/shared/modules";
+import { images } from "@prime-fresh/assets";
 
 export const GRNView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -52,20 +53,21 @@ export const GRNView = () => {
         (
           <Box sx={{ flex: 1 }}>
             <Grid container rowSpacing={1}>
-              <Grid item xs={12} md={4}>
+              <Grid item xs={12} md={4} sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}>
                 <PageTitle pagetitle='Goods Received Note' />
               </Grid>
-              <Grid item xs={12} md={8}>
-                <Grid container columnSpacing={2}>
+              <Grid item xs={12} md={8} sx={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+                <PrintButton label="Print" onClick={() => reactToPrintFn()} />
+                {/* <Grid container columnSpacing={2}>
                   <Grid item xs={4}>
                     <Button fullWidth variant="contained" color="info" size="small" sx={{ height: 40 }} onClick={() => reactToPrintFn()}>Print</Button>
                   </Grid>
-                </Grid>
+                </Grid> */}
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Typography variant="body1" component="div"><Typography variant="body1" component="span" color="error">*</Typography>Mention reason for approval / not approval</Typography>
                 <TextField fullWidth size="small" name="reason" value={reason} onChange={(e) => setReason(e.target.value)} />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Box sx={{ flex: 1, padding: 1 }} ref={contentRef}>
               <Box sx={{ width: '100%', marginY: 1, border: borderColor }}>
@@ -73,7 +75,7 @@ export const GRNView = () => {
                   <Grid item xs={3}>
                     <Box sx={{ width: 200, height: 70, padding: 0.5 }}>
                       <img
-                        src={smallLogo}
+                        src={images.sidebarlogo}
                         alt="prime-fresh-logo"
                         style={{ width: `100%`, height: `100%` }}
                       />

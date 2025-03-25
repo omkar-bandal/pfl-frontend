@@ -5,7 +5,6 @@ export * from './lib/auto_form/Form';
 export * from './lib/auto_form/old_components/models';
 export * from './lib/auto_form/old_components';
 export * from './lib/preview_page';
-export * from './assets';
 export * from './lib/view_page/DataDisplay';
 export * from './lib/notification/ToastProvider';
 export * from './lib/buttons';

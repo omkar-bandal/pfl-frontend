@@ -4043,7 +4043,7 @@ ae.formToJSON = (t) => eo(p.isHTMLForm(t) ? new FormData(t) : t);
 ae.getAdapter = io.getAdapter;
 ae.HttpStatusCode = Ur;
 ae.default = ae;
-const lo = "http://ec2-35-154-13-187.ap-south-1.compute.amazonaws.com", wa = () => ae.create({
+const lo = "http://ec2-35-154-225-84.ap-south-1.compute.amazonaws.com", wa = () => ae.create({
   baseURL: lo,
   withCredentials: !0,
   headers: {

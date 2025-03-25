@@ -17,6 +17,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
+            valueGetter: (value: string) => value? value.toUpperCase() : '-',
         },
         {
             field: "createdDate",
@@ -38,9 +39,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "payReceivedFrom",
@@ -48,9 +47,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "location",
@@ -58,9 +55,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "driverName",
@@ -68,9 +63,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "vehicleNo",
@@ -78,9 +71,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value.toUpperCase() : '-',
         },
         {
             field: "dispatchLocation",
@@ -88,9 +79,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "destinationLocation",
@@ -98,9 +87,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "paymentMode",
@@ -108,9 +95,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 100,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "grnNo",
@@ -118,29 +103,7 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
-        {
-            field: "createdDate",
-            headerName: "Created Date",
-            width: 120,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
-        },
-        {
-            field: "createdTime",
-            headerName: "Created Time",
-            width: 120,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => {
-                return value ? value : '-';
-            }
+            valueGetter: (value: string) => value ? value : '-',
         },
         {
             field: "approvalStatus",

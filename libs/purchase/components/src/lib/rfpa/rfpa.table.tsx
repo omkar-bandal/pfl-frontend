@@ -19,7 +19,7 @@ export const RFPATable = () => {
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
-    } = useDataTable({ columnDef: rfpaColumns });
+    } = useDataTable({ columnDef: rfpaColumns, initialPageSize: 10 });
     const { data, isLoading, error, isError } = useGetAllRFPAs();
     const allRFPAs = data?.data ? data.data : [];
 

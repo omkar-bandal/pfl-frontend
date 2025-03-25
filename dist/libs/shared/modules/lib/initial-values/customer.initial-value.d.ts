@@ -1,5 +1,6 @@
 import { PostBankDetails, PostBillingDetails, PostDeliveryDetails, PostKeyMobileNumbers, PostOfficeUseOnly, PostPaymentTerms, PostProductSpecification, PostStatutoryDetails } from '../../../../../api/admin_api/src/index.ts';
 
+export declare const initProductSpecification: PostProductSpecification;
 export declare const initValCustomer: {
     organisationName: null;
     customerTypes: null;

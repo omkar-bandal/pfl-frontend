@@ -1,4 +1,5 @@
 export const sharedData = {
+    customerFormTabs: ["Empanelment", "Key Mobile No", "References", "Billing Details", "Delivery Details", "Statutory Details", "Bank Details", "Product Specification", "Payment Terms", "Office Use Only"],
     accTypes: [
         { value: "savings", label: "Savings" },
         { value: "current", label: "Current" },
@@ -48,11 +49,38 @@ export const sharedData = {
         { value: "non-irrigated", label: "Non-Irrigated" },
     ],
     organizationType: [
-        {value: "proprietor", label: "Proprietor"},
-        {value: "partnership", label: "Partnership"},
-        {value: "private ltd.", label: "Private Ltd."},
-        {value: "llc", label: "LLC"},
-        {value: "public ltd.", label: "Public Ltd."},
-        {value: "other", label: "Other"},
+        { value: "proprietor", label: "Proprietor" },
+        { value: "partnership", label: "Partnership" },
+        { value: "private ltd.", label: "Private Ltd." },
+        { value: "llc", label: "LLC" },
+        { value: "public ltd.", label: "Public Ltd." },
+        { value: "other", label: "Other" },
+    ],
+    certificationDetails: [
+        { value: "iso", label: "ISO" },
+        { value: "apeda", label: "APEDA" },
+        { value: "fssai", label: "FSSAI" },
+        { value: "other", label: "Other" },
+    ],
+    corporateRegistrationDetails: [
+        { value: "msme", label: "MSME" },
+        { value: "other", label: "Other" },
+    ],
+    paymentToBeMade: [
+        { value: "advance", label: "Advance" },
+        { value: "against delivery", label: "Against delivery" },
+        { value: "50% advance", label: "50% advance" },
+        { value: "other", label: "Other" },
+    ],
+    paymentMode: [
+        { value: "cheque", label: "Cheque" },
+        { value: "demand draft", label: "Demand Draft" },
+        { value: "neft", label: "NEFT" },
+        { value: "rtgs", label: "RTGS" },
+        { value: "other", label: "Other" },
+    ],
+    creditWorthinessDue: [
+        { value: "6 Months", label: "6 Months" },
+        { value: "12 Months", label: "12 Months" },
     ]
 }
