@@ -26,7 +26,7 @@ export function useDeleteProductById(id: string):
     });
 }
 
-export function useGetAllProducts(queryParams: QueryParams):
+export function useGetAllProducts(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetProduct[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProduct[]>, ErrorModel>({
         queryKey: ['get-all-products', queryParams],

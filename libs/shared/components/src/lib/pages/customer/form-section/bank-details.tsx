@@ -109,7 +109,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAddress.address1"
                     label="Address Line 1"
-                    value={values.bankDetails.bankAddress.address1}
+                    value={values.bankDetails.bankAddress?.address1 || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -118,7 +118,7 @@ export const CustomerBankDetails = () => {
                     isRequired={false}
                     name="bankDetails.bankAddress.address2"
                     label="Address Line 2"
-                    value={values.bankDetails.bankAddress.address2}
+                    value={values.bankDetails.bankAddress?.address2 || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -127,7 +127,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAddress.location"
                     label="Location"
-                    value={values.bankDetails.bankAddress.location}
+                    value={values.bankDetails.bankAddress?.location || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -136,7 +136,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAddress.city"
                     label="City"
-                    value={values.bankDetails.bankAddress.city}
+                    value={values.bankDetails.bankAddress?.city || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -145,7 +145,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAddress.state"
                     label="State"
-                    value={values.bankDetails.bankAddress.state}
+                    value={values.bankDetails.bankAddress?.state || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -154,7 +154,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAddress.pincode"
                     label="Pincode"
-                    value={values.bankDetails.bankAddress.pincode}
+                    value={values.bankDetails.bankAddress.pincode || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -171,7 +171,7 @@ export const CustomerBankDetails = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <FileUpload
                     isRequired={false}
-                    name="bankDetails.cancelledChequeCopy"
+                    name="cancelledChequeCopy"
                     label="Copy of cancelled cheque"
                 />
             </Grid2>

@@ -1,18 +1,19 @@
 export type PostEODProducts = {
-    sku: string,
-    uom: string,
-    qty: number,
-    totalWeightinKg: number,
+    sku: string | null,
+    uom: string | null,
+    qty: number| null,
+    totalWeightinKg: number| null,
 }
 
 export type GetEODProducts = {id: string} & PostEODProducts;
 
 export type PostEODReport = {
-    location: string,
-    stockDate: string,
+    companyName: string | null,
+    location: string | null,
+    stockDate: string | null,
     eodProducts: PostEODProducts[],
-    submission: string,
-    comments: string,
+    submission: string | null,
+    comments: string | null,
 }
 
 export type GetEODReport = {id: string} & PostEODReport;

@@ -14,8 +14,8 @@ export class BranchService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllBranches(branchType: string, { page, limit, sort }: QueryParams): Promise<ApiBaseState<GetBranches[]>> {
-        const url = adminApiUrlConstants.GET_ALL_BRANCHES(branchType, { page, limit, sort });
+    getAllBranches(branchType: string, queryParams?: QueryParams): Promise<ApiBaseState<GetBranches[]>> {
+        const url = adminApiUrlConstants.GET_ALL_BRANCHES(branchType, queryParams);
         console.log(url);
         return this.get(url);
     }

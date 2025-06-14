@@ -2,22 +2,22 @@ import { PostAQR, AQRParameters } from "@prime-fresh/inventory_api";
 
 export const AQRQualityParams: AQRParameters = {
   qualityParameterId: '',
-  qualityParameterType: 'good',
+  qualityParameterType: null,
   qualityParameterName: '',
-  quantity: 0,
+  quantity: null,
   percentage: 0,
 }
 
 export const AQRinitalValues: PostAQR = {
   dcNo: '',
   dcDate: '',
-  arrivedQty: 0,
-  samplingQty: 0,
+  arrivedQty: null,
+  samplingQty: null,
   purchaseBy: '',
   packBy: '',
   receivedBy: '',
   qcCheckBy: '',
-  varifiedBy: '',
+  verifiedBy: '',
   totalQty: 0,
   totalpercent: 0,
   supplierName: '',

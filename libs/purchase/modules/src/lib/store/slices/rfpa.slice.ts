@@ -1,34 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.purchase";
-import { GetRFPA, PostRFPA } from "@prime-fresh/purchase_api";
+import { IRFPA } from "@prime-fresh/purchase_api";
 
 type rfpaDataState = {
-    rfpa: GetRFPA[];
-    selectedRFPA: GetRFPA | undefined;
-    previewRFPA: PostRFPA | GetRFPA | undefined;
+    rfpaFormPreview: Omit<IRFPA, 'id'> | undefined;
 }
 const initialState: rfpaDataState = {
-    rfpa: [],
-    selectedRFPA: undefined,
-    previewRFPA: undefined,
+
+    rfpaFormPreview: undefined,
 }
 const rfpaDataSlice = createSlice({
     name: 'rfpaData',
     initialState,
     reducers: {
-        setRFPAData: (state, action: PayloadAction<GetRFPA[]>) => {
-            state.rfpa = action.payload;
-        },
-        setSelectedRFPA: (state, action: PayloadAction<GetRFPA|undefined>) => {
-            state.selectedRFPA = action.payload;
-        },
-        setPreviewRFPA: (state, action: PayloadAction<PostRFPA | GetRFPA | undefined>) => {
-            state.previewRFPA = action.payload;
+        setRFPAFormPreview: (state, action: PayloadAction<Omit<IRFPA, 'id'>| undefined>) => {
+            state.rfpaFormPreview = action.payload;
         }
     }
 })
 
-export const { setRFPAData, setSelectedRFPA, setPreviewRFPA } = rfpaDataSlice.actions;
+export const { setRFPAFormPreview } = rfpaDataSlice.actions;
 
 export const rfpaDataState = (state: RootState) => state.rfpaData;
 

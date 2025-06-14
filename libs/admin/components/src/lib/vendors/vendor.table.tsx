@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Grid2 } from "@mui/material";
 import { useVendorColumns } from "./vendor.columns";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllVendors } from "@prime-fresh/admin/modules";
+import { useGetAllVendors } from "@prime-fresh/admin/modules";
 import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
+import { sharedRoutes } from "@prime-fresh/shared/modules";
 
 export function VendorTable() {
   const navigate = useNavigate()
@@ -23,10 +24,10 @@ export function VendorTable() {
 
   const { data, isError, isLoading, error } = useGetAllVendors(queryParams);
   const allVendors = data ? data : null;
-  const rowCountRef = React.useRef(allVendors?.totalvendors || 0);
-  const rowCount = React.useMemo(() => {
-    if (allVendors?.totalvendors !== undefined) {
-      rowCountRef.current = allVendors.totalvendors;
+  const rowCountRef = React.useRef(allVendors?.totalPages || 0);
+  const rowCount = useMemo(() => {
+    if (allVendors?.totalPages !== undefined) {
+      rowCountRef.current = allVendors.totalPages;
     }
     return rowCountRef.current;
   }, [allVendors]);
@@ -38,7 +39,7 @@ export function VendorTable() {
   }, [isError, error])
 
   const handleCreate = () => {
-    navigate(ADMIN_ROUTES.CREATE_VENDOR);
+    navigate(sharedRoutes.CREATE_VENDOR);
   };
 
   return (
@@ -62,7 +63,7 @@ export function VendorTable() {
       </Grid2>
       <DataGridTable
         loading={isLoading}
-        rows={allVendors?.data}
+        rows={allVendors?.data || []}
         columns={vendorColumns}
         mode="server"
         initialPageSize={10}

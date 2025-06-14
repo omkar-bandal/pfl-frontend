@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box, Button, Grid, LinearProgress, Typography } from "@mui/material"
 import { useParams } from 'react-router-dom';
-import { useGetDealSlipById } from '@prime-fresh/purchase/modules';
+import { useGetDealSlipForViewById } from '@prime-fresh/purchase/modules';
 
 export const DealSlipView = () => {
   const { id } = useParams<{ id: string }>();
   const dealslipId = id ? id : '';
-  const { data, isLoading } = useGetDealSlipById(dealslipId);
+  const { data, isLoading } = useGetDealSlipForViewById(dealslipId);
   const dealSlip = data?.data ? data.data : null;
   console.log(dealSlip);
 
@@ -30,13 +30,13 @@ export const DealSlipView = () => {
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Created Date : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.dealSlipCreatedAt.toLocaleString().split('T', 1)}
+                                Created Date : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.dealSlipCreatedAt?.toLocaleString().split('T', 1)}
                                 </Typography>
                             </Typography>
                         </Grid>
                         <Grid item>
                             <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                                Created Time : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.dealSlipCreatedAt.toLocaleString().split('T')[1].split('.')}
+                                Created Time : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{dealSlip?.dealSlipCreatedAt?.toLocaleString().split('T')[1].split('.')}
                                 </Typography>
                             </Typography>
                         </Grid>

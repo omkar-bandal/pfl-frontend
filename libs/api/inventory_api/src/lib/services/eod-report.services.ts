@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetEODReport, PostEODReport } from "../models";
 import { inventoryApiUrl } from "../constants";
 
@@ -14,8 +14,8 @@ export class EODReportServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllEODReports():Promise<ApiBaseState<GetEODReport[]>> {
-        const url = inventoryApiUrl.GET_ALL_EOD_REPORT;
+    getAllEODReports(queryParams?: QueryParams):Promise<ApiBaseState<GetEODReport[]>> {
+        const url = inventoryApiUrl.GET_ALL_EOD_REPORT(queryParams);
         return this.get(url);
     }
 

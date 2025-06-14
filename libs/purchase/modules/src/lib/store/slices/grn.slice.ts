@@ -1,49 +1,45 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GetGRN, PostGRN } from "@prime-fresh/purchase_api";
-import { RootState } from "../store.purchase";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IGRN } from '@prime-fresh/purchase_api';
+import { RootState } from '../store.purchase';
 
 type grnDataState = {
-    grn: GetGRN[];
-    selectedGRN: GetGRN | undefined;
-    previewGRN: PostGRN | GetGRN| undefined;
-    subTotalAmt: number;
-    totalAmt: number;
-    totAmtWords: string;
-}
+  grn: IGRN[];
+  selectedGRN: IGRN | undefined;
+  grnFormPreview: Omit<IGRN, 'id'> | undefined;
+  grnActionType: 'approve' | 'reject' | null;
+  reasonForGRNAction: string;
+};
 const initialState: grnDataState = {
-    grn: [],
-    selectedGRN: undefined,
-    previewGRN: undefined,
-    subTotalAmt: 0,
-    totalAmt: 0,
-    totAmtWords: "",
-}
+  grn: [],
+  selectedGRN: undefined,
+  grnFormPreview: undefined,
+  grnActionType: null,
+  reasonForGRNAction: '',
+};
 const grnDataSlice = createSlice({
-    name: 'grnData',
-    initialState,
-    reducers: {
-        setGRNData: (state, action: PayloadAction<GetGRN[]>) => {
-            state.grn = action.payload;
-        },
-        setSelectedGRN: (state, action: PayloadAction<GetGRN|undefined>) => {
-            state.selectedGRN = action.payload;
-        },
-        setPreviewGRN:(state, action: PayloadAction<PostGRN| GetGRN |undefined>) => {
-            state.previewGRN = action.payload;
-        },
-        setSubTotalAmt: (state, action: PayloadAction<number>)=>{
-            state.subTotalAmt = action.payload;
-        },
-        setTotalAmt: (state, action: PayloadAction<number>)=>{
-            state.totalAmt = action.payload;
-        },
-        setTotAmtWords: (state, action: PayloadAction<string>)=>{
-            state.totAmtWords = action.payload;
-        },
-    }
-})
+  name: 'grnData',
+  initialState,
+  reducers: {
+    setGRNData: (state, action: PayloadAction<IGRN[]>) => {
+      state.grn = action.payload;
+    },
+    setSelectedGRN: (state, action: PayloadAction<IGRN | undefined>) => {
+      state.selectedGRN = action.payload;
+    },
+    setGRNFormPreview: (state, action: PayloadAction<Omit<IGRN, 'id'> | undefined>) => {
+      state.grnFormPreview = action.payload;
+    },
+    setGRNActionType: (state, action: PayloadAction<'approve' | 'reject' | null>) => {
+      state.grnActionType = action.payload;
+    },
+    setReasonForGRNAction: (state, action: PayloadAction<string>) => {
+      state.reasonForGRNAction = action.payload;
+    },
+  },
+});
 
-export const { setGRNData, setSelectedGRN, setPreviewGRN, setSubTotalAmt, setTotalAmt, setTotAmtWords  } = grnDataSlice.actions;
+export const { setGRNData, setSelectedGRN, setGRNFormPreview, setGRNActionType, setReasonForGRNAction } =
+  grnDataSlice.actions;
 
 export const grnDataState = (state: RootState) => state.grnData;
 

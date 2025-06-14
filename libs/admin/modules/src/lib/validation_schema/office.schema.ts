@@ -19,7 +19,7 @@ export const officeValidationSchema = Yup.object().shape({
         .matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
     officeEmail: Yup.string()
         .nullable()
-        .email('Invalid email format'),
+        .matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
     notes: Yup.string()
         .nullable(),
 })

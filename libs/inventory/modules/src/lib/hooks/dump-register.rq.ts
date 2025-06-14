@@ -1,18 +1,18 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
-import { DumpRegisterServices, PostDumpRegister, GetDumpRegister } from '@prime-fresh/inventory_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { DumpRegisterServices, IDumpRegister } from '@prime-fresh/inventory_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateDumpRegister():
-    UseMutationResult<ResultModel, ErrorModel, PostDumpRegister, unknown> {
-    return useMutation<ResultModel, ErrorModel, PostDumpRegister, unknown>({
+    UseMutationResult<ResultModel, ErrorModel, IDumpRegister, unknown> {
+    return useMutation<ResultModel, ErrorModel, IDumpRegister, unknown>({
         mutationKey: ['create-dump-register'],
         mutationFn: (data) => DumpRegisterServices.getInstance().createDumpRegister(data),
     });
 }
 
 export function useUpdateDumpRegister(id: string):
-    UseMutationResult<ResultModel, ErrorModel, GetDumpRegister, unknown> {
-    return useMutation<ResultModel, ErrorModel, GetDumpRegister, unknown>({
+    UseMutationResult<ResultModel, ErrorModel, IDumpRegister, unknown> {
+    return useMutation<ResultModel, ErrorModel, IDumpRegister, unknown>({
         mutationKey: ['update-dump-register'],
         mutationFn: (data) => DumpRegisterServices.getInstance().updateDumpRegister(id, data),
     });
@@ -26,20 +26,30 @@ export function useDeleteDumpRegisterById(id: string):
     });
 }
 
-export function useGetAllDumpRegisters():
-    UseQueryResult<ApiBaseState<GetDumpRegister[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetDumpRegister[]>, ErrorModel>({
-        queryKey: ['get-all-dump-registers'],
-        queryFn: () => DumpRegisterServices.getInstance().getAllDumpRegisters(),
+export function useGetAllDumpRegisters(queryParams?: QueryParams):
+    UseQueryResult<ApiBaseState<IDumpRegister[]>, ErrorModel> {
+    return useQuery<ApiBaseState<IDumpRegister[]>, ErrorModel>({
+        queryKey: ['get-all-dump-registers', queryParams],
+        queryFn: () => DumpRegisterServices.getInstance().getAllDumpRegisters(queryParams),
     });
 }
 
-export function useGetDumpRegisterById(id: string):
-    UseQueryResult<ApiBaseState<GetDumpRegister>, ErrorModel> {
+export function useGetDumpRegisterForViewById(id: string):
+    UseQueryResult<ApiBaseState<IDumpRegister>, ErrorModel> {
         const enable = id.length > 1 ? true : false;
-    return useQuery<ApiBaseState<GetDumpRegister>, ErrorModel>({
-        queryKey: ['get-dump-register-by-id', id],
-        queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterById(id),
+    return useQuery<ApiBaseState<IDumpRegister>, ErrorModel>({
+        queryKey: ['get-dump-register-for-view-by-id', id],
+        queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterForViewById(id),
+        enabled: enable,
+    });
+}
+
+export function useGetDumpRegisterForUpdateById(id: string):
+    UseQueryResult<ApiBaseState<IDumpRegister>, ErrorModel> {
+        const enable = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IDumpRegister>, ErrorModel>({
+        queryKey: ['get-dump-register-for-update-by-id', id],
+        queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterForUpdateById(id),
         enabled: enable,
     });
 }

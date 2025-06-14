@@ -1,27 +1,21 @@
-import { 
-    formContainerReducer, 
-    customerDataReducer, 
-    employeeDataReducer, 
-    farmerDataReducer, 
-    productDataReducer, 
-    uomDataReducer, 
-    officesDataReducer, 
-    branchesDataReducer,
-    vendorDataReducer,
-    alertSnackbarReducer,
-    vendorCategoryDataReducer,
-  } from './slices';
-  
+import {
+  customerDataReducer,
+  employeeDataReducer,
+  farmerDataReducer,
+  productDataReducer,
+  officesDataReducer,
+  branchesDataReducer,
+  vendorDataReducer,
+  packagingMaterialDataReducer,
+} from './slices';
+
 export const adminReducer = {
-    formContainer: formContainerReducer,
-    customerData: customerDataReducer,
-    vendorData: vendorDataReducer,
-    vendorCategoryData: vendorCategoryDataReducer,
-    employeeData: employeeDataReducer,
-    farmerData: farmerDataReducer,
-    productData: productDataReducer,
-    uomData: uomDataReducer,
-    officesData: officesDataReducer,
-    branchesData: branchesDataReducer,
-    alertSnackbar: alertSnackbarReducer,
-}
+  customerData: customerDataReducer,
+  vendorData: vendorDataReducer,
+  employeeData: employeeDataReducer,
+  farmerData: farmerDataReducer,
+  productData: productDataReducer,
+  officesData: officesDataReducer,
+  branchesData: branchesDataReducer,
+  packagingMaterialData: packagingMaterialDataReducer
+};

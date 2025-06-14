@@ -59,7 +59,6 @@ export class PurchaseDashboardServices extends BaseService {
 
     getDashboardData(filterParams: Record<string, any> | null): Promise<ApiBaseState<DashboardData>> {
         const url = buildUrl(filterParams, "/api/management/getGrns/management");
-        console.log("dashboard data url: ", url);
         return this.get(url);
     }
 }

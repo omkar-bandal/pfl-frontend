@@ -1,23 +1,37 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
-import { GetPMPvoucher } from '@prime-fresh/purchase_api'
+import { IPackingMaterialPaymentVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES, useGetAllPackingMeterialPaymentVouchers } from '@prime-fresh/purchase/modules'
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom'
 import { usePMPVoucherColumns } from './packing-material-payment-voucher.columns'
+import { usePermission } from '@prime-fresh/modules';
 
 export const PackingMaterialPaymentVoucherTable = () => {
     const navigate = useNavigate();
-    const pmpVoucherColumns = usePMPVoucherColumns();
+    const { canEdit, canView } = usePermission('packaging-material-voucher');
+    const pmpVoucherColumns = usePMPVoucherColumns(canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
     } = useDataTable({ columnDef: pmpVoucherColumns, initialPageSize: 10 });
-    const { data, isLoading, isError, error } = useGetAllPackingMeterialPaymentVouchers();
-    const allPMPVouchers = data?.data ? data.data : [];
+    const { data, isLoading, isError, error } = useGetAllPackingMeterialPaymentVouchers(queryParams);
+    const allPMPVouchers = data ? data : null;
+    const rowCountRef = React.useRef(allPMPVouchers?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (allPMPVouchers?.allRecords !== undefined) {
+            rowCountRef.current = allPMPVouchers.allRecords;
+        }
+        return rowCountRef.current;
+    }, [allPMPVouchers]);
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -46,11 +60,17 @@ export const PackingMaterialPaymentVoucherTable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetPMPvoucher>
-                mode="client"
+            <DataGridTable<IPackingMaterialPaymentVoucher>
                 loading={isLoading}
-                rows={allPMPVouchers}
+                rows={allPMPVouchers?.data || []}
                 columns={pmpVoucherColumns}
+                mode="server"
+                initialPageSize={10}
+                totalRows={rowCount}
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationChange}
+                sortModel={sortModel}
+                onSortModelChange={handleSortingChange}
                 columnVisibilityModel={columnVisibilityModel}
             />
         </Box>

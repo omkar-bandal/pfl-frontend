@@ -2,7 +2,8 @@ import { PostProduct } from '@prime-fresh/admin_api';
 
 export const initValProduct: PostProduct = {
     name: '',
-    productOrigin: '',
+    prefix: '',
+    productOrigin: [],
     brand: '',
     classification: '',
     category: '',

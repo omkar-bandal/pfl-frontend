@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetProduct, GetProductCategory, GetProductSubcategory, ProductPartialData } from "@prime-fresh/admin_api";
+import { GetProduct, GetProductCategory, GetProductSubcategory, PostProduct, ProductPartialData } from "@prime-fresh/admin_api";
 
 type ProductDataState = {
     allProducts: GetProduct[],
@@ -8,6 +8,7 @@ type ProductDataState = {
     productCat: GetProductCategory[],
     productSubCat: GetProductSubcategory[],
     productPartialData: ProductPartialData[],
+    productFormPreview: PostProduct | null,
 }
 const initialState: ProductDataState = {
     allProducts: [],
@@ -15,6 +16,7 @@ const initialState: ProductDataState = {
     productCat: [],
     productSubCat: [],
     productPartialData: [],
+    productFormPreview: null,
 }
 const productDataSlice = createSlice({
     name: 'productData',
@@ -49,12 +51,24 @@ const productDataSlice = createSlice({
             const index = action.payload;
             state.productPartialData.splice(index, 1);
         },
+        setProductFormPreview: (state, action: PayloadAction<PostProduct>) => {
+            state.productFormPreview = action.payload;
+        }
     }
 });
 
-export const { setProducts, setProductCat, setProductSubCat, setSelectedProduct, addorupdateProductPartialData, removeProductPartialData, clearProductPartialData } = productDataSlice.actions;
+export const { 
+    setProducts, 
+    setProductCat, 
+    setProductSubCat, 
+    setSelectedProduct, 
+    addorupdateProductPartialData, 
+    removeProductPartialData, 
+    clearProductPartialData,
+    setProductFormPreview
+ } = productDataSlice.actions;
 
-export const productsDataState = (state: RootState) => state.productData;
+export const productsDataStates = (state: RootState) => state.productData;
 export const productsState = (state: RootState) => state.productData.allProducts;
 export const productCatState = (state: RootState) => state.productData.productCat;
 export const productSubCatState = (state: RootState) => state.productData.productSubCat;

@@ -5,3 +5,4 @@ export * from './vendors';
 export * from './customers';
 export * from './farmers';
 export * from './employees';
+export * from './packaging-material';

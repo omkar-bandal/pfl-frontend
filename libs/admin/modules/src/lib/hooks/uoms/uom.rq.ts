@@ -26,7 +26,7 @@ export function useDeleteUOMById(id: string):
     });
 }
 
-export function useGetAllUOMs(queryParams: QueryParams):
+export function useGetAllUOMs(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetUOM[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetUOM[]>, ErrorModel>({
         queryKey: ['get-all-uoms', queryParams],

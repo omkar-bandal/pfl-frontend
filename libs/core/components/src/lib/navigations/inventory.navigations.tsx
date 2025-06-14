@@ -1,13 +1,21 @@
-import { Analytics, Article, Assessment, DeleteSweep, FormatIndentDecrease, FormatIndentIncrease, FormatListBulleted, GridViewOutlined, Group, LocalShipping, Remove } from "@mui/icons-material";
+import { Analytics, Assessment, DeleteSweep, FormatIndentDecrease, FormatIndentIncrease, FormatListBulleted, GridViewOutlined, Group, Inventory, LocalShipping } from "@mui/icons-material";
 import { Navigations, stringConstants } from "@prime-fresh/modules";
 import {inventoryRouteConstants} from "@prime-fresh/inventory/modules";
-import { SALES_ROUTES } from "@prime-fresh/sales/modules";
+import { salesRoutes } from "@prime-fresh/sales/modules";
+import { sharedRoutes } from "@prime-fresh/shared/modules";
 
 export const inventoryNavigations: Navigations[] = [
     {
         name: "Dashboard",
         logo: <GridViewOutlined />,
         path: inventoryRouteConstants.DASHBOARD_INVENTORY,
+        roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+        depts: [stringConstants.DEPT_INVENTORY],
+    },
+    {
+        name: "Inventory",
+        logo: <Inventory />,
+        path: sharedRoutes.GET_ALL_STOCK,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_INVENTORY],
     },
@@ -42,25 +50,32 @@ export const inventoryNavigations: Navigations[] = [
     {
         name: "Labor Register",
         logo: <Group />,
+        path: inventoryRouteConstants.GET_ALL_LABOUR_REGISTER,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_INVENTORY],
-        children: [
-            {
-                name: "Permanent Labors",
-                logo: <Remove />,
-                path: inventoryRouteConstants.GET_ALL_LABOUR_REGISTER,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_INVENTORY],
-            },
-            {
-                name: "Labor Attendance",
-                logo: <Remove />,
-                path: inventoryRouteConstants.GET_ALL_LABOUR_ATTENDANCE,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_INVENTORY],
-            },
-        ]
     },
+    // {
+    //     name: "Labor Register",
+    //     logo: <Group />,
+    //     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    //     depts: [stringConstants.DEPT_INVENTORY],
+    //     children: [
+    //         {
+    //             name: "Permanent Labors",
+    //             logo: <Remove />,
+    //             path: inventoryRouteConstants.GET_ALL_LABOUR_REGISTER,
+    //             roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    //             depts: [stringConstants.DEPT_INVENTORY],
+    //         },
+    //         {
+    //             name: "Labor Attendance",
+    //             logo: <Remove />,
+    //             path: inventoryRouteConstants.GET_ALL_LABOUR_ATTENDANCE,
+    //             roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    //             depts: [stringConstants.DEPT_INVENTORY],
+    //         },
+    //     ]
+    // },
     {
         name: "Dump Register",
         logo: <DeleteSweep />,
@@ -89,17 +104,17 @@ export const inventoryNavigations: Navigations[] = [
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_INVENTORY],
     },
-    {
-        name: "Sales Orders",
-        logo: <Article />,
-        path: SALES_ROUTES.GET_ALL_SALES_ORDER,
-        roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-        depts: [stringConstants.DEPT_INVENTORY]
-    },
+    // {
+    //     name: "Sales Orders",
+    //     logo: <Article />,
+    //     path: salesRoutes.GET_ALL_SALES_ORDER,
+    //     roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    //     depts: [stringConstants.DEPT_INVENTORY]
+    // },
     {
         name: "Return By Customer",
         logo: <FormatListBulleted />,
-        path: SALES_ROUTES.GET_ALL_RBC,
+        path: salesRoutes.GET_ALL_RBC,
         roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_INVENTORY]
     },

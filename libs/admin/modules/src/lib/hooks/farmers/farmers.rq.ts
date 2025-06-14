@@ -26,7 +26,7 @@ export function useDeleteFarmerById(id: string):
     });
 }
 
-export function useGetAllFarmers(queryParams: QueryParams):
+export function useGetAllFarmers(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetFarmer[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetFarmer[]>, ErrorModel>({
         queryKey: ['get-all-farmers', queryParams],
@@ -36,9 +36,10 @@ export function useGetAllFarmers(queryParams: QueryParams):
 
 export function useGetFarmerById(id: string):
     UseQueryResult<ApiBaseState<GetFarmer>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetFarmer>, ErrorModel>({
         queryKey: ['get-farmer-by-id'],
         queryFn: () => FarmersService.getInstance().getFarmerById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }

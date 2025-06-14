@@ -1,5 +1,5 @@
 import { FC, memo, useMemo, useCallback } from "react";
-import { Grid } from "@mui/material";
+import { Grid2 } from "@mui/material";
 import { GetFilteredBranchData } from "@prime-fresh/admin_api";
 import { PostDeliveryChallan } from "@prime-fresh/purchase_api";
 import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
@@ -45,7 +45,7 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
 
     if (deliveryCType !== null && ["customer", "cc-dc stock transfer", "dc-dc stock transfer"].includes(deliveryCType)) {
         return (
-            <Grid item xs={12} md={deliveryCType !== "customer" ? 6 : 3}>
+            <Grid2 size={{ xs: 12, md: deliveryCType !== "customer" ? 6 : 3}}>
                 <AutoCompleteInput
                     isRequired
                     loading={loading}
@@ -53,16 +53,16 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                     label="From Location"
                     options={getFromLocations(deliveryCType) || []}
                 />
-            </Grid>
+            </Grid2>
         );
     }
 
     if (deliveryCType === "other" && typeof fromLocation !== "string") {
         return (
-            <Grid item xs={12}>
+            <Grid2 size={{ xs: 12}}>
                 <FormAccordion panel="From Location">
-                    <Grid container spacing={1}>
-                        <Grid item xs={12} md={6}>
+                    <Grid2 container spacing={1}>
+                        <Grid2 size={{ xs: 12, md: 6}}>
                             <TextInput
                                 type="text"
                                 isRequired={true}
@@ -71,8 +71,8 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                                 value={fromLocationInput?.address1 || ""}
                                 handleChange={handleChange}
                             />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 6}}>
                             <TextInput
                                 type="text"
                                 isRequired={false}
@@ -81,8 +81,8 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                                 value={fromLocationInput?.address2 || ""}
                                 handleChange={handleChange}
                             />
-                        </Grid>
-                        <Grid item xs={12} md={3}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 3}}>
                             <TextInput
                                 type="text"
                                 isRequired={true}
@@ -91,8 +91,8 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                                 value={fromLocationInput?.location || ""}
                                 handleChange={handleChange}
                             />
-                        </Grid>
-                        <Grid item xs={12} md={3}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 3}}>
                             <TextInput
                                 type="text"
                                 isRequired={true}
@@ -101,8 +101,8 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                                 value={fromLocationInput?.city || ""}
                                 handleChange={handleChange}
                             />
-                        </Grid>
-                        <Grid item xs={12} md={3}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 3}}>
                             <TextInput
                                 type="text"
                                 isRequired={true}
@@ -111,8 +111,8 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                                 value={fromLocationInput?.state || ""}
                                 handleChange={handleChange}
                             />
-                        </Grid>
-                        <Grid item xs={12} md={3}>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 3}}>
                             <TextInput
                                 type="text"
                                 isRequired={true}
@@ -121,10 +121,10 @@ export const FromLocation: FC<FromLocationProps> = memo(({ locations, loading })
                                 value={fromLocationInput?.pincode || ""}
                                 handleChange={handleChange}
                             />
-                        </Grid>
-                    </Grid>
+                        </Grid2>
+                    </Grid2>
                 </FormAccordion>
-            </Grid>
+            </Grid2>
         );
     }
     return null;

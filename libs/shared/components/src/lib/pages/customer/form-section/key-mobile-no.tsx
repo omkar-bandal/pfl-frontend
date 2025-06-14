@@ -107,7 +107,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 8 }}>
                 <FileUpload
                     isRequired={false}
-                    name="keyMobileNumbers.mandiLicenceCopy"
+                    name="mandiLicenceCopy"
                     label="Copy of Mandi Licence (if available)" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
@@ -123,7 +123,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 8 }}>
                 <FileUpload
                     isRequired={false}
-                    name="keyMobileNumbers.regiCopy"
+                    name="regiCopy"
                     label="Copy of Est. Cert. (if available)" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
@@ -149,7 +149,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 4 }}>
                 <FileUpload
                     isRequired={false}
-                    name="keyMobileNumbers.electricityBillCopy"
+                    name="electricityBillCopy"
                     label="Copy of Electricity Bill (recent)" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 12 }}>
@@ -215,7 +215,7 @@ export const CustomerKeyMobileNo = () => {
             <Grid2 size={{ xs: 12, md: 4 }}>
                 <FileUpload
                     isRequired={false}
-                    name="keyMobileNumbers.visitingCardCopy"
+                    name="visitingCardCopy"
                     label="Copy of Visiting Card" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 12 }}>

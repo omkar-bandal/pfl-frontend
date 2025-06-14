@@ -14,8 +14,8 @@ export class VendorSubcategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllVendorSubcategories({ page, limit, sort }: QueryParams): Promise<ApiBaseState<GetVendorSubcategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_VENDOR_SUBCAT({ page, limit, sort });
+    getAllVendorSubcategories(queryParams?: QueryParams): Promise<ApiBaseState<GetVendorSubcategory[]>> {
+        const url = adminApiUrlConstants.GET_ALL_VENDOR_SUBCAT(queryParams);
         return this.get(url);
     }
 

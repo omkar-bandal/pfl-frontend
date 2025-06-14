@@ -1,36 +1,17 @@
-export type PostDumpProducts = {
-    product: string,
-    uom: string,
-    quantity: number,
-    dumpCost: number,
+import { FormProductQtyAmt, FormProducts, FormProductUoM } from '@prime-fresh/common_api';
+
+export interface IDumpProducts extends FormProducts, FormProductUoM, FormProductQtyAmt {
+  id?: string;
 }
-
-export type GetDumpProducts = {id: string} & PostDumpProducts;
-// { 
-//     id: string, 
-//     product: {id: string, name: string},
-//     uom: {id: string, unit: string},
-//     quantity: number,
-//     dumpCost: number,
-// } 
-
-export type PostDumpRegister = {
-    companyName: string,
-    location: string,
-    date: string,
-    batchNo: string,
-    grn: string,
-    dumpProducts: PostDumpProducts[],
-    remark: string,
+export interface IDumpRegister {
+  id: string;
+  companyName: string | null;
+  location: string | null;
+  date: string | null;
+  batchNo: string | null;
+  grn: string | null;
+  dumpProducts: IDumpProducts[];
+  totalDumpCost: number | null;
+  totalCostInWords: string | null;
+  remark: string | null;
 }
-
-export type GetDumpRegister = {
-    id: string,
-    companyName: string,
-    location: string,
-    date: string,
-    batchNo: string,
-    grn: number,
-    dumpProducts: GetDumpProducts[],
-    remark: string,
-};

@@ -1,18 +1,18 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { RFPAServices, PostRFPA, GetRFPA } from '@prime-fresh/purchase_api';
+import { RFPAServices, IRFPA } from '@prime-fresh/purchase_api';
 
 export function useCreateRFPA():
-    UseMutationResult<ResultModel, ErrorModel, PostRFPA, unknown> {
-    return useMutation<ResultModel, ErrorModel, PostRFPA, unknown>({
+    UseMutationResult<ResultModel, ErrorModel, IRFPA, unknown> {
+    return useMutation<ResultModel, ErrorModel, IRFPA, unknown>({
         mutationKey: ['create-rfpa'],
         mutationFn: (data) => RFPAServices.getInstance().createRFPA(data),
     });
 }
 
 export function useUpdateRFPAById(id: string):
-    UseMutationResult<ResultModel, ErrorModel, GetRFPA, unknown> {
-    return useMutation<ResultModel, ErrorModel, GetRFPA, unknown>({
+    UseMutationResult<ResultModel, ErrorModel, IRFPA, unknown> {
+    return useMutation<ResultModel, ErrorModel, IRFPA, unknown>({
         mutationKey: ['update-rfpa'],
         mutationFn: (data) => RFPAServices.getInstance().updateRFPA(id, data),
     });
@@ -26,20 +26,31 @@ export function useDeleteRFPAById(id: string):
     });
 }
 
-export function useGetAllRFPAs():
-    UseQueryResult<ApiBaseState<GetRFPA[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetRFPA[]>, ErrorModel>({
-        queryKey: ['get-all-rfpas'],
-        queryFn: () => RFPAServices.getInstance().getAllRFPAs(),
+export function useGetAllRFPAs(queryParams?: QueryParams):
+    UseQueryResult<ApiBaseState<IRFPA[]>, ErrorModel> {
+    return useQuery<ApiBaseState<IRFPA[]>, ErrorModel>({
+        queryKey: ['get-all-rfpas', queryParams],
+        queryFn: () => RFPAServices.getInstance().getAllRFPAs(queryParams),
     });
 }
 
-export function useGetRFPAById(id: string):
-    UseQueryResult<ApiBaseState<GetRFPA>, ErrorModel> {
+export function useGetRFPAForViewById(id: string):
+    UseQueryResult<ApiBaseState<IRFPA>, ErrorModel> {
         const enabled = id.length > 1 ? true : false;
-    return useQuery<ApiBaseState<GetRFPA>, ErrorModel>({
-        queryKey: ['get-rfpa-by-id'],
-        queryFn: () => RFPAServices.getInstance().getRFPAById(id),
+    return useQuery<ApiBaseState<IRFPA>, ErrorModel>({
+        queryKey: ['get-rfpa-for-view-by-id', id],
+        queryFn: () => RFPAServices.getInstance().getRFPAForViewById(id),
         enabled: enabled,
     });
 }
+
+export function useGetRFPAForUpdateById(id: string):
+    UseQueryResult<ApiBaseState<IRFPA>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IRFPA>, ErrorModel>({
+        queryKey: ['get-rfpa-for-update-by-id', id],
+        queryFn: () => RFPAServices.getInstance().getRFPAForUpdateById(id),
+        enabled: enabled,
+    });
+}
+

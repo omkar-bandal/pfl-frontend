@@ -1,6 +1,5 @@
 // import { Employee } from "../../api/admin/models"
 import { useParams } from "react-router-dom";
-import { DataDisplay } from "@prime-fresh/ui_shared";
 import { Box, LinearProgress } from "@mui/material";
 import { useGetFarmerById } from "@prime-fresh/admin/modules";
 
@@ -18,7 +17,7 @@ export const ViewFarmer = () => {
   }
   else {
     return (
-      <DataDisplay header="Farmer Details" data={farmer} />
+     <></>
     )
   }
 }

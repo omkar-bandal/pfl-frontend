@@ -6,3 +6,4 @@ export * from './vehicle-dispatch-register.services';
 export * from './eod-report.services';
 export * from './labor-registration.services';
 export * from './labor-attendance.services';
+export * from './proforma.invoice.services';

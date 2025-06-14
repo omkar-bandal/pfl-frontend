@@ -26,7 +26,7 @@ export function useDeleteVendorById(id: string):
     });
 }
 
-export function useGetAllVendors(queryParams: QueryParams):
+export function useGetAllVendors(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetVendor[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVendor[]>, ErrorModel>({
         queryKey: ['get-all-vendors', queryParams],

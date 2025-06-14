@@ -1,25 +1,28 @@
-import { IconButton, Chip, Button } from "@mui/material";
+import { IconButton, Chip } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Edit, Preview } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { ADMIN_ROUTES, setDataId } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
 export const useEmployeeColumns = (): CustomGridColDef[] => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEmployeeStatus = useCallback((id: string) => {
-    dispatch(setDataId(id));
-  },[dispatch]);
+  // const handleEmployeeStatus = useCallback((id: string) => {
+  //   dispatch(setDataId(id));
+  // },[dispatch]);
   return useMemo(() => [
     {
       field: "employeeId",
       headerName: "Employee ID",
-      width: 150,
+      width: 120,
+    },
+    {
+      field: "currentLevel",
+      headerName: "Level",
+      width: 100
     },
     {
       field: 'fullName',
@@ -41,31 +44,67 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       width: 100,
     },
     {
-      field: "phoneNumber",
-      headerName: "Contact No",
+      field: "password",
+      headerName: "Password",
       width: 100,
     },
     {
-      field: "email",
-      headerName: "Email",
-      width: 150,
+      field: "cugNo",
+      headerName: "CUG No",
+      width: 100,
     },
     {
-      field: "address",
-      headerName: "Address",
-      width: 300,
-      valueGetter: (value) => value ? formatAddress(value) : '-',
+      field: "workEmail",
+      headerName: "Email",
+      width: 150,
     },
     {
       field: "joiningDate",
       headerName: "Joining Date",
       width: 100,
     },
-    // {
-    //   field: "reportingManager",
-    //   headerName: "Reporting Manager",
-    //   width: 100,
-    // },
+    {
+      field: "joiningLocation",
+      headerName: "Joining Location",
+      width: 100,
+    },
+    {
+      field: "currentWorkLocation",
+      headerName: "Work Location",
+      width: 100,
+    },
+    {
+      field: "residentialAddress",
+      headerName: "Residential Address",
+      width: 300,
+      valueGetter: (value) => value ? formatAddress(value) : '-',
+    },
+    {
+      field: "permanentAddress",
+      headerName: "Permanent Address",
+      width: 300,
+      valueGetter: (value) => value ? formatAddress(value) : '-',
+    },
+    {
+      field: "primaryMobNo",
+      headerName: "Primary Mobile No",
+      width: 100,
+    },
+    {
+      field: "primaryEmail",
+      headerName: "Primary Email",
+      width: 150,
+    },
+    {
+      field: "secondaryMobNo",
+      headerName: "Secondary Mobile No",
+      width: 100,
+    },
+    {
+      field: "secondaryEmail",
+      headerName: "Secondary Email",
+      width: 150,
+    },
     {
       field: "status",
       headerName: "Status",
@@ -73,47 +112,19 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
         switch (params.row.status) {
-          case "pending": return <Chip label={params.row.status} color="default" size="small" sx={{ width: 80 }} />;
-          case "approved": return <Chip label={params.row.status} color="info" size="small" sx={{ width: 80 }} />;
-          default: return <Chip label="pending" color="error" size="small" />
+          case "ACTIVE": return <Chip label={convertInTitleCase(params.row.status)} color="success" size="small" sx={{ width: 80 }} />;
+          case "INACTIVE": return <Chip label={convertInTitleCase(params.row.status)} color="default" size="small" sx={{ width: 80 }} />;
+          case "SUSPENDED": return <Chip label={convertInTitleCase(params.row.status)} color="error" size="small" sx={{ width: 80 }} />;
+          default: return <Chip label="INACTIVE" color="default" size="small" />
         }
       }
-    },
-    {
-      field: 'create',
-      headerName: 'Create',
-      headerAlign: 'center',
-      align: 'center',
-      width: 85,
-      hideable: false,
-      sortable: false,
-      filterable: false,
-      disableExport: true,
-      disableColumnMenu: true,
-      renderCell: (params: GridRenderCellParams) => {
-        if (params.row.employeeStatus === 'inactive') {
-          return <Button
-            sx={{ fontSize: 14, textTransform: 'none' }}
-            color="primary" variant="text"
-            onClick={() => handleEmployeeStatus(params.row.id)}>
-            Active
-          </Button>
-        } else {
-          return <Button
-            sx={{ fontSize: 12, textTransform: 'none' }}
-            color="error" variant="text"
-            onClick={() => handleEmployeeStatus(params.row.id)}>
-            Inactive
-          </Button>
-        }
-      },
     },
     {
       field: 'edit',
       headerName: 'Edit',
       headerAlign: 'center',
       align: 'center',
-      width: 80,
+      width: 70,
       hideable: false,
       sortable: false,
       filterable: false,
@@ -130,7 +141,7 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       headerName: 'View',
       headerAlign: 'center',
       align: 'center',
-      width: 80,
+      width: 70,
       hideable: false,
       sortable: false,
       filterable: false,
@@ -142,5 +153,5 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
         </IconButton>
       ),
     },
-  ],[navigate, handleEmployeeStatus])
+  ],[navigate])
 };

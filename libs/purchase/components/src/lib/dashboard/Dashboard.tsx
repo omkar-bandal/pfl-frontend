@@ -5,6 +5,7 @@ import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames } f
 
 import { MetricCard } from './metric-card'
 import { useGetDashboardData } from '@prime-fresh/purchase/modules'
+import { DashboardCard } from './DashboardCard'
 
 export const DashboardPurchase = () => {
   const [filterParams, setFilterParams] = useState({
@@ -120,11 +121,13 @@ export const DashboardPurchase = () => {
       </Grid2>
       <Grid2 container spacing={1} marginY={1}>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <MetricCard
-            cardColor='#009933'
-            title='Total Purchase'
-            quantity={dashboardData?.grns.totalPurchase.totalQuantityInKg || 0}
-            amount={dashboardData?.grns.totalPurchase.totalAmount || 0}
+          <DashboardCard
+          label='Total Purchase'
+          quantityCount={dashboardData?.grns.totalPurchase.totalQuantityInKg || 0}
+          quantityPercent={100}
+          amountCount={dashboardData?.grns.totalPurchase.totalAmount || 0}
+          amountPercent={100}
+          color='009933'
           />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>

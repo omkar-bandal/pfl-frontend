@@ -1,5 +1,8 @@
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { lazy } from "react";
+import { Outlet } from "react-router-dom";
+import { ADMIN_ROUTES, adminRoutes } from "@prime-fresh/admin/modules";
 import {
+    ApprovalFlowForm,
     BranchForm,
     CustomerTable,
     DashboardAdmin,
@@ -36,16 +39,30 @@ import {
     CustomerTypeTable,
     CustomerTypeForm,
     CustomerCategoryForm,
-    CustomerCategoryTable
+    CustomerCategoryTable,
+    PackagingMaterialTable,
+    PackagingMaterialForm,
+    PackagingMaterialView,
+    LevelForm
 } from "@prime-fresh/admin/components";
-import { Outlet } from "react-router-dom";
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { VendorRegistrationForm } from "@prime-fresh/shared/components";
+import { FarmerRegistrationForm, VendorRegistrationForm } from "@prime-fresh/shared/components";
+const CustomerForm = lazy(() => import("@prime-fresh/shared/components").then(mod => ({ default: mod.CustomerRegistrationForm })));
 
 export const AdminRoutes = [
     {
         path: ADMIN_ROUTES.DASHBOARD_ADMIN,
         element: <DashboardAdmin />,
+    },
+    {
+        path: adminRoutes.APPROVAL_FLOW,
+        element: <Outlet />,
+        children: [
+            {
+                path: adminRoutes.CREATE_APPROVAL_FLOW,
+                element: <ApprovalFlowForm/>,
+            }
+        ]
     },
     {
         path: ADMIN_ROUTES.USERS,
@@ -74,6 +91,10 @@ export const AdminRoutes = [
             {
                 path: `${ADMIN_ROUTES.VIEW_CUSTOMER}/:id`,
                 element: <ViewCustomer />,
+            },
+            {
+                path: `${ADMIN_ROUTES.UPDATE_CUSTOMER}/:id`,
+                element: <CustomerForm />,
             },
             {
                 path: ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES,
@@ -139,13 +160,23 @@ export const AdminRoutes = [
                 path: ADMIN_ROUTES.GET_ALL_FARMERS,
                 element: <FarmerTable />,
             },
-            // {
-            //     path: ADMIN_ROUTES.CREATE_FARMER,
-            //     element: <FarmerRegistrationForm />,
-            // },
+            {
+                path: `${ADMIN_ROUTES.EDIT_FARMER}/:id`,
+                element: <FarmerRegistrationForm />,
+            },
             {
                 path: `${ADMIN_ROUTES.VIEW_FARMER}/:id`,
                 element: <ViewFarmer />,
+            },
+        ]
+    },
+    {
+        path: adminRoutes.LEVEL,
+        element: <Outlet />,
+        children: [
+            {
+                path: adminRoutes.CREATE_LEVEL,
+                element: <LevelForm />
             },
         ]
     },
@@ -204,6 +235,29 @@ export const AdminRoutes = [
         ]
     },
     {
+        path: adminRoutes.PACKAGING_MATERIAL,
+        element: <Outlet />,
+        children: [
+            {
+                path: adminRoutes.VIEW_ALL_PACKAGING_MATERIAL,
+                element: <PackagingMaterialTable />,
+            },
+            {
+                path: adminRoutes.CREATE_PACKAGING_MATERIAL,
+                element: <PackagingMaterialForm />
+            },
+            {
+                path: `${adminRoutes.UPDATE_PACKAGING_MATERIAL}/:id`,
+                element: <PackagingMaterialForm />
+            },
+            {
+                path: `${adminRoutes.VIEW_PACKAGING_MATERIAL}/:id`,
+                element: <PackagingMaterialView />
+            },
+        ]
+    },
+
+    {
         path: ADMIN_ROUTES.UOM,
         element: <Outlet />,
         children: [
@@ -250,7 +304,7 @@ export const AdminRoutes = [
                 element: <OfficeForm />
             },
             {
-                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:id`,
+                path: `${ADMIN_ROUTES.VIEW_OFFICE}/:officeType/:id`,
                 element: <OfficeView />
             },
             {
@@ -270,7 +324,7 @@ export const AdminRoutes = [
                         element: <BranchForm />
                     },
                     {
-                        path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:id`,
+                        path: `${ADMIN_ROUTES.VIEW_BRANCHES}/:branchType/:id`,
                         element: <BranchView />
                     },
                 ]

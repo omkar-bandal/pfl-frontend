@@ -24,7 +24,7 @@ export interface DataGridProps<T> {
     apiRef?: React.MutableRefObject<GridApi>;
 }
 
-export const DataGridTable = <T extends { id: string | number }>(props: DataGridProps<T>) => {
+export const DataGridTable = <T extends { id?: string | number }>(props: DataGridProps<T>) => {
     const {
         rows,
         columns,
@@ -47,7 +47,6 @@ export const DataGridTable = <T extends { id: string | number }>(props: DataGrid
     const mobileColumns = isMobile
         ? columns.filter((col) => col.isMobileVisible)
         : columns;
-
     return (
         <Box sx={{ height: isMobile ? '100%' : 500, width: '100%' }}>
             <DataGrid
@@ -65,7 +64,7 @@ export const DataGridTable = <T extends { id: string | number }>(props: DataGrid
                 columns={mobileColumns}
                 columnVisibilityModel={columnVisibilityModel}
                 rows={rows || []}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row.id ? row.id : row.serialNumber}
                 paginationMode={mode} 
                 rowCount={mode === 'server' ? totalRows : (rows ? rows.length : 0)}
                 paginationModel={paginationModel || { pageSize: initialPageSize || 5, page: 0 }}
@@ -75,13 +74,13 @@ export const DataGridTable = <T extends { id: string | number }>(props: DataGrid
                 onSortModelChange={onSortModelChange}
                 sx={{
                     '& .MuiDataGrid-columnHeader': {
-                        backgroundColor: '#00cc66',
+                        backgroundColor: theme.palette.primary.main,
                         height: 10,
                     },
                     '& .MuiDataGrid-columnHeaderTitle': {
                         fontSize: '15px',
                         fontWeight: 'bold',
-                        color: '#FFFFFF',
+                        color: theme.palette.primary.contrastText,
                     },
                     '& .MuiDataGrid-cell': {
                         color: '#595959',

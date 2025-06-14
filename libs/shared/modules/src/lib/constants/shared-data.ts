@@ -1,5 +1,7 @@
 export const sharedData = {
     customerFormTabs: ["Empanelment", "Key Mobile No", "References", "Billing Details", "Delivery Details", "Statutory Details", "Bank Details", "Product Specification", "Payment Terms", "Office Use Only"],
+    vendorFormTabs: ["Primary Details", "Other Details", "Sales Contact Details", "Bank Details", "References"],
+    farmerFormTabs: ["Farmer Details", "Farm Details", "Crop Details", "Images"],
     accTypes: [
         { value: "savings", label: "Savings" },
         { value: "current", label: "Current" },
@@ -8,23 +10,23 @@ export const sharedData = {
         { value: "other", label: "Other" },
     ],
     inFnVBusiness: [
-        { value: "Less than 1 year", label: "Less than 1 year" },
-        { value: "Less than 3 year", label: "Less than 3 year" },
-        { value: "Less than 5 year", label: "Less than 5 year" },
-        { value: "More than 5 year", label: "More than 5 year" },
-        { value: "More than 10 year", label: "More than 10 year" },
-        { value: "More than 15 year", label: "More than 15 year" },
+        { value: "less than 1 year", label: "Less than 1 year" },
+        { value: "less than 3 year", label: "Less than 3 year" },
+        { value: "less than 5 year", label: "Less than 5 year" },
+        { value: "more than 5 year", label: "More than 5 year" },
+        { value: "more than 10 year", label: "More than 10 year" },
+        { value: "more than 15 year", label: "More than 15 year" },
     ],
     fileYesOrNo: [
         { value: true, label: "Yes" },
         { value: false, label: "No" }
     ],
     proposedPaymentTerms: [
-        { value: "After Unloading", label: "After Unloading" },
-        { value: "After Loading", label: "After Loading" },
-        { value: "Between 3 to 5 Days", label: "Between 3 to 5 Days" },
-        { value: "1 Week", label: "1 Week" },
-        { value: "15 Days", label: "15 Days" }
+        { value: "after unloading", label: "After Unloading" },
+        { value: "after loading", label: "After Loading" },
+        { value: "between 3 to 5 days", label: "Between 3 to 5 Days" },
+        { value: "1 week", label: "1 Week" },
+        { value: "15 days", label: "15 Days" }
     ],
     creditTerms: [
         { value: "5/10 net 30", label: "5/10 net 30" },

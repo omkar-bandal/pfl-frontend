@@ -2,7 +2,7 @@ export type PostStatutoryDetails = {
     panNo: string | null,
     panCopy: File | null,
     aadharNo: string | null,
-    addharCopy: File | null,
+    aadharCopy: File | null,
     gstn: string | null,
     regiCertificateCopy: File | null,
     billBookCopy: File | null,

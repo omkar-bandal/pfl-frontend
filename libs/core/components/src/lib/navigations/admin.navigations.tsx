@@ -1,160 +1,180 @@
-import { AddShoppingCart, Category } from '@mui/icons-material';
-import {
-  GridViewOutlined,
-  Groups2,
-  LocationOn,
-  Scale,
-} from "@mui/icons-material";
+import { AddShoppingCart, Approval, Category } from '@mui/icons-material';
+import { GridViewOutlined, Groups2, LocationOn, Scale } from '@mui/icons-material';
 import { Navigations } from '@prime-fresh/modules';
-import { stringConstants } from "@prime-fresh/modules";
-import {ADMIN_ROUTES, STRINGS} from "@prime-fresh/admin/modules";
+import { stringConstants } from '@prime-fresh/modules';
+import { ADMIN_ROUTES, adminRoutes, STRINGS } from '@prime-fresh/admin/modules';
 
 export const adminNavigations: Navigations[] = [
   {
-    name: "Dashboard",
+    name: 'Dashboard',
+    uniqueKey: 'dashboard',
     logo: <GridViewOutlined />,
     path: ADMIN_ROUTES.DASHBOARD_ADMIN,
-    roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-    depts: [stringConstants.DEPT_ADMIN]
   },
+  // {
+  //   name: "Level",
+  //   logo: <GridViewOutlined />,
+  //   path: adminRoutes.CREATE_LEVEL,
+  // },
   {
-    name: "Users",
+    name: 'Users',
+    uniqueKey: 'users',
     logo: <Groups2 />,
-    roles: [stringConstants.ROLE_ADMIN],
-    depts: [stringConstants.DEPT_ADMIN],
     children: [
-      { 
-        name: "Employee", 
-        path: ADMIN_ROUTES.GET_ALL_EMPLOYEES, 
-        roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER], 
-        depts:[stringConstants.DEPT_ADMIN] 
-      },
-      { name: "Farmers", 
-        path: ADMIN_ROUTES.GET_ALL_FARMERS, 
-        roles: [stringConstants.ROLE_ADMIN], 
-        depts:[stringConstants.DEPT_ADMIN] 
-      },
       {
-        name: "Vendors",
-        roles: [stringConstants.ROLE_ADMIN],
-        depts: [stringConstants.DEPT_ADMIN],
+        name: 'Employee',
+        uniqueKey: 'employees',
+        path: ADMIN_ROUTES.GET_ALL_EMPLOYEES,
+      },
+      { name: 'Farmers', uniqueKey: 'farmers', path: ADMIN_ROUTES.GET_ALL_FARMERS },
+      {
+        name: 'Vendors',
+        uniqueKey: 'vendors',
         grandChildren: [
-          { name: "Vendor", 
-            path: ADMIN_ROUTES.GET_ALL_VENDORS, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts:[stringConstants.DEPT_ADMIN] 
+          {
+            name: 'Vendor',
+            uniqueKey: 'vendors',
+            path: ADMIN_ROUTES.GET_ALL_VENDORS,
           },
           {
-            name: "Vendor Category",
+            name: 'Vendor Category',
+            uniqueKey: 'vendor-category',
             logo: <Category />,
             path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
-            roles: [stringConstants.ROLE_ADMIN],
-            depts: [stringConstants.DEPT_ADMIN]
           },
           {
-            name: "Vendor Subategory",
+            name: 'Vendor Subategory',
+            uniqueKey: 'vendor-subcategory',
             logo: <Category />,
             path: ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT,
-            roles: [stringConstants.ROLE_ADMIN],
-            depts: [stringConstants.DEPT_ADMIN]
           },
-        ]
+        ],
       },
       {
-        name: "Customers",
-        roles: [stringConstants.ROLE_ADMIN],
-        depts: [stringConstants.DEPT_ADMIN],
+        name: 'Customers',
+        uniqueKey: 'customer',
         grandChildren: [
-          { name: "Customer", 
-            path: ADMIN_ROUTES.GET_ALL_CUSTOMERS, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts:[stringConstants.DEPT_ADMIN] 
+          {
+            name: 'Customer',
+            uniqueKey: 'customer',
+            path: ADMIN_ROUTES.GET_ALL_CUSTOMERS,
           },
-          { name: "Customer Type", 
-            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts:[stringConstants.DEPT_ADMIN] 
+          {
+            name: 'Customer Type',
+            uniqueKey: 'customer-type',
+            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES,
           },
-          { name: "Customer Category", 
-            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_CAT, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts:[stringConstants.DEPT_ADMIN] 
+          {
+            name: 'Customer Category',
+            uniqueKey: 'customer-category',
+            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_CAT,
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
-    name: "Product",
+    name: 'Approval Module',
+    uniqueKey: 'approval-module',
+    logo: <Approval />,
+    path: adminRoutes.CREATE_APPROVAL_FLOW
+  },
+  {
+    name: 'Product',
+    uniqueKey: 'products',
     logo: <AddShoppingCart />,
-    roles: [stringConstants.ROLE_ADMIN],
-    depts: [stringConstants.DEPT_ADMIN],
     children: [
-      { name: "Products", path: ADMIN_ROUTES.GET_ALL_PRODUCTS, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-      { name: "Product Classification", path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-      { name: "Product Category", path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-      { name: "Product Subcategory", path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-    ],
-  },
-  {
-    name: "UoM",
-    logo: <Scale />,
-    roles: [stringConstants.ROLE_ADMIN],
-    depts: [stringConstants.DEPT_ADMIN],
-    children: [
-      { name: "Units", path: ADMIN_ROUTES.GET_ALL_UOMs, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-      { name: "UOM Conversion", path: ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX, roles: [stringConstants.ROLE_ADMIN], depts: [stringConstants.DEPT_ADMIN] },
-    ],
-  },
-  {
-    name: "Locations",
-    logo: <LocationOn />,
-    roles: [stringConstants.ROLE_ADMIN],
-    depts: [stringConstants.DEPT_ADMIN],
-    children: [
-      { 
-        name: "Registered Office", 
-        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.REGISTERED_OFFICE}`, 
-        roles: [stringConstants.ROLE_ADMIN], 
-        depts: [stringConstants.DEPT_ADMIN] 
-      },
-      { 
-        name: "Corporate Office", 
-        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.CORPORATE_OFFICE}`, 
-        roles: [stringConstants.ROLE_ADMIN], 
-        depts: [stringConstants.DEPT_ADMIN] 
+      {
+        name: 'Products',
+        path: ADMIN_ROUTES.GET_ALL_PRODUCTS,
+        uniqueKey: 'products',
       },
       {
-        name: "Branches",
-        roles: [stringConstants.ROLE_ADMIN],
-        depts: [stringConstants.DEPT_ADMIN],
-        grandChildren: [
-          { 
-            name: "Collection Center (CC)", 
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.CC}`, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts: [stringConstants.DEPT_ADMIN] 
-          },
-          { 
-            name: "Distribution Center (DC)", 
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.DC}`, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts: [stringConstants.DEPT_ADMIN] 
-          },
-          { 
-            name: "Seasonal CC", 
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.SEASONAL_CC}`, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts: [stringConstants.DEPT_ADMIN] 
-          },
-          { 
-            name: "Warehouses (WH)", 
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.WH}`, 
-            roles: [stringConstants.ROLE_ADMIN], 
-            depts: [stringConstants.DEPT_ADMIN] 
-          },
-        ]
+        name: 'Product Classification',
+        uniqueKey: 'products-claasification',
+        path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS,
       },
-    ]
+      {
+        name: 'Product Category',
+        uniqueKey: 'products-category',
+        path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT,
+      },
+      {
+        name: 'Product Subcategory',
+        uniqueKey: 'products-subcategory',
+        path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT,
+      },
+    ],
+  },
+  {
+    name: 'Packaging Material',
+    uniqueKey: 'packing-material',
+    logo: <AddShoppingCart />,
+    path: adminRoutes.VIEW_ALL_PACKAGING_MATERIAL,
+  },
+  {
+    name: 'UoM',
+    uniqueKey: 'uom',
+    logo: <Scale />,
+    children: [
+      {
+        name: 'Units',
+        uniqueKey: 'units',
+        path: ADMIN_ROUTES.GET_ALL_UOMs,
+      },
+      {
+        name: 'UOM Conversion',
+        uniqueKey: 'uom-conversion',
+        path: ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX,
+      },
+    ],
+  },
+  {
+    name: 'Locations',
+    uniqueKey: 'location',
+    logo: <LocationOn />,
+    depts: [stringConstants.DEPT_ADMIN],
+    children: [
+      {
+        name: 'Registered Office',
+        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.REGISTERED_OFFICE}`,
+        uniqueKey: 'registered-office',
+      },
+      {
+        name: 'Corporate Office',
+        uniqueKey: 'corporate-office',
+        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.CORPORATE_OFFICE}`,
+      },
+      {
+        name: 'Branches',
+        uniqueKey: 'branches',
+        grandChildren: [
+          {
+            name: 'Collection Center (CC)',
+            uniqueKey: 'cc',
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.CC}`,
+            depts: [stringConstants.DEPT_ADMIN],
+          },
+          {
+            name: 'Distribution Center (DC)',
+            uniqueKey: 'dc',
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.DC}`,
+            depts: [stringConstants.DEPT_ADMIN],
+          },
+          {
+            name: 'Seasonal CC',
+            uniqueKey: 'seasonal-cc',
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.SEASONAL_CC}`,
+            depts: [stringConstants.DEPT_ADMIN],
+          },
+          {
+            name: 'Warehouses (WH)',
+            uniqueKey: 'wh',
+            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.WH}`,
+            depts: [stringConstants.DEPT_ADMIN],
+          },
+        ],
+      },
+    ],
   },
 ];

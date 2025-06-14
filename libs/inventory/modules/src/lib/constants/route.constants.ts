@@ -81,7 +81,7 @@ export const inventoryRouteConstants = {
     VIEW_EOD_REPORT: "/inventory/eod-report/view",
     UPDATE_EOD_REPORT: "/inventory/eod-report/update",
 
-    PROFORMA_INVOICES: "/inventory/proforma-invoices",
-    GET_ALL_PROFORMA_INVOICES: "/inventory/proforma-invoices",
+    FINAL_INVOICES: "/inventory/final-invoices",
+    GET_ALL_FINAL_INVOICES: "/inventory/final-invoices",
 
 }

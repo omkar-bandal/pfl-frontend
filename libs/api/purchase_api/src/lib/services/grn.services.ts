@@ -1,6 +1,6 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, ApprovalModel, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
-import { GetGRN } from "../models";
+import { IGRN } from "../models";
 
 export class GRNServices extends BaseService {
     private static _instance: GRNServices;
@@ -14,23 +14,33 @@ export class GRNServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllGRNs(): Promise<ApiBaseState<GetGRN[]>> {
-        const url = purchaseApiUrl.GET_ALL_GRN;
+    getAllGRNs(queryParams? : QueryParams): Promise<ApiBaseState<IGRN[]>> {
+        const url = purchaseApiUrl.GET_ALL_GRN(queryParams);
         return this.get(url);
     }
 
-    getGRNById(id: string): Promise<ApiBaseState<GetGRN>> {
-        const url = `${purchaseApiUrl.GET_GRN_BY_ID}/${id}`;
+    getGRNForViewById(id: string): Promise<ApiBaseState<IGRN>> {
+        const url = purchaseApiUrl.GET_GRN_FOR_VIEW_BY_ID(id);
+        return this.get(url);
+    }
+
+    getGRNForUpdateById(id: string): Promise<ApiBaseState<IGRN>> {
+        const url = purchaseApiUrl.GET_GRN_FOR_UPDATE_BY_ID(id);
         return this.get(url);
     }
 
     updateGRN(id: string, data: FormData): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.UPDATE_GRN}/${id}`;
+        const url = purchaseApiUrl.UPDATE_GRN(id);
         return this.patchFormData(url, data);
     }
 
     deleteGRNById(id: string): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.DELETE_GRN}/${id}`;
+        const url = purchaseApiUrl.DELETE_GRN(id);
         return this.delete(url);
+    }
+
+    approveGRN(id: string, data: ApprovalModel): Promise<ResultModel> {
+        const url = purchaseApiUrl.APPROVE_GRN(id);
+        return this.patch(url, data);
     }
 }

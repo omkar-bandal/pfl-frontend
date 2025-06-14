@@ -55,7 +55,7 @@ export const ProductUpdateForm = () => {
             : [];
     }, [units]);
 
-    const qcParamsType = ["good", "bad"].map(type => { return { value: type, label: type } });
+    const qcParamsType = ["good", "bad", "average"].map(type => { return { value: type, label: type } });
 
     const handleGetCategoryAndClassification = useCallback((values: any, setFieldValue: (field: string, value: any) => void) => {
         const subcategory = productsubcategories?.data?.find(subcategory => subcategory.id === values.subcategory);
@@ -99,7 +99,7 @@ export const ProductUpdateForm = () => {
                             <Grid2 size={{ xs: 12 }}>
                                 <PageTitle pagetitle="Product" />
                             </Grid2>
-                            <Grid2 size={{ xs: 12, md: 4 }}>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={true}
@@ -109,17 +109,18 @@ export const ProductUpdateForm = () => {
                                     handleChange={handleChange}
                                 />
                             </Grid2>
-                            <Grid2 size={{ xs: 12, md: 4 }}>
-                                <TextInput
-                                    type="text"
-                                    isRequired={false}
-                                    name="productOrigin"
-                                    label="Origin of Product"
-                                    value={values.productOrigin}
-                                    handleChange={handleChange}
-                                />
-                            </Grid2>
-                            <Grid2 size={{ xs: 12, md: 4 }}>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
+                            <TextInput
+                                type="text"
+                                isRequired={true}
+                                name="prefix"
+                                label="Product Code Prefix"
+                                value={values.prefix ? values.prefix.toUpperCase() : values.prefix}
+                                handleChange={handleChange}
+                                // infoTipText={`Enter prefix to generate product code. For example, if product name is Royal Gala Apple enter prefix as RGA`}
+                            />
+                        </Grid2>
+                            <Grid2 size={{ xs: 12, md: 3 }}>
                                 <TextInput
                                     type="text"
                                     isRequired={false}
@@ -206,6 +207,14 @@ export const ProductUpdateForm = () => {
                                     value={values.classification}
                                     handleChange={handleChange} />
                             </Grid2>
+                            <Grid2 size={{ xs: 12 }}>
+                            <MultipleTextInput
+                                isRequired={false}
+                                name="productOrigin"
+                                label="Product Origins"
+                                values={values.productOrigin}
+                                setFieldValue={setFieldValue} />
+                        </Grid2>
                             <Grid2 size={{ xs: 12 }}>
                                 <MultipleTextInput
                                     isRequired={false}

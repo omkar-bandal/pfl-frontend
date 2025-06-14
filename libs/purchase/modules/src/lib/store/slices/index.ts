@@ -1,5 +1,5 @@
 export * from "./rfpa.slice";
-export * from './dealSlip.slice';
+export * from './deal-slip.slice';
 export * from './grn.slice';
 export * from './mcVoucher.slice';
 export * from './lpVoucher.slice';

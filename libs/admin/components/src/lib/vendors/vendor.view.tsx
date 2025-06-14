@@ -1,7 +1,4 @@
-// import { Employee } from "../../api/admin/models"
 import { useParams } from "react-router-dom";
-// import { CircularProgress } from "@mui/material";
-import { DataDisplay } from "@prime-fresh/ui_shared";
 import { Box, LinearProgress } from "@mui/material";
 import { useGetVendorById } from "@prime-fresh/admin/modules";
 
@@ -19,7 +16,7 @@ export const ViewVendor = () => {
   }
   else {
     return (
-      <DataDisplay header="Vendor Details" data={vendor} />
+      <></>
     )
   }
 }

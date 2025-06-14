@@ -3,26 +3,38 @@ import React from "react"
 import { Box, Grid2 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { useRFPAColumns } from "./rfpa.columns"
-import { GetRFPA } from "@prime-fresh/purchase_api"
+import { IRFPA } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES, useGetAllRFPAs } from "@prime-fresh/purchase/modules";
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useDispatch } from "react-redux"
-import { setPreview } from "@prime-fresh/modules"
+import { setPreview, usePermission } from "@prime-fresh/modules"
 
 export const RFPATable = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const rfpaColumns = useRFPAColumns();
+    const { canEdit, canView } = usePermission('rfpa');
+    const rfpaColumns = useRFPAColumns( canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
     } = useDataTable({ columnDef: rfpaColumns, initialPageSize: 10 });
-    const { data, isLoading, error, isError } = useGetAllRFPAs();
-    const allRFPAs = data?.data ? data.data : [];
-
+    const { data, isLoading, error, isError } = useGetAllRFPAs(queryParams);
+    const allRFPAs = data ? data : null;
+    const rowCountRef = React.useRef(allRFPAs?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (allRFPAs?.allRecords !== undefined) {
+            rowCountRef.current = allRFPAs.allRecords;
+        }
+        return rowCountRef.current;
+    }, [allRFPAs]);
     const handleCreate = () => {
         dispatch(setPreview(false))
         navigate(PURCHASE_ROUTES.CREATE_RFPA);
@@ -53,11 +65,17 @@ export const RFPATable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetRFPA>
-                mode="client"
+            <DataGridTable<IRFPA>
                 loading={isLoading}
-                rows={allRFPAs}
+                rows={allRFPAs?.data || []}
                 columns={rfpaColumns}
+                mode="server"
+                initialPageSize={10}
+                totalRows={rowCount}
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationChange}
+                sortModel={sortModel}
+                onSortModelChange={handleSortingChange}
                 columnVisibilityModel={columnVisibilityModel}
             />
         </Box>

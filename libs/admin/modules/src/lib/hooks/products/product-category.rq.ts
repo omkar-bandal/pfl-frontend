@@ -36,9 +36,10 @@ export function useGetAllProductCategories(queryParams?: QueryParams):
 
 export function useGetProductCategoryById(id: string):
     UseQueryResult<ApiBaseState<GetProductCategory>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetProductCategory>, ErrorModel>({
         queryKey: ['get-product-category-by-id'],
         queryFn: () => ProductCategoryService.getInstance().getProductCategoryById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }

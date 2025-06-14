@@ -1,6 +1,6 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
-import { GetTPvoucher } from "../models";
+import { ITranportPaymentVoucher } from "../models";
 
 export class TransportPaymentVoucherServices extends BaseService {
     private static _instance: TransportPaymentVoucherServices;
@@ -14,23 +14,33 @@ export class TransportPaymentVoucherServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllTransportPaymentVouchers(): Promise<ApiBaseState<GetTPvoucher[]>> {
-        const url = purchaseApiUrl.GET_ALL_TP_VOUCHER;
+    getAllTransportPaymentVouchers(queryParams? : QueryParams): Promise<ApiBaseState<ITranportPaymentVoucher[]>> {
+        const url = purchaseApiUrl.GET_ALL_TP_VOUCHER(queryParams);
         return this.get(url);
     }
 
-    GetTransportPaymentVoucherById(id: string): Promise<ApiBaseState<GetTPvoucher>> {
+    getTransportPaymentVoucherById(id: string): Promise<ApiBaseState<ITranportPaymentVoucher>> {
         const url = `${purchaseApiUrl.GET_TP_VOUCHER_BY_ID}/${id}`;
         return this.get(url);
     }
 
+    getTransportPaymentVoucherForViewById(id: string): Promise<ApiBaseState<ITranportPaymentVoucher>> {
+        const url = purchaseApiUrl.GET_TP_VOUCHER_FOR_VIEW_BY_ID(id);
+        return this.get(url);
+    }
+
+    getTransportPaymentVoucherForUpdateById(id: string): Promise<ApiBaseState<ITranportPaymentVoucher>> {
+        const url = purchaseApiUrl.GET_TP_VOUCHER_FOR_UPDATE_BY_ID(id);
+        return this.get(url);
+    }
+
     updateTransportPaymentVoucher(id: string, data: FormData): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.UPDATE_TP_VOUCHER}/${id}`;
+        const url = purchaseApiUrl.UPDATE_TP_VOUCHER(id);
         return this.patchFormData(url, data);
     }
 
     deleteTransportPaymentVoucherById(id: string): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.DELETE_TP_VOUCHER}/${id}`;
+        const url = purchaseApiUrl.DELETE_TP_VOUCHER(id);
         return this.delete(url);
     }
 }

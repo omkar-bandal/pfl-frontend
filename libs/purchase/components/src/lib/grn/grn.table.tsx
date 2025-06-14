@@ -2,23 +2,37 @@ import React from "react"
 import { Box, Grid2 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { useGRNColumns } from "./grn.columns"
-import { GetGRN } from "@prime-fresh/purchase_api"
+import { IGRN } from "@prime-fresh/purchase_api"
 import { PURCHASE_ROUTES, useGetAllGRNs } from "@prime-fresh/purchase/modules"
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
+import { usePermission } from "@prime-fresh/modules"
 
 export const GRNTable = () => {
     const navigate = useNavigate();
-    const grnColumns = useGRNColumns();
+    const { canEdit, canView } = usePermission('grn');
+    const grnColumns = useGRNColumns(canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
     } = useDataTable({ columnDef: grnColumns, initialPageSize: 10 });
-    const { data, isLoading, isError, error } = useGetAllGRNs();
-    const allGRN = data?.data ? data.data : [];
+    const { data, isLoading, isError, error } = useGetAllGRNs(queryParams);
+    const allGRN = data ? data : null;
+    const rowCountRef = React.useRef(allGRN?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (allGRN?.allRecords !== undefined) {
+            rowCountRef.current = allGRN.allRecords;
+        }
+        return rowCountRef.current;
+    }, [allGRN]);
     console.log("All GRNs :", allGRN);
     React.useEffect(() => {
         if (isError) {
@@ -50,11 +64,17 @@ export const GRNTable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetGRN>
-                mode="client"
+            <DataGridTable<IGRN>
                 loading={isLoading}
-                rows={allGRN}
+                rows={allGRN?.data || []}
                 columns={grnColumns}
+                mode="server"
+                initialPageSize={10}
+                totalRows={rowCount}
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationChange}
+                sortModel={sortModel}
+                onSortModelChange={handleSortingChange}
                 columnVisibilityModel={columnVisibilityModel}
             />
         </Box>

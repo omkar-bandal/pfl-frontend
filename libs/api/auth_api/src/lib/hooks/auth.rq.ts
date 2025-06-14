@@ -10,8 +10,8 @@ export function useSignIn(): UseMutationResult<SignInResponse, ErrorModel, SignI
         onSuccess: (result) => {
             localStorage.setItem('access_token', result.access_token);
             localStorage.setItem('refresh_token', result.refresh_token);
-            localStorage.setItem('department', result.department);
             localStorage.setItem('userName', result.userName);
+            localStorage.setItem('userId', result.id);
         }
     });
 }

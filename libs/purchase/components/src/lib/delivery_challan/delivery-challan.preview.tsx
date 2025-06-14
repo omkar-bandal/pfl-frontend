@@ -2,106 +2,146 @@ import React from 'react'
 import { Box, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { useAppSelector } from '@prime-fresh/modules';
 import { dcState } from '@prime-fresh/purchase/modules';
-import { PreviewContainer } from '@prime-fresh/ui_shared';
+import { DataViewer, formatCurrency, ObjectViewerConfig, PreviewContainer } from '@prime-fresh/ui_shared';
+import { convertInTitleCase } from '@prime-fresh/shared/modules';
+import { Inventory } from '@mui/icons-material';
+import { FormProducts } from '@prime-fresh/common_api';
 
 export const DeliveryChallanPreview = ( ) => {
     const { previewDC } = useAppSelector(dcState);
+    const dcConfig: ObjectViewerConfig = {
+        sections: [
+          {
+            sectionType: "object",
+            fields: [
+              {
+                key: "deliveryCType",
+                label: "Challan Type",
+                render: (value: string) => value ? <Typography variant='body1' component='span'>{value.toUpperCase()}</Typography> : '',
+            },
+            { 
+                key: "companyName", 
+                label: "Company",
+                render: (value: string) => value ? <Typography variant='body1' component='span'>{convertInTitleCase(value)}</Typography> : '',
+            },
+            { 
+                key: "office", 
+                label: "Office",
+                render: (value: string) => value ? <Typography variant='body1' component='span'>{convertInTitleCase(value)}</Typography> : '',
+            },
+            { 
+                key: "grnNo", 
+                label: "GRN Number",
+                render: (value: string) => value ? <Typography variant='body1' component='span'>{value.toUpperCase()}</Typography> : '',
+             },
+            { 
+                key: "poNumber", 
+                label: "PO Number",
+                render: (value: string) => value ? <Typography variant='body1' component='span'>{value.toUpperCase()}</Typography> : '',
+             },
+              { key: "partyName", label: "Customer Name" },
+              { key: "fromLocation", label: "From Location" },
+              { key: "toLocation", label: "To Location" },
+            ],
+            gridColumns: 3,
+          },
+          {
+            title: "Delivery Challan Products",
+            sectionType: "array",
+            icon: <Inventory />,
+            fieldArrayName: "deliveryChallanProducts",
+            keyField: "id",
+            fields: [
+              {
+                key: "productName",
+                label: "Product",
+                width: "25%",
+                render: (value: string, item: FormProducts) =>
+                  <Typography variant="body1" color="text.primary">
+                    {`${convertInTitleCase(value || '')} ${item.count} ${item.size} ${item.variety}`}
+                  </Typography>
+              },
+              {
+                key: "uom",
+                label: "Unit",
+                width: "10%",
+              },
+              {
+                key: "quantity",
+                label: "Quantity",
+                width: "10%",
+                render: (value: number) => value ? value : 0,
+              },
+              {
+                key: "unitPrice",
+                label: "Unit Price",
+                width: "10%",
+                render: (value: number) => value? formatCurrency(value) : 0,
+              },
+              {
+                key: "amount",
+                label: "Amount",
+                width: "10%",
+                render: (value: number) => value ? formatCurrency(value) : 0,
+              },
+              {
+                key: "netWeight",
+                label: "Net Weight",
+                width: "10%",
+                render: (value: number) => value ? `${value} kg` : 0,
+              },
+            ],
+          },
+          {
+            title: "Total Quantity & Amount",
+            sectionType: "object",
+            fields: [
+              { key: "netProductWeight", label: "Product Net Weight" },
+              { key: "totalProductAmount", label: "Total Amount of Products" },
+              { key: "netPackagingMaterialWeight", label: "Packaging Material Net Weight" },
+              { key: "totalPackagingMaterialAmount", label: "Total Amount of Packaging Material" },
+              { key: "totalAmtInWords", label: "Product Total Amount in Words" },
+            ],
+            gridColumns: 4,
+          },
+          {
+            title: "Driver Details",
+            sectionType: "object",
+            fields: [
+              { 
+                key: "driverName", 
+                label: "Driver Name",
+                render: (value: string) => value? convertInTitleCase(value) : '',
+             },
+              { 
+                key: "licenseNo", 
+                label: "License Number",
+                render: (value: string) => value? value.toUpperCase() : '',
+            },
+            { 
+                key: "contactNo", 
+                label: "Contact Number",
+                render: (value: string) => value? value : '',
+            },
+            { 
+                key: "altContactNo", 
+                label: "Alternate Contact Number",
+                render: (value: string) => value? value : '',
+             },
+             { 
+                 key: "vehicleNo", 
+                 label: "Vehicle Number",
+                 render: (value: string) => value? value.toUpperCase() : '',
+             },
+            ],
+            gridColumns: 2,
+          },
+        ],
+      }
     return (
         <PreviewContainer title='Delivery Challan Preview'>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Challan Type : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.deliveryCType}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    GRN No : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.grnNo}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Company Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.companyName}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Party Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.partyName}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    From Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.fromLocation?.toString()}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    To Location : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.toLocation?.toString()}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Driver Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.driverName}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Vehicle Number : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.vehicleNo}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Driver Contact : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{`${previewDC?.contactNo} , ${previewDC?.altContactNo}`}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Divider textAlign="left" sx={{ marginY: 2 }}>Products Information</Divider>
-            <Grid item>
-                <TableContainer component={Box}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Name</TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Quantity</TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Rate</TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: 18 }}>Amount</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {previewDC?.deliveryChallanProducts.map((product, index: number) => (
-                                <TableRow
-                                    key={index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{typeof product.productName !== "string"? product.productName?.name : product.productName}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.quantity}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.unitPrice}</TableCell>
-                                    <TableCell align="center" sx={{ fontWeight: 400, fontSize: 16 }}>{product.amount}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Total Amount : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.totalAmt}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="h6" component="span" sx={{ color: "#555" }}>
-                    Receiver Name : <Typography variant="h6" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewDC?.receiverName}
-                    </Typography>
-                </Typography>
-            </Grid>
+            <DataViewer config={dcConfig} data={previewDC || []} />
         </PreviewContainer>
     )
 }
+

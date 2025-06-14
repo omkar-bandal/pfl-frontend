@@ -26,7 +26,7 @@ export function useDeleteVendorSubcategoryById(id: string):
     });
 }
 
-export function useGetAllVendorSubcategories(queryParams: QueryParams):
+export function useGetAllVendorSubcategories(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetVendorSubcategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVendorSubcategory[]>, ErrorModel>({
         queryKey: ['get-all-vendor-subcategories', queryParams],
@@ -45,9 +45,10 @@ export function useGetVendorSubcategoryById(id: string):
 
 export function useGetVendorSubcategoriesByQuery(query: string):
     UseQueryResult<ApiBaseState<GetVendorSubcategory[]>, ErrorModel> {
+        const enabled = query.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetVendorSubcategory[]>, ErrorModel>({
         queryKey: ['get-vendor-subcategories-by-query'],
         queryFn: () => VendorSubcategoryService.getInstance().getVendorSubcategoryByQuery(query),
-        enabled: !!query,
+        enabled: enabled,
     });
 }

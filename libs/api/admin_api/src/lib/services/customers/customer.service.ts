@@ -14,8 +14,8 @@ export class CustomersService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllCustomers({page, limit, sort}: QueryParams): Promise<ApiBaseState<GetCustomer[]>> {
-        const url = adminApiUrlConstants.GET_ALL_CUSTOMERS({page, limit, sort});
+    getAllCustomers(queryParams?: QueryParams): Promise<ApiBaseState<GetCustomer[]>> {
+        const url = adminApiUrlConstants.GET_ALL_CUSTOMERS(queryParams);
         return this.get(url);
     }
 

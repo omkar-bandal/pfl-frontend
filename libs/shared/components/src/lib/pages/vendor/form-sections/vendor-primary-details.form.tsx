@@ -13,6 +13,7 @@ export const VendorPrimaryDetails = () => {
 
     const { data: vSubcat } = useGetVendorSubcategoriesByQuery(values.category || '');
     const vendorSubcategory = vSubcat?.data ? mapToValueLabelArray(vSubcat.data, 'id', 'name') : [];
+    console.log(vendorCategory, "Vendor subcategories: ", vendorSubcategory)
     return (
         <Grid2 container spacing={1} padding={1}>
             <Grid2 size={{ xs: 12 }}>
@@ -79,7 +80,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={true}
                     name="officeAddress.address1"
                     label="Address Line 1"
-                    value={values.officeAddress.address1}
+                    value={values.officeAddress.address1 || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -89,7 +90,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={false}
                     name="officeAddress.address2"
                     label="Address Line 2"
-                    value={values.officeAddress.address2}
+                    value={values.officeAddress.address2 || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -99,7 +100,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={true}
                     name="officeAddress.location"
                     label="Location"
-                    value={values.officeAddress.location}
+                    value={values.officeAddress.location || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -109,7 +110,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={true}
                     name="officeAddress.city"
                     label="City"
-                    value={values.officeAddress.city}
+                    value={values.officeAddress.city || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -119,7 +120,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={true}
                     name="officeAddress.state"
                     label="State"
-                    value={values.officeAddress.state}
+                    value={values.officeAddress.state || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -129,7 +130,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={true}
                     name="officeAddress.pincode"
                     label="Pincode"
-                    value={values.officeAddress.pincode}
+                    value={values.officeAddress.pincode || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -139,7 +140,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={true}
                     name="officeContactNo"
                     label="Office Contact Number"
-                    value={values.officeContactNo}
+                    value={values.officeContactNo || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -149,7 +150,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={false}
                     name="officeEmail"
                     label="Office Email"
-                    value={values.officeEmail}
+                    value={values.officeEmail || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -159,7 +160,7 @@ export const VendorPrimaryDetails = () => {
                     isRequired={false}
                     name="website"
                     label="Office Website"
-                    value={values.website}
+                    value={values.website || ''}
                     handleChange={handleChange}
                 />
             </Grid2>

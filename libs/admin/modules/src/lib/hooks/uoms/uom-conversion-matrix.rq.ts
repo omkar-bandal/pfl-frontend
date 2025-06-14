@@ -26,7 +26,7 @@ export function useDeleteUOMConversionMatrixById(id: string):
     });
 }
 
-export function useGetAllUOMConversionMatrix(queryParams: QueryParams):
+export function useGetAllUOMConversionMatrix(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetUOMConversionMatrix[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetUOMConversionMatrix[]>, ErrorModel>({
         queryKey: ['get-all-uom-conversion-matrix', queryParams],

@@ -14,8 +14,8 @@ export class VendorsService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllVendors({ page, limit, sort }: QueryParams): Promise<ApiBaseState<GetVendor[]>> {
-        const url = adminApiUrlConstants.GET_ALL_VENDORS({ page, limit, sort });
+    getAllVendors(queryParams?: QueryParams): Promise<ApiBaseState<GetVendor[]>> {
+        const url = adminApiUrlConstants.GET_ALL_VENDORS(queryParams);
         return this.get(url);
     }
 

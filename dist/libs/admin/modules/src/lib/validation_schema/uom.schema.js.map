@@ -1,1 +1,0 @@
-{"version":3,"file":"uom.schema.js","sourceRoot":"","sources":["../../../../../../../libs/admin/modules/src/lib/validation_schema/uom.schema.ts"],"names":[],"mappings":";;;AAAA,2BAA2B;AAEd,QAAA,SAAS,GAAG,GAAG,CAAC,MAAM,EAAE,CAAC,KAAK,CAAC;IACxC,IAAI,EAAE,GAAG,CAAC,MAAM,EAAE,CAAC,QAAQ,CAAC,sBAAsB,CAAC;IACnD,YAAY,EAAE,GAAG,CAAC,MAAM,EAAE,CAAC,QAAQ,CAAC,iCAAiC,CAAC;CACzE,CAAC,CAAA"}

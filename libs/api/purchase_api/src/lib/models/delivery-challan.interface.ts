@@ -1,75 +1,112 @@
-import { Address } from "@prime-fresh/admin_api";
-import { RequestedBy } from "./requestedBy.interface";
-import { FormBasedProductData } from "./form-based-products";
+import { Address } from '@prime-fresh/admin_api';
+import { RequestedBy } from './requestedBy.interface';
+import {
+  FormProducts,
+  FormProductQtyAmt,
+  FormProductWeight,
+  FormProductUoM,
+} from '@prime-fresh/common_api';
 
-export type DeliveryChallanProducts = FormBasedProductData;
+export type DeliveryChallanProducts = {
+  saleUoM: string | null;
+  packagingMaterial: string | null;
+  packagingMaterialUoM: string | null;
+  packagingMaterialQuantity: number | null;
+  packagingMaterialUnitPrice: number | null;
+  packagingMaterialAmount: number | null;
+  packagingMaterialTotalWeight: number | null;
+} & FormProducts &
+  FormProductUoM &
+  FormProductQtyAmt &
+  FormProductWeight;
+
 export type GetDeliveryChallanProducts = {
-    productName: {id: string, name: string},
-    count: string | null,
-    size: string | null,
-    uom: {id: string, unit: string},
-    quantity: number,
-    unitPrice: number,
-    amount: number,
-    grossWeight: number,
-    packingMaterialWeight: number,
-    netWeight: number,
-};
+  productName: { id: string; productName: string };
+  count: string | null;
+  size: string | null;
+  origin: string | null;
+  variety: string | null;
+  uom: { id: string; unit: string };
+  saleUoM: { id: string; unit: string };
+  packagingMaterial: { id: string; name: string };
+  packagingMaterialUoM: { id: string; unit: string };
+  packagingMaterialQuantity: number | null;
+  packagingMaterialUnitPrice: number | null;
+  packagingMaterialAmount: number | null;
+  packagingMaterialTotalWeight: number | null;
+} & FormProductQtyAmt &
+  FormProductWeight;
 
 export interface PostDeliveryChallan {
-  deliveryCType: "customer" | "cc-dc stock transfer" | "dc-dc stock transfer" | "other",
-  otherCType: string | null,
-  grnNo: string | null,
-  companyName: string | null,
-  offices: string | null,
-  poNumber: string | null,
-  partyName: string | null,
-  fromLocation: string | Address | null,
-  toLocation: string | Address | null,
-  fromLocationInput: Address | null,
-  toLocationInput: Address | null,
-  deliveryChallanProducts: DeliveryChallanProducts[],
-  totalAmt: string | null,
-  totalAmtInWords: string | null,
-  driverName: string | null,
-  licenseNo: string | null,
-  contactNo: string | null,
-  altContactNo: string | null,
-  vehicleNo: string | null,
-  receiverName: string | null,
-  remark: string | null,
-  rmn: string | null,
-  anyAttachment: File | null,
+  deliveryCType:
+    | 'customer'
+    | 'cc-dc stock transfer'
+    | 'dc-dc stock transfer'
+    | 'other';
+  otherCType: string | null;
+  grnNo: string | null;
+  companyName: string | null;
+  offices: string | null;
+  poNumber: string | null;
+  partyName: string | null;
+  fromLocation: string | null;
+  toLocation: string | null;
+  fromLocationInput: Address | null;
+  toLocationInput: Address | null;
+  deliveryChallanProducts: DeliveryChallanProducts[];
+  netProductWeight: number | null;
+  netPackagingMaterialWeight: number | null;
+  totalPackagingMaterialAmount: number | null;
+  totalProductAmount: number | null;
+  totalAmtInWords: string | null;
+  driverName: string | null;
+  licenseNo: string | null;
+  contactNo: string | null;
+  altContactNo: string | null;
+  vehicleNo: string | null;
+  receiverName: string | null;
+  remark: string | null;
+  rmn: string | null;
+  anyAttachment: File | null;
 }
 
 export interface GetDeliveryChallan {
-  id: string,
-  createdDate: string,
-  createdTime: string,
+  id: string;
+  createdDate: string;
+  createdTime: string;
   requestedBy: RequestedBy;
   requestingDepartment: string;
   challanNo: string;
-  deliveryCType: string | null,
-  otherCType: string | null,
-  grnNo: string | null,
-  companyName: string | null,
-  offices: string | null,
-  poNumber: string | null,
-  partyName: string | null,
-  fromLocation: string | Address | null,
-  toLocation: string | Address | null,
-  deliveryChallanProducts: GetDeliveryChallanProducts[],
-  totalAmt: string | null,
-  totalAmtInWords: string | null,
-  driverName: string | null,
-  licenseNo: string | null,
-  contactNo: string | null,
-  altContactNo: string | null,
-  vehicleNo: string | null,
-  receiverName: string | null,
-  remark: string | null,
-  rmn: string | null,
-  anyAttachment: string,
+  deliveryCType:
+    | 'customer'
+    | 'cc-dc stock transfer'
+    | 'dc-dc stock transfer'
+    | 'other';
+  otherCType: string | null;
+  grnNo: { id: string; grnNo: string } | null;
+  companyName: { id: string; companyName: string } | null;
+  offices: { id: string; name: string } | null;
+  poNumber: string | null;
+  partyName: { id: string; organizationName: string } | string | null;
+  fromLocation: { id: string; name: string } | null;
+  toLocation: { id: string; name: string } | null;
+  fromLocationInput: Address | null;
+  toLocationInput: Address | null;
+  deliveryChallanProducts: GetDeliveryChallanProducts[];
+  netProductWeight: number | null;
+  totalPackagingMaterialAmount: number | null;
+  netPackagingMaterialWeight: number | null;
+  totalProductAmount: number | null;
+  totalAmtInWords: string | null;
+  driverName: string | null;
+  licenseNo: string | null;
+  contactNo: string | null;
+  altContactNo: string | null;
+  vehicleNo: string | null;
+  receiverName: string | null;
+  remark: string | null;
+  rmn: string | null;
+  anyAttachment: File | null;
 }
 
 export interface GetAllChallanNumbers {

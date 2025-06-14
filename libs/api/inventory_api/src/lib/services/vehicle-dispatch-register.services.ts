@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetVehicleDispatchRegister, PostVehicleDispatchRegister } from "../models";
 import { inventoryApiUrl } from "../constants";
 
@@ -14,8 +14,8 @@ export class VehicleDispatchRegisterServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllVehicleDispatchRegisters(): Promise<ApiBaseState<GetVehicleDispatchRegister[]>> {
-        const url = inventoryApiUrl.GET_ALL_VEHICLE_DISPATCH_REGISTERS;
+    getAllVehicleDispatchRegisters(queryParams?: QueryParams): Promise<ApiBaseState<GetVehicleDispatchRegister[]>> {
+        const url = inventoryApiUrl.GET_ALL_VEHICLE_DISPATCH_REGISTERS(queryParams);
         return this.get(url);
     }
 

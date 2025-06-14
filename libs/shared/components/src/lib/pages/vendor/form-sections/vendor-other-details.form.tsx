@@ -3,9 +3,13 @@ import { PostVendor } from "@prime-fresh/admin_api";
 import { sharedData } from "@prime-fresh/shared/modules";
 import { FileUpload, MultipleTextInput, RadioGroupInput, SelectInput, TextInput } from "@prime-fresh/ui_shared";
 import { useFormikContext } from "formik";
+import { useMemo } from "react";
 
 export const VendorOtherDetails = () => {
     const { values, handleChange, setFieldValue } = useFormikContext<PostVendor>();
+    const disableGSTNinfo = useMemo(() => values.ifGstnCopy === false || String(values.ifGstnCopy) === "false"  ? true : false, [values.ifGstnCopy]);
+    const disablePANinfo = useMemo(() => values.ifPanCardCopy === false || String(values.ifPanCardCopy) === "false"  ? true : false, [values.ifPanCardCopy]);
+    const disableMSMEinfo = useMemo(() => values.ifMsmeCopy === false || String(values.ifMsmeCopy) === "false"  ? true : false, [values.ifMsmeCopy]);
     return (
         <Grid2 container spacing={1}>
             <Grid2 size={{ xs: 12 }}>
@@ -13,7 +17,7 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="listOfAllProducts"
                     label="List Of All Products"
-                    values={values.listOfAllProducts}
+                    values={values.listOfAllProducts || []}
                     setFieldValue={setFieldValue} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
@@ -22,7 +26,7 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="mainProduct"
                     label="Main Products To Be Supplied"
-                    value={values.mainProduct}
+                    value={values.mainProduct || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -32,7 +36,7 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="dispatchCenter"
                     label="Dispatch Center"
-                    value={values.dispatchCenter}
+                    value={values.dispatchCenter || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -42,7 +46,7 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="warehouseLocations"
                     label="Warehouse Locations"
-                    value={values.warehouseLocations}
+                    value={values.warehouseLocations || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -52,7 +56,7 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="packingCenterLocation"
                     label="Packing Center Location"
-                    value={values.packingCenterLocation}
+                    value={values.packingCenterLocation || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -72,13 +76,15 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="gstn"
                     label="GSTN (if available)"
-                    value={values.gstn}
+                    value={values.gstn || ''}
                     handleChange={handleChange}
+                    isReadOnly={disableGSTNinfo}
                 />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 5 }}>
                 <FileUpload
                     isRequired={false}
+                    isReadOnly={disableGSTNinfo}
                     name="gstnCopy"
                     label="GST Regn. Cert. Copy (if available)" />
             </Grid2>
@@ -96,15 +102,17 @@ export const VendorOtherDetails = () => {
                 <TextInput
                     type="text"
                     isRequired={false}
+                    isReadOnly={disablePANinfo}
                     name="panNo"
                     label="PAN Number (if available)"
-                    value={values.panNo}
+                    value={values.panNo || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 5 }}>
                 <FileUpload
                     isRequired={false}
+                    isReadOnly={disablePANinfo}
                     name="panCardCopy"
                     label="PAN Card Copy (if available)" />
             </Grid2>
@@ -122,15 +130,17 @@ export const VendorOtherDetails = () => {
                 <TextInput
                     type="text"
                     isRequired={false}
+                    isReadOnly={disableMSMEinfo}
                     name="msmeNo"
                     label="MSME Number (if available)"
-                    value={values.msmeNo}
+                    value={values.msmeNo || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 5 }}>
                 <FileUpload
                     isRequired={false}
+                    isReadOnly={disableMSMEinfo}
                     name="msmeCopy"
                     label="UDYAM (MSME) Card Copy (if available)" />
             </Grid2>
@@ -140,7 +150,7 @@ export const VendorOtherDetails = () => {
                     isRequired={false}
                     name="tradeLicenseNumber"
                     label="Trade License Number"
-                    value={values.tradeLicenseNumber}
+                    value={values.tradeLicenseNumber || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -172,7 +182,7 @@ export const VendorOtherDetails = () => {
                     maxRows={4}
                     name="anyDetailsTeamAndInfra"
                     label="Any Other Details Regarding Team And Infrastructure"
-                    value={values.anyDetailsTeamAndInfra}
+                    value={values.anyDetailsTeamAndInfra || ''}
                     handleChange={handleChange}
                 />
             </Grid2>

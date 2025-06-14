@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { Grid2, Box, Typography, Button } from '@mui/material';
 import { useFormikContext } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { ADMIN_ROUTES, setSelectedFarmerPartialData, setSelectedVendorPartialData } from '@prime-fresh/admin/modules';
-import { FormikAutocomplete, RadioGroupInput } from '../auto_form/components';
+import { setSelectedFarmerPartialData, setSelectedVendorPartialData } from '@prime-fresh/admin/modules';
+import { FormikAutocomplete, RadioGroupInput } from '../form';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
 import { VendorReadOnlyFields } from './vendor-readonly-fields';
 import { FarmerReadOnlyFields } from './farmer-readonly-fields';
-import { debounce, useGetFarmersPartialDataById, useGetVendorsPartialDataById, useSearchFarmerData, useSearchVendorData } from '@prime-fresh/shared/modules';
+import { debounce, sharedRoutes, useGetFarmersPartialDataById, useGetVendorsPartialDataById, useSearchFarmerData, useSearchVendorData } from '@prime-fresh/shared/modules';
 import { FarmerPartialData, VendorPartialData } from '@prime-fresh/common_api';
+import { SectionHeader } from './section-header';
 
 export const VendorFarmerInfo = <T extends { source: 'vendor' | 'farmer'; selectedParty: string | null }>({
   source,
@@ -60,11 +62,7 @@ export const VendorFarmerInfo = <T extends { source: 'vendor' | 'farmer'; select
   return (
     <>
       <Grid2 size={{ xs: 12 }} marginY={2}>
-        <Box sx={{ width: '100%', borderBottom: '1px solid #BDBDBD' }}>
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-            Vendor / Farmer Information
-          </Typography>
-        </Box>
+        <SectionHeader sectionHeader='Vendor / Farmer Information' />
       </Grid2>
       <Grid2 size={{ xs: 12 }} sx={{ display: 'flex', alignItems: 'center' }}>
         <RadioGroupInput
@@ -114,7 +112,7 @@ export const VendorFarmerInfo = <T extends { source: 'vendor' | 'farmer'; select
             If {values.source === 'vendor' ? 'Vendor' : 'Farmer'} Not Found{' '}
             <Button
               variant="text"
-              onClick={() => navigate(values.source === 'vendor' ? ADMIN_ROUTES.CREATE_VENDOR : ADMIN_ROUTES.CREATE_FARMER)}
+              onClick={() => navigate(values.source === 'vendor' ? sharedRoutes.CREATE_VENDOR : sharedRoutes.CREATE_FARMER)}
             >
               Click Here
             </Button>

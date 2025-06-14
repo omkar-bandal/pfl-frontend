@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetOffices, OfficeType } from "@prime-fresh/admin_api";
+import { GetOffices, OfficeType, PostOffices } from "@prime-fresh/admin_api";
 
 type OfficesDataState = {
     offices: GetOffices[],
     officeType: OfficeType,
     selectedOffices: GetOffices | undefined,
+    officeFormPreview: PostOffices | null,
 }
 
 const initialState: OfficesDataState = {
     offices: [],
     officeType: OfficeType["registered-office"],
-    selectedOffices: undefined
+    selectedOffices: undefined,
+    officeFormPreview: null,
 }
 const officesDataSlice = createSlice({
     name: "officesData",
@@ -23,12 +25,14 @@ const officesDataSlice = createSlice({
         setOfficeType: (state, action: PayloadAction<OfficeType>) => {
             state.officeType = action.payload;
         },
+        setOfficeFormPreview: (state, action: PayloadAction<PostOffices>) => {
+            state.officeFormPreview = action.payload;
+        }
     }
 })
 
-export const { setOfficesData, setOfficeType } = officesDataSlice.actions;
+export const { setOfficesData, setOfficeType, setOfficeFormPreview } = officesDataSlice.actions;
 
-export const officesDataState = (state: RootState) => state.officesData;
-
+export const officesDataStates = (state: RootState) => state.officesData;
 
 export const officesDataReducer = officesDataSlice.reducer;

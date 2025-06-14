@@ -1,11 +1,4 @@
 export const purchaseOptionsConstants = {
-    companyNames: [
-        { value: "prime fresh limited", label: "Prime Fresh Limited" },
-        { value: "florens fresh supply solutions pvt.ltd.", label: "Florens Fresh Supply Solutions Pvt.Ltd." },
-        { value: "florens farming private limited", label: "Florens Farming Private Limited" },
-        { value: "prime fresh retail (i) private limited", label: "Prime Fresh Retail (I) Private Limited" },
-        { value: "vyankteshprime fresh farmers producer company limited", label: "VyankteshPrime Fresh Farmers Producer Company Limited" }
-    ],
     source: [
         { value: "vendor", label: "Vendor" },
         { value: "farmer", label: "Farmer" },
@@ -23,6 +16,12 @@ export const purchaseOptionsConstants = {
         { value: "cc-dc stock transfer", label: "CC-DC Stock Transfer" },
         { value: "dc-dc stock transfer", label: "DC-DC Stock Transfer" },
         { value: "other", label: "Other" },
+    ],
+    stockTransferType: [
+        { value: "cc-dc stock transfer", label: "From CC To DC" },
+        { value: "dc-cc stock transfer", label: "From DC To CC" },
+        { value: "cc-cc stock transfer", label: "From CC To CC" },
+        { value: "dc-dc stock transfer", label: "From DC To DC" },
     ],
     locationTypes: [
         { value: "cc", label: "CC" },

@@ -1,15 +1,22 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
-import { GetMCvoucher } from '@prime-fresh/purchase_api'
+import { IMultiCashVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES, useGetAllMultiCashVouchers } from '@prime-fresh/purchase/modules'
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom'
 import { useMCVoucherColumns } from './multi-cash-voucher.columns'
+import { usePermission } from '@prime-fresh/modules';
 
 export const MultipleCashVoucherTable = () => {
     const navigate = useNavigate();
-    const mcVoucherColumns = useMCVoucherColumns();
+    const { canEdit, canView } = usePermission('multi-cash-voucher');
+    const mcVoucherColumns = useMCVoucherColumns(canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
@@ -17,8 +24,15 @@ export const MultipleCashVoucherTable = () => {
         handleOpenColumnVisibilityPanel
     } = useDataTable({columnDef: mcVoucherColumns, initialPageSize: 10});
 
-    const { data, isLoading, isError, error } = useGetAllMultiCashVouchers();
-    const allMCVouchers = data?.data ? data.data : [];
+    const { data, isLoading, isError, error } = useGetAllMultiCashVouchers(queryParams);
+    const allMCVouchers = data ? data : null;
+    const rowCountRef = React.useRef(allMCVouchers?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (allMCVouchers?.allRecords !== undefined) {
+            rowCountRef.current = allMCVouchers.allRecords;
+        }
+        return rowCountRef.current;
+    }, [allMCVouchers]);
 
     React.useEffect(() => {
         if (isError) {
@@ -47,12 +61,18 @@ export const MultipleCashVoucherTable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetMCvoucher>
-                mode="client"
-                loading={isLoading}
-                rows={allMCVouchers}
-                columns={mcVoucherColumns}
-                columnVisibilityModel={columnVisibilityModel}
+            <DataGridTable<IMultiCashVoucher>
+               loading={isLoading}
+               rows={allMCVouchers?.data || []}
+               columns={mcVoucherColumns}
+               mode="server"
+               initialPageSize={10}
+               totalRows={rowCount}
+               paginationModel={paginationModel}
+               onPaginationModelChange={handlePaginationChange}
+               sortModel={sortModel}
+               onSortModelChange={handleSortingChange}
+               columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

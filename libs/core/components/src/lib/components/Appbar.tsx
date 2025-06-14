@@ -1,83 +1,135 @@
 import * as React from 'react';
-import { AppBar, Typography, IconButton, Box, MenuItem, Menu, ListItemIcon, Divider } from '@mui/material';
+import { AppBar, IconButton, Box, Badge } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useDispatch } from 'react-redux';
-import { authRouteConstants, isClosingState, mobileOpenState, setMobileOpen, useActions, useAppSelector } from '@prime-fresh/modules';
-import { Logout, Settings } from '@mui/icons-material';
+import {
+  authRouteConstants,
+  layoutStates,
+  setMobileOpen,
+  useActions,
+  useAppDispatch,
+  useAppSelector,
+} from '@prime-fresh/modules';
+import { AccountCircle, Logout, Notifications } from '@mui/icons-material';
 import { SignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
+import { socket } from '@prime-fresh/common_api';
+import { ProfileMenu } from './ProfileMenu';
+import { NotificationBox } from './NotificationBox';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isClosing = useAppSelector(isClosingState);
-  const mobileOpen = useAppSelector(mobileOpenState);
-  const username = convertInTitleCase(localStorage.getItem('userName') || "");
-  const { setLoggedInUserInfo } = useActions();
+  const { mobileOpen, isSidebarClosing } = useAppSelector(layoutStates);
+  const username = convertInTitleCase(localStorage.getItem('userName') || '');
+  const { setLoggedInUserInfo, setEmployeeLevel, setEmployeePermissions } = useActions();
+
+  React.useEffect(() => {
+    console.log('Appbar useEffect running...');
+    socket.on('newNotification', (data: { message: string; userId: string }) => {
+      console.log('incoming notification', data.message);
+      console.log('on socketid: ', data.userId);
+    });
+  }, []);
 
   const handleDrawerToggle = () => {
-    if (!isClosing) {
+    if (!isSidebarClosing) {
       dispatch(setMobileOpen(!mobileOpen));
     }
   };
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+
+  const [profileMenuAnchorEl, setProfileMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openProfileMenu = Boolean(profileMenuAnchorEl);
+
+  const [notificationBoxAnchorEl, setNotificationBoxAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openNotificationBox = Boolean(notificationBoxAnchorEl);
+
+  const handleOpenProfileMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileMenuAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+
+  const handleCloseProfileMenu = () => {
+    setProfileMenuAnchorEl(null);
+  };
+
+  const handleOpenNotificationBox = (event: React.MouseEvent<HTMLElement>) => {
+    setNotificationBoxAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseNotificationBox = () => {
+    setNotificationBoxAnchorEl(null);
   };
 
   const { mutateAsync, isError, error } = useSignOut();
 
   const handleLogout = () => {
-
     const accessToken = localStorage.getItem('access_token');
     const refreshToken = localStorage.getItem('refresh_token');
 
     if (accessToken && refreshToken) {
-
       const tokens: SignOutRequest = {
         access_token: accessToken,
         refresh_token: refreshToken,
-      }
+      };
 
       mutateAsync(tokens)
         .then(() => {
           localStorage.clear();
           setLoggedInUserInfo(null);
-          handleClose();
+          setEmployeeLevel(null);
+          setEmployeePermissions(null);
+          handleCloseProfileMenu();
           navigate(authRouteConstants.SIGN_IN);
         })
         .catch(() => {
           if (isError) {
             localStorage.clear();
             setLoggedInUserInfo(null);
-            toast.error(error ? error.message : "Error while logout");
-            navigate(authRouteConstants.SIGN_IN)
+            setEmployeeLevel(null);
+            setEmployeePermissions(null);
+            toast.error(error ? error.message : 'Error while logout');
+            navigate(authRouteConstants.SIGN_IN);
           }
-        })
+        });
     } else {
-      throw new Error("Unable to logout please refresh the page.")
+      throw new Error('Unable to logout please refresh the page.');
     }
-  }
-
+  };
+  const notifications = [
+    { message: 'You have a new message from John', timestamp: 'just now' },
+    { message: 'System will be updated at midnight', timestamp: '10:30 AM' },
+    { message: 'Your report has been generated successfully', timestamp: '10:45 AM' },
+    { message: 'Failed to sync data. Please try again', timestamp: '1:34 PM' },
+    { message: 'You have a new message from John', timestamp: 'just now' },
+    { message: 'System will be updated at midnight', timestamp: '10:30 AM' },
+    { message: 'Your report has been generated successfully', timestamp: '10:45 AM' },
+    { message: 'Failed to sync data. Please try again', timestamp: '1:34 PM' },
+  ];
+  const profileMenuOptions = [
+    {
+      label: 'Logout',
+      icon: <Logout />,
+      onClickFn: handleLogout,
+    },
+  ];
   return (
     <AppBar
       position="fixed"
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
-        height: 30,
+        height: 40,
         ml: { sm: `${drawerWidth}px` },
-        bgcolor: "#FFFFFF",
-        boxShadow: "none",
+        bgcolor: '#FFFFFF',
+        boxShadow: 'none',
         boxSizing: 'border-box',
       }}
     >
-      <Box width='100%' height='100%' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2 }}>
+      <Box
+        width="100%"
+        height="100%"
+        sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2 , paddingY: 1}}
+      >
         <IconButton
           color="primary"
           aria-label="open drawer"
@@ -87,66 +139,37 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
         >
           <MenuIcon />
         </IconButton>
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "end", alignItems: "center" }}>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
+          <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
+            <Badge badgeContent={notifications.length}  color="error">
+              <Notifications fontSize="medium" />
+            </Badge>
+          </IconButton>
           <IconButton
-            onClick={handleClick}
-            size="small"
+            onClick={handleOpenProfileMenu}
+            size="medium"
             sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
+            aria-controls={openProfileMenu ? 'profile-menu' : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
+            aria-expanded={openProfileMenu ? 'true' : undefined}
           >
-            <Settings fontSize='small' />
+            <AccountCircle fontSize="medium" />
           </IconButton>
         </Box>
-        <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          slotProps={{
-            paper: {
-              elevation: 0,
-              sx: {
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                '& .MuiAvatar-root': {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                '&::before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: 'background.paper',
-                  transform: 'translateY(-50%) rotate(45deg)',
-                  zIndex: 0,
-                },
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-          <Typography variant="body1" noWrap component="div" textAlign="center" sx={{ color: "#000", fontWeight: 600, padding: 1 }}>
-            {username}
-          </Typography>
-          <Divider />
-          <MenuItem onClick={handleLogout}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Menu>
+        <ProfileMenu
+          open={openProfileMenu}
+          anchorEl={profileMenuAnchorEl}
+          onClick={handleCloseProfileMenu}
+          onClose={handleCloseProfileMenu}
+          loggedInUsername={username}
+          menuoptions={profileMenuOptions}
+        />
+        <NotificationBox
+          open={openNotificationBox}
+          anchorEl={notificationBoxAnchorEl}
+          onClose={handleCloseNotificationBox}
+          notifications={notifications}
+        />
       </Box>
     </AppBar>
   );

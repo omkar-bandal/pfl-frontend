@@ -21,7 +21,7 @@ export const CustomerStatutoryDetails = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <FileUpload
                     isRequired={false}
-                    name="statutoryDetails.panCopy"
+                    name="panCopy"
                     label="Copy of PAN Card" />
             </Grid2>
              <Grid2 size={{ xs: 12, md: 3 }}>
@@ -37,7 +37,7 @@ export const CustomerStatutoryDetails = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <FileUpload
                     isRequired={false}
-                    name="statutoryDetails.aadharCopy"
+                    name="aadharCopy"
                     label="Copy of Aadhar Card" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
@@ -53,7 +53,7 @@ export const CustomerStatutoryDetails = () => {
             <Grid2 size={{ xs: 12, md: 4 }}>
                 <FileUpload
                     isRequired={false}
-                    name="statutoryDetails.regiCertificateCopy"
+                    name="regiCertificateCopy"
                     label="Copy of Registration certificate" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
@@ -69,13 +69,13 @@ export const CustomerStatutoryDetails = () => {
             <Grid2 size={{ xs: 12 }}>
                 <FileUpload
                     isRequired={false}
-                    name="statutoryDetails.incorpoCertificateCopy"
+                    name="incorpoCertificateCopy"
                     label="Copy of incorporation certificate duly signed by the director if it is a corporate client" />
             </Grid2>
             <Grid2 size={{ xs: 12 }}>
                 <FileUpload
                     isRequired={false}
-                    name="statutoryDetails.billBookCopy"
+                    name="billBookCopy"
                     label="Copy of Bill Book or Bilty attached" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>

@@ -26,7 +26,7 @@ export function useDeleteOfficeById(id: string, officeType: string):
     });
 }
 
-export function useGetAllOffices(officeType: string, queryParams: QueryParams):
+export function useGetAllOffices(officeType: string, queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetOffices[]>, ErrorModel> {
         const enabled = officeType.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetOffices[]>, ErrorModel>({

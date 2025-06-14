@@ -1,25 +1,40 @@
 import React from "react";
 import { Box, Grid2 } from "@mui/material";
 import { inventoryRouteConstants, useGetAllDumpRegisters } from "@prime-fresh/inventory/modules";
-import { GetDumpRegister } from "@prime-fresh/inventory_api";
+import { IDumpRegister } from "@prime-fresh/inventory_api";
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 import { useDumpRegisterColumns } from "./dump-register.column";
+import { usePermission } from "@prime-fresh/modules";
+
 
 export const DumpRegisterTable = () => {
     const navigate = useNavigate();
-    const dumpRegisterColumns = useDumpRegisterColumns();
+    const { canEdit, canView } = usePermission('dump-register');
+    const dumpRegisterColumns = useDumpRegisterColumns(canEdit, canView);
     const { 
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
-        handleOpenColumnVisibilityPanel,
-        paginationModel,
-        setPaginationModel
+        handleOpenColumnVisibilityPanel
     } = useDataTable({ columnDef: dumpRegisterColumns, initialPageSize: 10 });
-    const { data, isLoading, isError, error } = useGetAllDumpRegisters();
-    const dumps = data?.data ? data.data : [];
+
+    const { data, isLoading, isError, error } = useGetAllDumpRegisters(queryParams);
+
+    const dumps = data ? data : null;
+    const rowCountRef = React.useRef(dumps?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (dumps?.allRecords !== undefined) {
+            rowCountRef.current = dumps.allRecords;
+        }
+        return rowCountRef.current;
+    }, [dumps]);
     console.log(dumps);
     React.useEffect(() => {
         if (isError) {
@@ -50,14 +65,18 @@ export const DumpRegisterTable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetDumpRegister>
-                mode="client"
+            <DataGridTable<IDumpRegister>
                 loading={isLoading}
-                rows={dumps}
+                rows={dumps?.data || []}
                 columns={dumpRegisterColumns}
-                columnVisibilityModel={columnVisibilityModel}
+                mode="server"
+                initialPageSize={10}
+                totalRows={rowCount}
                 paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
+                onPaginationModelChange={handlePaginationChange}
+                sortModel={sortModel}
+                onSortModelChange={handleSortingChange}
+                columnVisibilityModel={columnVisibilityModel}
             />
         </Box >
     )

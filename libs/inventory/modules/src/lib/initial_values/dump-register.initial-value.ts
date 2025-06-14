@@ -1,18 +1,25 @@
-import { PostDumpProducts, PostDumpRegister } from "@prime-fresh/inventory_api"
+import { IDumpProducts, IDumpRegister } from "@prime-fresh/inventory_api"
 
-export const dumpProductsInitialValue: PostDumpProducts = {
-    product: "",
-    uom: "",
-    quantity: 0,
-    dumpCost: 0,
+export const dumpProductsInitialValue: IDumpProducts = {
+    productName: null,
+    origin: null,
+    variety: null,
+    count: null,
+    size: null,
+    uom: null,
+    quantity: null,
+    unitPrice: null,
+    amount: null
 }
 
-export const dumpRegisterInitialValue: PostDumpRegister = {
-    companyName: "",
-    location: "",
-    date: "",
-    batchNo: "",
-    grn: "",
+export const dumpRegisterInitialValue: Omit<IDumpRegister, 'id'> = {
+    companyName: null,
+    location: null,
+    date: null,
+    batchNo: null,
+    grn: null,
     dumpProducts: [dumpProductsInitialValue],
-    remark: "",
+    totalDumpCost: null,
+    totalCostInWords: null,
+    remark: null,
 }

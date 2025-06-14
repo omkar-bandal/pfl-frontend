@@ -1,23 +1,37 @@
 import React from 'react'
 import { Box, Grid2 } from '@mui/material'
-import { GetTPvoucher } from '@prime-fresh/purchase_api'
+import { ITranportPaymentVoucher } from '@prime-fresh/purchase_api'
 import { PURCHASE_ROUTES, useGetAllTransportPaymentVouchers } from '@prime-fresh/purchase/modules'
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from 'react-router-dom'
 import { useTPVoucherColumns } from './transport-payment-voucher.columns'
+import { usePermission } from '@prime-fresh/modules';
 
 export const TransportPaymentVoucherTable = () => {
     const navigate = useNavigate();
-    const tpVoucherColumns = useTPVoucherColumns();
+    const { canEdit, canView } = usePermission('transport-payment-voucher');
+    const tpVoucherColumns = useTPVoucherColumns(canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
     } = useDataTable({ columnDef: tpVoucherColumns, initialPageSize: 10 });
-    const { data, isLoading, isError, error } = useGetAllTransportPaymentVouchers();
-    const allTPVouchers = data?.data ? data.data : [];
+    const { data, isLoading, isError, error } = useGetAllTransportPaymentVouchers(queryParams);
+    const allTPVouchers = data ? data : null;
+    const rowCountRef = React.useRef(allTPVouchers?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (allTPVouchers?.allRecords !== undefined) {
+            rowCountRef.current = allTPVouchers.allRecords;
+        }
+        return rowCountRef.current;
+    }, [allTPVouchers]);
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -45,12 +59,18 @@ export const TransportPaymentVoucherTable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetTPvoucher>
-                mode="client"
-                loading={isLoading}
-                rows={allTPVouchers}
-                columns={tpVoucherColumns}
-                columnVisibilityModel={columnVisibilityModel}
+            <DataGridTable<ITranportPaymentVoucher>
+                 loading={isLoading}
+                 rows={allTPVouchers?.data || []}
+                 columns={tpVoucherColumns}
+                 mode="server"
+                 initialPageSize={10}
+                 totalRows={rowCount}
+                 paginationModel={paginationModel}
+                 onPaginationModelChange={handlePaginationChange}
+                 sortModel={sortModel}
+                 onSortModelChange={handleSortingChange}
+                 columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

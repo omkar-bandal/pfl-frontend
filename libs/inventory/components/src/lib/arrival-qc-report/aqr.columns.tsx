@@ -1,10 +1,12 @@
-import { Edit, Preview } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { GridRenderCellParams } from "@mui/x-data-grid";
+import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
+import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const useAQRColumns = (): CustomGridColDef[] => {
-    return useMemo(()=>[
+export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
+    const navigate = useNavigate();
+    return useMemo(() => [
         {
             field: "supplierName",
             headerName: "Supplier Name",
@@ -61,31 +63,43 @@ export const useAQRColumns = (): CustomGridColDef[] => {
             width: 300,
             valueGetter: (value: string) => value ? value : "-",
         },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 80,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: () => (
-                <IconButton aria-label="edit">
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            width: 80,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: () => (
-                <IconButton aria-label="edit">
-                    <Preview color="primary" />
-                </IconButton>
-            ),
-        },
-    ],[])
+        ...(canEdit
+            ? [
+                {
+                  field: 'edit',
+                  headerName: 'Edit',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <EditIconBtn
+                      onClick={() =>
+                        navigate(`${inventoryRouteConstants.UPDATE_AQR}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(canView
+            ? [
+                {
+                  field: 'view',
+                  headerName: 'View',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <ViewIconBtn
+                      onClick={() =>
+                        navigate(`${inventoryRouteConstants.VIEW_AQR}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+    ], [canEdit, canView, navigate])
 }

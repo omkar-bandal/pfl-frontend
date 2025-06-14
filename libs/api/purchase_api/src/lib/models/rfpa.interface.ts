@@ -1,21 +1,16 @@
-import { RequestedBy } from "./requestedBy.interface";
+import { FormProductQtyAmt, FormProducts, FormProductUoM } from "@prime-fresh/common_api";
 
+export type RFPASourceType = 'vendor' | 'farmer';
 
-export interface RFPA_Items {
-    product: string | null;
+export interface IRFPAProducts extends FormProducts, FormProductUoM, FormProductQtyAmt {
     grade: string | null;
-    quantity: number | null;
-    uom: string | null;
-    unitPrice: number | null;
-    totalVal: number | null;
-    description: string | null;
     purchaseDate: string | null;
     dispatchDate: string | null;
     deliveryDate: string | null;
     deliveryLocation: string | null;
     expectedHarvestDate?: string | null;
 }
-export interface Payment_Info {
+export interface IPaymentInfo {
     paymentMode: string | null;
     creditPeriod: number | null;
     paymentDate: string | null;
@@ -24,45 +19,30 @@ export interface Payment_Info {
     advancePaidAmt: number | null;
     validityofQuote: string | null;
 }
-export interface PostRFPA {
+
+export interface IRFPA {
+    id: string;
+    rfpaId?: string;
+    createdDate?: string;
+    createdTime?: string;
+    requestedBy?: string;
+    requestingDepartment?: string;
+    baseLocation?: string;
     companyName: string | null;
     purchaseLocation: string | null;
     otherPurchaseLoc: string | null;
     purchaseForSalesLocation: string | null;
     otherPurchaseForSalesLoc: string | null;
     specialReq: string | null;
-    source: "vendor" | "farmer";
+    source: RFPASourceType;
     selectedParty: string | null;
-    rfpaProducts: RFPA_Items[];
-    paymentInfo: Payment_Info;
+    rfpaProducts: IRFPAProducts[];
+    paymentInfo: IPaymentInfo;
     deliveryReceivingPerson: string | null;
     validityOfQuote: string | null;
     packingInstruction: string | null;
     remark: string | null;
-}
-export interface GetRFPA {
-    id: string;
-    rfpaId?: string;
-    createdDate?: string;
-    createdTime?: string;
-    requestedBy?: RequestedBy;
-    requestingDepartment?: string;
-    baseLocation?: string;
-    companyName: { id: string, companyName: string };
-    purchaseLocation: string;
-    otherPurchaseLoc: string
-    purchaseForSalesLocation: string;
-    otherPurchaseForSalesLoc: string
-    specialReq: string;
-    source: "vendor" | "farmer";
-    selectedParty: string | null;
-    rfpaProducts: RFPA_Items[];
-    paymentInfo: Payment_Info;
-    deliveryReceivingPerson: string;
-    validityOfQuote: string;
-    packingInstruction: string;
-    remark: string;
-    approvalStatus?: string;
+    approvalStatus?: string | null;
 }
 
 export interface ChangeStatusResponse {

@@ -11,22 +11,22 @@ export const CustomerDeliveryDetails = () => {
                 <SectionHeader sectionHeader="Delivery Address" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.address1" label="Address Line 1" value={values.deliveryDetails.deliveryAddress.address1} handleChange={handleChange} />
+                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.address1" label="Address Line 1" value={values.deliveryDetails.deliveryAddress?.address1 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="deliveryDetails.deliveryAddress.address2" label="Address Line 2" value={values.deliveryDetails.deliveryAddress.address2} handleChange={handleChange} />
+                <TextInput isRequired={false} name="deliveryDetails.deliveryAddress.address2" label="Address Line 2" value={values.deliveryDetails.deliveryAddress?.address2 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.location" label="Location" value={values.deliveryDetails.deliveryAddress.location} handleChange={handleChange} />
+                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.location" label="Location" value={values.deliveryDetails.deliveryAddress?.location || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.city" label="City" value={values.deliveryDetails.deliveryAddress.city} handleChange={handleChange} />
+                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.city" label="City" value={values.deliveryDetails.deliveryAddress?.city || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.state" label="State" value={values.deliveryDetails.deliveryAddress.state} handleChange={handleChange} />
+                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.state" label="State" value={values.deliveryDetails.deliveryAddress?.state || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.pincode" label="Pincode" value={values.deliveryDetails.deliveryAddress.pincode} handleChange={handleChange} />
+                <TextInput isRequired={true} name="deliveryDetails.deliveryAddress.pincode" label="Pincode" value={values.deliveryDetails.deliveryAddress?.pincode || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12 }} marginY={1}>
                 <SectionHeader sectionHeader="Receiving Person's Details" />
@@ -58,7 +58,7 @@ export const CustomerDeliveryDetails = () => {
             <Grid2 size={{ xs: 12 }}>
                 <FileUpload
                     isRequired={false}
-                    name="deliveryDetails.deliveryAddressProofCopy"
+                    name="deliveryAddressProofCopy"
                     label="Copy of proof of delivery address" />
             </Grid2>
         </Grid2>

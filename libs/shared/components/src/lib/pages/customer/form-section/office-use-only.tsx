@@ -134,7 +134,7 @@ export const CustomerOfficeUseOnly = () => {
             <Grid2 size={{ xs: 12, md: 4 }}>
                 <SelectInput
                     isRequired={false}
-                    name="paymentTerms.creditWorthinessDue"
+                    name="officeUseOnly.creditWorthinessDue"
                     label="Renewal of Credit Worthiness Due"
                     options={sharedData.creditWorthinessDue}
                     value={values.officeUseOnly.creditWorthinessDue}
@@ -153,7 +153,7 @@ export const CustomerOfficeUseOnly = () => {
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
                 <TextInput
-                    type="text"
+                    type="date"
                     isRequired={false}
                     name="officeUseOnly.sinceWhen"
                     label="Since When"

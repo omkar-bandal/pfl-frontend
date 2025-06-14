@@ -26,7 +26,7 @@ export function useDeleteBranchById(id: string, branchType: string):
     });
 }
 
-export function useGetAllBranches(branchType: string, queryParams: QueryParams):
+export function useGetAllBranches(branchType: string, queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetBranches[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetBranches[]>, ErrorModel>({
         queryKey: ['get-all-branchs', branchType, queryParams],

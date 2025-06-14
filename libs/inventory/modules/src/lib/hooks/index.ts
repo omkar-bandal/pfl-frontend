@@ -4,3 +4,5 @@ export * from "./second-sale-register.rq";
 export * from "./vehicle-dispatch-register.rq";
 export * from "./aqr.rq";
 export * from "./eod-report.rq";
+export * from "./labor-registration.rq";
+export * from "./proforma-invoices.rq";

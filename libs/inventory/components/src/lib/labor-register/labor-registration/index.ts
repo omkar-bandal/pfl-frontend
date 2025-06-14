@@ -1,2 +1,2 @@
 export * from './labor-register.table';
-export * from './labor-registration-create.form';
+export * from './labor-registration.form';

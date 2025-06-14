@@ -14,8 +14,8 @@ export class OfficeService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllOffice(officeType: string, {page, limit, sort}: QueryParams): Promise<ApiBaseState<GetOffices[]>> {
-        const url = adminApiUrlConstants.GET_ALL_OFFICES(officeType, {page, limit, sort});
+    getAllOffice(officeType: string, queryParams?: QueryParams): Promise<ApiBaseState<GetOffices[]>> {
+        const url = adminApiUrlConstants.GET_ALL_OFFICES(officeType, queryParams);
         return this.get(url);
     }
 

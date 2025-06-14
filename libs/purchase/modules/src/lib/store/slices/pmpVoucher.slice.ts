@@ -1,34 +1,27 @@
-import { GetPMPvoucher, PostPMPvoucher } from "@prime-fresh/purchase_api"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store.purchase";
+import { IPackingMaterialPaymentVoucher } from '@prime-fresh/purchase_api';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store.purchase';
 
 type pmpVoucherState = {
-    pmpVouchers: GetPMPvoucher[];
-    selectedPMPVoucher: GetPMPvoucher | undefined;
-    previewPMPVoucher: PostPMPvoucher | GetPMPvoucher | undefined;
-}
-const initialState : pmpVoucherState = {
-    pmpVouchers: [],
-    selectedPMPVoucher: undefined,
-    previewPMPVoucher: undefined,
-}
+  pmpVoucherFormPreview: Omit<IPackingMaterialPaymentVoucher, 'id'> | undefined;
+};
+const initialState: pmpVoucherState = {
+  pmpVoucherFormPreview: undefined,
+};
 
 const pmpVoucherSlice = createSlice({
-    name: "pmp_voucher",
-    initialState,
-    reducers: {
-        setPMPVouchers: (state, action: PayloadAction<GetPMPvoucher[]>) =>{
-            state.pmpVouchers = action.payload;
-        },
-        setSelectedPMPVoucher: (state, action: PayloadAction<GetPMPvoucher | undefined>) => {
-            state.selectedPMPVoucher = action.payload;
-        },
-        setPreviewPMPVoucher: (state, action: PayloadAction<PostPMPvoucher | GetPMPvoucher | undefined>) => {
-            state.previewPMPVoucher = action.payload;
-        }
-    }
-})
-export const {setPMPVouchers, setPreviewPMPVoucher, setSelectedPMPVoucher } = pmpVoucherSlice.actions;
+  name: 'pmp_voucher',
+  initialState,
+  reducers: {
+    setPMPVoucherFormPreview: (
+      state,
+      action: PayloadAction<Omit<IPackingMaterialPaymentVoucher, 'id'> | undefined>
+    ) => {
+      state.pmpVoucherFormPreview = action.payload;
+    },
+  },
+});
+export const { setPMPVoucherFormPreview } = pmpVoucherSlice.actions;
 
 export const pmpVoucherState = (state: RootState) => state.pmp_voucher;
 

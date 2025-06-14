@@ -4,9 +4,9 @@ import { PostCustomer } from "@prime-fresh/admin_api";
 import { mapToValueLabelArray, sharedData } from "@prime-fresh/shared/modules";
 import { SectionHeader, SelectInput, TextInput } from "@prime-fresh/ui_shared"
 import { useFormikContext } from "formik";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
-export const CustomerEmpanelment = () => {
+export const CustomerEmpanelment = memo(() => {
     const { values, handleChange } = useFormikContext<PostCustomer>();
 
     const { data: cat } = useGetAllCustomerCategories();
@@ -171,4 +171,4 @@ export const CustomerEmpanelment = () => {
             </Grid2>
         </Grid2>
     )
-}
+});

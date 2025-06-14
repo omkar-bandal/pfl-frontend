@@ -1,7 +1,6 @@
 // import { Employee } from "../../api/admin/models"
 import { useParams } from "react-router-dom";
 import { Box, LinearProgress } from "@mui/material";
-import { DataDisplay } from "@prime-fresh/ui_shared";
 import { useGetCustomerById } from "@prime-fresh/admin/modules";
 
 export const ViewCustomer = () => {
@@ -18,7 +17,7 @@ export const ViewCustomer = () => {
   }
   else {
     return (
-      <DataDisplay header="Customer Details" data={customer} />
+     <></>
     )
   }
 

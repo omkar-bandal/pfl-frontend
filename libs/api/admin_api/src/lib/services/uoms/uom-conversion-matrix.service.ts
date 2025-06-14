@@ -14,8 +14,8 @@ export class UOMConversionMatrixService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllUOMConversionMatrix({ page, limit, sort }: QueryParams):Promise<ApiBaseState<GetUOMConversionMatrix[]>> {
-        const url = adminApiUrlConstants.GET_ALL_UOM_CONVERSION({ page, limit, sort });
+    getAllUOMConversionMatrix(queryParams?: QueryParams):Promise<ApiBaseState<GetUOMConversionMatrix[]>> {
+        const url = adminApiUrlConstants.GET_ALL_UOM_CONVERSION(queryParams);
         return this.get(url);
     }
 

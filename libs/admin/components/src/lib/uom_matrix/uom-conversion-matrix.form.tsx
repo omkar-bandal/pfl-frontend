@@ -3,7 +3,7 @@ import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prim
 import { ADMIN_ROUTES, initValUOMConversionMatrix, uomConversionMatrixSchema, useCreateUOMConversionMatrix, useGetAllUOMs, useGetUOMConversionMatrixById, useUpdateUOMConversionMatrixById } from "@prime-fresh/admin/modules";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
-import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { mapToValueLabelArray, useGetUOMPartialData } from "@prime-fresh/shared/modules";
 
 export const UOMConvMatrixForm = () => {
     const { oid } = useParams<{ oid: string }>();
@@ -21,7 +21,7 @@ export const UOMConvMatrixForm = () => {
             toUOM: '',
         }
     const UOMsConvMatInitValue = uomConvMatId === '' ? initValUOMConversionMatrix : uomConvMatrix;
-    const { data: uoms } = useGetAllUOMs();
+    const { data: uoms } = useGetUOMPartialData();
     const allUoms = uoms !== null && uoms?.data ? uoms.data : [];
     const { mutateAsync: mutatePost, error: postError, data: postRes } = useCreateUOMConversionMatrix();
     const { mutateAsync: mutatePatch, error: patchError, data: patchRes } = useUpdateUOMConversionMatrixById(uomConvMatId);

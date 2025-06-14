@@ -14,8 +14,8 @@ export class ProductsService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllProducts({page, limit, sort}: QueryParams):Promise<ApiBaseState<GetProduct[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCTS({page, limit, sort});
+    getAllProducts(queryParams?: QueryParams):Promise<ApiBaseState<GetProduct[]>> {
+        const url = adminApiUrlConstants.GET_ALL_PRODUCTS(queryParams);
         return this.get(url);
     }
 

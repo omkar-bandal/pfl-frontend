@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { VehicleDispatchRegisterServices, PostVehicleDispatchRegister, GetVehicleDispatchRegister } from '@prime-fresh/inventory_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteVehicleDispatchRegisterById(id: string):
     });
 }
 
-export function useGetAllVehicleDispatchRegisters():
+export function useGetAllVehicleDispatchRegisters(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetVehicleDispatchRegister[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVehicleDispatchRegister[]>, ErrorModel>({
-        queryKey: ['get-all-vehicle-dispatch-registers'],
-        queryFn: () => VehicleDispatchRegisterServices.getInstance().getAllVehicleDispatchRegisters(),
+        queryKey: ['get-all-vehicle-dispatch-registers', queryParams],
+        queryFn: () => VehicleDispatchRegisterServices.getInstance().getAllVehicleDispatchRegisters(queryParams),
     });
 }
 

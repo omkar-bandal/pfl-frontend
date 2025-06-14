@@ -5,19 +5,33 @@ import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable
 import { useEODReportColumns } from './eod-report.column'
 import { useNavigate } from 'react-router-dom'
 import { inventoryRouteConstants, useGetAllEODReports } from '@prime-fresh/inventory/modules'
+import { usePermission } from '@prime-fresh/modules';
 
 export const EODReportTable = () => {
   const navigate = useNavigate();
-  const eodReportColumns = useEODReportColumns();
+  const { canEdit, canView } = usePermission('eod-report');
+  const eodReportColumns = useEODReportColumns(canEdit, canView);
   const {
+    paginationModel,
+    sortModel,
+    handleSortingChange,
+    handlePaginationChange,
+    queryParams,
     columnVisibilityModel,
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
     handleOpenColumnVisibilityPanel
   } = useDataTable({ columnDef: eodReportColumns });
-  const { data, isLoading, error, isError } = useGetAllEODReports();
-  const eods = data?.data ? data.data : [];
+  const { data, isLoading, error, isError } = useGetAllEODReports(queryParams);
+  const eods = data ? data : null;
+  const rowCountRef = React.useRef(eods?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (eods?.allRecords !== undefined) {
+            rowCountRef.current = eods.allRecords;
+        }
+        return rowCountRef.current;
+    }, [eods]);
 
   React.useEffect(() => {
     if (isError) {
@@ -48,11 +62,17 @@ export const EODReportTable = () => {
         </Grid2>
       </Grid2>
       <DataGridTable<GetEODReport>
-        mode="client"
-        loading={isLoading}
-        rows={eods}
-        columns={eodReportColumns}
-        columnVisibilityModel={columnVisibilityModel}
+         loading={isLoading}
+         rows={eods?.data || []}
+         columns={eodReportColumns}
+         mode="server"
+         initialPageSize={10}
+         totalRows={rowCount}
+         paginationModel={paginationModel}
+         onPaginationModelChange={handlePaginationChange}
+         sortModel={sortModel}
+         onSortModelChange={handleSortingChange}
+         columnVisibilityModel={columnVisibilityModel}
       />
     </Box >
   )

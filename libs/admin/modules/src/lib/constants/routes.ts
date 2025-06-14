@@ -108,11 +108,5 @@ export const ADMIN_ROUTES = {
     CREATE_BRANCHES: "/admin/locations/branches/create",
     EDIT_BRANCHES: "/admin/locations/branches/edit",
     VIEW_BRANCHES: "/admin/locations/branches/view",
-    
-    //Registeration
-    CREATE_CUSTOMER: "/create/customers",
-    CREATE_VENDOR: "/create/vendor",
-    CREATE_FARMER: "/create/farmer",
-    CREATE_PRODUCT: "/create/product",
-    
+     
 }

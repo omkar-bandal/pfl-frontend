@@ -1,17 +1,14 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, IconButton } from "@mui/material";
-import { AddCard, Edit, Preview } from "@mui/icons-material";
+import { AddCard } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
-import { RequestedBy } from "@prime-fresh/purchase_api";
-import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
 import { convertInTitleCase } from "@prime-fresh/shared/modules";
-import { useMemo } from "react";
 
-export const useGRNColumns = (): CustomGridColDef[] => {
+export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
     const navigate = useNavigate();
-
-    return useMemo(() => [
+    return [
         {
             field: "grnNo",
             headerName: "GRN Number",
@@ -52,28 +49,28 @@ export const useGRNColumns = (): CustomGridColDef[] => {
             headerAlign: "center",
             valueGetter: (value: string) => value ? value.toUpperCase() : "",
         },
-        {
-            field: "requestedBy",
-            headerName: "Requested By",
-            width: 150,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: RequestedBy) => value !== null ? convertInTitleCase(`${value.firstName || ''} ${value.lastName || ''}`) : "-",
-        },
-        {
-            field: "requestingDepartment",
-            headerName: "Department",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-        },
-        {
-            field: "baseLocation",
-            headerName: "Base Location",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
-        },
+        // {
+        //     field: "requestedBy",
+        //     headerName: "Requested By",
+        //     width: 150,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     valueGetter: (value: RequestedBy) => value !== null ? convertInTitleCase(`${value.firstName || ''} ${value.lastName || ''}`) : "-",
+        // },
+        // {
+        //     field: "requestingDepartment",
+        //     headerName: "Department",
+        //     width: 100,
+        //     align: "center",
+        //     headerAlign: "center",
+        // },
+        // {
+        //     field: "baseLocation",
+        //     headerName: "Base Location",
+        //     width: 100,
+        //     align: "center",
+        //     headerAlign: "center",
+        // },
         {
             field: "companyName",
             headerName: "Company",
@@ -148,31 +145,43 @@ export const useGRNColumns = (): CustomGridColDef[] => {
                 </IconButton>
             ),
         },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)}>
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.id}`)}>
-                    <Preview color="primary" />
-                </IconButton>
-            ),
-        },
-    ], [navigate])
+        ...(canEdit
+            ? [
+                {
+                  field: 'edit',
+                  headerName: 'Edit',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <EditIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(canView
+            ? [
+                {
+                  field: 'view',
+                  headerName: 'View',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <ViewIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+    ];
 }

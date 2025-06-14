@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
-import { LaborPaymentVoucherServices, GetLPvoucher } from '@prime-fresh/purchase_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { LaborPaymentVoucherServices, ILaborPaymentVoucher } from '@prime-fresh/purchase_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateLaborPaymentVoucher():
@@ -26,19 +26,40 @@ export function useDeleteLaborPaymentVoucherById(id: string):
     });
 }
 
-export function useGetAllLaborPaymentVouchers():
-    UseQueryResult<ApiBaseState<GetLPvoucher[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetLPvoucher[]>, ErrorModel>({
-        queryKey: ['get-all-labor-payment-vouchers'],
-        queryFn: () => LaborPaymentVoucherServices.getInstance().getAllLaborPaymentVouchers(),
+export function useGetAllLaborPaymentVouchers(queryParams?: QueryParams):
+    UseQueryResult<ApiBaseState<ILaborPaymentVoucher[]>, ErrorModel> {
+    return useQuery<ApiBaseState<ILaborPaymentVoucher[]>, ErrorModel>({
+        queryKey: ['get-all-labor-payment-vouchers', queryParams],
+        queryFn: () => LaborPaymentVoucherServices.getInstance().getAllLaborPaymentVouchers(queryParams),
     });
 }
 
 export function useGetLaborPaymentVoucherById(id: string):
-    UseQueryResult<ApiBaseState<GetLPvoucher>, ErrorModel> {
-    return useQuery<ApiBaseState<GetLPvoucher>, ErrorModel>({
-        queryKey: ['get-labor-payment-voucher-by-id'],
-        queryFn: () => LaborPaymentVoucherServices.getInstance().GetLaborPaymentVoucherById(id),
-        enabled: !!id,
+    UseQueryResult<ApiBaseState<ILaborPaymentVoucher>, ErrorModel> {
+        const enabled = id.length > 0 ? true : false;
+    return useQuery<ApiBaseState<ILaborPaymentVoucher>, ErrorModel>({
+        queryKey: ['get-labor-payment-voucher-by-id', enabled],
+        queryFn: () => LaborPaymentVoucherServices.getInstance().getLaborPaymentVoucherById(id),
+        enabled: enabled,
+    });
+}
+
+export function useGetLaborPaymentVoucherForViewById(id: string):
+    UseQueryResult<ApiBaseState<ILaborPaymentVoucher>, ErrorModel> {
+        const enabled = id.length > 0 ? true : false;
+    return useQuery<ApiBaseState<ILaborPaymentVoucher>, ErrorModel>({
+        queryKey: ['get-labor-payment-voucher-for-view-by-id', id],
+        queryFn: () => LaborPaymentVoucherServices.getInstance().getLaborPaymentVoucherForViewById(id),
+        enabled: enabled,
+    });
+}
+
+export function useGetLaborPaymentVoucherForUpdateById(id: string):
+    UseQueryResult<ApiBaseState<ILaborPaymentVoucher>, ErrorModel> {
+        const enabled = id.length > 0 ? true : false;
+    return useQuery<ApiBaseState<ILaborPaymentVoucher>, ErrorModel>({
+        queryKey: ['get-labor-payment-voucher-for-update-by-id', id],
+        queryFn: () => LaborPaymentVoucherServices.getInstance().getLaborPaymentVoucherForUpdateById(id),
+        enabled: enabled,
     });
 }

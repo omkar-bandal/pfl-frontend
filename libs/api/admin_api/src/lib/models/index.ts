@@ -5,3 +5,4 @@ export * from './uoms';
 export * from './users';
 export * from './address.type';
 export * from './postResponse.type';
+export * from './packaging-material';

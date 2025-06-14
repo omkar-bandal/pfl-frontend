@@ -1,88 +1,84 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { numToWords } from "@prime-fresh/purchase/modules";
-import { GetGRN, GRNProducts, PostGRN } from "@prime-fresh/purchase_api";
-import { ProductPartialData } from "@prime-fresh/admin_api";
-import { FormikHelpers, FormikProps } from "formik";
-import { ChangeEvent } from "react";
-import {useGetProductById} from '@prime-fresh/admin/modules';
-
+import { numToWords } from '@prime-fresh/purchase/modules';
+import { GetGRN, GRNProducts, IGRN, PostGRN } from '@prime-fresh/purchase_api';
+import { ProductPartialData } from '@prime-fresh/admin_api';
+import { FormikHelpers, FormikProps } from 'formik';
+import { ChangeEvent } from 'react';
+import { useGetProductById } from '@prime-fresh/admin/modules';
 
 export const getProductCount = (productId: string | null, products: ProductPartialData[] | null | undefined) => {
   if (products !== null && productId !== null) {
-    const counts = products?.find(product => product.id === productId)?.count;
-    return counts?.map(count => { return { label: count, value: count } })
+    const counts = products?.find((product) => product.id === productId)?.count;
+    return counts?.map((count) => {
+      return { label: count, value: count };
+    });
   } else {
     return [];
   }
-}
+};
 
 export const getProductSizes = (productId: string | null, products: ProductPartialData[] | null | undefined) => {
   if (products !== null && productId !== null) {
-    const sizes = products?.find(product => product.id === productId)?.size;
-    return sizes?.map(size => { return { label: size, value: size } })
+    const sizes = products?.find((product) => product.id === productId)?.size;
+    return sizes?.map((size) => {
+      return { label: size, value: size };
+    });
   } else {
     return [];
   }
-}
+};
 
 export const getProductOrigin = (productId: string | null, products: ProductPartialData[] | null | undefined) => {
   if (products !== null && productId !== null) {
-    return products?.find(product => product.id === productId)?.productOrigin;
+    return products?.find((product) => product.id === productId)?.productOrigin;
   } else {
-    return "";
+    return '';
   }
-}
+};
 export const getSelectedProductData = (productId: string | null, products: ProductPartialData[] | null | undefined) => {
   if (products !== null && productId !== null) {
-    return products?.find(product => product.id === productId);
+    return products?.find((product) => product.id === productId);
   } else {
     return null;
   }
-}
+};
 
-const recalcTotal = (products: PostGRN["grnProducts"]): number =>
+const recalcTotal = (products: PostGRN['grnProducts']): number =>
   products.reduce((sum, prod) => sum + (Number(prod.amount) || 0), 0);
-
 
 export const handleRemoveProduct = (
   index: number,
-  values: PostGRN | GetGRN,
-  setFieldValue: FormikHelpers<PostGRN>["setFieldValue"]
+  values: PostGRN | GetGRN | Omit<IGRN, 'id'>,
+  setFieldValue: FormikHelpers<PostGRN>['setFieldValue']
 ): void => {
   const updatedProducts = values.grnProducts.filter((_, i) => i !== index);
   const newSubtotal = recalcTotal(updatedProducts);
-  const newTotal =
-    newSubtotal +
-    (Number(values.freight) || 0) +
-    (Number(values.otherCharges) || 0);
-  setFieldValue("grnProducts", updatedProducts, false);
-  setFieldValue("subTotalAmt", newSubtotal, false);
-  setFieldValue("totalAmt", newTotal, false);
-  setFieldValue("amtWords", numToWords(newTotal), true);
+  const newTotal = newSubtotal + (Number(values.freight) || 0) + (Number(values.otherCharges) || 0);
+  setFieldValue('grnProducts', updatedProducts, false);
+  setFieldValue('subTotalAmt', newSubtotal, false);
+  setFieldValue('totalAmt', newTotal, false);
+  setFieldValue('amtWords', numToWords(newTotal), true);
 };
 
 export const handlePushProduct = (
-  newProduct: PostGRN["grnProducts"][0],
-  values: PostGRN | GetGRN,
-  setFieldValue: FormikHelpers<PostGRN>["setFieldValue"]
+  newProduct: PostGRN['grnProducts'][0],
+  values: PostGRN | GetGRN | Omit<IGRN, 'id'>,
+  setFieldValue: FormikHelpers<PostGRN>['setFieldValue']
 ): void => {
   const updatedProducts = [...values.grnProducts, newProduct];
   const newSubtotal = recalcTotal(updatedProducts);
-  const newTotal =
-    newSubtotal +
-    (Number(values.freight) || 0) +
-    (Number(values.otherCharges) || 0);
-  setFieldValue("grnProducts", updatedProducts, false);
-  setFieldValue("subTotalAmt", newSubtotal, false);
-  setFieldValue("totalAmt", newTotal, false);
-  setFieldValue("amtWords", numToWords(newTotal), true);
+  const newTotal = newSubtotal + (Number(values.freight) || 0) + (Number(values.otherCharges) || 0);
+  setFieldValue('grnProducts', updatedProducts, false);
+  setFieldValue('subTotalAmt', newSubtotal, false);
+  setFieldValue('totalAmt', newTotal, false);
+  setFieldValue('amtWords', numToWords(newTotal), true);
 };
 // Allowed fields for product items (excluding non-numeric fields such as "productName")
-export type GrnProductField = "quantity" | "unitPrice" | "packingMaterialWeight" | "grossWeight";
-export type GrnProductFieldUpdate = "revisedQuantity" | "revisedRate";
+export type GrnProductField = 'quantity' | 'unitPrice' | 'packingMaterialWeight' | 'grossWeight';
+export type GrnProductFieldUpdate = 'revisedQuantity' | 'revisedRate';
 
 // Allowed top-level fields
-export type TopLevelField = "freight" | "otherCharges";
+export type TopLevelField = 'freight' | 'otherCharges';
 
 // Combined union type
 export type AllowedField = GrnProductField | TopLevelField;
@@ -93,8 +89,8 @@ export const handleGRNProductsChange = (
   index: number | null,
   fieldName: AllowedField,
   newValue: any,
-  values: PostGRN,
-  setFieldValue: FormikHelpers<PostGRN>["setFieldValue"]
+  values: PostGRN | Omit<IGRN, 'id'>,
+  setFieldValue: FormikHelpers<PostGRN>['setFieldValue']
 ): void => {
   if (index !== null) {
     // Update a product field.
@@ -107,39 +103,39 @@ export const handleGRNProductsChange = (
     product[productField] = newValue;
 
     // Recalculate product.amount if quantity or unitPrice changed.
-    if (productField === "quantity" || productField === "unitPrice") {
+    if (productField === 'quantity' || productField === 'unitPrice') {
       product.amount = Number(product.quantity) * Number(product.unitPrice);
     }
     // Recalculate netWeight.
     // netWeight = grossWeight + ((packingMaterialWeight * quantity) / 1000)
     product.netWeight = product.packingMaterialWeight
-      ? Number(product.grossWeight) - ((product.packingMaterialWeight * Number(product.quantity)) / 1000)
+      ? Number(product.grossWeight) - (product.packingMaterialWeight * Number(product.quantity)) / 1000
       : product.grossWeight;
 
     updatedProducts[index] = product;
-    setFieldValue("grnProducts", updatedProducts, false);
+    setFieldValue('grnProducts', updatedProducts, false);
 
     // Recalculate subtotal from updated products.
     const newSubTotal = recalcTotal(updatedProducts);
-    setFieldValue("subTotalAmt", newSubTotal, false);
+    setFieldValue('subTotalAmt', newSubTotal, false);
 
     // Calculate totalAmt from subtotal plus top-level freight and otherCharges.
     const currentFreight = Number(values.freight) || 0;
     const currentOtherCharges = Number(values.otherCharges) || 0;
     const newTotal = newSubTotal + currentFreight + currentOtherCharges;
-    setFieldValue("totalAmt", newTotal, false);
-    setFieldValue("amtWords", numToWords(newTotal), true);
+    setFieldValue('totalAmt', newTotal, false);
+    setFieldValue('amtWords', numToWords(newTotal), true);
   } else {
     // Update top-level field: freight or otherCharges.
     // Assert that fieldName is one of TopLevelField.
     const topField = fieldName as TopLevelField;
     setFieldValue(topField, newValue, false);
 
-    const updatedFreight = topField === "freight" ? newValue : Number(values.freight) || 0;
-    const updatedOtherCharges = topField === "otherCharges" ? newValue : Number(values.otherCharges) || 0;
+    const updatedFreight = topField === 'freight' ? newValue : Number(values.freight) || 0;
+    const updatedOtherCharges = topField === 'otherCharges' ? newValue : Number(values.otherCharges) || 0;
     const newTotal = (values.subTotalAmt || 0) + updatedFreight + updatedOtherCharges;
-    setFieldValue("totalAmt", newTotal, false);
-    setFieldValue("amtWords", numToWords(newTotal), true);
+    setFieldValue('totalAmt', newTotal, false);
+    setFieldValue('amtWords', numToWords(newTotal), true);
   }
 };
 export const handleGRNProductsUpdateChange = (
@@ -147,7 +143,7 @@ export const handleGRNProductsUpdateChange = (
   fieldName: AllowedFieldUpdate,
   newValue: any,
   values: PostGRN | GetGRN,
-  setFieldValue: FormikHelpers<GetGRN>["setFieldValue"]
+  setFieldValue: FormikHelpers<GetGRN>['setFieldValue']
 ): void => {
   if (index !== null) {
     // Update a product field.
@@ -160,46 +156,54 @@ export const handleGRNProductsUpdateChange = (
     product[productField] = newValue;
 
     // Recalculate product.amount if quantity or unitPrice changed.
-    if (product.amount !== null && (productField === "revisedQuantity" || productField === "revisedRate")) {
+    if (product.amount !== null && (productField === 'revisedQuantity' || productField === 'revisedRate')) {
       product.amount = Number(product.revisedQuantity) * Number(product.revisedRate);
     }
 
-    if (product.amount === null && (productField === "quantity" || productField === "unitPrice")) {
+    if (product.amount === null && (productField === 'quantity' || productField === 'unitPrice')) {
       product.amount = Number(product.quantity) * Number(product.unitPrice);
     }
     // Recalculate netWeight.
     // netWeight = grossWeight + ((packingMaterialWeight * quantity) / 1000)
     product.netWeight = product.packingMaterialWeight
-      ? Number(product.grossWeight) - ((product.packingMaterialWeight * Number(product.quantity)) / 1000)
+      ? Number(product.grossWeight) - (product.packingMaterialWeight * Number(product.quantity)) / 1000
       : product.grossWeight;
 
     updatedProducts[index] = product;
-    setFieldValue("grnProducts", updatedProducts, false);
+    setFieldValue('grnProducts', updatedProducts, false);
 
     // Recalculate subtotal from updated products.
     const newSubTotal = recalcTotal(updatedProducts);
-    setFieldValue("subTotalAmt", newSubTotal, false);
+    setFieldValue('subTotalAmt', newSubTotal, false);
 
     // Calculate totalAmt from subtotal plus top-level freight and otherCharges.
     const currentFreight = Number(values.freight) || 0;
     const currentOtherCharges = Number(values.otherCharges) || 0;
     const newTotal = newSubTotal + currentFreight + currentOtherCharges;
-    setFieldValue("totalAmt", newTotal, false);
-    setFieldValue("amtWords", numToWords(newTotal), true);
+    setFieldValue('totalAmt', newTotal, false);
+    setFieldValue('amtWords', numToWords(newTotal), true);
   } else {
     // Update top-level field: freight or otherCharges.
     // Assert that fieldName is one of TopLevelField.
     const topField = fieldName as TopLevelField;
     setFieldValue(topField, newValue, false);
 
-    const updatedFreight = topField === "freight" ? newValue : Number(values.freight) || 0;
-    const updatedOtherCharges = topField === "otherCharges" ? newValue : Number(values.otherCharges) || 0;
+    const updatedFreight = topField === 'freight' ? newValue : Number(values.freight) || 0;
+    const updatedOtherCharges = topField === 'otherCharges' ? newValue : Number(values.otherCharges) || 0;
     const newTotal = (values.subTotalAmt || 0) + updatedFreight + updatedOtherCharges;
-    setFieldValue("totalAmt", newTotal, false);
-    setFieldValue("amtWords", numToWords(newTotal), true);
+    setFieldValue('totalAmt', newTotal, false);
+    setFieldValue('amtWords', numToWords(newTotal), true);
   }
 };
 
+export const calculateDueDate = (paymentDate: string | null, paymentTerms: number | null): string => {
+  if (!paymentDate) return '';
+  const date = new Date(paymentDate);
+  if (paymentTerms !== null && paymentTerms !== undefined) {
+    date.setDate(date.getDate() + paymentTerms);
+  }
+  return date.toISOString().split('T')[0];
+};
 
 // export const handleGRNProductsUpdateChange = (
 //   index: number,
@@ -266,4 +270,3 @@ export const handleGRNProductsUpdateChange = (
 //   const newTotalAmountInWords = numToWords(totalAmount);
 //   setFieldValue('amtWords', newTotalAmountInWords);
 // };
-

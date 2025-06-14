@@ -2,8 +2,9 @@ import React from "react";
 import { Box, Grid2 } from "@mui/material";
 import { useCustomerColumns } from "./customer-columns";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllCustomers } from '@prime-fresh/admin/modules';
+import { useGetAllCustomers } from '@prime-fresh/admin/modules';
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
+import { sharedRoutes } from "@prime-fresh/shared/modules";
 
 export function CustomerTable() {
 
@@ -38,7 +39,7 @@ export function CustomerTable() {
   }, [isError, error]);
 
   const handleCreate = () => {
-    navigate(ADMIN_ROUTES.CREATE_CUSTOMER);
+    navigate(sharedRoutes.CREATE_CUSTOMER);
   }
 
   return (

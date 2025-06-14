@@ -38,33 +38,33 @@ export const CustomerBillingDetails = () => {
                 <TextInput isRequired={false} name="billingDetails.emailSecondary" label="Email (Alternate)" value={values.billingDetails.emailSecondary} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={true} name="billingDetails.billingAddress.address1" label="Address Line 1" value={values.billingDetails.billingAddress.address1} handleChange={handleChange} />
+                <TextInput isRequired={true} name="billingDetails.billingAddress.address1" label="Address Line 1" value={values.billingDetails.billingAddress?.address1 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="billingDetails.billingAddress.address2" label="Address Line 2" value={values.billingDetails.billingAddress.address2} handleChange={handleChange} />
+                <TextInput isRequired={false} name="billingDetails.billingAddress.address2" label="Address Line 2" value={values.billingDetails.billingAddress?.address2 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="billingDetails.billingAddress.location" label="Location" value={values.billingDetails.billingAddress.location} handleChange={handleChange} />
+                <TextInput isRequired={true} name="billingDetails.billingAddress.location" label="Location" value={values.billingDetails.billingAddress?.location || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="billingDetails.billingAddress.city" label="City" value={values.billingDetails.billingAddress.city} handleChange={handleChange} />
+                <TextInput isRequired={true} name="billingDetails.billingAddress.city" label="City" value={values.billingDetails.billingAddress?.city || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="billingDetails.billingAddress.state" label="State" value={values.billingDetails.billingAddress.state} handleChange={handleChange} />
+                <TextInput isRequired={true} name="billingDetails.billingAddress.state" label="State" value={values.billingDetails.billingAddress?.state || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="billingDetails.billingAddress.pincode" label="Pincode" value={values.billingDetails.billingAddress.pincode} handleChange={handleChange} />
+                <TextInput isRequired={true} name="billingDetails.billingAddress.pincode" label="Pincode" value={values.billingDetails.billingAddress?.pincode || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
                 <FileUpload
                     isRequired={false}
-                    name="billingDetails.billingAddressProofCopy"
+                    name="billingAddressProofCopy"
                     label="Billing Address Proof Copy" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
                 <FileUpload
                     isRequired={false}
-                    name="billingDetails.billingFormatCopy"
+                    name="billingFormatCopy"
                     label="Billing Format" />
             </Grid2>
         </Grid2>

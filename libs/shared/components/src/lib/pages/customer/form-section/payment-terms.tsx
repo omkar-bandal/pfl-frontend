@@ -107,13 +107,13 @@ export const CustomerPaymentTerms = () => {
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <FileUpload
                     isRequired={false}
-                    name="paymentTerms.lc"
+                    name="lc"
                     label="L/C" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
                 <FileUpload
                     isRequired={false}
-                    name="paymentTerms.bg"
+                    name="bg"
                     label="B/G" />
             </Grid2>
             <Grid2 size={{ xs: 12 }}>
@@ -185,7 +185,7 @@ export const CustomerPaymentTerms = () => {
             <Grid2 size={{ xs: 12 }}>
                 <FileUpload
                     isRequired={false}
-                    name="paymentTerms.docEvidenceCopy"
+                    name="docEvidenceCopy"
                     label="Documentary Evidence" />
             </Grid2>
             <Grid2 size={{ xs: 12 }}>

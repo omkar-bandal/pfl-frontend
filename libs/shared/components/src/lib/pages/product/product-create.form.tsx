@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { FieldArray, Formik } from "formik";
-import { Box, Grid2, IconButton, InputAdornment, Typography } from "@mui/material";
+import { Box, Grid2, IconButton, InputAdornment, Tooltip, Typography } from "@mui/material";
 import { FormButtonGroup, ImageUpload, MultipleTextInput, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { PostProduct } from "@prime-fresh/admin_api";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ export const ProductCreateForm = () => {
             : [];
     }, [units]);
 
-    const qcParamsType = ["good", "bad"].map(type => { return { value: type, label: type } });
+    const qcParamsType = ["good", "bad", "average"].map(type => { return { value: type, label: type } });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleGetCategoryAndClassification = useCallback((values: PostProduct, setFieldValue: (field: string, value: any) => void) => {
@@ -78,7 +78,7 @@ export const ProductCreateForm = () => {
                         <Grid2 size={{ xs: 12 }}>
                             <PageTitle pagetitle="Create Product" />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 6 }}>
                             <TextInput
                                 type="text"
                                 isRequired={true}
@@ -88,17 +88,18 @@ export const ProductCreateForm = () => {
                                 handleChange={handleChange}
                             />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 3 }}>
                             <TextInput
                                 type="text"
-                                isRequired={false}
-                                name="productOrigin"
-                                label="Origin of Product"
-                                value={values.productOrigin}
+                                isRequired={true}
+                                name="prefix"
+                                label="Product Code Prefix"
+                                value={values.prefix ? values.prefix.toUpperCase() : values.prefix}
                                 handleChange={handleChange}
+                                // infoTipText={`Enter prefix to generate product code. For example, if product name is Royal Gala Apple enter prefix as RGA`}
                             />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 3 }}>
                             <TextInput
                                 type="text"
                                 isRequired={false}
@@ -184,6 +185,14 @@ export const ProductCreateForm = () => {
                                 options={classifications}
                                 value={values.classification}
                                 handleChange={handleChange} />
+                        </Grid2>
+                        <Grid2 size={{ xs: 12 }}>
+                            <MultipleTextInput
+                                isRequired={false}
+                                name="productOrigin"
+                                label="Product Origins"
+                                values={values.productOrigin}
+                                setFieldValue={setFieldValue} />
                         </Grid2>
                         <Grid2 size={{ xs: 12 }}>
                             <MultipleTextInput

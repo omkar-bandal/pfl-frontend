@@ -2,14 +2,14 @@
 import { Formik } from "formik";
 import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, initValProductClass, productClassificationSchema, useGetAProductClassificationById, useCreateProductClassification, useUpdateProductClassification } from "@prime-fresh/admin/modules";
+import { ADMIN_ROUTES, initValProductClass, productClassificationSchema, useGetProductClassificationById, useCreateProductClassification, useUpdateProductClassification } from "@prime-fresh/admin/modules";
 import { Box, Grid2, LinearProgress } from "@mui/material";
 
 export function ProductClassForm() {
     const { id } = useParams<{ id: string }>();
     const classificationId = id ? id : "";
 
-    const { data, isLoading } = useGetAProductClassificationById(classificationId);
+    const { data, isLoading } = useGetProductClassificationById(classificationId);
     const productClassVal = data !== null && data?.data ? data.data : initValProductClass;
 
     const { mutateAsync: postProductClassification, error: postError, data: postRes } = useCreateProductClassification();

@@ -1,11 +1,11 @@
 import { Grid2 } from "@mui/material"
-import { TextInput } from "../auto_form/components"
+import { TextInput } from "../form";
 import { useAppSelector } from "@prime-fresh/modules";
-import { vendorsDataState } from "@prime-fresh/admin/modules";
+import { vendorsDataStates } from "@prime-fresh/admin/modules";
 import { displayAddress } from "@prime-fresh/purchase/modules";
 
 export const VendorReadOnlyFields = () => {
-    const { selectedVendorPartialData } = useAppSelector(vendorsDataState);
+    const { selectedVendorPartialData } = useAppSelector(vendorsDataStates);
     return (
         <>
             <Grid2 size={{ xs: 12, md: 4 }}>

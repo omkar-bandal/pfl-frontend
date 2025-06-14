@@ -1,6 +1,6 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
-import { GetLPvoucher } from "../models";
+import { ILaborPaymentVoucher } from "../models";
 
 export class LaborPaymentVoucherServices extends BaseService {
     private static _instance: LaborPaymentVoucherServices;
@@ -14,23 +14,33 @@ export class LaborPaymentVoucherServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllLaborPaymentVouchers(): Promise<ApiBaseState<GetLPvoucher[]>> {
-        const url = purchaseApiUrl.GET_ALL_LP_VOUCHER;
+    getAllLaborPaymentVouchers(queryParams?: QueryParams): Promise<ApiBaseState<ILaborPaymentVoucher[]>> {
+        const url = purchaseApiUrl.GET_ALL_LP_VOUCHER(queryParams);
         return this.get(url);
     }
 
-    GetLaborPaymentVoucherById(id: string): Promise<ApiBaseState<GetLPvoucher>> {
+    getLaborPaymentVoucherForViewById(id: string): Promise<ApiBaseState<ILaborPaymentVoucher>> {
+        const url = purchaseApiUrl.GET_LP_VOUCHER_FOR_VIEW_BY_ID(id);
+        return this.get(url);
+    }
+
+    getLaborPaymentVoucherForUpdateById(id: string): Promise<ApiBaseState<ILaborPaymentVoucher>> {
+        const url = purchaseApiUrl.GET_LP_VOUCHER_FOR_UPDATE_BY_ID(id);
+        return this.get(url);
+    }
+
+    getLaborPaymentVoucherById(id: string): Promise<ApiBaseState<ILaborPaymentVoucher>> {
         const url = `${purchaseApiUrl.GET_LP_VOUCHER_BY_ID}/${id}`;
         return this.get(url);
     }
 
     updateLaborPaymentVoucher(id: string, data: FormData): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.UPDATE_LP_VOUCHER}/${id}`;
+        const url = purchaseApiUrl.UPDATE_LP_VOUCHER(id);
         return this.patchFormData(url, data);
     }
 
     deleteLaborPaymentVoucherById(id: string): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.DELETE_LP_VOUCHER}/${id}`;
+        const url = purchaseApiUrl.DELETE_LP_VOUCHER(id);
         return this.delete(url);
     }
 }

@@ -14,8 +14,8 @@ export class FarmersService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllFarmers({page, limit, sort}: QueryParams): Promise<ApiBaseState<GetFarmer[]>> {
-        const url = adminApiUrlConstants.GET_ALL_FARMERS({page, limit, sort});
+    getAllFarmers(queryParams?: QueryParams): Promise<ApiBaseState<GetFarmer[]>> {
+        const url = adminApiUrlConstants.GET_ALL_FARMERS(queryParams);
         return this.get(url);
     }
 

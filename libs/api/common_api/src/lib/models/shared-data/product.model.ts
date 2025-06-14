@@ -8,7 +8,7 @@ export type GetProduct = {
     category: string,       
     subcategory: string,    
     uom: string,            
-    productOrigin: string,                                    
+    productOrigin: string[],                                    
     count: string[],
     size: string[], 
     variety: string[], 

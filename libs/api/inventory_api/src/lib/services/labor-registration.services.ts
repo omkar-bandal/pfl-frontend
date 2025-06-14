@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetLaborRegistration, PostLaborRegistration } from "../models";
 import { inventoryApiUrl } from "../constants";
 
@@ -14,8 +14,8 @@ export class LaborRegistrationServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllRegistreredLabors(): Promise<ApiBaseState<GetLaborRegistration[]>> {
-        const url = inventoryApiUrl.GET_ALL_REGISTERED_LABORS;
+    getAllRegistreredLabors(queryParams?: QueryParams): Promise<ApiBaseState<GetLaborRegistration[]>> {
+        const url = inventoryApiUrl.GET_ALL_REGISTERED_LABORS(queryParams);
         return this.get(url);
     }
 

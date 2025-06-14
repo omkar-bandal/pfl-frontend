@@ -1,42 +1,84 @@
-import React, { memo, useState } from "react";
-import { Box, Drawer } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { mobileOpenState, Navigations, setIsClosing, setMobileOpen, SidebarProps, useAppSelector } from '@prime-fresh/modules';
-import Logo from "./Logo";
-import SidebarList from "./SidebarList";
-import { adminNavigations, inventoryNavigations, purchaseNavigations, salesNavigations } from "../navigations";
-
+import React, { memo, useState } from 'react';
+import { Box, Drawer, useTheme } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import {
+  authState,
+  hasPermission,
+  mobileOpenState,
+  setIsSidebarClosing,
+  setMobileOpen,
+  SidebarProps,
+  useAppSelector,
+} from '@prime-fresh/modules';
+import Logo from './Logo';
+import SidebarList from './SidebarList';
+import { adminNavigations, commonNavigation, userSpecificNavigation } from '../navigations';
 
 export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const mobileOpen = useAppSelector(mobileOpenState);
-  const [selectedItem, setSelectedItem] = useState("");
-
-  const navigationMap: { [key: string]: Navigations[] } = {
-    "administrator": adminNavigations,
-    "purchase": purchaseNavigations,
-    "inventory": inventoryNavigations,
-    "sales": salesNavigations,
-    "default": [],
-  };
-
-  const department = localStorage.getItem("department");
-  const dept = department?.toLowerCase();
-  
-  const navigations = navigationMap[dept ? dept : "Default"] || [];
-
+  const [selectedItem, setSelectedItem] = useState('');
+  const { employeeLevel, employeePermissions } = useAppSelector(authState);
+const getNavigations = () => {
+  if(employeeLevel?.name === 'admin')
+    return adminNavigations;
+  else{
+    const filteredNavigation = userSpecificNavigation.filter((nav) =>
+      nav.children
+        ? nav.children.filter((subnav) =>
+            hasPermission(
+              employeePermissions || [],
+              subnav.uniqueKey,
+              'create'
+            )
+          )
+        : hasPermission(
+            employeePermissions || [],
+            nav.uniqueKey,
+            'create'
+          )
+    )
+    return [...commonNavigation, ...filteredNavigation]
+  }
+}
+  // const navigations = useMemo(
+  //   () =>
+  //     employeeLevel?.name === 'admin'
+  //       ? adminNavigations
+  //       : purchaseNavigations.filter((nav) =>
+  //           nav.children
+  //             ? nav.children.filter((subnav) =>
+  //                 hasPermission(
+  //                   employeePermissions || [],
+  //                   subnav.uniqueKey,
+  //                   'create'
+  //                 )
+  //               )
+  //             : hasPermission(
+  //                 employeePermissions || [],
+  //                 nav.uniqueKey,
+  //                 'create'
+  //               )
+  //         ),
+  //   [employeeLevel?.name, employeePermissions]
+  // );
+  const navigations = getNavigations();
   const handleDrawerClose = () => {
-    dispatch(setIsClosing(true));
+    dispatch(setIsSidebarClosing(true));
     dispatch(setMobileOpen(false));
   };
 
   const handleDrawerTransitionEnd = () => {
-    dispatch(setIsClosing(false));
+    dispatch(setIsSidebarClosing(false));
   };
 
   return (
-    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+    <Box
+      component="nav"
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+    >
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -46,47 +88,49 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
           keepMounted: true,
         }}
         sx={{
-          display: { xs: "block", sm: "none" },
-          "& .MuiDrawer-paper": {
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': {
             paddingX: 1,
-            boxSizing: "border-box",
+            boxSizing: 'border-box',
             width: drawerWidth,
-            backgroundColor: "#F6FFF7",
+            backgroundColor: theme.palette.primary.light,
             '&::-webkit-scrollbar': {
               display: 'none',
             },
           },
-        }}>
+        }}
+      >
         <Logo />
         <SidebarList
-          dept={dept ? dept : "Default"}
           navigations={navigations}
           selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem} />
+          setSelectedItem={setSelectedItem}
+        />
       </Drawer>
       <Drawer
         open
         variant="permanent"
         sx={{
-          display: { xs: "none", sm: "block" },
-          "& .MuiDrawer-paper": {
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': {
             paddingX: 1,
-            boxSizing: "border-box",
+            boxSizing: 'border-box',
             width: drawerWidth,
-            backgroundColor: "#F6FFF7",
+            backgroundColor: theme.palette.primary.light,
             '&::-webkit-scrollbar': {
               display: 'none',
             },
           },
-        }}>
+        }}
+      >
         <Logo />
         <SidebarList
-          dept={dept ? dept : "Default"}
+          // dept={dept ? dept : "Default"}
           navigations={navigations}
           selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem} />
+          setSelectedItem={setSelectedItem}
+        />
       </Drawer>
     </Box>
   );
 });
-

@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, Level, GetLevel, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, Level, GetLevel, ResultModel, GetDocumentDetails, DocumentDetails } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 
 export class LevelsService extends BaseService {
@@ -10,9 +10,15 @@ export class LevelsService extends BaseService {
 
     getAllLevels(): Promise<ApiBaseState<GetLevel[]>> {
         const url = adminApiUrlConstants.GET_ALL_LEVEL;
+        console.log("Level Url:", url);
         return this.get(url);
     }
-
+    
+    getAllDocumentDetails(): Promise<ApiBaseState<GetDocumentDetails[]>> {
+        const url = adminApiUrlConstants.GET_ALL_DOCUMENT_DETAILS;
+        return this.get(url);
+    }
+    
     getLevelById(levelId: string): Promise<ApiBaseState<GetLevel>> {
         const url = `${adminApiUrlConstants.GET_LEVEL_BY_ID}/${levelId}`;
         return this.get(url)
@@ -20,6 +26,11 @@ export class LevelsService extends BaseService {
 
     createLevel(data: Level): Promise<ResultModel> {
         const url = adminApiUrlConstants.CREATE_LEVEL;
+        return this.post(url, data);
+    }
+
+    createDocumentDetail(data: DocumentDetails): Promise<ResultModel> {
+        const url = adminApiUrlConstants.CREATE_DOCUMENT_DETAILS;
         return this.post(url, data);
     }
 

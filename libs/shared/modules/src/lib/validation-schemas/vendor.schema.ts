@@ -9,7 +9,7 @@ export const vendorValidationSchema = Yup.object().shape({
     subcategory: Yup.string().required('Please select subcategory of vendor'),
     officeAddress: addressSchema,
     officeContactNo: Yup.string().required('Please enter contact number.').matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
-    officeEmail: Yup.string().nullable().email("Please enter valid email"),
+    officeEmail: Yup.string().nullable().matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
     mainProduct: Yup.string().nullable().matches(REGEX.IS_STRING, "Product name should only include alphabets."),
     dispatchCenter: Yup.string().nullable().matches(REGEX.IS_STRING,'Please add valid location of dispatch center'),
     warehouseLocations: Yup.string().nullable().matches(REGEX.IS_STRING, 'Please add valid location of warehouse location'),
@@ -55,7 +55,7 @@ export const vendorValidationSchema = Yup.object().shape({
         contactLName: Yup.string().required("Contact person last name is required.").matches(REGEX.IS_STRING, "Name should include only alphabets."),
         directContactNumber: Yup.string().required("Contact person phone number is required").matches(REGEX.CONTACT_NO, "Please enter a valid contact number."),
         mobileNumber: Yup.string().nullable().matches(REGEX.CONTACT_NO, "Please enter a valid contact number."),
-        email: Yup.string().nullable().email("Please enter valid email"),
+        email: Yup.string().nullable().matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
     }),
     vendorBankDetails: Yup.object().shape({
         beneficiaryFName: Yup.string().required("Beneficiary person first name is required.").matches(REGEX.IS_STRING, "Name should include only alphabets."),
@@ -75,14 +75,18 @@ export const vendorValidationSchema = Yup.object().shape({
     ref1PrimaryCNumb: Yup.string().required("Contact number is required").matches(REGEX.CONTACT_NO, "Please enter valid contact number."),
     ref1AltrCNumb: Yup.string().nullable().matches(REGEX.CONTACT_NO, "Please enter valid contact number."),
     ref1Address: addressSchema,
-    ref1Email: Yup.string().nullable().email("Please enter valid email."),
+    ref1Email: Yup.string().nullable().matches(REGEX.IS_EMAIL,'Please enter valid email.'),
     ref2FName: Yup.string().nullable().matches(REGEX.IS_STRING, "Name should include only alphabets."),
     ref2MName: Yup.string().nullable().matches(REGEX.IS_STRING, "Name should include only alphabets."),
     ref2LName: Yup.string().nullable().matches(REGEX.IS_STRING, "Name should include only alphabets."),
     ref2PrimaryCNumb: Yup.string().nullable().matches(REGEX.CONTACT_NO, "Please enter valid contact number."),
     ref2AltrCNumb: Yup.string().nullable().matches(REGEX.CONTACT_NO, "Please enter valid contact number."),
-    // ref2Address: initValAddress,
-    ref2Email: Yup.string().nullable().email("Please enter valid email."),
+    ref2Address: Yup.object().shape({
+        city: Yup.string().nullable().matches(REGEX.IS_STRING, "City name should only contains alphabets."),
+        state: Yup.string().nullable().matches(REGEX.IS_STRING, "State name should only contains alphabets."),
+        pincode: Yup.string().nullable().matches(REGEX.PINCODE, 'Pincode must be exactly 6 digits'),
+    }),
+    ref2Email: Yup.string().nullable().matches(REGEX.IS_EMAIL,'Please enter valid email.'),
 });
 
 export default vendorValidationSchema;

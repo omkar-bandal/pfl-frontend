@@ -1,16 +1,13 @@
-import { Edit, Preview } from "@mui/icons-material";
-import { Chip, IconButton } from "@mui/material";
+import { Chip } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { RequestedBy } from "@prime-fresh/purchase_api";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { useNavigate } from "react-router-dom";
-import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { useMemo } from "react";
+import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
 
-export const useDealSlipColumns = (): CustomGridColDef[] => {
+export const useDealSlipColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
     const navigate = useNavigate();
-
-    return useMemo(() => [
+    return [
         {
             field: "dealSlipNo",
             headerName: "Deal Slip No",
@@ -18,6 +15,7 @@ export const useDealSlipColumns = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
+            valueGetter: (value: string) => value? value.toUpperCase() : '-',
         },
         {
             field: "createdDate",
@@ -40,13 +38,6 @@ export const useDealSlipColumns = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             valueGetter: (value: RequestedBy) => value ? `${value.firstName || ''} ${value.lastName || ''}` : "",
-        },
-        {
-            field: "requestingDepartment",
-            headerName: "Department",
-            width: 100,
-            align: "center",
-            headerAlign: "center",
         },
         {
             field: "loadingLocation",
@@ -89,31 +80,43 @@ export const useDealSlipColumns = (): CustomGridColDef[] => {
                 }
             }
         },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_DEAL_SLIP}/${params.row.id}`)}>
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DEAL_SLIP}/${params.row.id}`)}>
-                    <Preview color="primary" />
-                </IconButton>
-            ),
-        },
-    ], [navigate])
+        ...(canEdit
+            ? [
+                {
+                  field: 'edit',
+                  headerName: 'Edit',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <EditIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.UPDATE_DEAL_SLIP}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(canView
+            ? [
+                {
+                  field: 'view',
+                  headerName: 'View',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <ViewIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.VIEW_DEAL_SLIP}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+    ];
 }

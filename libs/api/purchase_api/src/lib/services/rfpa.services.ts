@@ -1,5 +1,5 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
-import { GetRFPA, PostRFPA } from "../models";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
+import { IRFPA } from "../models";
 import { purchaseApiUrl } from "../constants";
 
 export class RFPAServices extends BaseService {
@@ -9,28 +9,33 @@ export class RFPAServices extends BaseService {
         return this._instance || (this._instance = new this());
     }
 
-    createRFPA(data: PostRFPA): Promise<ResultModel> {
+    createRFPA(data: IRFPA): Promise<ResultModel> {
         const url = purchaseApiUrl.CREATE_RFPA;
         return this.post(url, data);
     }
 
-    getAllRFPAs():Promise<ApiBaseState<GetRFPA[]>> {
-        const url = purchaseApiUrl.GET_ALL_RFPA;
+    getAllRFPAs(queryParams?: QueryParams):Promise<ApiBaseState<IRFPA[]>> {
+        const url = purchaseApiUrl.GET_ALL_RFPA(queryParams);
         return this.get(url);
     }
 
-    getRFPAById(id: string): Promise<ApiBaseState<GetRFPA>> {
-        const url = `${purchaseApiUrl.GET_RFPA_BY_ID}/${id}`;
+    getRFPAForViewById(id: string): Promise<ApiBaseState<IRFPA>> {
+        const url = purchaseApiUrl.GET_RFPA_FOR_VIEW_BY_ID(id);
         return this.get(url);
     }
 
-    updateRFPA(id: string, data: GetRFPA): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.UPDATE_RFPA}/${id}`;
+    getRFPAForUpdateById(id: string): Promise<ApiBaseState<IRFPA>> {
+        const url = purchaseApiUrl.GET_RFPA_FOR_UPDATE_BY_ID(id);
+        return this.get(url);
+    }
+
+    updateRFPA(id: string, data: IRFPA): Promise<ResultModel> {
+        const url = purchaseApiUrl.UPDATE_RFPA(id);
         return this.patch(url, data);
     }
 
     deleteRFPAById(id: string): Promise<ResultModel> {
-        const url = `${purchaseApiUrl.DELETE_RFPA}/${id}`;
+        const url = purchaseApiUrl.DELETE_RFPA(id);
         return this.delete(url);
     }
 }

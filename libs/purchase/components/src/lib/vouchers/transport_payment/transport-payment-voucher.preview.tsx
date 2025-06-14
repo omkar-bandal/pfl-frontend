@@ -1,103 +1,112 @@
-import React from 'react'
-import { Grid, Typography } from '@mui/material'
 import { useAppSelector } from '@prime-fresh/modules';
 import { tpVoucherState } from '@prime-fresh/purchase/modules';
-import { PreviewContainer } from '@prime-fresh/ui_shared';
+import { convertInTitleCase } from '@prime-fresh/shared/modules';
+import { DataViewer, ObjectViewerConfig, PreviewContainer } from '@prime-fresh/ui_shared';
 
 export const TPVoucherPreview = () => {
-    const { previewTPVoucher } = useAppSelector(tpVoucherState);
+    const { tpVoucherFormPreview } = useAppSelector(tpVoucherState);
+    const tpVoucherPreviewConfig: ObjectViewerConfig = {
+        sections: [
+            {
+                sectionType: "object",
+                layout: "grid",
+                gridColumns: 3,
+                fields: [
+                    {
+                        key: "grnNo",
+                        label: "Refered GRN",
+                        render: (value: string) => value ? value.toUpperCase() : '-',
+                    },
+                    {
+                        key: "companyName",
+                        label: "Company Name"
+                    },
+                    {
+                        key: "location",
+                        label: "Location",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "debitCreditTo",
+                        label: "Debit / Credit To",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "payReceivedFrom",
+                        label: "Pay To / Received From",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "dispatchLocation",
+                        label: "Dispatch Location",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "destinationLocation",
+                        label: "Destination Location",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "driverName",
+                        label: "Driver Name",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "contactNo",
+                        label: "Contact No",
+                    },
+                    {
+                        key: "altContactNo",
+                        label: "Alternate Contact No"
+                    },
+                    {
+                        key: "vehicleNo",
+                        label: "Vehicle Number",
+                        render: (value: string) => value ? value.toUpperCase() : '-',
+                    },
+                    {
+                        key: "kyc",
+                        label: "Is KYC attached? (Driver Lic. / RC Book / PAN)",
+                        render: (value: boolean) => value === true ? "Yes" : "No"
+                    },
+                    {
+                        key: "paymentMode",
+                        label: "Payment Mode",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "freightAmt",
+                        label: "Freight Amount",
+                        render: (value: number) => value ? `Rs. ${value}` : 0,
+                    },
+                    {
+                        key: "totalAmt",
+                        label: "Total Amount",
+                        render: (value: number) => value ? `Rs. ${value}` : 0,
+                    },
+                    {
+                        key: "amtWords",
+                        label: "Amount In Words"
+                    },
+                    {
+                        key: "receiverName",
+                        label: "Receiver Name",
+                        render: (value: string) => value ? convertInTitleCase(value) : '-',
+                    },
+                    {
+                        key: "remark",
+                        label: "Remark"
+                    },
+                ]
+            },
+        ]
+    }
     return (
-        <PreviewContainer title='Transport Payment Voucher Preview'>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    GRN No : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewTPVoucher?.grnNo !== "string" ? previewTPVoucher?.grnNo?.grnNo : previewTPVoucher.grnNo}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Company Name : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{typeof previewTPVoucher?.companyName !== "string" ? previewTPVoucher?.companyName?.companyName : previewTPVoucher.companyName}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Location : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.location}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Debit From / Credit To : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.debitCreditTo}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Pay To / Received From : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.payReceivedFrom}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Driver Name : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.driverName}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Contact Numbers of Driver : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{`${previewTPVoucher?.contactNo || ''}, ${previewTPVoucher?.altContactNo  || ''}`}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Vehicle Number : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.vehicleNo}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Dispatch Location : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.dispatchLocation}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Destination Location : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.destinationLocation}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Freight Amount : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.freightAmt}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Total Amount : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.totalAmt}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Total Amount in Words : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.amtWords}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Payment Mode : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.paymentMode}
-                    </Typography>
-                </Typography>
-            </Grid>
-            <Grid item>
-                <Typography variant="body1" component="span" sx={{ color: "#555" }}>
-                    Products : <Typography variant="body1" component="span" sx={{ color: "#000000", fontWeight: 700 }}>{previewTPVoucher?.products}
-                    </Typography>
-                </Typography>
-            </Grid>
+        <PreviewContainer title='Transport Payment Voucher'>
+            <DataViewer
+                config={tpVoucherPreviewConfig}
+                data={tpVoucherFormPreview ? tpVoucherFormPreview : []}
+            />
         </PreviewContainer>
     )
 }

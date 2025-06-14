@@ -5,19 +5,33 @@ import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable
 import { useNavigate } from 'react-router-dom';
 import { GetSecondSaleRegister } from '@prime-fresh/inventory_api';
 import { useSecondSaleRegisterColumns } from './second-sale-register.column';
+import { usePermission } from '@prime-fresh/modules';
 
 export const SecondSaleRegisterTable = () => {
   const navigate = useNavigate();
-  const secondSaleRegisterColumns = useSecondSaleRegisterColumns()
+  const { canEdit, canView } = usePermission('second-sale');
+  const secondSaleRegisterColumns = useSecondSaleRegisterColumns(canEdit, canView)
   const {
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
+        columnVisibilityModel,
+        displayColumnVisibilityPanel,
+        handleColumnVisibilityModelChange,
+        handleCloseColumnVisibilityPanel,
+        handleOpenColumnVisibilityPanel
   } = useDataTable({columnDef: secondSaleRegisterColumns});
-  const { data, isLoading, isError, error } = useGetAllSecondSaleRegisters();
-  const secondSales = data?.data ? data.data : [];
+  const { data, isLoading, isError, error } = useGetAllSecondSaleRegisters(queryParams);
+  const secondSales = data ? data : null;
+  const rowCountRef = React.useRef(secondSales?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (secondSales?.allRecords !== undefined) {
+            rowCountRef.current = secondSales.allRecords;
+        }
+        return rowCountRef.current;
+    }, [secondSales]);
   React.useEffect(() => {
     if (isError) {
       toast.error(error?.message || 'Error occured please refresh the page.')
@@ -44,11 +58,17 @@ export const SecondSaleRegisterTable = () => {
         </Grid2>
       </Grid2>
       <DataGridTable<GetSecondSaleRegister>
-        mode="client"
-        loading={isLoading}
-        rows={secondSales}
-        columns={secondSaleRegisterColumns}
-        columnVisibilityModel={columnVisibilityModel}
+       loading={isLoading}
+       rows={secondSales?.data || []}
+       columns={secondSaleRegisterColumns}
+       mode="server"
+       initialPageSize={10}
+       totalRows={rowCount}
+       paginationModel={paginationModel}
+       onPaginationModelChange={handlePaginationChange}
+       sortModel={sortModel}
+       onSortModelChange={handleSortingChange}
+       columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
   )

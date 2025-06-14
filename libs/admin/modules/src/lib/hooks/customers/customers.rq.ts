@@ -26,7 +26,7 @@ export function useDeleteCustomerById(id: string):
     });
 }
 
-export function useGetAllCustomers(queryParams: QueryParams):
+export function useGetAllCustomers(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetCustomer[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetCustomer[]>, ErrorModel>({
         queryKey: ['get-all-customers',queryParams],
@@ -36,9 +36,10 @@ export function useGetAllCustomers(queryParams: QueryParams):
 
 export function useGetCustomerById(id: string):
     UseQueryResult<ApiBaseState<GetCustomer>, ErrorModel> {
+        const enabled = id.length > 0 ? true : false;
     return useQuery<ApiBaseState<GetCustomer>, ErrorModel>({
-        queryKey: ['get-customer-by-id'],
+        queryKey: ['get-customer-by-id', id],
         queryFn: () => CustomersService.getInstance().getCustomerById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }

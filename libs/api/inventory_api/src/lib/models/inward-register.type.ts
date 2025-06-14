@@ -1,57 +1,27 @@
+import { FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
 
-export type PostInwardProducts = {
-    product: string,  
-    count: string,
-    size: string,
-    weight: number,
-    uom: string,  
-    qty: number,
-    productContainerWeight: number, 
-    netWeight: number,
-    grossWeight: number,
-}
+export interface IInwardProducts extends FormProducts,
+  FormProductUoM,
+  FormProductQtyAmt,
+  FormProductWeight { weight: number | null };
 
-export type GetInwardProducts = {id: string} & PostInwardProducts;
-
-export type PostInwardRegister = {
-    grnNo: string                    // approved grn id 
-    deliveryChallanNo: string,       // approved delivery challan id
-    inwardType: string,              // type of inward cc-cc, cc-dc, dc-dc, farm-dc, farm-cc
-    companyName: string,
-    location: string,
-    date: string,
-    totalWeightInKg: number,
-    batchNo: string,
-    selectedParty: string,            // selected vendor / farmer id
-    inwardProducts: PostInwardProducts[],    // Relation to InwardProduct entity  
-    source: "vendor" | "farmer",                  // vendor / farmer
-    purchasedBy: string,
-    purchasedQty: number,
-    inwardQtyInKg: number,
-    inwardCost: number,
-    remarks: string,
-    inwardBy: string,
-}
-
-export type GetInwardRegister = {
-    id: string,
-    createdDate: string,
-    createdTime: string,
-    grnNo: string                    // approved grn id 
-    deliveryChallanNo: string,       // approved delivery challan id
-    inwardType: string,              // type of inward cc-cc, cc-dc, dc-dc, farm-dc, farm-cc
-    companyName: string,
-    location: string,
-    date: Date,
-    batchNo: string,
-    source: "vendor" | "farmer",                  // vendor / farmer
-    selectedParty: string,            // selected vendor / farmer id         
-    inwardProducts: PostInwardProducts[],    // Relation to InwardProduct entity  
-    totalWeightInKg: number,
-    purchasedQty: number,
-    purchasedBy: string,
-    inwardBy: string,
-    inwardQtyInKg: number,
-    inwardCost: number,
-    remarks: string,
+export interface IInwardRegister {
+  id: string;
+  inwardType: 'purchase' | 'transferred';
+  grnNo: string | null;
+  deliveryChallanNo: string | null;
+  companyName: string | null;
+  location: string | null;
+  date: string | null;
+  batchNo: string | null;
+  selectedParty: string | null;
+  inwardProducts: IInwardProducts[];
+  source: 'vendor' | 'farmer';
+  purchasedBy: string | null;
+  totalWeightInKg: number | null;
+  purchasedQty: number | null;
+  inwardQtyInKg: number | null;
+  inwardCost: number | null;
+  remarks: string | null;
+  inwardBy: string | null;
 }

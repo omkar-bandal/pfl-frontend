@@ -6,6 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { ExpandMore, ExpandLess, Remove } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
@@ -13,35 +14,35 @@ import { Navigations, setMobileOpen, SidebarListProps } from "@prime-fresh/modul
 import { useDispatch } from "react-redux";
 
 const SidebarList: React.FC<SidebarListProps> = memo(({
-  dept,
   selectedItem,
   setSelectedItem,
   navigations,
 }) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const [openItems, setOpenItems] = React.useState<Record<string, boolean>>({});
 
   const handleToggle = (name: string) => {
     setOpenItems((prev) => ({ ...prev, [name]: !prev[name] }));
   };
 
-  // Extracted common styles
   const listItemStyles = {
     minHeight: 36,
     borderRadius: 2,
     marginY: 1,
     "&.Mui-selected, &.Mui-focusVisible": {
-      backgroundColor: "#00cc66",
+      backgroundColor: theme.palette.primary.main,
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+      },
     },
     "&:hover": {
-      backgroundColor: "#00e673",
+      backgroundColor: theme.palette.primary.main,
     },
   };
 
   const renderChildItems = (children: Navigations[], parentName: string) =>
     children.map((child) => {
-      if (!child.depts?.includes(dept)) return null;
-
       return (
         <React.Fragment key={child.name}>
           {child.path ? (
@@ -50,7 +51,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
                 selected={selectedItem === child.name}
                 onClick={() => {
                   dispatch(setMobileOpen(false));
-                  setSelectedItem(child.name);
+                  setSelectedItem(child.name || '');
                 }}
                 sx={listItemStyles}>
                 <ListItemIcon sx={{ fontSize: "small", color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>
@@ -99,17 +100,17 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
   return (
     <List dense={true}>
       {navigations.map((item) => {
-        if (!item.depts?.includes(dept)) return null;
+        // if (!item.depts?.includes(dept)) return null;
         return item.path ? (
           <NavLink to={item.path} key={item.name}>
             <ListItemButton dense={true}
               selected={selectedItem === item.name}
               sx={listItemStyles}
-               onClick={() => {
+              onClick={() => {
                 dispatch(setMobileOpen(false));
-                setSelectedItem(item.name);
+                setSelectedItem(item.name || '');
               }}
-              >
+            >
               <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
               <ListItemText
                 primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>}
@@ -118,16 +119,16 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
           </NavLink>
         ) : item.children ? (
           <React.Fragment key={item.name}>
-            <ListItemButton dense={true} onClick={() => handleToggle(item.name)} sx={listItemStyles}>
+            <ListItemButton dense={true} onClick={() => handleToggle(item.name || '')} sx={listItemStyles}>
               <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
               <ListItemText primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>} />
               <ListItemIcon>
-                {openItems[item.name] ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+                {openItems[item.name || ''] ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
               </ListItemIcon>
             </ListItemButton>
-            <Collapse in={openItems[item.name]} timeout="auto" unmountOnExit>
+            <Collapse in={openItems[item.name || '']} timeout="auto" unmountOnExit>
               <List component="div" dense={true} disablePadding>
-                {renderChildItems(item.children, item.name)}
+                {renderChildItems(item.children, item.name || '')}
               </List>
             </Collapse>
           </React.Fragment>

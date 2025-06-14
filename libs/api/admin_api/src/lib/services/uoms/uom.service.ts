@@ -14,8 +14,8 @@ export class UOMService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllUOMs({ page, limit, sort }: QueryParams): Promise<ApiBaseState<GetUOM[]>> {
-        const url = adminApiUrlConstants.GET_ALL_UOM({ page, limit, sort });
+    getAllUOMs(queryParams?: QueryParams): Promise<ApiBaseState<GetUOM[]>> {
+        const url = adminApiUrlConstants.GET_ALL_UOM(queryParams);
         return this.get(url);
     }
 

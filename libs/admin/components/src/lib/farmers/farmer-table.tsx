@@ -2,8 +2,9 @@ import React from "react";
 import { Box, Grid2 } from "@mui/material";
 import { useFarmerColumns } from "./farmer-columns";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllFarmers } from '@prime-fresh/admin/modules';
+import { useGetAllFarmers } from '@prime-fresh/admin/modules';
 import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
+import { sharedRoutes } from "@prime-fresh/shared/modules";
 
 export function FarmerTable() {
 
@@ -23,6 +24,7 @@ export function FarmerTable() {
 
   const { data, isLoading, isError, error } = useGetAllFarmers(queryParams);
   const allFarmers = data ? data : null;
+  console.log('All Farmers: ', allFarmers)
   const rowCountRef = React.useRef(allFarmers?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allFarmers?.allRecords !== undefined) {
@@ -38,7 +40,7 @@ export function FarmerTable() {
   }, [isError, error]);
 
   const handleCreate = () => {
-    navigate(ADMIN_ROUTES.CREATE_FARMER)
+    navigate(sharedRoutes.CREATE_FARMER)
   };
 
   return (

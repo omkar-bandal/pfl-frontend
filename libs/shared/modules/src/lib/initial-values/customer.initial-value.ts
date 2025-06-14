@@ -80,7 +80,7 @@ const initStatutoryDetails: PostStatutoryDetails = {
     panNo: null,
     panCopy: null,
     aadharNo: null,
-    addharCopy: null,
+    aadharCopy: null,
     gstn: null,
     regiCertificateCopy: null,
     billBookCopy: null,

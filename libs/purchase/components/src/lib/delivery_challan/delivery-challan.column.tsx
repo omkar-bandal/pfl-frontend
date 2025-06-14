@@ -1,15 +1,14 @@
-import { Edit, Preview } from "@mui/icons-material";
-import { Chip, IconButton } from "@mui/material";
+import { Chip } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { RequestedBy } from "@prime-fresh/purchase_api";
-import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { useMemo } from "react";
+import { convertInTitleCase } from "@prime-fresh/shared/modules";
+import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 
-export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
+export const useDeliveryChallanColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
     const navigate = useNavigate();
-    return useMemo(() => [
+    return [
         {
             field: "challanNo",
             headerName: "Challan Number",
@@ -17,6 +16,7 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
             align: "center",
             headerAlign: "center",
             isMobileVisible: true,
+            valueGetter: (value: string) => value? value.toUpperCase() : '-',
         },
         {
             field: "deliveryCType",
@@ -24,6 +24,7 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
+            valueGetter: (value: string) => value? value.toUpperCase() : '-',
         },
         {
             field: "createdDate",
@@ -45,20 +46,12 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
             width: 150,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: RequestedBy) => value ? `${value.firstName || ''} ${value.lastName || ''}` : '-',
+            valueGetter: (value: RequestedBy) => value ? convertInTitleCase(`${value.firstName || ''} ${value.lastName || ''}`) : '-',
         },
         {
             field: "companyName",
             headerName: "Company Name",
-            width: 130,
-            align: "center",
-            headerAlign: "center",
-            valueGetter: (value: string) => value ? value : '-',
-        },
-        {
-            field: "partyName",
-            headerName: "Party Name",
-            width: 130,
+            width: 200,
             align: "center",
             headerAlign: "center",
             valueGetter: (value: string) => value ? value : '-',
@@ -85,7 +78,7 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value ? value : '-',
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         {
             field: "vehicleNo",
@@ -93,7 +86,7 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
             width: 130,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value !== null ? value : '-',
+            valueGetter: (value: string) => value !== null ? value.toUpperCase() : '-',
         },
         // {
         //     field: "totAmt",
@@ -109,7 +102,7 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
             width: 120,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value: string) => value ? value : '-',
+            valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
         },
         {
             field: "approvalStatus",
@@ -139,33 +132,43 @@ export const useDeliveryChallanColumns = (): CustomGridColDef[] => {
         //             return value;
         //     }
         // },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            headerAlign: "center",
-            width: 80,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: this,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_DELIVERY_CHALLAN}/${params.row.id}`)}>
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            headerAlign: "center",
-            width: 80,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/${params.row.id}`)}>
-                    <Preview color="primary" />
-                </IconButton>
-            ),
-        },
-    ], [navigate])
+        ...(canEdit
+            ? [
+                {
+                  field: 'edit',
+                  headerName: 'Edit',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <EditIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.UPDATE_DELIVERY_CHALLAN}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(canView
+            ? [
+                {
+                  field: 'view',
+                  headerName: 'View',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <ViewIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+    ];
 }

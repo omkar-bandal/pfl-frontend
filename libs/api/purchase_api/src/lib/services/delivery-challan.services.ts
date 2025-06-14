@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
 import { GetDeliveryChallan } from "../models";
 
@@ -14,8 +14,8 @@ export class DeliveryChallanServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllDeliveryChallans(): Promise<ApiBaseState<GetDeliveryChallan[]>> {
-        const url = purchaseApiUrl.GET_ALL_DELIVERY_CHALLAN;
+    getAllDeliveryChallans(queryParams?: QueryParams): Promise<ApiBaseState<GetDeliveryChallan[]>> {
+        const url = purchaseApiUrl.GET_ALL_DELIVERY_CHALLAN(queryParams);
         return this.get(url);
     }
 

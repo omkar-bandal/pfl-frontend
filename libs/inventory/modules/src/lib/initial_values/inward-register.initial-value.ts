@@ -1,34 +1,38 @@
-import { PostInwardProducts, PostInwardRegister } from "@prime-fresh/inventory_api";
+import { IInwardProducts, IInwardRegister } from "@prime-fresh/inventory_api";
 // eslint-disable-next-line @nx/enforce-module-boundaries
 
-export const InwardProductInitialValue: PostInwardProducts = {
-    product: '',
-    count: '',
-    size: '',
-    qty: 0,
-    uom: '',
-    weight: 0,
-    productContainerWeight: 0,
-    netWeight: 0,
-    grossWeight: 0
+export const InwardProductInitialValue: IInwardProducts = {
+    productName: null,
+    origin: null,
+    variety: null,
+    count: null,
+    size: null,
+    uom: null,
+    quantity: null,
+    unitPrice: null,
+    amount: null,
+    packingMaterialWeight: null,
+    grossWeight: null,
+    netWeight: null,
+    weight: null,
 }
 
-export const InwardRegisterInitialValue: PostInwardRegister = {
-    deliveryChallanNo: '',
-    grnNo: '',
-    companyName: '',
-    batchNo: '',
-    date: '',
+export const InwardRegisterInitialValue: Omit<IInwardRegister, 'id'> = {
+    deliveryChallanNo: null,
+    grnNo: null,
+    companyName: null,
+    batchNo: null,
+    date: null,
     source: 'vendor',
-    selectedParty: '',
-    inwardBy: '',
-    inwardCost: 0,
+    selectedParty: null,
+    inwardBy: null,
+    inwardCost: null,
     inwardProducts: [InwardProductInitialValue],
-    inwardQtyInKg: 0,
-    inwardType: '',
-    location: '',
-    purchasedBy: '',
-    purchasedQty: 0,
-    remarks: '',
-    totalWeightInKg: 0,
+    inwardQtyInKg: null,
+    inwardType: 'purchase',
+    location: null,
+    purchasedBy: null,
+    purchasedQty: null,
+    remarks: null,
+    totalWeightInKg: null,
 }

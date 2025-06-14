@@ -1,0 +1,59 @@
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { DCTypeStockTransferServices, IDeliveryChallanTypeStockTransfer } from '@prime-fresh/purchase_api';
+import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
+
+export const useCreateDCTypeStockTransfer = (): UseMutationResult<ResultModel, ErrorModel, FormData, unknown> => {
+  return useMutation<ResultModel, ErrorModel, FormData, unknown>({
+    mutationKey: ['create-dc-type-stock-transfer'],
+    mutationFn: (data) => DCTypeStockTransferServices.getInstance().createDCTypeStockTransfer(data),
+  });
+};
+
+export const useUpdateDCTypeStockTransferById = (
+  id: string
+): UseMutationResult<ResultModel, ErrorModel, FormData, unknown> => {
+  return useMutation<ResultModel, ErrorModel, FormData, unknown>({
+    mutationKey: ['update-dc-type-stock-transfer-by-id'],
+    mutationFn: (data) => DCTypeStockTransferServices.getInstance().updateDCTypeStockTransfer(id, data),
+  });
+};
+
+export const useDeleteDCTypeStockTransferById = (
+  id: string
+): UseMutationResult<ResultModel, ErrorModel, unknown, unknown> => {
+  return useMutation<ResultModel, ErrorModel, unknown, unknown>({
+    mutationKey: ['delete-dc-type-stock-transfer-by-id'],
+    mutationFn: () => DCTypeStockTransferServices.getInstance().deleteDCTypeStockTransferById(id),
+  });
+};
+
+export const useGetAllDCTypeStockTransfers = (
+  queryParams?: QueryParams
+): UseQueryResult<ApiBaseState<IDeliveryChallanTypeStockTransfer[]>, ErrorModel> => {
+  return useQuery<ApiBaseState<IDeliveryChallanTypeStockTransfer[]>, ErrorModel>({
+    queryKey: ['get-all-dc-type-stock-transfer', queryParams],
+    queryFn: () => DCTypeStockTransferServices.getInstance().getAllDCTypeStockTransfer(queryParams),
+  });
+};
+
+export const useGetDCTypeStockTransferForViewById = (
+  id: string
+): UseQueryResult<ApiBaseState<IDeliveryChallanTypeStockTransfer>, ErrorModel> => {
+  const enabled = id.length > 1 ? true : false;
+  return useQuery<ApiBaseState<IDeliveryChallanTypeStockTransfer>, ErrorModel>({
+    queryKey: ['get-dc-type-stock-transfer-for-view-by-id', id],
+    queryFn: () => DCTypeStockTransferServices.getInstance().getDCTypeStockTransferForViewById(id),
+    enabled: enabled,
+  });
+};
+
+export const useGetDCTypeStockTransferForUpdateById = (
+  id: string
+): UseQueryResult<ApiBaseState<IDeliveryChallanTypeStockTransfer>, ErrorModel> => {
+  const enabled = id.length > 1 ? true : false;
+  return useQuery<ApiBaseState<IDeliveryChallanTypeStockTransfer>, ErrorModel>({
+    queryKey: ['get-dc-type-stock-transfer-for-update-by-id', id],
+    queryFn: () => DCTypeStockTransferServices.getInstance().getDCTypeStockTransferForUpdateById(id),
+    enabled: enabled,
+  });
+};

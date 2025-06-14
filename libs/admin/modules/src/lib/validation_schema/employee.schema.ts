@@ -21,7 +21,7 @@ export const employeeValidationSchema = Yup.object().shape({
         .matches(REGEX.CONTACT_NO, 'Mobile number must contain only numbers'),
     email: Yup.string()
         .required('Email is required')
-        .email('Invalid email format'),
+        .matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
     address: addressSchema,
     joiningDate: Yup.string()
         .required('Joining date is required'),

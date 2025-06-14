@@ -1,0 +1,110 @@
+import { useMemo } from 'react';
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import { IconButton } from '@mui/material';
+import { ChevronRight } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { CustomGridColDef } from '@prime-fresh/ui_shared';
+import { convertInTitleCase, sharedRoutes } from '@prime-fresh/shared/modules';
+
+export const useStockLocationWiseColumns = (): CustomGridColDef[] => {
+  const navigate = useNavigate();
+
+  return useMemo(
+    () => [
+      {
+        field: 'companyName',
+        headerName: 'Company Name',
+        flex: 1,
+        minWidth: 250,
+        align: 'center',
+        headerAlign: 'center',
+        valueGetter: (value: string) => (value ? value : '-'),
+      },
+      {
+        field: 'location',
+        headerName: 'Location',
+        flex: 1,
+        minWidth: 130,
+        align: 'center',
+        headerAlign: 'center',
+        isMobileVisible: true,
+        valueGetter: (value: string) =>
+          value ? convertInTitleCase(value) : '-',
+      },
+      // {
+      //     field: "createdDate",
+      //     headerName: "Created Date",
+      //     width: 120,
+      //     align: "center",
+      //     headerAlign: "center"
+      // },
+      // {
+      //     field: "createdTime",
+      //     headerName: "Created Time",
+      //     width: 120,
+      //     align: "center",
+      //     headerAlign: "center"
+      // },
+      {
+        field: 'product',
+        headerName: 'Product',
+        width: 150,
+        align: 'center',
+        headerAlign: 'center',
+        valueGetter: (value: string) =>
+          value ? convertInTitleCase(value) : '-',
+      },
+      // {
+      //   field: 'varients',
+      //   headerName: 'Product Variant',
+      //   width: 200,
+      //   align: 'center',
+      //   headerAlign: 'center',
+      //   valueGetter: (value: string) =>
+      //     value ? convertInTitleCase(value) : '-',
+      // },
+      {
+        field: 'onHandQty',
+        headerName: 'Quantity (Kg)',
+        flex: 1,
+        minWidth: 100,
+        align: 'center',
+        headerAlign: 'center',
+        valueGetter: (value: number) => (value ? value : 0),
+      },
+      {
+        field: 'amount',
+        headerName: 'Amount (Rs.)',
+        flex: 1,
+        minWidth: 100,
+        align: 'center',
+        headerAlign: 'center',
+        valueGetter: (value: number) => (value ? value : 0),
+      },
+      {
+        field: 'details',
+        headerName: 'Details',
+        align: 'center',
+        headerAlign: 'center',
+        flex: 1,
+        minWidth: 80,
+        sortable: false,
+        filterable: false,
+        isMobileVisible: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <IconButton
+            aria-label="details"
+            onClick={() =>
+              navigate(
+                `${sharedRoutes.GET_STOCK_BY_PRODUCT}/${params.row.product}/${params.row.location}/${params.row.companyName}`
+              )
+            }
+          >
+            <ChevronRight color="primary" />
+          </IconButton>
+        ),
+      },
+    ],
+    [navigate]
+  );
+};

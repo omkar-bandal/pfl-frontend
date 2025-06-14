@@ -1,16 +1,17 @@
 import { PostEODProducts, PostEODReport } from "@prime-fresh/inventory_api";
 
 export const eodReportProductsInitialValue: PostEODProducts = {
-    sku: '',
-    uom: '',
+    sku: null,
+    uom: null,
     qty: 0,
     totalWeightinKg: 0
 }
 
 export const eodReportInitialValue: PostEODReport = {
-    location: '',
-    stockDate: '',
+    companyName: null,
+    location: null,
+    stockDate: null,
     eodProducts: [eodReportProductsInitialValue],
-    submission: '',
-    comments: ''
+    submission: null,
+    comments: null
 }

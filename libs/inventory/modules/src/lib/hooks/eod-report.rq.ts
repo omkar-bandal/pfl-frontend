@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { EODReportServices, GetEODReport, PostEODReport} from '@prime-fresh/inventory_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteEODReportById(id: string):
     });
 }
 
-export function useGetAllEODReports():
+export function useGetAllEODReports(queryParams?: QueryParams):
     UseQueryResult<ApiBaseState<GetEODReport[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetEODReport[]>, ErrorModel>({
-        queryKey: ['get-all-eod-reports'],
-        queryFn: () => EODReportServices.getInstance().getAllEODReports(),
+        queryKey: ['get-all-eod-reports', queryParams],
+        queryFn: () => EODReportServices.getInstance().getAllEODReports(queryParams),
     });
 }
 

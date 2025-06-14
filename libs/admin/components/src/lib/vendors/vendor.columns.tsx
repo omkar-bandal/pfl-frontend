@@ -1,5 +1,5 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Preview } from '@mui/icons-material';
+import { Edit, Preview } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
@@ -86,18 +86,18 @@ export const useVendorColumns = (): CustomGridColDef[] => {
       headerName: "Regd Date",
       width: 150,
     },
-    // {
-    //   field: 'edit',
-    //   headerName: 'Edit',
-    //   width: 50,
-    //   sortable: false,
-    //   filterable: false,
-    //   renderCell: (params: GridRenderCellParams) => (
-    //       <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_VENDOR}/${params.row.id}`)}>
-    //         <Edit color="secondary" />
-    //       </IconButton>
-    //   ),
-    // },
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      width: 50,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams) => (
+          <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_VENDOR}/${params.row.id}`)}>
+            <Edit color="secondary" />
+          </IconButton>
+      ),
+    },
     {
       field: 'view',
       headerName: 'View',

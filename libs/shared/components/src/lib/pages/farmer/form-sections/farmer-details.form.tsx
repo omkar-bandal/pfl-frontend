@@ -53,7 +53,7 @@ export const FarmerDetails = () => {
                     isRequired={true}
                     name="residensialAddress.address1"
                     label="Address Line 1"
-                    value={values.residensialAddress.address1}
+                    value={values.residensialAddress?.address1 || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -63,7 +63,7 @@ export const FarmerDetails = () => {
                     isRequired={false}
                     name="residensialAddress.address2"
                     label="Address Line 2"
-                    value={values.residensialAddress.address2}
+                    value={values.residensialAddress?.address2 || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -73,7 +73,7 @@ export const FarmerDetails = () => {
                     isRequired={true}
                     name="residensialAddress.location"
                     label="Location"
-                    value={values.residensialAddress.location}
+                    value={values.residensialAddress?.location || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -83,7 +83,7 @@ export const FarmerDetails = () => {
                     isRequired={true}
                     name="residensialAddress.city"
                     label="City"
-                    value={values.residensialAddress.city}
+                    value={values.residensialAddress?.city || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -93,7 +93,7 @@ export const FarmerDetails = () => {
                     isRequired={true}
                     name="residensialAddress.state"
                     label="State"
-                    value={values.residensialAddress.state}
+                    value={values.residensialAddress?.state || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -103,7 +103,7 @@ export const FarmerDetails = () => {
                     isRequired={true}
                     name="residensialAddress.pincode"
                     label="Pincode"
-                    value={values.residensialAddress.pincode}
+                    value={values.residensialAddress?.pincode || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -147,7 +147,17 @@ export const FarmerDetails = () => {
                     options={sharedData.gender}
                     handleChange={handleChange} />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4.5 }}>
+            <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                    type="date"
+                    isRequired={false}
+                    name="dob"
+                    label="Birth Date"
+                    value={values.dob}
+                    handleChange={handleChange}
+                />
+            </Grid2>
+            <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                     type="text"
                     isRequired={false}
@@ -157,7 +167,7 @@ export const FarmerDetails = () => {
                     handleChange={handleChange}
                 />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 4.5 }}>
+            <Grid2 size={{ xs: 12, md: 3 }}>
                 <FileUpload
                     isRequired={false}
                     name="idProofCopy"

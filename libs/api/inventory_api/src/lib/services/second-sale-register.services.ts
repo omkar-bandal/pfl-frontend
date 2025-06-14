@@ -1,4 +1,4 @@
-import { ApiBaseState, BaseService, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetSecondSaleRegister, PostSecondSaleRegister } from "../models";
 import { inventoryApiUrl } from "../constants";
 
@@ -14,8 +14,8 @@ export class SecondSaleRegisterServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllSecondSaleRegisters():Promise<ApiBaseState<GetSecondSaleRegister[]>> {
-        const url = inventoryApiUrl.GET_ALL_SECOND_SALE_REGISTERS;
+    getAllSecondSaleRegisters(queryParams?: QueryParams):Promise<ApiBaseState<GetSecondSaleRegister[]>> {
+        const url = inventoryApiUrl.GET_ALL_SECOND_SALE_REGISTERS(queryParams);
         return this.get(url);
     }
 

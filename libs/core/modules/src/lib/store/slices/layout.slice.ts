@@ -4,14 +4,12 @@ import { RootState } from '../store.core';
 
 type LayoutState = {
   mobileOpen: boolean;
-  isClosing: boolean;
-  pageTitle: string;
+  isSidebarClosing: boolean;
 };
 
 const initialState: LayoutState = {
   mobileOpen: false,
-  isClosing: false,
-  pageTitle: "Dashboard",
+  isSidebarClosing: false,
 };
 
 const layoutSlice = createSlice({
@@ -21,20 +19,16 @@ const layoutSlice = createSlice({
     setMobileOpen: (state, action: PayloadAction<boolean>) => {
       state.mobileOpen = action.payload;
     },
-    setIsClosing: (state, action: PayloadAction<boolean>) => {
-      state.isClosing = action.payload;
-    },
-    setPageTitle: (state, action: PayloadAction<string>) => {
-      state.pageTitle = action.payload;
+    setIsSidebarClosing: (state, action: PayloadAction<boolean>) => {
+      state.isSidebarClosing = action.payload;
     },
   },
 });
 
-export const { setMobileOpen, setIsClosing, setPageTitle } = layoutSlice.actions;
-export const layoutActionCreators = { setMobileOpen, setIsClosing, setPageTitle };
+export const { setMobileOpen, setIsSidebarClosing } = layoutSlice.actions;
+export const layoutActionCreators = { setMobileOpen, setIsSidebarClosing };
 // Other code such as selectors can use the imported `RootState` type
 export const mobileOpenState = (state: RootState) => state.layout.mobileOpen;
-export const isClosingState = (state: RootState) => state.layout.isClosing;
-export const pageTitleState = (state: RootState) => state.layout.pageTitle;
-
+export const isSidebarClosingState = (state: RootState) => state.layout.isSidebarClosing;
+export const layoutStates = (state: RootState) => state.layout;
 export const layoutReducer = layoutSlice.reducer;

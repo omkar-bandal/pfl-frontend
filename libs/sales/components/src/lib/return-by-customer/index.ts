@@ -1,4 +1,3 @@
-export * from './rbc-create.form';
-export * from './rbc-update.form';
-export * from './rbc.table';
-export * from './rbc.view';
+export * from './returned-by-customer.form';
+export * from './returned-by-customer.table';
+export * from './returned-by-customer.view';

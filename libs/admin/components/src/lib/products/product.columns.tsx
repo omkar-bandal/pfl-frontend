@@ -6,6 +6,7 @@ import { GetProductCategory, GetProductClassification, GetProductSubcategory, Ge
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
+import { convertInTitleCase } from "@prime-fresh/shared/modules";
 
 export const useProductColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const useProductColumns = (): CustomGridColDef[] => {
       width: 150,
       align: "center",
       headerAlign: "center",
+      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
       isMobileVisible: true,
     },
     {

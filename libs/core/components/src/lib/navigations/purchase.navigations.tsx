@@ -1,94 +1,242 @@
-import { Article, Assessment, FormatListBulleted, GridViewOutlined, Handshake, LocalShipping, Payment, Remove, Report } from "@mui/icons-material";
-import { Navigations } from "@prime-fresh/modules";
-import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
-import { stringConstants } from "@prime-fresh/modules";
+import {
+  Analytics,
+  Article,
+  Assessment,
+  DeleteSweep,
+  FormatIndentDecrease,
+  FormatIndentIncrease,
+  FormatListBulleted,
+  GridViewOutlined,
+  Group,
+  Handshake,
+  Inventory,
+  LocalShipping,
+  Payment,
+  Remove,
+} from '@mui/icons-material';
+import { Navigations } from '@prime-fresh/modules';
+import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
+import { stringConstants } from '@prime-fresh/modules';
+import { sharedRoutes } from '@prime-fresh/shared/modules';
+import { inventoryRouteConstants } from '@prime-fresh/inventory/modules';
+import { salesRoutes } from '@prime-fresh/sales/modules';
 
 export const purchaseNavigations: Navigations[] = [
-    {
-        name: "Dashboard",
-        logo: <GridViewOutlined />,
-        path: PURCHASE_ROUTES.DASHBOARD_PURCHASE,
+  {
+    name: 'Dashboard',
+    uniqueKey: 'dashboard',
+    logo: <GridViewOutlined />,
+    path: PURCHASE_ROUTES.DASHBOARD_PURCHASE,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+  },
+  {
+    name: 'Inventory',
+    uniqueKey: 'stock',
+    logo: <Inventory />,
+    path: sharedRoutes.GET_ALL_STOCK,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+  },
+  {
+    name: 'RFPA',
+    uniqueKey: 'rfpa',
+    logo: <Article />,
+    path: PURCHASE_ROUTES.GET_ALL_RFPA,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+  },
+  {
+    name: 'Deal Slip',
+    uniqueKey: 'deal-slip',
+    logo: <Handshake />,
+    path: PURCHASE_ROUTES.GET_ALL_DEAL_SLIP,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+  },
+  {
+    name: 'GRN',
+    uniqueKey: 'grn',
+    logo: <FormatListBulleted />,
+    path: PURCHASE_ROUTES.GET_ALL_GRN,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+  },
+  {
+    name: 'Vouchers',
+    uniqueKey: '',
+    logo: <Payment />,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+    children: [
+      {
+        name: 'Multiple Cash',
+        uniqueKey: 'multi-cash-voucher',
+        logo: <Remove />,
+        path: PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_PURCHASE],
-    },
-    {
-        name: "RFPA",
-        logo: <Article />,
-        path: PURCHASE_ROUTES.GET_ALL_RFPA,
+      },
+      {
+        name: 'Transports Payment',
+        uniqueKey: 'transport-payment-voucher',
+        logo: <Remove />,
+        path: PURCHASE_ROUTES.GET_ALL_TRANSPORT_CASH_VOUCHER,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_PURCHASE],
-    },
-    {
-        name: "Deal Slip",
-        logo: <Handshake />,
-        path: PURCHASE_ROUTES.GET_ALL_DEAL_SLIP,
+      },
+      {
+        name: 'Packing Material Payment',
+        uniqueKey: 'packaging-material-voucher',
+        logo: <Remove />,
+        path: PURCHASE_ROUTES.GET_ALL_PACKING_MATERIAL_VOUCHER,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_PURCHASE],
-    },
-    {
-        name: "GRN",
-        logo: <FormatListBulleted />,
-        path: PURCHASE_ROUTES.GET_ALL_GRN,
+      },
+      {
+        name: 'Labour Payment',
+        uniqueKey: 'labor-payment-voucher',
+        logo: <Remove />,
+        path: PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER,
         roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
         depts: [stringConstants.DEPT_PURCHASE],
-    },
-    {
-        name: "Vouchers",
-        logo: <Payment />,
-        roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-        depts: [stringConstants.DEPT_PURCHASE],
-        children: [
-            {
-                name: "Multiple Cash",
-                logo: <Remove />,
-                path: PURCHASE_ROUTES.GET_ALL_MULT_CASH_VOUCHER,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_PURCHASE],
-            },
-            {
-                name: "Transports Payment",
-                logo: <Remove />,
-                path: PURCHASE_ROUTES.GET_ALL_TRANSPORT_CASH_VOUCHER,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_PURCHASE],
-            },
-            {
-                name: "Packing Material Payment",
-                logo: <Remove />,
-                path: PURCHASE_ROUTES.GET_ALL_PACKING_MATERIAL_VOUCHER,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_PURCHASE],
-            },
-            {
-                name: "Labour Payment",
-                logo: <Remove />,
-                path: PURCHASE_ROUTES.GET_ALL_LABOUR_CASH_VOUCHER,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_PURCHASE],
-            }
-        ]
-    },
-    {
-        name: "Delivery Challan",
-        logo: <LocalShipping />,
-        path: PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN,
-        roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-        depts: [stringConstants.DEPT_PURCHASE]
-    },
-    {
-        name: "Reports",
-        logo: <Assessment />,
-        roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-        depts: [stringConstants.DEPT_PURCHASE],
-        children: [
-            {
-                name: "Purchase Reports",
-                logo: <Remove />,
-                path: PURCHASE_ROUTES.PURCHASE_REPORTS,
-                roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
-                depts: [stringConstants.DEPT_PURCHASE],
-            },
-        ]
-    },
-
-]
+      },
+    ],
+  },
+  {
+    name: 'Delivery Challan',
+    uniqueKey: 'delivery-challan',
+    logo: <LocalShipping />,
+    path: PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN,
+    roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+    depts: [stringConstants.DEPT_PURCHASE],
+  },
+  // {
+  //   name: 'Reports',
+  //   logo: <Assessment />,
+  //   roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+  //   depts: [stringConstants.DEPT_PURCHASE],
+  //   children: [
+  //     {
+  //       name: 'Purchase Reports',
+  //       logo: <Remove />,
+  //       path: PURCHASE_ROUTES.PURCHASE_REPORTS,
+  //       roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+  //       depts: [stringConstants.DEPT_PURCHASE],
+  //     },
+  //   ],
+  // },
+//   {
+//     name: "Inventory",
+//     logo: <Inventory />,
+//     path: sharedRoutes.GET_ALL_STOCK,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "Delivery Challan",
+//     logo: <LocalShipping />,
+//     path: inventoryRouteConstants.GET_ALL_DELIVERY_CHALLAN,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "Inward Register",
+//     logo: <FormatIndentIncrease />,
+//     path: inventoryRouteConstants.GET_ALL_INWARD_REGISTERS,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "AQR",
+//     logo: <Analytics />,
+//     path: inventoryRouteConstants.GET_ALL_AQR,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "GRN",
+//     logo: <FormatListBulleted />,
+//     path: inventoryRouteConstants.GET_ALL_GRN,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "Labor Register",
+//     logo: <Group />,
+//     path: inventoryRouteConstants.GET_ALL_LABOUR_REGISTER,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// // {
+// //     name: "Labor Register",
+// //     logo: <Group />,
+// //     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+// //     depts: [stringConstants.DEPT_INVENTORY],
+// //     children: [
+// //         {
+// //             name: "Permanent Labors",
+// //             logo: <Remove />,
+// //             path: inventoryRouteConstants.GET_ALL_LABOUR_REGISTER,
+// //             roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+// //             depts: [stringConstants.DEPT_INVENTORY],
+// //         },
+// //         {
+// //             name: "Labor Attendance",
+// //             logo: <Remove />,
+// //             path: inventoryRouteConstants.GET_ALL_LABOUR_ATTENDANCE,
+// //             roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+// //             depts: [stringConstants.DEPT_INVENTORY],
+// //         },
+// //     ]
+// // },
+// {
+//     name: "Dump Register",
+//     logo: <DeleteSweep />,
+//     path: inventoryRouteConstants.GET_ALL_DUMP_REGISTERS,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "Dispatch Register",
+//     logo: <FormatIndentDecrease />,
+//     path: inventoryRouteConstants.GET_ALL_VEHILCE_DISPATCH_REGISTER,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "Second Sale",
+//     logo: <GridViewOutlined />,
+//     path: inventoryRouteConstants.GET_ALL_SECOND_SALE_REGISTER,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// {
+//     name: "EOD Report",
+//     logo: <Assessment />,
+//     path: inventoryRouteConstants.GET_ALL_EOD_REPORT,
+//     roles: [stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY],
+// },
+// // {
+// //     name: "Sales Orders",
+// //     logo: <Article />,
+// //     path: salesRoutes.GET_ALL_SALES_ORDER,
+// //     roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+// //     depts: [stringConstants.DEPT_INVENTORY]
+// // },
+// {
+//     name: "Return By Customer",
+//     logo: <FormatListBulleted />,
+//     path: salesRoutes.GET_ALL_RBC,
+//     roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY]
+// },
+// {
+//     name: "Proforma Invoices",
+//     logo: <Analytics />,
+//     path: inventoryRouteConstants.GET_ALL_PROFORMA_INVOICES,
+//     roles: [stringConstants.ROLE_ADMIN, stringConstants.ROLE_MANAGER, stringConstants.ROLE_EMPLOYEE],
+//     depts: [stringConstants.DEPT_INVENTORY]
+// },
+];

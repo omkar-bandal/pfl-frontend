@@ -1,8 +1,8 @@
 export * from './initValAddress';
-export * from './initValRFPA';
-export * from './initValDealSlip';
-export * from './initValGRN';
-export * from './initValDeliveryChallan';
-export * from './vouchers';
+export * from './rfpa.initial-value';
+export * from './deal-slip.initial-value';
 export * from './initValPaymentRequest';
+export * from './delivery-challan.initial-value';
+export * from './grn.initial-value';
+export * from './vouchers';
 

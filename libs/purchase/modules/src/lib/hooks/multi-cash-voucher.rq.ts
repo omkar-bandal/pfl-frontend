@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
-import { MultiCashVoucherServices, GetMCvoucher } from '@prime-fresh/purchase_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { MultiCashVoucherServices, IMultiCashVoucher } from '@prime-fresh/purchase_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateMultiCashVoucher():
@@ -26,19 +26,30 @@ export function useDeleteMultiCashVoucherById(id: string):
     });
 }
 
-export function useGetAllMultiCashVouchers():
-    UseQueryResult<ApiBaseState<GetMCvoucher[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetMCvoucher[]>, ErrorModel>({
-        queryKey: ['get-all-multi-cash-vouchers'],
-        queryFn: () => MultiCashVoucherServices.getInstance().getAllMultiCashVouchers(),
+export function useGetAllMultiCashVouchers(queryParams? : QueryParams):
+    UseQueryResult<ApiBaseState<IMultiCashVoucher[]>, ErrorModel> {
+    return useQuery<ApiBaseState<IMultiCashVoucher[]>, ErrorModel>({
+        queryKey: ['get-all-multi-cash-vouchers', queryParams],
+        queryFn: () => MultiCashVoucherServices.getInstance().getAllMultiCashVouchers(queryParams),
     });
 }
 
-export function useGetMultiCashVoucherById(id: string):
-    UseQueryResult<ApiBaseState<GetMCvoucher>, ErrorModel> {
-    return useQuery<ApiBaseState<GetMCvoucher>, ErrorModel>({
-        queryKey: ['get-multi-cash-voucher-by-id'],
-        queryFn: () => MultiCashVoucherServices.getInstance().getMultiCashVoucherById(id),
-        enabled: !!id,
+export function useGetMultiCashVoucherForViewById(id: string):
+    UseQueryResult<ApiBaseState<IMultiCashVoucher>, ErrorModel> {
+        const enabled = id.length > 0 ? true : false;
+    return useQuery<ApiBaseState<IMultiCashVoucher>, ErrorModel>({
+        queryKey: ['get-multi-cash-voucher-for-view-by-id', id],
+        queryFn: () => MultiCashVoucherServices.getInstance().getMultiCashVoucherForViewById(id),
+        enabled: enabled,
+    });
+}
+
+export function useGetMultiCashVoucherForUpdateById(id: string):
+    UseQueryResult<ApiBaseState<IMultiCashVoucher>, ErrorModel> {
+        const enabled = id.length > 0 ? true : false;
+    return useQuery<ApiBaseState<IMultiCashVoucher>, ErrorModel>({
+        queryKey: ['get-multi-cash-voucher-for-update-by-id', id],
+        queryFn: () => MultiCashVoucherServices.getInstance().getMultiCashVoucherForUpdateById(id),
+        enabled: enabled,
     });
 }

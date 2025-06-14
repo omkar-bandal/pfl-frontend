@@ -1,4 +1,4 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { SecondSaleRegisterServices, PostSecondSaleRegister, GetSecondSaleRegister } from '@prime-fresh/inventory_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -26,11 +26,11 @@ export function useDeleteSecondSaleRegisterById(id: string):
     });
 }
 
-export function useGetAllSecondSaleRegisters():
+export function useGetAllSecondSaleRegisters(queryParams? : QueryParams):
     UseQueryResult<ApiBaseState<GetSecondSaleRegister[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetSecondSaleRegister[]>, ErrorModel>({
-        queryKey: ['get-all-second-sale-registers'],
-        queryFn: () => SecondSaleRegisterServices.getInstance().getAllSecondSaleRegisters(),
+        queryKey: ['get-all-second-sale-registers', queryParams],
+        queryFn: () => SecondSaleRegisterServices.getInstance().getAllSecondSaleRegisters(queryParams),
     });
 }
 

@@ -1,44 +1,54 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
-import { GRNServices, GetGRN } from '@prime-fresh/purchase_api'; 
+import { ApiBaseState, ApprovalModel, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { GRNServices, IGRN } from '@prime-fresh/purchase_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
-export function useCreateGRN():
-    UseMutationResult<ResultModel, ErrorModel, FormData, unknown> {
-    return useMutation<ResultModel, ErrorModel, FormData, unknown>({
-        mutationKey: ['create-GRN'],
-        mutationFn: (data) => GRNServices.getInstance().createGRN(data),
-    });
-}
+export const useCreateGRN = (): UseMutationResult<ResultModel, ErrorModel, FormData, unknown> => {
+  return useMutation<ResultModel, ErrorModel, FormData, unknown>({
+    mutationKey: ['create-GRN'],
+    mutationFn: (data) => GRNServices.getInstance().createGRN(data),
+  });
+};
 
-export function useUpdateGRNById(id: string):
-    UseMutationResult<ResultModel, ErrorModel, FormData, unknown> {
-    return useMutation<ResultModel, ErrorModel, FormData, unknown>({
-        mutationKey: ['update-GRN-by-id'],
-        mutationFn: (data) => GRNServices.getInstance().updateGRN(id, data),
-    });
-}
+export const useUpdateGRNById = (id: string): UseMutationResult<ResultModel, ErrorModel, FormData, unknown> => {
+  return useMutation<ResultModel, ErrorModel, FormData, unknown>({
+    mutationKey: ['update-GRN-by-id'],
+    mutationFn: (data) => GRNServices.getInstance().updateGRN(id, data),
+  });
+};
 
-export function useDeleteGRNById(id: string):
-    UseMutationResult<ResultModel, ErrorModel, unknown, unknown> {
-    return useMutation<ResultModel, ErrorModel, unknown, unknown>({
-        mutationKey: ['delete-GRN-by-id'],
-        mutationFn: () => GRNServices.getInstance().deleteGRNById(id),
-    });
-}
+export const useDeleteGRNById = (id: string): UseMutationResult<ResultModel, ErrorModel, unknown, unknown> => {
+  return useMutation<ResultModel, ErrorModel, unknown, unknown>({
+    mutationKey: ['delete-GRN-by-id'],
+    mutationFn: () => GRNServices.getInstance().deleteGRNById(id),
+  });
+};
 
-export function useGetAllGRNs():
-    UseQueryResult<ApiBaseState<GetGRN[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetGRN[]>, ErrorModel>({
-        queryKey: ['get-all-GRNs'],
-        queryFn: () => GRNServices.getInstance().getAllGRNs(),
-    });
-}
+export const useGetAllGRNs = (queryParams?: QueryParams): UseQueryResult<ApiBaseState<IGRN[]>, ErrorModel> => {
+  return useQuery<ApiBaseState<IGRN[]>, ErrorModel>({
+    queryKey: ['get-all-GRNs', queryParams],
+    queryFn: () => GRNServices.getInstance().getAllGRNs(queryParams),
+  });
+};
 
-export function useGetGRNById(id: string):
-    UseQueryResult<ApiBaseState<GetGRN>, ErrorModel> {
-    return useQuery<ApiBaseState<GetGRN>, ErrorModel>({
-        queryKey: ['get-GRN-by-id'],
-        queryFn: () => GRNServices.getInstance().getGRNById(id),
-        enabled: !!id,
-    });
-}
+export const useGetGRNForViewById = (id: string): UseQueryResult<ApiBaseState<IGRN>, ErrorModel> => {
+  return useQuery<ApiBaseState<IGRN>, ErrorModel>({
+    queryKey: ['get-GRN-for-view-by-id', id],
+    queryFn: () => GRNServices.getInstance().getGRNForViewById(id),
+    enabled: !!id,
+  });
+};
+
+export const useGetGRNForUpdateById = (id: string): UseQueryResult<ApiBaseState<IGRN>, ErrorModel> => {
+  return useQuery<ApiBaseState<IGRN>, ErrorModel>({
+    queryKey: ['get-GRN-for-update-by-id', id],
+    queryFn: () => GRNServices.getInstance().getGRNForUpdateById(id),
+    enabled: !!id,
+  });
+};
+
+export const useApproveGRN = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalModel, unknown> => {
+  return useMutation<ResultModel, ErrorModel, ApprovalModel, unknown>({
+    mutationKey: ['approve-GRN'],
+    mutationFn: (data) => GRNServices.getInstance().approveGRN(id, data),
+  });
+};

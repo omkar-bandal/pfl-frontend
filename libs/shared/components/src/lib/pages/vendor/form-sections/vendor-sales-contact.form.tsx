@@ -13,7 +13,7 @@ export const VendorSalesContact = () => {
                     isRequired={true}
                     name="vendorSaleInfo.contactFName"
                     label="First Name"
-                    value={values.vendorSaleInfo.contactFName}
+                    value={values.vendorSaleInfo.contactFName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -23,7 +23,7 @@ export const VendorSalesContact = () => {
                     isRequired={false}
                     name="vendorSaleInfo.contactMName"
                     label="Middle Name"
-                    value={values.vendorSaleInfo.contactMName}
+                    value={values.vendorSaleInfo.contactMName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -33,7 +33,7 @@ export const VendorSalesContact = () => {
                     isRequired={true}
                     name="vendorSaleInfo.contactLName"
                     label="Last Name"
-                    value={values.vendorSaleInfo.contactLName}
+                    value={values.vendorSaleInfo.contactLName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -43,7 +43,7 @@ export const VendorSalesContact = () => {
                     isRequired={true}
                     name="vendorSaleInfo.directContactNumber"
                     label="Contact Number"
-                    value={values.vendorSaleInfo.directContactNumber}
+                    value={values.vendorSaleInfo.directContactNumber || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -53,7 +53,7 @@ export const VendorSalesContact = () => {
                     isRequired={false}
                     name="vendorSaleInfo.mobileNumber"
                     label="Contact Number (Alternate)"
-                    value={values.vendorSaleInfo.mobileNumber}
+                    value={values.vendorSaleInfo.mobileNumber || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -63,7 +63,7 @@ export const VendorSalesContact = () => {
                     isRequired={false}
                     name="vendorSaleInfo.email"
                     label="Email"
-                    value={values.vendorSaleInfo.email}
+                    value={values.vendorSaleInfo.email || ''}
                     handleChange={handleChange}
                 />
             </Grid2>

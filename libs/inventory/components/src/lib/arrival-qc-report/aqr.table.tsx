@@ -5,19 +5,33 @@ import { GetAQR } from "@prime-fresh/inventory_api";
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
 import { useNavigate } from "react-router-dom";
 import { useAQRColumns } from "./aqr.columns";
+import { usePermission } from "@prime-fresh/modules";
 
 export const AQRTable = () => {
     const navigate = useNavigate();
-    const aqrColumns = useAQRColumns();
+    const { canEdit, canView } = usePermission('aqr');
+    const aqrColumns = useAQRColumns(canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
     } = useDataTable({ columnDef: aqrColumns });
-    const { data, isLoading, isError, error } = useGetAllAQRs();
-    const aqrs = data?.data ? data.data : [];
+    const { data, isLoading, isError, error } = useGetAllAQRs(queryParams);
+    const aqrs = data ? data : null;
+    const rowCountRef = React.useRef(aqrs?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (aqrs?.allRecords !== undefined) {
+            rowCountRef.current = aqrs.allRecords;
+        }
+        return rowCountRef.current;
+    }, [aqrs]);
     React.useEffect(() => {
         if (isError) {
             toast.error(error?.message || 'Error occured please refresh the page.')
@@ -46,10 +60,16 @@ export const AQRTable = () => {
                 </Grid2>
             </Grid2>
             <DataGridTable<GetAQR>
-                mode="client"
                 loading={isLoading}
-                rows={aqrs}
+                rows={aqrs?.data || []}
                 columns={aqrColumns}
+                mode="server"
+                initialPageSize={10}
+                totalRows={rowCount}
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationChange}
+                sortModel={sortModel}
+                onSortModelChange={handleSortingChange}
                 columnVisibilityModel={columnVisibilityModel}
             />
         </Box >

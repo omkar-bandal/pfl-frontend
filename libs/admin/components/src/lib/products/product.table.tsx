@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Box, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllProducts } from "@prime-fresh/admin/modules";
+import { useGetAllProducts } from "@prime-fresh/admin/modules";
 import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
 import { useProductColumns } from "./product.columns";
+import { sharedRoutes } from "@prime-fresh/shared/modules";
 
 export function ProductTable() {
 
@@ -39,7 +40,7 @@ export function ProductTable() {
   }, [isError, error]);
 
   const handleCreate = () => {
-    navigate(ADMIN_ROUTES.CREATE_PRODUCT);
+    navigate(sharedRoutes.CREATE_PRODUCT);
   };
 
   return (

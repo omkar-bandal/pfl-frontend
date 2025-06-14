@@ -1,18 +1,18 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { DealSlipServices, PostDealSlip, GetDealSlip } from '@prime-fresh/purchase_api';
+import { DealSlipServices, IDealSlip } from '@prime-fresh/purchase_api';
 
 export function useCreateDealSlip():
-    UseMutationResult<ResultModel, ErrorModel, PostDealSlip, unknown> {
-    return useMutation<ResultModel, ErrorModel, PostDealSlip, unknown>({
+    UseMutationResult<ResultModel, ErrorModel, IDealSlip, unknown> {
+    return useMutation<ResultModel, ErrorModel, IDealSlip, unknown>({
         mutationKey: ['create-deal-slip'],
         mutationFn: (data) => DealSlipServices.getInstance().createDealSlip(data),
     });
 }
 
 export function useUpdateDealSlipById(id: string):
-    UseMutationResult<ResultModel, ErrorModel, GetDealSlip, unknown> {
-    return useMutation<ResultModel, ErrorModel, GetDealSlip, unknown>({
+    UseMutationResult<ResultModel, ErrorModel, IDealSlip, unknown> {
+    return useMutation<ResultModel, ErrorModel, IDealSlip, unknown>({
         mutationKey: ['update-deal-slip'],
         mutationFn: (data) => DealSlipServices.getInstance().updateDealSlip(id, data),
     });
@@ -26,19 +26,30 @@ export function useDeleteDealSlipById(id: string):
     });
 }
 
-export function useGetAllDealSlips():
-    UseQueryResult<ApiBaseState<GetDealSlip[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetDealSlip[]>, ErrorModel>({
-        queryKey: ['get-all-deal-slips'],
+export function useGetAllDealSlips(queryParams: QueryParams):
+    UseQueryResult<ApiBaseState<IDealSlip[]>, ErrorModel> {
+    return useQuery<ApiBaseState<IDealSlip[]>, ErrorModel>({
+        queryKey: ['get-all-deal-slips', queryParams],
         queryFn: () => DealSlipServices.getInstance().getAllDealSlips(),
     });
 }
 
-export function useGetDealSlipById(id: string):
-    UseQueryResult<ApiBaseState<GetDealSlip>, ErrorModel> {
-    return useQuery<ApiBaseState<GetDealSlip>, ErrorModel>({
-        queryKey: ['get-deal-slip-by-id'],
-        queryFn: () => DealSlipServices.getInstance().getDealSlipById(id),
-        enabled: !!id,
+export function useGetDealSlipForViewById(id: string):
+    UseQueryResult<ApiBaseState<IDealSlip>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IDealSlip>, ErrorModel>({
+        queryKey: ['get-deal-slip-for-view-by-id', id],
+        queryFn: () => DealSlipServices.getInstance().getDealSlipForViewById(id),
+        enabled: enabled,
+    });
+}
+
+export function useGetDealSlipForUpdateById(id: string):
+    UseQueryResult<ApiBaseState<IDealSlip>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IDealSlip>, ErrorModel>({
+        queryKey: ['get-deal-slip-for-update-by-id', id],
+        queryFn: () => DealSlipServices.getInstance().getDealSlipForUpdateById(id),
+        enabled: enabled,
     });
 }

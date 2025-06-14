@@ -23,7 +23,7 @@ export function EmployeeTable() {
 
   const { data, isLoading, isError, error } = useGetAllEmployees(queryParams);
   const allEmployees = data ? data : null;
-  console.log(allEmployees);
+  console.log("All Employees: ", allEmployees);
   const rowCountRef = useRef(allEmployees?.allRecords || 0);
   const rowCount = useMemo(() => {
     if (allEmployees?.allRecords !== undefined) {

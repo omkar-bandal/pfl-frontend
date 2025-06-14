@@ -1,15 +1,13 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Chip, IconButton } from "@mui/material";
-import { Edit, Preview } from "@mui/icons-material";
+import { Chip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
-import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { useMemo } from "react";
-// import { RequestedBy } from "@prime-fresh/purchase_api";
+import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
 
-export const useTPVoucherColumns = (): CustomGridColDef[] => {
+export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
     const navigate = useNavigate();
-    return useMemo(() => [
+
+    return [
         {
             field: "voucherNo",
             headerName: "Voucher Number",
@@ -131,31 +129,43 @@ export const useTPVoucherColumns = (): CustomGridColDef[] => {
                     return value;
             }
         },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}>
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            width: 50,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}>
-                    <Preview color="primary" />
-                </IconButton>
-            ),
-        },
-    ], [navigate])
+        ...(canEdit
+            ? [
+                {
+                  field: 'edit',
+                  headerName: 'Edit',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <EditIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.UPDATE_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(canView
+            ? [
+                {
+                  field: 'view',
+                  headerName: 'View',
+                  width: 70,
+                  sortable: false,
+                  filterable: false,
+                  isMobileVisible: true,
+                  renderCell: (params: GridRenderCellParams) => (
+                    <ViewIconBtn
+                      onClick={() =>
+                        navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)
+                      }
+                    />
+                  ),
+                },
+              ]
+            : []),    
+    ];
 }

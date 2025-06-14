@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { Box, Button, Grid, LinearProgress, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { displayAddress, useGetPackingMeterialPaymentVoucherById } from "@prime-fresh/purchase/modules";
+import { Box, Grid, LinearProgress, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { displayAddress, useGetPackingMeterialPaymentVoucherForViewById } from "@prime-fresh/purchase/modules";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { PageTitle, PrintButton } from "@prime-fresh/ui_shared";
@@ -14,7 +14,7 @@ export const PackingMaterialPaymentVoucherView = () => {
     const [approval, setApproval] = useState<string>("");
     const { voucherid } = useParams<{ voucherid: string }>();
     const pmpVoucherId = voucherid ? voucherid : '';
-    const { data, isLoading } = useGetPackingMeterialPaymentVoucherById(pmpVoucherId);
+    const { data, isLoading } = useGetPackingMeterialPaymentVoucherForViewById(pmpVoucherId);
     const pmpVoucher = data?.data ? data.data : null;
     console.log("pmpVoucher : ", pmpVoucher)
     return (
@@ -63,7 +63,7 @@ export const PackingMaterialPaymentVoucherView = () => {
                                     </Grid>
                                     <Grid item xs={8} sx={{ textAlign: "center" }}>
                                         <Typography variant="subtitle1" component="span" textAlign="center" sx={{ fontWeight: 700, borderBottom: '1px solid #000000' }}>PACKING MATERIAL  PAYMENT  VOUCHER</Typography>
-                                        <Typography variant="h4" component="div" textAlign="center" sx={{ fontWeight: 700 }}>{pmpVoucher?.companyName.companyName || "Prime Fresh Limited"}</Typography>
+                                        <Typography variant="h4" component="div" textAlign="center" sx={{ fontWeight: 700 }}>{pmpVoucher?.companyName || "Prime Fresh Limited"}</Typography>
                                         <Typography variant="caption" component="div" textAlign="center">102, Sanskar-ll, Nr. Ketav Petrol Pump, Polytechnic Road, Ambawadi, Ahmedabad-380015.</Typography>
                                         <Typography variant="caption" component="div" textAlign="center"> Ph.:+91-79-40320244, Email: info@primecustomer.co.in, Web: www.primecustomer.co.in</Typography>
                                     </Grid>
@@ -205,7 +205,7 @@ export const PackingMaterialPaymentVoucherView = () => {
                                         <Box sx={{ width: '100%', height: 50 }}></Box>
                                         <Box sx={{ width: '100%' }}>
                                             <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000", fontWeight: 700 }}>Prepared By</Typography>
-                                            <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${pmpVoucher?.requestedBy.firstName} ${pmpVoucher?.requestedBy.lastName})`}</Typography>
+                                            <Typography variant="subtitle1" component="div" textAlign="center" sx={{ color: "#000000" }}>{`(${pmpVoucher?.requestedBy})`}</Typography>
                                         </Box>
                                     </Grid>
                                     <Grid item xs={4} sx={{ border: '1px solid #000000' }}>

@@ -8,3 +8,4 @@ export * from './transport-payment-voucher.services';
 export * from './packing-material-payment-voucher.services';
 export * from './delivery-challan.services';
 export * from './payment-request.services';
+export * from './delivery-challan';

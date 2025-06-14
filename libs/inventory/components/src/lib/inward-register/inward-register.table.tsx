@@ -1,24 +1,38 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
 import { Box, Grid2 } from "@mui/material";
-import { GetInwardRegister } from "@prime-fresh/inventory_api";
+import { IInwardRegister } from "@prime-fresh/inventory_api";
 import { useInwardRegisterColumns } from "./inward-register.column";
 import { inventoryRouteConstants, useGetAllInwardRegisters } from "@prime-fresh/inventory/modules";
 import { useNavigate } from "react-router-dom";
 import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
+import { usePermission } from "@prime-fresh/modules";
 
 export const InwardRegisterTable = () => {
     const navigate = useNavigate();
-    const inwardRegisterColumns = useInwardRegisterColumns();
+    const { canEdit, canView } = usePermission('inward-register');
+    const inwardRegisterColumns = useInwardRegisterColumns(canEdit, canView);
     const {
+        paginationModel,
+        sortModel,
+        handleSortingChange,
+        handlePaginationChange,
+        queryParams,
         columnVisibilityModel,
         displayColumnVisibilityPanel,
         handleColumnVisibilityModelChange,
         handleCloseColumnVisibilityPanel,
         handleOpenColumnVisibilityPanel
     } = useDataTable();
-    const { data, isLoading, isError, error } = useGetAllInwardRegisters();
-    const inwards = data?.data ? data.data : [];
+    const { data, isLoading, isError, error } = useGetAllInwardRegisters(queryParams);
+    const inwards = data ? data : null;
+    const rowCountRef = React.useRef(inwards?.allRecords || 0);
+    const rowCount = React.useMemo(() => {
+        if (inwards?.allRecords !== undefined) {
+            rowCountRef.current = inwards.allRecords;
+        }
+        return rowCountRef.current;
+    }, [inwards]);
     console.log(inwards)
     React.useEffect(() => {
         if (isError) {
@@ -47,12 +61,18 @@ export const InwardRegisterTable = () => {
                     />
                 </Grid2>
             </Grid2>
-            <DataGridTable<GetInwardRegister>
-                mode="client"
-                loading={isLoading}
-                rows={inwards}
-                columns={inwardRegisterColumns}
-                columnVisibilityModel={columnVisibilityModel}
+            <DataGridTable<IInwardRegister>
+               loading={isLoading}
+               rows={inwards?.data || []}
+               columns={inwardRegisterColumns}
+               mode="server"
+               initialPageSize={10}
+               totalRows={rowCount}
+               paginationModel={paginationModel}
+               onPaginationModelChange={handlePaginationChange}
+               sortModel={sortModel}
+               onSortModelChange={handleSortingChange}
+               columnVisibilityModel={columnVisibilityModel}
             />
         </Box>
     )

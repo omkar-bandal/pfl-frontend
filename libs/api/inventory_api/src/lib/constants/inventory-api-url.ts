@@ -1,64 +1,146 @@
+import { QueryParams } from '@prime-fresh/common_api';
+
 export const inventoryApiUrl = {
-    //Inward Register
-    GET_ALL_INWARD_REGISTERS: "/inwardRegister",
-    GET_INWARD_REGISTER_BY_ID: "/inwardRegister",
-    CREATE_INWARD_REGISTER: "/inwardRegister",
-    UPDATE_INWARD_REGISTER: "/inwardRegister",
-    DELETE_INWARD_REGISTER: "/inwardRegister",
+  //Inward Register
+  GET_ALL_INWARD_REGISTERS: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/inwardRegister/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/inwardRegister/`;
+    }
+  },
+  GET_INWARD_REGISTER_FOR_VIEW_BY_ID: '/inwardRegister/view',
+  GET_INWARD_REGISTER_FOR_UPDATE_BY_ID: '/inwardRegister/update',
+  CREATE_INWARD_REGISTER: '/inwardRegister',
+  UPDATE_INWARD_REGISTER: '/inwardRegister',
+  DELETE_INWARD_REGISTER: '/inwardRegister',
 
-    //Arrival Quality Report
-    GET_ALL_AQR: "/aqr/",
-    GET_AQR_BY_ID: "/aqr",
-    CREATE_AQR: "/aqr/",
-    UPDATE_AQR: "/aqr",
-    DELETE_AQR: "/aqr",
+  //Arrival Quality Report
+  GET_ALL_AQR: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/aqr/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/aqr/`;
+    }
+  },
+  GET_AQR_FOR_VIEW_BY_ID: '/aqr/view',
+  GET_AQR_FOR_UPDATE_BY_ID: '/aqr/update',
+  CREATE_AQR: '/aqr/',
+  UPDATE_AQR: '/aqr',
+  DELETE_AQR: '/aqr',
 
-    //Dump Register
-    GET_ALL_DUMP_REGISTERS: "/dumpRegister/",
-    GET_DUMP_REGISTER_BY_ID: "/dumpRegister",
-    CREATE_DUMP_REGISTER: "/dumpRegister/",
-    UPDATE_DUMP_REGISTER: "/dumpRegister",
-    DELETE_DUMP_REGISTER: "/dumpRegister",
+  //Dump Register
+  GET_ALL_DUMP_REGISTERS: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/dumpRegister/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/dumpRegister/`;
+    }
+  },
+  GET_DUMP_REGISTER_FOR_VIEW_BY_ID: '/dumpRegister/view',
+  GET_DUMP_REGISTER_FOR_UPDATE_BY_ID: '/dumpRegister/update',
+  CREATE_DUMP_REGISTER: '/dumpRegister/',
+  UPDATE_DUMP_REGISTER: '/dumpRegister',
+  DELETE_DUMP_REGISTER: '/dumpRegister',
 
-    //Labor Registration
-    GET_ALL_REGISTERED_LABORS: "/labors/",
-    GET_REGISTERED_LABOR_BY_ID: "/labors",
-    CREATE_LABOR_REGISTRATION: "/labors/",
-    UPDATE_REGISTERED_LABOR: "/labors",
-    DELETE_REGISTERED_LABOR: "/labors",
+  //Labor Registration
+  GET_ALL_REGISTERED_LABORS: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/labors/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/labors/`;
+    }
+  },
+  GET_REGISTERED_LABOR_BY_ID: '/labors',
+  CREATE_LABOR_REGISTRATION: '/labors/',
+  UPDATE_REGISTERED_LABOR: '/labors',
+  DELETE_REGISTERED_LABOR: '/labors',
 
-    //Temporaty Labors
-    GET_ALL_TEMP_LABORS: "/tempLabour/",
-    GET_TEMP_LABOR_BY_ID: "/tempLabour",
-    CREATE_A_TEMP_LABOR: "/tempLabour/",
-    UPDATE_TEMP_LABOR: "/tempLabour",
-    DELETE_TEMP_LABOR: "/tempLabour",
+  //Temporaty Labors
+  GET_ALL_TEMP_LABORS: '/tempLabour/',
+  GET_TEMP_LABOR_BY_ID: '/tempLabour',
+  CREATE_A_TEMP_LABOR: '/tempLabour/',
+  UPDATE_TEMP_LABOR: '/tempLabour',
+  DELETE_TEMP_LABOR: '/tempLabour',
 
-    //Labor Attendance
-    GET_ALL_LABOR_ATTENDANCE: "/laborAttendances/",
-    GET_LABOR_ATTENDANCE_BY_ID: "/laborAttendances",
-    CREATE_LABOR_ATTENDANCE: "/laborAttendances/",
-    UPDATE_LABOR_ATTENDANCE: "/laborAttendances",
-    DELETE_LABOR_ATTENDANCE: "/laborAttendances",
+  //Labor Attendance
+  GET_ALL_LABOR_ATTENDANCE: '/laborAttendances/',
+  GET_LABOR_ATTENDANCE_BY_ID: '/laborAttendances',
+  CREATE_LABOR_ATTENDANCE: '/laborAttendances/',
+  UPDATE_LABOR_ATTENDANCE: '/laborAttendances',
+  DELETE_LABOR_ATTENDANCE: '/laborAttendances',
 
-    //Vehicle Dispatch Register
-    GET_ALL_VEHICLE_DISPATCH_REGISTERS: "/vehicleDispatches/",
-    GET_VEHICLE_DISPATCH_REGISTER_BY_ID: "/vehicleDispatches",
-    CREATE_VEHICLE_DISPATCH_REGISTER: "/vehicleDispatches/",
-    UPDATE_VEHICLE_DISPATCH_REGISTER: "/vehicleDispatches",
-    DELETE_VEHICLE_DISPATCH_REGISTER: "/vehicleDispatches",
+  //Vehicle Dispatch Register
+  GET_ALL_VEHICLE_DISPATCH_REGISTERS: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/vehicleDispatches/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/vehicleDispatches/`;
+    }
+  },
+  GET_VEHICLE_DISPATCH_REGISTER_BY_ID: '/vehicleDispatches',
+  CREATE_VEHICLE_DISPATCH_REGISTER: '/vehicleDispatches/',
+  UPDATE_VEHICLE_DISPATCH_REGISTER: '/vehicleDispatches',
+  DELETE_VEHICLE_DISPATCH_REGISTER: '/vehicleDispatches',
 
-    //Second Sale Register
-    GET_ALL_SECOND_SALE_REGISTERS: "/secondSales/",
-    GET_SECOND_SALE_REGISTER_BY_ID: "/secondSales",
-    CREATE_SECOND_SALE_REGISTER: "/secondSales/",
-    UPDATE_SECOND_SALE_REGISTER: "/secondSales",
-    DELETE_SECOND_SALE_REGISTER: "/secondSales",
+  //Second Sale Register
+  GET_ALL_SECOND_SALE_REGISTERS: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/secondSales/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/secondSales/`;
+    }
+  },
+  GET_SECOND_SALE_REGISTER_BY_ID: '/secondSales',
+  CREATE_SECOND_SALE_REGISTER: '/secondSales/',
+  UPDATE_SECOND_SALE_REGISTER: '/secondSales',
+  DELETE_SECOND_SALE_REGISTER: '/secondSales',
 
-    //EOD Report 
-    GET_ALL_EOD_REPORT: "/eodStock/",
-    GET_EOD_REPORT_BY_ID: "/eodStock",
-    CREATE_EOD_REPORT: "/eodStock/",
-    UPDATE_EOD_REPORT: "/eodStock",
-    DELETE_EOD_REPORT: "/eodStock",
-}
+  //EOD Report
+  GET_ALL_EOD_REPORT: (queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/eodStock/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/eodStock/`;
+    }
+  },
+  GET_EOD_REPORT_BY_ID: '/eodStock',
+  CREATE_EOD_REPORT: '/eodStock/',
+  UPDATE_EOD_REPORT: '/eodStock',
+  DELETE_EOD_REPORT: '/eodStock',
+
+  GET_ALL_PROF_INV: '/invoice/getAll',
+  CREATE_PROF_INV: '/invoice/generate/profarma',
+
+  GET_ALL_FINAL_INV: '/invoice/getfinal/all',
+  CREATE_FINAL_INV: '/invoice/generate/final',
+
+};

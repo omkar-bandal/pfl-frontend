@@ -34,11 +34,12 @@ export function useGetAllProductClassifications(queryParams?: QueryParams):
     });
 }
 
-export function useGetAProductClassificationById(id: string):
+export function useGetProductClassificationById(id: string):
     UseQueryResult<ApiBaseState<GetProductClassification>, ErrorModel> {
+        const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetProductClassification>, ErrorModel>({
         queryKey: ['get-product-classification-by-id'],
         queryFn: () => ProductClassificationService.getInstance().getProductClassificationById(id),
-        enabled: !!id,
+        enabled: enabled,
     });
 }

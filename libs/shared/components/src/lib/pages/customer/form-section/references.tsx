@@ -27,22 +27,22 @@ export const CustomerReferences = () => {
                 <TextInput isRequired={false} name="keyMobileNumbers.ref1Email" label="Email" value={values.keyMobileNumbers.ref1Email} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.address1" label="Address Line 1" value={values.keyMobileNumbers.ref1Address.address1} handleChange={handleChange} />
+                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.address1" label="Address Line 1" value={values.keyMobileNumbers.ref1Address?.address1 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref1Address.address2" label="Address Line 2" value={values.keyMobileNumbers.ref1Address.address2} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref1Address.address2" label="Address Line 2" value={values.keyMobileNumbers.ref1Address?.address2 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.location" label="Location" value={values.keyMobileNumbers.ref1Address.location} handleChange={handleChange} />
+                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.location" label="Location" value={values.keyMobileNumbers.ref1Address?.location || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.city" label="City" value={values.keyMobileNumbers.ref1Address.city} handleChange={handleChange} />
+                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.city" label="City" value={values.keyMobileNumbers.ref1Address?.city || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.state" label="State" value={values.keyMobileNumbers.ref1Address.state} handleChange={handleChange} />
+                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.state" label="State" value={values.keyMobileNumbers.ref1Address?.state || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.pincode" label="Pincode" value={values.keyMobileNumbers.ref1Address.pincode} handleChange={handleChange} />
+                <TextInput isRequired={true} name="keyMobileNumbers.ref1Address.pincode" label="Pincode" value={values.keyMobileNumbers.ref1Address?.pincode || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12 }} marginY={1}>
                 <SectionHeader sectionHeader="References 2" />
@@ -63,22 +63,22 @@ export const CustomerReferences = () => {
                 <TextInput isRequired={false} name="keyMobileNumbers.ref2Email" label="Email" value={values.keyMobileNumbers.ref2Email} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.address1" label="Address Line 1" value={values.keyMobileNumbers.ref2Address.address1} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.address1" label="Address Line 1" value={values.keyMobileNumbers.ref2Address?.address1 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.address2" label="Address Line 2" value={values.keyMobileNumbers.ref2Address.address2} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.address2" label="Address Line 2" value={values.keyMobileNumbers.ref2Address?.address2 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.location" label="Location" value={values.keyMobileNumbers.ref2Address.location} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.location" label="Location" value={values.keyMobileNumbers.ref2Address?.location || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.city" label="City" value={values.keyMobileNumbers.ref2Address.city} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.city" label="City" value={values.keyMobileNumbers.ref2Address?.city || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.state" label="State" value={values.keyMobileNumbers.ref2Address.state} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.state" label="State" value={values.keyMobileNumbers.ref2Address?.state || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.pincode" label="Pincode" value={values.keyMobileNumbers.ref2Address.pincode} handleChange={handleChange} />
+                <TextInput isRequired={false} name="keyMobileNumbers.ref2Address.pincode" label="Pincode" value={values.keyMobileNumbers.ref2Address?.pincode || ''} handleChange={handleChange} />
             </Grid2>
         </Grid2>
     )

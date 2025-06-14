@@ -3,9 +3,9 @@ export const muiTheme: Theme = createTheme({
     palette: {
         primary: {
             main: "#00cc66",
-            light: "#e6fff2",
-            dark: "#00994d",
-            contrastText: "#fff",
+            light: "#f6fff7",
+            dark: " #00994d",
+            contrastText: "#ffffff",
         },
         secondary: {
             main: "#404040",

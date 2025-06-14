@@ -1,34 +1,24 @@
-import { GetMCvoucher, PostMCvoucher } from "@prime-fresh/purchase_api"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store.purchase";
+import { IMultiCashVoucher } from '@prime-fresh/purchase_api';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store.purchase';
 
-type mcVoucherState = {
-    mcVouchers: GetMCvoucher[];
-    selectedMCVoucher: GetMCvoucher | undefined;
-    previewMCVoucher: PostMCvoucher | GetMCvoucher | undefined;
-}
-const initialState : mcVoucherState = {
-    mcVouchers: [],
-    selectedMCVoucher: undefined,
-    previewMCVoucher: undefined,
-}
+type MCVoucherState = {
+  mcVoucherFormPreview: Omit<IMultiCashVoucher, 'id'> | undefined;
+};
+const initialState: MCVoucherState = {
+  mcVoucherFormPreview: undefined,
+};
 
 const mcVoucherSlice = createSlice({
-    name: "mc_voucher",
-    initialState,
-    reducers: {
-        setMCVouchers: (state, action: PayloadAction<GetMCvoucher[]>) =>{
-            state.mcVouchers = action.payload;
-        },
-        setSelectedMCVoucher: (state, action: PayloadAction<GetMCvoucher | undefined>) => {
-            state.selectedMCVoucher = action.payload;
-        },
-        setPreviewMCVoucher: (state, action: PayloadAction<PostMCvoucher | GetMCvoucher | undefined>) => {
-            state.previewMCVoucher = action.payload;
-        }
-    }
-})
-export const {setMCVouchers, setPreviewMCVoucher, setSelectedMCVoucher } = mcVoucherSlice.actions;
+  name: 'mc_voucher',
+  initialState,
+  reducers: {
+    setMCVoucherFormPreview: (state, action: PayloadAction<Omit<IMultiCashVoucher, 'id'> | undefined>) => {
+      state.mcVoucherFormPreview = action.payload;
+    },
+  },
+});
+export const { setMCVoucherFormPreview } = mcVoucherSlice.actions;
 
 export const mcVoucherState = (state: RootState) => state.mc_voucher;
 
