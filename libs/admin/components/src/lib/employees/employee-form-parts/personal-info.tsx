@@ -1,11 +1,11 @@
 import { Grid2 } from '@mui/material';
-import { PostEmployee } from '@prime-fresh/admin_api'
+import { IEmployee } from '@prime-fresh/admin_api'
 import { SectionHeader, TextInput } from '@prime-fresh/ui_shared';
 import { useFormikContext } from 'formik'
 import { memo } from 'react';
 
 export const PersonalInfo = memo(() => {
-    const {values, handleChange} = useFormikContext<PostEmployee>();
+    const {values, handleChange} = useFormikContext<IEmployee>();
   return (
     <Grid2 container spacing={1} padding={1}>
     <Grid2 size={{ xs: 12, md: 3 }}>

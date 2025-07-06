@@ -1,6 +1,6 @@
 export type Navigations = {
     name?: string;
-    uniqueKey: string;
+    uniqueKey?: string;
     logo?: React.ReactElement;
     path?: string;
     roles?: string[];

@@ -1,21 +1,21 @@
-import { PostProduct } from '@prime-fresh/admin_api';
+import { IProduct } from '@prime-fresh/admin_api';
 
-export const initValProduct: PostProduct = {
-    name: '',
-    prefix: '',
-    productOrigin: [],
-    brand: '',
-    classification: '',
-    category: '',
-    subcategory: '',
-    description: '',
-    variety: [],
-    count: [],
-    size: [],
-    uom: '',
-    packingType: '',
-    shelfLife: 0,
-    storageTemp: 0,
-    qualityParameters: [{ name: '', type: 'good' }],
-    image: null,
-}
+export const initValProduct: Omit<IProduct, 'id'> = {
+  name: null,
+  prefix: null,
+  brand: null,
+  classification: null,
+  category: null,
+  subcategory: null,
+  description: null,
+  productOrigin: [],
+  variety: [],
+  count: [],
+  size: [],
+  uom: null,
+  packingType: null,
+  shelfLife: null,
+  storageTemp: null,
+  qualityParameters: [{ name: '', type: 'good' }],
+  image: null,
+};

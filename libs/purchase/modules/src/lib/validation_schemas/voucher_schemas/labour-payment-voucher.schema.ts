@@ -8,7 +8,7 @@ export const labourPaymentVoucherSchema = yup.object().shape({
     location: yup.string().required('Location is required'),
     noOfLabours: yup.number().required('Number of labour is required').positive('Number of labours cannot be negative'),
     ratePerLabour: yup.number().required('Rate is required').positive('Rate cannot be negative'), 
-    loadingDate: yup.date().required('Loading date is required'),
+    loadingDate: yup.string().required('Loading date is required'),
     contactNo: yup.string().required('Contact number is required.').matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
     altContactNo: yup.string().nullable().matches(REGEX.IS_NUMBER, "Please enter valid contact number."),
     paymentMode: yup.string().required('Payment mode is required'),

@@ -17,7 +17,7 @@ export interface IPaymentInfo {
     paymentTerms: number | null;
     dueDate: string | null;
     advancePaidAmt: number | null;
-    validityofQuote: string | null;
+    validityOfQuote: string | null;
 }
 
 export interface IRFPA {
@@ -39,7 +39,6 @@ export interface IRFPA {
     rfpaProducts: IRFPAProducts[];
     paymentInfo: IPaymentInfo;
     deliveryReceivingPerson: string | null;
-    validityOfQuote: string | null;
     packingInstruction: string | null;
     remark: string | null;
     approvalStatus?: string | null;

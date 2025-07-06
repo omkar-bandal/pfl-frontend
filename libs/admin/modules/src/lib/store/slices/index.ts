@@ -6,3 +6,4 @@ export * from './productData.slice';
 export * from './officeData.slice';
 export * from './branchesData.slice';
 export * from './packaging-material.slice';
+export * from './approvalFlow.slice';

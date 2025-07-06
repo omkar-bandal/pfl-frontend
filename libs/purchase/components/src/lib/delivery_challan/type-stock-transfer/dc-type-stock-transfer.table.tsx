@@ -2,18 +2,11 @@ import React from 'react';
 import { Box, Grid2 } from '@mui/material';
 import { PURCHASE_ROUTES, useGetAllDCTypeStockTransfers } from '@prime-fresh/purchase/modules';
 import { IDeliveryChallanTypeStockTransfer } from '@prime-fresh/purchase_api';
-import {
-  AddNewButton,
-  ColumnSettingButton,
-  ColumnVisibilityPanel,
-  DataGridTable,
-  PageTitle,
-  toast,
-  useDataTable,
-} from '@prime-fresh/ui_shared';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { useNavigate } from 'react-router-dom';
 import { useDCTypeStockTransferColumns } from './dc-type-stock-transfer.column';
 import { usePermission } from '@prime-fresh/modules';
+import { Add, Settings } from '@mui/icons-material';
 
 export const DCTypeStockTransferTable = () => {
   const navigate = useNavigate();
@@ -50,9 +43,7 @@ export const DCTypeStockTransferTable = () => {
     }
   }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(PURCHASE_ROUTES.CREATE_DC_TYPE_STOCK_TRANSFER);
-  };
+  const handleCreate = () => navigate(PURCHASE_ROUTES.CREATE_DC_TYPE_STOCK_TRANSFER);
 
   return (
     <Box sx={{ flex: 1 }}>
@@ -61,8 +52,8 @@ export const DCTypeStockTransferTable = () => {
           <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery challan for stock transfer" />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="dc-type-stock-transfer-col-def"
             columns={dcTypeStockTransferColumns}

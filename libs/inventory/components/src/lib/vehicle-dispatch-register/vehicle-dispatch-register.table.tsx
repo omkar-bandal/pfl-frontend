@@ -1,19 +1,12 @@
 import React from 'react';
 import { Box, Grid2 } from '@mui/material';
 import { GetVehicleDispatchRegister } from '@prime-fresh/inventory_api';
-import {
-  AddNewButton,
-  ColumnSettingButton,
-  ColumnVisibilityPanel,
-  DataGridTable,
-  PageTitle,
-  toast,
-  useDataTable,
-} from '@prime-fresh/ui_shared';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { useVehicleDispatchRegisterColumns } from './vehicle-dispatch-register.column';
 import { inventoryRouteConstants, useGetAllVehicleDispatchRegisters } from '@prime-fresh/inventory/modules';
 import { useNavigate } from 'react-router-dom';
 import { usePermission } from '@prime-fresh/modules';
+import { Add, Settings } from '@mui/icons-material';
 
 export const VehicleDispatchRegisterTable = () => {
   const navigate = useNavigate();
@@ -45,7 +38,9 @@ export const VehicleDispatchRegisterTable = () => {
       toast.error(error?.message || 'Error occured please refresh the page.');
     }
   }, [isError, error]);
+
   const handleCreate = () => navigate(inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER);
+
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
@@ -53,8 +48,8 @@ export const VehicleDispatchRegisterTable = () => {
           <PageTitle pagetitle="Vehicle Dispatch Register" />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="vehicle-dispatches-col-def"
             columns={vehicleDispatchRegisterColumns}

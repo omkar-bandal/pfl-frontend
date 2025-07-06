@@ -1,20 +1,16 @@
-export type TokenRes = {
+export interface ITokenRes  {
     access_token: string;
     refresh_token: string;
 }
 
-export type LoggedInUserInfoRes = {
+export interface ILoggedInUserInfoRes  {
     id: string;
     employeeId: string;
     userName: string;
+    department: string ;
 }
 
-export type EmployeeLevel = {
-    id: string,
-    name: string
-}
-
-export type EmployeePermissions = {
+export interface IEmployeePermissions {
     documentDefinition: {
         id: string,
         name: string,
@@ -27,19 +23,18 @@ export type EmployeePermissions = {
     canDownload: boolean
 }
 
-export type SignInRequest = {
+export interface ISignInRequest {
     uid: string;
     password: string;
 }
 
-export type SignInResponse = TokenRes & LoggedInUserInfoRes & {
+export interface ISignInResponse extends ITokenRes, ILoggedInUserInfoRes {
+    permissions: IEmployeePermissions[];
     status: string;
-    level: EmployeeLevel;
-    permissions: EmployeePermissions[];
 }
 
-export type SignOutRequest = TokenRes;
+export type ISignOutRequest = ITokenRes;
 
-export type SignOutResponse = {
+export interface ISignOutResponse {
     message: string,
 }

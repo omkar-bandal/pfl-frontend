@@ -1,5 +1,5 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { GetEmployee } from '../../models';
+import { IEmployee } from '../../models';
 import { adminApiUrlConstants } from '../../constants';
 
 export class EmployeesService extends BaseService {
@@ -9,23 +9,33 @@ export class EmployeesService extends BaseService {
     return this._instance || (this._instance = new this());
   }
 
-  createEmployee(data: FormData): Promise<ResultModel> {
+  createEmployee(data: IEmployee): Promise<ResultModel> {
     const url = adminApiUrlConstants.CREATE_EMPLOYEE;
     return this.post(url, data);
   }
 
-  getAllEmployees(queryParams?: QueryParams): Promise<ApiBaseState<GetEmployee[]>> {
+  getAllEmployees(queryParams?: QueryParams): Promise<ApiBaseState<IEmployee[]>> {
     const url = adminApiUrlConstants.GET_ALL_EMPLOYEES(queryParams);
     return this.get(url);
   }
 
-  getEmployeeById(id: string): Promise<ApiBaseState<GetEmployee>> {
-    const url = `${adminApiUrlConstants.GET_AN_EMPLOYEE}/${id}`;
+  // getEmployeeById(id: string): Promise<ApiBaseState<IEmployee>> {
+  //   const url = `${adminApiUrlConstants.GET_AN_EMPLOYEE}/${id}`;
+  //   return this.get(url);
+  // }
+
+  getEmployeeForView(id: string): Promise<ApiBaseState<IEmployee>> {
+    const url = adminApiUrlConstants.GET_AN_EMPLOYEE_FOR_VIEW(id);
     return this.get(url);
   }
 
-  updateEmployee(id: string, data: FormData): Promise<ResultModel> {
-    const url = `${adminApiUrlConstants.UPDATE_AN_EMPLOYEE}/${id}`;
+  getEmployeeForUpdate(id: string): Promise<ApiBaseState<IEmployee>> {
+    const url = adminApiUrlConstants.GET_AN_EMPLOYEE_FOR_UPDATE(id);
+    return this.get(url);
+  }
+
+  updateEmployee(id: string, data: IEmployee): Promise<ResultModel> {
+    const url = adminApiUrlConstants.UPDATE_AN_EMPLOYEE(id);
     return this.patch(url, data);
   }
 
@@ -34,8 +44,8 @@ export class EmployeesService extends BaseService {
     return this.patch(url, { status: status });
   }
 
-  deleteEmployeeById(id: string): Promise<ResultModel> {
-    const url = `${adminApiUrlConstants.DELETE_EMPLOYEE}/${id}`;
+  deleteEmployee(id: string): Promise<ResultModel> {
+    const url = adminApiUrlConstants.DELETE_EMPLOYEE(id);
     return this.delete(url);
   }
 }

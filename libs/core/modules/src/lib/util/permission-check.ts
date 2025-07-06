@@ -1,6 +1,6 @@
-import { EmployeePermissions } from "@prime-fresh/auth_api";
+import { IEmployeePermissions } from "@prime-fresh/auth_api";
 
-export const hasPermission = (permissions: EmployeePermissions[] ,documentUniqueKey: string, action: 'create' | 'view' | 'edit' | 'delete' | 'download') => {
+export const hasPermission = (permissions: IEmployeePermissions[] ,documentUniqueKey: string, action: 'create' | 'view' | 'edit' | 'delete' | 'download') => {
     const documentPermission = permissions?.find(
       perm => perm.documentDefinition.uniqueKey === documentUniqueKey
     );

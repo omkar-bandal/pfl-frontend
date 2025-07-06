@@ -12,7 +12,7 @@ import {
     useGetProductSubcategoryById,
     useUpdateProductSubcategoryById
 } from "@prime-fresh/admin/modules";
-import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { handleFormKeyDown, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export function ProductSubcatForm() {
     const { id } = useParams<{ id: string }>();
@@ -70,7 +70,7 @@ export function ProductSubcatForm() {
                     handleSubmit(values);
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
                         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid2 size={{ xs: 12 }}>
                                 <PageTitle pagetitle="Product Subcategory" />

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useUOMMatrixColumns } from "./uom-conversion-matrix.columns";
-import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllUOMConversionMatrix } from "@prime-fresh/admin/modules";
+import { useEffect, useMemo, useRef } from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { Add, Settings } from '@mui/icons-material';
+import { useUOMMatrixColumns } from './uom-conversion-matrix.columns';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
+import { useNavigate } from 'react-router-dom';
+import { ADMIN_ROUTES, useGetAllUOMConversionMatrix } from '@prime-fresh/admin/modules';
 
 export function UOMConvMatrixTable() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function UOMConvMatrixTable() {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: uomMatrixColumns, initialPageSize: 10 });
 
   const { data, isLoading, isError, error } = useGetAllUOMConversionMatrix(queryParams);
@@ -37,18 +38,17 @@ export function UOMConvMatrixTable() {
     }
   }, [isError, error]);
 
-  const handleNavigate = () => {
-    navigate(ADMIN_ROUTES.CREATE_UOMs_CONV_MATRIX)
-  }
+  const handleCreate = () => navigate(ADMIN_ROUTES.CREATE_UOMs_CONV_MATRIX);
+
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='UoM Conversion Matrix' />
+          <PageTitle pagetitle="UoM Conversion Matrix" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleNavigate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="uom-conv-mat-col-def"
             columns={uomMatrixColumns}

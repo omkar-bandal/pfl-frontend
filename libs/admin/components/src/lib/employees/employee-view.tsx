@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Email, Home, LocalPostOffice, People, Person, Phone } from '@mui/icons-material';
+import { Home, LocalPostOffice, Person } from '@mui/icons-material';
 import { Box, Button, Chip, LinearProgress, Typography } from '@mui/material';
-import { ADMIN_ROUTES, adminRoutes, useGetEmployeeById, useUpdateEmployeeStatus } from '@prime-fresh/admin/modules';
-import { GetEmployee } from '@prime-fresh/admin_api';
+import { adminRoutes, useGetEmployeeForView, useUpdateEmployeeStatus } from '@prime-fresh/admin/modules';
 import { Address } from '@prime-fresh/common_api';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 import { DataViewer, ObjectViewerConfig, PageTitle, toast } from '@prime-fresh/ui_shared';
@@ -13,24 +12,8 @@ export const ViewEmployee = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const employeeId = id ? id : '';
-  const normalizedEmployeeData = (data: GetEmployee) => {
-    return {
-      ...data,
-      companyName: data?.companyName?.companyName || '',
-      currentLevel: data?.currentLevel?.name || '',
-      reportingManagers:
-        data?.reportingManagers?.map((reportingMData) => ({
-          ...reportingMData,
-          level: reportingMData.level.name,
-          reportingTo:
-            reportingMData.reportingTo?.map((reportingData) => ({
-              id: `${reportingData.firstName} ${reportingData.middleName} ${reportingData.lastName}`,
-            })) || [],
-        })) || [],
-    };
-  };
-  const { data, isLoading } = useGetEmployeeById(employeeId);
-  const employeeData = data?.data ? normalizedEmployeeData(data.data) : null;
+  const { data, isLoading } = useGetEmployeeForView(employeeId);
+  const employeeData = data?.data ? data.data : null;
   console.log('An Employee: ', data?.data);
   const employeeViewConfig: ObjectViewerConfig = {
     sections: [
@@ -61,12 +44,16 @@ export const ViewEmployee = () => {
             label: 'Current Employee Status',
             render: (value: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED') => {
               switch (value) {
-                case "ACTIVE": return <Chip label={convertInTitleCase(value)} color="success" size="small" sx={{ width: 80 }} />;
-                case "INACTIVE": return <Chip label={convertInTitleCase(value)} color="default" size="small" sx={{ width: 80 }} />;
-                case "SUSPENDED": return <Chip label={convertInTitleCase(value)} color="error" size="small" sx={{ width: 80 }} />;
-                default: return <Chip label="INACTIVE" color="default" size="small" />
+                case 'ACTIVE':
+                  return <Chip label={convertInTitleCase(value)} color="success" size="small" sx={{ width: 80 }} />;
+                case 'INACTIVE':
+                  return <Chip label={convertInTitleCase(value)} color="default" size="small" sx={{ width: 80 }} />;
+                case 'SUSPENDED':
+                  return <Chip label={convertInTitleCase(value)} color="error" size="small" sx={{ width: 80 }} />;
+                default:
+                  return <Chip label="INACTIVE" color="default" size="small" />;
               }
-            }
+            },
           },
           {
             key: 'primaryMobNo',
@@ -114,7 +101,7 @@ export const ViewEmployee = () => {
           },
           {
             key: 'permanentAddress',
-            label: 'Middle Name',
+            label: 'Permanent Address',
             render: (value: Address) =>
               value ? (
                 <>
@@ -181,7 +168,7 @@ export const ViewEmployee = () => {
       .then(() => {
         toast.success(ResData ? ResData.message : 'Employee status change to Active.');
         setTimeout(() => {
-          navigate(ADMIN_ROUTES.GET_ALL_EMPLOYEES);
+          navigate(adminRoutes.VIEW_ALL_EMPLOYEES);
         }, 2000);
       })
       .catch(() => {
@@ -193,7 +180,7 @@ export const ViewEmployee = () => {
       .then(() => {
         toast.success(ResData ? ResData.message : 'Employee status change to Inactive.');
         setTimeout(() => {
-          navigate(ADMIN_ROUTES.GET_ALL_EMPLOYEES);
+          navigate(adminRoutes.VIEW_ALL_EMPLOYEES);
         }, 2000);
       })
       .catch(() => {
@@ -205,7 +192,7 @@ export const ViewEmployee = () => {
       .then(() => {
         toast.success(ResData ? ResData.message : 'Employee status change to Suspend.');
         setTimeout(() => {
-          navigate(ADMIN_ROUTES.GET_ALL_EMPLOYEES);
+          navigate(adminRoutes.VIEW_ALL_EMPLOYEES);
         }, 2000);
       })
       .catch(() => {
@@ -218,21 +205,39 @@ export const ViewEmployee = () => {
     </Box>
   ) : (
     <Box flex={1}>
-      <Box flex={1} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box flex={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <PageTitle pagetitle="Employee Details" />
         <Box>
           {employeeData?.status !== 'ACTIVE' && (
-            <Button size="small" variant="contained" color="success" onClick={changeStatusToActive} sx={{textTransform: 'none', width: 100, fontWeight: 600, mx: 2}}>
+            <Button
+              size="small"
+              variant="contained"
+              color="success"
+              onClick={changeStatusToActive}
+              sx={{ textTransform: 'none', width: 100, fontWeight: 600, mx: 2 }}
+            >
               Active
             </Button>
           )}
           {employeeData?.status !== 'INACTIVE' && (
-            <Button size="small" variant="contained" color="error" onClick={changeStatusToInavtive} sx={{textTransform: 'none', width: 100, fontWeight: 600, mx: 2}}>
+            <Button
+              size="small"
+              variant="contained"
+              color="error"
+              onClick={changeStatusToInavtive}
+              sx={{ textTransform: 'none', width: 100, fontWeight: 600, mx: 2 }}
+            >
               Inactive
             </Button>
           )}
           {employeeData?.status !== 'SUSPENDED' && (
-            <Button size="small" variant="contained" color="info" onClick={changeStatusToSuspend} sx={{textTransform: 'none', width: 100, fontWeight: 600, mx: 2}}>
+            <Button
+              size="small"
+              variant="contained"
+              color="info"
+              onClick={changeStatusToSuspend}
+              sx={{ textTransform: 'none', width: 100, fontWeight: 600, mx: 2 }}
+            >
               Suspend
             </Button>
           )}

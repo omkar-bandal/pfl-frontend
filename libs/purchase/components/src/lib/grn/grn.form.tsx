@@ -4,6 +4,8 @@ import { STRINGS } from '@prime-fresh/admin/modules';
 import { useActions, useAppDispatch } from '@prime-fresh/modules';
 import {
   grnInitialValue,
+  grnProductsInitialValue,
+  grnSchema,
   PURCHASE_ARRAYS,
   PURCHASE_ROUTES,
   purchaseOptionsConstants,
@@ -20,6 +22,7 @@ import {
   appendFormData,
   useGetUOMPartialData,
   reverseDateString,
+  handleFormKeyDown,
 } from '@prime-fresh/shared/modules';
 import {
   PageTitle,
@@ -37,12 +40,12 @@ import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { handlePushProduct, handleGRNProductsChange, calculateDueDate } from './helper-functions';
+import { handlePushProduct, handleGRNProductsChange, calculateDueDate, handleRemoveProduct, handleCalculateRemainingAmt } from './helper-functions';
 import { ProductFormFields } from '@prime-fresh/shared/components';
 import { Close } from '@mui/icons-material';
 import { GRNPreview } from './grn.preview';
 
-export const GRNFormNew = () => {
+export const GRNForm = () => {
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
 
@@ -86,12 +89,12 @@ export const GRNFormNew = () => {
 
   const { data: grn, isLoading } = useGetGRNForUpdateById(grnId);
   const grnData = grn?.data ? grn.data : grnInitialValue;
-  console.log('GRN Id: ', grnId, 'GRN Data: ', grn?.data);
   const initialValuesForGRN = grnId === '' ? grnInitialValue : grnData;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: initialValuesForGRN,
+    validationSchema: grnSchema,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => handleSubmit(values),
@@ -124,6 +127,7 @@ export const GRNFormNew = () => {
       <form
         encType="multipart/form-data"
         key={grnId === '' ? 'create-form' : 'update-grn'}
+        onKeyDown={handleFormKeyDown}
         onSubmit={formik.handleSubmit}
       >
         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
@@ -301,7 +305,7 @@ export const GRNFormNew = () => {
                         }}
                       >
                         {formik.values.grnProducts.length > 1 ? (
-                          <IconButton color="error" size="small" onClick={() => remove(index)}>
+                          <IconButton color="error" size="small" onClick={() => handleRemoveProduct(index, formik)}>
                             <Close fontSize="small" />
                           </IconButton>
                         ) : (
@@ -332,8 +336,7 @@ export const GRNFormNew = () => {
                               index,
                               'quantity',
                               Number(event.target.value),
-                              formik.values,
-                              formik.setFieldValue
+                              formik
                             )
                           }
                         />
@@ -356,8 +359,7 @@ export const GRNFormNew = () => {
                               index,
                               'unitPrice',
                               Number(event.target.value),
-                              formik.values,
-                              formik.setFieldValue
+                              formik
                             )
                           }
                         />
@@ -396,8 +398,7 @@ export const GRNFormNew = () => {
                               index,
                               'packingMaterialWeight',
                               Number(event.target.value),
-                              formik.values,
-                              formik.setFieldValue
+                              formik
                             )
                           }
                         />
@@ -420,8 +421,7 @@ export const GRNFormNew = () => {
                               index,
                               'grossWeight',
                               Number(event.target.value),
-                              formik.values,
-                              formik.setFieldValue
+                              formik
                             )
                           }
                         />
@@ -444,7 +444,7 @@ export const GRNFormNew = () => {
                       </Grid2>
                       <Grid2 size={{ xs: 6, md: 3 }}>
                         <TextInput
-                          isRequired={false}
+                          isRequired={true}
                           label="Purchase Date"
                           name={`grnProducts.${index}.purchaseDate`}
                           type="date"
@@ -454,7 +454,7 @@ export const GRNFormNew = () => {
                       </Grid2>
                       <Grid2 size={{ xs: 6, md: 3 }}>
                         <TextInput
-                          isRequired={false}
+                          isRequired={true}
                           label="Dispatch Date"
                           name={`grnProducts.${index}.dispatchDate`}
                           type="date"
@@ -464,7 +464,7 @@ export const GRNFormNew = () => {
                       </Grid2>
                       <Grid2 size={{ xs: 6, md: 3 }}>
                         <TextInput
-                          isRequired={false}
+                          isRequired={true}
                           label="Delivery Date"
                           name={`grnProducts.${index}.deliveryDate`}
                           type="date"
@@ -488,7 +488,7 @@ export const GRNFormNew = () => {
                       )}
                       <Grid2 size={{ xs: 6, md: 3 }}>
                         <TextInput
-                          isRequired={false}
+                          isRequired={true}
                           label="Delivery Location"
                           name={`grnProducts.${index}.deliveryLocation`}
                           type="text"
@@ -511,7 +511,6 @@ export const GRNFormNew = () => {
                         />
                       </Grid2>
                     </Grid2>
-                    // <GRNProductArray index={index} />
                   ))}
                   <Grid2
                     size={{ xs: 12 }}
@@ -523,7 +522,7 @@ export const GRNFormNew = () => {
                   >
                     <AddFieldButton
                       label="Add More"
-                      onClickFn={() => handlePushProduct(grnInitialValue, formik.values, formik.setFieldValue)}
+                      onClickFn={() => handlePushProduct(grnProductsInitialValue, formik)}
                     />
                   </Grid2>
                 </>
@@ -558,7 +557,7 @@ export const GRNFormNew = () => {
                 },
               }}
               handleChange={(e) =>
-                handleGRNProductsChange(null, 'freight', Number(e.target.value), formik.values, formik.setFieldValue)
+                handleGRNProductsChange(null, 'freight', Number(e.target.value), formik)
               }
             />
           </Grid2>
@@ -579,8 +578,7 @@ export const GRNFormNew = () => {
                   null,
                   'otherCharges',
                   Number(e.target.value),
-                  formik.values,
-                  formik.setFieldValue
+                  formik
                 )
               }
             />
@@ -642,8 +640,7 @@ export const GRNFormNew = () => {
                   endAdornment: <InputAdornment position="end">Days</InputAdornment>,
                 },
               }}
-              handleChange={formik.handleChange}
-              onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+              handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const creditPeriod = parseInt(event.target.value, 10) || 0;
                 formik.setFieldValue('paymentInfo.creditPeriod', creditPeriod);
                 if (formik.values.paymentInfo?.paymentDate) {
@@ -661,8 +658,7 @@ export const GRNFormNew = () => {
               name="paymentInfo.paymentDate"
               label="Payment Date"
               value={formik.values.paymentInfo?.paymentDate}
-              handleChange={formik.handleChange}
-              onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+              handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const paymentDate = event.target.value;
                 formik.setFieldValue('paymentInfo.paymentDate', paymentDate);
                 if (formik.values.paymentInfo?.creditPeriod) {
@@ -707,12 +703,13 @@ export const GRNFormNew = () => {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
                 },
               }}
-              onChange={formik.handleChange}
+              handleChange={(e) => handleCalculateRemainingAmt(Number(e.target.value), formik)}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
               isRequired={false}
+              isReadOnly={true}
               type="number"
               id="paymentInfo.remainingAmt"
               name="paymentInfo.remainingAmt"
@@ -723,7 +720,7 @@ export const GRNFormNew = () => {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
                 },
               }}
-              onChange={formik.handleChange}
+              // onChange={formik.handleChange}
             />
           </Grid2>
           <Grid2 size={{ xs: 12 }} marginY={2}>

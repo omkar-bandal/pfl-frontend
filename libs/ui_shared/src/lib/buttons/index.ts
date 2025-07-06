@@ -10,3 +10,4 @@ export * from './btn-add-fields';
 export * from './btn-edit';
 export * from './btn-view';
 export * from './styled-button';
+export * from './btn-small';

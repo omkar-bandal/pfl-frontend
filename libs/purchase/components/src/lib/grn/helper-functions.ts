@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { numToWords } from '@prime-fresh/purchase/modules';
-import { GetGRN, GRNProducts, IGRN, PostGRN } from '@prime-fresh/purchase_api';
+import { IGRN } from '@prime-fresh/purchase_api';
 import { ProductPartialData } from '@prime-fresh/admin_api';
-import { FormikHelpers, FormikProps } from 'formik';
-import { ChangeEvent } from 'react';
-import { useGetProductById } from '@prime-fresh/admin/modules';
+import { FormikHelpers} from 'formik';
 
 export const getProductCount = (productId: string | null, products: ProductPartialData[] | null | undefined) => {
   if (products !== null && productId !== null) {
@@ -43,35 +41,37 @@ export const getSelectedProductData = (productId: string | null, products: Produ
   }
 };
 
-const recalcTotal = (products: PostGRN['grnProducts']): number =>
+const recalcTotal = (products: IGRN['grnProducts']): number =>
   products.reduce((sum, prod) => sum + (Number(prod.amount) || 0), 0);
 
 export const handleRemoveProduct = (
   index: number,
-  values: PostGRN | GetGRN | Omit<IGRN, 'id'>,
-  setFieldValue: FormikHelpers<PostGRN>['setFieldValue']
+  formik: any,
+  // values: Omit<IGRN, 'id'>,
+  // setFieldValue: FormikHelpers<IGRN>['setFieldValue']
 ): void => {
-  const updatedProducts = values.grnProducts.filter((_, i) => i !== index);
+  const updatedProducts = formik.values.grnProducts.filter((_: any, i: number) => i !== index);
   const newSubtotal = recalcTotal(updatedProducts);
-  const newTotal = newSubtotal + (Number(values.freight) || 0) + (Number(values.otherCharges) || 0);
-  setFieldValue('grnProducts', updatedProducts, false);
-  setFieldValue('subTotalAmt', newSubtotal, false);
-  setFieldValue('totalAmt', newTotal, false);
-  setFieldValue('amtWords', numToWords(newTotal), true);
+  const newTotal = newSubtotal + (Number(formik.values.freight) || 0) + (Number(formik.values.otherCharges) || 0);
+  formik.setFieldValue('grnProducts', updatedProducts, false);
+  formik.setFieldValue('subTotalAmt', newSubtotal, false);
+  formik.setFieldValue('totalAmt', newTotal, false);
+  formik.setFieldValue('amtWords', numToWords(newTotal), true);
 };
 
 export const handlePushProduct = (
-  newProduct: PostGRN['grnProducts'][0],
-  values: PostGRN | GetGRN | Omit<IGRN, 'id'>,
-  setFieldValue: FormikHelpers<PostGRN>['setFieldValue']
+  newProduct: Omit<IGRN, 'id'>['grnProducts'][0],
+  formik: any,
+  // values: Omit<IGRN, 'id'>,
+  // setFieldValue: FormikHelpers<IGRN>['setFieldValue']
 ): void => {
-  const updatedProducts = [...values.grnProducts, newProduct];
+  const updatedProducts = [...formik.values.grnProducts, newProduct];
   const newSubtotal = recalcTotal(updatedProducts);
-  const newTotal = newSubtotal + (Number(values.freight) || 0) + (Number(values.otherCharges) || 0);
-  setFieldValue('grnProducts', updatedProducts, false);
-  setFieldValue('subTotalAmt', newSubtotal, false);
-  setFieldValue('totalAmt', newTotal, false);
-  setFieldValue('amtWords', numToWords(newTotal), true);
+  const newTotal = newSubtotal + (Number(formik.values.freight) || 0) + (Number(formik.values.otherCharges) || 0);
+  formik.setFieldValue('grnProducts', updatedProducts, false);
+  formik.setFieldValue('subTotalAmt', newSubtotal, false);
+  formik.setFieldValue('totalAmt', newTotal, false);
+  formik.setFieldValue('amtWords', numToWords(newTotal), true);
 };
 // Allowed fields for product items (excluding non-numeric fields such as "productName")
 export type GrnProductField = 'quantity' | 'unitPrice' | 'packingMaterialWeight' | 'grossWeight';
@@ -89,12 +89,13 @@ export const handleGRNProductsChange = (
   index: number | null,
   fieldName: AllowedField,
   newValue: any,
-  values: PostGRN | Omit<IGRN, 'id'>,
-  setFieldValue: FormikHelpers<PostGRN>['setFieldValue']
+  formik: any
+  // values: Omit<IGRN, 'id'>,
+  // setFieldValue: FormikHelpers<IGRN>['setFieldValue']
 ): void => {
   if (index !== null) {
     // Update a product field.
-    const updatedProducts = [...values.grnProducts];
+    const updatedProducts = [...formik.values.grnProducts];
     // Here we assert that fieldName is one of GrnProductField.
     const productField = fieldName as GrnProductField;
     const product = { ...updatedProducts[index] };
@@ -113,37 +114,37 @@ export const handleGRNProductsChange = (
       : product.grossWeight;
 
     updatedProducts[index] = product;
-    setFieldValue('grnProducts', updatedProducts, false);
+    formik.setFieldValue('grnProducts', updatedProducts, false);
 
     // Recalculate subtotal from updated products.
     const newSubTotal = recalcTotal(updatedProducts);
-    setFieldValue('subTotalAmt', newSubTotal, false);
+    formik.setFieldValue('subTotalAmt', newSubTotal, false);
 
     // Calculate totalAmt from subtotal plus top-level freight and otherCharges.
-    const currentFreight = Number(values.freight) || 0;
-    const currentOtherCharges = Number(values.otherCharges) || 0;
+    const currentFreight = Number(formik.values.freight) || 0;
+    const currentOtherCharges = Number(formik.values.otherCharges) || 0;
     const newTotal = newSubTotal + currentFreight + currentOtherCharges;
-    setFieldValue('totalAmt', newTotal, false);
-    setFieldValue('amtWords', numToWords(newTotal), true);
+    formik.setFieldValue('totalAmt', newTotal, false);
+    formik.setFieldValue('amtWords', numToWords(newTotal), true);
   } else {
     // Update top-level field: freight or otherCharges.
     // Assert that fieldName is one of TopLevelField.
     const topField = fieldName as TopLevelField;
-    setFieldValue(topField, newValue, false);
+    formik.setFieldValue(topField, newValue, false);
 
-    const updatedFreight = topField === 'freight' ? newValue : Number(values.freight) || 0;
-    const updatedOtherCharges = topField === 'otherCharges' ? newValue : Number(values.otherCharges) || 0;
-    const newTotal = (values.subTotalAmt || 0) + updatedFreight + updatedOtherCharges;
-    setFieldValue('totalAmt', newTotal, false);
-    setFieldValue('amtWords', numToWords(newTotal), true);
+    const updatedFreight = topField === 'freight' ? newValue : Number(formik.values.freight) || 0;
+    const updatedOtherCharges = topField === 'otherCharges' ? newValue : Number(formik.values.otherCharges) || 0;
+    const newTotal = (formik.values.subTotalAmt || 0) + updatedFreight + updatedOtherCharges;
+    formik.setFieldValue('totalAmt', newTotal, false);
+    formik.setFieldValue('amtWords', numToWords(newTotal), true);
   }
 };
 export const handleGRNProductsUpdateChange = (
   index: number | null,
   fieldName: AllowedFieldUpdate,
   newValue: any,
-  values: PostGRN | GetGRN,
-  setFieldValue: FormikHelpers<GetGRN>['setFieldValue']
+  values: IGRN,
+  setFieldValue: FormikHelpers<IGRN>['setFieldValue']
 ): void => {
   if (index !== null) {
     // Update a product field.
@@ -205,68 +206,8 @@ export const calculateDueDate = (paymentDate: string | null, paymentTerms: numbe
   return date.toISOString().split('T')[0];
 };
 
-// export const handleGRNProductsUpdateChange = (
-//   index: number,
-//   field: 'revisedQuantity' | 'revisedRate' | "packingMaterialWeight" | "grossWeight",
-//   value: any,
-//   values: GetGRN | PostGRN,
-//   setFieldValue: FormikHelpers<GetGRN>['setFieldValue']
-// ) => {
-//   // Update the changed field
-//   setFieldValue(`grnProducts[${index}].${field}`, Number(value));
-
-//   // Get the current values for quantity and unitPrice
-//   const currentProduct = values.grnProducts[index];
-//   const revisedQuantity =
-//     field === 'revisedQuantity' ? Number(value) : Number(currentProduct.revisedQuantity);
-//   const revisedRate =
-//     field === 'revisedRate' ? Number(value) : Number(currentProduct.revisedRate);
-//   const packingMaterialWeight =
-//     field === 'packingMaterialWeight' ? Number(value) : Number(currentProduct.packingMaterialWeight);
-//   const grossWeight =
-//     field === 'grossWeight' ? Number(value) : Number(currentProduct.grossWeight);
-
-//   // Calculate the new amount for the product
-//   const newAmount = revisedQuantity * revisedRate;
-//   setFieldValue(`grnProducts[${index}].amount`, newAmount);
-
-//   const newNetWeight = grossWeight - ((packingMaterialWeight * revisedQuantity) / 1000);
-//   setFieldValue(`grnProducts[${index}].netWeight`, newNetWeight);
-
-//   // Recalculate the subtotal by summing up all product amounts
-//   const newSubtotal = values.grnProducts.reduce((sum, prod, i) => {
-//     // If we are at the current index, use the newAmount instead of the existing value
-//     const prodAmount = i === index ? newAmount : prod.amount;
-//     return sum + (Number(prodAmount) || 0);
-//   }, 0);
-//   setFieldValue('subTotalAmt', newSubtotal);
-
-//   // Recalculate the totalAmt using the updated subtotal, current freight, and otherCharges
-//   const freight = Number(values.freight) || 0;
-//   const otherCharges = Number(values.otherCharges) || 0;
-//   const newTotal = newSubtotal + freight + otherCharges;
-//   setFieldValue('totalAmt', newTotal);
-//   const newTotalAmountInWords = numToWords(newTotal);
-//   setFieldValue('amtWords', newTotalAmountInWords);
-// };
-
-// // Handler for changing freight or otherCharges
-// export const calculateTotalAmount = (
-//   field: 'freight' | 'otherCharges',
-//   value: any,
-//   values: PostGRN | GetGRN,
-//   setFieldValue: FormikHelpers<PostGRN | GetGRN>['setFieldValue']
-// ) => {
-//   setFieldValue(field, Number(value));
-
-//   // Recalculate totalAmt using the current subtotalAmt plus freight and otherCharges
-//   const subtotal = Number(values.subTotalAmt) || 0;
-//   // Depending on which field changed, update that value and use the current value of the other
-//   const freight = field === 'freight' ? Number(value) : Number(values.freight);
-//   const otherCharges =
-//     field === 'otherCharges' ? Number(value) : Number(values.otherCharges);
-//   const totalAmount = subtotal + freight + otherCharges;
-//   setFieldValue('totalAmt', subtotal + freight + totalAmount);
-//   const newTotalAmountInWords = numToWords(totalAmount);
-//   setFieldValue('amtWords', newTotalAmountInWords);
-// };
+export const handleCalculateRemainingAmt = (newValue: any, formik: any) => {
+  formik.setFieldValue('paymentInfo.advancePaidAmt', newValue);
+  const remainingAmt = Number(formik.values.totalAmt) - newValue;
+  formik.setFieldValue('paymentInfo.remainingAmt', remainingAmt);
+}

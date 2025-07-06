@@ -3,6 +3,7 @@ import { AppBar, IconButton, Box, Badge } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
   authRouteConstants,
+  authState,
   layoutStates,
   setMobileOpen,
   useActions,
@@ -10,7 +11,7 @@ import {
   useAppSelector,
 } from '@prime-fresh/modules';
 import { AccountCircle, Logout, Notifications } from '@mui/icons-material';
-import { SignOutRequest, useSignOut } from '@prime-fresh/auth_api';
+import { ISignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
@@ -22,8 +23,9 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { mobileOpen, isSidebarClosing } = useAppSelector(layoutStates);
-  const username = convertInTitleCase(localStorage.getItem('userName') || '');
-  const { setLoggedInUserInfo, setEmployeeLevel, setEmployeePermissions } = useActions();
+  const {loggedInUserInfo} = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
+  const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
 
   React.useEffect(() => {
     console.log('Appbar useEffect running...');
@@ -68,7 +70,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
     const refreshToken = localStorage.getItem('refresh_token');
 
     if (accessToken && refreshToken) {
-      const tokens: SignOutRequest = {
+      const tokens: ISignOutRequest = {
         access_token: accessToken,
         refresh_token: refreshToken,
       };
@@ -76,8 +78,8 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
       mutateAsync(tokens)
         .then(() => {
           localStorage.clear();
+          setIsLoggedIn(false);
           setLoggedInUserInfo(null);
-          setEmployeeLevel(null);
           setEmployeePermissions(null);
           handleCloseProfileMenu();
           navigate(authRouteConstants.SIGN_IN);
@@ -85,8 +87,8 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
         .catch(() => {
           if (isError) {
             localStorage.clear();
+            setIsLoggedIn(false);
             setLoggedInUserInfo(null);
-            setEmployeeLevel(null);
             setEmployeePermissions(null);
             toast.error(error ? error.message : 'Error while logout');
             navigate(authRouteConstants.SIGN_IN);
@@ -140,11 +142,11 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           <MenuIcon />
         </IconButton>
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
-          <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
+          {/* <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
             <Badge badgeContent={notifications.length}  color="error">
               <Notifications fontSize="medium" />
             </Badge>
-          </IconButton>
+          </IconButton> */}
           <IconButton
             onClick={handleOpenProfileMenu}
             size="medium"
@@ -164,12 +166,12 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           loggedInUsername={username}
           menuoptions={profileMenuOptions}
         />
-        <NotificationBox
+        {/* <NotificationBox
           open={openNotificationBox}
           anchorEl={notificationBoxAnchorEl}
           onClose={handleCloseNotificationBox}
           notifications={notifications}
-        />
+        /> */}
       </Box>
     </AppBar>
   );

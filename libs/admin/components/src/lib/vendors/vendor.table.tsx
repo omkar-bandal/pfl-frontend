@@ -1,13 +1,14 @@
-import React, { useMemo } from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useVendorColumns } from "./vendor.columns";
-import { useNavigate } from "react-router-dom";
-import { useGetAllVendors } from "@prime-fresh/admin/modules";
-import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
-import { sharedRoutes } from "@prime-fresh/shared/modules";
+import React, { useMemo } from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { Add, Settings } from '@mui/icons-material';
+import { useVendorColumns } from './vendor.columns';
+import { useNavigate } from 'react-router-dom';
+import { useGetAllVendors } from '@prime-fresh/admin/modules';
+import { toast, BtnSmall, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
+import { sharedRoutes } from '@prime-fresh/shared/modules';
 
 export function VendorTable() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const vendorColumns = useVendorColumns();
   const {
     paginationModel,
@@ -19,7 +20,7 @@ export function VendorTable() {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: vendorColumns, initialPageSize: 10 });
 
   const { data, isError, isLoading, error } = useGetAllVendors(queryParams);
@@ -34,23 +35,21 @@ export function VendorTable() {
 
   React.useEffect(() => {
     if (isError) {
-      toast.error(error?.message || 'Error occured please refresh the page.')
+      toast.error(error?.message || 'Error occured please refresh the page.');
     }
-  }, [isError, error])
+  }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(sharedRoutes.CREATE_VENDOR);
-  };
+  const handleCreate = () => navigate(sharedRoutes.CREATE_VENDOR);
 
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='Vendors' />
+          <PageTitle pagetitle="Vendors" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="vendors-col-def"
             columns={vendorColumns}

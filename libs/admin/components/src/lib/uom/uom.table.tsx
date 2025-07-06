@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useUOMColumns } from "./uom.columns";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllUOMs } from "@prime-fresh/admin/modules";
-import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
+import { useEffect, useMemo, useRef } from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { Add, Settings } from '@mui/icons-material';
+import { useUOMColumns } from './uom.columns';
+import { useNavigate } from 'react-router-dom';
+import { ADMIN_ROUTES, useGetAllUOMs } from '@prime-fresh/admin/modules';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 
 export const UOMTable = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export const UOMTable = () => {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: uomColumns, initialPageSize: 10 });
 
   const { data, isLoading, isError, error } = useGetAllUOMs(queryParams);
@@ -37,19 +38,17 @@ export const UOMTable = () => {
     }
   }, [isError, error]);
 
-  const handleNavigate = () => {
-    navigate(ADMIN_ROUTES.CREATE_UOM)
-  }
+  const handleCreate = () => navigate(ADMIN_ROUTES.CREATE_UOM);
 
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='Unit of Measures' />
+          <PageTitle pagetitle="Unit of Measures" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleNavigate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="uom-col-def"
             columns={uomColumns}
@@ -75,4 +74,4 @@ export const UOMTable = () => {
       />
     </Box>
   );
-}
+};

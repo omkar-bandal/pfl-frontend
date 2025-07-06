@@ -1,4 +1,5 @@
 import { QueryParams } from '@prime-fresh/common_api';
+import { buildUrl } from '@prime-fresh/shared/modules';
 
 export const purchaseApiUrl = {
   //RFPA
@@ -45,6 +46,9 @@ export const purchaseApiUrl = {
   GET_ALL_GRN: (queryParams?: QueryParams) => {
     if (queryParams) {
       let url = `/grns/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if(queryParams.filter){
+        url = buildUrl(queryParams.filter, url);
+      }
       if (queryParams.sort && queryParams.sort.length > 0) {
         url = url + `&sort=${queryParams.sort}`;
       }

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid2 } from '@mui/material';
+import { Add, Settings } from '@mui/icons-material';
 import { useGridApiRef } from '@mui/x-data-grid';
 import { adminRoutes, useGetAllPackagingMaterials } from '@prime-fresh/admin/modules';
 import { usePackagingMaterialColumns } from './packaging-material.columns';
 import {
-  AddNewButton,
-  ColumnSettingButton,
+  BtnSmall,
   ColumnVisibilityPanel,
   DataGridTable,
   PageTitle,
@@ -48,25 +48,21 @@ export const PackagingMaterialTable = () => {
     }
   }, [isError, error]);
 
-  const handleNavigate = () => {
-    navigate(adminRoutes.CREATE_PACKAGING_MATERIAL);
-  };
+  const handleCreate = () => navigate(adminRoutes.CREATE_PACKAGING_MATERIAL);
+  
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
           <PageTitle pagetitle="Packaging Materials" />
         </Grid2>
-        <Grid2
-          size={{ xs: 12, md: 4 }}
-          sx={{
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{
             display: 'flex',
             justifyContent: 'flex-end',
             alignItems: 'center',
-          }}
-        >
-          <AddNewButton handleClick={handleNavigate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          }}>
+           <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+           <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="packaging-material-col-def"
             columns={packagingMaterialColumns}

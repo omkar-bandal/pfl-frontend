@@ -21,6 +21,7 @@ import { Box, Grid2, LinearProgress } from '@mui/material';
 import { PostOffices } from '@prime-fresh/admin_api';
 import { OfficeFormPreview } from './office.preview';
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
+import { handleFormKeyDown } from '@prime-fresh/shared/modules';
 
 export const OfficeForm = () => {
   const dispatch = useAppDispatch();
@@ -120,6 +121,7 @@ export const OfficeForm = () => {
       >
         <form
           key={officeId ? 'create-form' : 'update-form'}
+          onKeyDown={handleFormKeyDown}
           onSubmit={formik.handleSubmit}
         >
           <Grid2 container spacing={1} padding={1}>

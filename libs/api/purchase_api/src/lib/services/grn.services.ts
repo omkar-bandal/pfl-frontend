@@ -16,6 +16,7 @@ export class GRNServices extends BaseService {
 
     getAllGRNs(queryParams? : QueryParams): Promise<ApiBaseState<IGRN[]>> {
         const url = purchaseApiUrl.GET_ALL_GRN(queryParams);
+        console.log('Get all GRNs url:', url);
         return this.get(url);
     }
 

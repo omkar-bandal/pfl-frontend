@@ -10,7 +10,6 @@ import {
   useUpdateDealSlipById,
   useGetRFPAForViewById,
   useCreateDealSlip,
-  PURCHASE_ARRAYS,
 } from '@prime-fresh/purchase/modules';
 import { useAppDispatch, useAppSelector } from '@prime-fresh/modules';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -19,7 +18,6 @@ import {
   FormButtonGroup,
   Label,
   PageTitle,
-  RadioGroupInput,
   SectionHeader,
   SelectInput,
   TextInput,
@@ -34,6 +32,7 @@ import {
 } from '@prime-fresh/admin/modules';
 import {
   convertInTitleCase,
+  handleFormKeyDown,
   mapToValueLabelArray,
   useGetAllRFPANums,
   useGetFarmersPartialData,
@@ -88,13 +87,13 @@ export const DealSlipForm = () => {
     dealSlipId === ''
       ? mutatePost(values)
           .then(() => {
-            toast.success(resPost ? resPost.message : 'Deal Slip Updated');
+            toast.success(resPost ? resPost.message : 'Deal Slip created');
             setTimeout(() => {
               navigate(PURCHASE_ROUTES.GET_ALL_DEAL_SLIP);
             }, 2000);
           })
           .catch(() => {
-            toast.error(errorPost ? errorPost.message : 'Error while updating deal slip.');
+            toast.error(errorPost ? errorPost.message : 'Error while creating deal slip.');
           })
       : mutatePatch(values)
           .then(() => {
@@ -114,7 +113,7 @@ export const DealSlipForm = () => {
     </Box>
   ) : (
     <FormikProvider key={dealSlipId === '' ? 'create-deal-slip' : 'update-deal-slip'} value={formik}>
-      <form key={dealSlipId === '' ? 'create-form' : 'update-form'} onSubmit={handleSubmit}>
+      <form key={dealSlipId === '' ? 'create-form' : 'update-form'} onKeyDown={handleFormKeyDown} onSubmit={formik.handleSubmit}>
         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
           <Grid2 size={{ xs: 12 }} marginBottom={2}>
             <PageTitle pagetitle="Deal Slip" />

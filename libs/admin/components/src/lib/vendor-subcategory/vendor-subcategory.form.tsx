@@ -5,7 +5,7 @@ import { Box, Grid2, LinearProgress } from "@mui/material";
 import { PostVendorSubcategory } from "@prime-fresh/admin_api";
 import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { ADMIN_ROUTES, useCreateVendorSubategory, useGetAllVendorCategories, useGetVendorSubcategoryById, useUpdateVendorSubcategoryById } from "@prime-fresh/admin/modules";
-import { mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { handleFormKeyDown, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 const initValVendorSubcat: PostVendorSubcategory = {
     name: '',
@@ -74,7 +74,7 @@ export function VendorSubcatForm() {
                 }}
             >
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
                         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid2 size={{ xs: 12 }}>
                                 <PageTitle pagetitle="Vendor Subcategory" />

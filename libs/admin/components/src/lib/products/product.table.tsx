@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useGetAllProducts } from "@prime-fresh/admin/modules";
-import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
-import { useProductColumns } from "./product.columns";
-import { sharedRoutes } from "@prime-fresh/shared/modules";
+import { useEffect, useMemo, useRef } from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { Add, Settings } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { useGetAllProducts } from '@prime-fresh/admin/modules';
+import { toast, BtnSmall, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
+import { useProductColumns } from './product.columns';
+import { sharedRoutes } from '@prime-fresh/shared/modules';
 
 export function ProductTable() {
-
   const navigate = useNavigate();
   const productColumns = useProductColumns();
   const {
@@ -20,7 +20,7 @@ export function ProductTable() {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: productColumns, initialPageSize: 10 });
 
   const { data, isLoading, error, isError } = useGetAllProducts(queryParams);
@@ -39,19 +39,17 @@ export function ProductTable() {
     }
   }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(sharedRoutes.CREATE_PRODUCT);
-  };
+  const handleCreate = () => navigate(sharedRoutes.CREATE_PRODUCT);
 
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='Products' />
+          <PageTitle pagetitle="Products" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="products-col-def"
             columns={productColumns}
@@ -76,7 +74,7 @@ export function ProductTable() {
         columnVisibilityModel={columnVisibilityModel}
       />
     </Box>
-  )
+  );
 }
 
 // export const ProductTable = () => {

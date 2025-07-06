@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { GridPaginationModel, GridSortModel } from "@mui/x-data-grid";
 import { CustomGridColDef } from "./models";
@@ -85,6 +86,7 @@ export interface QueryParams {
   page: number;
   limit: number;
   sort: string;
+  filter?: Record<string, any> | null;
 }
 
 interface UseDataTableProps {
@@ -111,6 +113,7 @@ export const useDataTable = ({ initialPageSize = 10, columnDef }: UseDataTablePr
     page: 1,
     limit: initialPageSize,
     sort: '',
+    filter: null
   });
 
   const handleCloseColumnVisibilityPanel = () => {
@@ -144,6 +147,10 @@ export const useDataTable = ({ initialPageSize = 10, columnDef }: UseDataTablePr
     setQueryParams((prev) => ({ ...prev, sort }));
   };
 
+  const handleFilterParamsChange = (filterParams: Record<string, any>) => {
+    setQueryParams((prev) => ({ ...prev, filter: filterParams }));
+  }
+
   return {
     paginationModel,
     sortModel,
@@ -157,5 +164,6 @@ export const useDataTable = ({ initialPageSize = 10, columnDef }: UseDataTablePr
     handleColumnVisibilityModelChange,
     handlePaginationChange,
     handleSortingChange,
+    handleFilterParamsChange,
   };
 };

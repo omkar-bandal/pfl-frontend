@@ -6,6 +6,7 @@ import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
 import { useMemo } from "react";
+import { IGetEmployee } from "@prime-fresh/admin_api";
 
 export const useEmployeeColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
@@ -18,11 +19,6 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       field: "employeeId",
       headerName: "Employee ID",
       width: 120,
-    },
-    {
-      field: "currentLevel",
-      headerName: "Level",
-      width: 100
     },
     {
       field: 'fullName',
@@ -72,6 +68,13 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       field: "currentWorkLocation",
       headerName: "Work Location",
       width: 100,
+    },
+    {
+      field: "accessLocation",
+      headerName: "Access To Locations",
+      width: 180,
+      renderCell: (params: GridRenderCellParams<IGetEmployee>) =>
+        (params.row.accessLocation || []).join(', '),
     },
     {
       field: "residentialAddress",

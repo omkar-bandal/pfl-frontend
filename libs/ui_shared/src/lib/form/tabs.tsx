@@ -1,13 +1,15 @@
 import React from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 
+export type TabOptions = {label: string, isDisabled: boolean};
+
 type FormTabsProps = {
-    tabLabels: string[],
+    tabOptions: TabOptions[],
     value: number;
     handleChange: (event: React.SyntheticEvent, newValue: number) => void
 }
 
-export const FormTabs: React.FC<FormTabsProps> = ({ tabLabels, value, handleChange }) => {
+export const FormTabs: React.FC<FormTabsProps> = ({ tabOptions, value, handleChange }) => {
     const a11yProps = (index: number) => {
         return {
             id: `simple-tab-${index}`,
@@ -24,10 +26,11 @@ export const FormTabs: React.FC<FormTabsProps> = ({ tabLabels, value, handleChan
                 allowScrollButtonsMobile
                 aria-label="tab arrangement for forms"
             >
-                {tabLabels.map((labels, index) => (
+                {tabOptions.map((option, index) => (
                     <Tab
                         key={index}
-                        label={labels}
+                        label={option.label}
+                        disabled={option.isDisabled}
                         {...a11yProps(index)}
                         sx={{
                             textTransform: 'none',

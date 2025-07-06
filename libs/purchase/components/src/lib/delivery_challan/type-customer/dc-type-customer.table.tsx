@@ -2,18 +2,11 @@ import React from 'react';
 import { Box, Grid2 } from '@mui/material';
 import { PURCHASE_ROUTES, useGetAllDCTypeCustomers } from '@prime-fresh/purchase/modules';
 import { IDeliveryChallanTypeCustomer } from '@prime-fresh/purchase_api';
-import {
-  AddNewButton,
-  ColumnSettingButton,
-  ColumnVisibilityPanel,
-  DataGridTable,
-  PageTitle,
-  toast,
-  useDataTable,
-} from '@prime-fresh/ui_shared';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { useNavigate } from 'react-router-dom';
 import { useDCTypeCustomerColumns } from './dc-type-customer.column';
 import { usePermission } from '@prime-fresh/modules';
+import { Add, Settings } from '@mui/icons-material';
 
 export const DCTypeCustomerTable = () => {
   const navigate = useNavigate();
@@ -50,9 +43,7 @@ export const DCTypeCustomerTable = () => {
     }
   }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(PURCHASE_ROUTES.CREATE_DC_TYPE_CUSTOMER);
-  };
+  const handleCreate = () => navigate(PURCHASE_ROUTES.CREATE_DC_TYPE_CUSTOMER);
 
   return (
     <Box sx={{ flex: 1 }}>
@@ -61,8 +52,8 @@ export const DCTypeCustomerTable = () => {
           <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery challan for the customers" />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="dc-type-customer-col-def"
             columns={dcTypeCustomerColumns}

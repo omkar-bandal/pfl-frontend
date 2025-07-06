@@ -38,18 +38,18 @@ export const grnInitialValue: Omit<IGRN, 'id'> = {
   source: 'vendor',
   selectedParty: null,
   grnProducts: [grnProductsInitialValue],
-  deliveryReceivingPerson: null,
   subTotalAmt: 0,
-  totalAmt: 0,
-  amtWords: null,
   freight: 0,
   otherCharges: 0,
+  totalAmt: 0,
+  amtWords: null,
   purchasedBy: null,
+  deliveryReceivingPerson: null,
   receivedThrough: null,
-  securityPerson: null,
   vehicleNo: null,
   timeIn: null,
   cratesIn: 0,
+  securityPerson: null,
   rmn: null,
   paymentInfo: {
     paymentMode: null,
@@ -63,3 +63,12 @@ export const grnInitialValue: Omit<IGRN, 'id'> = {
   remark: null,
   billImage: null,
 };
+
+export const grnInitValForFilter = {
+  companyName: null,
+  purchaseLocation: null,
+  purchaseForSalesLocation: null,
+  locationType: null,
+  grnType: null,
+  source: null,
+}

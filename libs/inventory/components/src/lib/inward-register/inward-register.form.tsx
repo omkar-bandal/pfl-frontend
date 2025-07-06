@@ -14,8 +14,9 @@ import {
   useGetInwardRegisterForUpdateById,
   useUpdateInwardRegister,
 } from '@prime-fresh/inventory/modules';
-import { PostInwardRegister } from '@prime-fresh/inventory_api';
+import { IInwardRegister } from '@prime-fresh/inventory_api';
 import {
+  handleFormKeyDown,
   mapToValueLabelArray,
   useGetAllDeliveryChallanNums,
   useGetAllGRNNums,
@@ -58,7 +59,7 @@ export const InwardRegisterForm = () => {
   const { data: employee, isLoading: isEmployeeDataLoading } = useGetEmployeePartialData();
   const employeeData = employee?.data ? mapToValueLabelArray(employee.data, 'id', 'fullName') : [];
 
-  const formik = useFormik<PostInwardRegister>({
+  const formik = useFormik<Omit<IInwardRegister, 'id'>>({
     initialValues: initialValueInwardRegister,
     validationSchema: inwardRegisterValidationSchema,
     validateOnChange: true,
@@ -124,7 +125,7 @@ export const InwardRegisterForm = () => {
   ) : (
     <Fragment>
       <FormikProvider key={Id === '' ? 'create-inward' : 'update-inward'} value={formik}>
-        <form key={Id === '' ? 'create-form' : 'update-form'} onSubmit={formik.handleSubmit}>
+        <form key={Id === '' ? 'create-form' : 'update-form'} onKeyDown={handleFormKeyDown} onSubmit={formik.handleSubmit}>
           <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
             <Grid2 size={{ xs: 12 }} marginBottom={2}>
               <PageTitle pagetitle="Inward Register" />
@@ -194,7 +195,7 @@ export const InwardRegisterForm = () => {
               />
             </Grid2>
 
-            <VendorFarmerInfo<PostInwardRegister>
+            <VendorFarmerInfo<IInwardRegister>
               source={formik.values.source}
               selectedParty={formik.values.selectedParty || ''}
             />

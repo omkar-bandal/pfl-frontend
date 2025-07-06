@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const MOBILE_REGEX = /^[0-9]{10}$/; 
-const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
+const USERNAME_REGEX = /^[a-zA-Z0-9_-]{3,20}$/;
 
 export const loginSchema = yup.object({
     uid: yup

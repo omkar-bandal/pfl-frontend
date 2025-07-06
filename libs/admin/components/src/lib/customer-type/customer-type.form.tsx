@@ -5,6 +5,7 @@ import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_sh
 import { Box, Grid2, LinearProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { ADMIN_ROUTES, useCreateCustomerType, useGetCustomerTypeById, useUpdateCustomerTypeById } from "@prime-fresh/admin/modules";
+import { handleFormKeyDown } from '@prime-fresh/shared/modules';
 
 const initValCustomerType = {
     name: '',
@@ -63,7 +64,7 @@ export function CustomerTypeForm() {
                     handleSubmit(values);
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
                         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid2 size={{ xs: 12 }}>
                                 <PageTitle pagetitle="Customer Type" />

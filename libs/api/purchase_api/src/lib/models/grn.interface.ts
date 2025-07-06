@@ -1,13 +1,13 @@
 import { RequestedBy } from './requestedBy.interface';
 import { FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
 
-export type GRNLocationType = 'cc' | 'dc';
+export type IGRNLocationType = 'cc' | 'dc';
 
-export type GRNType = 'transfer' | 'purchase';
+export type IGRNType = 'transfer' | 'purchase';
 
-export type GRNPurchaseType = 'fixed price sales' | 'consignment sales/bikri' | 'mgp sales';
+export type IGRNPurchaseType = 'fixed price sales' | 'consignment sales/bikri' | 'mgp sales';
 
-export type GRNSourceType = 'vendor' | 'farmer';
+export type IGRNSourceType = 'vendor' | 'farmer';
 
 export interface IGRNProducts extends FormProducts, FormProductUoM, FormProductQtyAmt, FormProductWeight {
   rtv: boolean;
@@ -41,9 +41,9 @@ export interface IGRN {
   documentDef?: string | null;
   approvalStatus?: string | null;
   approvalNote?: string | null;
-  locationType: GRNLocationType;
-  grnType: GRNType;
-  purchaseType: GRNPurchaseType;
+  locationType: IGRNLocationType;
+  grnType: IGRNType;
+  purchaseType: IGRNPurchaseType;
   dealSlipId: string | null;
   billNo: string | null;
   companyName: string | null;
@@ -53,7 +53,7 @@ export interface IGRN {
   purchaseForSalesLocation: string | null;
   otherPurchaseForSalesLoc: string | null;
   specialReq: string | null;
-  source: GRNSourceType;
+  source: IGRNSourceType;
   selectedParty: string | null;
   grnProducts: IGRNProducts[];
   deliveryReceivingPerson: string | null;

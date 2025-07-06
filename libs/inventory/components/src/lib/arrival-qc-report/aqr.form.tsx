@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useMemo } from 'react';
-import { FieldArray, Formik, FormikProvider, useFormik } from 'formik';
+import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { Box, Divider, Grid2, InputAdornment, LinearProgress, Typography } from '@mui/material';
 import {
   AutoCompleteInput,
@@ -26,6 +26,7 @@ import { AQRParameters, PostAQR } from '@prime-fresh/inventory_api';
 import {
   convertInTitleCase,
   debounce,
+  handleFormKeyDown,
   mapToValueLabelArray,
   useGetAllDeliveryChallanNums,
   useGetEmployeePartialData,
@@ -132,7 +133,7 @@ export const AQRForm = () => {
         key={aqrId === '' ? 'create-aqr' : 'update-aqr'}
        value={formik}
       >
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik.handleSubmit} onKeyDown={handleFormKeyDown}>
             <Grid2 container rowSpacing={1} columnSpacing={1} padding={1}>
               <Grid2 size={{ xs: 12 }} marginBottom={2}>
                 <PageTitle pagetitle="Arrival Quality Reports" />

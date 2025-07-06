@@ -1,0 +1,251 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+.printAreaContainer {
+  padding: 20px;
+}
+.mainContainer {
+  border: 1px solid #000;
+}
+.header {
+  width: 100%;
+  height: 120px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #000;
+}
+
+.voucherNo {
+  width: 20%;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #000;
+}
+.voucherNo span {
+  display: block;
+}
+.companyDetails {
+  width: 60%;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #000;
+}
+
+.logo {
+  width: 20%;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.companyName {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.address,
+.contact {
+  margin-bottom: 5px;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  /* gap: 3px; */
+  margin-bottom: 5px;
+}
+.gridItem {
+  padding: 2px;
+}
+.span_2 {
+  grid-column: span 2;
+}
+.span_3 {
+  grid-column: span 3;
+}
+.span_4 {
+  grid-column: span 4;
+}
+.span_5 {
+  grid-column: span 5;
+}
+.span_6 {
+  grid-column: span 6;
+}
+.span_7 {
+  grid-column: span 7;
+}
+.span_8 {
+  grid-column: span 8;
+}
+.span_9 {
+  grid-column: span 9;
+}
+.span_10 {
+  grid-column: span 10;
+}
+.span_12 {
+  grid-column: span 12;
+}
+
+.voucherDetails {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 0px 10px;
+}
+
+.voucher-no-row {
+  width: 100%;
+  display: flex;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+}
+
+.voucher-no-label {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.voucher-no-value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.leftDetails,
+.rightDetails {
+  width: 50%;
+}
+
+.detailRow {
+  width: 100%;
+  display: flex;
+  margin-bottom: 5px;
+}
+.label {
+  width: 40%;
+}
+.value {
+  width: 60%;
+}
+
+.voucherTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  border: 1px solid #000;
+}
+
+.voucherTable thead tr th {
+  border: 1px solid #000;
+  text-align: center;
+  background-color: #f2f2f2;
+}
+
+.voucherTable tbody tr td {
+  border: 1px solid #000;
+}
+
+.srNoCol {
+  width: 10%;
+}
+.perticularsCol {
+  width: 70%;
+}
+.amountCol {
+  width: 20%;
+}
+
+.receiverSignContainer {
+  display: flex;
+}
+.receiverSignContainerLeft {
+  width: 80%;
+}
+.receiverSignContainerRight {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.receiverSignContainerRight div {
+  width: 80px;
+  height: 80px;
+  border: 1px solid black;
+}
+.receiverSignContainerRight span {
+  width: 100%;
+  margin-top: 5px;
+}
+.signatureContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.signatureBox {
+  width: 25%;
+  height: 80px;
+  padding-top: 5px;
+  border-top: 1px solid #000;
+  border-right: 1px solid #000;
+  display: flex;
+  align-items: flex-end;
+}
+.signatureLabel {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.textXS {
+  font-size: 10px;
+}
+
+.textSM {
+  font-size: 14px;
+}
+
+.textMD {
+  font-size: 18px;
+}
+
+.textLG {
+  font-size: 28px;
+}
+
+.textBold {
+  font-weight: bold;
+}
+.textAlignCenter {
+  text-align: center;
+}
+.mr {
+  margin-right: 5px;
+}
+.mb {
+  margin-bottom: 5px;
+}
+.px {
+  padding: 0px 10px;
+}

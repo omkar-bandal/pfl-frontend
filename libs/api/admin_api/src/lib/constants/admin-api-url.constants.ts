@@ -1,4 +1,5 @@
 import { QueryParams } from '@prime-fresh/common_api';
+import { IDocumentType } from '../models';
 
 export const adminApiUrlConstants = {
   //Department
@@ -33,14 +34,35 @@ export const adminApiUrlConstants = {
   },
   CREATE_EMPLOYEE: '/employee/',
   GET_AN_EMPLOYEE: '/employee',
-  UPDATE_AN_EMPLOYEE: '/employee',
-  DELETE_EMPLOYEE: '/employee/',
+  GET_AN_EMPLOYEE_FOR_VIEW: (id: string) => `/employee/${id}/view`,
+  GET_AN_EMPLOYEE_FOR_UPDATE: (id: string) => `/employee/${id}/update`,
+  UPDATE_AN_EMPLOYEE: (id: string) => `/employee/${id}`,
+  DELETE_EMPLOYEE: (id: string) => `/employee/${id}`,
   UPDATE_EMPLOYEE_STATUS: (empId: string, status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED') => {
-    if(empId && status)
-    return `/employee/status/${empId}?status=${status}`;
-  else
-  return '';
+    if (empId && status) return `/employee/status/${empId}?status=${status}`;
+    else return '';
   },
+
+  //Approval Flow
+  GET_ALL_APPROVAL_FLOWS: (documentType: IDocumentType | null, queryParams?: QueryParams) => {
+    if (queryParams) {
+      let url = `/approval-flow/?page=${queryParams.page}&limit=${queryParams.limit}`;
+      if (documentType) {
+        url = url + `&type=${documentType}`;
+      }
+      if (queryParams.sort && queryParams.sort.length > 0) {
+        url = url + `&sort=${queryParams.sort}`;
+      }
+      return url;
+    } else {
+      return `/approval-flow/`;
+    }
+  },
+  CREATE_APPROVAL_FLOW: `/approval-flow/`,
+  GET_APPROVAL_FLOW_BY_ID: (id: string) => `/approval-flow/${id}`,
+  UPDATE_APPROVAL_FLOW: (id: string) => `/approval-flow/${id}`,
+  DELETE_APPROVAL_FLOW: (id: string) => `/approval-flow/${id}`,
+  REPLACE_EMPLOYEE: `/approval-flow/replace/user`,
 
   //Customers
   GET_ALL_CUSTOMERS: (queryParams?: QueryParams) => {

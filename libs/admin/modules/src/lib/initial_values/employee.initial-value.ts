@@ -1,7 +1,7 @@
-import { PostEmployee } from '@prime-fresh/admin_api';
+import { IEmployee } from '@prime-fresh/admin_api';
 import { initValAddress } from './address.initial-value';
 
-export const initValEmployee: PostEmployee = {
+export const initValEmployee: Omit<IEmployee,'id'> = {
   firstName: null,
   middleName: null,
   lastName: null,
@@ -13,6 +13,7 @@ export const initValEmployee: PostEmployee = {
   residentialAddress: initValAddress,
   permanentAddress: initValAddress,
   companyName: null,
+  department: null,
   designation: null,
   joiningDate: null,
   joiningLocation: null,
@@ -21,11 +22,6 @@ export const initValEmployee: PostEmployee = {
   accessLocation: [],
   cugNo: null,
   workEmail: null,
-  currentLevel: null,
-  reportingManagers: [ {
-    level: null,
-    reportingTo: [],
-  },],
   permissions: [
     {
       documentDefinition: null,

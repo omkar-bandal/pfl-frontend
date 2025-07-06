@@ -31,6 +31,7 @@ import {
 } from '@prime-fresh/ui_shared';
 import { Close } from '@mui/icons-material';
 import {
+  handleFormKeyDown,
   mapToValueLabelArray,
   numToWords,
   useGetAllGRNNums,
@@ -39,7 +40,7 @@ import {
   useGetUOMPartialData,
 } from '@prime-fresh/shared/modules';
 import { ProductFormFields } from '@prime-fresh/shared/components';
-import { PostDumpRegister } from '@prime-fresh/inventory_api';
+import { IDumpRegister } from '@prime-fresh/inventory_api';
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 import { DumpRegisterFormPreview } from './dump-register.preview';
 
@@ -97,7 +98,7 @@ export const DumpRegisterForm = () => {
   const initialValuesDumpRegi =
     dumpRegiId === '' ? dumpRegisterInitialValue : dumpRegi;
 
-  const formik = useFormik<PostDumpRegister>({
+  const formik = useFormik<Omit<IDumpRegister,'id'>>({
     enableReinitialize: true,
     initialValues: initialValuesDumpRegi,
     validationSchema: dumpRegisterSchema,
@@ -106,7 +107,7 @@ export const DumpRegisterForm = () => {
     onSubmit: (values) => handleSubmit(values),
   });
   const recalcTotalDumpCost = useCallback(
-    (products: PostDumpRegister['dumpProducts']): number =>
+    (products: IDumpRegister['dumpProducts']): number =>
       products.reduce((sum, prod) => sum + (Number(prod.amount) || 0), 0),
     []
   );
@@ -228,6 +229,7 @@ export const DumpRegisterForm = () => {
       >
         <form
           key={dumpRegiId === '' ? 'create-form' : 'update-form'}
+          onKeyDown={handleFormKeyDown}
           onSubmit={formik.handleSubmit}
         >
           <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>

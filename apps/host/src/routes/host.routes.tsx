@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import { Layout, Login } from '@prime-fresh/components';
+import { Layout, SignIn } from '@prime-fresh/components';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
 import { PurchaseRoutes } from './purchase.routes';
 import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
@@ -61,7 +61,7 @@ const StockView = lazy(() =>
 export const HostRoutes = createBrowserRouter([
   {
     path: '/',
-    element: <Login />,
+    element: <SignIn />,
   },
   {
     path: '/',

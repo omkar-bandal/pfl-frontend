@@ -10,6 +10,7 @@ import {
 } from '@prime-fresh/admin/modules';
 import { PostPackagingMaterial } from '@prime-fresh/admin_api';
 import {
+  handleFormKeyDown,
   mapToValueLabelArray,
   useGetUOMPartialData,
 } from '@prime-fresh/shared/modules';
@@ -119,6 +120,7 @@ export const PackagingMaterialForm = () => {
       >
         <form
           key={packMatId === '' ? 'create-form' : 'update-form'}
+          onKeyDown={handleFormKeyDown}
           onSubmit={formik.handleSubmit}
         >
           <Grid2 container rowSpacing={1} columnSpacing={2} padding={1}>

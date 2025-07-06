@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useVendorSubcategoryColumns } from "./vendor-subcategory.columns";
-import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllVendorSubcategories } from "@prime-fresh/admin/modules";
+import { useEffect, useMemo, useRef } from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { Add, Settings } from '@mui/icons-material';
+import { useVendorSubcategoryColumns } from './vendor-subcategory.columns';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
+import { useNavigate } from 'react-router-dom';
+import { ADMIN_ROUTES, useGetAllVendorSubcategories } from '@prime-fresh/admin/modules';
 
 export function VendorSubcatTable() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function VendorSubcatTable() {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: vendorSubcategoryColumns, initialPageSize: 10 });
 
   const { data, isLoading, isError, error } = useGetAllVendorSubcategories(queryParams);
@@ -37,17 +38,17 @@ export function VendorSubcatTable() {
     }
   }, [isError, error]);
 
-  const handleNavigate = () => navigate(ADMIN_ROUTES.CREATE_VENDORS_SUBCAT)
+  const handleCreate = () => navigate(ADMIN_ROUTES.CREATE_VENDORS_SUBCAT);
 
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='Vendor Subcategories' />
+          <PageTitle pagetitle="Vendor Subcategories" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleNavigate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="vendor-subcat-col-def"
             columns={vendorSubcategoryColumns}

@@ -22,9 +22,9 @@ export const paymentInfoInitialValue: IPaymentInfo = {
     paymentDate: null,
     paymentTerms: null,
     dueDate: null,
-    advancePaidAmt: null,
-    creditPeriod: null,
-    validityofQuote: null,
+    advancePaidAmt: null, 
+    creditPeriod: 0,
+    validityOfQuote: null,
 }
 export const rfpaInitialvalue: Omit<IRFPA, 'id'> = {
     companyName: null,
@@ -38,7 +38,6 @@ export const rfpaInitialvalue: Omit<IRFPA, 'id'> = {
     rfpaProducts: [rfpaProductsInitialValue],
     paymentInfo: paymentInfoInitialValue,
     deliveryReceivingPerson: null,
-    validityOfQuote: null,
     packingInstruction: null,
     remark: null,
 }

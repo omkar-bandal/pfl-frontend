@@ -7,9 +7,11 @@ import {
   branchesDataReducer,
   vendorDataReducer,
   packagingMaterialDataReducer,
+  approvalFlowReducer,
 } from './slices';
 
 export const adminReducer = {
+  approvalFlow: approvalFlowReducer,
   customerData: customerDataReducer,
   vendorData: vendorDataReducer,
   employeeData: employeeDataReducer,

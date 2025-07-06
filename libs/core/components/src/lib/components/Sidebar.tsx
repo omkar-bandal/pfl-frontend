@@ -3,7 +3,7 @@ import { Box, Drawer, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import {
   authState,
-  hasPermission,
+  filterSidebarOptions,
   mobileOpenState,
   setIsSidebarClosing,
   setMobileOpen,
@@ -20,50 +20,15 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
 
   const mobileOpen = useAppSelector(mobileOpenState);
   const [selectedItem, setSelectedItem] = useState('');
-  const { employeeLevel, employeePermissions } = useAppSelector(authState);
-const getNavigations = () => {
-  if(employeeLevel?.name === 'admin')
-    return adminNavigations;
-  else{
-    const filteredNavigation = userSpecificNavigation.filter((nav) =>
-      nav.children
-        ? nav.children.filter((subnav) =>
-            hasPermission(
-              employeePermissions || [],
-              subnav.uniqueKey,
-              'create'
-            )
-          )
-        : hasPermission(
-            employeePermissions || [],
-            nav.uniqueKey,
-            'create'
-          )
-    )
-    return [...commonNavigation, ...filteredNavigation]
-  }
-}
-  // const navigations = useMemo(
-  //   () =>
-  //     employeeLevel?.name === 'admin'
-  //       ? adminNavigations
-  //       : purchaseNavigations.filter((nav) =>
-  //           nav.children
-  //             ? nav.children.filter((subnav) =>
-  //                 hasPermission(
-  //                   employeePermissions || [],
-  //                   subnav.uniqueKey,
-  //                   'create'
-  //                 )
-  //               )
-  //             : hasPermission(
-  //                 employeePermissions || [],
-  //                 nav.uniqueKey,
-  //                 'create'
-  //               )
-  //         ),
-  //   [employeeLevel?.name, employeePermissions]
-  // );
+  const { loggedInUserInfo, employeePermissions } = useAppSelector(authState);
+  const userperms = employeePermissions !== null ? employeePermissions : [];
+  const getNavigations = () => {
+    if (loggedInUserInfo?.department === 'admin') return adminNavigations;
+    else {
+      const filteredNavigation = filterSidebarOptions(userSpecificNavigation, userperms, 'create', true);
+      return [...commonNavigation, ...filteredNavigation];
+    }
+  };
   const navigations = getNavigations();
   const handleDrawerClose = () => {
     dispatch(setIsSidebarClosing(true));
@@ -75,10 +40,7 @@ const getNavigations = () => {
   };
 
   return (
-    <Box
-      component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-    >
+    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -101,11 +63,7 @@ const getNavigations = () => {
         }}
       >
         <Logo />
-        <SidebarList
-          navigations={navigations}
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-        />
+        <SidebarList navigations={navigations} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
       </Drawer>
       <Drawer
         open

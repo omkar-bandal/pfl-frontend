@@ -22,6 +22,7 @@ import {
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 import { PostBranches } from '@prime-fresh/admin_api';
 import { BranchFormPreview } from './branch.preview';
+import { handleFormKeyDown } from '@prime-fresh/shared/modules';
 
 export const BranchForm = () => {
   const dispatch = useAppDispatch();
@@ -120,6 +121,7 @@ export const BranchForm = () => {
       >
         <form
           key={branchId === '' ? 'create-form' : 'update-form'}
+          onKeyDown={handleFormKeyDown}
           onSubmit={formik.handleSubmit}
         >
           <Grid2 container spacing={1} padding={1}>

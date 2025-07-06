@@ -19,6 +19,7 @@ import {
   useGetCompanyNames,
   useGetAllGRNNums,
   useGetBranchesPartialData,
+  handleFormKeyDown,
 } from '@prime-fresh/shared/modules';
 import { IDeliveryChallanTypeStockTransfer } from '@prime-fresh/purchase_api';
 import { DeliveryChallanBaseForm } from '../delivery-challan-base.form';
@@ -146,7 +147,7 @@ export const DCTypeStockTransferForm = () => {
   ) : (
     <>
       <FormikProvider key={dcId === '' ? 'create-dc' : 'update-dc'} value={formik}>
-        <form key={dcId === '' ? 'create-form' : 'update-form'} onSubmit={formik.handleSubmit}>
+        <form key={dcId === '' ? 'create-form' : 'update-form'} onKeyDown={handleFormKeyDown} onSubmit={formik.handleSubmit}>
           <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
             <Grid2 size={{ xs: 12 }}>
               <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery challan only for stock transfer." />

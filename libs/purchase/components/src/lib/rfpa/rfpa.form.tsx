@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Close } from '@mui/icons-material';
-import {
-  Box,
-  Grid2,
-  IconButton,
-  LinearProgress,
-  Typography,
-} from '@mui/material';
+import { Box, Grid2, IconButton, InputAdornment, LinearProgress, Typography } from '@mui/material';
 import {
   PURCHASE_ARRAYS,
   PURCHASE_ROUTES,
@@ -18,11 +12,7 @@ import {
   useUpdateRFPAById,
 } from '@prime-fresh/purchase/modules';
 import { IRFPA } from '@prime-fresh/purchase_api';
-import {
-  setPreview,
-  useAppDispatch,
-  useAppSelector,
-} from '@prime-fresh/modules';
+import { setPreview, useAppDispatch, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { rfpaSchema } from '@prime-fresh/purchase/modules';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -38,12 +28,11 @@ import {
   VendorFarmerInfo,
 } from '@prime-fresh/ui_shared';
 import { RFPAPreview } from './rfpa.preview';
+import { calculateDueDate, calculateTotoalPrice } from './helper-functions';
 import {
-  calculateDueDate,
-  calculateTotoalPrice,
-} from './helper-functions';
-import {
+  handleFormKeyDown,
   mapToValueLabelArray,
+  reverseDateString,
   useGetBranchesPartialData,
   useGetCompanyNames,
   useGetUOMPartialData,
@@ -52,6 +41,7 @@ import {
   farmersDataStates,
   setSelectedFarmerPartialData,
   setSelectedVendorPartialData,
+  useGetProductById,
   vendorsDataStates,
 } from '@prime-fresh/admin/modules';
 import { ProductFormFields } from '@prime-fresh/shared/components';
@@ -66,15 +56,11 @@ export const RFPAForm = () => {
   const rfpaInitVal = rfpaId === '' ? rfpaInitialvalue : rfpaData;
 
   const { data: companies } = useGetCompanyNames();
-  const companyNames = companies?.data
-    ? mapToValueLabelArray(companies.data, 'id', 'name')
-    : [];
+  const companyNames = companies?.data ? mapToValueLabelArray(companies.data, 'id', 'name') : [];
   const { data: uom } = useGetUOMPartialData();
   const UOMs = uom?.data ? mapToValueLabelArray(uom.data, 'id', 'unit') : [];
   const { data: Locations } = useGetBranchesPartialData();
-  const allPurchaseLocation = Locations?.data
-    ? mapToValueLabelArray(Locations.data, 'id', 'name')
-    : [];
+  const allPurchaseLocation = Locations?.data ? mapToValueLabelArray(Locations.data, 'id', 'name') : [];
   const allPurchaseForEachLocations = Locations?.data
     ? mapToValueLabelArray(
         Locations?.data.filter((loc) => loc.type === 'distribution-center'),
@@ -86,7 +72,7 @@ export const RFPAForm = () => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: rfpaInitVal,
-    // validationSchema: rfpaSchema,
+    validationSchema: rfpaSchema,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => {
@@ -96,42 +82,28 @@ export const RFPAForm = () => {
   });
   const { selectedVendorPartialData } = useAppSelector(vendorsDataStates);
   const { selectedFarmerPartialData } = useAppSelector(farmersDataStates);
-  const onFormPreview = (values: Omit<IRFPA,'id'>) => {
+  const onFormPreview = (values: Omit<IRFPA, 'id'>) => {
     const data: any = {
       ...values,
-      companyName: values.companyName
-        ? companyNames.find((names) => names.value === values.companyName)
-            ?.label
-        : null,
+      companyName: values.companyName ? companyNames.find((names) => names.value === values.companyName)?.label : null,
       purchaseLocation: values.purchaseLocation
-        ? allPurchaseLocation.find(
-            (loc) => loc.value === values.purchaseLocation
-          )?.label
+        ? allPurchaseLocation.find((loc) => loc.value === values.purchaseLocation)?.label
         : values.otherPurchaseLoc,
       purchaseForSalesLocation: values.purchaseForSalesLocation
-        ? allPurchaseForEachLocations.find(
-            (loc) => loc.value === values.purchaseForSalesLocation
-          )?.label
+        ? allPurchaseForEachLocations.find((loc) => loc.value === values.purchaseForSalesLocation)?.label
         : values.otherPurchaseForSalesLoc,
-      selectedParty:
-        values?.source === 'vendor'
-          ? selectedVendorPartialData
-          : selectedFarmerPartialData,
+      selectedParty: values?.source === 'vendor' ? selectedVendorPartialData : selectedFarmerPartialData,
+      rfpaProducts: values.rfpaProducts.map((product) => ({
+        ...product,
+        uom: UOMs.find((uom) => uom.value === product.uom)?.label,
+      })),
     };
     dispatch(setRFPAFormPreview(data));
     dispatch(setPreview(true));
   };
 
-  const {
-    mutateAsync: mutatePost,
-    error: errorPost,
-    data: resPost,
-  } = useCreateRFPA();
-  const {
-    mutateAsync: mutatePatch,
-    error: errorPatch,
-    data: resPatch,
-  } = useUpdateRFPAById(rfpaId);
+  const { mutateAsync: mutatePost, error: errorPost, data: resPost } = useCreateRFPA();
+  const { mutateAsync: mutatePatch, error: errorPatch, data: resPatch } = useUpdateRFPAById(rfpaId);
 
   const handleSubmit = (values: any) => {
     rfpaId === ''
@@ -143,9 +115,7 @@ export const RFPAForm = () => {
             }, 2000);
           })
           .catch(() => {
-            toast.error(
-              errorPost ? errorPost.message : 'Error while creating RFPA'
-            );
+            toast.error(errorPost ? errorPost.message : 'Error while creating RFPA');
           })
       : mutatePatch(values)
           .then(() => {
@@ -156,9 +126,7 @@ export const RFPAForm = () => {
             }, 2000);
           })
           .catch(() => {
-            toast.error(
-              errorPatch ? errorPatch.message : 'Error while updating RFPA'
-            );
+            toast.error(errorPatch ? errorPatch.message : 'Error while updating RFPA');
           });
   };
 
@@ -167,14 +135,12 @@ export const RFPAForm = () => {
       {isLoading ? (
         <LinearProgress />
       ) : (
-        <FormikProvider
-          key={rfpaId === '' ? 'create-rfpa' : 'update-rfpa'}
-          value={formik}
-        >
+        <FormikProvider key={rfpaId === '' ? 'create-rfpa' : 'update-rfpa'} value={formik}>
           <form
             key={rfpaId === '' ? 'create-form' : 'update-form'}
-            onSubmit={formik.handleSubmit}
             encType="multipart/form-data"
+            onKeyDown={handleFormKeyDown}
+            onSubmit={formik.handleSubmit}
           >
             <Grid2 container spacing={1} padding={1}>
               <Grid2 size={{ xs: 12 }} marginBottom={2}>
@@ -206,32 +172,30 @@ export const RFPAForm = () => {
                   options={allPurchaseForEachLocations}
                 />
               </Grid2>
-              {formik.touched.purchaseLocation === true &&
-                formik.values.purchaseLocation === '' && (
-                  <Grid2 size={{ xs: 12 }}>
-                    <TextInput
-                      isRequired={true}
-                      type="text"
-                      name="otherPurchaseLoc"
-                      label="Other Purchase Location"
-                      value={formik.values.otherPurchaseLoc}
-                      handleChange={formik.handleChange}
-                    />
-                  </Grid2>
-                )}
-              {formik.touched.purchaseForSalesLocation === true &&
-                formik.values.purchaseForSalesLocation === '' && (
-                  <Grid2 size={{ xs: 12 }}>
-                    <TextInput
-                      isRequired={true}
-                      type="text"
-                      name="otherPurchaseForSalesLoc"
-                      label="Other Purchase For Sales Location"
-                      value={formik.values.otherPurchaseForSalesLoc}
-                      handleChange={formik.handleChange}
-                    />
-                  </Grid2>
-                )}
+              {formik.touched.purchaseLocation === true && formik.values.purchaseLocation === '' && (
+                <Grid2 size={{ xs: 12 }}>
+                  <TextInput
+                    isRequired={true}
+                    type="text"
+                    name="otherPurchaseLoc"
+                    label="Other Purchase Location"
+                    value={formik.values.otherPurchaseLoc}
+                    handleChange={formik.handleChange}
+                  />
+                </Grid2>
+              )}
+              {formik.touched.purchaseForSalesLocation === true && formik.values.purchaseForSalesLocation === '' && (
+                <Grid2 size={{ xs: 12 }}>
+                  <TextInput
+                    isRequired={true}
+                    type="text"
+                    name="otherPurchaseForSalesLoc"
+                    label="Other Purchase For Sales Location"
+                    value={formik.values.otherPurchaseForSalesLoc}
+                    handleChange={formik.handleChange}
+                  />
+                </Grid2>
+              )}
               <Grid2 size={{ xs: 12 }}>
                 <TextInput
                   isRequired={false}
@@ -268,13 +232,8 @@ export const RFPAForm = () => {
                             marginY: 1,
                           }}
                         >
-                          <Grid2
-                            size={{ xs: 6 }}
-                            sx={{ display: 'flex', alignItems: 'center' }}
-                          >
-                            <Typography variant="caption">
-                              Product : {index + 1}
-                            </Typography>
+                          <Grid2 size={{ xs: 6 }} sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="caption">Product : {index + 1}</Typography>
                           </Grid2>
                           <Grid2
                             size={{ xs: 6 }}
@@ -285,20 +244,12 @@ export const RFPAForm = () => {
                             }}
                           >
                             {formik.values.rfpaProducts.length > 1 && (
-                              <IconButton
-                                color="error"
-                                size="medium"
-                                onClick={() => remove(index)}
-                              >
+                              <IconButton color="error" size="medium" onClick={() => remove(index)}>
                                 <Close />
                               </IconButton>
                             )}
                           </Grid2>
-                          <ProductFormFields
-                            fieldArrayName="rfpaProducts"
-                            index={index}
-                            formik={formik}
-                          />
+                          <ProductFormFields fieldArrayName="rfpaProducts" index={index} formik={formik} />
                           <Grid2 size={{ xs: 6, md: 3 }}>
                             <TextInput
                               isRequired={false}
@@ -326,12 +277,8 @@ export const RFPAForm = () => {
                               id={`rfpaProducts.${index}.quantity`}
                               name={`rfpaProducts.${index}.quantity`}
                               label="Quantity"
-                              value={
-                                formik.values.rfpaProducts[index].quantity || ''
-                              }
-                              handleChange={(event) =>
-                                calculateTotoalPrice(event, index, formik)
-                              }
+                              value={formik.values.rfpaProducts[index].quantity || ''}
+                              handleChange={(event) => calculateTotoalPrice(event, index, formik)}
                             />
                           </Grid2>
                           <Grid2 size={{ xs: 4, md: 3 }}>
@@ -341,13 +288,13 @@ export const RFPAForm = () => {
                               id={`rfpaProducts.${index}.unitPrice`}
                               name={`rfpaProducts.${index}.unitPrice`}
                               label="Unit Price"
-                              value={
-                                formik.values.rfpaProducts[index].unitPrice ||
-                                ''
-                              }
-                              handleChange={(event) =>
-                                calculateTotoalPrice(event, index, formik)
-                              }
+                              value={formik.values.rfpaProducts[index].unitPrice || ''}
+                              handleChange={(event) => calculateTotoalPrice(event, index, formik)}
+                              slotProps={{
+                                input: {
+                                  endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                                },
+                              }}
                             />
                           </Grid2>
                           <Grid2 size={{ xs: 4, md: 3 }}>
@@ -359,6 +306,11 @@ export const RFPAForm = () => {
                               name={`rfpaProducts.${index}.amount`}
                               label="Amount"
                               value={formik.values.rfpaProducts[index].amount}
+                              slotProps={{
+                                input: {
+                                  endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                                },
+                              }}
                             />
                           </Grid2>
                           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -367,10 +319,7 @@ export const RFPAForm = () => {
                               id={`rfpaProducts.${index}.deliveryLocation`}
                               name={`rfpaProducts.${index}.deliveryLocation`}
                               label="Delivery Location"
-                              value={
-                                formik.values.rfpaProducts[index]
-                                  .deliveryLocation
-                              }
+                              value={formik.values.rfpaProducts[index].deliveryLocation}
                               onChange={formik.handleChange}
                             />
                           </Grid2>
@@ -381,9 +330,7 @@ export const RFPAForm = () => {
                               id={`rfpaProducts.${index}.purchaseDate`}
                               name={`rfpaProducts.${index}.purchaseDate`}
                               label="Purchase Date"
-                              value={
-                                formik.values.rfpaProducts[index].purchaseDate
-                              }
+                              value={reverseDateString(formik.values.rfpaProducts[index].purchaseDate || '')}
                               onChange={formik.handleChange}
                             />
                           </Grid2>
@@ -394,9 +341,7 @@ export const RFPAForm = () => {
                               id={`rfpaProducts.${index}.dispatchDate`}
                               name={`rfpaProducts.${index}.dispatchDate`}
                               label="Dispatch Date"
-                              value={
-                                formik.values.rfpaProducts[index].dispatchDate
-                              }
+                              value={reverseDateString(formik.values.rfpaProducts[index].dispatchDate || '')}
                               onChange={formik.handleChange}
                             />
                           </Grid2>
@@ -407,9 +352,7 @@ export const RFPAForm = () => {
                               id={`rfpaProducts.${index}.deliveryDate`}
                               name={`rfpaProducts.${index}.deliveryDate`}
                               label="Delivery Date"
-                              value={
-                                formik.values.rfpaProducts[index].deliveryDate
-                              }
+                              value={reverseDateString(formik.values.rfpaProducts[index].deliveryDate || '')}
                               onChange={formik.handleChange}
                             />
                           </Grid2>
@@ -421,10 +364,7 @@ export const RFPAForm = () => {
                                 id={`rfpaProducts.${index}.expectedHarvestDate`}
                                 name={`rfpaProducts.${index}.expectedHarvestDate`}
                                 label="Expected Harvest Date"
-                                value={
-                                  formik.values.rfpaProducts[index]
-                                    .expectedHarvestDate
-                                }
+                                value={reverseDateString(formik.values.rfpaProducts[index].expectedHarvestDate || '')}
                                 onChange={formik.handleChange}
                               />
                             </Grid2>
@@ -439,10 +379,7 @@ export const RFPAForm = () => {
                           justifyContent: 'end',
                         }}
                       >
-                        <AddFieldButton
-                          label="Add More"
-                          onClickFn={() => push(rfpaInitVal)}
-                        />
+                        <AddFieldButton label="Add More" onClickFn={() => push(rfpaInitVal)} />
                       </Grid2>
                     </>
                   )}
@@ -471,6 +408,11 @@ export const RFPAForm = () => {
                   label="Advance Paid Amount"
                   value={formik.values.paymentInfo.advancePaidAmt}
                   onChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
                 />
               </Grid2>
               <Grid2 size={{ xs: 12, md: 4 }}>
@@ -478,8 +420,8 @@ export const RFPAForm = () => {
                   isRequired={false}
                   label="Validity of Quote"
                   id="validityOfQuote"
-                  name="validityOfQuote"
-                  value={formik.values.validityOfQuote}
+                  name="paymentInfo.validityOfQuote"
+                  value={formik.values.paymentInfo.validityOfQuote}
                   onChange={formik.handleChange}
                 />
               </Grid2>
@@ -487,11 +429,16 @@ export const RFPAForm = () => {
                 <TextInput
                   isRequired={true}
                   type="number"
-                  label="Payment Terms (in Days)"
+                  label="Payment Terms"
                   id="paymentInfo.paymentTerms"
                   name="paymentInfo.paymentTerms"
                   value={formik.values.paymentInfo.paymentTerms}
                   onChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Days</InputAdornment>,
+                    },
+                  }}
                 />
               </Grid2>
               <Grid2 size={{ xs: 12, md: 3 }}>
@@ -501,19 +448,12 @@ export const RFPAForm = () => {
                   type="date"
                   name="paymentInfo.paymentDate"
                   label="Payment Date"
-                  value={formik.values.paymentInfo.paymentDate}
-                  handleChange={formik.handleChange}
-                  onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                  value={reverseDateString(formik.values.paymentInfo.paymentDate || '')}
+                  handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     const paymentDate = event.target.value;
-                    formik.setFieldValue(
-                      'paymentInfo.paymentDate',
-                      paymentDate
-                    );
+                    formik.setFieldValue('paymentInfo.paymentDate', paymentDate);
                     if (formik.values.paymentInfo.creditPeriod) {
-                      const dueDate = calculateDueDate(
-                        paymentDate,
-                        formik.values.paymentInfo.creditPeriod
-                      );
+                      const dueDate = calculateDueDate(paymentDate, formik.values.paymentInfo.creditPeriod);
                       formik.setFieldValue('paymentInfo.dueDate', dueDate);
                     }
                   }}
@@ -522,25 +462,23 @@ export const RFPAForm = () => {
               <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   id="paymentInfo.creditPeriod"
-                  isRequired={true}
+                  isRequired={false}
                   type="number"
-                  label="Credit Period (in Days)"
+                  label="Credit Period"
                   name="paymentInfo.creditPeriod"
                   value={formik.values.paymentInfo.creditPeriod}
-                  handleChange={formik.handleChange}
-                  onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
-                    const creditPeriod = parseInt(event.target.value, 10) || 0;
-                    formik.setFieldValue(
-                      'paymentInfo.creditPeriod',
-                      creditPeriod
-                    );
+                  handleChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const creditPeriod = Number(event.target.value);
+                    formik.setFieldValue('paymentInfo.creditPeriod', creditPeriod);
                     if (formik.values.paymentInfo.paymentDate) {
-                      const dueDate = calculateDueDate(
-                        formik.values.paymentInfo.paymentDate,
-                        creditPeriod
-                      );
+                      const dueDate = calculateDueDate(formik.values.paymentInfo.paymentDate, creditPeriod);
                       formik.setFieldValue('paymentInfo.dueDate', dueDate);
                     }
+                  }}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Days</InputAdornment>,
+                    },
                   }}
                 />
               </Grid2>
@@ -552,7 +490,7 @@ export const RFPAForm = () => {
                   label="Due Date"
                   id="paymentInfo.dueDate"
                   name="paymentInfo.dueDate"
-                  value={formik.values.paymentInfo.dueDate}
+                  value={reverseDateString(formik.values.paymentInfo.dueDate || '')}
                 />
               </Grid2>
               <Grid2 size={{ xs: 12, md: 3 }}>

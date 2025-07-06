@@ -13,7 +13,7 @@ import {
 import { Box, Grid2, LinearProgress } from '@mui/material';
 import { FormButtonGroup, PageTitle, RadioGroupInput, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { useNavigate, useParams } from 'react-router-dom';
-import { mapToValueLabelArray, useGetAllDeliveryChallanNums, useGetCompanyNames } from '@prime-fresh/shared/modules';
+import { handleFormKeyDown, mapToValueLabelArray, useGetAllDeliveryChallanNums, useGetCompanyNames } from '@prime-fresh/shared/modules';
 import { VehicleDispatchRegisterFormPreview } from './vehicle-dispatch-register.preview';
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 
@@ -86,7 +86,7 @@ export const VehicleDispatchRegisterForm = () => {
         }}
       >
         {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
             <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid2 size={{ xs: 12 }}>
                 <PageTitle pagetitle="Vehicle Dispatch Register" />

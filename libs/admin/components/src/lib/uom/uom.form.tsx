@@ -4,6 +4,7 @@ import { PostUOM } from "@prime-fresh/admin_api";
 import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
+import { handleFormKeyDown } from "@prime-fresh/shared/modules";
 
 export const UOMForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -65,7 +66,7 @@ export const UOMForm = () => {
                     handleSubmit(values);
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
                         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid2 size={{ xs: 12 }}>
                                 <PageTitle pagetitle='Unit of Measures' />

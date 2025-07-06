@@ -6,3 +6,4 @@ export * from './users';
 export * from './address.type';
 export * from './postResponse.type';
 export * from './packaging-material';
+export * from './approval-flow';

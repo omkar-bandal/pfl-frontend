@@ -1,16 +1,17 @@
-import React from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useFarmerColumns } from "./farmer-columns";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { useFarmerColumns } from './farmer-columns';
+import { useNavigate } from 'react-router-dom';
 import { useGetAllFarmers } from '@prime-fresh/admin/modules';
-import { toast, AddNewButton, ColumnSettingButton, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
-import { sharedRoutes } from "@prime-fresh/shared/modules";
+import { toast, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable, BtnSmall } from '@prime-fresh/ui_shared';
+import { sharedRoutes } from '@prime-fresh/shared/modules';
+import { Add, Settings } from '@mui/icons-material';
 
 export function FarmerTable() {
-
   const navigate = useNavigate();
   const farmerColumns = useFarmerColumns();
-  const { paginationModel,
+  const {
+    paginationModel,
     sortModel,
     handleSortingChange,
     handlePaginationChange,
@@ -19,12 +20,12 @@ export function FarmerTable() {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: farmerColumns, initialPageSize: 10 });
 
   const { data, isLoading, isError, error } = useGetAllFarmers(queryParams);
   const allFarmers = data ? data : null;
-  console.log('All Farmers: ', allFarmers)
+  console.log('All Farmers: ', allFarmers);
   const rowCountRef = React.useRef(allFarmers?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allFarmers?.allRecords !== undefined) {
@@ -39,19 +40,17 @@ export function FarmerTable() {
     }
   }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(sharedRoutes.CREATE_FARMER)
-  };
+  const handleCreate = () => navigate(sharedRoutes.CREATE_FARMER);
 
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='Farmers' />
+          <PageTitle pagetitle="Farmers" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="farmers-col-def"
             columns={farmerColumns}

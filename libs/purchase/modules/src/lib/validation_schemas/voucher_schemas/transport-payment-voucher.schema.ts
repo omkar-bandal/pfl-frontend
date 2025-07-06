@@ -13,5 +13,6 @@ export const transportPaymentVoucherSchema = yup.object().shape({
     dispatchLocation: yup.string().required('Dispatch location is required'),
     destinationLocation: yup.string().required('Destination location is required'),
     paymentMode: yup.string().required('Payment mode is required'),
+    totalAmt: yup.number().required('Total amount is required.').min(0, 'Amount cannot be negative.'),
     receiverName: yup.string().required('Receiver name is required').matches(REGEX.IS_STRING, 'Name should only contain alphabets'),
 })

@@ -3,8 +3,9 @@ import { Box, Grid2 } from "@mui/material";
 import { useCustomerColumns } from "./customer-columns";
 import { useNavigate } from "react-router-dom";
 import { useGetAllCustomers } from '@prime-fresh/admin/modules';
-import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
+import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { sharedRoutes } from "@prime-fresh/shared/modules";
+import { Add, Settings } from "@mui/icons-material";
 
 export function CustomerTable() {
 
@@ -38,9 +39,7 @@ export function CustomerTable() {
     }
   }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(sharedRoutes.CREATE_CUSTOMER);
-  }
+  const handleCreate = () => navigate(sharedRoutes.CREATE_CUSTOMER);
 
   return (
     <Box sx={{ flex: 1 }}>
@@ -49,8 +48,8 @@ export function CustomerTable() {
           <PageTitle pagetitle='Customers' />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleCreate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="customers-col-def"
             columns={customerColumns}

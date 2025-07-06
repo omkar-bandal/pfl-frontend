@@ -17,6 +17,7 @@ import { AutoCompleteInput, FormButtonGroup, PageTitle, SelectInput, TextInput, 
 import { Add, Close } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  handleFormKeyDown,
   mapToValueLabelArray,
   useGetBranchesPartialData,
   useGetCompanyNames,
@@ -106,7 +107,7 @@ export const EODReportForm = () => {
         }}
       >
         {({ values, handleChange, handleReset, handleSubmit, isSubmitting }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
             <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid2 size={{ xs: 12 }}>
                 <PageTitle pagetitle="EOD Report" />

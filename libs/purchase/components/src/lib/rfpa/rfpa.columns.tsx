@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GridRenderCellParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
-import { RequestedBy } from '@prime-fresh/purchase_api';
 import {
   CustomGridColDef,
   EditIconBtn,
   ViewIconBtn,
 } from '@prime-fresh/ui_shared';
+import { convertInTitleCase, reverseDateString } from '@prime-fresh/shared/modules';
 
 export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
   const navigate = useNavigate();
@@ -15,7 +16,8 @@ export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridCo
     {
       field: 'rfpaId',
       headerName: 'RFPA Number',
-      width: 130,
+      flex: 1, 
+      minWidth: 130,
       align: 'center',
       headerAlign: 'center',
       isMobileVisible: true,
@@ -23,61 +25,191 @@ export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridCo
     {
       field: 'createdDate',
       headerName: 'Created Date',
-      width: 120,
+      flex: 1, 
+      minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      valueGetter: (value: string) => value ? reverseDateString(value) : '',
     },
     {
       field: 'createdTime',
       headerName: 'Created Time',
-      width: 120,
+      flex: 1, 
+      minWidth: 120,
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'requestedBy',
-      headerName: 'Requested By',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (value: RequestedBy) =>
-        value ? `${value.firstName || ''} ${value.lastName || ''}` : '',
-    },
+    // {
+      //   field: 'requestedBy',
+    //   headerName: 'Requested By',
+    //   flex: 1, minWidth: 150,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   valueGetter: (value: RequestedBy) =>
+    //     value ? `${value.firstName || ''} ${value.lastName || ''}` : '',
+    // },
     {
       field: 'companyName',
       headerName: 'Company',
-      width: 150,
-      align: 'center',
+      flex: 1, 
+      minWidth: 200,
       headerAlign: 'center',
-      valueGetter: (value: string) => (value ? value : '-'),
+      valueGetter: (value: string) => (value ? value : ''),
     },
     {
       field: 'purchaseLocation',
       headerName: 'Location',
-      width: 100,
+      flex: 1, 
+      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
-      field: 'purchaseForWhich',
+      field: 'purchaseForSalesLocation',
       headerName: 'Destination',
-      width: 100,
+      flex: 1, 
+      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
       field: 'source',
       headerName: 'Source',
-      width: 100,
+      flex: 1, 
+      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (value: string) =>
-        value ? value.charAt(0).toUpperCase() + value.slice(1) : '-',
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+    },
+    {
+      field: 'rfpaProducts',
+      headerName: 'Products',
+      minWidth: 200,
+      flex: 1,
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const rfpaProducts = params.row.rfpaProducts.map((p: any) => p.productName)
+        return convertInTitleCase((rfpaProducts || []).join(', '));
+      }
+    },
+    {
+      field: 'paymentMode',
+      headerName: 'Payment Mode',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.paymentMode ? convertInTitleCase(paymentInfo.paymentMode) : '';
+      }
+    },
+    {
+      field: 'paymentTerms',
+      headerName: 'Payment Terms',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.paymentTerms ? `${Number(paymentInfo.paymentTerms)} Days` : '';
+      }
+    },
+    {
+      field: 'paymentDate',
+      headerName: 'Payment Date',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.paymentDate ? reverseDateString(paymentInfo.paymentDate) : '';
+      }
+    },
+    {
+      field: 'creditPeriod',
+      headerName: 'Credit Period',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.creditPeriod ? `${paymentInfo.creditPeriod} Days` : '';
+      }
+    },
+    {
+      field: 'dueDate',
+      headerName: 'Due Date',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.dueDate ? reverseDateString(paymentInfo.dueDate) : '';
+      }
+    },
+    {
+      field: 'advancePaidAmt',
+      headerName: 'Advance Paid Amount',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.advancePaidAmt ? `${Number(paymentInfo.advancePaidAmt)} Rs.` : '';
+      }
+    },
+    {
+      field: 'validityOfQuote',
+      headerName: 'Validity Of Quote',
+      minWidth: 120,
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        const paymentInfo = params.row.paymentInfo;
+        return paymentInfo?.validityOfQuote ? paymentInfo.validityOfQuote : '';
+      }
+    },
+    {
+      field: 'deliveryReceivingPerson',
+      headerName: 'Delivery Receiving Person',
+      flex: 1, 
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+    },
+    {
+      field: 'packingInstruction',
+      headerName: 'Packing Instruction',
+      flex: 1, 
+      minWidth: 250,
+      headerAlign: 'center',
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+    },
+    {
+      field: 'remark',
+      headerName: 'Remark',
+      flex: 1, 
+      minWidth: 250,
+      headerAlign: 'center',
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
       field: 'approvalStatus',
       headerName: 'Status',
-      width: 100,
+      flex: 1, 
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
         switch (params.row.approvalStatus) {
           case 'pending':
@@ -86,7 +218,7 @@ export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridCo
                 label={params.row.approvalStatus}
                 color="default"
                 size="small"
-                sx={{ width: 80 }}
+                sx={{ flex: 1, minWidth: 80 }}
               />
             );
           case 'approved':
@@ -95,7 +227,7 @@ export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridCo
                 label={params.row.approvalStatus}
                 color="info"
                 size="small"
-                sx={{ width: 80 }}
+                sx={{ flex: 1, minWidth: 80 }}
               />
             );
           default:
@@ -108,7 +240,8 @@ export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridCo
           {
             field: 'edit',
             headerName: 'Edit',
-            width: 70,
+            flex: 1, 
+            minWidth: 70,
             sortable: false,
             filterable: false,
             isMobileVisible: true,
@@ -127,7 +260,8 @@ export const useRFPAColumns = (canEdit: boolean, canView: boolean): CustomGridCo
           {
             field: 'view',
             headerName: 'View',
-            width: 70,
+            flex: 1, 
+            minWidth: 70,
             sortable: false,
             filterable: false,
             isMobileVisible: true,

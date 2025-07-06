@@ -22,9 +22,9 @@ export interface ITranportPaymentVoucher {
   destinationLocation: string | null;
   products: string | null;
   paymentMode: string | null;
-  freightAmt: number;
+  freightAmt: number | null;
   kyc: boolean;
-  totalAmt: number;
+  totalAmt: number | null;
   amtWords: string | null;
   receiverName: string | null;
   remark: string | null;

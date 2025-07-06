@@ -1,4 +1,12 @@
 export const ADMIN_ARRAYS = {
+    departments: [
+            {value: 'admin', label: 'Admin'},
+            {value: 'management', label: 'Management'},
+            {value: 'purchase', label: 'Purchase'},
+            {value: 'sale', label: 'Sale'},
+            {value: 'operations', label: 'Operation'},
+            {value: 'other', label: 'Other'},
+    ],
     landHoldingStatus: [
         { value: "Owned", label: "Owned" },
         { value: "Leased", label: "Leased" },

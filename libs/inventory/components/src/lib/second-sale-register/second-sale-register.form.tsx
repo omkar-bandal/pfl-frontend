@@ -24,6 +24,7 @@ import {
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  handleFormKeyDown,
   mapToValueLabelArray,
   useGetAllDeliveryChallanNums,
   useGetBranchesPartialData,
@@ -118,7 +119,7 @@ export const SecondSaleRegisterForm = () => {
         key={secondSaleId === '' ? 'create-ss-register' : 'update-ss-register'}
        value={formik}
       >
-          <form key={secondSaleId === '' ? 'create-form' : 'update-form'} onSubmit={formik.handleSubmit} encType="multipart/form-data">
+          <form key={secondSaleId === '' ? 'create-form' : 'update-form'} onKeyDown={handleFormKeyDown} onSubmit={formik.handleSubmit} encType="multipart/form-data">
             <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
               <Grid2 size={{ xs: 12 }}>
                 <PageTitle pagetitle="Second Sale Register" />

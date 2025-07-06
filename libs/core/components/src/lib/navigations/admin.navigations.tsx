@@ -24,7 +24,7 @@ export const adminNavigations: Navigations[] = [
       {
         name: 'Employee',
         uniqueKey: 'employees',
-        path: ADMIN_ROUTES.GET_ALL_EMPLOYEES,
+        path: adminRoutes.VIEW_ALL_EMPLOYEES,
       },
       { name: 'Farmers', uniqueKey: 'farmers', path: ADMIN_ROUTES.GET_ALL_FARMERS },
       {
@@ -77,7 +77,23 @@ export const adminNavigations: Navigations[] = [
     name: 'Approval Module',
     uniqueKey: 'approval-module',
     logo: <Approval />,
-    path: adminRoutes.CREATE_APPROVAL_FLOW
+    children: [
+      {
+        name: 'For Purchase',
+        uniqueKey: 'approval-module-for-purchase',
+        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${STRINGS.PURCHASE}`,
+      },
+      {
+        name: 'For Sales',
+        uniqueKey: 'approval-module-for-purchase',
+        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${STRINGS.SALES}`,
+      },
+      {
+        name: 'For Operations',
+        uniqueKey: 'approval-module-for-purchase',
+        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${STRINGS.OPERATIONS}`,
+      },
+    ],
   },
   {
     name: 'Product',

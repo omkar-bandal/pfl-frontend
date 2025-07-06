@@ -10,7 +10,7 @@ import { DownloadButton, PageTitle } from '@prime-fresh/ui_shared';
 type FilterPanelProps = {
     filterParams: GRNFilterParams,
     setFilterParams: React.Dispatch<React.SetStateAction<GRNFilterParams>>,
-    fileUrl: string,
+    fileUrl?: string,
 }
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams, fileUrl }) => {
@@ -43,7 +43,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilte
         <Grid2 container rowSpacing={1} columnSpacing={1} marginY={1} padding={1} sx={{ border: `1px solid #666666`, borderRadius: 2 }}>
             <Grid2 size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: "space-between", alignItems: 'center' }}>
                 <PageTitle pagetitle='Filter Panel' />
-                <DownloadButton fileUrl={fileUrl} />
+                {/* <DownloadButton fileUrl={fileUrl} /> */}
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
                 <Dropdown
@@ -98,9 +98,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilte
                     onChange={(e) => handleChange(e)}
                     options={PURCHASE_ARRAYS.source}
                     noOptionsMessage="No options available" />
-            </Grid2>
-            <Grid2 size={{ xs: 12, md: 6 }}>
-                
             </Grid2>
         </Grid2>
     )

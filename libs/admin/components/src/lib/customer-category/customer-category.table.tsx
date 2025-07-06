@@ -1,9 +1,17 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Box, Grid2 } from "@mui/material";
-import { useCustomerCategoryColumns } from "./customer-category.columns";
-import { AddNewButton, ColumnSettingButton, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from "@prime-fresh/ui_shared";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES, useGetAllCustomerCategories } from "@prime-fresh/admin/modules";
+import { useEffect, useMemo, useRef } from 'react';
+import { Box, Grid2 } from '@mui/material';
+import { useCustomerCategoryColumns } from './customer-category.columns';
+import {
+  BtnSmall,
+  ColumnVisibilityPanel,
+  DataGridTable,
+  PageTitle,
+  toast,
+  useDataTable,
+} from '@prime-fresh/ui_shared';
+import { useNavigate } from 'react-router-dom';
+import { ADMIN_ROUTES, useGetAllCustomerCategories } from '@prime-fresh/admin/modules';
+import { Add, Settings } from '@mui/icons-material';
 
 export function CustomerCategoryTable() {
   const navigate = useNavigate();
@@ -18,7 +26,7 @@ export function CustomerCategoryTable() {
     displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel
+    handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: customerCategoryColumns, initialPageSize: 10 });
 
   const { data, isLoading, isError, error } = useGetAllCustomerCategories(queryParams);
@@ -37,17 +45,17 @@ export function CustomerCategoryTable() {
     }
   }, [isError, error]);
 
-  const handleNavigate = () => navigate(ADMIN_ROUTES.CREATE_CUSTOMER_CAT)
+  const handleCreate = () => navigate(ADMIN_ROUTES.CREATE_CUSTOMER_CAT);
 
   return (
     <Box sx={{ flex: 1 }}>
       <Grid2 container marginY={1}>
         <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle='Customer Categories' />
+          <PageTitle pagetitle="Customer Categories" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "center" }}>
-          <AddNewButton handleClick={handleNavigate} />
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="customer-cat-col-def"
             columns={customerCategoryColumns}

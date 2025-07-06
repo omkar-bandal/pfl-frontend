@@ -47,7 +47,7 @@ export function useGetVendorSubcategoriesByQuery(query: string):
     UseQueryResult<ApiBaseState<GetVendorSubcategory[]>, ErrorModel> {
         const enabled = query.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetVendorSubcategory[]>, ErrorModel>({
-        queryKey: ['get-vendor-subcategories-by-query'],
+        queryKey: ['get-vendor-subcategories-by-query', query],
         queryFn: () => VendorSubcategoryService.getInstance().getVendorSubcategoryByQuery(query),
         enabled: enabled,
     });

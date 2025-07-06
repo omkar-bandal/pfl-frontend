@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DataGridTable, DownloadButton, toast } from '@prime-fresh/ui_shared'
 import { ReportTableCols } from './report-table-cols'
-import { GetGRN } from '@prime-fresh/purchase_api'
+import { IGRN } from '@prime-fresh/purchase_api'
 import { Box } from '@mui/material'
 import { useGetAllGRNs } from '@prime-fresh/purchase/modules'
 import React from 'react'
@@ -29,7 +29,7 @@ export const PurchaseReports = () => {
   return (
     <Box flex={1}>
       <FilterPanel filterParams={filterParams} setFilterParams={setFilterParams} fileUrl={fileURL} />
-      <DataGridTable<GetGRN>
+      <DataGridTable<IGRN>
         mode="client"
         loading={isLoading || loadingReport}
         rows={reportRows}

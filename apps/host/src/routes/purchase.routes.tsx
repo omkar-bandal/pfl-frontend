@@ -30,7 +30,7 @@ import {
   DCTypeStockTransferTable,
   DCTypeCustomerView,
   DCTypeStockTransferView,
-  GRNFormNew,
+  GRNForm,
 } from '@prime-fresh/purchase/components';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
 import { Outlet } from 'react-router-dom';
@@ -94,7 +94,7 @@ export const PurchaseRoutes = [
       },
       {
         path: PURCHASE_ROUTES.CREATE_GRN,
-        element: <GRNFormNew />,
+        element: <GRNForm />,
       },
       {
         path: `${PURCHASE_ROUTES.VIEW_GRN}/:id`,
@@ -102,7 +102,7 @@ export const PurchaseRoutes = [
       },
       {
         path: `${PURCHASE_ROUTES.UPDATE_GRN}/:id`,
-        element: <GRNFormNew />,
+        element: <GRNForm />,
       },
     ],
   },

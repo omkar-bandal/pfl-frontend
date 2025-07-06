@@ -9,4 +9,9 @@ export const STRINGS = {
     WH: "warehouse",
     REGISTERED_OFFICE: "registered-office",
     CORPORATE_OFFICE: "corporate-office",
+
+    //Document Type
+    PURCHASE: "Procurement",
+    SALES: "Sale",
+    OPERATIONS: "Operation"
 }

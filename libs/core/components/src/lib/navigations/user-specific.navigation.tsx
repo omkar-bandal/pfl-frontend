@@ -39,7 +39,7 @@ export const userSpecificNavigation: Navigations[] = [
   },
   {
     name: 'Vouchers',
-    uniqueKey: 'vouchers',
+    // uniqueKey: 'vouchers',
     logo: <Payment />,
     children: [
       {
@@ -70,7 +70,7 @@ export const userSpecificNavigation: Navigations[] = [
   },
   {
     name: 'Delivery Challan',
-    uniqueKey: 'delivery-challan',
+    // uniqueKey: 'delivery-challan',
     logo: <LocalShipping />,
     children: [
       {

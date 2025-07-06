@@ -3,7 +3,7 @@ import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prim
 import { ADMIN_ROUTES, initValUOMConversionMatrix, uomConversionMatrixSchema, useCreateUOMConversionMatrix, useGetAllUOMs, useGetUOMConversionMatrixById, useUpdateUOMConversionMatrixById } from "@prime-fresh/admin/modules";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
-import { mapToValueLabelArray, useGetUOMPartialData } from "@prime-fresh/shared/modules";
+import { handleFormKeyDown, mapToValueLabelArray, useGetUOMPartialData } from "@prime-fresh/shared/modules";
 
 export const UOMConvMatrixForm = () => {
     const { oid } = useParams<{ oid: string }>();
@@ -67,7 +67,7 @@ export const UOMConvMatrixForm = () => {
                     handleSubmit(values);
                 }}>
                 {({ values, handleChange, handleSubmit, handleReset, isSubmitting }) => (
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
                         <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
                             <Grid2 size={{ xs: 12 }}>
                                 <PageTitle pagetitle='UoM Conversion Matrix' />
