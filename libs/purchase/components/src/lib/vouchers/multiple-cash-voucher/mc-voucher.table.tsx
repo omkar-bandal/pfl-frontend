@@ -27,6 +27,7 @@ export const MultipleCashVoucherTable = () => {
 
   const { data, isLoading, isError, error } = useGetAllMultiCashVouchers(queryParams);
   const allMCVouchers = data ? data : null;
+  console.log('All MC vouchers:', allMCVouchers)
   const rowCountRef = React.useRef(allMCVouchers?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allMCVouchers?.allRecords !== undefined) {

@@ -7,22 +7,22 @@ export type AQRParameters = {
 }
 
 export type PostAQR = {
-    dcNo: string,
-    dcDate: string,
+    dcNo: string | null,
+    dcDate: string | null,
     arrivedQty: number | null,
     samplingQty: number | null,
-    purchaseBy: string,
-    packBy: string,
-    receivedBy: string,
-    qcCheckBy: string,
-    verifiedBy: string,
+    purchaseBy: string | null,
+    packBy: string | null,
+    receivedBy: string | null,
+    qcCheckBy: string | null,
+    verifiedBy: string | null,
     totalQty: number,
     totalpercent: number,
-    supplierName: string,
-    arrivalDate: string,
-    supplierLocation: string,
-    remark: string,
-    product: string,
+    supplierName: string | null,
+    arrivalDate: string | null,
+    supplierLocation: string | null,
+    remark: string | null,
+    product: string | null,
     parameters: AQRParameters[]
 }
 

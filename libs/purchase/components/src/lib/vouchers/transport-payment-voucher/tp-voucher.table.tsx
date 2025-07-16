@@ -26,6 +26,7 @@ export const TransportPaymentVoucherTable = () => {
   } = useDataTable({ columnDef: tpVoucherColumns, initialPageSize: 10 });
   const { data, isLoading, isError, error } = useGetAllTransportPaymentVouchers(queryParams);
   const allTPVouchers = data ? data : null;
+  console.log('All TP vouchers', allTPVouchers)
   const rowCountRef = React.useRef(allTPVouchers?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allTPVouchers?.allRecords !== undefined) {

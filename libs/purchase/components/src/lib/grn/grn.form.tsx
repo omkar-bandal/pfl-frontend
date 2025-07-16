@@ -1,7 +1,7 @@
 import { Grid2, IconButton, InputAdornment, LinearProgress } from '@mui/material';
 import { Box } from '@mui/system';
 import { STRINGS } from '@prime-fresh/admin/modules';
-import { useActions, useAppDispatch } from '@prime-fresh/modules';
+import { queryClient, useActions, useAppDispatch } from '@prime-fresh/modules';
 import {
   grnInitialValue,
   grnProductsInitialValue,
@@ -108,6 +108,7 @@ export const GRNForm = () => {
     mutatePost(formData)
       .then(() => {
         toast.success(data ? data.message : 'GRN created.');
+        queryClient.invalidateQueries({ queryKey: ['user-notifications'] })
         setTimeout(() => {
           navigate(PURCHASE_ROUTES.GET_ALL_GRN);
         }, 2000);

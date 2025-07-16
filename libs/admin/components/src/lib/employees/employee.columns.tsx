@@ -6,7 +6,7 @@ import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
 import { useMemo } from "react";
-import { IGetEmployee } from "@prime-fresh/admin_api";
+import { IEmployee } from "@prime-fresh/admin_api";
 
 export const useEmployeeColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
@@ -37,12 +37,12 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
     {
       field: "username",
       headerName: "Username",
-      width: 100,
+      width: 120,
     },
     {
       field: "password",
       headerName: "Password",
-      width: 100,
+      width: 120,
     },
     {
       field: "cugNo",
@@ -73,7 +73,7 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       field: "accessLocation",
       headerName: "Access To Locations",
       width: 180,
-      renderCell: (params: GridRenderCellParams<IGetEmployee>) =>
+      renderCell: (params: GridRenderCellParams<IEmployee>) =>
         (params.row.accessLocation || []).join(', '),
     },
     {

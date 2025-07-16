@@ -4,6 +4,10 @@
     box-sizing: border-box;
     font-family: Arial, sans-serif;
   }
+  @page { 
+    size: A4;
+    margin: 1cm 1cm
+  }
   .printAreaContainer {
     padding: 20px;
   }
@@ -115,6 +119,10 @@
   .voucherTable tbody tr td {
     padding: 5px 5px;
     border: 1px solid #000;
+  }
+
+  .tableEmptyRows {
+   height: 25px
   }
   
   .srNoCol {

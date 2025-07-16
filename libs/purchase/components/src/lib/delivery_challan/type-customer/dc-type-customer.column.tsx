@@ -155,7 +155,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
                   renderCell: (params: GridRenderCellParams) => (
                     <ViewIconBtn
                       onClick={() =>
-                        navigate(`${PURCHASE_ROUTES.VIEW_DC_TYPE_CUSTOMER}/${params.row.id}`)
+                        navigate(`${PURCHASE_ROUTES.VIEW_DC_TYPE_CUSTOMER}/${params.row.documentId}`)
                       }
                     />
                   ),

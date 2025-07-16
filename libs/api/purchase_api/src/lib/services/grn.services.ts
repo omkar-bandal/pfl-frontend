@@ -1,4 +1,4 @@
-import { ApiBaseState, ApprovalModel, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, ApprovalRequest, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
 import { IGRN } from "../models";
 
@@ -40,7 +40,7 @@ export class GRNServices extends BaseService {
         return this.delete(url);
     }
 
-    approveGRN(id: string, data: ApprovalModel): Promise<ResultModel> {
+    approveGRN(id: string, data: ApprovalRequest): Promise<ResultModel> {
         const url = purchaseApiUrl.APPROVE_GRN(id);
         return this.patch(url, data);
     }

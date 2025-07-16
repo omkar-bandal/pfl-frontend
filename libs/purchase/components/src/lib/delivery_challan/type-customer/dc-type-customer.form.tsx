@@ -4,7 +4,7 @@ import { Box, Grid2, LinearProgress } from '@mui/material';
 import { FormikProvider, useFormik } from 'formik';
 import {
   dcTypeCustomerInitialValue,
-  deliveryChallanSchema,
+  dcTypeCustomerSchema,
   PURCHASE_ROUTES,
   useCreateDCTypeCustomer,
   useGetDCTypeCustomerForUpdateById,
@@ -49,7 +49,7 @@ export const DCTypeCustomerForm = () => {
   const formik = useFormik<IDeliveryChallanTypeCustomer>({
     enableReinitialize: true,
     initialValues: dcTypeCustomerInitVal,
-    validationSchema: deliveryChallanSchema,
+    validationSchema: dcTypeCustomerSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: (values) => handleSubmit(values),

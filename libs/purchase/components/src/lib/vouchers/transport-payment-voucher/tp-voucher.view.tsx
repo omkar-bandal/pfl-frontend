@@ -1,17 +1,18 @@
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import { BtnSmall, ProgressStepper, PageTitle, ProgressStep } from '@prime-fresh/ui_shared';
+import { BtnSmall, PageTitle, DrawerContainer, InfoTooltip, VerticalStepper, StepperData, toast } from '@prime-fresh/ui_shared';
 import { useGetTransportPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
-import { Check, Close, Message, Download } from '@mui/icons-material';
+import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
 import styles from './tp-voucher.module.css';
-import { convertInTitleCase, useGetAllCompaniesData } from '@prime-fresh/shared/modules';
-import { usePermission } from '@prime-fresh/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
 
 export const TransportPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  const { openDrawer } = useActions();
   const { canDownload } = usePermission('transport-payment-voucher');
   // const navigate = useNavigate();
   const [reason, setReason] = useState<string>('');
@@ -23,14 +24,15 @@ export const TransportPaymentVoucherView = () => {
   const { data: companies, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const companyDetails = companies?.data ? companies.data.find((comp) => comp.name === tpVoucher?.companyName) : null;
 
-  const approvalData: ProgressStep[] = [
-    { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-    { title: 'First Approval', subtitle: 'Sudhanshu Singh', status: 'approved' },
-    { title: 'Second Approval', subtitle: 'Ashok Kori', status: 'pending' },
-    { title: 'Third Approval', subtitle: 'Hiren Ghelani', status: 'rejected' },
-    { title: 'First Finalizer', subtitle: 'Hiren Ghelani', status: 'rejected' },
-    { title: 'Second Finalizer', subtitle: 'Hiren Ghelani', status: 'pending' },
-    { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: tpVoucher?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Verified', subtitle: tpVoucher?.approvalSummary?.verified?.name || '', status: tpVoucher?.approvalSummary?.verified?.status || 'hold' },
+    { title: 'First Approval', subtitle: tpVoucher?.approvalSummary?.firstApproved?.name || '', status: tpVoucher?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Second Approval', subtitle: tpVoucher?.approvalSummary?.secondApproved?.name || '', status: tpVoucher?.approvalSummary?.secondApproved?.status || 'hold' },
+    { title: 'Third Approval', subtitle: tpVoucher?.approvalSummary?.thirdApproved?.name || '', status: tpVoucher?.approvalSummary?.thirdApproved?.status || 'hold' },
+    { title: 'First Finalizer', subtitle: tpVoucher?.approvalSummary?.firstFinalized?.name || '', status: tpVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
+    { title: 'Second Finalizer', subtitle: tpVoucher?.approvalSummary?.secondFinalized?.name || '', status: tpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
+    { title: 'Completed', status: tpVoucher?.overAllStatus || 'hold' },
   ];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function createData(srNo: number, title: string, value: any) {
@@ -62,6 +64,31 @@ export const TransportPaymentVoucherView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
+
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(tpVoucherId);
+  const approveTPVoucher = () => {
+    mutateAsync({
+      status: 'approved',
+      reason: reason,
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+        toast.success(actionRes?.message)
+      })
+      .catch(() => toast.error(`${error}`));
+  };
+
+  const rejectTPVoucher = () => {
+    mutateAsync({
+      status: 'REJECT',
+      reason: reason,
+    }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+      toast.success(actionRes?.message)
+    })
+      .catch(() => toast.error(`${error}`));
+  };
+
   return (
     <Container maxWidth="xl">
       {isVoucherLoading || isCompanyDataLoading ? (
@@ -75,8 +102,8 @@ export const TransportPaymentVoucherView = () => {
               <PageTitle pagetitle="Transport Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveTPVoucher()} />
+                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectTPVoucher()} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -97,8 +124,25 @@ export const TransportPaymentVoucherView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper steps={approvalData} />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(tpVoucher?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(tpVoucher?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(tpVoucher?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>

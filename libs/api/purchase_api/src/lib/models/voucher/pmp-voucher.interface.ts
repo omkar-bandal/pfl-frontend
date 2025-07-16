@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ApprovalSummany, DocumentStatus } from '@prime-fresh/common_api';
 import { Address } from '../address.interface';
 
 export interface IMaterials {
@@ -12,10 +13,11 @@ export interface IMaterials {
 
 export interface IPackingMaterialPaymentVoucher {
     id: string;
+    documentId?: string | null;
+    documentDef?: string | null;
+    createdBy?: string | null;
     createdDate?: string;
     createdTime?: string;
-    requestedBy?: string;
-    requestingDepartment?: string;
     voucherNo?: string;
     grnNo: string | null;
     companyName: string | null;
@@ -35,5 +37,9 @@ export interface IPackingMaterialPaymentVoucher {
     kyc: boolean;
     remark: string | null;
     anyAttachment: any;
-    approvalStatus?: string | null;
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: ApprovalSummany;
+    // requestedBy?: string;
+    // requestingDepartment?: string;
+    // approvalStatus?: string | null;
 }

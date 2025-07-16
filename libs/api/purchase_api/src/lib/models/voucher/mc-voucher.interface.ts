@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RequestedBy } from "../requestedBy.interface";
+import { ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api";
+// import { RequestedBy } from "../requestedBy.interface";
 
 export interface IParticulars {
     id?: string,
@@ -9,10 +10,11 @@ export interface IParticulars {
 
 export interface IMultiCashVoucher {
     id: string,
+    documentId?: string | null;
+    documentDef?: string | null;
+    createdBy?: string | null;
     createdDate?: string,
     createdTime?: string,
-    requestedBy?: RequestedBy,
-    requestingDepartment?: string,
     voucherNo?: string,
     grnNo: string | null;
     challanNo: string | null;
@@ -27,5 +29,9 @@ export interface IMultiCashVoucher {
     receiverName: string | null;
     remark: string | null;
     particulars: IParticulars[],
-    approvalStatus?: string | null;
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: ApprovalSummany;
+    // requestedBy?: RequestedBy,
+    // requestingDepartment?: string,
+    // approvalStatus?: string | null;
 }

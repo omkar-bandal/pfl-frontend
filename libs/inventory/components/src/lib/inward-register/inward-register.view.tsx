@@ -192,6 +192,16 @@ export const InwardRegisterView = () => {
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.amount}</td>
                         </tr>
                       ))}
+                        {(inwardData?.inwardProducts.length || 0) < 5 && Array(5 - (inwardData?.inwardProducts?.length || 0)).fill(null).map(() => (
+                          <tr className={styles.tableEmptyRows}>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

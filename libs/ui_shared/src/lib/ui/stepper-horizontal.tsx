@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { CheckCircle, Cancel, PauseCircleFilled } from '@mui/icons-material';
+import { DocumentStatus } from '@prime-fresh/common_api';
 export interface ProgressStep {
   title: string;
   subtitle?: string;
-  status: 'approved' | 'rejected' | 'pending';
+  status: DocumentStatus;
 }
 
 export interface ProgressStepperProps {
@@ -12,22 +13,25 @@ export interface ProgressStepperProps {
 }
 export const ProgressStepper: FC<ProgressStepperProps> = (props) => {
   const { steps } = props;
-  const activeStep = steps.findIndex((step) => step.status === 'pending');
+  const activeStep = steps.findIndex((step) => step.status === 'hold' || step.status === 'query');
   const getStepIcon = (status: ProgressStep['status']) => {
-    switch (status) {
-      case 'approved':
-        return <CheckCircle fontSize="medium" color="success" />;
-      case 'rejected':
-        return <Cancel fontSize="medium" color="error" />;
-      case 'pending':
-      default:
-        return <PauseCircleFilled fontSize="medium" color="warning" />;
-    }
-  };
+    if (status === 'approved' || status === 'COMPLETE' || status === 'VERIFIED')
+      return <CheckCircle fontSize="medium" color="success" />;
+    else if (status === 'REJECT')
+      return <Cancel fontSize="medium" color="error" />;
+    else
+      return <PauseCircleFilled fontSize="medium" color="warning" />;
+  }
+  const getCompletedStep = (status: DocumentStatus) => {
+    if (status === 'approved' || status === 'VERIFIED' || status === 'COMPLETE')
+      return true;
+    else if (status === 'REJECT' || status === 'hold' || status === 'query')
+      return false
+  }
   return (
     <Stepper nonLinear alternativeLabel activeStep={activeStep}>
       {steps.map((step, index) => (
-        <Step key={index} completed={step.status === 'approved' ? true : false}>
+        <Step key={index} completed={getCompletedStep(step.status)}>
           <StepLabel icon={getStepIcon(step.status)}>
             <Typography variant="body2" component="div" sx={{ fontWeight: 600 }}>
               {step.title}

@@ -1,20 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from './rfpa.module.css';
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useGetRFPAForViewById } from '@prime-fresh/purchase/modules';
-import { BtnSmall, PageTitle, ProgressStepper } from '@prime-fresh/ui_shared';
-import { Check, Close, Download, Message } from '@mui/icons-material';
-import { convertInTitleCase } from '@prime-fresh/shared/modules';
+import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
+import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useReactToPrint } from 'react-to-print';
 
 export const RFPAView = () => {
   const { id } = useParams<{ id: string }>();
   const rfpaId = id ? id : '';
+  const { canDownload } = usePermission('rfpa');
+  const { openDrawer } = useActions();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
+  const [reason, setReason] = React.useState('');
   const { data, isLoading } = useGetRFPAForViewById(rfpaId);
   const rfpa = data?.data ? data.data : null;
+  const { data: companyData, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
+  console.log(companyData?.data);
+  const company = companyData?.data ? companyData.data.find((comp) => comp.name === rfpa?.companyName) : null;
 
-  const [reason, setReason] = React.useState('');
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: rfpa?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Approved', subtitle: rfpa?.approvalSummary?.firstApproved?.name || '', status: rfpa?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Completed', status: rfpa?.overAllStatus || 'hold' },
+  ];
   const rfpaLocField = [
     { title: 'Created Date:', value: rfpa?.createdDate || '' },
     { title: 'Created Time:', value: rfpa?.createdTime || '' },
@@ -70,9 +84,33 @@ export const RFPAView = () => {
 
   const signatureLabels = ['Created By', 'Approved By', 'Receiver Sign'];
   const rfpaSourceField = rfpa?.source === 'vendor' ? rfpaVendorField : rfpaFarmerField;
+
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(rfpaId);
+  const approveRFPA = () => {
+    mutateAsync({
+      status: 'approved',
+      reason: reason,
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+        toast.success(actionRes?.message)
+      })
+      .catch(() => toast.error(`${error}`));
+  };
+
+  const rejectRFPA = () => {
+    mutateAsync({
+      status: 'REJECT',
+      reason: reason,
+    }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+      toast.success(actionRes?.message)
+    })
+      .catch(() => toast.error(`${error}`));
+  };
   return (
     <Container maxWidth="xl">
-      {isLoading ? (
+      {isCompanyDataLoading && isLoading ? (
         <Box sx={{ flex: 1 }}>
           <LinearProgress />
         </Box>
@@ -83,10 +121,10 @@ export const RFPAView = () => {
               <PageTitle pagetitle="Request For Purchase Approval" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveRFPA()} />
+                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectRFPA()} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
-              <BtnSmall label="Download" icon={<Download />} color="info" />
+                {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />}
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" component="div">
@@ -103,32 +141,41 @@ export const RFPAView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper
-                steps={[
-                  { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-                  { title: 'Approved', subtitle: 'Sudhanshu Singh', status: 'approved' },
-                  { title: 'Completed', status: 'pending' },
-                ]}
-              />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(rfpa?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(rfpa?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(rfpa?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-            <div className={styles.printAreaContainer}>
+              <div className={styles.printAreaContainer} ref={contentRef}>
               <div className={styles.mainContainer}>
                 <header className={styles.header}>
                   <div className={styles.rfpaNo}>
                     <span className={`${styles.textSM} ${styles.textBold} ${styles.mb}`}>RFPA No.</span>
-                    <span className={`${styles.textMD} ${styles.textBold}`}>PFL-LP-1306250001</span>
+                      <span className={`${styles.textMD} ${styles.textBold}`}>{rfpa?.rfpaId}</span>
                   </div>
                   <div className={styles.companyDetails}>
                     <div className={`${styles.title} ${styles.textMD}`}>REQUEST FOR PURCHASE APPROVAL</div>
-                    <div className={`${styles.companyName} ${styles.textLG}`}>PRIME FRESH COMPANY LIMITED</div>
-                    <div className={`${styles.address} ${styles.textXS}`}>
-                      Address: 102, Sanskar-ll, Nr. Ketav Petrol Pump, Polytechnic Road, Ambawadi, Ahmedabad-380015.
-                    </div>
+                      <div className={`${styles.companyName} ${styles.textLG}`}>{company?.name}</div>
+                      <div className={`${styles.address} ${styles.textXS}`}>{company?.officeAddress}</div>
                     <div className={`${styles.contact} ${styles.textXS}`}>
-                      Ph.:+919090909090, Email: primefresh.employee@example.com, Web: website: primefreshlimited.com
+                        GSTN: {company?.gstNo}, FASSAI No.: {company?.fassaiNo}
                     </div>
                   </div>
                   <div className={styles.logo}>LOGO</div>
@@ -180,6 +227,16 @@ export const RFPAView = () => {
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.amount}</td>
                         </tr>
                       ))}
+                        {(rfpa?.rfpaProducts.length || 0) < 5 && Array(5 - (rfpa?.rfpaProducts?.length || 0)).fill(null).map(() => (
+                          <tr className={styles.tableEmptyRows}>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
@@ -187,20 +244,18 @@ export const RFPAView = () => {
                   {paymentInfoField.map((data, index) => (
                     <React.Fragment key={index}>
                       <div
-                        className={`${styles.gridItem} ${
-                          data.title === 'Packing Instruction:' || data.title === 'Remark:'
-                            ? styles.span_3
-                            : styles.span_3
-                        }`}
+                        className={`${styles.gridItem} ${data.title === 'Packing Instruction:' || data.title === 'Remark:'
+                          ? styles.span_3
+                          : styles.span_3
+                          }`}
                       >
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}>{data.title} </span>
                       </div>
                       <div
-                        className={`${styles.gridItem} ${
-                          data.title === 'Packing Instruction:' || data.title === 'Remark:'
-                            ? styles.span_9
-                            : styles.span_3
-                        }`}
+                        className={`${styles.gridItem} ${data.title === 'Packing Instruction:' || data.title === 'Remark:'
+                          ? styles.span_9
+                          : styles.span_3
+                          }`}
                       >
                         <span className={styles.textSM}>{data.value}</span>
                       </div>
@@ -222,20 +277,3 @@ export const RFPAView = () => {
     </Container>
   );
 };
-
-//
-// const { selectedVendorPartialData } = useAppSelector(vendorsDataStates);
-// const { selectedFarmerPartialData } = useAppSelector(farmersDataStates);
-// const { data: branches } = useGetBranchesPartialData();
-// const locations = branches?.data ? branches.data : [];
-// return (
-//   <Box sx={{ flex: 1, padding: 1 }}>
-//     {isLoading ? (
-//       <Box sx={{ flex: 1 }}>
-//         <LinearProgress />
-//       </Box>
-//     ) : (
-//       <DataViewer config={rfpaPreviewConfig} data={rfpa} />
-//     )}
-//   </Box>
-// );

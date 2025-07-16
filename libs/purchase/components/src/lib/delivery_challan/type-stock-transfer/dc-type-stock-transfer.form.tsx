@@ -5,6 +5,7 @@ import { Box, Grid2, LinearProgress } from '@mui/material';
 import { FormikProvider, useFormik } from 'formik';
 import {
   dcTypeStockTransferInitialValue,
+  dcTypeStockTransferSchema,
   PURCHASE_ROUTES,
   purchaseOptionsConstants,
   useCreateDCTypeStockTransfer,
@@ -39,7 +40,7 @@ export const DCTypeStockTransferForm = () => {
   const formik = useFormik<IDeliveryChallanTypeStockTransfer>({
     enableReinitialize: true,
     initialValues: dcTypeStockTransferInitVal,
-    // validationSchema: deliveryChallanSchema,
+    validationSchema: dcTypeStockTransferSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: (values) => handleSubmit(values),

@@ -1,31 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './grn.module.css';
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import {
   grnDataState,
   setReasonForGRNAction,
-  useApproveGRN,
   useGetGRNForViewById,
 } from '@prime-fresh/purchase/modules';
 import { useReactToPrint } from 'react-to-print';
-import { BtnSmall, formatCurrency, formatDate, PageTitle, ProgressStepper, toast } from '@prime-fresh/ui_shared';
+import { BtnSmall, DrawerContainer, formatCurrency, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import {
   farmersDataStates,
   setSelectedFarmerPartialData,
   setSelectedVendorPartialData,
   vendorsDataStates,
 } from '@prime-fresh/admin/modules';
-import { useAppDispatch, useAppSelector, usePermission } from '@prime-fresh/modules';
+import { queryClient, useActions, useAppDispatch, useAppSelector, usePermission } from '@prime-fresh/modules';
 import {
   convertInTitleCase,
   formatAddress,
+  getDocStatusColor,
   useGetFarmersPartialData,
   useGetVendorsPartialData,
+  useUpdateDocumentStatus,
 } from '@prime-fresh/shared/modules';
 import { images } from '@prime-fresh/assets';
-import { Check, Close, Message, Download } from '@mui/icons-material';
+import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
 
 export const GRNView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ export const GRNView = () => {
   const { canDownload } = usePermission('grn');
   const { reasonForGRNAction } = useAppSelector(grnDataState);
   const dispatch = useAppDispatch();
-
+  const { openDrawer } = useActions();
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
   const { data, isLoading } = useGetGRNForViewById(grnId);
@@ -63,25 +64,38 @@ export const GRNView = () => {
   const handleReasonChange = (reason: string) => {
     dispatch(setReasonForGRNAction(reason));
   };
-  const { mutateAsync, data: actionRes } = useApproveGRN(grn?.documentId ? grn?.documentId : '');
+
+  const approvalSummary: StepperData[
+  ] = [
+      { title: 'Created', subtitle: grn?.createdBy || '', status: 'approved' },
+      { title: 'Verified', subtitle: grn?.approvalSummary?.verified?.name || '', status: grn?.approvalSummary?.verified?.status || 'hold' },
+      { title: 'First Approval', subtitle: grn?.approvalSummary?.firstApproved?.name || '', status: grn?.approvalSummary?.firstApproved?.status || 'hold' },
+      { title: 'Second Approval', subtitle: grn?.approvalSummary?.secondApproved?.name || '', status: grn?.approvalSummary?.secondApproved?.status || 'hold' },
+      { title: 'Third Approval', subtitle: grn?.approvalSummary?.thirdApproved?.name || '', status: grn?.approvalSummary?.thirdApproved?.status || 'hold' },
+      { title: 'First Finalizer', subtitle: grn?.approvalSummary?.firstFinalized?.name || '', status: grn?.approvalSummary?.firstFinalized?.status || 'hold' },
+      { title: 'Second Finalizer', subtitle: grn?.approvalSummary?.secondFinalized?.name || '', status: grn?.approvalSummary?.secondFinalized?.status || 'hold' },
+      { title: 'Completed', status: grn?.approvalSummary?.secondFinalized?.status || 'hold' },
+    ]
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(grnId);
 
   const approveGRN = () => {
-    if (grn?.documentDef) {
-      mutateAsync({
-        documentdef: grn?.documentDef,
-        action: 'approve',
-        reason: reasonForGRNAction,
+    mutateAsync({
+      // documentdef: grn?.documentDef,
+      status: 'approved',
+      reason: reasonForGRNAction,
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['get-GRN-for-view-by-id'], exact: false })
+        toast.success(actionRes?.message)
       })
-        .then(() => toast.success(actionRes?.message))
-        .catch((error) => toast.error(`${error}`));
-    }
+      .catch(() => toast.error(`${error}`));
   };
 
   const rejectGRN = () => {
     if (grn?.documentDef) {
       mutateAsync({
-        documentdef: grn?.documentDef,
-        action: 'reject',
+        // documentdef: grn?.documentDef,
+        status: 'REJECT',
         reason: reasonForGRNAction,
       });
     }
@@ -106,7 +120,7 @@ export const GRNView = () => {
                 color="success"
                 onClick={() => approveGRN()}
               />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectGRN()} />
+                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectGRN()} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -127,18 +141,25 @@ export const GRNView = () => {
                 onChange={(e) => handleReasonChange(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper
-                steps={[
-                  { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-                  { title: 'First Approval', subtitle: 'Sudhanshu Singh', status: 'approved' },
-                  { title: 'Second Approval', subtitle: 'Ashok Kori', status: 'pending' },
-                  { title: 'Third Approval', subtitle: 'Hiren Ghelani', status: 'rejected' },
-                  { title: 'First Finalizer', subtitle: 'Hiren Ghelani', status: 'rejected' },
-                  { title: 'Second Finalizer', subtitle: 'Hiren Ghelani', status: 'pending' },
-                  { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
-                ]}
-              />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(grn?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(grn?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(grn?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
@@ -174,14 +195,15 @@ export const GRNView = () => {
               <div className={styles['details-grid']}>
                 {[
                   { label: 'GRN No:', value: grn?.grnNo },
+                    { label: 'Purchase Instruction By:', value: grn?.purchaseInstructionsBy },
+                    { label: 'Source:', value: grn?.source },
+                    { label: 'Created By:', value: grn?.createdBy },
                   { label: 'Created Date:', value: grn?.createdDate },
                   { label: 'Created Time:', value: grn?.createdTime },
-                  { label: 'Purchase Instruction By:', value: grn?.purchaseInstructionsBy },
-                  { label: 'Requested By:', value: grn?.requestedBy?.firstName },
-                  { label: 'Base Location:', value: grn?.baseLocation },
+                    // { label: 'Requested By:', value: grn?.requestedBy?.firstName },
+                    // { label: 'Base Location:', value: grn?.baseLocation },
                   { label: 'Purchase Location:', value: grn?.purchaseLocation },
-                  { label: 'Purchase For Which Location:', value: grn?.purchaseForSalesLocation },
-                  { label: 'Source:', value: grn?.source },
+                    { label: 'Purchase For Which Location:', value: grn?.purchaseForSalesLocation },
                 ].map((item, index) => (
                   <div key={index} className={`${styles['details-item']} ${styles['span-4']}`}>
                     <span
@@ -276,6 +298,16 @@ export const GRNView = () => {
                       </th>
                     </tr>
                   ))}
+                    {(grn?.grnProducts.length || 0) < 5 && Array(5 - (grn?.grnProducts?.length || 0)).fill(null).map(() => (
+                      <tr className={styles.tableEmptyRows}>
+                        <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
+                        <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
+                        <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
+                        <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
+                        <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
+                        <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
+                      </tr>
+                    ))}
                 </tbody>
                 <tfoot>
                   <tr className={styles['total-row']}>
@@ -300,9 +332,8 @@ export const GRNView = () => {
                 ].map((item, index) => (
                   <div
                     key={index}
-                    className={`${styles['details-item']} ${
-                      item.label === 'Amount in Words:' ? styles['span-12'] : styles['span-4']
-                    }`}
+                    className={`${styles['details-item']} ${item.label === 'Amount in Words:' ? styles['span-12'] : styles['span-4']
+                      }`}
                     style={{ border: borderColor }}
                   >
                     <span
@@ -327,9 +358,8 @@ export const GRNView = () => {
                 ].map((item, index) => (
                   <div
                     key={index}
-                    className={`${styles['details-item']} ${
-                      item.label === 'Delivery Receiving Person:' ? styles['span-6'] : styles['span-3']
-                    }`}
+                    className={`${styles['details-item']} ${item.label === 'Delivery Receiving Person:' ? styles['span-6'] : styles['span-3']
+                      }`}
                   >
                     <span
                       className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
@@ -341,7 +371,7 @@ export const GRNView = () => {
                   </div>
                 ))}
               </div>
-              <div style={{ width: '100%', border: borderColor, padding: 0, display: 'flex' }}>
+                {/* <div style={{ width: '100%', border: borderColor, padding: 0, display: 'flex' }}>
                 <div style={{ width: '75%' }} className={`${styles['payment-terms-grid']}`}>
                   {[
                     { label: 'Payment Mode', value: convertInTitleCase(grn?.paymentInfo.paymentMode || '') },
@@ -371,11 +401,12 @@ export const GRNView = () => {
                     Supervisor Signature
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Box>
         </Box>
-      )}
-    </Container>
+      )
+      }
+    </Container >
   );
 };

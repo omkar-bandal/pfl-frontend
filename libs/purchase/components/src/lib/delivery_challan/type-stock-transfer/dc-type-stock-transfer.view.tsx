@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import { BtnSmall, PageTitle, ProgressStep, ProgressStepper } from '@prime-fresh/ui_shared';
+import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useGetDCTypeStockTransferForViewById } from '@prime-fresh/purchase/modules';
-import { convertInTitleCase, useGetAllCompaniesData } from '@prime-fresh/shared/modules';
-import { Box, LinearProgress, Typography, Container, Grid, TextField } from '@mui/material';
-import { Check, Close, Message, Download } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { Box, LinearProgress, Typography, Container, Grid, TextField, Grid2, IconButton } from '@mui/material';
+import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
 import styles from './dc-type-stock-transfer.module.css';
-import { usePermission } from '@prime-fresh/modules';
+import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
 
 export const DCTypeStockTransferView = () => {
   const { id } = useParams<{ id: string }>();
   const dcId = id ? id : '';
   const { canDownload } = usePermission('delivery-challan');
   const [reason, setReason] = useState('');
+  const { openDrawer } = useActions();
   const { data, isLoading: isDCTypeStockTransferLoading } = useGetDCTypeStockTransferForViewById(dcId);
   const dcTypeStockTransferData = data?.data ? data.data : null;
   console.log('DC Type Stock Transfer Data: ', dcTypeStockTransferData);
@@ -28,14 +29,11 @@ export const DCTypeStockTransferView = () => {
     ? companyData.data.find((comp) => comp.name === dcTypeStockTransferData?.companyName)
     : null;
 
-  const approvalData: ProgressStep[] = [
-    { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-    { title: 'First Approval', subtitle: 'Sudhanshu Singh', status: 'approved' },
-    { title: 'Second Approval', subtitle: 'Ashok Kori', status: 'pending' },
-    { title: 'Third Approval', subtitle: 'Hiren Ghelani', status: 'rejected' },
-    { title: 'First Finalizer', subtitle: 'Hiren Ghelani', status: 'rejected' },
-    { title: 'Second Finalizer', subtitle: 'Hiren Ghelani', status: 'pending' },
-    { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: dcTypeStockTransferData?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Approved', subtitle: dcTypeStockTransferData?.approvalSummary?.firstApproved?.name || '', status: dcTypeStockTransferData?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Approved', subtitle: dcTypeStockTransferData?.approvalSummary?.secondApproved?.name || '', status: dcTypeStockTransferData?.approvalSummary?.secondApproved?.status || 'hold' },
+    { title: 'Completed', status: dcTypeStockTransferData?.overAllStatus || 'hold' },
   ];
 
   const firstGridData = [
@@ -58,6 +56,30 @@ export const DCTypeStockTransferView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
+
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(dcId);
+  const approveDCTypeStockTransfer = () => {
+    mutateAsync({
+      status: 'approved',
+      reason: reason,
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+        toast.success(actionRes?.message)
+      })
+      .catch(() => toast.error(`${error}`));
+  };
+
+  const rejectDCTypeStockTransfer = () => {
+    mutateAsync({
+      status: 'REJECT',
+      reason: reason,
+    }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+      toast.success(actionRes?.message)
+    })
+      .catch(() => toast.error(`${error}`));
+  };
   return (
     <Container maxWidth="xl">
       {isDCTypeStockTransferLoading || isCompanyDataLoading ? (
@@ -71,8 +93,8 @@ export const DCTypeStockTransferView = () => {
               <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery Challan Only For Stock Transfter" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveDCTypeStockTransfer()} />
+                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectDCTypeStockTransfer()} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -93,9 +115,26 @@ export const DCTypeStockTransferView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper steps={approvalData} />
-            </Grid>
+              <Grid2 size={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(dcTypeStockTransferData?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid2>
+              <Grid2 size={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(dcTypeStockTransferData?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(dcTypeStockTransferData?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
+              </Grid2>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
             <div className={styles.printAreaContainer} ref={contentRef}>
@@ -109,7 +148,7 @@ export const DCTypeStockTransferView = () => {
                       GSTN: {company?.gstNo}, FASSAI No.: {company?.fassaiNo}
                     </div>
                   </div>
-                  <div className={styles.logo}>LOGO</div>
+                    <div className={styles.logo}><img src={company?.logo} alt="logo" /></div>
                 </header>
                 <div className={`${styles.gridContainer} ${styles.px}`}>
                   {firstGridData.map((data, index) => (
@@ -148,6 +187,16 @@ export const DCTypeStockTransferView = () => {
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.amount}</td>
                         </tr>
                       ))}
+                        {(dcTypeStockTransferData?.deliveryChallanProducts.length || 0) < 5 && Array(5 - (dcTypeStockTransferData?.deliveryChallanProducts?.length || 0)).fill(null).map(() => (
+                          <tr className={styles.tableEmptyRows}>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

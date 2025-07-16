@@ -7,6 +7,7 @@ import {
   FormButtonGroup,
   MultiSelectAutocomplete,
   PageTitle,
+  SectionHeader,
   TextInput,
   toast,
 } from '@prime-fresh/ui_shared';
@@ -52,11 +53,11 @@ export const ApprovalFlowForm = () => {
     () =>
       emps?.data
         ? emps.data.map((emp) => {
-            return {
-              value: emp.id,
-              label: convertInTitleCase(`${emp.firstName || ''} ${emp.lastName || ''}`),
-            };
-          })
+          return {
+            value: emp.id,
+            label: convertInTitleCase(`${emp.firstName || ''} ${emp.lastName || ''}`),
+          };
+        })
         : [],
     [emps]
   );
@@ -72,29 +73,29 @@ export const ApprovalFlowForm = () => {
   const handleSubmit = (values: any) => {
     approvalFlowId === ''
       ? mutatePost(values)
-          .then(() => {
-            toast.success(postRes ? postRes.message : 'New Approval Flow Created Successfully.');
-            setTimeout(() => {
-              console.log(`Navigating to ${docType} approval flow page.`);
-              navigate(`${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${docType}`);
-              queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows', docType], exact: true });
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(postError ? postError.message : 'Error While Creating Approval Flow.');
-          })
+        .then(() => {
+          toast.success(postRes ? postRes.message : 'New Approval Flow Created Successfully.');
+          setTimeout(() => {
+            console.log(`Navigating to ${docType} approval flow page.`);
+            navigate(`${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${docType}`);
+            queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows', docType], exact: true });
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(postError ? postError.message : 'Error While Creating Approval Flow.');
+        })
       : mutatePatch(values)
-          .then(() => {
-            toast.success(patchRes ? patchRes.message : 'Approval Flow Updated Successfully.');
-            setTimeout(() => {
-              console.log(`Navigating to ${docType} approval flow page.`);
-              navigate(`${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${docType}`);
-              queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows', docType], exact: true });
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(patchError ? patchError.message : 'Error While Updating Approval Flow.');
-          });
+        .then(() => {
+          toast.success(patchRes ? patchRes.message : 'Approval Flow Updated Successfully.');
+          setTimeout(() => {
+            console.log(`Navigating to ${docType} approval flow page.`);
+            navigate(`${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${docType}`);
+            queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows', docType], exact: true });
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(patchError ? patchError.message : 'Error While Updating Approval Flow.');
+        });
   };
   return isLoading ? (
     <Box flex={1}>
@@ -112,33 +113,47 @@ export const ApprovalFlowForm = () => {
             <PageTitle pagetitle={`${docType} Approval Flow`} />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <AutoCompleteInput isRequired={true} label="Creator" name="creator" options={employees} />
+              <AutoCompleteInput
+                isRequired={true}
+                label="Creator"
+                name="creator"
+                options={employees}
+                infoTipText={`Enter the name of the employee for whom the approval flow is to be created.`} />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Grid2 size={{ xs: 12 }} marginY={2}>
+              <SectionHeader sectionHeader="Verifiers Section" />
+            </Grid2>
+            <Grid2 size={{ xs: 12 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={false}
               label="Verifiers"
               name="verifiers"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will verify the document created by the creator.`}
             />
           </Grid2>
+            <Grid2 size={{ xs: 12 }} marginY={2}>
+              <SectionHeader sectionHeader="Approvers Section" />
+            </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={true}
               label="First Approver"
               name="approvers.firstApprover.users"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
             <TextInput
               isRequired={false}
+                isReadOnly={true}
               type="number"
               label="Minimum Amount Can Approve"
               name="approvers.firstApprover.minAmtCanApprove"
@@ -151,7 +166,7 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3 }}>
             <TextInput
               isRequired={false}
               type="number"
@@ -169,12 +184,13 @@ export const ApprovalFlowForm = () => {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={true}
               label="Second Approver"
               name="approvers.secondApprover.users"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -210,12 +226,13 @@ export const ApprovalFlowForm = () => {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={true}
               label="Third Approver"
               name="approvers.thirdApprover.users"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -251,12 +268,13 @@ export const ApprovalFlowForm = () => {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={false}
               label="Fourth Approver"
               name="approvers.fourthApprover.users"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -292,12 +310,13 @@ export const ApprovalFlowForm = () => {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={false}
               label="Fifth Approver"
               name="approvers.fifthApprover.users"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -330,26 +349,31 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
+            <Grid2 size={{ xs: 12 }} marginY={2}>
+              <SectionHeader sectionHeader="Finalizer Section" />
+            </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={false}
               label="First Finalizer"
               name="finalizers.firstFinalizers"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will finalize the approved document created by the creator.`}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
-              limitTags={2}
+                limitTags={3}
               isRequired={false}
               label="Second Finalizer"
               name="finalizers.secondFinalizers"
               options={emps?.data || []}
               getOptionLabel={getEmployeeOptions}
+                infoTipText={`Add employee(s) who will finalize the approved document created by the creator.`}
             />
           </Grid2>
           <Grid2

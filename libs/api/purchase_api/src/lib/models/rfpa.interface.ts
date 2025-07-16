@@ -1,4 +1,4 @@
-import { FormProductQtyAmt, FormProducts, FormProductUoM } from "@prime-fresh/common_api";
+import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM } from "@prime-fresh/common_api";
 
 export type RFPASourceType = 'vendor' | 'farmer';
 
@@ -23,11 +23,11 @@ export interface IPaymentInfo {
 export interface IRFPA {
     id: string;
     rfpaId?: string;
+    createdBy?: string | null;
     createdDate?: string;
     createdTime?: string;
-    requestedBy?: string;
-    requestingDepartment?: string;
-    baseLocation?: string;
+    documentId?: string | null;
+    documentDef?: string | null;
     companyName: string | null;
     purchaseLocation: string | null;
     otherPurchaseLoc: string | null;
@@ -41,7 +41,13 @@ export interface IRFPA {
     deliveryReceivingPerson: string | null;
     packingInstruction: string | null;
     remark: string | null;
-    approvalStatus?: string | null;
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: Partial<ApprovalSummany>;
+    // requestedBy?: string;
+    // requestingDepartment?: string;
+    // baseLocation?: string;
+    // approvalStatus?: string | nul
+    // l;
 }
 
 export interface ChangeStatusResponse {

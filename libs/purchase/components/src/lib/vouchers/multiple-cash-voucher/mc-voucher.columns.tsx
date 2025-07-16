@@ -206,7 +206,7 @@ export const useMCVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
                   renderCell: (params: GridRenderCellParams) => (
                     <ViewIconBtn
                       onClick={() =>
-                        navigate(`${PURCHASE_ROUTES.VIEW_MULT_CASH_VOUCHER}/${params.row.id}`)
+                        navigate(`${PURCHASE_ROUTES.VIEW_MULT_CASH_VOUCHER}/${params.row.documentId}`)
                       }
                     />
                   ),

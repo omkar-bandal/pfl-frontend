@@ -1,16 +1,25 @@
-import { RequestedBy } from "./requestedBy.interface";
+// import { RequestedBy } from "./requestedBy.interface";
+
+import { ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api";
 
 export interface IDealSlip {
     id: string;
-    dealSlipCreatedAt?: Date;
-    requestedBy?: RequestedBy;
-    requestingDepartment?: string;
+    createdBy?: string | null;
+    createdDate?: string;
+    createdTime?: string;
+    documentId?: string | null;
+    documentDef?: string | null;
     dealSlipNo?: string;
     rfpa: string,
     lotNo: string,
     loadingLocation: string,
     remark: string,
     specialRequest: string,
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: Partial<ApprovalSummany>;
+    // dealSlipCreatedAt?: Date;
+    // requestedBy?: RequestedBy;
+    // requestingDepartment?: string;
 }
 
 export interface GetAllDealSlipNums {

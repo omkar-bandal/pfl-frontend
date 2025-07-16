@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
 import { BtnSmall, PageTitle, ProgressStep, ProgressStepper } from '@prime-fresh/ui_shared';
 import { useGetDumpRegisterForViewById } from '@prime-fresh/inventory/modules';
@@ -13,11 +14,11 @@ import { usePermission } from '@prime-fresh/modules';
 export const DumpRegisterView = () => {
   const { id } = useParams<{ id: string }>();
   const dumpRegiId = id ? id : '';
+  const { canDownload } = usePermission('dump-register');
+  const [reason, setReason] = useState('');
   const { data, isLoading: isDumpLoading } = useGetDumpRegisterForViewById(dumpRegiId);
   const dumpData = data?.data ? data.data : null;
   console.log('View Dump: ', dumpData);
-  const { canDownload } = usePermission('dump-register');
-  const [reason, setReason] = useState('');
 
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
@@ -50,16 +51,7 @@ export const DumpRegisterView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Approved By', 'Approved By'];
-  // return isLoading ? (
-  //   <Box flex={1}>
-  //     <LinearProgress />
-  //   </Box>
-  // ) : (
-  //   <Box flex={1}>
-  //     <PageTitle pagetitle="Dump Register" />
-  //     <DataViewer data={dumpData || []} config={dumpRegisterViewConfig} />
-  //   </Box>
-  // );
+
   return (
     <Container maxWidth="xl">
       {isDumpLoading || isCompanyDataLoading ? (
@@ -70,7 +62,7 @@ export const DumpRegisterView = () => {
         <Box sx={{ flex: 1, marginY: 1 }}>
           <Grid container rowSpacing={1} marginBottom={2}>
             <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <PageTitle pagetitle="Inward Register" />
+                <PageTitle pagetitle="Dump Register" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
               <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
@@ -101,7 +93,7 @@ export const DumpRegisterView = () => {
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
             <div className={styles.printAreaContainer} ref={contentRef}>
-              <div className={styles.mainContainer}>
+                <div className={styles.mainContainer} >
                 <header className={`${styles.header} ${styles.px}`}>
                   <div className={styles.companyDetails}>
                     <div className={`${styles.title} ${styles.textMD}`}>DUMP REGISTER</div>
@@ -142,7 +134,7 @@ export const DumpRegisterView = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {dumpData?.dumpProducts.map((product, index) => (
+                        {dumpData?.dumpProducts?.map((product, index) => (
                         <tr key={index}>
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{index + 1}</td>
                           <td className={`${styles.textSM}`}>{convertInTitleCase(product.productName || '')}</td>
@@ -152,6 +144,16 @@ export const DumpRegisterView = () => {
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.amount}</td>
                         </tr>
                       ))}
+                        {(dumpData?.dumpProducts.length || 0) < 5 && Array(5 - (dumpData?.dumpProducts?.length || 0)).fill(null).map(() => (
+                          <tr className={styles.tableEmptyRows}>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                            <td className={styles.tableEmptyRows}></td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

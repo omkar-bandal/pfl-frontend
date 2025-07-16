@@ -111,17 +111,17 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? value : '-'),
     },
-    {
-      field: 'grnProducts',
-      headerName: 'Products',
-      flex: 1, 
-      minWidth: 200,
-      headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams) => {
-        const grnProducts = params.row.grnProducts.map((p: any) => p.productName);
-        return convertInTitleCase((grnProducts || []).join(', '));
-      },
-    },
+    // {
+    //   field: 'grnProducts',
+    //   headerName: 'Products',
+    //   flex: 1, 
+    //   minWidth: 200,
+    //   headerAlign: 'center',
+    //   renderCell: (params: GridRenderCellParams) => {
+    //     const grnProducts = params.row.grnProducts.map((p: any) => p.productName);
+    //     return convertInTitleCase((grnProducts || []).join(', '));
+    //   },
+    // },
     {
       field: 'subTotalAmt',
       headerName: 'Subtotal Amount',
@@ -401,9 +401,10 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
             sortable: false,
             filterable: false,
             isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.id}`)} />
-            ),
+            renderCell: (params: GridRenderCellParams) => {
+              console.log('Document ID in column:', params.row.documentId);
+              return <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.documentId}`)} />
+            },
           },
         ]
       : []),

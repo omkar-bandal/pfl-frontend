@@ -2,7 +2,7 @@ import { Info } from "@mui/icons-material";
 import { IconButton, Typography } from "@mui/material"
 import { red } from "@mui/material/colors";
 import { InfoTooltip } from "../ui";
-type LabelProps = {
+export type LabelProps = {
     isRequired?: boolean;
     label: string;
     name: string;
@@ -38,7 +38,7 @@ export const Label: React.FC<LabelProps> = (props) => {
             )}
             {label}
             {infoTipText && <InfoTooltip info={infoTipText}>
-                <IconButton sx={{ fontSize: 15 }}>
+                <IconButton sx={{ fontSize: 10 }}>
                     <Info fontSize="inherit" color="info" />
                 </IconButton>
             </InfoTooltip>}

@@ -20,7 +20,6 @@ import { authRouteConstants, authState, loginSchema, stringConstants, useActions
 import { TextInput, toast } from '@prime-fresh/ui_shared';
 import { adminRoutes } from '@prime-fresh/admin/modules';
 import { sharedRoutes } from '@prime-fresh/shared/modules';
-import { socket } from '@prime-fresh/common_api';
 
 const InitValSignIn: ISignInRequest = {
   uid: '',
@@ -79,8 +78,6 @@ export const SignIn = () => {
         toast.success('Signed In Successfully.');
         setTimeout(() => {
           if (result) {
-            socket.connect();
-            socket.emit('registerUser', result.id);
             const loggedInUserInfo = {
               id: result.id,
               userName: result.userName,

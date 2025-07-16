@@ -5,6 +5,7 @@ import {
   authRouteConstants,
   authState,
   layoutStates,
+  notificationsState,
   setMobileOpen,
   useActions,
   useAppDispatch,
@@ -14,26 +15,31 @@ import { AccountCircle, Logout, Notifications } from '@mui/icons-material';
 import { ISignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { convertInTitleCase } from '@prime-fresh/shared/modules';
-import { socket } from '@prime-fresh/common_api';
+import { convertInTitleCase, useGetUserNotifications } from '@prime-fresh/shared/modules';
 import { ProfileMenu } from './ProfileMenu';
 import { NotificationBox } from './NotificationBox';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { setNotifications, addNotification } = useActions();
   const { mobileOpen, isSidebarClosing } = useAppSelector(layoutStates);
-  const {loggedInUserInfo} = useAppSelector(authState);
+  const { loggedInUserInfo } = useAppSelector(authState);
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
+  const { data } = useGetUserNotifications();
+  const noti = React.useMemo(() => data?.data ? data.data.map(noti => noti.message) : [], [data]);
 
   React.useEffect(() => {
-    console.log('Appbar useEffect running...');
-    socket.on('newNotification', (data: { message: string; userId: string }) => {
-      console.log('incoming notification', data.message);
-      console.log('on socketid: ', data.userId);
-    });
-  }, []);
+    // socket.on('newNotification', ({ message, userId }) => {
+    //   console.log(`Notification received for user id ${userId}:`, message);
+    //   addNotification(message);
+    // });
+    setNotifications(noti);
+  }, [addNotification, noti, setNotifications]);
+
+  const notifications = useAppSelector(notificationsState);
+  console.log("Notifications: ", notifications);
 
   const handleDrawerToggle = () => {
     if (!isSidebarClosing) {
@@ -98,16 +104,6 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
       throw new Error('Unable to logout please refresh the page.');
     }
   };
-  const notifications = [
-    { message: 'You have a new message from John', timestamp: 'just now' },
-    { message: 'System will be updated at midnight', timestamp: '10:30 AM' },
-    { message: 'Your report has been generated successfully', timestamp: '10:45 AM' },
-    { message: 'Failed to sync data. Please try again', timestamp: '1:34 PM' },
-    { message: 'You have a new message from John', timestamp: 'just now' },
-    { message: 'System will be updated at midnight', timestamp: '10:30 AM' },
-    { message: 'Your report has been generated successfully', timestamp: '10:45 AM' },
-    { message: 'Failed to sync data. Please try again', timestamp: '1:34 PM' },
-  ];
   const profileMenuOptions = [
     {
       label: 'Logout',
@@ -130,7 +126,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
       <Box
         width="100%"
         height="100%"
-        sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2 , paddingY: 1}}
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2, paddingY: 1 }}
       >
         <IconButton
           color="primary"
@@ -142,11 +138,11 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           <MenuIcon />
         </IconButton>
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
-          {/* <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
-            <Badge badgeContent={notifications.length}  color="error">
+          <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
+            <Badge badgeContent={notifications.length} color="error">
               <Notifications fontSize="medium" />
             </Badge>
-          </IconButton> */}
+          </IconButton>
           <IconButton
             onClick={handleOpenProfileMenu}
             size="medium"
@@ -166,12 +162,12 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           loggedInUsername={username}
           menuoptions={profileMenuOptions}
         />
-        {/* <NotificationBox
+        <NotificationBox
           open={openNotificationBox}
           anchorEl={notificationBoxAnchorEl}
           onClose={handleCloseNotificationBox}
           notifications={notifications}
-        /> */}
+        />
       </Box>
     </AppBar>
   );

@@ -1,12 +1,8 @@
 import * as yup from 'yup';
 import { REGEX } from '@prime-fresh/shared/modules';
 
-export const deliveryChallanSchema = yup.object().shape({
-    deliveryCType: yup.string().required('Challan type is required'),
+const dcBaseSchema = yup.object().shape({
     companyName: yup.string().required('Company name is required'),
-    partyName: yup.string().required('Name is required'),
-    fromLocation: yup.string().required('Location is required'),
-    toLocation: yup.string().notRequired(),
     driverName: yup.string().required('Driver name is required').matches(REGEX.IS_STRING, 'Name should only contain alphabets.'),
     contactNo: yup.string().required('Driver contact number is required.').matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
     altContactNo: yup.string().nullable().matches(REGEX.CONTACT_NO, 'Please enter valid contact number.'),
@@ -36,4 +32,15 @@ export const deliveryChallanSchema = yup.object().shape({
             const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
             return file.size <= maxSizeInBytes;
         }),
+})
+
+export const dcTypeCustomerSchema = dcBaseSchema.shape({
+    customerName: yup.string().required('Name is required'),
+    fromLocation: yup.string().required('Location is required'),
+})
+
+export const dcTypeStockTransferSchema = dcBaseSchema.shape({
+    stockTransferType: yup.string().required('Type of stock transfer is required'),
+    fromLocation: yup.string().required('Location is required'),
+    toLocation: yup.string().required('Location is required'),
 })

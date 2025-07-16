@@ -1,24 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Box, FormControl, Grid2, InputLabel, MenuItem, Select } from '@mui/material';
 import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames } from '@prime-fresh/shared/modules';
 import { useGetDashboardData } from '@prime-fresh/purchase/modules';
 import { DashboardCard } from '../../components/dashboard';
-import { socket } from '@prime-fresh/common_api';
+// import { socket } from '@prime-fresh/common_api';
 
 export const Dashboard = () => {
-  useEffect(() => {
-    console.log('Dashboard running...');
-    socket.on('socketId', (data) => {
-      console.log('My socket ID is', data);
-    });
-    socket.on('newNotification', ({ message }) => {
-      console.log('📨 Notification received:', message);
-    });
-    // socket.on('server:test', (data) => {
-    //   console.log(data);
-    // });
-  }, []);
   const [filterParams, setFilterParams] = useState({
     filterType: 'tillDate',
     companyName: '',
@@ -46,7 +34,7 @@ export const Dashboard = () => {
   const handleChange = (event: any) => {
     const { name, value } = event.target;
     setFilterParams((prev) => ({ ...prev, [name]: value }));
-    socket.emit('client:test', 'Client Test request...');
+    // socket.emit('client:test', 'Client Test request...');
   };
   return (
     // isLoading ? (
@@ -77,7 +65,7 @@ export const Dashboard = () => {
             >
               {filtersTypes.map((type) => {
                 return (
-                  <MenuItem value={type.value} sx={{ fontSize: '14px' }}>
+                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
                     {type.label}
                   </MenuItem>
                 );
@@ -106,7 +94,7 @@ export const Dashboard = () => {
             >
               {companies.map((type) => {
                 return (
-                  <MenuItem value={type.value} sx={{ fontSize: '14px' }}>
+                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
                     {type.label}
                   </MenuItem>
                 );
@@ -135,7 +123,7 @@ export const Dashboard = () => {
             >
               {locations.map((type) => {
                 return (
-                  <MenuItem value={type.value} sx={{ fontSize: '14px' }}>
+                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
                     {type.label}
                   </MenuItem>
                 );

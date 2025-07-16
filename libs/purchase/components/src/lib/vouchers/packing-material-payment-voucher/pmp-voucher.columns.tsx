@@ -261,7 +261,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
             isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
               <ViewIconBtn
-                onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_PACKING_MATERIAL_VOUCHER}/${params.row.id}`)}
+                onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_PACKING_MATERIAL_VOUCHER}/${params.row.documentId}`)}
               />
             ),
           },

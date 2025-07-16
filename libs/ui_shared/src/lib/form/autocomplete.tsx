@@ -91,18 +91,15 @@ import {
   TextField,
 } from "@mui/material";
 import { useField, useFormikContext } from "formik";
-import { Label } from "./label";
+import { Label, LabelProps } from "./label";
 
 type AutoCompleteOption = {
   label: string;
   value: string;
 };
 
-type AutoCompleteInputProps = {
+type AutoCompleteInputProps = Omit<LabelProps, 'isReadOnly' | 'isError'> & {
   multipleSelect?: boolean;
-  isRequired?: boolean;
-  label: string;
-  name: string;
   loading?: boolean;
   options: AutoCompleteOption[];
   value?: AutoCompleteOption | null;
@@ -121,6 +118,7 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = memo(({
   options = [],
   handleChange,
   handleBlur,
+  infoTipText
 }) => {
   const [field, meta] = useField(name);
   const {setFieldValue} = useFormikContext();
@@ -134,7 +132,8 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = memo(({
           isReadOnly={false}
           isError={meta.touched && Boolean(meta.error)}
           name={name}
-          label={label} />
+          label={label}
+          infoTipText={infoTipText} />
       </Grid2>
       <Grid2 size={{xs: 12}}>
         <Autocomplete

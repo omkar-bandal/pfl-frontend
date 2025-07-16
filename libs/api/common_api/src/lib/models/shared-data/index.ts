@@ -1,3 +1,4 @@
+export * from './user-notifications';
 export * from './address.model';
 export * from './company-names.model';
 export * from './farmer-partial-data.model';

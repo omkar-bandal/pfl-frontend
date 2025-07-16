@@ -155,7 +155,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
                   renderCell: (params: GridRenderCellParams) => (
                     <ViewIconBtn
                       onClick={() =>
-                        navigate(`${PURCHASE_ROUTES.VIEW_DC_TYPE_STOCK_TRANSFER}/${params.row.id}`)
+                        navigate(`${PURCHASE_ROUTES.VIEW_DC_TYPE_STOCK_TRANSFER}/${params.row.documentId}`)
                       }
                     />
                   ),

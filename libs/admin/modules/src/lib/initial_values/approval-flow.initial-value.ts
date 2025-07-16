@@ -11,7 +11,12 @@ export const approvalFlowInitialValue: Omit<IApprovalFlow, 'id'> = {
   creator: null,
   verifiers: null,
   approvers: {
-    firstApprover: approverInitialValue,
+    firstApprover: {
+      hierarchy: null,
+      minAmtCanApprove: 0,
+      maxAmtCanApprove: null,
+      users: null,
+    },
     secondApprover: approverInitialValue,
     thirdApprover: approverInitialValue,
     fourthApprover: approverInitialValue,

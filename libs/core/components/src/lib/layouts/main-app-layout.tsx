@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { coreStore } from '@prime-fresh/modules';
 import { Outlet } from 'react-router-dom';
 import { ErrorBoundary, ErrorFallback } from '@prime-fresh/ui_shared';
+import SocketInitializer from '../notifications/socketInitializer';
 
 const drawerWidth = 250;
 
@@ -13,6 +14,7 @@ export function Layout() {
     <Provider store={coreStore}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
+        <SocketInitializer />
         <Appbar drawerWidth={drawerWidth} />
         <Sidebar drawerWidth={drawerWidth} />
         <Box component="main"

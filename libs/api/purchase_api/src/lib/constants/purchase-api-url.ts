@@ -53,15 +53,19 @@ export const purchaseApiUrl = {
         url = url + `&sort=${queryParams.sort}`;
       }
       return url;
+      // return `/documents/userid/grn`
     } else {
       return `/grns/`;
+      // return `/documents/userid/grn`
     }
   },
   GET_GRN_FOR_VIEW_BY_ID: (id: string) => `/grns/view/${id}`,
+  // GET_GRN_FOR_VIEW_BY_ID: (id: string) => `/documents/${id}`,
   GET_GRN_FOR_UPDATE_BY_ID: (id: string) => `/grns/update/${id}`,
   UPDATE_GRN: (id: string) => `/grns/${id}`,
   DELETE_GRN: (id: string) => `/grns/${id}`,
-  APPROVE_GRN: (id: string) => `/api/documents/${id}/action `,
+  // APPROVE_GRN: (id: string) => `/api/documents/${id}/action `,
+  APPROVE_GRN: (id: string) => `/documents/update/${id}`,
   CREATE_GRN: '/grns/',
   GET_ALL_GRN_NO: '/grns/grnnumbers/getAllgrnNo',
 

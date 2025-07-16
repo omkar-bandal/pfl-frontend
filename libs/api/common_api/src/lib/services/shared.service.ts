@@ -2,6 +2,7 @@ import { sharedApiUrls } from '../constants';
 import {
   AllCompaniesData,
   ApiBaseState,
+  ApprovalRequest,
   CompanyNamesData,
   CustomerNames,
   CustomerPartialData,
@@ -15,8 +16,10 @@ import {
   GetLevels,
   GetProduct,
   LocationPartialData,
+  Notification,
   PackagingMaterialPartialData,
   ProductPartialData,
+  ResultModel,
   UOMPartialData,
   VendorPartialData,
 } from '../models';
@@ -27,6 +30,18 @@ export class SharedService extends BaseService {
 
   public static getInstance(): SharedService {
     return this._instance || (this._instance = new this());
+  }
+  //Approval
+  updateDocumentStatus(id: string, data: ApprovalRequest): Promise<ResultModel> {
+    console.log('Document Id:', id)
+    const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS(id);
+    return this.patch(url, data);
+  }
+
+  //Notifications
+  getAllUserNotifications(): Promise<ApiBaseState<Notification[]>> {
+    const url = sharedApiUrls.GET_NOTIFICATIONS_BY_USER;
+    return this.get(url);
   }
 
   getEmployeePartialData(): Promise<ApiBaseState<EmployeePartialData[]>> {

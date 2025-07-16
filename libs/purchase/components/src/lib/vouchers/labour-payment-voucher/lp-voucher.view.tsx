@@ -1,19 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useGetLaborPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
 import { useReactToPrint } from 'react-to-print';
-import { BtnSmall, PageTitle, ProgressStepper } from '@prime-fresh/ui_shared';
+import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import styles from './lp-voucher.module.css';
-import { convertInTitleCase } from '@prime-fresh/shared/modules';
-import { Check, Close, Download, Message } from '@mui/icons-material';
-import { usePermission } from '@prime-fresh/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
+import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
 
 export const LabourPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
   const { canDownload } = usePermission('labor-payment-voucher');
   const [reason, setReason] = useState<string>('');
+  const { openDrawer } = useActions();
   const { voucherid } = useParams<{ voucherid: string }>();
   const lpVoucherId = voucherid ? voucherid : '';
   const { data, isLoading } = useGetLaborPaymentVoucherForViewById(lpVoucherId);
@@ -48,7 +49,42 @@ export const LabourPaymentVoucherView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
+  // const approverBlock = lpVoucher?.approvalSummary?
+  const approvalSummary: StepperData[
+  ] = [
+      { title: 'Created', subtitle: lpVoucher?.createdBy || '', status: 'approved' },
+      { title: 'Verified', subtitle: lpVoucher?.approvalSummary?.verified?.name || '', status: lpVoucher?.approvalSummary?.verified?.status || 'hold' },
+      { title: 'First Approval', subtitle: lpVoucher?.approvalSummary?.firstApproved?.name || '', status: lpVoucher?.approvalSummary?.firstApproved?.status || 'hold', },
+      { title: 'Second Approval', subtitle: lpVoucher?.approvalSummary?.secondApproved?.name || '', status: lpVoucher?.approvalSummary?.secondApproved?.status || 'hold', disabled: lpVoucher?.approvalSummary?.secondApproved === null ? true : false },
+      { title: 'Third Approval', subtitle: lpVoucher?.approvalSummary?.thirdApproved?.name || '', status: lpVoucher?.approvalSummary?.thirdApproved?.status || 'hold', disabled: lpVoucher?.approvalSummary?.thirdApproved === null ? true : false },
+      { title: 'First Finalizer', subtitle: lpVoucher?.approvalSummary?.firstFinalized?.name || '', status: lpVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
+      { title: 'Second Finalizer', subtitle: lpVoucher?.approvalSummary?.secondFinalized?.name || '', status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
+      { title: 'Completed', status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
+    ]
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(lpVoucherId);
 
+  const approveLPVoucher = () => {
+    mutateAsync({
+      status: 'approved',
+      reason: reason,
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+        toast.success(actionRes?.message)
+      })
+      .catch(() => toast.error(`${error}`));
+  };
+
+  const rejectLPVoucher = () => {
+    mutateAsync({
+      status: 'REJECT',
+      reason: reason,
+    }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+      toast.success(actionRes?.message)
+    })
+      .catch(() => toast.error(`${error}`));
+  };
   return (
     <Container maxWidth="xl">
       {isLoading ? (
@@ -62,8 +98,8 @@ export const LabourPaymentVoucherView = () => {
               <PageTitle pagetitle="Labour Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveLPVoucher()} />
+                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectLPVoucher()} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -84,18 +120,25 @@ export const LabourPaymentVoucherView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper
-                steps={[
-                  { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-                  { title: 'First Approval', subtitle: 'Sudhanshu Singh', status: 'approved' },
-                  { title: 'Second Approval', subtitle: 'Ashok Kori', status: 'pending' },
-                  { title: 'Third Approval', subtitle: 'Hiren Ghelani', status: 'rejected' },
-                  { title: 'First Finalizer', subtitle: 'Hiren Ghelani', status: 'rejected' },
-                  { title: 'Second Finalizer', subtitle: 'Hiren Ghelani', status: 'pending' },
-                  { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
-                ]}
-              />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(lpVoucher?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(lpVoucher?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(lpVoucher?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>

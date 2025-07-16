@@ -1,8 +1,13 @@
+import { ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ILaborPaymentVoucher {
     id: string;
-    createdDate?: string;
-    createdTime?: string;
+    documentId?: string | null;
+    documentDef?: string | null;
+    createdBy?: string | null;
+    createdDate?: string | null;
+    createdTime?: string | null;
     requestedBy?: string;
     requestingDepartment?: string;
     voucherNo?: string;
@@ -25,4 +30,6 @@ export interface ILaborPaymentVoucher {
     receiverName: string | null;
     remark: string | null;
     anyAttachment: File | null;
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: ApprovalSummany;
 }

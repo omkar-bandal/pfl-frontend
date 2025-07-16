@@ -50,9 +50,10 @@ export type FormAccordionPropType = {
 };
 
 const FormAccordionComponent: React.FC<FormAccordionPropType> = ({ panel, children, openOnError }) => {
-  const { errors } = useFormikContext<any>();
+  // const { errors } = useFormikContext<any>();
 
-  const hasErrors = useMemo(() => openOnError && errors && Object.keys(errors).length > 0, [errors, openOnError]);
+  // const hasErrors = useMemo(() => openOnError && errors && Object.keys(errors).length > 0, [errors, openOnError]);
+  const hasErrors = openOnError;
 
   const [expanded, setExpanded] = useState<string | false>(false);
 

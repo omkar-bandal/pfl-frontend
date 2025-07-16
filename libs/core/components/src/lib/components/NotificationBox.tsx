@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Popover, Box, Typography, List, ListItem, ListItemText, PopoverProps } from '@mui/material';
 
 type NotificationBoxPropsType = PopoverProps & {
-  notifications: { message: string; timestamp: string }[];
+  notifications: string[];
 };
 
 export const NotificationBox: FC<NotificationBoxPropsType> = (props) => {
@@ -34,7 +34,7 @@ export const NotificationBox: FC<NotificationBoxPropsType> = (props) => {
           <List dense disablePadding>
             {notifications.map((notif, index) => (
               <ListItem key={index} divider>
-                <ListItemText primary={notif.message} secondary={notif.timestamp} />
+                <ListItemText primary={notif} />
               </ListItem>
             ))}
           </List>

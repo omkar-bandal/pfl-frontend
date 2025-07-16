@@ -1,4 +1,4 @@
-import { ApiBaseState, ApprovalModel, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, ApprovalRequest, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { GRNServices, IGRN } from '@prime-fresh/purchase_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -46,9 +46,9 @@ export const useGetGRNForUpdateById = (id: string): UseQueryResult<ApiBaseState<
   });
 };
 
-export const useApproveGRN = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalModel, unknown> => {
-  return useMutation<ResultModel, ErrorModel, ApprovalModel, unknown>({
-    mutationKey: ['approve-GRN'],
+export const useApproveGRN = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+  return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
+    mutationKey: ['approve-GRN', id],
     mutationFn: (data) => GRNServices.getInstance().approveGRN(id, data),
   });
 };

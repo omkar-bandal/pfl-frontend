@@ -9,21 +9,21 @@ export const AQRQualityParams: AQRParameters = {
 }
 
 export const AQRinitalValues: PostAQR = {
-  dcNo: '',
-  dcDate: '',
+  dcNo: null,
+  dcDate: null,
   arrivedQty: null,
   samplingQty: null,
-  purchaseBy: '',
-  packBy: '',
-  receivedBy: '',
-  qcCheckBy: '',
-  verifiedBy: '',
+  purchaseBy: null,
+  packBy: null,
+  receivedBy: null,
+  qcCheckBy: null,
+  verifiedBy: null,
   totalQty: 0,
   totalpercent: 0,
-  supplierName: '',
-  arrivalDate: '',
-  supplierLocation: '',
-  remark: '',
-  product: '',
+  supplierName: null,
+  arrivalDate: null,
+  supplierLocation: null,
+  remark: null,
+  product: null,
   parameters: [AQRQualityParams]
 }

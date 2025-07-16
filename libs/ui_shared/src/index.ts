@@ -8,3 +8,4 @@ export * from './lib/error-boundary/error-boundary';
 export * from './lib/fallbacks';
 export * from './lib/data_table';
 export * from './lib/ui';
+export * from './lib/containers';

@@ -1,36 +1,38 @@
 import React, { useRef, useState } from 'react';
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import { PageTitle, BtnSmall, ProgressStepper, ProgressStep } from '@prime-fresh/ui_shared';
+import { PageTitle, BtnSmall, StepperData, toast, DrawerContainer, VerticalStepper, InfoTooltip } from '@prime-fresh/ui_shared';
 import { useGetMultiCashVoucherForViewById } from '@prime-fresh/purchase/modules';
 import styles from './mc-voucher.module.css';
-import { Check, Close, Download, Message } from '@mui/icons-material';
-import { convertInTitleCase, useGetAllCompaniesData } from '@prime-fresh/shared/modules';
-import { usePermission } from '@prime-fresh/modules';
+import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
 
 export const MultipleCashVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
   const { canDownload } = usePermission('multi-cash-voucher');
+  const { openDrawer } = useActions();
   // const navigate = useNavigate();
   const [reason, setReason] = useState<string>('');
   const { voucherid } = useParams<{ voucherid: string }>();
   const mcVoucherId = voucherid ? voucherid : '';
   const { data, isLoading: isVoucherLoading } = useGetMultiCashVoucherForViewById(mcVoucherId);
   const mcVoucher = data?.data ? data.data : null;
+  console.log('MC voucher: ', mcVoucher);
   const { data: companies, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const companyDetails = companies?.data ? companies.data.find((comp) => comp.name === mcVoucher?.companyName) : null;
-  console.log(companies?.data);
 
-  const approvalData: ProgressStep[] = [
-    { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-    { title: 'First Approval', subtitle: 'Sudhanshu Singh', status: 'approved' },
-    { title: 'Second Approval', subtitle: 'Ashok Kori', status: 'pending' },
-    { title: 'Third Approval', subtitle: 'Hiren Ghelani', status: 'rejected' },
-    { title: 'First Finalizer', subtitle: 'Hiren Ghelani', status: 'rejected' },
-    { title: 'Second Finalizer', subtitle: 'Hiren Ghelani', status: 'pending' },
-    { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: mcVoucher?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Verified', subtitle: mcVoucher?.approvalSummary?.verified?.name || '', status: mcVoucher?.approvalSummary?.verified?.status || 'hold' },
+    { title: 'First Approval', subtitle: mcVoucher?.approvalSummary?.firstApproved?.name || '', status: mcVoucher?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Second Approval', subtitle: mcVoucher?.approvalSummary?.secondApproved?.name || '', status: mcVoucher?.approvalSummary?.secondApproved?.status || 'hold' },
+    { title: 'Third Approval', subtitle: mcVoucher?.approvalSummary?.thirdApproved?.name || '', status: mcVoucher?.approvalSummary?.thirdApproved?.status || 'hold' },
+    { title: 'First Finalizer', subtitle: mcVoucher?.approvalSummary?.firstFinalized?.name || '', status: mcVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
+    { title: 'Second Finalizer', subtitle: mcVoucher?.approvalSummary?.secondFinalized?.name || '', status: mcVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
+    { title: 'Completed', status: mcVoucher?.overAllStatus || 'hold' },
   ];
 
   const firstGridData = [
@@ -46,7 +48,29 @@ export const MultipleCashVoucherView = () => {
     { title: 'Amount In Words:', value: convertInTitleCase(mcVoucher?.amtWords || '') },
   ];
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(mcVoucherId);
+  const approveMCVoucher = () => {
+    mutateAsync({
+      status: 'approved',
+      reason: reason,
+    })
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+        toast.success(actionRes?.message)
+      })
+      .catch(() => toast.error(`${error}`));
+  };
 
+  const rejectMCVoucher = () => {
+    mutateAsync({
+      status: 'REJECT',
+      reason: reason,
+    }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
+      toast.success(actionRes?.message)
+    })
+      .catch(() => toast.error(`${error}`));
+  };
   return (
     <Container maxWidth="xl">
       {isVoucherLoading || isCompanyDataLoading ? (
@@ -60,8 +84,8 @@ export const MultipleCashVoucherView = () => {
               <PageTitle pagetitle="Multiple Cash Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveMCVoucher()} />
+                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectMCVoucher()} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -82,8 +106,25 @@ export const MultipleCashVoucherView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper steps={approvalData} />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(mcVoucher?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(mcVoucher?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(mcVoucher?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>

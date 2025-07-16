@@ -15,7 +15,7 @@ export type ResultModel = {
 export interface ApprovalModel {
   action: 'approve' | 'reject' | 'escalate' | null;
   reason: string | null;
-  documentdef: string | null;
+  documentdef?: string | null;
 }
 
 export interface ApprovalModelState extends ApprovalModel {

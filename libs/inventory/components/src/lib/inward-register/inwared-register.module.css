@@ -4,6 +4,10 @@
     box-sizing: border-box;
     font-family: Arial, sans-serif;
   }
+  @page { 
+    size: A4;
+    margin: 1cm 1cm;
+  }
   .printAreaContainer {
     padding: 20px;
   }
@@ -135,6 +139,9 @@
   }
   .amountCol {
     width: 10%;
+  }
+  .tableEmptyRows {
+   height: 25px
   }
   .termsConditionContainer {
     display: flex;

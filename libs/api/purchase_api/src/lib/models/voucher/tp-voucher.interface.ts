@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RequestedBy } from '../requestedBy.interface';
+import { ApprovalSummany, DocumentStatus } from '@prime-fresh/common_api';
+// import { RequestedBy } from '../requestedBy.interface';
 
 export interface ITranportPaymentVoucher {
   id: string;
+  documentId?: string | null;
+  documentDef?: string | null;
+  createdBy?: string | null;
   createdDate?: string;
   createdTime?: string;
-  requestedBy?: RequestedBy;
   receivedBy?: string;
-  requestingDepartment?: string;
   voucherNo?: string;
   grnNo: string | null;
   companyName: string | null;
@@ -29,4 +31,8 @@ export interface ITranportPaymentVoucher {
   receiverName: string | null;
   remark: string | null;
   anyAttachment: File[] | null;
+  overAllStatus?: DocumentStatus;
+  approvalSummary?: ApprovalSummany;
+  // requestedBy?: RequestedBy;
+  // requestingDepartment?: string;
 }

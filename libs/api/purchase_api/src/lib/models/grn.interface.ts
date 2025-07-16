@@ -1,5 +1,5 @@
-import { RequestedBy } from './requestedBy.interface';
-import { FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
+// import { RequestedBy } from './requestedBy.interface';
+import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
 
 export type IGRNLocationType = 'cc' | 'dc';
 
@@ -32,15 +32,11 @@ export interface IGRNPaymentInfo {
 export interface IGRN {
   id: string;
   grnNo?: string | null;
+  createdBy?: string | null;
   createdDate?: string | null;
   createdTime?: string | null;
-  requestedBy?: RequestedBy;
-  requestingDepartment?: string | null;
-  baseLocation?: string | null;
   documentId?: string | null;
   documentDef?: string | null;
-  approvalStatus?: string | null;
-  approvalNote?: string | null;
   locationType: IGRNLocationType;
   grnType: IGRNType;
   purchaseType: IGRNPurchaseType;
@@ -72,6 +68,13 @@ export interface IGRN {
   paymentInfo: IGRNPaymentInfo;
   remark: string | null;
   billImage: string | null;
+  overAllStatus?: DocumentStatus;
+  approvalSummary?: ApprovalSummany;
+  // requestedBy?: RequestedBy;
+  // requestingDepartment?: string | null;
+  // baseLocation?: string | null;
+  // approvalStatus?: string | null;
+  // approvalNote?: string | null;
 }
 
 export interface IGRNApproveReq {
@@ -84,3 +87,4 @@ export interface GetAllGRNnumbers {
   id: string | null;
   grnNo: string | null;
 }
+

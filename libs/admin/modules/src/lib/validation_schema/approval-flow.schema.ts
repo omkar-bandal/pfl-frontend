@@ -9,8 +9,8 @@ export const approvalFlowSchema = yup.object().shape({
         .of(yup.string())
         .required('Name of first approver is required.')
         .min(1, 'Please select atleast one option'),
-      minAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
-      maxAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
+      minAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
+      maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),
     secondApprover: yup.object().shape({
       users: yup
@@ -18,8 +18,8 @@ export const approvalFlowSchema = yup.object().shape({
         .of(yup.string())
         .required('Name of second approver is required.')
         .min(1, 'Please select atleast one option'),
-      minAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
-      maxAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
+      minAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
+      maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),
     thirdApprover: yup.object().shape({
       users: yup
@@ -27,16 +27,16 @@ export const approvalFlowSchema = yup.object().shape({
         .of(yup.string())
         .required('Name of third approver is required.')
         .min(1, 'Please select atleast one option'),
-      minAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
-      maxAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
+      minAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
+      maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),
     fourthApprover: yup.object().shape({
-      minAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
-      maxAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
+      minAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
+      maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),
     fifthApprover: yup.object().shape({
-      minAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
-      maxAmtCanApprove: yup.number().nullable().positive('Amount cannot be negative.'),
+      minAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
+      maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),
   }),
 });

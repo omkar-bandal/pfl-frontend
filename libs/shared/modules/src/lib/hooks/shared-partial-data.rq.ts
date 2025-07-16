@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 import {
   ApiBaseState,
   ErrorModel,
@@ -21,7 +21,24 @@ import {
   GetLevels,
   LocationPartialData,
   EmployeePartialData,
+  Notification,
+  ResultModel,
+  ApprovalRequest,
 } from '@prime-fresh/common_api';
+
+export const useUpdateDocumentStatus = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+  return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
+    mutationKey: ['update-doc-status', id],
+    mutationFn: (data) => SharedService.getInstance().updateDocumentStatus(id, data),
+  });
+};
+
+export const useGetUserNotifications = (): UseQueryResult<ApiBaseState<Notification[]>, ErrorModel> => {
+  return useQuery<ApiBaseState<Notification[]>, ErrorModel>({
+    queryKey: ['user-notifications'],
+    queryFn: () => SharedService.getInstance().getAllUserNotifications(),
+  })
+}
 
 export const useGetEmployeePartialData = (): UseQueryResult<ApiBaseState<EmployeePartialData[]>, ErrorModel> => {
   return useQuery<ApiBaseState<EmployeePartialData[]>, ErrorModel>({

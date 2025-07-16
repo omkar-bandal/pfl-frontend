@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store.core";
 
-type PreviewStateType = {
+type DialogBoxStateType = {
     isDialogBoxOpen: boolean,
 }
-const initialState: PreviewStateType = {
+const initialState: DialogBoxStateType = {
     isDialogBoxOpen: false,
 };
 export const dialogBoxSlice = createSlice({

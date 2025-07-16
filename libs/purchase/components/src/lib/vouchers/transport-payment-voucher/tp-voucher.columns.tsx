@@ -256,7 +256,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
             isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
               <ViewIconBtn
-                onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}
+                onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.documentId}`)}
               />
             ),
           },

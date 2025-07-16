@@ -249,7 +249,7 @@ export const useLPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
                   renderCell: (params: GridRenderCellParams) => (
                     <ViewIconBtn
                       onClick={() =>
-                        navigate(`${PURCHASE_ROUTES.VIEW_LABOUR_CASH_VOUCHER}/${params.row.id}`)
+                              navigate(`${PURCHASE_ROUTES.VIEW_LABOUR_CASH_VOUCHER}/${params.row.documentId}`)
                       }
                     />
                   ),

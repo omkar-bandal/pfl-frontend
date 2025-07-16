@@ -1,6 +1,14 @@
 import { QueryParams } from '../models';
 
 export const sharedApiUrls = {
+
+  //Notifications
+  GET_ALL_NOTIFICATIONS: `/notification/getallNotification`,
+  GET_NOTIFICATIONS_BY_USER: `/notification/getbyuserid`,
+
+  //Approval
+  UPDATE_DOCUMENT_STATUS: (id: string) => `/documents/update/${id}`,
+
   //Stock
   GET_ALL_STOCK: (queryParams?: QueryParams) => {
     if (queryParams) {
@@ -58,7 +66,7 @@ export const sharedApiUrls = {
   GET_STOCK_BY_ID: '/inventoryStock',
 
   GET_EMPLOYEE_PARTIAL_DATA: '/employee/all/partial',
-  
+
   GET_COMPANY_NAMES: '/company/partial/details',
   GET_ALL_COMPANIES_DATA: '/company/',
   GET_DEPARTMENT_BY_ID: '/departments',
