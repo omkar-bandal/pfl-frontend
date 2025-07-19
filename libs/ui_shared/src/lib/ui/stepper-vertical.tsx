@@ -4,7 +4,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
-import { CheckCircle, Cancel, PauseCircleFilled, HelpOutlined} from '@mui/icons-material';
+import { CheckCircle, Cancel, PauseCircleFilled, HelpOutlined } from '@mui/icons-material';
 import { DocumentStatus } from '@prime-fresh/common_api';
 
 export interface StepperData {
@@ -16,35 +16,41 @@ export interface StepperData {
 }
 
 export interface VerticleStepperProps {
-  steps : StepperData[];
+  steps: StepperData[];
 }
 
-export const VerticalStepper:React.FC<VerticleStepperProps> = ({steps}) => {
+export const VerticalStepper: React.FC<VerticleStepperProps> = ({ steps }) => {
+
   const activeStep = steps.findIndex((step) => step.status === 'hold' || step.status === 'query');
+
   const getStepIcon = (status: string) => {
-    if (status === 'approved' || status === 'COMPLETE' || status === 'VERIFIED')
+    const receivedStatus = status ? status.toLowerCase() : status;
+    if (receivedStatus === 'approved' || receivedStatus === 'complete' || receivedStatus === 'verified')
       return <CheckCircle fontSize="medium" color="success" />;
-    else if (status === 'REJECT')
+    else if (receivedStatus === 'reject')
       return <Cancel fontSize="medium" color="error" />;
-    else if(status === 'query')
-      return <HelpOutlined fontSize="medium" htmlColor='purple'/>
+    else if (receivedStatus === 'query')
+      return <HelpOutlined fontSize="medium" htmlColor='purple' />
     else
       return <PauseCircleFilled fontSize="medium" color="warning" />;
   }
+
   const getCompletedStep = (status: string) => {
-    if (status === 'approved' || status === 'VERIFIED' || status === 'COMPLETE')
+    const receivedStatus = status ? status.toLowerCase() : status;
+
+    if (receivedStatus === 'approved' || receivedStatus === 'verified' || receivedStatus === 'complete')
       return true;
-    else if (status === 'REJECT' || status === 'hold' || status === 'query')
+    else if (receivedStatus === 'reject' || receivedStatus === 'hold' || receivedStatus === 'query')
       return false
   }
-  
+
   return (
     <Box flex={1} marginY={2}>
       <Stepper activeStep={activeStep} nonLinear orientation="vertical">
         {steps.map((step, index) => (
           <Step key={index} completed={getCompletedStep(step.status)} disabled={step.disabled}>
             <StepLabel
-              icon={step.disabled ? <Cancel/> : getStepIcon(step.status)}
+              icon={step.disabled ? <Cancel /> : getStepIcon(step.status)}
               optional={
                 <>
                   <Typography variant='body2' sx={{ fontWeight: 700 }} >{step.subtitle}</Typography>

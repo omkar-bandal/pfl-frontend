@@ -7,7 +7,7 @@ import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, 
 import styles from './lp-voucher.module.css';
 import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const LabourPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -17,7 +17,7 @@ export const LabourPaymentVoucherView = () => {
   const { openDrawer } = useActions();
   const { voucherid } = useParams<{ voucherid: string }>();
   const lpVoucherId = voucherid ? voucherid : '';
-  const { data, isLoading } = useGetLaborPaymentVoucherForViewById(lpVoucherId);
+  const { data, isLoading, refetch } = useGetLaborPaymentVoucherForViewById(lpVoucherId);
   const lpVoucher = data?.data ? data.data : null;
   console.log(lpVoucher);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,14 +52,47 @@ export const LabourPaymentVoucherView = () => {
   // const approverBlock = lpVoucher?.approvalSummary?
   const approvalSummary: StepperData[
   ] = [
-      { title: 'Created', subtitle: lpVoucher?.createdBy || '', status: 'approved' },
-      { title: 'Verified', subtitle: lpVoucher?.approvalSummary?.verified?.name || '', status: lpVoucher?.approvalSummary?.verified?.status || 'hold' },
-      { title: 'First Approval', subtitle: lpVoucher?.approvalSummary?.firstApproved?.name || '', status: lpVoucher?.approvalSummary?.firstApproved?.status || 'hold', },
-      { title: 'Second Approval', subtitle: lpVoucher?.approvalSummary?.secondApproved?.name || '', status: lpVoucher?.approvalSummary?.secondApproved?.status || 'hold', disabled: lpVoucher?.approvalSummary?.secondApproved === null ? true : false },
-      { title: 'Third Approval', subtitle: lpVoucher?.approvalSummary?.thirdApproved?.name || '', status: lpVoucher?.approvalSummary?.thirdApproved?.status || 'hold', disabled: lpVoucher?.approvalSummary?.thirdApproved === null ? true : false },
-      { title: 'First Finalizer', subtitle: lpVoucher?.approvalSummary?.firstFinalized?.name || '', status: lpVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
-      { title: 'Second Finalizer', subtitle: lpVoucher?.approvalSummary?.secondFinalized?.name || '', status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
-      { title: 'Completed', status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
+      {
+        title: 'Created',
+        subtitle: lpVoucher?.createdBy || '',
+        status: 'COMPLETE'
+      },
+      {
+        title: 'Verified',
+        subtitle: lpVoucher?.approvalSummary?.verified?.name || '',
+        status: lpVoucher?.approvalSummary?.verified?.status || 'hold'
+      },
+      {
+        title: 'First Approval',
+        subtitle: lpVoucher?.approvalSummary?.firstApproved?.name || '',
+        status: lpVoucher?.approvalSummary?.firstApproved?.status || 'hold',
+      },
+      {
+        title: 'Second Approval',
+        subtitle: lpVoucher?.approvalSummary?.secondApproved?.name || '',
+        status: lpVoucher?.approvalSummary?.secondApproved?.status || 'hold',
+        disabled: lpVoucher?.approvalSummary?.secondApproved === null ? true : false
+      },
+      {
+        title: 'Third Approval',
+        subtitle: lpVoucher?.approvalSummary?.thirdApproved?.name || '',
+        status: lpVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
+        disabled: lpVoucher?.approvalSummary?.thirdApproved === null ? true : false
+      },
+      {
+        title: 'First Finalizer',
+        subtitle: lpVoucher?.approvalSummary?.firstFinalized?.name || '',
+        status: lpVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
+      },
+      {
+        title: 'Second Finalizer',
+        subtitle: lpVoucher?.approvalSummary?.secondFinalized?.name || '',
+        status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+      },
+      {
+        title: 'Completed',
+        status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+      },
     ]
   const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(lpVoucherId);
 
@@ -69,21 +102,21 @@ export const LabourPaymentVoucherView = () => {
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        refetch();
+        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.');
       })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
   };
 
   const rejectLPVoucher = () => {
     mutateAsync({
-      status: 'REJECT',
+      status: 'reject',
       reason: reason,
     }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
+      refetch();
+      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
     })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while rejecting voucher.'));
   };
   return (
     <Container maxWidth="xl">

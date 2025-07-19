@@ -119,7 +119,7 @@ export const useDealSlipColumns = (canEdit: boolean, canView: boolean): CustomGr
             filterable: false,
             isMobileVisible: true,
             renderCell: (params: GridRenderCellParams) => (
-              <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DEAL_SLIP}/${params.row.id}`)} />
+              <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_DEAL_SLIP}/${params.row.documentId}`)} />
             ),
           },
         ]

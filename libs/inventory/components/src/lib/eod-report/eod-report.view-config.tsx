@@ -11,12 +11,12 @@ export const eodReportViewConfig: ObjectViewerConfig = {
         {
           key: 'companyName',
           label: 'Company Name',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'location',
           label: 'Location',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'stockDate',
@@ -26,7 +26,7 @@ export const eodReportViewConfig: ObjectViewerConfig = {
         {
           key: 'submission',
           label: 'Submission',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
       ],
     },
@@ -39,22 +39,22 @@ export const eodReportViewConfig: ObjectViewerConfig = {
         {
           key: 'sku',
           label: 'SKU',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'uom',
           label: 'UoM',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'qty',
           label: 'Quantity',
-          render: (value: number) => (value ? value : 0),
+          render: (value: number) => (value ? Number(value) : 0),
         },
         {
           key: 'totalWeightinKg',
           label: 'Total Weight In Kg',
-          render: (value: number) => (value ? `${value} Kg` : 0),
+          render: (value: number) => (value ? `${Number(value)} Kg` : 0),
         },
       ],
     },

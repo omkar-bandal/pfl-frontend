@@ -5,7 +5,7 @@ import {
   inventoryRouteConstants,
   setVehicleDispatchRegisterFormPreview,
   useCreateVehicleDispatchRegister,
-  useGetVehicleDispatchRegisterById,
+  useGetVehicleDispatchRegisterForUpdateById,
   useUpdateVehicleDispatchRegister,
   vehicleDispatchRegisterInitialValues,
   vehicleDispatchRegisterSchema,
@@ -24,7 +24,7 @@ export const VehicleDispatchRegisterForm = () => {
   const { id } = useParams<{ id: string }>();
   const vehicleDispatchId = id ? id : '';
 
-  const { data, isLoading } = useGetVehicleDispatchRegisterById(vehicleDispatchId);
+  const { data, isLoading } = useGetVehicleDispatchRegisterForUpdateById(vehicleDispatchId);
   const vehicleDispatch = React.useMemo(() => (data?.data ? data.data : vehicleDispatchRegisterInitialValues), [data]);
   const initialValueVehicleDispatch = vehicleDispatchId === '' ? vehicleDispatchRegisterInitialValues : vehicleDispatch;
 

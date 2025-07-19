@@ -1,6 +1,6 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
-import { purchaseApiUrl } from "../constants";
-import { ITranportPaymentVoucher } from "../models";
+import { purchaseApiUrl } from "../../constants";
+import { ITranportPaymentVoucher } from "../../models";
 
 export class TransportPaymentVoucherServices extends BaseService {
     private static _instance: TransportPaymentVoucherServices;

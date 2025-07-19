@@ -1,4 +1,4 @@
-export type DocumentStatus = "hold" | "VERIFIED" | "approved" | "COMPLETE" | "REJECT" | "query";
+export type DocumentStatus = "hold" | "VERIFIED" | "approved" | "FINALIZING" | "COMPLETE" | "reject" | "query";
 
 export interface ApprovalSummaryBlock {
   name: string,

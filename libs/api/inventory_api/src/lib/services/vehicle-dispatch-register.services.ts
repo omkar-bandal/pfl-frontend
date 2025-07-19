@@ -19,18 +19,23 @@ export class VehicleDispatchRegisterServices extends BaseService {
         return this.get(url);
     }
 
-    getVehicleDispatchRegisterById(id: string): Promise<ApiBaseState<GetVehicleDispatchRegister>> {
-        const url = `${inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_BY_ID}/${id}`;
+    getVehicleDispatchRegisterForViewById(id: string): Promise<ApiBaseState<GetVehicleDispatchRegister>> {
+        const url = inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_FOR_VIEW_BY_ID(id);
+        return this.get(url);
+    }
+
+    getVehicleDispatchRegisterForUpdateById(id: string): Promise<ApiBaseState<GetVehicleDispatchRegister>> {
+        const url = inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_FOR_UPDATE_BY_ID(id);
         return this.get(url);
     }
 
     updateVehicleDispatchRegister(id: string, data: GetVehicleDispatchRegister): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.UPDATE_VEHICLE_DISPATCH_REGISTER}/${id}`;
+        const url = inventoryApiUrl.UPDATE_VEHICLE_DISPATCH_REGISTER(id);
         return this.patch(url, data);
     }
 
     deleteVehicleDispatchRegisterById(id: string): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.DELETE_VEHICLE_DISPATCH_REGISTER}/${id}`;
+        const url = inventoryApiUrl.DELETE_VEHICLE_DISPATCH_REGISTER(id);
         return this.delete(url);
     }
 }

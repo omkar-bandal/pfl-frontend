@@ -38,7 +38,7 @@ export function useGetDumpRegisterForViewById(id: string):
     UseQueryResult<ApiBaseState<IDumpRegister>, ErrorModel> {
         const enable = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<IDumpRegister>, ErrorModel>({
-        queryKey: ['get-dump-register-for-view-by-id', id],
+        queryKey: ['get-dump-register-for-view-by-id', enable],
         queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterForViewById(id),
         enabled: enable,
     });
@@ -48,7 +48,7 @@ export function useGetDumpRegisterForUpdateById(id: string):
     UseQueryResult<ApiBaseState<IDumpRegister>, ErrorModel> {
         const enable = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<IDumpRegister>, ErrorModel>({
-        queryKey: ['get-dump-register-for-update-by-id', id],
+        queryKey: ['get-dump-register-for-update-by-id', enable],
         queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterForUpdateById(id),
         enabled: enable,
     });

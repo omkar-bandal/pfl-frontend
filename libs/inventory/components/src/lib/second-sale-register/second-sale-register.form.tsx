@@ -8,7 +8,7 @@ import {
   SecondSaleRegisterInitialValue,
   setSecondSaleRegisterFormPreview,
   useCreateSecondSaleRegister,
-  useGetSecondSaleRegisterById,
+  useGetSecondSaleRegisterForUpdateById,
   useUpdateSecondSaleRegister,
 } from '@prime-fresh/inventory/modules';
 import { PURCHASE_ARRAYS } from '@prime-fresh/purchase/modules';
@@ -36,9 +36,8 @@ import {
   handlePushProduct,
   handleRemoveProduct,
   handleSecondSaleProductsChange,
-  normalizeData,
 } from './helper-function';
-import { PostSecondSaleRegister } from '@prime-fresh/inventory_api';
+import { ISecondSaleRegister } from '@prime-fresh/inventory_api';
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 import { SecondSaleRegisterFormPreview } from './second-sale-register.preview';
 
@@ -48,12 +47,12 @@ export const SecondSaleRegisterForm = () => {
   const { id } = useParams<{ id: string }>();
   const secondSaleId = id ? id : '';
 
-  const { data, isLoading } = useGetSecondSaleRegisterById(secondSaleId);
-  const secondSale = data?.data ? normalizeData(data.data) : SecondSaleRegisterInitialValue;
+  const { data, isLoading } = useGetSecondSaleRegisterForUpdateById(secondSaleId);
+  const secondSale = data?.data ? data.data : SecondSaleRegisterInitialValue;
   console.log('ss: ', secondSale);
   const initialValueSecondSale = secondSaleId === '' ? SecondSaleRegisterInitialValue : secondSale;
 
-  const formik = useFormik<PostSecondSaleRegister>({
+  const formik = useFormik<Omit<ISecondSaleRegister, 'id'>>({
     enableReinitialize: true,
     initialValues: initialValueSecondSale,
     validateOnBlur: true,

@@ -14,17 +14,17 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'companyName',
           label: 'Company',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'location',
           label: 'Location',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'dcNo',
           label: 'Delivery Challan Number',
-          render: (value: string) => (value ? value.toUpperCase() : '-'),
+          render: (value: string) => (value ? String(value).toUpperCase() : '-'),
         },
         {
           key: 'saleDate',
@@ -34,7 +34,7 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'buyerName',
           label: 'Buyer Name',
-          render: (value: string) => (value ? convertInTitleCase(value) : ''),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : ''),
         },
         {
           key: 'buyerMobNo',
@@ -43,12 +43,12 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'approvedBy',
           label: 'Approved By',
-          render: (value: string) => (value ? convertInTitleCase(value) : ''),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : ''),
         },
         {
           key: 'soldBy',
           label: 'Sold By',
-          render: (value: string) => (value ? convertInTitleCase(value) : ''),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : ''),
         },
         {
           key: 'reasonForSale',
@@ -93,13 +93,13 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
           key: 'amount',
           label: 'Amount',
           width: '10%',
-          render: (value: any) => (value ? formatCurrency(value) : 0),
+          render: (value: any) => (value ? formatCurrency(Number(value)) : 0),
         },
         {
           key: 'netWeight',
           label: 'Net Weight',
           width: '10%',
-          render: (value: any) => (value ? `${value} kg` : 0),
+          render: (value: any) => (value ? `${Number(value)} kg` : 0),
         },
       ],
     },
@@ -111,17 +111,17 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'totalNetWeight',
           label: 'Total Net Weight',
-          render: (value: number) => (value ? `${value} Kg` : ''),
+          render: (value: number) => (value ? `${Number(value)} Kg` : ''),
         },
         {
           key: 'totalAmt',
           label: 'Total Amount',
-          render: (value: number) => (value ? formatCurrency(value) : 0),
+          render: (value: number) => (value ? formatCurrency(Number(value)) : 0),
         },
         {
           key: 'totalAmtInWords',
           label: 'Total Amount in Words',
-          render: (value: string) => (value ? convertInTitleCase(value) : ''),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : ''),
         },
         {
           key: 'paymentMode',
@@ -130,12 +130,12 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'paidAmount',
           label: 'Paid Amount',
-          render: (value: number) => (value ? formatCurrency(value) : 0),
+          render: (value: number) => (value ? formatCurrency(Number(value)) : 0),
         },
         {
           key: 'pendingAmt',
           label: 'Pending Amount',
-          render: (value: number) => (value ? formatCurrency(value) : 0),
+          render: (value: number) => (value ? formatCurrency(Number(value)) : 0),
         },
         { key: 'remarks', label: 'Remarks' },
         { key: 'comments', label: 'Comments' },

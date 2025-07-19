@@ -1,22 +1,23 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
-import { BtnSmall, PageTitle, ProgressStep, ProgressStepper } from '@prime-fresh/ui_shared';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
+import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useGetDumpRegisterForViewById } from '@prime-fresh/inventory/modules';
 import { useParams } from 'react-router-dom';
 import styles from './dump-register.module.css';
-import { convertInTitleCase, useGetAllCompaniesData } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
 import { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { Check, Close, Download, Message } from '@mui/icons-material';
+import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
 import React from 'react';
-import { usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const DumpRegisterView = () => {
   const { id } = useParams<{ id: string }>();
   const dumpRegiId = id ? id : '';
   const { canDownload } = usePermission('dump-register');
   const [reason, setReason] = useState('');
-  const { data, isLoading: isDumpLoading } = useGetDumpRegisterForViewById(dumpRegiId);
+  const { openDrawer } = useActions();
+  const { data, isLoading: isDumpLoading, refetch } = useGetDumpRegisterForViewById(dumpRegiId);
   const dumpData = data?.data ? data.data : null;
   console.log('View Dump: ', dumpData);
 
@@ -27,11 +28,11 @@ export const DumpRegisterView = () => {
   console.log(companyData?.data);
   const company = companyData?.data ? companyData.data.find((comp) => comp.name === dumpData?.companyName) : null;
 
-  const approvalData: ProgressStep[] = [
-    { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-    { title: 'Approved', subtitle: 'Sudhanshu Singh', status: 'approved' },
-    { title: 'Approved', subtitle: 'Ashok Kori', status: 'pending' },
-    { title: 'Completed', status: 'pending' },
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: dumpData?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Approved', subtitle: dumpData?.approvalSummary?.firstApproved?.name || '', status: dumpData?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Approved', subtitle: dumpData?.approvalSummary?.secondApproved?.name || '', status: dumpData?.approvalSummary?.secondApproved?.status || 'hold' },
+    { title: 'Completed', status: dumpData?.approvalSummary?.secondApproved?.status || 'hold' },
   ];
 
   const firstGridData = [
@@ -51,7 +52,18 @@ export const DumpRegisterView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Approved By', 'Approved By'];
-
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(dumpRegiId);
+  const changeDumpRegisterStatus = (status: 'approved' | 'reject') => {
+    mutateAsync({
+      status: status,
+      reason: reason,
+    })
+      .then(() => {
+        toast.success(actionRes?.message ? actionRes.message : `Dump register ${status} successfully.`)
+        refetch();
+      })
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of dump register.'));
+  };
   return (
     <Container maxWidth="xl">
       {isDumpLoading || isCompanyDataLoading ? (
@@ -65,8 +77,8 @@ export const DumpRegisterView = () => {
                 <PageTitle pagetitle="Dump Register" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDumpRegisterStatus('approved')} />
+                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDumpRegisterStatus('reject')} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -87,8 +99,25 @@ export const DumpRegisterView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper steps={approvalData} />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(dumpData?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(dumpData?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(dumpData?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
@@ -144,8 +173,8 @@ export const DumpRegisterView = () => {
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.amount}</td>
                         </tr>
                       ))}
-                        {(dumpData?.dumpProducts.length || 0) < 5 && Array(5 - (dumpData?.dumpProducts?.length || 0)).fill(null).map(() => (
-                          <tr className={styles.tableEmptyRows}>
+                        {(dumpData?.dumpProducts.length || 0) < 5 && Array(5 - (dumpData?.dumpProducts?.length || 0)).fill(null).map((_, index) => (
+                          <tr key={index} className={styles.tableEmptyRows}>
                             <td className={styles.tableEmptyRows}></td>
                             <td className={styles.tableEmptyRows}></td>
                             <td className={styles.tableEmptyRows}></td>

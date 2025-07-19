@@ -97,8 +97,9 @@ interface UseDataTableProps {
 export const useDataTable = ({ initialPageSize = 10, columnDef }: UseDataTableProps = {}) => {
   // If column definitions are provided, initialize each column as visible.
   const initialColumnVisibility = columnDef
-    ? columnDef.reduce((acc, col) => ({ ...acc, [col.field]: true }), {})
+    ? columnDef.reduce((acc, col) => ({ ...acc, [col.field]: col.hide !== true }), {})
     : {};
+
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState<{ [field: string]: boolean }>(
     initialColumnVisibility

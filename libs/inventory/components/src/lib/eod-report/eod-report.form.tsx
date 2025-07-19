@@ -7,9 +7,9 @@ import {
   eodReportValidatoinSchema,
   inventoryRouteConstants,
   useCreateEODReport,
-  useGetEODReportById,
   useUpdateEODReport,
   setEODReportFormPreview,
+  useGetEODReportForUpdateById,
 } from '@prime-fresh/inventory/modules';
 import { FieldArray, Formik } from 'formik';
 import { Box, Grid2, IconButton, LinearProgress } from '@mui/material';
@@ -32,7 +32,7 @@ export const EODReportForm = () => {
   const { id } = useParams<{ id: string }>();
   const eodId = id ? id : '';
   const navigate = useNavigate();
-  const { data: eods, isLoading, isError, error } = useGetEODReportById(eodId);
+  const { data: eods, isLoading, isError, error } = useGetEODReportForUpdateById(eodId);
   const EODReportInitialValue = React.useMemo(() => (eods?.data ? eods.data : eodReportInitialValue), [eods]);
 
   useEffect(() => {

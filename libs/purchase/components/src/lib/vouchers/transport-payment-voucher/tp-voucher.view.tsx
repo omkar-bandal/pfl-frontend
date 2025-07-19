@@ -7,7 +7,7 @@ import { useGetTransportPaymentVoucherForViewById } from '@prime-fresh/purchase/
 import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
 import styles from './tp-voucher.module.css';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const TransportPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -18,21 +18,54 @@ export const TransportPaymentVoucherView = () => {
   const [reason, setReason] = useState<string>('');
   const { voucherid } = useParams<{ voucherid: string }>();
   const tpVoucherId = voucherid ? voucherid : '';
-  const { data, isLoading: isVoucherLoading } = useGetTransportPaymentVoucherForViewById(tpVoucherId);
+  const { data, isLoading: isVoucherLoading, refetch } = useGetTransportPaymentVoucherForViewById(tpVoucherId);
   const tpVoucher = data?.data ? data.data : null;
   console.log(tpVoucher);
   const { data: companies, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const companyDetails = companies?.data ? companies.data.find((comp) => comp.name === tpVoucher?.companyName) : null;
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: tpVoucher?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Verified', subtitle: tpVoucher?.approvalSummary?.verified?.name || '', status: tpVoucher?.approvalSummary?.verified?.status || 'hold' },
-    { title: 'First Approval', subtitle: tpVoucher?.approvalSummary?.firstApproved?.name || '', status: tpVoucher?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Second Approval', subtitle: tpVoucher?.approvalSummary?.secondApproved?.name || '', status: tpVoucher?.approvalSummary?.secondApproved?.status || 'hold' },
-    { title: 'Third Approval', subtitle: tpVoucher?.approvalSummary?.thirdApproved?.name || '', status: tpVoucher?.approvalSummary?.thirdApproved?.status || 'hold' },
-    { title: 'First Finalizer', subtitle: tpVoucher?.approvalSummary?.firstFinalized?.name || '', status: tpVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
-    { title: 'Second Finalizer', subtitle: tpVoucher?.approvalSummary?.secondFinalized?.name || '', status: tpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
-    { title: 'Completed', status: tpVoucher?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: tpVoucher?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Verified',
+      subtitle: tpVoucher?.approvalSummary?.verified?.name || '',
+      status: tpVoucher?.approvalSummary?.verified?.status || 'hold'
+    },
+    {
+      title: 'First Approval',
+      subtitle: tpVoucher?.approvalSummary?.firstApproved?.name || '',
+      status: tpVoucher?.approvalSummary?.firstApproved?.status || 'hold',
+    },
+    {
+      title: 'Second Approval',
+      subtitle: tpVoucher?.approvalSummary?.secondApproved?.name || '',
+      status: tpVoucher?.approvalSummary?.secondApproved?.status || 'hold',
+      disabled: tpVoucher?.approvalSummary?.secondApproved === null ? true : false
+    },
+    {
+      title: 'Third Approval',
+      subtitle: tpVoucher?.approvalSummary?.thirdApproved?.name || '',
+      status: tpVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
+      disabled: tpVoucher?.approvalSummary?.secondApproved === null ? true : false
+    },
+    {
+      title: 'First Finalizer',
+      subtitle: tpVoucher?.approvalSummary?.firstFinalized?.name || '',
+      status: tpVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
+    },
+    {
+      title: 'Second Finalizer',
+      subtitle: tpVoucher?.approvalSummary?.secondFinalized?.name || '',
+      status: tpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: tpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+    },
   ];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function createData(srNo: number, title: string, value: any) {
@@ -72,21 +105,21 @@ export const TransportPaymentVoucherView = () => {
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        refetch()
+        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.')
       })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
   };
 
   const rejectTPVoucher = () => {
     mutateAsync({
-      status: 'REJECT',
+      status: 'reject',
       reason: reason,
     }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
+      refetch();
+      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
     })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while rejecting voucher.'));
   };
 
   return (

@@ -21,6 +21,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
       },
       {
         field: 'verifiers',
@@ -30,6 +31,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.verifiers || []).join(', ')),
       },
@@ -41,22 +43,24 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.approvers?.firstApprover?.users || []).join(', ')),
       },
-      // {
-      //   field: 'firstApproverRange',
-      //   headerName: 'Approval Range',
-      //   minWidth: 220,
-      //   flex: 1,
-      //   headerAlign: 'center',
-      //   renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
-      //     const approver = params.row.approvers?.firstApprover;
-      //     return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
-      //       ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
-      //       : '';
-      //   },
-      // },
+      {
+        field: 'firstApproverRange',
+        headerName: 'Approval Range',
+        minWidth: 220,
+        flex: 1,
+        headerAlign: 'center',
+        hide: true,
+        renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
+          const approver = params.row.approvers?.firstApprover;
+          return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
+            ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
+            : '';
+        },
+      },
       {
         field: 'secondApproverUsers',
         headerName: 'Second Approver(s)',
@@ -65,22 +69,24 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           (params.row.approvers?.secondApprover?.users || []).join(', '),
       },
-      // {
-      //   field: 'secondApproverRange',
-      //   headerName: 'Approval Range',
-      //   minWidth: 220,
-      //   flex: 1,
-      //   headerAlign: 'center',
-      //   renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
-      //     const approver = params.row.approvers?.secondApprover;
-      //     return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
-      //       ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
-      //       : '';
-      //   },
-      // },
+      {
+        field: 'secondApproverRange',
+        headerName: 'Approval Range',
+        minWidth: 220,
+        flex: 1,
+        headerAlign: 'center',
+        hide: true,
+        renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
+          const approver = params.row.approvers?.secondApprover;
+          return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
+            ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
+            : '';
+        },
+      },
       {
         field: 'thirdApproverUsers',
         headerName: 'Third Approver(s)',
@@ -89,22 +95,24 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           (params.row.approvers?.thirdApprover?.users || []).join(', '),
       },
-      // {
-      //   field: 'thirdApproverRange',
-      //   headerName: 'Approval Range',
-      //   minWidth: 220,
-      //   flex: 1,
-      //   headerAlign: 'center',
-      //   renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
-      //     const approver = params.row.approvers?.thirdApprover;
-      //     return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
-      //       ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
-      //       : '';
-      //   },
-      // },
+      {
+        field: 'thirdApproverRange',
+        headerName: 'Approval Range',
+        minWidth: 220,
+        flex: 1,
+        headerAlign: 'center',
+        hide: true,
+        renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
+          const approver = params.row.approvers?.thirdApprover;
+          return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
+            ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
+            : '';
+        },
+      },
       {
         field: 'fourthApproverUsers',
         headerName: 'Fourth Approver(s)',
@@ -113,22 +121,24 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: true,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           (params.row.approvers?.fourthApprover?.users || []).join(', '),
       },
-      // {
-      //   field: 'fourthApproverRange',
-      //   headerName: 'Approval Range',
-      //   minWidth: 220,
-      //   flex: 1,
-      //   headerAlign: 'center',
-      //   renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
-      //     const approver = params.row.approvers?.fourthApprover;
-      //     return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
-      //       ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
-      //       : '';
-      //   },
-      // },
+      {
+        field: 'fourthApproverRange',
+        headerName: 'Approval Range',
+        minWidth: 220,
+        flex: 1,
+        headerAlign: 'center',
+        hide: true,
+        renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
+          const approver = params.row.approvers?.fourthApprover;
+          return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
+            ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
+            : '';
+        },
+      },
       {
         field: 'fifthApproverUsers',
         headerName: 'Fifth Approver(s)',
@@ -137,22 +147,24 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: true,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           (params.row.approvers?.fifthApprover?.users || []).join(', '),
       },
-      // {
-      //   field: 'fifthApproverRange',
-      //   headerName: 'Approval Range',
-      //   minWidth: 220,
-      //   flex: 1,
-      //   headerAlign: 'center',
-      //   renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
-      //     const approver = params.row.approvers?.fifthApprover;
-      //     return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
-      //       ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
-      //       : '';
-      //   },
-      // },
+      {
+        field: 'fifthApproverRange',
+        headerName: 'Approval Range',
+        minWidth: 220,
+        flex: 1,
+        headerAlign: 'center',
+        hide: true,
+        renderCell: (params: GridRenderCellParams<IApprovalFlow>) => {
+          const approver = params.row.approvers?.fifthApprover;
+          return approver?.minAmtCanApprove || approver?.maxAmtCanApprove
+            ? `From Rs.${approver.minAmtCanApprove || 0} To Rs.${approver.maxAmtCanApprove || 0}`
+            : '';
+        },
+      },
       {
         field: 'firstFinalizerUsers',
         headerName: 'First Finalizer (s)',
@@ -161,6 +173,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.finalizers.firstFinalizers || []).join(', ')),
       },
@@ -172,6 +185,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
+        hide: false,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.finalizers.secondFinalizers || []).join(', ')),
       },

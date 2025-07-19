@@ -1,3 +1,7 @@
+export interface IVendorCategory {
+  id: string;
+  name: string;
+}
 export type PostVendorCategory = {
     name: string;
   }

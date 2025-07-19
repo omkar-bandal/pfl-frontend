@@ -22,11 +22,6 @@ export const approvalFlowSchema = yup.object().shape({
       maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),
     thirdApprover: yup.object().shape({
-      users: yup
-        .array()
-        .of(yup.string())
-        .required('Name of third approver is required.')
-        .min(1, 'Please select atleast one option'),
       minAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
       maxAmtCanApprove: yup.number().nullable().min(0, 'Amount cannot be negative.'),
     }),

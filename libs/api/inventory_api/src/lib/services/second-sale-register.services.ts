@@ -1,5 +1,5 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
-import { GetSecondSaleRegister, PostSecondSaleRegister } from "../models";
+import { ISecondSaleRegister } from "../models";
 import { inventoryApiUrl } from "../constants";
 
 export class SecondSaleRegisterServices extends BaseService {
@@ -9,28 +9,33 @@ export class SecondSaleRegisterServices extends BaseService {
         return this._instance || (this._instance = new this());
     }
 
-    createSecondSaleRegister(data: PostSecondSaleRegister): Promise<ResultModel> {
-        const url = inventoryApiUrl.CREATE_SECOND_SALE_REGISTER;
+    createSecondSaleRegister(data: Omit<ISecondSaleRegister, 'id'>): Promise<ResultModel> {
+        const url = inventoryApiUrl.CREATE_SECOND_SALE;
         return this.post(url, data);
     }
 
-    getAllSecondSaleRegisters(queryParams?: QueryParams):Promise<ApiBaseState<GetSecondSaleRegister[]>> {
-        const url = inventoryApiUrl.GET_ALL_SECOND_SALE_REGISTERS(queryParams);
+    getAllSecondSaleRegisters(queryParams?: QueryParams): Promise<ApiBaseState<ISecondSaleRegister[]>> {
+        const url = inventoryApiUrl.GET_ALL_SECOND_SALES(queryParams);
         return this.get(url);
     }
 
-    getSecondSaleRegisterById(id: string): Promise<ApiBaseState<GetSecondSaleRegister>> {
-        const url = `${inventoryApiUrl.GET_SECOND_SALE_REGISTER_BY_ID}/${id}`;
+    getSecondSaleRegisterForViewById(id: string): Promise<ApiBaseState<ISecondSaleRegister>> {
+        const url = inventoryApiUrl.GET_SECOND_SALE_FOR_VIEW_BY_ID(id);
         return this.get(url);
     }
 
-    updateSecondSaleRegister(id: string, data: GetSecondSaleRegister): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.UPDATE_SECOND_SALE_REGISTER}/${id}`;
+    getSecondSaleRegisterForUpdateById(id: string): Promise<ApiBaseState<ISecondSaleRegister>> {
+        const url = inventoryApiUrl.GET_SECOND_SALE_FOR_UPDATE_BY_ID(id);
+        return this.get(url);
+    }
+
+    updateSecondSaleRegister(id: string, data: ISecondSaleRegister): Promise<ResultModel> {
+        const url = inventoryApiUrl.UPDATE_SECOND_SALE(id);
         return this.patch(url, data);
     }
 
     deleteSecondSaleRegisterById(id: string): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.DELETE_SECOND_SALE_REGISTER}/${id}`;
+        const url = inventoryApiUrl.DELETE_SECOND_SALE(id);
         return this.delete(url);
     }
 }

@@ -14,7 +14,7 @@ export const purchaseApiUrl = {
       return `/rfpa/`;
     }
   },
-  GET_RFPA_FOR_VIEW_BY_ID: (id: string) => `/rfpa/${id}/view`,
+  GET_RFPA_FOR_VIEW_BY_ID: (id: string) => `/rfpa/view/${id}`,
   GET_RFPA_FOR_UPDATE_BY_ID: (id: string) => `/rfpa/${id}/update`,
   UPDATE_RFPA: (id: string) => `/rfpa/${id}`,
   DELETE_RFPA: (id: string) => `/rfpa/${id}`,
@@ -34,7 +34,7 @@ export const purchaseApiUrl = {
       return `/dealSlip/`;
     }
   },
-  GET_DEAL_SLIP_FOR_VIEW_BY_ID: (id: string) => `/dealSlip/${id}/view`,
+  GET_DEAL_SLIP_FOR_VIEW_BY_ID: (id: string) => /*`/dealSlip/${id}/view`*/ `/dealslip/view/${id}`,
   GET_DEAL_SLIP_FOR_UPDATE_BY_ID: (id: string) => `/dealSlip/${id}/update`,
   UPDATE_DEAL_SLIP: (id: string) => `/dealSlip/${id}`,
   DELETE_DEAL_SLIP: (id: string) => `/dealSlip/${id}`,

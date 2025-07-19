@@ -1,6 +1,6 @@
-import { PostSecondSaleProducts, PostSecondSaleRegister } from "@prime-fresh/inventory_api";
+import { ISecondSaleProducts, ISecondSaleRegister } from "@prime-fresh/inventory_api";
 
-export const SecondSaleProductsInitialValue: PostSecondSaleProducts = {
+export const SecondSaleProductsInitialValue: ISecondSaleProducts = {
     productName: null,
     count: null,
     size: null,
@@ -13,7 +13,7 @@ export const SecondSaleProductsInitialValue: PostSecondSaleProducts = {
     netWeight: null,
 }
 
-export const SecondSaleRegisterInitialValue: PostSecondSaleRegister = {
+export const SecondSaleRegisterInitialValue: Omit<ISecondSaleRegister, 'id'> = {
     companyName: null,
     location: null,
     dcNo: null,

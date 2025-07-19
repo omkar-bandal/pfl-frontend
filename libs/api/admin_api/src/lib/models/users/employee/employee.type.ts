@@ -1,5 +1,6 @@
 import { Address } from '@prime-fresh/common_api';
 
+export type EmployeeStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
 export interface IPermission {
   documentDefinition: string | null;
   canCreate: boolean;
@@ -8,27 +9,6 @@ export interface IPermission {
   canDelete: boolean;
   canDownload: boolean;
 }
-
-// export interface ICreatePermissions extends IBasePermission {
-//   documentDefinition: string | null;
-// };
-
-// export interface IGetPermissions extends IBasePermission {
-//   documentDefinition: {
-//     id: string;
-//     name: string;
-//     uniqueKey: string;
-//     documentType: string;
-//   };
-// };
-
-// export type ReportingManagers = {
-//   level: string | null;
-//   reportingTo: {
-//     id: string | null;
-//   }[];
-// };
-
 export interface IEmployee {
   id: string;
   createdAt?: string;
@@ -64,8 +44,28 @@ export interface IEmployee {
   permissions: IPermission[];
 
   //Employee Status
-  status?: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+  status?: EmployeeStatus;
 }
+
+// export interface ICreatePermissions extends IBasePermission {
+//   documentDefinition: string | null;
+// };
+
+// export interface IGetPermissions extends IBasePermission {
+//   documentDefinition: {
+//     id: string;
+//     name: string;
+//     uniqueKey: string;
+//     documentType: string;
+//   };
+// };
+
+// export type ReportingManagers = {
+//   level: string | null;
+//   reportingTo: {
+//     id: string | null;
+//   }[];
+// };
 
 // currentLevel: { id: string; name: string; hierarchy: number } | null;
 // reportingManagers: {

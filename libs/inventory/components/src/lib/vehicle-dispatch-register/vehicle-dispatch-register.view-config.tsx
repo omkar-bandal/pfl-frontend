@@ -14,7 +14,7 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'companyName',
           label: 'Company',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'dcNumber',
@@ -34,12 +34,12 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'vehicleType',
           label: 'Vehicle Type',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'driverName',
           label: 'Driver Name',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'driverMobNo',
@@ -49,22 +49,22 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'paymentDiscussed',
           label: 'Payment Discussed',
-          render: (value: number) => (value ? formatCurrency(value) : '-'),
+          render: (value: number) => (value ? formatCurrency(Number(value)) : '-'),
         },
         {
           key: 'transportationBillAmt',
           label: 'Transportation Bill Amount',
-          render: (value: number) => (value ? formatCurrency(value) : '-'),
+          render: (value: number) => (value ? formatCurrency(Number(value)) : '-'),
         },
         {
           key: 'advancePaid',
           label: 'Any Advance Paid to Transporter',
-          render: (value: number) => (value ? formatCurrency(value) : '-'),
+          render: (value: number) => (value ? formatCurrency(Number(value)) : '-'),
         },
         {
           key: 'clientName',
           label: 'Client Name',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'clientGRNNo',
@@ -89,7 +89,7 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'receivingPerson',
           label: 'Receiving Person At Location',
-          render: (value: string) => (value ? convertInTitleCase(value) : '-'),
+          render: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
         },
         {
           key: 'reachingTime',
@@ -113,17 +113,17 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'netInwardQty',
           label: 'Net Inward Quantity',
-          render: (value: number) => (value ? `${value} Kg` : '-'),
+          render: (value: number) => (value ? `${Number(value)} Kg` : '-'),
         },
         {
           key: 'rejection',
           label: 'Rejection (If Any)',
-          render: (value: number) => (value ? `${value} Kg` : '-'),
+          render: (value: number) => (value ? `${Number(value)} Kg` : '-'),
         },
         {
           key: 'shrinkageDump',
           label: 'Shrinkage Dump (If Any)',
-          render: (value: number) => (value ? `${value} Kg` : '-'),
+          render: (value: number) => (value ? `${Number(value)} Kg` : '-'),
         },
         {
           key: 'remarksPFL',

@@ -13,8 +13,11 @@ export const useCustomerTypeColumns = (): CustomGridColDef[] => {
         {
             field: "name",
             headerName: "Customer Type",
+            headerAlign: 'center',
+            align: 'center',
             flex: 1,
             minWidth: 200,
+            hide: false,
             isMobileVisible: true,
             valueGetter: (value: string) => value ? value : '-',
         },

@@ -27,6 +27,7 @@ export const DealSlipTable = () => {
 
   const { data, isLoading, isError, error } = useGetAllDealSlips(queryParams);
   const allDealSlip = data ? data : null;
+  console.log('All Dealslip Data: ', allDealSlip);
   const rowCountRef = React.useRef(allDealSlip?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allDealSlip?.allRecords !== undefined) {

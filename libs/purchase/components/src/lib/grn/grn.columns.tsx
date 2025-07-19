@@ -5,7 +5,7 @@ import { AddCard } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
 import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
-import { convertInTitleCase, reverseDateString } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, reverseDateString } from '@prime-fresh/shared/modules';
 
 export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
   const navigate = useNavigate();
@@ -13,103 +13,124 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
     {
       field: 'grnNo',
       headerName: 'GRN Number',
-      flex: 1, 
+      flex: 1,
       minWidth: 130,
       align: 'center',
       headerAlign: 'center',
       isMobileVisible: true,
+      hide: false,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+    },
+    {
+      field: 'createdBy',
+      headerName: 'Created By',
+      flex: 1,
+      minWidth: 120,
+      align: 'center',
+      headerAlign: 'center',
+      hide: false,
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
       field: 'createdDate',
       headerName: 'Created Date',
-      flex: 1, 
+      flex: 1,
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
     },
     {
       field: 'createdTime',
       headerName: 'Created Time',
-      flex: 1, 
+      flex: 1,
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
     },
     {
       field: 'grnType',
       headerName: 'GRN Type',
-      flex: 1, 
+      flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       isMobileVisible: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      hide: true,
     },
     {
       field: 'purchaseType',
       headerName: 'Purchase Type',
-      flex: 1, 
+      flex: 1,
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       isMobileVisible: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      hide: true,
     },
     {
       field: 'locationType',
       headerName: 'Location Type',
-      flex: 1, 
+      flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       isMobileVisible: true,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+      hide: true,
     },
     {
       field: 'companyName',
       headerName: 'Company',
-      flex: 1, 
+      flex: 1,
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? value : '-'),
+      hide: false,
     },
     {
       field: 'purchaseLocation',
       headerName: 'Location',
-      flex: 1, 
+      flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? value : '-'),
+      hide: false,
     },
     {
       field: 'purchaseForSalesLocation',
       headerName: 'Destination',
-      flex: 1, 
+      flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? value : '-'),
+      hide: false,
     },
     {
       field: 'billNo',
       headerName: 'Bill Number',
-      flex: 1, 
+      flex: 1,
       minWidth: 130,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+      hide: true,
     },
     {
       field: 'source',
       headerName: 'Source',
-      flex: 1, 
+      flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? value : '-'),
+      hide: false,
     },
     // {
     //   field: 'grnProducts',
@@ -125,46 +146,51 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
     {
       field: 'subTotalAmt',
       headerName: 'Subtotal Amount',
-      flex: 1, 
+      flex: 1,
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: number) => (value ? `${Number(value)} Rs` : '-'),
+      hide: true,
     },
     {
       field: 'freight',
       headerName: 'Freight',
-      flex: 1, 
+      flex: 1,
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: number) => (value ? `${Number(value)} Rs` : '-'),
+      hide: true,
     },
     {
       field: 'otherCharges',
       headerName: 'Other Charges',
-      flex: 1, 
+      flex: 1,
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: number) => (value ? `${Number(value)} Rs` : '-'),
+      hide: true,
     },
     {
       field: 'totalAmt',
       headerName: 'Total Amount',
-      flex: 1, 
+      flex: 1,
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (value: number) => (value ? `${Number(value)} Rs` : '-'),
+      hide: false,
     },
     {
       field: 'amtWords',
       headerName: 'Amount In Words',
-      flex: 1, 
+      flex: 1,
       minWidth: 180,
       headerAlign: 'center',
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+      hide: true,
     },
     {
       field: 'paymentMode',
@@ -173,6 +199,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.paymentMode ? convertInTitleCase(paymentInfo.paymentMode) : '';
@@ -185,6 +212,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.paymentTerms ? `${Number(paymentInfo.paymentTerms)} Days` : '';
@@ -197,6 +225,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.paymentDate ? reverseDateString(paymentInfo.paymentDate) : '';
@@ -209,6 +238,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.creditPeriod ? `${paymentInfo.creditPeriod} Days` : '';
@@ -221,6 +251,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.dueDate ? reverseDateString(paymentInfo.dueDate) : '';
@@ -233,6 +264,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.advancePaidAmt ? `${Number(paymentInfo.advancePaidAmt)} Rs.` : '';
@@ -245,6 +277,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       renderCell: (params: GridRenderCellParams) => {
         const paymentInfo = params.row.paymentInfo;
         return paymentInfo?.validityOfQuote ? paymentInfo.validityOfQuote : '';
@@ -257,6 +290,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -266,6 +300,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -275,6 +310,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -284,6 +320,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
     },
     {
@@ -293,6 +330,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value : ''),
     },
     {
@@ -302,6 +340,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value : ''),
     },
     {
@@ -311,6 +350,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -320,6 +360,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -328,38 +369,8 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       flex: 1,
       minWidth: 250,
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
-    },
-    {
-      field: 'approvalStatus',
-      headerName: 'Status',
-      flex: 1, minWidth: 130,
-      align: 'center',
-      headerAlign: 'center',
-      isMobileVisible: true,
-      renderCell: (params: GridRenderCellParams) => {
-        switch (params.row.approvalStatus) {
-          case 'pending':
-            return <Chip label={params.row.approvalStatus} color="default" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          case 'approved':
-            return <Chip label={params.row.approvalStatus} color="info" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          case 'notApproved':
-            return <Chip label={params.row.approvalStatus} color="error" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          default:
-            return <Chip label="-" color="error" size="small" />;
-        }
-      },
-    },
-    {
-      field: 'approvalNote',
-      headerName: 'Reason',
-      flex: 1, minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (value: string) => {
-        if (value === null) return '';
-        else return value;
-      },
     },
     {
       field: 'payment_req',
@@ -368,6 +379,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       sortable: false,
       filterable: false,
       isMobileVisible: true,
+      hide: true,
       renderCell: (params: GridRenderCellParams) => (
         <IconButton
           aria-label="payment_req"
@@ -377,36 +389,50 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
         </IconButton>
       ),
     },
+    {
+      field: 'overAllStatus',
+      headerName: 'Status',
+      flex: 1,
+      minWidth: 130,
+      align: 'center',
+      headerAlign: 'center',
+      hide: false,
+      isMobileVisible: true,
+      renderCell: (params: GridRenderCellParams) => {
+        const status = convertInTitleCase(params.row.overAllStatus);
+        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+      },
+    },
     ...(canEdit
       ? [
-          {
-            field: 'edit',
-            headerName: 'Edit',
-            flex: 1, minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <EditIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)} />
-            ),
-          },
-        ]
+        {
+          field: 'edit',
+          headerName: 'Edit',
+          flex: 1, minWidth: 70,
+          sortable: false,
+          filterable: false,
+          isMobileVisible: true,
+          renderCell: (params: GridRenderCellParams) => (
+            <EditIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)} />
+          ),
+        },
+      ]
       : []),
     ...(canView
       ? [
-          {
-            field: 'view',
-            headerName: 'View',
-            flex: 1, minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => {
-              console.log('Document ID in column:', params.row.documentId);
-              return <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.documentId}`)} />
-            },
+        {
+          field: 'view',
+          headerName: 'View',
+          flex: 1, minWidth: 70,
+          sortable: false,
+          filterable: false,
+          isMobileVisible: true,
+          renderCell: (params: GridRenderCellParams) => {
+            console.log('Document ID in column:', params.row.documentId);
+            return <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.documentId}`)} />
           },
-        ]
+        },
+      ]
       : []),
   ];
 };

@@ -7,7 +7,7 @@ import { useGetMultiCashVoucherForViewById } from '@prime-fresh/purchase/modules
 import styles from './mc-voucher.module.css';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const MultipleCashVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -18,21 +18,54 @@ export const MultipleCashVoucherView = () => {
   const [reason, setReason] = useState<string>('');
   const { voucherid } = useParams<{ voucherid: string }>();
   const mcVoucherId = voucherid ? voucherid : '';
-  const { data, isLoading: isVoucherLoading } = useGetMultiCashVoucherForViewById(mcVoucherId);
+  const { data, isLoading: isVoucherLoading, refetch } = useGetMultiCashVoucherForViewById(mcVoucherId);
   const mcVoucher = data?.data ? data.data : null;
   console.log('MC voucher: ', mcVoucher);
   const { data: companies, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const companyDetails = companies?.data ? companies.data.find((comp) => comp.name === mcVoucher?.companyName) : null;
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: mcVoucher?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Verified', subtitle: mcVoucher?.approvalSummary?.verified?.name || '', status: mcVoucher?.approvalSummary?.verified?.status || 'hold' },
-    { title: 'First Approval', subtitle: mcVoucher?.approvalSummary?.firstApproved?.name || '', status: mcVoucher?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Second Approval', subtitle: mcVoucher?.approvalSummary?.secondApproved?.name || '', status: mcVoucher?.approvalSummary?.secondApproved?.status || 'hold' },
-    { title: 'Third Approval', subtitle: mcVoucher?.approvalSummary?.thirdApproved?.name || '', status: mcVoucher?.approvalSummary?.thirdApproved?.status || 'hold' },
-    { title: 'First Finalizer', subtitle: mcVoucher?.approvalSummary?.firstFinalized?.name || '', status: mcVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
-    { title: 'Second Finalizer', subtitle: mcVoucher?.approvalSummary?.secondFinalized?.name || '', status: mcVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
-    { title: 'Completed', status: mcVoucher?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: mcVoucher?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Verified',
+      subtitle: mcVoucher?.approvalSummary?.verified?.name || '',
+      status: mcVoucher?.approvalSummary?.verified?.status || 'hold'
+    },
+    {
+      title: 'First Approval',
+      subtitle: mcVoucher?.approvalSummary?.firstApproved?.name || '',
+      status: mcVoucher?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Second Approval',
+      subtitle: mcVoucher?.approvalSummary?.secondApproved?.name || '',
+      status: mcVoucher?.approvalSummary?.secondApproved?.status || 'hold',
+      disabled: mcVoucher?.approvalSummary?.secondApproved === null ? true : false
+    },
+    {
+      title: 'Third Approval',
+      subtitle: mcVoucher?.approvalSummary?.thirdApproved?.name || '',
+      status: mcVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
+      disabled: mcVoucher?.approvalSummary?.secondApproved === null ? true : false
+    },
+    {
+      title: 'First Finalizer',
+      subtitle: mcVoucher?.approvalSummary?.firstFinalized?.name || '',
+      status: mcVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
+    },
+    {
+      title: 'Second Finalizer',
+      subtitle: mcVoucher?.approvalSummary?.secondFinalized?.name || '',
+      status: mcVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: mcVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+    },
   ];
 
   const firstGridData = [
@@ -55,21 +88,21 @@ export const MultipleCashVoucherView = () => {
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        refetch();
+        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.')
       })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
   };
 
   const rejectMCVoucher = () => {
     mutateAsync({
-      status: 'REJECT',
+      status: 'reject',
       reason: reason,
     }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
+      refetch();
+      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
     })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while rejecting voucher.'));
   };
   return (
     <Container maxWidth="xl">

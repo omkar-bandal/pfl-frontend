@@ -20,22 +20,22 @@ export class InwardRegisterServices extends BaseService {
     }
 
     getInwardRegisterForViewById(id: string): Promise<ApiBaseState<IInwardRegister>> {
-        const url = `${inventoryApiUrl.GET_INWARD_REGISTER_FOR_VIEW_BY_ID}/${id}`;
+        const url = inventoryApiUrl.GET_INWARD_REGISTER_FOR_VIEW_BY_ID(id);
         return this.get(url);
     }
 
     getInwardRegisterForUpdateById(id: string): Promise<ApiBaseState<IInwardRegister>> {
-        const url = `${inventoryApiUrl.GET_INWARD_REGISTER_FOR_UPDATE_BY_ID}/${id}`;
+        const url = inventoryApiUrl.GET_INWARD_REGISTER_FOR_UPDATE_BY_ID(id);
         return this.get(url);
     }
 
     updateInwardRegister(id: string, data: IInwardRegister): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.UPDATE_INWARD_REGISTER}/${id}`;
+        const url = inventoryApiUrl.UPDATE_INWARD_REGISTER(id);
         return this.patch(url, data);
     }
 
     deleteInwardRegisterById(id: string): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.DELETE_INWARD_REGISTER}/${id}`;
+        const url = inventoryApiUrl.DELETE_INWARD_REGISTER(id);
         return this.delete(url);
     }
 }

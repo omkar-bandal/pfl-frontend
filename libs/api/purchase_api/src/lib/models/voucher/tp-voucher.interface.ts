@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApprovalSummany, DocumentStatus } from '@prime-fresh/common_api';
-// import { RequestedBy } from '../requestedBy.interface';
-
 export interface ITranportPaymentVoucher {
   id: string;
   documentId?: string | null;
@@ -33,6 +31,6 @@ export interface ITranportPaymentVoucher {
   anyAttachment: File[] | null;
   overAllStatus?: DocumentStatus;
   approvalSummary?: ApprovalSummany;
-  // requestedBy?: RequestedBy;
-  // requestingDepartment?: string;
 }
+// requestedBy?: RequestedBy;
+// requestingDepartment?: string;

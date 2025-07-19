@@ -1,9 +1,9 @@
 import axios from 'axios';
 //Vaishali
-// export const BASE_URL = "https://1ce72606753c.ngrok-free.app";
+// export const BASE_URL = "https://8ac98a22623b.ngrok-free.app";
 
 //Shreenath
-export const BASE_URL = "https://64bd834426e1.ngrok-free.app";
+export const BASE_URL = "https://79089bf9d6a1.ngrok-free.app";
 
 //Server
 // export const BASE_URL = "http://ec2-35-154-225-84.ap-south-1.compute.amazonaws.com";

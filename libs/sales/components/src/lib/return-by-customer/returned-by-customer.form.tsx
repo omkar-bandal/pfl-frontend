@@ -13,7 +13,7 @@ import {
 import { FormButtonGroup, PageTitle, SectionHeader, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
 import { mapToValueLabelArray, useGetCompanyNames, useGetUOMPartialData } from '@prime-fresh/shared/modules';
 import { handleReturnedProductsChange } from './helper-function';
-import { useGetAllDeliveryChallans, useGetDeliveryChallanById } from '@prime-fresh/purchase/modules';
+import { useGetAllDCTypeCustomers, useGetDCTypeCustomerForUpdateById } from '@prime-fresh/purchase/modules';
 import { ProductFormFields } from '@prime-fresh/shared/components';
 import { PostReturnByCustomer } from '@prime-fresh/sales_api';
 
@@ -22,21 +22,14 @@ export const ReturnedByCustomerForm = () => {
   const [challanNo, setChallanNo] = useState('');
   const { data: company } = useGetCompanyNames();
   const companies = company?.data ? mapToValueLabelArray(company?.data, 'id', 'name') : [];
-  const { data: dcs } = useGetAllDeliveryChallans();
-  const dcNums = React.useMemo(
-    () =>
-      dcs?.data
-        ? mapToValueLabelArray(
-            dcs.data.filter((dc) => dc.deliveryCType === 'customer'),
-            'id',
-            'challanNo'
-          )
-        : [],
-    [dcs]
-  );
+
+  const { data: dcs } = useGetAllDCTypeCustomers();
+  console.log('DC type customers: ', dcs?.data);
+  const dcNums = React.useMemo(() => dcs?.data ? mapToValueLabelArray(dcs.data, 'id', 'challanNo') : [], [dcs]);
+
   const { data: uom } = useGetUOMPartialData();
   const uoms = uom?.data ? mapToValueLabelArray(uom.data, 'id', 'unit') : [];
-  const { data: dc } = useGetDeliveryChallanById(challanNo);
+  const { data: dc } = useGetDCTypeCustomerForUpdateById(challanNo);
   const dcData = dc?.data ? dc.data : null;
   const formik = useFormik({
     enableReinitialize: true,
@@ -52,12 +45,12 @@ export const ReturnedByCustomerForm = () => {
   useEffect(() => {
     if (dcData && dcData?.deliveryChallanProducts !== null) {
       const mappedProductArray = dcData.deliveryChallanProducts.map((product) => ({
-        productName: product.productName.id,
+        productName: product.productName,
         count: product.count,
         size: product.size,
         origin: product.origin,
         variety: product.variety,
-        saleUoM: product.saleUoM.id,
+        saleUoM: product.saleUoM,
         quantity: null,
         unitPrice: null,
         amount: null,
@@ -65,7 +58,7 @@ export const ReturnedByCustomerForm = () => {
         packingMaterialWeight: null,
         netWeight: null,
       }));
-      formik.setFieldValue('companyName', dcData.companyName?.id);
+      formik.setFieldValue('companyName', dcData.companyName);
       formik.setFieldValue('returnedProducts', mappedProductArray);
     }
   }, [dcData, formik.setFieldValue]);

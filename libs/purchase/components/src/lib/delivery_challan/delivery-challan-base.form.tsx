@@ -126,7 +126,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 3 }}>
                       <TextInput
-                        isReadOnly={true}
+                        isReadOnly={false}
                         name="containsQuantity"
                         label="Quantity Per Package"
                         value={getQtyPerPackage(index)}
@@ -149,7 +149,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 3 }}>
                       <SelectInput
-                        isRequired={true}
+                        isRequired={false}
                         name={`deliveryChallanProducts.${index}.packagingMaterialUoM`}
                         label="Material UoM"
                         options={allUOMs}
@@ -159,7 +159,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 3 }}>
                       <TextInput
-                        isRequired={true}
+                        isRequired={false}
                         name={`deliveryChallanProducts.${index}.packagingMaterialQuantity`}
                         label="Material Quantity"
                         value={formik.values.deliveryChallanProducts[index].packagingMaterialQuantity}
@@ -168,7 +168,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 3 }}>
                       <TextInput
-                        isRequired={true}
+                        isRequired={false}
                         name={`deliveryChallanProducts.${index}.packagingMaterialUnitPrice`}
                         label="Material Unit Price"
                         value={formik.values.deliveryChallanProducts[index].packagingMaterialUnitPrice}
@@ -177,7 +177,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 3 }}>
                       <TextInput
-                        isRequired={true}
+                        isRequired={false}
                         isReadOnly={true}
                         name={`deliveryChallanProducts.${index}.packagingMaterialAmount`}
                         label="Material Amount"
@@ -191,7 +191,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 3 }}>
                       <TextInput
-                        isRequired={true}
+                        isRequired={false}
                         isReadOnly={true}
                         name={`deliveryChallanProducts.${index}.packagingMaterialTotalWeight`}
                         label="Material Total Weight"

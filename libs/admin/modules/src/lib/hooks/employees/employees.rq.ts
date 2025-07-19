@@ -1,5 +1,5 @@
 import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { EmployeesService, IEmployee } from '@prime-fresh/admin_api';
+import { EmployeesService, EmployeeStatus, IEmployee } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateEmployee(): UseMutationResult<ResultModel, ErrorModel, IEmployee, unknown> {
@@ -47,13 +47,15 @@ export function useGetEmployeeForUpdate(id: string): UseQueryResult<ApiBaseState
   });
 }
 
-export function useUpdateEmployeeStatus(id: string): UseMutationResult<ResultModel, ErrorModel, 'ACTIVE' | 'INACTIVE' | 'SUSPENDED', unknown> {
-  return useMutation<ResultModel, ErrorModel, 'ACTIVE' | 'INACTIVE' | 'SUSPENDED', unknown>({
+export function useUpdateEmployeeStatus(id: string): UseMutationResult<ResultModel, ErrorModel, EmployeeStatus, unknown> {
+  return useMutation<ResultModel, ErrorModel, EmployeeStatus, unknown>({
     mutationKey: ['update-employee-status'],
-    mutationFn: (status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED') =>
+    mutationFn: (status: EmployeeStatus) =>
       EmployeesService.getInstance().updateEmployeeStatus(id, status),
   });
 }
+
+
 
 // export function useGetEmployeeById(id: string): UseQueryResult<ApiBaseState<IEmployee>, ErrorModel> {
 //   const employeeId = id.length > 1 ? id : null;

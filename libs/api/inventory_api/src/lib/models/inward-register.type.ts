@@ -1,4 +1,4 @@
-import { FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
+import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
 
 export interface IInwardProducts extends FormProducts,
   FormProductUoM,
@@ -7,6 +7,11 @@ export interface IInwardProducts extends FormProducts,
 
 export interface IInwardRegister {
   id: string;
+  documentId?: string | null;
+  documentDef?: string | null;
+  createdBy?: string | null;
+  createdDate?: string,
+  createdTime?: string,
   inwardType: 'purchase' | 'transferred';
   grnNo: string | null;
   deliveryChallanNo: string | null;
@@ -24,4 +29,6 @@ export interface IInwardRegister {
   inwardCost: number | null;
   remarks: string | null;
   inwardBy: string | null;
+  overAllStatus?: DocumentStatus;
+  approvalSummary?: ApprovalSummany;
 }

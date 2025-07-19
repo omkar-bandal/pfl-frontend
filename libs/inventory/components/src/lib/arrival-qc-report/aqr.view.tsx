@@ -1,23 +1,23 @@
 import { useParams } from 'react-router-dom';
-import { Box, Grid, LinearProgress, TextField, Typography } from '@mui/material';
-import { BtnSmall, formatDate, PageTitle, ProgressStepper } from '@prime-fresh/ui_shared';
+import { Box, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
+import { BtnSmall, DrawerContainer, formatDate, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useGetAQRForViewById } from '@prime-fresh/inventory/modules';
-import { Check, Close, Download, Message } from '@mui/icons-material';
+import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
 import React, { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 import styles from './aqr.module.css';
-import { convertInTitleCase } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
 
 export const AQRView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
   const { canDownload } = usePermission('aqr');
   const [reason, setReason] = useState<string>('');
-
+  const { openDrawer } = useActions();
   const { id } = useParams<{ id: string }>();
-  const Id = id ? id : '';
-  const { data, isLoading } = useGetAQRForViewById(Id);
+  const aqrId = id ? id : '';
+  const { data, isLoading, refetch } = useGetAQRForViewById(aqrId);
   const aqrData = data?.data ? data.data : null;
   console.log("AQR Data: ", aqrData);
 
@@ -41,6 +41,23 @@ export const AQRView = () => {
 
   const signatureLabels = ['Prepared By', 'Approved By'];
 
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: aqrData?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Approved', subtitle: aqrData?.approvalSummary?.firstApproved?.name || '', status: aqrData?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Completed', status: aqrData?.overAllStatus || 'hold' },
+  ];
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(aqrId);
+  const changeAQRStatus = (status: 'approved' | 'reject') => {
+    mutateAsync({
+      status: status,
+      reason: reason,
+    })
+      .then(() => {
+        toast.success(actionRes?.message ? actionRes.message : `Arrival quality report ${status} successfully.`)
+        refetch();
+      })
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of arrival quality report.'));
+  };
   return isLoading ? (
     <Box flex={1}>
       <LinearProgress />
@@ -52,8 +69,8 @@ export const AQRView = () => {
             <PageTitle pagetitle="Arrival Quality Report" />
           </Grid>
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-            <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+            <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeAQRStatus('approved')} />
+            <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeAQRStatus('reject')} />
             <BtnSmall label="Query" icon={<Message />} color="warning" />
             {canDownload && (
               <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -74,14 +91,25 @@ export const AQRView = () => {
               onChange={(e) => setReason(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-            <ProgressStepper
-              steps={[
-                { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-                { title: 'Approved', subtitle: 'Sudhanshu Singh', status: 'pending' },
-                { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
-              ]}
-            />
+          <Grid item xs={12}>
+            <DrawerContainer>
+              <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+              <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(aqrData?.overAllStatus || '')}`}</Typography>
+              <VerticalStepper steps={approvalSummary} />
+            </DrawerContainer>
+          </Grid>
+          <Grid item xs={12} alignItems='center'>
+            <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+              Current Document Status:
+              <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(aqrData?.overAllStatus || 'hold') }}>
+                {convertInTitleCase(aqrData?.overAllStatus || '')}
+              </Typography>
+            </Typography>
+            <InfoTooltip info={`Click here to see complete approval summary.`}>
+              <IconButton size='medium' onClick={() => openDrawer()}>
+                <ChevronRight fontSize='inherit' />
+              </IconButton>
+            </InfoTooltip>
           </Grid>
         </Grid>
         <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>

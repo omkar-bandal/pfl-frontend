@@ -2,9 +2,8 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
-import { RequestedBy } from '@prime-fresh/purchase_api';
 import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
-import { convertInTitleCase, formatAddress } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, formatAddress, getDocStatusColor } from '@prime-fresh/shared/modules';
 import { Address } from '@prime-fresh/common_api';
 
 export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
@@ -17,8 +16,19 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 130,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       isMobileVisible: true,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+    },
+    {
+      field: 'createdBy',
+      headerName: 'Created By',
+      flex: 1,
+      minWidth: 120,
+      align: 'center',
+      headerAlign: 'center',
+      hide: false,
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
       field: 'createdDate',
@@ -27,6 +37,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false
     },
     {
       field: 'createdTime',
@@ -35,24 +46,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
-    },
-    {
-      field: 'requestedBy',
-      headerName: 'Requested By',
-      flex: 1,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (value: RequestedBy) => (value ? `${value.firstName || ''} ${value.lastName || ''}` : ''),
-    },
-    {
-      field: 'requestingDepartment',
-      headerName: 'Department',
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (value: string) => (value ? value : ''),
+      hide: false
     },
     {
       field: 'grnNo',
@@ -61,6 +55,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 130,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
     },
     {
@@ -70,6 +65,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 200,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -79,6 +75,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -88,6 +85,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -97,6 +95,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -106,6 +105,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -115,6 +115,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 250,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: Address) => (value ? formatAddress(value) : ''),
     },
     {
@@ -124,6 +125,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value : ''),
     },
     {
@@ -133,6 +135,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value : ''),
     },
     {
@@ -142,6 +145,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 200,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -151,6 +155,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: number) => (value ? `${Number(value)} Rs.` : ''),
     },
     {
@@ -160,6 +165,7 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 200,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -169,103 +175,86 @@ export const usePMPVoucherColumns = (canEdit: boolean, canView: boolean): Custom
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
-        field: "receiverName",
-        headerName: "Receiver Name",
-        flex: 1, 
-        minWidth: 150,
-        align: "center",
-        headerAlign: "center",
-        valueGetter: (value: string) => value ? convertInTitleCase(value) : '',
-    },
-    {
-        field: "kyc",
-        headerName: "KYC",
-        flex: 1, 
-        minWidth: 100,
-        align: "center",
-        headerAlign: "center",
-        valueGetter: (value: boolean) => value === true ? 'Yes' : 'No',
-    },
-    {
-        field: "remark",
-        headerName: "Remark",
-        flex: 1, 
-        minWidth: 200,
-        headerAlign: "center",
-        valueGetter: (value: string) => value ? convertInTitleCase(value) : '',
-    },
-    {
-      field: 'approvalStatus',
-      headerName: 'Status',
+      field: "receiverName",
+      headerName: "Receiver Name",
       flex: 1,
-      minWidth: 130,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams) => {
-        switch (params.row.approvalStatus) {
-          case 'pending':
-            return (
-              <Chip label={params.row.approvalStatus} color="default" size="small" sx={{ flex: 1, minWidth: 80 }} />
-            );
-          case 'approved':
-            return <Chip label="Approved" color="info" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          case 'rejected':
-            return <Chip label="Not Approved" color="error" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          default:
-            return <Chip label="pending" color="error" size="small" />;
-        }
-      },
+      minWidth: 150,
+      align: "center",
+      headerAlign: "center",
+      hide: true,
+      valueGetter: (value: string) => value ? convertInTitleCase(value) : '',
     },
     {
-      field: 'approvalNote',
-      headerName: 'Reason',
+      field: "kyc",
+      headerName: "KYC",
       flex: 1,
       minWidth: 100,
+      align: "center",
+      headerAlign: "center",
+      hide: true,
+      valueGetter: (value: boolean) => value === true ? 'Yes' : 'No',
+    },
+    {
+      field: "remark",
+      headerName: "Remark",
+      flex: 1,
+      minWidth: 200,
+      headerAlign: "center",
+      hide: true,
+      valueGetter: (value: string) => value ? convertInTitleCase(value) : '',
+    },
+    {
+      field: 'overAllStatus',
+      headerName: 'Status',
+      flex: 1, minWidth: 130,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (value: string) => {
-        if (value === null) return '';
-        else return value;
+      hide: false,
+      isMobileVisible: true,
+      renderCell: (params: GridRenderCellParams) => {
+        const status = convertInTitleCase(params.row.overAllStatus);
+        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
       },
     },
     ...(canEdit
       ? [
-          {
-            field: 'edit',
-            headerName: 'Edit',
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <EditIconBtn
-                onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_PACKING_MATERIAL_VOUCHER}/${params.row.id}`)}
-              />
-            ),
-          },
-        ]
+        {
+          field: 'edit',
+          headerName: 'Edit',
+          flex: 1,
+          minWidth: 70,
+          sortable: false,
+          filterable: false,
+          isMobileVisible: true,
+          renderCell: (params: GridRenderCellParams) => (
+            <EditIconBtn
+              onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_PACKING_MATERIAL_VOUCHER}/${params.row.id}`)}
+            />
+          ),
+        },
+      ]
       : []),
     ...(canView
       ? [
-          {
-            field: 'view',
-            headerName: 'View',
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <ViewIconBtn
-                onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_PACKING_MATERIAL_VOUCHER}/${params.row.documentId}`)}
-              />
-            ),
-          },
-        ]
+        {
+          field: 'view',
+          headerName: 'View',
+          flex: 1,
+          minWidth: 70,
+          sortable: false,
+          filterable: false,
+          isMobileVisible: true,
+          renderCell: (params: GridRenderCellParams) => (
+            <ViewIconBtn
+              onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_PACKING_MATERIAL_VOUCHER}/${params.row.documentId}`)}
+            />
+          ),
+        },
+      ]
       : []),
   ];
 };

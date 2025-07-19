@@ -1,7 +1,4 @@
-// import { RequestedBy } from "./requestedBy.interface";
-
 import { ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api";
-
 export interface IDealSlip {
     id: string;
     createdBy?: string | null;
@@ -17,12 +14,13 @@ export interface IDealSlip {
     specialRequest: string,
     overAllStatus?: DocumentStatus;
     approvalSummary?: Partial<ApprovalSummany>;
-    // dealSlipCreatedAt?: Date;
-    // requestedBy?: RequestedBy;
-    // requestingDepartment?: string;
 }
 
 export interface GetAllDealSlipNums {
     id: string;
     dealSlipNo: string;
 }
+
+// dealSlipCreatedAt?: Date;
+// requestedBy?: RequestedBy;
+// requestingDepartment?: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grid2 } from '@mui/material';
 import { inventoryRouteConstants, useGetAllAQRs } from '@prime-fresh/inventory/modules';
-import { GetAQR } from '@prime-fresh/inventory_api';
+import { IAQR } from '@prime-fresh/inventory_api';
 import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { useNavigate } from 'react-router-dom';
 import { useAQRColumns } from './aqr.columns';
@@ -59,7 +59,7 @@ export const AQRTable = () => {
           />
         </Grid2>
       </Grid2>
-      <DataGridTable<GetAQR>
+      <DataGridTable<IAQR>
         loading={isLoading}
         rows={aqrs?.data || []}
         columns={aqrColumns}

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PostEODReport } from "@prime-fresh/inventory_api";
+import { IEODReport } from "@prime-fresh/inventory_api";
 import { RootState } from "../store.inventory";
 
 type EODReportState = {
-    eodReportFormPreview: PostEODReport | undefined;
+    eodReportFormPreview: Omit<IEODReport, 'id'> | undefined;
 }
 const initialState : EODReportState = {
     eodReportFormPreview: undefined,
@@ -13,7 +13,7 @@ const eodReportSlice = createSlice({
     name: "eodReport",
     initialState,
     reducers: {
-        setEODReportFormPreview: (state, action: PayloadAction<PostEODReport | undefined>) => {
+        setEODReportFormPreview: (state, action: PayloadAction<Omit<IEODReport, 'id'> | undefined>) => {
             state.eodReportFormPreview = action.payload;
         }
     }

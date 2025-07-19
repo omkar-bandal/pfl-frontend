@@ -1,4 +1,4 @@
-import { Address } from "@prime-fresh/common_api"
+import { Address, ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api"
 
 export type PostVehicleDispatchRegister = {
     companyName: string | null,
@@ -51,4 +51,37 @@ export type GetVehicleDispatchRegister = {
     paymentTerms: string,
     rejection: number,
     shrinkageDump: number
+}
+export interface IVehicleDispatchRegister {
+    id: string;
+    documentId?: string | null;
+    documentDef?: string | null;
+    createdBy?: string | null;
+    createdDate?: string;
+    createdTime?: string;
+    companyName: string;
+    date: string;
+    vehicleType: string;
+    vehicleNo: string;
+    driverName: string;
+    paymentDiscussed: number;
+    driverMobNo: string;
+    outTime: string;
+    clientName: string;
+    clientAddress: Address;
+    receivingPerson: string;
+    reachingTime: string;
+    accDeptVerification: string;
+    transportationBillAmt: number;
+    advancePaid: number;
+    remarksPFL: string;
+    feedbackbyTransporterOwner: string;
+    dcNumber: string;
+    netInwardQty: number;
+    clientGRNNo: string;
+    paymentTerms: string;
+    rejection: number;
+    shrinkageDump: number;
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: ApprovalSummany;
 }

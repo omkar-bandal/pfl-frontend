@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApprovalSummany, DocumentStatus } from '@prime-fresh/common_api';
-import { Address } from '../address.interface';
-
+import { ApprovalSummany, DocumentStatus, Address } from '@prime-fresh/common_api';
 export interface IMaterials {
     id?: string;
     itemName: string | null;
@@ -10,7 +8,6 @@ export interface IMaterials {
     rate: number | null;
     amt: number;
 }
-
 export interface IPackingMaterialPaymentVoucher {
     id: string;
     documentId?: string | null;
@@ -39,7 +36,7 @@ export interface IPackingMaterialPaymentVoucher {
     anyAttachment: any;
     overAllStatus?: DocumentStatus;
     approvalSummary?: ApprovalSummany;
-    // requestedBy?: string;
-    // requestingDepartment?: string;
-    // approvalStatus?: string | null;
 }
+// requestedBy?: string;
+// requestingDepartment?: string;
+// approvalStatus?: string | null;

@@ -24,7 +24,7 @@ export const InwardRegisterTable = () => {
     handleColumnVisibilityModelChange,
     handleCloseColumnVisibilityPanel,
     handleOpenColumnVisibilityPanel,
-  } = useDataTable();
+  } = useDataTable({ columnDef: inwardRegisterColumns, initialPageSize: 10 });
   const { data, isLoading, isError, error } = useGetAllInwardRegisters(queryParams);
   const inwards = data ? data : null;
   const rowCountRef = React.useRef(inwards?.allRecords || 0);

@@ -22,7 +22,7 @@ import {
   useGetAQRForUpdateById,
   useUpdateAQR,
 } from '@prime-fresh/inventory/modules';
-import { AQRParameters, PostAQR } from '@prime-fresh/inventory_api';
+import { AQRParameters, IAQR } from '@prime-fresh/inventory_api';
 import {
   convertInTitleCase,
   debounce,
@@ -72,7 +72,7 @@ export const AQRForm = () => {
   const { data: dcnums } = useGetAllDeliveryChallanNums();
   const dcNums = dcnums?.data ? mapToValueLabelArray(dcnums.data, 'id', 'challanNo') : [];
 
-  const calculateTotalQty = (values: PostAQR, setFieldValue: (field: string, value: any) => void) => {
+  const calculateTotalQty = (values: Omit<IAQR, 'id'>, setFieldValue: (field: string, value: any) => void) => {
     const updatedParameters = values.parameters.map((param: AQRParameters) => ({
       ...param,
       percentage: values.samplingQty ? parseFloat(((Number(param.quantity) / values.samplingQty) * 100).toFixed(2)) : 0,
@@ -111,7 +111,7 @@ export const AQRForm = () => {
             toast.error(PatchError ? PatchError.message : 'Error while updating AQR.');
           });
   };
-  const formik = useFormik<PostAQR>({
+  const formik = useFormik<Omit<IAQR, 'id'>>({
     enableReinitialize: true,
     initialValues: AQRinitVal,
     validationSchema: aqrValidationSchema,
@@ -284,7 +284,7 @@ export const AQRForm = () => {
               <Grid2 size={{ xs: 12 }}>
                 <FieldArray name="parameters">
                   {() =>
-                    formik.values.parameters.map((_, index) => (
+                    formik.values.parameters?.map((_, index) => (
                       <Grid2
                         container
                         key={index}
@@ -303,7 +303,7 @@ export const AQRForm = () => {
                           <input
                             hidden={true}
                             name={`parameters.${index}.qualityParameterId`}
-                            value={formik.values.parameters[index].qualityParameterId}
+                            value={formik.values.parameters[index]?.qualityParameterId}
                             readOnly={true}
                           />
                           <Typography component="div" variant="subtitle1" sx={{ fontWeight: 500 }}>
@@ -337,7 +337,7 @@ export const AQRForm = () => {
                             type="number"
                             label=""
                             name={`parameters.${index}.quantity`}
-                            value={formik.values.parameters[index].quantity}
+                            value={formik.values.parameters[index]?.quantity}
                             sx={{ borderColor: 'transparent' }}
                             handleChange={formik.handleChange}
                             onBlur={() => calculateTotalQty(formik.values, formik.setFieldValue)}

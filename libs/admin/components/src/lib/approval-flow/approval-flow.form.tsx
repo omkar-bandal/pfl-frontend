@@ -227,7 +227,7 @@ export const ApprovalFlowForm = () => {
             <MultiSelectAutocomplete
               isLoading={empFetching || empLoading}
                 limitTags={3}
-              isRequired={true}
+                isRequired={false}
               label="Third Approver"
               name="approvers.thirdApprover.users"
               options={emps?.data || []}

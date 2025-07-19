@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GetSecondSaleRegister, PostSecondSaleProducts, PostSecondSaleRegister } from "@prime-fresh/inventory_api";
+import { ISecondSaleRegister, ISecondSaleProducts } from "@prime-fresh/inventory_api";
 import { numToWords } from "@prime-fresh/shared/modules";
 import { FormikHelpers } from "formik";
 
-export const normalizeData = (data: GetSecondSaleRegister): PostSecondSaleRegister => {
-    return {
-      ...data,
-      companyName: data.companyName ? data.companyName.id : null,
-      location: data.location ? data.location.id : null,
-      dcNo: data.dcNo ? data.dcNo.id : null,
-      secondSaleProducts: data.secondSaleProducts.map(product => ({
-        ...product,
-        productName: product.productName ? product.productName.id : null,
-        uom: product.uom ? product.uom.id : null,
-      })),
-    };
-  };
+// export const normalizeData = (data: ISecondSaleRegister): ISecondSaleRegister => {
+//     return {
+//       ...data,
+//       companyName: data.companyName ? data.companyName.id : null,
+//       location: data.location ? data.location.id : null,
+//       dcNo: data.dcNo ? data.dcNo.id : null,
+//       secondSaleProducts: data.secondSaleProducts.map(product => ({
+//         ...product,
+//         productName: product.productName ? product.productName.id : null,
+//         uom: product.uom ? product.uom.id : null,
+//       })),
+//     };
+//   };
 
-  const recalcTotalWeight = (products: PostSecondSaleProducts[]): number =>
+const recalcTotalWeight = (products: ISecondSaleProducts[]): number =>
     products.reduce((sum, prod) => sum + (Number(prod.netWeight) || 0), 0);
 
-  const recalcTotalAmt = (products: PostSecondSaleProducts[]): number =>
+const recalcTotalAmt = (products: ISecondSaleProducts[]): number =>
     products.reduce((sum, prod) => sum + (Number(prod.amount) || 0), 0);
   
   export const handleRemoveProduct = (
     index: number,
-    values: PostSecondSaleRegister,
-    setFieldValue: FormikHelpers<PostSecondSaleRegister>["setFieldValue"]
+    values: Omit<ISecondSaleRegister, 'id'>,
+    setFieldValue: FormikHelpers<ISecondSaleRegister>["setFieldValue"]
   ): void => {
     const updatedProducts = values.secondSaleProducts.filter((_, i) => i !== index);
     const newTotalNetWt = recalcTotalWeight(updatedProducts);
@@ -38,9 +38,9 @@ export const normalizeData = (data: GetSecondSaleRegister): PostSecondSaleRegist
   };
   
   export const handlePushProduct = (
-    newProduct: PostSecondSaleRegister["secondSaleProducts"][0],
-    values: PostSecondSaleRegister,
-    setFieldValue: FormikHelpers<PostSecondSaleRegister>["setFieldValue"]
+    newProduct: ISecondSaleRegister["secondSaleProducts"][0],
+    values: Omit<ISecondSaleRegister, 'id'>,
+    setFieldValue: FormikHelpers<ISecondSaleRegister>["setFieldValue"]
   ): void => {
     const updatedProducts = [...values.secondSaleProducts, newProduct];
     const newTotalNetWt = recalcTotalWeight(updatedProducts);
@@ -55,8 +55,8 @@ export const normalizeData = (data: GetSecondSaleRegister): PostSecondSaleRegist
     index: number | null,
     fieldName: "quantity" | "unitPrice" | "packingMaterialWeight" | "grossWeight",
     newValue: any,
-    values: PostSecondSaleRegister,
-    setFieldValue: FormikHelpers<PostSecondSaleRegister>['setFieldValue']
+    values: Omit<ISecondSaleRegister, 'id'>,
+    setFieldValue: FormikHelpers<ISecondSaleRegister>['setFieldValue']
   ): void => {
     if (index !== null) {
       const updatedProducts = [...values.secondSaleProducts];

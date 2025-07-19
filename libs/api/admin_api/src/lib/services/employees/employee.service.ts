@@ -1,5 +1,5 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { IEmployee } from '../../models';
+import { EmployeeStatus, IEmployee } from '../../models';
 import { adminApiUrlConstants } from '../../constants';
 
 export class EmployeesService extends BaseService {
@@ -39,7 +39,7 @@ export class EmployeesService extends BaseService {
     return this.patch(url, data);
   }
 
-  updateEmployeeStatus(id: string, status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'): Promise<ResultModel> {
+  updateEmployeeStatus(id: string, status: EmployeeStatus): Promise<ResultModel> {
     const url = adminApiUrlConstants.UPDATE_EMPLOYEE_STATUS(id, status);
     return this.patch(url, { status: status });
   }

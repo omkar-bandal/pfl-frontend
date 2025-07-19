@@ -1,6 +1,6 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { purchaseApiUrl } from '../constants';
-import { IMultiCashVoucher } from '../models';
+import { purchaseApiUrl } from '../../constants';
+import { IMultiCashVoucher } from '../../models';
 
 export class MultiCashVoucherServices extends BaseService {
   private static _instance: MultiCashVoucherServices;

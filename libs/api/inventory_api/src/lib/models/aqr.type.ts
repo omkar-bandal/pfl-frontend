@@ -1,12 +1,20 @@
+import { ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api";
+
 export type AQRParameters = {
     qualityParameterId: string,
     qualityParameterName: string,
     qualityParameterType: "good" | "bad" | "average" | null,
     quantity: number | null,
-    percentage: number,
+    percentage: number | null,
 }
 
-export type PostAQR = {
+export type IAQR = {
+    id: string,
+    documentId?: string | null;
+    documentDef?: string | null;
+    createdBy?: string | null;
+    createdDate?: string | null,
+    createdTime?: string | null,
     dcNo: string | null,
     dcDate: string | null,
     arrivedQty: number | null,
@@ -16,33 +24,14 @@ export type PostAQR = {
     receivedBy: string | null,
     qcCheckBy: string | null,
     verifiedBy: string | null,
-    totalQty: number,
-    totalpercent: number,
+    totalQty: number | null,
+    totalpercent: number | null,
     supplierName: string | null,
     arrivalDate: string | null,
     supplierLocation: string | null,
     remark: string | null,
     product: string | null,
-    parameters: AQRParameters[]
-}
-
-export type GetAQR = {
-    id: string,
-    dcNo: string,
-    dcDate: string,
-    arrivedQty: number,
-    samplingQty: number,
-    purchaseBy: string,
-    packBy: string,
-    receivedBy: string,
-    qcCheckBy: string,
-    verifiedBy: string,
-    totalQty: number,
-    totalpercent: number,
-    supplierName: string,
-    arrivalDate: string,
-    supplierLocation: string,
-    remark: string,
-    product: string,
-    parameters: AQRParameters[]
+    parameters: AQRParameters[],
+    overAllStatus?: DocumentStatus;
+    approvalSummary?: ApprovalSummany;
 }

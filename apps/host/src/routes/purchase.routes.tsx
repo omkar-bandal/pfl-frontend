@@ -3,8 +3,8 @@ import {
   DealSlipForm,
   DealSlipTable,
   DealSlipView,
-  DeliveryChallanTable,
-  DeliveryChallanView,
+  // DeliveryChallanTable,
+  // DeliveryChallanView,
   GRNTable,
   GRNView,
   LabourPaymentVoucherForm,
@@ -199,10 +199,10 @@ export const PurchaseRoutes = [
     element: <Outlet />,
     children: [
       //Get All
-      {
-        path: PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN,
-        element: <DeliveryChallanTable />,
-      },
+      // {
+      //   path: PURCHASE_ROUTES.GET_ALL_DELIVERY_CHALLAN,
+      //   element: <DeliveryChallanTable />,
+      // },
       {
         path: PURCHASE_ROUTES.GET_ALL_DC_TYPE_CUSTOMER,
         element: <DCTypeCustomerTable />,
@@ -221,10 +221,10 @@ export const PurchaseRoutes = [
         element: <DCTypeStockTransferForm />,
       },
       //View
-      {
-        path: `${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/:id`,
-        element: <DeliveryChallanView />,
-      },
+      // {
+      //   path: `${PURCHASE_ROUTES.VIEW_DELIVERY_CHALLAN}/:id`,
+      //   element: <DeliveryChallanView />,
+      // },
       {
         path: `${PURCHASE_ROUTES.VIEW_DC_TYPE_CUSTOMER}/:id`,
         element: <DCTypeCustomerView />,

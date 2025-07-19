@@ -7,7 +7,7 @@ import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompanie
 import { Box, Grid, LinearProgress, Typography, TextField, Container, IconButton } from '@mui/material';
 import { useGetPackingMeterialPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, formatCurrency, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const PackingMaterialPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -18,21 +18,54 @@ export const PackingMaterialPaymentVoucherView = () => {
   const [reason, setReason] = useState<string>('');
   const { voucherid } = useParams<{ voucherid: string }>();
   const pmpVoucherId = voucherid ? voucherid : '';
-  const { data, isLoading: isVoucherLoading } = useGetPackingMeterialPaymentVoucherForViewById(pmpVoucherId);
+  const { data, isLoading: isVoucherLoading, refetch } = useGetPackingMeterialPaymentVoucherForViewById(pmpVoucherId);
   const pmpVoucher = data?.data ? data.data : null;
   console.log('pmpVoucher : ', pmpVoucher);
   const { data: companies, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const companyDetails = companies?.data ? companies.data.find((comp) => comp.name === pmpVoucher?.companyName) : null;
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: pmpVoucher?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Verified', subtitle: pmpVoucher?.approvalSummary?.verified?.name || '', status: pmpVoucher?.approvalSummary?.verified?.status || 'hold' },
-    { title: 'First Approval', subtitle: pmpVoucher?.approvalSummary?.firstApproved?.name || '', status: pmpVoucher?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Second Approval', subtitle: pmpVoucher?.approvalSummary?.secondApproved?.name || '', status: pmpVoucher?.approvalSummary?.secondApproved?.status || 'hold' },
-    { title: 'Third Approval', subtitle: pmpVoucher?.approvalSummary?.thirdApproved?.name || '', status: pmpVoucher?.approvalSummary?.thirdApproved?.status || 'hold' },
-    { title: 'First Finalizer', subtitle: pmpVoucher?.approvalSummary?.firstFinalized?.name || '', status: pmpVoucher?.approvalSummary?.firstFinalized?.status || 'hold' },
-    { title: 'Second Finalizer', subtitle: pmpVoucher?.approvalSummary?.secondFinalized?.name || '', status: pmpVoucher?.approvalSummary?.secondFinalized?.status || 'hold' },
-    { title: 'Completed', status: pmpVoucher?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: pmpVoucher?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Verified',
+      subtitle: pmpVoucher?.approvalSummary?.verified?.name || '',
+      status: pmpVoucher?.approvalSummary?.verified?.status || 'hold'
+    },
+    {
+      title: 'First Approval',
+      subtitle: pmpVoucher?.approvalSummary?.firstApproved?.name || '',
+      status: pmpVoucher?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Second Approval',
+      subtitle: pmpVoucher?.approvalSummary?.secondApproved?.name || '',
+      status: pmpVoucher?.approvalSummary?.secondApproved?.status || 'hold',
+      disabled: pmpVoucher?.approvalSummary?.secondApproved === null ? true : false
+    },
+    {
+      title: 'Third Approval',
+      subtitle: pmpVoucher?.approvalSummary?.thirdApproved?.name || '',
+      status: pmpVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
+      disabled: pmpVoucher?.approvalSummary?.secondApproved === null ? true : false
+    },
+    {
+      title: 'First Finalizer',
+      subtitle: pmpVoucher?.approvalSummary?.firstFinalized?.name || '',
+      status: pmpVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
+    },
+    {
+      title: 'Second Finalizer',
+      subtitle: pmpVoucher?.approvalSummary?.secondFinalized?.name || '',
+      status: pmpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: pmpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
+    },
   ];
 
   const firstGridData = [
@@ -64,21 +97,21 @@ export const PackingMaterialPaymentVoucherView = () => {
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        refetch();
+        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.')
       })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
   };
 
   const rejectPMPVoucher = () => {
     mutateAsync({
-      status: 'REJECT',
+      status: 'reject',
       reason: reason,
     }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
+      refetch();
+      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
     })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while rejecting voucher.'));
   };
   return (
     <Container maxWidth="xl">

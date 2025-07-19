@@ -1,7 +1,8 @@
+import { Chip } from '@mui/material';
 import { GridRenderCellParams } from '@mui/x-data-grid';
 import { Address } from '@prime-fresh/common_api';
 import { inventoryRouteConstants } from '@prime-fresh/inventory/modules';
-import { formatAddress } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, formatAddress, getDocStatusColor } from '@prime-fresh/shared/modules';
 import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -12,19 +13,51 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
   return useMemo(
     () => [
       {
+        field: 'createdBy',
+        headerName: 'Created By',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      },
+      {
+        field: 'createdDate',
+        headerName: 'Created Date',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+      },
+      {
+        field: 'createdTime',
+        headerName: 'Created Time',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+      },
+      {
         field: 'companyName',
-        type: 'string',
         headerName: 'Company',
-        width: 200,
+        flex: 1,
+        minWidth: 200,
+        align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
+        hide: false,
       },
       {
         field: 'date',
         headerName: 'Date',
-        width: 100,
+        minWidth: 100,
+        flex: 1,
         align: 'center',
         headerAlign: 'center',
+        hide: false,
         isMobileVisible: true,
         valueGetter: (value: string) => (value ? value : '-'),
       },
@@ -32,7 +65,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'vehicleNo',
         type: 'string',
         headerName: 'Vehicle No',
-        width: 150,
+        flex: 1,
+        minWidth: 150,
         headerAlign: 'center',
         isMobileVisible: true,
         valueGetter: (value: string) => (value ? value : '-'),
@@ -41,7 +75,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'vehicleType',
         type: 'string',
         headerName: 'Vehicle No',
-        width: 150,
+        flex: 1,
+        minWidth: 150,
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
@@ -49,7 +84,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'driverName',
         type: 'string',
         headerName: 'Driver Name',
-        width: 150,
+        flex: 1,
+        minWidth: 150,
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
@@ -57,7 +93,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'driverMobNo',
         type: 'string',
         headerName: 'Driver Mob No',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
@@ -66,7 +103,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'paymentDiscussed',
         type: 'number',
         headerName: 'Payment Discussed',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
@@ -75,7 +113,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'transportationBillAmt',
         type: 'number',
         headerName: 'Transportation Bill Amount',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
@@ -84,7 +123,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'advancePaid',
         type: 'number',
         headerName: 'Advance Paid Amount',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
@@ -93,14 +133,16 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'clientName',
         type: 'string',
         headerName: 'Client Name',
-        width: 150,
+        flex: 1,
+        minWidth: 150,
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
       {
         field: 'clientAddress',
         headerName: 'Client Address',
-        width: 200,
+        flex: 1,
+        minWidth: 200,
         headerAlign: 'center',
         valueGetter: (value: Address) => (value ? formatAddress(value) : '-'),
       },
@@ -108,7 +150,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'receivingPerson',
         type: 'string',
         headerName: 'Receiving Person',
-        width: 150,
+        flex: 1,
+        minWidth: 150,
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
@@ -116,7 +159,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'outTime',
         type: 'string',
         headerName: 'Out Time',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
@@ -124,7 +168,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'reachingTime',
         type: 'string',
         headerName: 'Reaching Time',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
@@ -132,7 +177,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'netInwardQty',
         type: 'number',
         headerName: 'Net Inward Qty',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
@@ -141,7 +187,8 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'rejection',
         type: 'number',
         headerName: 'Rejection',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
@@ -150,46 +197,61 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         field: 'shrinkageDump',
         type: 'number',
         headerName: 'Shrinkage Dump',
-        width: 100,
+        flex: 1,
+        minWidth: 100,
         align: 'center',
         headerAlign: 'center',
         valueGetter: (value: string) => (value ? value : '-'),
       },
+      {
+        field: 'overAllStatus',
+        headerName: 'Status',
+        flex: 1,
+        minWidth: 130,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        isMobileVisible: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const status = convertInTitleCase(params.row.overAllStatus);
+          return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+        },
+      },
       ...(canEdit
         ? [
-            {
-              field: 'edit',
-              headerName: 'Edit',
-              width: 70,
-              sortable: false,
-              filterable: false,
-              isMobileVisible: true,
-              renderCell: (params: GridRenderCellParams) => (
-                <EditIconBtn
-                  onClick={() =>
-                    navigate(`${inventoryRouteConstants.UPDATE_VEHILCE_DISPATCH_REGISTER}/${params.row.id}`)
-                  }
-                />
-              ),
-            },
-          ]
+          {
+            field: 'edit',
+            headerName: 'Edit',
+            width: 70,
+            sortable: false,
+            filterable: false,
+            isMobileVisible: true,
+            renderCell: (params: GridRenderCellParams) => (
+              <EditIconBtn
+                onClick={() =>
+                  navigate(`${inventoryRouteConstants.UPDATE_VEHILCE_DISPATCH_REGISTER}/${params.row.id}`)
+                }
+              />
+            ),
+          },
+        ]
         : []),
       ...(canView
         ? [
-            {
-              field: 'view',
-              headerName: 'View',
-              width: 70,
-              sortable: false,
-              filterable: false,
-              isMobileVisible: true,
-              renderCell: (params: GridRenderCellParams) => (
-                <ViewIconBtn
-                  onClick={() => navigate(`${inventoryRouteConstants.VIEW_VEHILCE_DISPATCH_REGISTER}/${params.row.id}`)}
-                />
-              ),
-            },
-          ]
+          {
+            field: 'view',
+            headerName: 'View',
+            width: 70,
+            sortable: false,
+            filterable: false,
+            isMobileVisible: true,
+            renderCell: (params: GridRenderCellParams) => (
+              <ViewIconBtn
+                onClick={() => navigate(`${inventoryRouteConstants.VIEW_VEHILCE_DISPATCH_REGISTER}/${params.row.documentId}`)}
+              />
+            ),
+          },
+        ]
         : []),
     ],
     [canEdit, canView, navigate]

@@ -3,7 +3,7 @@ import { Box, Grid2 } from '@mui/material';
 import { inventoryRouteConstants, useGetAllSecondSaleRegisters } from '@prime-fresh/inventory/modules';
 import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { useNavigate } from 'react-router-dom';
-import { GetSecondSaleRegister } from '@prime-fresh/inventory_api';
+import { ISecondSaleRegister } from '@prime-fresh/inventory_api';
 import { useSecondSaleRegisterColumns } from './second-sale-register.column';
 import { usePermission } from '@prime-fresh/modules';
 import { Add, Settings } from '@mui/icons-material';
@@ -26,6 +26,7 @@ export const SecondSaleRegisterTable = () => {
   } = useDataTable({ columnDef: secondSaleRegisterColumns });
   const { data, isLoading, isError, error } = useGetAllSecondSaleRegisters(queryParams);
   const secondSales = data ? data : null;
+  console.log('SS data: ', secondSales);
   const rowCountRef = React.useRef(secondSales?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (secondSales?.allRecords !== undefined) {
@@ -59,7 +60,7 @@ export const SecondSaleRegisterTable = () => {
           />
         </Grid2>
       </Grid2>
-      <DataGridTable<GetSecondSaleRegister>
+      <DataGridTable<ISecondSaleRegister>
         loading={isLoading}
         rows={secondSales?.data || []}
         columns={secondSaleRegisterColumns}

@@ -28,6 +28,7 @@ export const DCTypeCustomerTable = () => {
 
   const { data, isLoading, isError, error } = useGetAllDCTypeCustomers(queryParams);
   const allDCTypeCustomers = data ? data : null;
+  console.log('DC for Customer: ', allDCTypeCustomers);
 
   const rowCountRef = React.useRef(allDCTypeCustomers?.allRecords || 0);
   const rowCount = React.useMemo(() => {

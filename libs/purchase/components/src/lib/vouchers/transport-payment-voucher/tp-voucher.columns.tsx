@@ -3,7 +3,7 @@ import { Chip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
 import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
-import { convertInTitleCase } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor } from '@prime-fresh/shared/modules';
 
 export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
   const navigate = useNavigate();
@@ -16,8 +16,19 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 130,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       isMobileVisible: true,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+    },
+    {
+      field: 'createdBy',
+      headerName: 'Created By',
+      flex: 1,
+      minWidth: 120,
+      align: 'center',
+      headerAlign: 'center',
+      hide: false,
+      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
       field: 'createdDate',
@@ -26,6 +37,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
     },
     {
       field: 'createdTime',
@@ -34,6 +46,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
     },
     {
       field: 'companyName',
@@ -41,6 +54,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       flex: 1,
       minWidth: 200,
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -50,6 +64,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -58,6 +73,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       flex: 1,
       minWidth: 200,
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -66,6 +82,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       flex: 1,
       minWidth: 200,
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -75,6 +92,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -84,6 +102,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? value : ''),
     },
     {
@@ -93,6 +112,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value : ''),
     },
     {
@@ -102,6 +122,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
     },
     {
@@ -111,6 +132,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -120,6 +142,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -129,6 +152,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -138,6 +162,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? `${Number(value)} Rs.` : ''),
     },
     {
@@ -147,6 +172,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
       valueGetter: (value: string) => (value ? `${Number(value)} Rs.` : ''),
     },
     {
@@ -155,6 +181,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       flex: 1,
       minWidth: 200,
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -164,6 +191,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 120,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
     },
     {
@@ -173,6 +201,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
@@ -182,6 +211,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: boolean) => (value === true ? 'Yes' : 'No'),
     },
     {
@@ -190,77 +220,57 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       flex: 1,
       minWidth: 200,
       headerAlign: 'center',
+      hide: true,
       valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
     },
     {
-      field: 'approvalStatus',
+      field: 'overAllStatus',
       headerName: 'Status',
-      flex: 1,
-      minWidth: 130,
+      flex: 1, minWidth: 130,
       align: 'center',
       headerAlign: 'center',
+      hide: false,
+      isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
-        switch (params.row.approvalStatus) {
-          case 'pending':
-            return (
-              <Chip label={params.row.approvalStatus} color="default" size="small" sx={{ flex: 1, minWidth: 80 }} />
-            );
-          case 'approved':
-            return <Chip label="Approved" color="info" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          case 'rejected':
-            return <Chip label="Not Approved" color="error" size="small" sx={{ flex: 1, minWidth: 80 }} />;
-          default:
-            return <Chip label="pending" color="error" size="small" />;
-        }
-      },
-    },
-    {
-      field: 'approvalNote',
-      headerName: 'Reason',
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (value: string) => {
-        if (value === null) return '';
-        else return value;
+        const status = convertInTitleCase(params.row.overAllStatus);
+        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
       },
     },
     ...(canEdit
       ? [
-          {
-            field: 'edit',
-            headerName: 'Edit',
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <EditIconBtn
-                onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}
-              />
-            ),
-          },
-        ]
+        {
+          field: 'edit',
+          headerName: 'Edit',
+          flex: 1,
+          minWidth: 70,
+          sortable: false,
+          filterable: false,
+          isMobileVisible: true,
+          renderCell: (params: GridRenderCellParams) => (
+            <EditIconBtn
+              onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}
+            />
+          ),
+        },
+      ]
       : []),
     ...(canView
       ? [
-          {
-            field: 'view',
-            headerName: 'View',
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <ViewIconBtn
-                onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.documentId}`)}
-              />
-            ),
-          },
-        ]
+        {
+          field: 'view',
+          headerName: 'View',
+          flex: 1,
+          minWidth: 70,
+          sortable: false,
+          filterable: false,
+          isMobileVisible: true,
+          renderCell: (params: GridRenderCellParams) => (
+            <ViewIconBtn
+              onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_TRANSPORT_CASH_VOUCHER}/${params.row.documentId}`)}
+            />
+          ),
+        },
+      ]
       : []),
   ];
 };

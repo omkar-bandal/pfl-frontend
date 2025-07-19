@@ -13,11 +13,11 @@ export const inventoryApiUrl = {
       return `/inwardRegister/`;
     }
   },
-  GET_INWARD_REGISTER_FOR_VIEW_BY_ID: '/inwardRegister/view',
-  GET_INWARD_REGISTER_FOR_UPDATE_BY_ID: '/inwardRegister/update',
+  GET_INWARD_REGISTER_FOR_VIEW_BY_ID: (id: string) => `/inwardRegister/view/${id}`,
+  GET_INWARD_REGISTER_FOR_UPDATE_BY_ID: (id: string) => `/inwardRegister/update/${id}`,
+  UPDATE_INWARD_REGISTER: (id: string) => `/inwardRegister/${id}`,
+  DELETE_INWARD_REGISTER: (id: string) => `/inwardRegister/${id}`,
   CREATE_INWARD_REGISTER: '/inwardRegister',
-  UPDATE_INWARD_REGISTER: '/inwardRegister',
-  DELETE_INWARD_REGISTER: '/inwardRegister',
 
   //Arrival Quality Report
   GET_ALL_AQR: (queryParams?: QueryParams) => {
@@ -31,11 +31,11 @@ export const inventoryApiUrl = {
       return `/aqr/`;
     }
   },
-  GET_AQR_FOR_VIEW_BY_ID: '/aqr/view',
-  GET_AQR_FOR_UPDATE_BY_ID: '/aqr/update',
+  GET_AQR_FOR_VIEW_BY_ID: (id: string) => `/aqr/view/${id}`,
+  GET_AQR_FOR_UPDATE_BY_ID: (id: string) => `/aqr/update/${id}`,
+  UPDATE_AQR: (id: string) => `/aqr/${id}`,
+  DELETE_AQR: (id: string) => `/aqr/${id}`,
   CREATE_AQR: '/aqr/',
-  UPDATE_AQR: '/aqr',
-  DELETE_AQR: '/aqr',
 
   //Dump Register
   GET_ALL_DUMP_REGISTERS: (queryParams?: QueryParams) => {
@@ -49,11 +49,11 @@ export const inventoryApiUrl = {
       return `/dumpRegister/`;
     }
   },
-  GET_DUMP_REGISTER_FOR_VIEW_BY_ID: '/dumpRegister/view',
-  GET_DUMP_REGISTER_FOR_UPDATE_BY_ID: '/dumpRegister/update',
+  GET_DUMP_REGISTER_FOR_VIEW_BY_ID: (id: string) => `/dumpRegister/view/${id}`,
+  GET_DUMP_REGISTER_FOR_UPDATE_BY_ID: (id: string) => `/dumpRegister/update/${id}`,
+  UPDATE_DUMP_REGISTER: (id: string) => `/dumpRegister/${id}`,
+  DELETE_DUMP_REGISTER: (id: string) => `/dumpRegister/${id}`,
   CREATE_DUMP_REGISTER: '/dumpRegister/',
-  UPDATE_DUMP_REGISTER: '/dumpRegister',
-  DELETE_DUMP_REGISTER: '/dumpRegister',
 
   //Labor Registration
   GET_ALL_REGISTERED_LABORS: (queryParams?: QueryParams) => {
@@ -98,13 +98,14 @@ export const inventoryApiUrl = {
       return `/vehicleDispatches/`;
     }
   },
-  GET_VEHICLE_DISPATCH_REGISTER_BY_ID: '/vehicleDispatches',
+  GET_VEHICLE_DISPATCH_REGISTER_FOR_VIEW_BY_ID: (id: string) => `/vehicleDispatches/${id}`,
+  GET_VEHICLE_DISPATCH_REGISTER_FOR_UPDATE_BY_ID: (id: string) => `/vehicleDispatches/${id}`,
+  UPDATE_VEHICLE_DISPATCH_REGISTER: (id: string) => `/vehicleDispatches/${id}`,
+  DELETE_VEHICLE_DISPATCH_REGISTER: (id: string) => `/vehicleDispatches/${id}`,
   CREATE_VEHICLE_DISPATCH_REGISTER: '/vehicleDispatches/',
-  UPDATE_VEHICLE_DISPATCH_REGISTER: '/vehicleDispatches',
-  DELETE_VEHICLE_DISPATCH_REGISTER: '/vehicleDispatches',
 
   //Second Sale Register
-  GET_ALL_SECOND_SALE_REGISTERS: (queryParams?: QueryParams) => {
+  GET_ALL_SECOND_SALES: (queryParams?: QueryParams) => {
     if (queryParams) {
       let url = `/secondSales/?page=${queryParams.page}&limit=${queryParams.limit}`;
       if (queryParams.sort && queryParams.sort.length > 0) {
@@ -115,10 +116,11 @@ export const inventoryApiUrl = {
       return `/secondSales/`;
     }
   },
-  GET_SECOND_SALE_REGISTER_BY_ID: '/secondSales',
-  CREATE_SECOND_SALE_REGISTER: '/secondSales/',
-  UPDATE_SECOND_SALE_REGISTER: '/secondSales',
-  DELETE_SECOND_SALE_REGISTER: '/secondSales',
+  GET_SECOND_SALE_FOR_VIEW_BY_ID: (id: string) => `/secondSales/${id}/view`,
+  GET_SECOND_SALE_FOR_UPDATE_BY_ID: (id: string) => `/secondSales/${id}/update`,
+  UPDATE_SECOND_SALE: (id: string) => `/secondSales/${id}`,
+  DELETE_SECOND_SALE: (id: string) => `/secondSales/${id}`,
+  CREATE_SECOND_SALE: '/secondSales/',
 
   //EOD Report
   GET_ALL_EOD_REPORT: (queryParams?: QueryParams) => {
@@ -132,10 +134,11 @@ export const inventoryApiUrl = {
       return `/eodStock/`;
     }
   },
-  GET_EOD_REPORT_BY_ID: '/eodStock',
+  GET_EOD_REPORT_FOR_VIEW_BY_ID: (id: string) => `/eodStock/view/${id}`,
+  GET_EOD_REPORT_FOR_UPDATE_BY_ID: (id: string) => `/eodStock/${id}`,
+  UPDATE_EOD_REPORT: (id: string) => `/eodStock/${id}`,
+  DELETE_EOD_REPORT: (id: string) => `/eodStock/${id}`,
   CREATE_EOD_REPORT: '/eodStock/',
-  UPDATE_EOD_REPORT: '/eodStock',
-  DELETE_EOD_REPORT: '/eodStock',
 
   GET_ALL_PROF_INV: '/invoice/getAll',
   CREATE_PROF_INV: '/invoice/generate/profarma',

@@ -24,11 +24,11 @@ export const EmployeeForm = () => {
 
   const { data, isLoading } = useGetEmployeeForUpdate(employeeId);
   const employeeData = data?.data ? data.data : null;
-  console.log('Fetched Employee Data: ', employeeData);
+  // console.log('Fetched Employee Data: ', employeeData);
 
   const { data: docAccessConfig } = useGetDocumentAccessConfig();
   const documentDetails = docAccessConfig?.data ? docAccessConfig.data : [];
-  console.log('Document Details:', documentDetails);
+  // console.log('Document Details:', documentDetails);
   const employeeInitialValue = {
     ...initValEmployee,
     permissions: documentDetails.map((permissions) => ({

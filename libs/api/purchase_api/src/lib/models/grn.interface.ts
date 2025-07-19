@@ -1,4 +1,3 @@
-// import { RequestedBy } from './requestedBy.interface';
 import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
 
 export type IGRNLocationType = 'cc' | 'dc';
@@ -70,11 +69,6 @@ export interface IGRN {
   billImage: string | null;
   overAllStatus?: DocumentStatus;
   approvalSummary?: ApprovalSummany;
-  // requestedBy?: RequestedBy;
-  // requestingDepartment?: string | null;
-  // baseLocation?: string | null;
-  // approvalStatus?: string | null;
-  // approvalNote?: string | null;
 }
 
 export interface IGRNApproveReq {
@@ -88,3 +82,8 @@ export interface GetAllGRNnumbers {
   grnNo: string | null;
 }
 
+// requestedBy?: RequestedBy;
+// requestingDepartment?: string | null;
+// baseLocation?: string | null;
+// approvalStatus?: string | null;
+// approvalNote?: string | null;

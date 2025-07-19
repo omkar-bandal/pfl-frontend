@@ -1,38 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Container, Grid, LinearProgress, TextField, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import { useGetInwardRegisterForViewById } from '@prime-fresh/inventory/modules';
-import { BtnSmall, PageTitle, ProgressStep, ProgressStepper } from '@prime-fresh/ui_shared';
+import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useParams } from 'react-router-dom';
-import { Check, Close, Message, Download } from '@mui/icons-material';
-import { convertInTitleCase, formatAddress, useGetAllCompaniesData } from '@prime-fresh/shared/modules';
+import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
+import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
 import React, { useRef, useState } from 'react';
 import styles from './inwared-register.module.css';
-import { usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 import { useReactToPrint } from 'react-to-print';
 
 export const InwardRegisterView = () => {
   const { id } = useParams<{ id: string }>();
-  const Id = id ? id : '';
+  const inwardId = id ? id : '';
   const { canDownload } = usePermission('inward-register');
   const [reason, setReason] = useState('');
-
+  const { openDrawer } = useActions();
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
-  const { data, isLoading: isInwardLoading } = useGetInwardRegisterForViewById(Id);
+  const { data, isLoading: isInwardLoading, refetch } = useGetInwardRegisterForViewById(inwardId);
   const inwardData = data?.data ? data.data : null;
   const inwardSourceData = inwardData?.selectedParty as any;
   console.log('Inward Data: ', inwardData);
 
   const { data: companyData, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
-  console.log(companyData?.data);
   const company = companyData?.data ? companyData.data.find((comp) => comp.name === inwardData?.companyName) : null;
-
-  const approvalData: ProgressStep[] = [
-    { title: 'Created', subtitle: 'Sagar Pagar', status: 'approved' },
-    { title: 'Approved', subtitle: 'Sudhanshu Singh', status: 'approved' },
-    { title: 'Completed', subtitle: 'Jinen Ghelani', status: 'pending' },
-  ];
 
   const firstGridData = [
     { title: 'Inward Type:', value: convertInTitleCase(inwardData?.inwardType || '') },
@@ -78,16 +71,24 @@ export const InwardRegisterView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Approved By', 'Approved By'];
-  // return isLoading ? (
-  //   <Box flex={1}>
-  //     <LinearProgress />
-  //   </Box>
-  // ) : (
-  //   <Box flex={1}>
-  //     <PageTitle pagetitle="Inward Register" />
-  //     <DataViewer data={inwardData || []} config={inwardRegisterViewConfig} />
-  //   </Box>
-  // );
+
+  const approvalSummary: StepperData[] = [
+    { title: 'Created', subtitle: inwardData?.createdBy || '', status: 'COMPLETE' },
+    { title: 'Approved', subtitle: inwardData?.approvalSummary?.firstApproved?.name || '', status: inwardData?.approvalSummary?.firstApproved?.status || 'hold' },
+    { title: 'Completed', status: inwardData?.overAllStatus || 'hold' },
+  ];
+  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(inwardId);
+  const changeInwardRegisterStatus = (status: 'approved' | 'reject') => {
+    mutateAsync({
+      status: status,
+      reason: reason,
+    })
+      .then(() => {
+        toast.success(actionRes?.message ? actionRes.message : `Arrival quality report ${status} successfully.`)
+        refetch();
+      })
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of arrival quality report.'));
+  };
   return (
     <Container maxWidth="xl">
       {isInwardLoading || isCompanyDataLoading ? (
@@ -101,8 +102,8 @@ export const InwardRegisterView = () => {
               <PageTitle pagetitle="Inward Register" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" />
-              <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeInwardRegisterStatus('approved')} />
+                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeInwardRegisterStatus('reject')} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
@@ -123,8 +124,25 @@ export const InwardRegisterView = () => {
                 onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} marginY={1} paddingY={2} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
-              <ProgressStepper steps={approvalData} />
+              <Grid item xs={12}>
+                <DrawerContainer>
+                  <Typography variant='h6' component='div' sx={{ fontWeight: 700, color: '#595959' }}>Approval Summary</Typography>
+                  <Typography variant='caption' component='div' sx={{ fontWeight: 700, color: '#595959' }}>{`Current Status: ${convertInTitleCase(inwardData?.overAllStatus || '')}`}</Typography>
+                  <VerticalStepper steps={approvalSummary} />
+                </DrawerContainer>
+              </Grid>
+              <Grid item xs={12} alignItems='center'>
+                <Typography variant='subtitle1' component='span' sx={{ fontWeight: 700, color: '#2C3E50' }}>
+                  Current Document Status:
+                  <Typography variant='subtitle1' component='span' sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(inwardData?.overAllStatus || 'hold') }}>
+                    {convertInTitleCase(inwardData?.overAllStatus || '')}
+                  </Typography>
+                </Typography>
+                <InfoTooltip info={`Click here to see complete approval summary.`}>
+                  <IconButton size='medium' onClick={() => openDrawer()}>
+                    <ChevronRight fontSize='inherit' />
+                  </IconButton>
+                </InfoTooltip>
             </Grid>
           </Grid>
           <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>

@@ -10,8 +10,8 @@ export const formatDate = (dateString: string | null) => {
   }
   
   // Format currency values
-  export const formatCurrency = (value: number) => {
-    return value ? `${value.toFixed(2)} Rs.` : 0;
+export const formatCurrency = (value: number | string) => {
+  return value ? `${Number(value).toFixed(2)} Rs.` : 0;
   }
   
   // Get appropriate color for status

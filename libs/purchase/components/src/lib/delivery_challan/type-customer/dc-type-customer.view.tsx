@@ -64,7 +64,7 @@ export const DCTypeCustomerView = () => {
 
   const rejectDCTypeCustomer = () => {
     mutateAsync({
-      status: 'REJECT',
+      status: 'reject',
       reason: reason,
     }).then(() => {
       queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })

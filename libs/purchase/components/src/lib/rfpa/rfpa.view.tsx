@@ -7,7 +7,7 @@ import { useGetRFPAForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 import { useReactToPrint } from 'react-to-print';
 
 export const RFPAView = () => {
@@ -18,10 +18,10 @@ export const RFPAView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
   const [reason, setReason] = React.useState('');
-  const { data, isLoading } = useGetRFPAForViewById(rfpaId);
+  const { data, isLoading, refetch } = useGetRFPAForViewById(rfpaId);
   const rfpa = data?.data ? data.data : null;
+  console.log('RFPA data: ', rfpa);
   const { data: companyData, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
-  console.log(companyData?.data);
   const company = companyData?.data ? companyData.data.find((comp) => comp.name === rfpa?.companyName) : null;
 
   const approvalSummary: StepperData[] = [
@@ -41,7 +41,7 @@ export const RFPAView = () => {
   ];
 
   const rfpaVendorField = [
-    { title: 'Vendor Name:', value: rfpa?.createdDate || '' },
+    { title: 'Vendor Name:', value: rfpa?.selectedParty || '' },
     { title: 'Vendor Code:', value: rfpa?.createdTime || '' },
     { title: 'Contact Person:', value: rfpa?.source },
     { title: 'Company Email:', value: rfpa?.purchaseLocation ? rfpa?.purchaseLocation : rfpa?.otherPurchaseLoc },
@@ -86,27 +86,16 @@ export const RFPAView = () => {
   const rfpaSourceField = rfpa?.source === 'vendor' ? rfpaVendorField : rfpaFarmerField;
 
   const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(rfpaId);
-  const approveRFPA = () => {
+  const changeRFPAStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        toast.success(actionRes?.message ? actionRes.message : `Request For Purchase Approval ${status} successfully.`)
+        refetch();
       })
-      .catch(() => toast.error(`${error}`));
-  };
-
-  const rejectRFPA = () => {
-    mutateAsync({
-      status: 'REJECT',
-      reason: reason,
-    }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
-    })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of RFPA.'));
   };
   return (
     <Container maxWidth="xl">
@@ -121,8 +110,8 @@ export const RFPAView = () => {
               <PageTitle pagetitle="Request For Purchase Approval" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveRFPA()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectRFPA()} />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeRFPAStatus('approved')} />
+                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeRFPAStatus('reject')} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
                 {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />}
             </Grid>
@@ -218,7 +207,7 @@ export const RFPAView = () => {
                     </thead>
                     <tbody>
                       {rfpa?.rfpaProducts.map((product, index) => (
-                        <tr>
+                        <tr key={index}>
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{index + 1}</td>
                           <td className={`${styles.textSM}`}>{convertInTitleCase(product.productName || '')}</td>
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.quantity}</td>
@@ -227,8 +216,8 @@ export const RFPAView = () => {
                           <td className={`${styles.textAlignCenter} ${styles.textSM}`}>{product.amount}</td>
                         </tr>
                       ))}
-                        {(rfpa?.rfpaProducts.length || 0) < 5 && Array(5 - (rfpa?.rfpaProducts?.length || 0)).fill(null).map(() => (
-                          <tr className={styles.tableEmptyRows}>
+                        {(rfpa?.rfpaProducts.length || 0) < 5 && Array(5 - (rfpa?.rfpaProducts?.length || 0)).fill(null).map((_, index) => (
+                          <tr key={index} className={styles.tableEmptyRows}>
                             <td className={styles.tableEmptyRows}></td>
                             <td className={styles.tableEmptyRows}></td>
                             <td className={styles.tableEmptyRows}></td>

@@ -11,20 +11,24 @@ import { IEmployee } from "@prime-fresh/admin_api";
 export const useEmployeeColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
 
-  // const handleEmployeeStatus = useCallback((id: string) => {
-  //   dispatch(setDataId(id));
-  // },[dispatch]);
   return useMemo(() => [
     {
       field: "employeeId",
       headerName: "Employee ID",
-      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 120,
+      hide: false,
     },
     {
       field: 'fullName',
       headerName: "Name",
-      width: 170,
+      flex: 1,
+      minWidth: 200,
+      headerAlign: 'center',
       isMobileVisible: true,
+      hide: false,
       valueGetter: (value, row) => {
         if (row) {
           const name = `${row.firstName || ''} ${row.middleName || ''} ${row.lastName || ''}`;
@@ -37,87 +41,142 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
     {
       field: "username",
       headerName: "Username",
-      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 150,
+      hide: false
     },
     {
       field: "password",
       headerName: "Password",
-      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 150,
+      hide: false
     },
     {
       field: "cugNo",
       headerName: "CUG No",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 100,
+      hide: false
     },
     {
       field: "workEmail",
       headerName: "Email",
-      width: 150,
+      headerAlign: 'center',
+      flex: 1,
+      minWidth: 150,
+      hide: false
     },
     {
       field: "joiningDate",
       headerName: "Joining Date",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 100,
+      hide: true
     },
     {
       field: "joiningLocation",
       headerName: "Joining Location",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 100,
+      hide: true
     },
     {
       field: "currentWorkLocation",
       headerName: "Work Location",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 100,
+      hide: true
     },
     {
       field: "accessLocation",
       headerName: "Access To Locations",
-      width: 180,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 180,
+      hide: true,
       renderCell: (params: GridRenderCellParams<IEmployee>) =>
         (params.row.accessLocation || []).join(', '),
     },
     {
       field: "residentialAddress",
       headerName: "Residential Address",
-      width: 300,
+      headerAlign: 'center',
+      flex: 1,
+      minWidth: 300,
+      hide: true,
       valueGetter: (value) => value ? formatAddress(value) : '-',
     },
     {
       field: "permanentAddress",
       headerName: "Permanent Address",
-      width: 300,
+      headerAlign: 'center',
+      flex: 1,
+      minWidth: 300,
+      hide: true,
       valueGetter: (value) => value ? formatAddress(value) : '-',
     },
     {
       field: "primaryMobNo",
       headerName: "Primary Mobile No",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 100,
+      hide: true,
     },
     {
       field: "primaryEmail",
       headerName: "Primary Email",
-      width: 150,
+      headerAlign: 'center',
+      flex: 1,
+      minWidth: 150,
+      hide: true,
     },
     {
       field: "secondaryMobNo",
       headerName: "Secondary Mobile No",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      minWidth: 100,
+      hide: true,
     },
     {
       field: "secondaryEmail",
       headerName: "Secondary Email",
-      width: 150,
+      headerAlign: 'center',
+      flex: 1,
+      minWidth: 150,
+      hide: true,
     },
     {
       field: "status",
       headerName: "Status",
-      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      hide: false,
+      flex: 1,
+      minWidth: 100,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
         switch (params.row.status) {
-          case "ACTIVE": return <Chip label={convertInTitleCase(params.row.status)} color="success" size="small" sx={{ width: 80 }} />;
-          case "INACTIVE": return <Chip label={convertInTitleCase(params.row.status)} color="default" size="small" sx={{ width: 80 }} />;
-          case "SUSPENDED": return <Chip label={convertInTitleCase(params.row.status)} color="error" size="small" sx={{ width: 80 }} />;
+          case "ACTIVE": return <Chip label={convertInTitleCase(params.row.status)} color="success" size="small" sx={{ flex: 1, minWidth: 80 }} />;
+          case "INACTIVE": return <Chip label={convertInTitleCase(params.row.status)} color="default" size="small" sx={{ flex: 1, minWidth: 80 }} />;
+          case "SUSPENDED": return <Chip label={convertInTitleCase(params.row.status)} color="error" size="small" sx={{ flex: 1, minWidth: 80 }} />;
           default: return <Chip label="INACTIVE" color="default" size="small" />
         }
       }
@@ -127,7 +186,8 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       headerName: 'Edit',
       headerAlign: 'center',
       align: 'center',
-      width: 70,
+      flex: 1,
+      minWidth: 70,
       hideable: false,
       sortable: false,
       filterable: false,
@@ -144,7 +204,8 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       headerName: 'View',
       headerAlign: 'center',
       align: 'center',
-      width: 70,
+      flex: 1,
+      minWidth: 70,
       hideable: false,
       sortable: false,
       filterable: false,

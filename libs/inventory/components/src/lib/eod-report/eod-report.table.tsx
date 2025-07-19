@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Grid2 } from '@mui/material';
-import { GetEODReport } from '@prime-fresh/inventory_api';
+import { IEODReport } from '@prime-fresh/inventory_api';
 import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
 import { useEODReportColumns } from './eod-report.column';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +61,7 @@ export const EODReportTable = () => {
           />
         </Grid2>
       </Grid2>
-      <DataGridTable<GetEODReport>
+      <DataGridTable<IEODReport>
         loading={isLoading}
         rows={eods?.data || []}
         columns={eodReportColumns}

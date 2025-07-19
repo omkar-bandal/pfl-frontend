@@ -19,6 +19,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         minWidth: 130,
         isMobileVisible: true,
+        hide: false,
       },
       {
         type: 'string',
@@ -28,6 +29,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         minWidth: 200,
         flex: 1,
         isMobileVisible: true,
+        hide: false,
         valueGetter: (value, row) => {
           return convertInTitleCase(`${row.farmerfName || ''} ${row.farmermName || ''} ${row.farmerlName || ''}`);
         },
@@ -39,6 +41,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         headerName: 'Farm Address',
         minWidth: 400,
         flex: 1,
+        hide: false,
         valueGetter: (value: Address) => (value ? formatAddress(value) : ''),
       },
       {
@@ -48,6 +51,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         minWidth: 400,
         flex: 1,
+        hide: false,
         valueGetter: (value: Address) => (value ? formatAddress(value) : ''),
       },
       {
@@ -58,6 +62,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         align: 'center',
         minWidth: 130,
         flex: 1,
+        hide: false,
         valueGetter: (value: string) => (value ? value : ''),
       },
       {
@@ -68,6 +73,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         align: 'center',
         minWidth: 100,
         flex: 1,
+        hide: true,
         valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
       },
       {
@@ -78,6 +84,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         align: 'center',
         minWidth: 100,
         flex: 1,
+        hide: true,
         valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
       },
       {
@@ -86,6 +93,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         width: 120,
+        hide: true,
         valueGetter: (value: number) => (value ? `${Number(value).toFixed(2)} Acres` : 0),
       },
       {
@@ -95,33 +103,36 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         width: 150,
+        hide: true,
         valueGetter: (value: number) => (value ? `${Number(value).toFixed(2)} Acres` : 0),
       },
       // {
-        //   field: "farmerGrading",
-        //   headerName: "Grade",
-        //   width: 100,
-        // },
-        {
-          type: 'string',
-          field: 'secondaryMobileNo',
-          headerName: 'Alternate Contact No',
-          headerAlign: 'center',
-          align: 'center',
-          minWidth: 130,
-          flex: 1,
-          valueGetter: (value: string) => (value ? value : ''),
-        },
-        {
-          type: 'string',
-          field: 'email',
-          headerName: 'Email',
-          headerAlign: 'center',
-          align: 'center',
-          minWidth: 150,
-          flex: 1,
-          valueGetter: (value: string) => (value ? value : ''),
-        },
+      //   field: "farmerGrading",
+      //   headerName: "Grade",
+      //   width: 100,
+      // },
+      {
+        type: 'string',
+        field: 'secondaryMobileNo',
+        headerName: 'Alternate Contact No',
+        headerAlign: 'center',
+        align: 'center',
+        minWidth: 130,
+        flex: 1,
+        hide: true,
+        valueGetter: (value: string) => (value ? value : ''),
+      },
+      {
+        type: 'string',
+        field: 'email',
+        headerName: 'Email',
+        headerAlign: 'center',
+        align: 'center',
+        minWidth: 150,
+        flex: 1,
+        hide: true,
+        valueGetter: (value: string) => (value ? value : ''),
+      },
       {
         type: 'string',
         field: 'gender',
@@ -130,6 +141,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         align: 'center',
         minWidth: 100,
         flex: 1,
+        hide: true,
         valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
       },
       {
@@ -140,6 +152,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         align: 'center',
         minWidth: 100,
         flex: 1,
+        hide: true,
         valueGetter: (value: string) => (value ? value : ''),
       },
       {
@@ -150,6 +163,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         align: 'center',
         minWidth: 100,
         flex: 1,
+        hide: true,
         valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
       },
       {
@@ -159,6 +173,7 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
         width: 70,
         sortable: false,
         filterable: false,
+        hide: true,
         renderCell: (params: GridRenderCellParams) => (
           <IconButton aria-label="download" onClick={() => downloadDoc(params.row.idProofCopy)}>
             <Download color="secondary" />

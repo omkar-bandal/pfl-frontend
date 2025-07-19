@@ -36,8 +36,9 @@ export function useGetAllInwardRegisters(queryParams?: QueryParams):
 
 export function useGetInwardRegisterForViewById(id: string):
     UseQueryResult<ApiBaseState<IInwardRegister>, ErrorModel> {
+    const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<IInwardRegister>, ErrorModel>({
-        queryKey: ['get-inward-register-for-view-by-id'],
+        queryKey: ['get-inward-register-for-view-by-id', enabled],
         queryFn: () => InwardRegisterServices.getInstance().getInwardRegisterForViewById(id),
         enabled: !!id,
     });
@@ -45,8 +46,9 @@ export function useGetInwardRegisterForViewById(id: string):
 
 export function useGetInwardRegisterForUpdateById(id: string):
     UseQueryResult<ApiBaseState<IInwardRegister>, ErrorModel> {
+    const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<IInwardRegister>, ErrorModel>({
-        queryKey: ['get-inward-register-for-update-by-id'],
+        queryKey: ['get-inward-register-for-update-by-id', enabled],
         queryFn: () => InwardRegisterServices.getInstance().getInwardRegisterForUpdateById(id),
         enabled: !!id,
     });

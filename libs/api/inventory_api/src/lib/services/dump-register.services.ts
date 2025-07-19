@@ -20,21 +20,21 @@ export class DumpRegisterServices extends BaseService {
     }
 
     getDumpRegisterForViewById(id: string): Promise<ApiBaseState<IDumpRegister>> {
-        const url = `${inventoryApiUrl.GET_DUMP_REGISTER_FOR_VIEW_BY_ID}/${id}`;
+        const url = inventoryApiUrl.GET_DUMP_REGISTER_FOR_VIEW_BY_ID(id);
         return this.get(url);
     }
     getDumpRegisterForUpdateById(id: string): Promise<ApiBaseState<IDumpRegister>> {
-        const url = `${inventoryApiUrl.GET_DUMP_REGISTER_FOR_UPDATE_BY_ID}/${id}`;
+        const url = inventoryApiUrl.GET_DUMP_REGISTER_FOR_UPDATE_BY_ID(id);
         return this.get(url);
     }
 
     updateDumpRegister(id: string, data: IDumpRegister): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.UPDATE_DUMP_REGISTER}/${id}`;
+        const url = inventoryApiUrl.UPDATE_DUMP_REGISTER(id);
         return this.patch(url, data);
     }
 
     deleteDumpRegisterById(id: string): Promise<ResultModel> {
-        const url = `${inventoryApiUrl.DELETE_DUMP_REGISTER}/${id}`;
+        const url = inventoryApiUrl.DELETE_DUMP_REGISTER(id);
         return this.delete(url);
     }
 }

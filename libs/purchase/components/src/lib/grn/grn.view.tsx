@@ -16,7 +16,7 @@ import {
   setSelectedVendorPartialData,
   vendorsDataStates,
 } from '@prime-fresh/admin/modules';
-import { queryClient, useActions, useAppDispatch, useAppSelector, usePermission } from '@prime-fresh/modules';
+import { useActions, useAppDispatch, useAppSelector, usePermission } from '@prime-fresh/modules';
 import {
   convertInTitleCase,
   formatAddress,
@@ -37,7 +37,7 @@ export const GRNView = () => {
   const { openDrawer } = useActions();
   const { id } = useParams<{ id: string }>();
   const grnId = id ? id : '';
-  const { data, isLoading } = useGetGRNForViewById(grnId);
+  const { data, isLoading, refetch } = useGetGRNForViewById(grnId);
   const grn = data?.data ? data.data : null;
   console.log('GRN by ID:', grn);
 
@@ -67,43 +67,64 @@ export const GRNView = () => {
 
   const approvalSummary: StepperData[
   ] = [
-      { title: 'Created', subtitle: grn?.createdBy || '', status: 'approved' },
-      { title: 'Verified', subtitle: grn?.approvalSummary?.verified?.name || '', status: grn?.approvalSummary?.verified?.status || 'hold' },
-      { title: 'First Approval', subtitle: grn?.approvalSummary?.firstApproved?.name || '', status: grn?.approvalSummary?.firstApproved?.status || 'hold' },
-      { title: 'Second Approval', subtitle: grn?.approvalSummary?.secondApproved?.name || '', status: grn?.approvalSummary?.secondApproved?.status || 'hold' },
-      { title: 'Third Approval', subtitle: grn?.approvalSummary?.thirdApproved?.name || '', status: grn?.approvalSummary?.thirdApproved?.status || 'hold' },
-      { title: 'First Finalizer', subtitle: grn?.approvalSummary?.firstFinalized?.name || '', status: grn?.approvalSummary?.firstFinalized?.status || 'hold' },
-      { title: 'Second Finalizer', subtitle: grn?.approvalSummary?.secondFinalized?.name || '', status: grn?.approvalSummary?.secondFinalized?.status || 'hold' },
-      { title: 'Completed', status: grn?.approvalSummary?.secondFinalized?.status || 'hold' },
+      {
+        title: 'Created',
+        subtitle: grn?.createdBy || '',
+        status: 'approved'
+      },
+      {
+        title: 'Verified',
+        subtitle: grn?.approvalSummary?.verified?.name || '',
+        status: grn?.approvalSummary?.verified?.status || 'hold'
+      },
+      {
+        title: 'First Approval',
+        subtitle: grn?.approvalSummary?.firstApproved?.name || '',
+        status: grn?.approvalSummary?.firstApproved?.status || 'hold'
+      },
+      {
+        title: 'Second Approval',
+        subtitle: grn?.approvalSummary?.secondApproved?.name || '',
+        status: grn?.approvalSummary?.secondApproved?.status || 'hold',
+        disabled: grn?.approvalSummary?.secondApproved === null ? true : false
+      },
+      {
+        title: 'Third Approval',
+        subtitle: grn?.approvalSummary?.thirdApproved?.name || '',
+        status: grn?.approvalSummary?.thirdApproved?.status || 'hold',
+        disabled: grn?.approvalSummary?.secondApproved === null ? true : false
+      },
+      {
+        title: 'First Finalizer',
+        subtitle: grn?.approvalSummary?.firstFinalized?.name || '',
+        status: grn?.approvalSummary?.firstFinalized?.status || 'hold'
+      },
+      {
+        title: 'Second Finalizer',
+        subtitle: grn?.approvalSummary?.secondFinalized?.name || '',
+        status: grn?.approvalSummary?.secondFinalized?.status || 'hold'
+      },
+      {
+        title: 'Completed',
+        status: grn?.approvalSummary?.secondFinalized?.status || 'hold'
+      },
     ]
   const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(grnId);
-
-  const approveGRN = () => {
+  const changeGRNStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      // documentdef: grn?.documentDef,
-      status: 'approved',
+      status: status,
       reason: reasonForGRNAction,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['get-GRN-for-view-by-id'], exact: false })
-        toast.success(actionRes?.message)
+        toast.success(actionRes?.message ? actionRes.message : `GRN ${status} successfully.`)
+        refetch();
       })
-      .catch(() => toast.error(`${error}`));
-  };
-
-  const rejectGRN = () => {
-    if (grn?.documentDef) {
-      mutateAsync({
-        // documentdef: grn?.documentDef,
-        status: 'REJECT',
-        reason: reasonForGRNAction,
-      });
-    }
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of GRN.'));
   };
 
   return (
     <Container maxWidth="xl">
-      {isLoading ? (
+      {isLoading ? ( 
         <Box sx={{ flex: 1 }}>
           <LinearProgress />
         </Box>
@@ -118,10 +139,21 @@ export const GRNView = () => {
                 label="Approve"
                 icon={<Check fontSize="inherit" />}
                 color="success"
-                onClick={() => approveGRN()}
+                  onClick={() => changeGRNStatus('approved')}
+                  disabled={grn?.overAllStatus === 'reject' ? true : false}
               />
-                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectGRN()} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                <BtnSmall
+                  label="Disapprove"
+                  icon={<Close fontSize="inherit" />}
+                  color="error" onClick={() => changeGRNStatus('reject')}
+                  disabled={grn?.overAllStatus === 'reject' ? true : false}
+                />
+                <BtnSmall
+                  label="Query"
+                  icon={<Message />}
+                  color="warning"
+                  disabled={grn?.overAllStatus === 'reject' ? true : false}
+                />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}
@@ -277,7 +309,7 @@ export const GRNView = () => {
                 </thead>
                 <tbody>
                   {grn?.grnProducts.map((product, index) => (
-                    <tr>
+                    <tr key={index}>
                       <th className={styles['sr-col']} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}>
                         {index}
                       </th>
@@ -298,8 +330,8 @@ export const GRNView = () => {
                       </th>
                     </tr>
                   ))}
-                    {(grn?.grnProducts.length || 0) < 5 && Array(5 - (grn?.grnProducts?.length || 0)).fill(null).map(() => (
-                      <tr className={styles.tableEmptyRows}>
+                    {(grn?.grnProducts.length || 0) < 5 && Array(5 - (grn?.grnProducts?.length || 0)).fill(null).map((_, index) => (
+                      <tr key={index} className={styles.tableEmptyRows}>
                         <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
                         <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>
                         <td className={styles.tableEmptyRows} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}></td>

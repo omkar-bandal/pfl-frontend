@@ -43,11 +43,6 @@ export interface IRFPA {
     remark: string | null;
     overAllStatus?: DocumentStatus;
     approvalSummary?: Partial<ApprovalSummany>;
-    // requestedBy?: string;
-    // requestingDepartment?: string;
-    // baseLocation?: string;
-    // approvalStatus?: string | nul
-    // l;
 }
 
 export interface ChangeStatusResponse {
@@ -63,3 +58,8 @@ export interface GetAllRFPAnumbers {
     rfpaId: string;
     approvalStatus: string;
 }
+
+// requestedBy?: string;
+// requestingDepartment?: string;
+// baseLocation?: string;
+// approvalStatus?: string | null;

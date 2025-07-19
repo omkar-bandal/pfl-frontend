@@ -14,9 +14,12 @@ export const useCustomerCategoryColumns = (): CustomGridColDef[] => {
         {
             field: "name",
             headerName: "Customer Category",
+            headerAlign: 'center',
+            align: 'center',
             flex: 1,
             minWidth: 200,
             isMobileVisible: true,
+            hide: false,
             valueGetter:(value: string) => value ? value : '-',
         },
         {
