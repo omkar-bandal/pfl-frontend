@@ -25,16 +25,16 @@ export type GRNsData = {
     totalExpenditure: number;
     totalPurchaseByFarmer: AmountQuantity;
     totalpurchaseByVendor: AmountQuantity;
-    totalPurchaseByvendorCategoryandsubcategory: VendorCategorySubcategory[];
+    totalPurchaseByvendorCategoryandsubcategory?: VendorCategorySubcategory[];
 };
 
 export type DeliveryChallanData = {
     filterType: string;
     totalChallans: number;
-    totalSaleQtyAndAmount: AmountQuantity;
     totalExpenditure: number;
-    totalSaleQtyAndAmountforCustomerCategory: CustomerCategorySubcategory[];
+    totalSaleQtyAndAmount: AmountQuantity;
     getQtyAndAmountForSecondSale: TotalQtyAmount;
+    totalSaleQtyAndAmountforCustomerCategory?: CustomerCategorySubcategory[];
 };
 
 export type DumpRejectionData = TotalQtyAmount;
@@ -55,3 +55,43 @@ export type DashboardFilterParams = {
     specificDate: string
 }
 
+export const DashboardDataInitValue: DashboardData = {
+    grns: {
+        filterType: '',
+        totalGRNs: 0,
+        totalExpenditure: 0,
+        totalPurchase: {
+            totalQuantityInKg: 0,
+            totalAmount: 0,
+        },
+        totalPurchaseByFarmer: {
+            totalQuantityInKg: 0,
+            totalAmount: 0,
+        },
+        totalpurchaseByVendor: {
+            totalQuantityInKg: 0,
+            totalAmount: 0,
+        },
+    },
+    deliverychallan: {
+        filterType: '',
+        totalChallans: 0,
+        totalExpenditure: 0,
+        totalSaleQtyAndAmount: {
+            totalQuantityInKg: 0,
+            totalAmount: 0
+        },
+        getQtyAndAmountForSecondSale: {
+            totalQuantity: 0,
+            totalAmount: 0
+        },
+    },
+    dump: {
+        totalQuantity: 0,
+        totalAmount: 0
+    },
+    rejection: {
+        totalAmount: 0,
+        totalQuantity: 0
+    }
+}

@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react';
-import { Box, FormControl, Grid2, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box, Grid2 } from '@mui/material';
 import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames } from '@prime-fresh/shared/modules';
 import { useGetDashboardData } from '@prime-fresh/purchase/modules';
-import { DashboardCard } from '../../components/dashboard';
-// import { socket } from '@prime-fresh/common_api';
+import { DashboardCard, PurchaseByProduct } from '../../components/dashboard';
+import { Select } from '@prime-fresh/ui_shared';
+import { DashboardDataInitValue } from '@prime-fresh/purchase_api';
 
+type CardType = 'Total Purchase' | 'Purchase By Vendor' | 'Purchase By Farmer' | 'Total Sale' | 'Total Dump' | 'Total Rejection';
 export const Dashboard = () => {
+  const [selectedCard, setSelectedCard] = useState<CardType>('Total Purchase')
   const [filterParams, setFilterParams] = useState({
     filterType: 'tillDate',
     companyName: '',
@@ -29,13 +32,92 @@ export const Dashboard = () => {
     { value: 'dateRange', label: 'By Date Range' },
     { value: 'specificDate', label: 'By Date' },
   ];
-  const { data } = useGetDashboardData(filterParams);
-  const dashboardData = data?.data ? data.data : null;
+  const { data: dashData } = useGetDashboardData(filterParams);
+  const dashboardData = dashData?.data ? dashData.data : DashboardDataInitValue;
+  const { grns, dump, deliverychallan, rejection } = dashboardData;
+  const { totalPurchase, totalpurchaseByVendor, totalPurchaseByFarmer } = grns;
+  // const { totalSaleQtyAndAmount } = deliverychallan;
+
+  const dashboardCardData = [
+    {
+      label: "Total Purchase",
+      color: "#009933",
+      quantityCount: totalPurchase.totalQuantityInKg || 0,
+      quantityPercent: 100,
+      amountCount: totalPurchase.totalAmount || 0,
+      amountPercent: 100,
+      onClickAction: () => setSelectedCard('Total Purchase')
+    },
+    {
+      label: "Purchase By Farmer",
+      color: "#ff9900",
+      quantityCount: totalPurchaseByFarmer.totalQuantityInKg || 0,
+      quantityPercent:
+        Number((((totalPurchaseByFarmer.totalQuantityInKg || 1) /
+          (totalPurchase.totalQuantityInKg || 1)) *
+          100).toFixed(2)),
+
+      amountCount: totalPurchaseByFarmer.totalAmount || 0,
+      amountPercent:
+        Number((((totalPurchaseByFarmer.totalAmount || 1) /
+          (totalPurchase.totalAmount || 1)) *
+          100).toFixed(2)),
+      onClickAction: () => setSelectedCard('Purchase By Farmer')
+    },
+    {
+      label: "Purchase By Vendor",
+      color: "#99004d",
+      quantityCount: dashboardData?.grns.totalpurchaseByVendor.totalQuantityInKg || 0,
+      quantityPercent:
+        Number(((totalpurchaseByVendor.totalQuantityInKg || 1) /
+          (totalPurchase.totalQuantityInKg || 1)) *
+          100).toFixed(2),
+      amountCount: totalpurchaseByVendor.totalAmount || 0,
+      amountPercent:
+        Number(((totalpurchaseByVendor.totalAmount || 1) /
+          (totalPurchase.totalAmount || 1)) *
+          100).toFixed(2),
+      onClickAction: () => setSelectedCard('Purchase By Vendor')
+    },
+    {
+      label: "Total Sales",
+      quantityCount: deliverychallan?.totalSaleQtyAndAmount.totalQuantityInKg || 0,
+      quantityPercent: 100,
+      amountCount: deliverychallan?.totalSaleQtyAndAmount.totalAmount || 0,
+      amountPercent: 100,
+      color: "#0044cc",
+      onClickAction: () => setSelectedCard('Total Sale')
+    },
+    {
+      label: "Total Dump",
+      color: "#a3a3c2",
+      quantityCount: dump.totalQuantity || 0,
+      quantityPercent:
+        Number(((dump.totalQuantity || 1) / (totalPurchase.totalQuantityInKg || 1)) * 100).toFixed(2),
+      amountCount: dump.totalAmount || 0,
+      amountPercent:
+        Number(((dump.totalAmount || 1) / (totalPurchase.totalAmount || 1)) * 100).toFixed(2),
+      onClickAction: () => setSelectedCard('Total Dump')
+    },
+    {
+      label: "Total Rejection",
+      quantityCount: rejection.totalQuantity || 0,
+      quantityPercent:
+        Number(((rejection.totalQuantity || 1) / (totalPurchase.totalQuantityInKg || 1)) * 100).toFixed(2),
+      amountCount: rejection.totalAmount || 0,
+      amountPercent:
+        Number(((rejection.totalAmount || 1) / (totalPurchase.totalAmount || 1)) * 100).toFixed(2),
+      color: "#ff3333",
+      onClickAction: () => setSelectedCard('Total Rejection')
+    }
+  ]
+
+  console.log('Dashboard Data: ', dashboardData);
   const handleChange = (event: any) => {
     const { name, value } = event.target;
     setFilterParams((prev) => ({ ...prev, [name]: value }));
-    // socket.emit('client:test', 'Client Test request...');
   };
+
   return (
     // isLoading ? (
     //   <Box flex={1}>
@@ -45,182 +127,51 @@ export const Dashboard = () => {
     <Box flex={1}>
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small" fullWidth>
-            <InputLabel id="demo-select-small-label" sx={{ fontSize: '14px' }}>
-              Duration
-            </InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              size="small"
-              name="filterType"
-              value={filterParams.filterType}
-              label="Duration"
-              onChange={(e) => handleChange(e)}
-              sx={{
-                height: '40px',
-                fontSize: '14px',
-                '& .MuiSelect-select': { padding: '6px 10px' },
-              }}
-            >
-              {filtersTypes.map((type) => {
-                return (
-                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
-                    {type.label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small" fullWidth>
-            <InputLabel id="demo-select-small-label" sx={{ fontSize: '14px' }}>
-              Company
-            </InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              size="small"
-              name="companyName"
-              value={filterParams.companyName}
-              label="Company"
-              onChange={(e) => handleChange(e)}
-              sx={{
-                height: '40px',
-                fontSize: '14px',
-                '& .MuiSelect-select': { padding: '6px 10px' },
-              }}
-            >
-              {companies.map((type) => {
-                return (
-                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
-                    {type.label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small" fullWidth>
-            <InputLabel id="demo-select-small-label" sx={{ fontSize: '14px' }}>
-              Location
-            </InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              size="small"
-              name="locationName"
-              value={filterParams.locationName}
-              label="Locations"
-              onChange={(e) => handleChange(e)}
-              sx={{
-                height: '40px',
-                fontSize: '14px',
-                '& .MuiSelect-select': { padding: '6px 10px' },
-              }}
-            >
-              {locations.map((type) => {
-                return (
-                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
-                    {type.label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Grid2>
-      </Grid2>
-      <Grid2 container spacing={1} marginY={1}>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            label="Total Purchase"
-            quantityCount={dashboardData?.grns.totalPurchase.totalQuantityInKg || 0}
-            quantityPercent={100}
-            amountCount={dashboardData?.grns.totalPurchase.totalAmount || 0}
-            amountPercent={100}
-            color="#009933"
+          <Select
+            name='filterType'
+            label='Duration'
+            value={filterParams.filterType}
+            options={filtersTypes}
+            onChange={(e) => handleChange(e)}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            label="Purchase By Farmer"
-            quantityCount={dashboardData?.grns.totalPurchaseByFarmer.totalQuantityInKg || 0}
-            quantityPercent={
-              ((dashboardData?.grns.totalPurchaseByFarmer.totalQuantityInKg || 1) /
-                (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) *
-              100
-            }
-            amountCount={dashboardData?.grns.totalPurchaseByFarmer.totalAmount || 0}
-            amountPercent={
-              ((dashboardData?.grns.totalPurchaseByFarmer.totalAmount || 1) /
-                (dashboardData?.grns.totalPurchase.totalAmount || 1)) *
-              100
-            }
-            color="#ff9900"
+          <Select
+            name='filterParams.companyName'
+            label='Company Name'
+            value={filterParams.companyName}
+            options={companies}
+            onChange={(e) => handleChange(e)}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            label="Purchase By Vendor"
-            quantityCount={dashboardData?.grns.totalpurchaseByVendor.totalQuantityInKg || 0}
-            quantityPercent={
-              ((dashboardData?.grns.totalpurchaseByVendor.totalQuantityInKg || 1) /
-                (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) *
-              100
-            }
-            amountCount={dashboardData?.grns.totalpurchaseByVendor.totalAmount || 0}
-            amountPercent={
-              ((dashboardData?.grns.totalpurchaseByVendor.totalAmount || 1) /
-                (dashboardData?.grns.totalPurchase.totalAmount || 1)) *
-              100
-            }
-            color="#99004d"
-          />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            label="Total Sales"
-            quantityCount={dashboardData?.deliverychallan.totalSaleQtyAndAmount.totalQuantityInKg || 0}
-            quantityPercent={100}
-            amountCount={dashboardData?.deliverychallan.totalSaleQtyAndAmount.totalAmount || 0}
-            amountPercent={100}
-            color="#0044cc"
-          />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            label="Total Dump"
-            quantityCount={dashboardData?.dump.totalQuantity || 0}
-            quantityPercent={
-              ((dashboardData?.dump.totalQuantity || 1) / (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) *
-              100
-            }
-            amountCount={dashboardData?.dump.totalAmount || 0}
-            amountPercent={
-              ((dashboardData?.dump.totalAmount || 1) / (dashboardData?.grns.totalPurchase.totalAmount || 1)) * 100
-            }
-            color="#a3a3c2"
-          />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <DashboardCard
-            label="Total Rejection"
-            quantityCount={dashboardData?.rejection.totalQuantity || 0}
-            quantityPercent={
-              ((dashboardData?.rejection.totalQuantity || 1) /
-                (dashboardData?.grns.totalPurchase.totalQuantityInKg || 1)) *
-              100
-            }
-            amountCount={dashboardData?.rejection.totalAmount || 0}
-            amountPercent={
-              ((dashboardData?.rejection.totalAmount || 1) / (dashboardData?.grns.totalPurchase.totalAmount || 1)) * 100
-            }
-            color="#ff3333"
+          <Select
+            name='locationName'
+            label='Location'
+            value={filterParams.locationName}
+            options={locations}
+            onChange={(e) => handleChange(e)}
           />
         </Grid2>
       </Grid2>
+      <Grid2 container>
+        <Grid2 container spacing={1} marginY={1}>
+          {dashboardCardData.map(data => (
+            <Grid2 size={{ xs: 12, md: 4 }}>
+              <DashboardCard
+                label={data.label}
+                color={data.color}
+                quantityCount={data.quantityCount}
+                quantityPercent={data.quantityPercent}
+                amountCount={data.amountCount}
+                amountPercent={data.amountPercent}
+                onClickAction={data.onClickAction}
+              />
+            </Grid2>
+          ))}
+        </Grid2>
+      </Grid2>
+      <PurchaseByProduct />
     </Box>
   );
 };

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useGetDCTypeStockTransferForViewById } from '@prime-fresh/purchase/modules';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { Box, LinearProgress, Typography, Container, Grid, TextField, Grid2, IconButton } from '@mui/material';
 import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
 import styles from './dc-type-stock-transfer.module.css';
@@ -57,7 +57,7 @@ export const DCTypeStockTransferView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(dcId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(dcId);
   const approveDCTypeStockTransfer = () => {
     mutateAsync({
       status: 'approved',

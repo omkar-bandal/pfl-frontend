@@ -67,6 +67,7 @@ export const EmployeeForm = () => {
     { label: 'Office Information', isDisabled: false },
     { label: 'Permission Configuration', isDisabled: formik.values.department === 'admin' ? true : false },
   ];
+  console.log('Emp Init Value: ', EmployeeInitValue);
   const handleSubmit = (values: any) => {
     employeeId === ''
       ? mutatePost(values)

@@ -26,10 +26,17 @@ import {
   ApprovalRequest,
 } from '@prime-fresh/common_api';
 
-export const useUpdateDocumentStatus = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+export const useUpdateDocStatusWithThreeApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
   return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
-    mutationKey: ['update-doc-status', id],
-    mutationFn: (data) => SharedService.getInstance().updateDocumentStatus(id, data),
+    mutationKey: ['update-doc-status-with-three-approval', id],
+    mutationFn: (data) => SharedService.getInstance().updateDocStatusWithThreeApproval(id, data),
+  });
+};
+
+export const useUpdateDocStatusWithTwoApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+  return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
+    mutationKey: ['update-doc-status-with-two-approval', id],
+    mutationFn: (data) => SharedService.getInstance().updateDocStatusWithTwoApproval(id, data),
   });
 };
 
@@ -37,6 +44,11 @@ export const useGetUserNotifications = (): UseQueryResult<ApiBaseState<Notificat
   return useQuery<ApiBaseState<Notification[]>, ErrorModel>({
     queryKey: ['user-notifications'],
     queryFn: () => SharedService.getInstance().getAllUserNotifications(),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }
 

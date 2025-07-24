@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useGetRFPAForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions, usePermission } from '@prime-fresh/modules';
 import { useReactToPrint } from 'react-to-print';
 
@@ -85,7 +85,7 @@ export const RFPAView = () => {
   const signatureLabels = ['Created By', 'Approved By', 'Receiver Sign'];
   const rfpaSourceField = rfpa?.source === 'vendor' ? rfpaVendorField : rfpaFarmerField;
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(rfpaId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(rfpaId);
   const changeRFPAStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

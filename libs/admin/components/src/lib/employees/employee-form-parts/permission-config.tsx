@@ -7,10 +7,11 @@ import { FieldArray, useFormikContext } from 'formik';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 
 export const PermissionConfiguration = memo(({ documentDetails }: { documentDetails: GetDocumentDetails[] }) => {
-  const { values, handleChange } = useFormikContext<IEmployee>();
-
+  const { values, handleChange, errors } = useFormikContext<IEmployee>();
+  console.log('Doc Details: ', documentDetails);
   return (
     <Box flex={1}>
+      {Boolean(errors.permissions) && <Typography variant='caption' color="error">Permission array is isRequired</Typography>}
       <FieldArray name="permissions">
         {() => (
           <TableContainer component={Box}>

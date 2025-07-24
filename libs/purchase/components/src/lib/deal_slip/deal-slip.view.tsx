@@ -5,7 +5,7 @@ import { useGetDealSlipForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DataViewer, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { dealSlipViewConfig } from './deal-slip.view-config';
 import { Check, Close, Message, ChevronRight } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions } from '@prime-fresh/modules';
 // import { usePermission } from '@prime-fresh/modules';
 
@@ -36,7 +36,7 @@ export const DealSlipView = () => {
     },
   ];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(dealslipId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(dealslipId);
   const changeDealSlipStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

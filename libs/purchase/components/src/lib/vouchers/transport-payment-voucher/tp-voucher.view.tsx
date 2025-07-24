@@ -6,7 +6,7 @@ import { BtnSmall, PageTitle, DrawerContainer, InfoTooltip, VerticalStepper, Ste
 import { useGetTransportPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
 import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
 import styles from './tp-voucher.module.css';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const TransportPaymentVoucherView = () => {
@@ -98,7 +98,7 @@ export const TransportPaymentVoucherView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(tpVoucherId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(tpVoucherId);
   const approveTPVoucher = () => {
     mutateAsync({
       status: 'approved',

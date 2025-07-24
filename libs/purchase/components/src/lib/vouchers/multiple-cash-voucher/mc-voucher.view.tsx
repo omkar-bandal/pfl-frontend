@@ -6,7 +6,7 @@ import { PageTitle, BtnSmall, StepperData, toast, DrawerContainer, VerticalStepp
 import { useGetMultiCashVoucherForViewById } from '@prime-fresh/purchase/modules';
 import styles from './mc-voucher.module.css';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const MultipleCashVoucherView = () => {
@@ -81,7 +81,7 @@ export const MultipleCashVoucherView = () => {
     { title: 'Amount In Words:', value: convertInTitleCase(mcVoucher?.amtWords || '') },
   ];
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(mcVoucherId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(mcVoucherId);
   const approveMCVoucher = () => {
     mutateAsync({
       status: 'approved',

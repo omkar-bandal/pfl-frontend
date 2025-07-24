@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import styles from './pmp-voucher.module.css';
 import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
-import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { Box, Grid, LinearProgress, Typography, TextField, Container, IconButton } from '@mui/material';
 import { useGetPackingMeterialPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, formatCurrency, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
@@ -90,7 +90,7 @@ export const PackingMaterialPaymentVoucherView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(pmpVoucherId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(pmpVoucherId);
   const approvePMPVoucher = () => {
     mutateAsync({
       status: 'approved',

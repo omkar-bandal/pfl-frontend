@@ -5,7 +5,7 @@ import { useGetLaborPaymentVoucherForViewById } from '@prime-fresh/purchase/modu
 import { useReactToPrint } from 'react-to-print';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import styles from './lp-voucher.module.css';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
 import { useActions, usePermission } from '@prime-fresh/modules';
 
@@ -94,7 +94,7 @@ export const LabourPaymentVoucherView = () => {
         status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
       },
     ]
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(lpVoucherId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(lpVoucherId);
 
   const approveLPVoucher = () => {
     mutateAsync({

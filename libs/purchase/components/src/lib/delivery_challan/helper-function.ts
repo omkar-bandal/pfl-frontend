@@ -1,36 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GetPackagingMaterial } from '@prime-fresh/admin_api';
-import {
-  DeliveryChallanProducts,
-  GetDeliveryChallan,
-  PostDeliveryChallan,
-} from '@prime-fresh/purchase_api';
+import { IDeliveryChallanProduct } from '@prime-fresh/purchase_api';
 import { numToWords } from '@prime-fresh/shared/modules';
 
-export const normalizeData = (
-  data: GetDeliveryChallan
-): PostDeliveryChallan => {
-  return {
-    ...data,
-    grnNo: data.grnNo ? data.grnNo.id : null,
-    companyName: data.companyName ? data.companyName.id : null,
-    offices: data.offices ? data.offices.id : null,
-    partyName:
-      typeof data.partyName !== 'string' && data.partyName !== null
-        ? data.partyName?.id
-        : null,
-    fromLocation: data.fromLocation ? data.fromLocation.id : null,
-    toLocation: data.toLocation ? data.toLocation.id : null,
-    deliveryChallanProducts: data.deliveryChallanProducts.map((product) => ({
-      ...product,
-      productName: product.productName ? product.productName.id : null,
-      uom: product.uom ? product.uom.id : null,
-      saleUoM: product.saleUoM ? product.saleUoM.id : null,
-      packagingMaterial: product.packagingMaterial ? product.packagingMaterial.id : null,
-      packagingMaterialUoM: product.packagingMaterialUoM ? product.packagingMaterialUoM.id : null,
-    })),
-  };
-};
+// export const normalizeData = (
+//   data: GetDeliveryChallan
+// ): PostDeliveryChallan => {
+//   return {
+//     ...data,
+//     grnNo: data.grnNo ? data.grnNo.id : null,
+//     companyName: data.companyName ? data.companyName.id : null,
+//     offices: data.offices ? data.offices.id : null,
+//     partyName:
+//       typeof data.partyName !== 'string' && data.partyName !== null
+//         ? data.partyName?.id
+//         : null,
+//     fromLocation: data.fromLocation ? data.fromLocation.id : null,
+//     toLocation: data.toLocation ? data.toLocation.id : null,
+//     deliveryChallanProducts: data.deliveryChallanProducts.map((product) => ({
+//       ...product,
+//       productName: product.productName ? product.productName.id : null,
+//       uom: product.uom ? product.uom.id : null,
+//       saleUoM: product.saleUoM ? product.saleUoM.id : null,
+//       packagingMaterial: product.packagingMaterial ? product.packagingMaterial.id : null,
+//       packagingMaterialUoM: product.packagingMaterialUoM ? product.packagingMaterialUoM.id : null,
+//     })),
+//   };
+// };
 
 export const handleProductChange = (
   event: React.ChangeEvent<HTMLInputElement>,
@@ -40,7 +36,7 @@ export const handleProductChange = (
   const { name, value } = event.target;
 
   // Identify the field name dynamically (last part of the field name after the dot)
-  const fieldName = name.split('.').pop() as keyof DeliveryChallanProducts;
+  const fieldName = name.split('.').pop() as keyof IDeliveryChallanProduct;
 
   if (!fieldName) return; // Prevent invalid updates if fieldName is not found
 
@@ -96,19 +92,19 @@ export const handleProductChange = (
   );
 
   // Recalculate amount based on quantity and unitPrice
-  product.amount = (product.quantity || 0) * (product.unitPrice || 0);
+  product.amount = (Number(product.quantity) || 0) * (Number(product.unitPrice) || 0);
   formik.setFieldValue(
     `deliveryChallanProducts.${index}.amount`,
-    product.amount
+    Number(product.amount)
   );
 
   // Recalculate netWeight (grossWeight - packingMaterialWeight in kg)
   product.netWeight =
-    (product.grossWeight || 0) -
-    (product.packagingMaterialTotalWeight || 0) / 1000; // convert grams to kg
+    (Number(product.grossWeight) || 0) -
+    (Number(product.packagingMaterialTotalWeight) || 0) / 1000; // convert grams to kg
   formik.setFieldValue(
     `deliveryChallanProducts.${index}.netWeight`,
-    product.netWeight
+    Number(product.netWeight)
   );
 
   // Calculate the packaging material total amount across all products
@@ -143,7 +139,7 @@ export const handleProductChange = (
     (sum, prod) => sum + (prod.amount || 0),
     0
   );
-  formik.setFieldValue('totalProductAmount', totalProductAmount); // Update total amount
+  formik.setFieldValue('totalProductAmount', Number(totalProductAmount)); // Update total amount
   formik.setFieldValue('totalAmtInWords', numToWords(totalProductAmount));
 };
 

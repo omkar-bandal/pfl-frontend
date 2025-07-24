@@ -182,7 +182,7 @@ export const DCTypeCustomerForm = () => {
             <Grid2 size={{ xs: 12 }}>
               <TextInput
                 isRequired={false}
-                isReadOnly={false}
+                  isReadOnly={true}
                 name="customerShippingAddress"
                 label="Shipping Address"
                 value={customerShippingAddress}
@@ -191,7 +191,7 @@ export const DCTypeCustomerForm = () => {
             <Grid2 size={{ xs: 12 }}>
               <TextInput
                 isRequired={false}
-                isReadOnly={false}
+                  isReadOnly={true}
                 name="customerBillingAddress"
                 label="Billing Address"
                 value={customerBillingAddress}

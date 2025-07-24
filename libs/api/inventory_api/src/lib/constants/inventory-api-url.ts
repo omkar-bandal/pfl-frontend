@@ -98,7 +98,7 @@ export const inventoryApiUrl = {
       return `/vehicleDispatches/`;
     }
   },
-  GET_VEHICLE_DISPATCH_REGISTER_FOR_VIEW_BY_ID: (id: string) => `/vehicleDispatches/${id}`,
+  GET_VEHICLE_DISPATCH_REGISTER_FOR_VIEW_BY_ID: (id: string) => `/vehicleDispatches/view/${id}`,
   GET_VEHICLE_DISPATCH_REGISTER_FOR_UPDATE_BY_ID: (id: string) => `/vehicleDispatches/${id}`,
   UPDATE_VEHICLE_DISPATCH_REGISTER: (id: string) => `/vehicleDispatches/${id}`,
   DELETE_VEHICLE_DISPATCH_REGISTER: (id: string) => `/vehicleDispatches/${id}`,

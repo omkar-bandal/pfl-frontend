@@ -1,5 +1,5 @@
 import { Grid2 } from "@mui/material"
-import { TextInput } from "../form";
+import { TextInput } from "../formik-form";
 import { useAppSelector } from "@prime-fresh/modules";
 import { vendorsDataStates } from "@prime-fresh/admin/modules";
 import { displayAddress } from "@prime-fresh/purchase/modules";

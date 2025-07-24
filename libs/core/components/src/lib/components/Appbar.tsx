@@ -28,7 +28,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
   const { data } = useGetUserNotifications();
-  const noti = React.useMemo(() => data?.data ? data.data.map(noti => noti.message) : [], [data]);
+  const noti = React.useMemo(() => data?.data ? data.data.map(noti => noti.message).reverse() : [], [data]);
 
   React.useEffect(() => {
     // socket.on('newNotification', ({ message, userId }) => {
@@ -39,7 +39,6 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   }, [addNotification, noti, setNotifications]);
 
   const notifications = useAppSelector(notificationsState);
-  console.log("Notifications: ", notifications);
 
   const handleDrawerToggle = () => {
     if (!isSidebarClosing) {

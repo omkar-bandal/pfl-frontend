@@ -1,4 +1,4 @@
-export * from './lib/form';
+export * from './lib/formik-form';
 export * from './lib/data_table/components/TableToolBar';
 export * from './lib/preview_page';
 export * from './lib/notification/ToastProvider';

@@ -6,9 +6,9 @@ import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import styles from './dc-type-customer.module.css';
-import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
 import { Check, ChevronRight, Close, Download, InsertDriveFile, Message } from '@mui/icons-material';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const DCTypeCustomerView = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +16,7 @@ export const DCTypeCustomerView = () => {
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
   const { canDownload } = usePermission('delivery-challan');
-  const { data, isLoading } = useGetDCTypeCustomerForViewById(dcId);
+  const { data, isLoading, refetch } = useGetDCTypeCustomerForViewById(dcId);
   const dcTypeCustomerData = data?.data ? data.data : null;
   console.log('DC Type Customer Data: ', dcTypeCustomerData);
 
@@ -49,28 +49,17 @@ export const DCTypeCustomerView = () => {
     { title: 'Approved', subtitle: dcTypeCustomerData?.approvalSummary?.secondApproved?.name || '', status: dcTypeCustomerData?.approvalSummary?.secondApproved?.status || 'hold' },
     { title: 'Completed', status: dcTypeCustomerData?.overAllStatus || 'hold' },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(dcId);
-  const approveDCTypeCustomer = () => {
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dcId);
+  const changeDCTypeCustomerStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        toast.success(actionRes?.message ? actionRes.message : `Delivery Challan / Proforma Inv. ${status} successfully.`)
+        refetch();
       })
-      .catch(() => toast.error(`${error}`));
-  };
-
-  const rejectDCTypeCustomer = () => {
-    mutateAsync({
-      status: 'reject',
-      reason: reason,
-    }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
-    })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of delivery challan / proforma inv.'));
   };
   return (
     <Container maxWidth="xl">
@@ -85,8 +74,8 @@ export const DCTypeCustomerView = () => {
               <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery Challan Only For Customer Type" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 8 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveDCTypeCustomer()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectDCTypeCustomer()} />
+                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDCTypeCustomerStatus('approved')} />
+                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDCTypeCustomerStatus('reject')} />
               <BtnSmall label="Query" icon={<Message />} color="warning" />
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />

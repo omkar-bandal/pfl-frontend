@@ -193,8 +193,8 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       width: 130,
       renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus);
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+        const status = convertInTitleCase(params.row.overAllStatus || '');
+        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus || '') }} />
       },
     },
     ...(canEdit

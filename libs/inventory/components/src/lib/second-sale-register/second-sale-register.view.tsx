@@ -5,7 +5,7 @@ import { BtnSmall, DataViewer, DrawerContainer, InfoTooltip, PageTitle, StepperD
 import { useParams } from 'react-router-dom';
 import { secondSaleRegisterViewConfig } from './second-sale-register.view-config';
 import { Check, ChevronRight, Close, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useState } from 'react';
 import { useActions } from '@prime-fresh/modules';
 
@@ -38,7 +38,7 @@ export const SecondSaleRegisterView = () => {
       status: secondSaleData?.approvalSummary?.secondApproved?.status || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(secondSaleId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(secondSaleId);
   const changeSecondSaleStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

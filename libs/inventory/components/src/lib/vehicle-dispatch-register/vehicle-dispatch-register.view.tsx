@@ -6,7 +6,7 @@ import { vehicleDispatchRegisterViewConfig } from './vehicle-dispatch-register.v
 import { useGetVehicleDispatchRegisterForViewById } from '@prime-fresh/inventory/modules';
 import { Check, Close, Message, ChevronRight } from '@mui/icons-material';
 import { useActions } from '@prime-fresh/modules';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useState } from 'react';
 
 export const VehicleDispatchRegisterView = () => {
@@ -29,16 +29,11 @@ export const VehicleDispatchRegisterView = () => {
       status: vehicleDispatchData?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
-      title: 'Approved',
-      subtitle: vehicleDispatchData?.approvalSummary?.secondApproved?.name || '',
-      status: vehicleDispatchData?.approvalSummary?.secondApproved?.status || 'hold'
-    },
-    {
       title: 'Completed',
-      status: vehicleDispatchData?.approvalSummary?.secondApproved?.status || 'hold'
+      status: vehicleDispatchData?.overAllStatus || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(vehicleDispatchId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(vehicleDispatchId);
   const changeVehicleDispatchStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

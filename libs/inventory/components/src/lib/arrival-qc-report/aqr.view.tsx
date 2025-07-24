@@ -7,7 +7,7 @@ import React, { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useActions, usePermission } from '@prime-fresh/modules';
 import styles from './aqr.module.css';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 
 export const AQRView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ export const AQRView = () => {
     { title: 'Approved', subtitle: aqrData?.approvalSummary?.firstApproved?.name || '', status: aqrData?.approvalSummary?.firstApproved?.status || 'hold' },
     { title: 'Completed', status: aqrData?.overAllStatus || 'hold' },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(aqrId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(aqrId);
   const changeAQRStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

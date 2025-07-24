@@ -32,9 +32,15 @@ export class SharedService extends BaseService {
     return this._instance || (this._instance = new this());
   }
   //Approval
-  updateDocumentStatus(id: string, data: ApprovalRequest): Promise<ResultModel> {
+  updateDocStatusWithThreeApproval(id: string, data: ApprovalRequest): Promise<ResultModel> {
     console.log('Document Id:', id)
-    const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS(id);
+    const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS_THREE_LEVEL_APPROVAL(id);
+    return this.patch(url, data);
+  }
+
+  updateDocStatusWithTwoApproval(id: string, data: ApprovalRequest): Promise<ResultModel> {
+    console.log('Document Id:', id)
+    const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS_TWO_LEVEL_APPROVAL(id);
     return this.patch(url, data);
   }
 

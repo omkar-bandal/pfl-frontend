@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { eodReportViewConfig } from './eod-report.view-config';
 import { useGetEODReportForViewById } from '@prime-fresh/inventory/modules';
 import { Check, ChevronRight, Close, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions } from '@prime-fresh/modules';
 
 export const EODReportView = () => {
@@ -37,7 +37,7 @@ export const EODReportView = () => {
       status: eodReportData?.approvalSummary?.secondApproved?.status || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(eodId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(eodId);
   const changeEoDReportStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

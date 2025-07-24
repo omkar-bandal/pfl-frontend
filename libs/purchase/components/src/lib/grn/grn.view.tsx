@@ -23,7 +23,7 @@ import {
   getDocStatusColor,
   useGetFarmersPartialData,
   useGetVendorsPartialData,
-  useUpdateDocumentStatus,
+  useUpdateDocStatusWithThreeApproval,
 } from '@prime-fresh/shared/modules';
 import { images } from '@prime-fresh/assets';
 import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
@@ -109,7 +109,7 @@ export const GRNView = () => {
         status: grn?.approvalSummary?.secondFinalized?.status || 'hold'
       },
     ]
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(grnId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(grnId);
   const changeGRNStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

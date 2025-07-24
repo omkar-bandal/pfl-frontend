@@ -7,7 +7,8 @@ export const sharedApiUrls = {
   GET_NOTIFICATIONS_BY_USER: `/notification/getbyuserid`,
 
   //Approval
-  UPDATE_DOCUMENT_STATUS: (id: string) => `/documents/update/${id}`,
+  UPDATE_DOCUMENT_STATUS_THREE_LEVEL_APPROVAL: (id: string) => `/documents/update/${id}`,
+  UPDATE_DOCUMENT_STATUS_TWO_LEVEL_APPROVAL: (id: string) => `/documents/updatesecondlevel/${id}`,
 
   //Stock
   GET_ALL_STOCK: (queryParams?: QueryParams) => {

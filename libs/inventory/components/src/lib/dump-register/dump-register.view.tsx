@@ -4,7 +4,7 @@ import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, 
 import { useGetDumpRegisterForViewById } from '@prime-fresh/inventory/modules';
 import { useParams } from 'react-router-dom';
 import styles from './dump-register.module.css';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
 import { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
@@ -52,7 +52,7 @@ export const DumpRegisterView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Approved By', 'Approved By'];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(dumpRegiId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dumpRegiId);
   const changeDumpRegisterStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

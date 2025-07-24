@@ -4,7 +4,7 @@ import { useGetInwardRegisterForViewById } from '@prime-fresh/inventory/modules'
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useParams } from 'react-router-dom';
 import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
-import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocumentStatus } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import React, { useRef, useState } from 'react';
 import styles from './inwared-register.module.css';
 import { useActions, usePermission } from '@prime-fresh/modules';
@@ -77,7 +77,7 @@ export const InwardRegisterView = () => {
     { title: 'Approved', subtitle: inwardData?.approvalSummary?.firstApproved?.name || '', status: inwardData?.approvalSummary?.firstApproved?.status || 'hold' },
     { title: 'Completed', status: inwardData?.overAllStatus || 'hold' },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocumentStatus(inwardId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(inwardId);
   const changeInwardRegisterStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,

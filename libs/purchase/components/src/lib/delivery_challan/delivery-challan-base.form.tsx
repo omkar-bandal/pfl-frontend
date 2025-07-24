@@ -256,7 +256,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                         isRequired={true}
                         name={`deliveryChallanProducts.${index}.quantity`}
                         label="Quantity"
-                        value={formik.values.deliveryChallanProducts[index].quantity || ''}
+                        value={Number(formik.values.deliveryChallanProducts[index].quantity) || ''}
                         handleChange={(event) => handleProductChange(event, index, formik)}
                       />
                     </Grid2>
@@ -266,7 +266,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                         isRequired={true}
                         name={`deliveryChallanProducts.${index}.unitPrice`}
                         label="Unit Price"
-                        value={formik.values.deliveryChallanProducts[index].unitPrice || ''}
+                        value={Number(formik.values.deliveryChallanProducts[index].unitPrice) || ''}
                         handleChange={(event) => handleProductChange(event, index, formik)}
                         slotProps={{
                           input: {
@@ -281,7 +281,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
                         isReadOnly={true}
                         name={`deliveryChallanProducts.${index}.amount`}
                         label="Amount"
-                        value={formik.values.deliveryChallanProducts[index].amount}
+                        value={Number(formik.values.deliveryChallanProducts[index].amount)}
                         slotProps={{
                           input: {
                             endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -359,7 +359,7 @@ export const DeliveryChallanBaseForm: FC<DeliveryChallanBaseFormProp> = (props) 
           isReadOnly={true}
           name="totalProductAmount"
           label="Total Product Amount"
-          value={formik.values.totalProductAmount}
+          value={Number(formik.values.totalProductAmount)}
           slotProps={{
             input: {
               endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
