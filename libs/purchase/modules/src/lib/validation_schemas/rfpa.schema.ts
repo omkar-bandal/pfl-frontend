@@ -57,7 +57,7 @@ export const rfpaSchema = yup.object().shape({
     .object()
     .shape({
       paymentMode: yup.string().required('Payment Mode is required'),
-      advancePaidAmt: yup.number().nullable().positive('Amount must be positive'),
+      advancePaidAmt: yup.number().nullable().min(0, 'Amount must be positive'),
       creditPeriod: yup.number().required('Credit Period is required').min(0, 'Credit Period must be positive'),
       paymentDate: dateSchema.required('Payment Date is required'),
       paymentTerms: yup.number().required('Payment Terms is required').positive('Payment Terms must be positive'),

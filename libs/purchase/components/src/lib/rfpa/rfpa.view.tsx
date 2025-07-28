@@ -5,9 +5,9 @@ import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography
 import { useParams } from 'react-router-dom';
 import { useGetRFPAForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
-import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 import { useReactToPrint } from 'react-to-print';
 
 export const RFPAView = () => {
@@ -23,11 +23,25 @@ export const RFPAView = () => {
   console.log('RFPA data: ', rfpa);
   const { data: companyData, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const company = companyData?.data ? companyData.data.find((comp) => comp.name === rfpa?.companyName) : null;
-
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
+  console.log('Username: ', username, 'Created By', rfpa?.createdBy);
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: rfpa?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Approved', subtitle: rfpa?.approvalSummary?.firstApproved?.name || '', status: rfpa?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Completed', status: rfpa?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: rfpa?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Approved',
+      subtitle: rfpa?.approvalSummary?.firstApproved?.name || '',
+      description: rfpa?.approvalSummary?.firstApproved?.reason || '',
+      status: rfpa?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: rfpa?.overAllStatus || 'hold'
+    },
   ];
   const rfpaLocField = [
     { title: 'Created Date:', value: rfpa?.createdDate || '' },
@@ -85,7 +99,7 @@ export const RFPAView = () => {
   const signatureLabels = ['Created By', 'Approved By', 'Receiver Sign'];
   const rfpaSourceField = rfpa?.source === 'vendor' ? rfpaVendorField : rfpaFarmerField;
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(rfpaId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithOneApproval(rfpaId);
   const changeRFPAStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -94,6 +108,7 @@ export const RFPAView = () => {
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `Request For Purchase Approval ${status} successfully.`)
         refetch();
+        setReason('');
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of RFPA.'));
   };
@@ -110,10 +125,30 @@ export const RFPAView = () => {
               <PageTitle pagetitle="Request For Purchase Approval" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeRFPAStatus('approved')} />
-                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeRFPAStatus('reject')} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
-                {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />}
+                {rfpa?.createdBy !== username &&
+                  <BtnSmall
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
+                    disabled={isPending && !isError}
+                    onClick={() => changeRFPAStatus('approved')}
+                  />}
+                {rfpa?.createdBy !== username &&
+                  <BtnSmall
+                    label="Disapprove"
+                    icon={<Close fontSize="inherit" />}
+                    color="error"
+                    disabled={isPending && !isError}
+                    onClick={() => changeRFPAStatus('reject')}
+                  />}
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
+                {canDownload &&
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />}
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" component="div">

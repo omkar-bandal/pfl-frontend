@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { BtnSmall, PageTitle, DrawerContainer, InfoTooltip, VerticalStepper, StepperData, toast } from '@prime-fresh/ui_shared';
 import { useGetTransportPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
-import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
+import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 import styles from './tp-voucher.module.css';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions, usePermission } from '@prime-fresh/modules';
@@ -33,33 +33,39 @@ export const TransportPaymentVoucherView = () => {
     {
       title: 'Verified',
       subtitle: tpVoucher?.approvalSummary?.verified?.name || '',
+      description: tpVoucher?.approvalSummary?.verified?.reason || '',
       status: tpVoucher?.approvalSummary?.verified?.status || 'hold'
     },
     {
       title: 'First Approval',
       subtitle: tpVoucher?.approvalSummary?.firstApproved?.name || '',
+      description: tpVoucher?.approvalSummary?.firstApproved?.reason || '',
       status: tpVoucher?.approvalSummary?.firstApproved?.status || 'hold',
     },
     {
       title: 'Second Approval',
       subtitle: tpVoucher?.approvalSummary?.secondApproved?.name || '',
+      description: tpVoucher?.approvalSummary?.secondApproved?.reason || '',
       status: tpVoucher?.approvalSummary?.secondApproved?.status || 'hold',
       disabled: tpVoucher?.approvalSummary?.secondApproved === null ? true : false
     },
     {
       title: 'Third Approval',
       subtitle: tpVoucher?.approvalSummary?.thirdApproved?.name || '',
+      description: tpVoucher?.approvalSummary?.thirdApproved?.reason || '',
       status: tpVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
       disabled: tpVoucher?.approvalSummary?.secondApproved === null ? true : false
     },
     {
       title: 'First Finalizer',
       subtitle: tpVoucher?.approvalSummary?.firstFinalized?.name || '',
+      description: tpVoucher?.approvalSummary?.firstFinalized?.reason || '',
       status: tpVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
     },
     {
       title: 'Second Finalizer',
       subtitle: tpVoucher?.approvalSummary?.secondFinalized?.name || '',
+      description: tpVoucher?.approvalSummary?.secondFinalized?.reason || '',
       status: tpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
     },
     {
@@ -98,7 +104,7 @@ export const TransportPaymentVoucherView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(tpVoucherId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithThreeApproval(tpVoucherId);
   const approveTPVoucher = () => {
     mutateAsync({
       status: 'approved',
@@ -135,9 +141,22 @@ export const TransportPaymentVoucherView = () => {
               <PageTitle pagetitle="Transport Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveTPVoucher()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectTPVoucher()} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                <BtnSmall
+                  label="Approve"
+                  icon={<Check fontSize="inherit" />}
+                  color="success"
+                  onClick={() => approveTPVoucher()}
+                  disabled={isPending && !isError}
+                />
+                <BtnSmall
+                  label="Reject"
+                  icon={<Close
+                    fontSize="inherit" />}
+                  color="error"
+                  onClick={() => rejectTPVoucher()}
+                  disabled={isPending && !isError}
+                />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}

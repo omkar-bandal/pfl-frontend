@@ -1,5 +1,5 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import { Layout, SignIn } from '@prime-fresh/components';
+import { AllNotifications, Layout, SignIn } from '@prime-fresh/components';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
 import { PurchaseRoutes } from './purchase.routes';
 import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
@@ -70,6 +70,10 @@ export const HostRoutes = createBrowserRouter([
       {
         path: sharedRoutes.DASHBOARD,
         element: <Dashboard />,
+      },
+      {
+        path: sharedRoutes.ALL_NOTIFICATIONS,
+        element: <AllNotifications />,
       },
       {
         path: sharedRoutes.GET_ALL_STOCK,

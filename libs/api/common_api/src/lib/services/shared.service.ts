@@ -15,8 +15,8 @@ import {
   GetDepartment,
   GetLevels,
   GetProduct,
+  INotification,
   LocationPartialData,
-  Notification,
   PackagingMaterialPartialData,
   ProductPartialData,
   ResultModel,
@@ -44,8 +44,14 @@ export class SharedService extends BaseService {
     return this.patch(url, data);
   }
 
+  updateDocStatusWithOneApproval(id: string, data: ApprovalRequest): Promise<ResultModel> {
+    console.log('Document Id:', id)
+    const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS_ONE_LEVEL_APPROVAL(id);
+    return this.patch(url, data);
+  }
+
   //Notifications
-  getAllUserNotifications(): Promise<ApiBaseState<Notification[]>> {
+  getAllUserNotifications(): Promise<ApiBaseState<INotification[]>> {
     const url = sharedApiUrls.GET_NOTIFICATIONS_BY_USER;
     return this.get(url);
   }

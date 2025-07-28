@@ -38,3 +38,11 @@ export type ISignOutRequest = ITokenRes;
 export interface ISignOutResponse {
     message: string,
 }
+
+export interface IForgetPasswordReq {
+    uid: string;
+}
+
+export interface IResetPasswordReq {
+    email: string;
+}

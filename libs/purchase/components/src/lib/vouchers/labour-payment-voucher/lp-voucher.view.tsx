@@ -6,8 +6,8 @@ import { useReactToPrint } from 'react-to-print';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import styles from './lp-voucher.module.css';
 import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
-import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const LabourPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -20,6 +20,8 @@ export const LabourPaymentVoucherView = () => {
   const { data, isLoading, refetch } = useGetLaborPaymentVoucherForViewById(lpVoucherId);
   const lpVoucher = data?.data ? data.data : null;
   console.log(lpVoucher);
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function createData(srNo: number, title: string, value: any) {
     return { srNo, title, value };
@@ -60,33 +62,39 @@ export const LabourPaymentVoucherView = () => {
       {
         title: 'Verified',
         subtitle: lpVoucher?.approvalSummary?.verified?.name || '',
+        description: lpVoucher?.approvalSummary?.verified?.reason || '',
         status: lpVoucher?.approvalSummary?.verified?.status || 'hold'
       },
       {
         title: 'First Approval',
         subtitle: lpVoucher?.approvalSummary?.firstApproved?.name || '',
+        description: lpVoucher?.approvalSummary?.firstApproved?.reason || '',
         status: lpVoucher?.approvalSummary?.firstApproved?.status || 'hold',
       },
       {
         title: 'Second Approval',
         subtitle: lpVoucher?.approvalSummary?.secondApproved?.name || '',
+        description: lpVoucher?.approvalSummary?.secondApproved?.reason || '',
         status: lpVoucher?.approvalSummary?.secondApproved?.status || 'hold',
         disabled: lpVoucher?.approvalSummary?.secondApproved === null ? true : false
       },
       {
         title: 'Third Approval',
         subtitle: lpVoucher?.approvalSummary?.thirdApproved?.name || '',
+        description: lpVoucher?.approvalSummary?.thirdApproved?.reason || '',
         status: lpVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
         disabled: lpVoucher?.approvalSummary?.thirdApproved === null ? true : false
       },
       {
         title: 'First Finalizer',
         subtitle: lpVoucher?.approvalSummary?.firstFinalized?.name || '',
+        description: lpVoucher?.approvalSummary?.firstFinalized?.reason || '',
         status: lpVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
       },
       {
         title: 'Second Finalizer',
         subtitle: lpVoucher?.approvalSummary?.secondFinalized?.name || '',
+        description: lpVoucher?.approvalSummary?.secondFinalized?.reason || '',
         status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
       },
       {
@@ -131,11 +139,26 @@ export const LabourPaymentVoucherView = () => {
               <PageTitle pagetitle="Labour Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveLPVoucher()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectLPVoucher()} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {lpVoucher?.createdBy !== username && <BtnSmall
+                  label="Approve"
+                  icon={<Check fontSize="inherit" />}
+                  color="success"
+                  onClick={() => approveLPVoucher()}
+                />}
+                {lpVoucher?.createdBy !== username && <BtnSmall
+                  label="Reject"
+                  icon={<Close fontSize="inherit" />}
+                  color="error"
+                  onClick={() => rejectLPVoucher()}
+                />}
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />
               )}
             </Grid>
             <Grid item xs={12} marginY={1}>

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import styles from './pmp-voucher.module.css';
-import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
+import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { Box, Grid, LinearProgress, Typography, TextField, Container, IconButton } from '@mui/material';
 import { useGetPackingMeterialPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
@@ -128,7 +128,7 @@ export const PackingMaterialPaymentVoucherView = () => {
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approvePMPVoucher()} />
                 <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectPMPVoucher()} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}

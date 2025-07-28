@@ -40,13 +40,13 @@ export const grnSchema = yup.object().shape({
     .of(
       yup.object().shape({
         productName: yup.string().required('Select at least one product'),
-        quantity: yup.number().required('Quantity is required').positive("Quantity can't be negative"),
-        unitPrice: yup.number().required('Unit price is required').positive("Price can't be negative"),
-        grossWeight: yup.number().required('Gross weight is required').positive("Weight can't be negative"),
+        quantity: yup.number().required('Quantity is required').min(0, "Quantity can't be negative"),
+        unitPrice: yup.number().required('Unit price is required').min(0, "Price can't be negative"),
+        grossWeight: yup.number().required('Gross weight is required').min(0, "Weight can't be negative"),
         packingMaterialWeight: yup
           .number()
           .required('Packing material weight is required')
-          .positive("Weight can't be negative"),
+          .min(0, "Weight can't be negative"),
         purchaseDate: dateSchema.required('Purchase Date is required'),
         dispatchDate: dateSchema.required('Dispatch Date is required'),
         deliveryDate: dateSchema.required('Delivery Date is required'),

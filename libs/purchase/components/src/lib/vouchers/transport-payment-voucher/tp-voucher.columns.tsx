@@ -28,7 +28,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'createdDate',
@@ -55,7 +55,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 200,
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'location',
@@ -65,7 +65,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'debitCreditTo',
@@ -74,7 +74,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 200,
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'payReceivedFrom',
@@ -83,7 +83,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 200,
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'driverName',
@@ -93,7 +93,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'contactNo',
@@ -123,7 +123,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+      valueGetter: (value: string) => (value ? value?.toUpperCase() : ''),
     },
     {
       field: 'dispatchLocation',
@@ -133,7 +133,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'destinationLocation',
@@ -143,7 +143,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'paymentMode',
@@ -153,7 +153,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'freightAmt',
@@ -182,7 +182,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 200,
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'grnNo',
@@ -192,7 +192,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+      valueGetter: (value: string) => (value ? value?.toUpperCase() : ''),
     },
     {
       field: 'receiverName',
@@ -202,7 +202,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       align: 'center',
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'kyc',
@@ -221,7 +221,7 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       minWidth: 200,
       headerAlign: 'center',
       hide: true,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'overAllStatus',
@@ -232,8 +232,16 @@ export const useTPVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       hide: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus);
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+        const status = convertInTitleCase(params.row.overAllStatus || '');
+        return <Chip
+          label={status}
+          size="small"
+          sx={{
+            flex: 1,
+            minWidth: 80,
+            color: '#FFF',
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+          }} />
       },
     },
     ...(canEdit

@@ -63,7 +63,7 @@ export const SecondSaleRegisterView = () => {
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeSecondSaleStatus('approved')} />
             <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeSecondSaleStatus('reject')} />
-            <BtnSmall label="Query" icon={<Message />} color="warning" />
+            {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
           </Grid>
           <Grid item xs={12}>

@@ -21,7 +21,7 @@ import {
   GetLevels,
   LocationPartialData,
   EmployeePartialData,
-  Notification,
+  INotification,
   ResultModel,
   ApprovalRequest,
 } from '@prime-fresh/common_api';
@@ -40,8 +40,15 @@ export const useUpdateDocStatusWithTwoApproval = (id: string): UseMutationResult
   });
 };
 
-export const useGetUserNotifications = (): UseQueryResult<ApiBaseState<Notification[]>, ErrorModel> => {
-  return useQuery<ApiBaseState<Notification[]>, ErrorModel>({
+export const useUpdateDocStatusWithOneApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+  return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
+    mutationKey: ['update-doc-status-with-one-approval', id],
+    mutationFn: (data) => SharedService.getInstance().updateDocStatusWithOneApproval(id, data),
+  });
+};
+
+export const useGetUserNotifications = (): UseQueryResult<ApiBaseState<INotification[]>, ErrorModel> => {
+  return useQuery<ApiBaseState<INotification[]>, ErrorModel>({
     queryKey: ['user-notifications'],
     queryFn: () => SharedService.getInstance().getAllUserNotifications(),
     staleTime: 0,

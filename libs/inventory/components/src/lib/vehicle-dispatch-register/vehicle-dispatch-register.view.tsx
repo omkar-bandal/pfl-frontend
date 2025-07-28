@@ -4,9 +4,9 @@ import { BtnSmall, DataViewer, DrawerContainer, InfoTooltip, PageTitle, StepperD
 import { useParams } from 'react-router-dom';
 import { vehicleDispatchRegisterViewConfig } from './vehicle-dispatch-register.view-config';
 import { useGetVehicleDispatchRegisterForViewById } from '@prime-fresh/inventory/modules';
-import { Check, Close, Message, ChevronRight } from '@mui/icons-material';
+import { Check, Close, ChevronRight } from '@mui/icons-material';
 import { useActions } from '@prime-fresh/modules';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 import { useState } from 'react';
 
 export const VehicleDispatchRegisterView = () => {
@@ -33,7 +33,7 @@ export const VehicleDispatchRegisterView = () => {
       status: vehicleDispatchData?.overAllStatus || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(vehicleDispatchId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(vehicleDispatchId);
   const changeVehicleDispatchStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -58,7 +58,7 @@ export const VehicleDispatchRegisterView = () => {
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeVehicleDispatchStatus('approved')} />
             <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeVehicleDispatchStatus('reject')} />
-            <BtnSmall label="Query" icon={<Message />} color="warning" />
+            {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
           </Grid>
           <Grid item xs={12}>

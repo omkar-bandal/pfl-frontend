@@ -2,6 +2,8 @@ export const sharedRoutes = {
   //Dashboard
   DASHBOARD: "/dashboard",
 
+  ALL_NOTIFICATIONS: '/all-notifications',
+
   //Stock
   GET_ALL_STOCK: '/get-all/main-stock',
   GET_STOCK_BY_LOCATION: '/get-stock',

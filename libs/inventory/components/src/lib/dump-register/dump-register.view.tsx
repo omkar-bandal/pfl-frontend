@@ -29,10 +29,25 @@ export const DumpRegisterView = () => {
   const company = companyData?.data ? companyData.data.find((comp) => comp.name === dumpData?.companyName) : null;
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: dumpData?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Approved', subtitle: dumpData?.approvalSummary?.firstApproved?.name || '', status: dumpData?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Approved', subtitle: dumpData?.approvalSummary?.secondApproved?.name || '', status: dumpData?.approvalSummary?.secondApproved?.status || 'hold' },
-    { title: 'Completed', status: dumpData?.approvalSummary?.secondApproved?.status || 'hold' },
+    {
+      title: 'Created',
+      subtitle: dumpData?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Approved',
+      subtitle: dumpData?.approvalSummary?.firstApproved?.name || '',
+      status: dumpData?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Approved',
+      subtitle: dumpData?.approvalSummary?.secondApproved?.name || '',
+      status: dumpData?.approvalSummary?.secondApproved?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: dumpData?.approvalSummary?.secondApproved?.status || 'hold'
+    },
   ];
 
   const firstGridData = [
@@ -79,7 +94,7 @@ export const DumpRegisterView = () => {
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDumpRegisterStatus('approved')} />
                 <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDumpRegisterStatus('reject')} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}

@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import { useGetDealSlipForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DataViewer, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { dealSlipViewConfig } from './deal-slip.view-config';
-import { Check, Close, Message, ChevronRight } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
-import { useActions } from '@prime-fresh/modules';
+import { Check, Close, ChevronRight } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
+import { authState, useActions, useAppSelector } from '@prime-fresh/modules';
 // import { usePermission } from '@prime-fresh/modules';
 
 export const DealSlipView = () => {
@@ -18,7 +18,8 @@ export const DealSlipView = () => {
   const { data, isLoading, refetch } = useGetDealSlipForViewById(dealslipId);
   const dealSlip = data?.data ? data.data : null;
   console.log('Deal Slip Data:', dealSlip);
-
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const approvalSummary: StepperData[] = [
     {
       title: 'Created',
@@ -28,6 +29,7 @@ export const DealSlipView = () => {
     {
       title: 'Approved',
       subtitle: dealSlip?.approvalSummary?.firstApproved?.name || '',
+      description: dealSlip?.approvalSummary?.firstApproved?.reason || '',
       status: dealSlip?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
@@ -36,7 +38,7 @@ export const DealSlipView = () => {
     },
   ];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(dealslipId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(dealslipId);
   const changeDealSlipStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -62,9 +64,19 @@ export const DealSlipView = () => {
                 <PageTitle pagetitle="Deal Slip" />
               </Grid>
               <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDealSlipStatus('approved')} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDealSlipStatus('reject')} />
-                <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {dealSlip?.createdBy !== username && <BtnSmall
+                  label="Approve"
+                  icon={<Check fontSize="inherit" />}
+                  color="success"
+                  onClick={() => changeDealSlipStatus('approved')}
+                />}
+                {dealSlip?.createdBy !== username && <BtnSmall
+                  label="Reject"
+                  icon={<Close fontSize="inherit" />}
+                  color="error"
+                  onClick={() => changeDealSlipStatus('reject')}
+                />}
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
                 {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
               </Grid>
               <Grid item xs={12}>

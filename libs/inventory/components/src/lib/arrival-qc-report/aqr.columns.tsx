@@ -18,7 +18,7 @@ export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: 'createdDate',
@@ -52,7 +52,7 @@ export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 100,
       align: "center",
       headerAlign: "center",
-      hide: false, 
+      hide: false,
       isMobileVisible: true,
       valueGetter: (value: string) => value ? value : '-'
     },
@@ -63,7 +63,7 @@ export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 100,
       align: "center",
       headerAlign: "center",
-      hide: false, 
+      hide: false,
       isMobileVisible: true,
       valueGetter: (value: string) => value ? value : '-',
     },
@@ -74,7 +74,7 @@ export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 150,
       align: "center",
       headerAlign: "center",
-      hide: false, 
+      hide: false,
       isMobileVisible: true,
       valueGetter: (value: number) => value ? value : 0,
     },
@@ -95,7 +95,7 @@ export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 150,
       align: "center",
       headerAlign: "center",
-      hide: false, 
+      hide: false,
       valueGetter: (value: string) => value ? value : "-",
     },
     {
@@ -117,8 +117,16 @@ export const useAQRColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       hide: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus);
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+        const status = convertInTitleCase(params.row.overAllStatus || '');
+        return <Chip
+          label={status}
+          size="small"
+          sx={{
+            flex: 1,
+            minWidth: 80,
+            color: '#FFF',
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+          }} />
       },
     },
     ...(canEdit

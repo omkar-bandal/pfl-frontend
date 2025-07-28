@@ -1,6 +1,6 @@
-import { ErrorModel } from "@prime-fresh/common_api";
+import { ErrorModel, ResultModel } from "@prime-fresh/common_api";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { ISignInRequest, ISignInResponse, ISignOutRequest, ISignOutResponse } from "../models";
+import { IForgetPasswordReq, IResetPasswordReq, ISignInRequest, ISignInResponse, ISignOutRequest, ISignOutResponse } from "../models";
 import { AuthenticationService } from "../services";
 
 export function useSignIn(): UseMutationResult<ISignInResponse, ErrorModel, ISignInRequest, unknown> {
@@ -20,3 +20,18 @@ export function useSignOut(): UseMutationResult<ISignOutResponse, ErrorModel, IS
         mutationFn: (data) => AuthenticationService.getInstance().signout(data),
     });
 }
+
+export function useForgetPassword(): UseMutationResult<string, ErrorModel, IForgetPasswordReq, unknown> {
+    return useMutation<string, ErrorModel, IForgetPasswordReq, unknown>({
+        mutationKey: ['forget-password'],
+        mutationFn: (uid) => AuthenticationService.getInstance().forgetPassword(uid),
+    });
+}
+
+export function useResetPassword(): UseMutationResult<ResultModel, ErrorModel, IResetPasswordReq, unknown> {
+    return useMutation<ResultModel, ErrorModel, IResetPasswordReq, unknown>({
+        mutationKey: ['reset-password'],
+        mutationFn: (data) => AuthenticationService.getInstance().resetPassword(data),
+    });
+}
+

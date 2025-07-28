@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
+import { BtnSmall, DrawerContainer, formatDate, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useGetDCTypeStockTransferForViewById } from '@prime-fresh/purchase/modules';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
 import { Box, LinearProgress, Typography, Container, Grid, TextField, Grid2, IconButton } from '@mui/material';
-import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
+import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 import styles from './dc-type-stock-transfer.module.css';
-import { queryClient, useActions, usePermission } from '@prime-fresh/modules';
+import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const DCTypeStockTransferView = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +16,7 @@ export const DCTypeStockTransferView = () => {
   const { canDownload } = usePermission('delivery-challan');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
-  const { data, isLoading: isDCTypeStockTransferLoading } = useGetDCTypeStockTransferForViewById(dcId);
+  const { data, isLoading: isDCTypeStockTransferLoading, refetch } = useGetDCTypeStockTransferForViewById(dcId);
   const dcTypeStockTransferData = data?.data ? data.data : null;
   console.log('DC Type Stock Transfer Data: ', dcTypeStockTransferData);
 
@@ -30,17 +30,32 @@ export const DCTypeStockTransferView = () => {
     : null;
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: dcTypeStockTransferData?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Approved', subtitle: dcTypeStockTransferData?.approvalSummary?.firstApproved?.name || '', status: dcTypeStockTransferData?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Approved', subtitle: dcTypeStockTransferData?.approvalSummary?.secondApproved?.name || '', status: dcTypeStockTransferData?.approvalSummary?.secondApproved?.status || 'hold' },
-    { title: 'Completed', status: dcTypeStockTransferData?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: dcTypeStockTransferData?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Approved',
+      subtitle: dcTypeStockTransferData?.approvalSummary?.firstApproved?.name || '',
+      status: dcTypeStockTransferData?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Approved',
+      subtitle: dcTypeStockTransferData?.approvalSummary?.secondApproved?.name || '',
+      status: dcTypeStockTransferData?.approvalSummary?.secondApproved?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: dcTypeStockTransferData?.approvalSummary?.secondApproved?.status || 'hold'
+    },
   ];
 
   const firstGridData = [
     { title: 'From Location:', value: convertInTitleCase(dcTypeStockTransferData?.fromLocation || '') },
-    { title: 'Challan No:', value: convertInTitleCase(dcTypeStockTransferData?.challanNo || '') },
+    { title: 'Challan No:', value: dcTypeStockTransferData?.challanNo?.toUpperCase() || '' },
     { title: 'To Location:', value: convertInTitleCase(dcTypeStockTransferData?.toLocation || '') },
-    { title: 'Date:', value: dcTypeStockTransferData?.createdDate },
+    { title: 'Date:', value: formatDate(dcTypeStockTransferData?.createdDate || '') },
   ];
 
   const secondGridData = [
@@ -57,29 +72,20 @@ export const DCTypeStockTransferView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(dcId);
-  const approveDCTypeStockTransfer = () => {
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dcId);
+  const changeDCTypeStockTransferStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-        toast.success(actionRes?.message)
+        toast.success(actionRes?.message ? actionRes.message : `Delivery Challan ${status} successfully.`)
+        setReason('');
+        refetch();
       })
-      .catch(() => toast.error(`${error}`));
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of delivery challan.'));
   };
 
-  const rejectDCTypeStockTransfer = () => {
-    mutateAsync({
-      status: 'reject',
-      reason: reason,
-    }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['lp-voucher'], exact: false })
-      toast.success(actionRes?.message)
-    })
-      .catch(() => toast.error(`${error}`));
-  };
   return (
     <Container maxWidth="xl">
       {isDCTypeStockTransferLoading || isCompanyDataLoading ? (
@@ -93,11 +99,26 @@ export const DCTypeStockTransferView = () => {
               <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery Challan Only For Stock Transfter" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveDCTypeStockTransfer()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectDCTypeStockTransfer()} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                <BtnSmall
+                  label="Approve"
+                  icon={<Check />}
+                  color="success"
+                  onClick={() => changeDCTypeStockTransferStatus('approved')}
+                />
+                <BtnSmall
+                  label="Reject"
+                  icon={<Close />}
+                  color="error"
+                  onClick={() => changeDCTypeStockTransferStatus('reject')}
+                />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />
               )}
             </Grid>
             <Grid item xs={12}>

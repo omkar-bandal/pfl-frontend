@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import { PageTitle, BtnSmall, StepperData, toast, DrawerContainer, VerticalStepper, InfoTooltip } from '@prime-fresh/ui_shared';
 import { useGetMultiCashVoucherForViewById } from '@prime-fresh/purchase/modules';
 import styles from './mc-voucher.module.css';
-import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
+import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
 import { useActions, usePermission } from '@prime-fresh/modules';
 
@@ -119,7 +119,7 @@ export const MultipleCashVoucherView = () => {
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveMCVoucher()} />
                 <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectMCVoucher()} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}

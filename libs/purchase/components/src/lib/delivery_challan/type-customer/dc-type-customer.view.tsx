@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import styles from './dc-type-customer.module.css';
 import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
-import { Check, ChevronRight, Close, Download, InsertDriveFile, Message } from '@mui/icons-material';
+import { Check, ChevronRight, Close, Download, InsertDriveFile } from '@mui/icons-material';
 import { useActions, usePermission } from '@prime-fresh/modules';
 
 export const DCTypeCustomerView = () => {
@@ -44,10 +44,25 @@ export const DCTypeCustomerView = () => {
   };
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: dcTypeCustomerData?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Approved', subtitle: dcTypeCustomerData?.approvalSummary?.firstApproved?.name || '', status: dcTypeCustomerData?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Approved', subtitle: dcTypeCustomerData?.approvalSummary?.secondApproved?.name || '', status: dcTypeCustomerData?.approvalSummary?.secondApproved?.status || 'hold' },
-    { title: 'Completed', status: dcTypeCustomerData?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: dcTypeCustomerData?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Approved',
+      subtitle: dcTypeCustomerData?.approvalSummary?.firstApproved?.name || '',
+      status: dcTypeCustomerData?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Approved',
+      subtitle: dcTypeCustomerData?.approvalSummary?.secondApproved?.name || '',
+      status: dcTypeCustomerData?.approvalSummary?.secondApproved?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: dcTypeCustomerData?.approvalSummary?.secondApproved?.status || 'hold'
+    },
   ];
   const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dcId);
   const changeDCTypeCustomerStatus = (status: 'approved' | 'reject') => {
@@ -76,7 +91,7 @@ export const DCTypeCustomerView = () => {
             <Grid2 size={{ xs: 12, md: 8 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDCTypeCustomerStatus('approved')} />
                 <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDCTypeCustomerStatus('reject')} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}

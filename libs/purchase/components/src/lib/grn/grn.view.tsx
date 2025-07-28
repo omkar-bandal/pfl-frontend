@@ -16,7 +16,7 @@ import {
   setSelectedVendorPartialData,
   vendorsDataStates,
 } from '@prime-fresh/admin/modules';
-import { useActions, useAppDispatch, useAppSelector, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppDispatch, useAppSelector, usePermission } from '@prime-fresh/modules';
 import {
   convertInTitleCase,
   formatAddress,
@@ -26,7 +26,7 @@ import {
   useUpdateDocStatusWithThreeApproval,
 } from '@prime-fresh/shared/modules';
 import { images } from '@prime-fresh/assets';
-import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
+import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 
 export const GRNView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -40,6 +40,8 @@ export const GRNView = () => {
   const { data, isLoading, refetch } = useGetGRNForViewById(grnId);
   const grn = data?.data ? data.data : null;
   console.log('GRN by ID:', grn);
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
 
   const borderColor = grn?.locationType === 'cc' ? `1px solid red` : `1px solid green`;
   const textColor = grn?.locationType === 'cc' ? `red` : `green`;
@@ -75,33 +77,39 @@ export const GRNView = () => {
       {
         title: 'Verified',
         subtitle: grn?.approvalSummary?.verified?.name || '',
+        description: grn?.approvalSummary?.verified?.reason || '',
         status: grn?.approvalSummary?.verified?.status || 'hold'
       },
       {
         title: 'First Approval',
         subtitle: grn?.approvalSummary?.firstApproved?.name || '',
+        description: grn?.approvalSummary?.firstApproved?.reason || '',
         status: grn?.approvalSummary?.firstApproved?.status || 'hold'
       },
       {
         title: 'Second Approval',
         subtitle: grn?.approvalSummary?.secondApproved?.name || '',
+        description: grn?.approvalSummary?.secondApproved?.reason || '',
         status: grn?.approvalSummary?.secondApproved?.status || 'hold',
         disabled: grn?.approvalSummary?.secondApproved === null ? true : false
       },
       {
         title: 'Third Approval',
         subtitle: grn?.approvalSummary?.thirdApproved?.name || '',
+        description: grn?.approvalSummary?.thirdApproved?.reason || '',
         status: grn?.approvalSummary?.thirdApproved?.status || 'hold',
         disabled: grn?.approvalSummary?.secondApproved === null ? true : false
       },
       {
         title: 'First Finalizer',
         subtitle: grn?.approvalSummary?.firstFinalized?.name || '',
+        description: grn?.approvalSummary?.firstFinalized?.reason || '',
         status: grn?.approvalSummary?.firstFinalized?.status || 'hold'
       },
       {
         title: 'Second Finalizer',
         subtitle: grn?.approvalSummary?.secondFinalized?.name || '',
+        description: grn?.approvalSummary?.secondFinalized?.reason || '',
         status: grn?.approvalSummary?.secondFinalized?.status || 'hold'
       },
       {
@@ -109,14 +117,15 @@ export const GRNView = () => {
         status: grn?.approvalSummary?.secondFinalized?.status || 'hold'
       },
     ]
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(grnId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithThreeApproval(grnId);
   const changeGRNStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
       reason: reasonForGRNAction,
     })
       .then(() => {
-        toast.success(actionRes?.message ? actionRes.message : `GRN ${status} successfully.`)
+        dispatch(setReasonForGRNAction(''));
+        toast.success(actionRes?.message ? actionRes.message : `GRN ${status} successfully.`);
         refetch();
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of GRN.'));
@@ -124,7 +133,7 @@ export const GRNView = () => {
 
   return (
     <Container maxWidth="xl">
-      {isLoading ? ( 
+      {isLoading ? (
         <Box sx={{ flex: 1 }}>
           <LinearProgress />
         </Box>
@@ -135,28 +144,32 @@ export const GRNView = () => {
               <PageTitle pagetitle="Goods Received Note" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <BtnSmall
+                {grn?.createdBy !== username && <BtnSmall
                 label="Approve"
                 icon={<Check fontSize="inherit" />}
                 color="success"
                   onClick={() => changeGRNStatus('approved')}
-                  disabled={grn?.overAllStatus === 'reject' ? true : false}
-              />
-                <BtnSmall
+                  disabled={grn?.overAllStatus === 'reject' || (isPending && !isError) ? true : false}
+                />}
+                {grn?.createdBy !== username && <BtnSmall
                   label="Disapprove"
                   icon={<Close fontSize="inherit" />}
                   color="error" onClick={() => changeGRNStatus('reject')}
-                  disabled={grn?.overAllStatus === 'reject' ? true : false}
-                />
-                <BtnSmall
+                  disabled={grn?.overAllStatus === 'reject' || (isPending && !isError) ? true : false}
+                />}
+                {/* <BtnSmall
                   label="Query"
                   icon={<Message />}
                   color="warning"
                   disabled={grn?.overAllStatus === 'reject' ? true : false}
-                />
+                /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
-              )}
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />)}
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" component="div">
@@ -226,16 +239,16 @@ export const GRNView = () => {
               {/* Details Grid */}
               <div className={styles['details-grid']}>
                 {[
-                  { label: 'GRN No:', value: grn?.grnNo },
-                    { label: 'Purchase Instruction By:', value: grn?.purchaseInstructionsBy },
-                    { label: 'Source:', value: grn?.source },
+                    { label: 'GRN No:', value: grn?.grnNo ? grn?.grnNo.toUpperCase() : '' },
+                    { label: 'Purchase Instruction By:', value: convertInTitleCase(grn?.purchaseInstructionsBy || '') },
+                    { label: 'Source:', value: convertInTitleCase(grn?.source || '') },
                     { label: 'Created By:', value: grn?.createdBy },
                   { label: 'Created Date:', value: grn?.createdDate },
                   { label: 'Created Time:', value: grn?.createdTime },
                     // { label: 'Requested By:', value: grn?.requestedBy?.firstName },
                     // { label: 'Base Location:', value: grn?.baseLocation },
-                  { label: 'Purchase Location:', value: grn?.purchaseLocation },
-                    { label: 'Purchase For Which Location:', value: grn?.purchaseForSalesLocation },
+                    { label: 'Purchase Location:', value: convertInTitleCase(grn?.purchaseLocation || '') },
+                    { label: 'Purchase For Which Location:', value: convertInTitleCase(grn?.purchaseForSalesLocation || '') },
                 ].map((item, index) => (
                   <div key={index} className={`${styles['details-item']} ${styles['span-4']}`}>
                     <span
@@ -380,13 +393,13 @@ export const GRNView = () => {
               </div>
               <div className={`${styles['details-grid']}`}>
                 {[
-                  { label: 'Received Through:', value: grn?.receivedThrough },
+                    { label: 'Received Through:', value: convertInTitleCase(grn?.receivedThrough || '') },
                   { label: 'Vehicle Number:', value: grn?.vehicleNo?.toUpperCase() },
                   { label: 'Crates In:', value: grn?.cratesIn },
                   { label: 'Time In:', value: grn?.timeIn },
-                  { label: 'Purchase By:', value: grn?.purchasedBy },
-                  { label: 'RM Name:', value: grn?.rmn },
-                  { label: 'Delivery Receiving Person:', value: grn?.deliveryReceivingPerson },
+                    { label: 'Purchase By:', value: convertInTitleCase(grn?.purchasedBy || '') },
+                    { label: 'RM Name:', value: convertInTitleCase(grn?.rmn || '') },
+                    { label: 'Delivery Receiving Person:', value: convertInTitleCase(grn?.deliveryReceivingPerson || '') },
                 ].map((item, index) => (
                   <div
                     key={index}

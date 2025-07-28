@@ -71,6 +71,7 @@ export const DealSlipForm = () => {
       handleSubmit(values);
     },
   });
+  console.log('rfpa id for dealslip:', formik.values.rfpa)
   const { data } = useGetRFPAForViewById(formik.values.rfpa || '');
   const rfpa = data?.data ? data.data : null;
   console.log('RFPA for Deal Slip: ', rfpa);

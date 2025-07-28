@@ -39,5 +39,5 @@ export const employeeValidationSchema = Yup.object().shape({
   accessLocation: Yup.array().of(Yup.string()).min(1, 'Atleast one access location should be selected').required('Access location is required'),
   cugNo: Yup.string().notRequired().matches(REGEX.CONTACT_NO, 'Mobile number must contain only numbers'),
   workEmail: Yup.string().notRequired().matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
-  permissions: Yup.array().min(1, 'Please fill the permission array').required('Permissions are required.')
+  // permissions: Yup.array().min(1, 'Please fill the permission array').required('Permissions are required.')
 });

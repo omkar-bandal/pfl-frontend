@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { coreStore } from '@prime-fresh/modules';
 import { Outlet } from 'react-router-dom';
 import { ErrorBoundary, ErrorFallback } from '@prime-fresh/ui_shared';
-import SocketInitializer from '../notifications/socketInitializer';
+import SocketInitializer from '../notifications/SocketInitializer';
 
 const drawerWidth = 250;
 

@@ -13,13 +13,14 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { ISignInRequest, useSignIn } from '@prime-fresh/auth_api';
+import { IForgetPasswordReq, ISignInRequest, useForgetPassword, useSignIn } from '@prime-fresh/auth_api';
 import { useNavigate } from 'react-router-dom';
 import { images } from '@prime-fresh/assets';
 import { authRouteConstants, authState, loginSchema, stringConstants, useActions, useAppSelector } from '@prime-fresh/modules';
 import { TextInput, toast } from '@prime-fresh/ui_shared';
 import { adminRoutes } from '@prime-fresh/admin/modules';
 import { sharedRoutes } from '@prime-fresh/shared/modules';
+import { ForgetPasswordDialog } from './forget-password';
 
 const InitValSignIn: ISignInRequest = {
   uid: '',
@@ -39,7 +40,7 @@ export const SignIn = () => {
   const { isLoggedIn, loggedInUserInfo } = useAppSelector(authState);
 
   //actions from authSlice
-  const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
+  const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn, openForgetPasswordDialog } = useActions();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -47,7 +48,7 @@ export const SignIn = () => {
     validationSchema: loginSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values) => { 
+    onSubmit: (values) => {
       handleSignIn(values);
     },
   });
@@ -57,18 +58,33 @@ export const SignIn = () => {
   //Function to show and hide the password
   const handleClickShowPassword = () => { showPassword === false ? setShowPassword(true) : setShowPassword(false); }
 
+  const { mutateAsync: forgetPswdReq, isPending, isError: isForgetPswdError, error: forgetPswdError, data } = useForgetPassword();
+
+  const hanldeForgetPassword = (uid: string) => {
+    if (uid === null || uid.length === 0) {
+      toast.error('Please enter usersname / email / mobile number in input field');
+    } else {
+      forgetPswdReq({ uid: uid }).then((data) => {
+        console.log(data);
+        openForgetPasswordDialog();
+      }).catch(() => {
+        toast.error(forgetPswdError?.message ? forgetPswdError.message : 'Error while changing password please try again later.')
+      })
+    }
+  }
+
   //custom hook for sign in
   const { mutateAsync, isError, error } = useSignIn();
 
   //Auth check and redirect
   useEffect(() => {
     if (isLoggedIn) {
-      if(loggedInUserInfo?.department === 'admin')
-          navigate(adminRoutes.DASHBOARD_ADMIN)
+      if (loggedInUserInfo?.department === 'admin')
+        navigate(adminRoutes.DASHBOARD_ADMIN)
       else
-          navigate(sharedRoutes.DASHBOARD);
-    }else
-    navigate(authRouteConstants.SIGN_IN)
+        navigate(sharedRoutes.DASHBOARD);
+    } else
+      navigate(authRouteConstants.SIGN_IN)
   }, [isLoggedIn, loggedInUserInfo?.department, navigate]);
 
   //Submit function of sign in form.
@@ -209,10 +225,22 @@ export const SignIn = () => {
                     </Button>
                   </Grid>
                 </Grid>
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <Button
+                    variant='text'
+                    sx={{
+                      fontSize: 12,
+                      textTransform: 'none'
+                    }}
+                    onClick={() => hanldeForgetPassword(formik.values.uid)}
+                    disabled={isPending && !isForgetPswdError}
+                  >Forget Password?</Button>
+                </Grid>
               </form>
             </FormikProvider>
           </Grid>
         </Grid>
+        <ForgetPasswordDialog message={data ? data : ''} />
       </Box>
     </Container>
   );

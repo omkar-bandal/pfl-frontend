@@ -7,6 +7,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
   loggedInUserInfo: null,
   employeePermissions: null,
+  isForgetPswdDialog: false,
 };
 
 const authSlice = createSlice({
@@ -26,15 +27,23 @@ const authSlice = createSlice({
     setEmployeePermissions: (state, action: PayloadAction<IEmployeePermissions[] | null>) => {
       state.employeePermissions = action.payload;
     },
+    openForgetPasswordDialog: (state) => {
+      state.isForgetPswdDialog = true;
+    },
+    closeForgetPasswordDialog: (state) => {
+      state.isForgetPswdDialog = false;
+    }
   },
 });
 
-export const { setIsLoggedIn, checkAuth, setLoggedInUserInfo, setEmployeePermissions } = authSlice.actions;
+export const { setIsLoggedIn, checkAuth, setLoggedInUserInfo, setEmployeePermissions, closeForgetPasswordDialog, openForgetPasswordDialog } = authSlice.actions;
 export const authState = (state: RootState) => state.auth;
 export const authActionCreators = {
   setIsLoggedIn,
   checkAuth,
   setLoggedInUserInfo,
   setEmployeePermissions,
+  openForgetPasswordDialog,
+  closeForgetPasswordDialog
 };
 export const authReducer = authSlice.reducer;

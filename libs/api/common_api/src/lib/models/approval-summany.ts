@@ -2,7 +2,8 @@ export type DocumentStatus = "hold" | "VERIFIED" | "approved" | "FINALIZING" | "
 
 export interface ApprovalSummaryBlock {
   name: string,
-  status: DocumentStatus
+  status: DocumentStatus,
+  reason?: string,
 }
 export interface ApprovalSummany {
   verified?: ApprovalSummaryBlock,

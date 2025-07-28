@@ -3,8 +3,8 @@ import { Box, Container, Grid, IconButton, LinearProgress, TextField, Typography
 import { useGetInwardRegisterForViewById } from '@prime-fresh/inventory/modules';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useParams } from 'react-router-dom';
-import { Check, Close, Message, Download, ChevronRight } from '@mui/icons-material';
-import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
+import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
+import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 import React, { useRef, useState } from 'react';
 import styles from './inwared-register.module.css';
 import { useActions, usePermission } from '@prime-fresh/modules';
@@ -73,11 +73,22 @@ export const InwardRegisterView = () => {
   const signatureLabels = ['Prepared By', 'Approved By', 'Approved By'];
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: inwardData?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Approved', subtitle: inwardData?.approvalSummary?.firstApproved?.name || '', status: inwardData?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Completed', status: inwardData?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: inwardData?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Approved',
+      subtitle: inwardData?.approvalSummary?.firstApproved?.name || '',
+      status: inwardData?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: inwardData?.overAllStatus || 'hold'
+    },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(inwardId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(inwardId);
   const changeInwardRegisterStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -104,7 +115,7 @@ export const InwardRegisterView = () => {
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeInwardRegisterStatus('approved')} />
                 <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeInwardRegisterStatus('reject')} />
-              <BtnSmall label="Query" icon={<Message />} color="warning" />
+                {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
               )}

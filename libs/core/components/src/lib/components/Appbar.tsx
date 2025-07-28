@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {
   authRouteConstants,
   authState,
+  INotification,
   layoutStates,
   notificationsState,
   setMobileOpen,
@@ -15,28 +16,26 @@ import { AccountCircle, Logout, Notifications } from '@mui/icons-material';
 import { ISignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { convertInTitleCase, useGetUserNotifications } from '@prime-fresh/shared/modules';
+import { convertInTitleCase } from '@prime-fresh/shared/modules';
 import { ProfileMenu } from './ProfileMenu';
 import { NotificationBox } from './NotificationBox';
+import { socket } from '@prime-fresh/common_api';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { setNotifications, addNotification } = useActions();
+  const { addNotification, setNotifications } = useActions();
   const { mobileOpen, isSidebarClosing } = useAppSelector(layoutStates);
   const { loggedInUserInfo } = useAppSelector(authState);
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
-  const { data } = useGetUserNotifications();
-  const noti = React.useMemo(() => data?.data ? data.data.map(noti => noti.message).reverse() : [], [data]);
 
   React.useEffect(() => {
-    // socket.on('newNotification', ({ message, userId }) => {
-    //   console.log(`Notification received for user id ${userId}:`, message);
-    //   addNotification(message);
-    // });
-    setNotifications(noti);
-  }, [addNotification, noti, setNotifications]);
+    socket.on('newNotification', (data: INotification) => {
+      console.log(`📩 Notification received:`, data);
+      addNotification(data);
+    });
+  }, [addNotification]);
 
   const notifications = useAppSelector(notificationsState);
 
@@ -66,6 +65,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
 
   const handleCloseNotificationBox = () => {
     setNotificationBoxAnchorEl(null);
+    setNotifications([])
   };
 
   const { mutateAsync, isError, error } = useSignOut();

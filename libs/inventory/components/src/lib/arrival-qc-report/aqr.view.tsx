@@ -7,7 +7,7 @@ import React, { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useActions, usePermission } from '@prime-fresh/modules';
 import styles from './aqr.module.css';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 
 export const AQRView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -42,11 +42,22 @@ export const AQRView = () => {
   const signatureLabels = ['Prepared By', 'Approved By'];
 
   const approvalSummary: StepperData[] = [
-    { title: 'Created', subtitle: aqrData?.createdBy || '', status: 'COMPLETE' },
-    { title: 'Approved', subtitle: aqrData?.approvalSummary?.firstApproved?.name || '', status: aqrData?.approvalSummary?.firstApproved?.status || 'hold' },
-    { title: 'Completed', status: aqrData?.overAllStatus || 'hold' },
+    {
+      title: 'Created',
+      subtitle: aqrData?.createdBy || '',
+      status: 'COMPLETE'
+    },
+    {
+      title: 'Approved',
+      subtitle: aqrData?.approvalSummary?.firstApproved?.name || '',
+      status: aqrData?.approvalSummary?.firstApproved?.status || 'hold'
+    },
+    {
+      title: 'Completed',
+      status: aqrData?.overAllStatus || 'hold'
+    },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(aqrId);
+  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(aqrId);
   const changeAQRStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -71,7 +82,7 @@ export const AQRView = () => {
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeAQRStatus('approved')} />
             <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeAQRStatus('reject')} />
-            <BtnSmall label="Query" icon={<Message />} color="warning" />
+            {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {canDownload && (
               <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
             )}

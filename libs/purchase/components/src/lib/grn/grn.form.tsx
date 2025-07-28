@@ -388,7 +388,7 @@ export const GRNForm = () => {
                           id={`grnProducts.${index}.packingMaterialWeight`}
                           name={`grnProducts.${index}.packingMaterialWeight`}
                           label="Packing Material Weight (in grams)"
-                          value={formik.values.grnProducts[index].packingMaterialWeight || null}
+                          value={formik.values.grnProducts[index].packingMaterialWeight}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="end">grams</InputAdornment>,

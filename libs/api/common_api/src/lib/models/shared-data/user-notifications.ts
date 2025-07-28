@@ -1,5 +1,6 @@
-export interface Notification {
-  id: string,
+export interface INotification {
   message: string,
-  user: string
+  date: string,
+  time: string,
+  isRead: boolean
 }

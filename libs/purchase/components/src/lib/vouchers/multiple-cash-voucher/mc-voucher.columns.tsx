@@ -158,14 +158,23 @@ export const useMCVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
     {
       field: 'overAllStatus',
       headerName: 'Status',
-      flex: 1, minWidth: 130,
+      flex: 1,
+      minWidth: 130,
       align: 'center',
       headerAlign: 'center',
       hide: false,
       isMobileVisible: true,
       renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus);
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+        const status = convertInTitleCase(params.row.overAllStatus || '');
+        return <Chip
+          label={status}
+          size="small"
+          sx={{
+            flex: 1,
+            minWidth: 80,
+            color: '#FFF',
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+          }} />
       },
     },
     ...(canEdit
@@ -210,29 +219,3 @@ export const useMCVoucherColumns = (canEdit: boolean, canView: boolean): CustomG
       : []),
   ];
 }
-
-// {
-//     field: "receivedBy",
-//     headerName: "Received By",
-//     minWidth: 120,
-//     align: "center",
-//     headerAlign: "center",
-//     valueGetter: (value: string) => {
-//         if (value === null)
-//             return '-';
-//         else
-//             return value;
-//     }
-// },
-// {
-//     field: "anyAttachment",
-//     headerName: "Attachment",
-//     minWidth: 100,
-//     align: "center",
-//     headerAlign: "center",
-//     renderCell: (params: GridRenderCellParams) => (
-//         <IconButton color="primary" onClick={() => handleDownload(params.row.billImage.path)}>
-//             <DownloadOutlined />
-//         </IconButton>
-//     ),
-// },

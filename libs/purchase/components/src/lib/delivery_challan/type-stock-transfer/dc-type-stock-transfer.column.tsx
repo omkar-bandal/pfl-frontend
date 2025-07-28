@@ -15,7 +15,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       headerAlign: "center",
       isMobileVisible: true,
-      valueGetter: (value: string) => value ? value.toUpperCase() : '-',
+      valueGetter: (value: string) => value ? value?.toUpperCase() : '-',
     },
     {
       field: 'createdBy',
@@ -25,7 +25,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: "createdDate",
@@ -130,7 +130,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       headerAlign: "center",
       hide: false,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "licenseNo",
@@ -157,7 +157,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       headerAlign: "center",
       hide: false,
-      valueGetter: (value: string) => value !== null ? value.toUpperCase() : '-',
+      valueGetter: (value: string) => value !== null ? value?.toUpperCase() : '-',
     },
     {
       field: "receiverName",
@@ -166,7 +166,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       headerAlign: "center",
       hide: true,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "rmn",
@@ -175,7 +175,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       headerAlign: "center",
       hide: true,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "remark",
@@ -184,7 +184,7 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       align: "center",
       headerAlign: "center",
       hide: true,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "overAllStatus",
@@ -194,7 +194,15 @@ export const useDCTypeStockTransferColumns = (canEdit: boolean, canView: boolean
       width: 130,
       renderCell: (params: GridRenderCellParams) => {
         const status = convertInTitleCase(params.row.overAllStatus || '');
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus || '') }} />
+        return <Chip
+          label={status}
+          size="small"
+          sx={{
+            flex: 1,
+            minWidth: 80,
+            color: '#FFF',
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+          }} />
       },
     },
     ...(canEdit

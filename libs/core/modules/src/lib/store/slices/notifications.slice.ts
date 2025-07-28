@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store.core';
+import { INotification } from '../../models';
 
 export interface NotificationState {
-  notifications: string[];
+  notifications: INotification[];
 }
 
 const initialState: NotificationState = {
@@ -13,13 +14,13 @@ const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    addNotification: (state, action: PayloadAction<string>) => {
+    addNotification: (state, action: PayloadAction<INotification>) => {
       state.notifications.push(action.payload);
     },
     clearNotifications: state => {
       state.notifications = [];
     },
-    setNotifications: (state, action: PayloadAction<string[]>) => {
+    setNotifications: (state, action: PayloadAction<INotification[]>) => {
       state.notifications = action.payload;
     }
   },

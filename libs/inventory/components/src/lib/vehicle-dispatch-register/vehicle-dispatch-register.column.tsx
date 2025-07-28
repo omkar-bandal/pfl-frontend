@@ -20,7 +20,7 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         align: 'center',
         headerAlign: 'center',
         hide: false,
-        valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
       },
       {
         field: 'createdDate',
@@ -213,8 +213,16 @@ export const useVehicleDispatchRegisterColumns = (canEdit: boolean, canView: boo
         hide: false,
         isMobileVisible: true,
         renderCell: (params: GridRenderCellParams) => {
-          const status = convertInTitleCase(params.row.overAllStatus);
-          return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus) }} />
+          const status = convertInTitleCase(params.row.overAllStatus || '');
+          return <Chip
+            label={status}
+            size="small"
+            sx={{
+              flex: 1,
+              minWidth: 80,
+              color: '#FFF',
+              backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+            }} />
         },
       },
       ...(canEdit

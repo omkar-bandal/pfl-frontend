@@ -16,7 +16,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       headerAlign: "center",
       hide: false,
       isMobileVisible: true,
-      valueGetter: (value: string) => value ? value.toUpperCase() : '-',
+      valueGetter: (value: string) => value ? value?.toUpperCase() : '-',
     },
     {
       field: 'createdBy',
@@ -26,7 +26,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       align: 'center',
       headerAlign: 'center',
       hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
     },
     {
       field: "createdDate",
@@ -131,8 +131,8 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       width: 130,
       align: "center",
       headerAlign: "center",
-    hide: false,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      hide: false,
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "licenseNo",
@@ -168,7 +168,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       align: "center",
       headerAlign: "center",
       hide: true,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "rmn",
@@ -177,7 +177,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       align: "center",
       headerAlign: "center",
       hide: true,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "remark",
@@ -186,7 +186,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       align: "center",
       headerAlign: "center",
       hide: true,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
     {
       field: "overAllStatus",
@@ -196,7 +196,15 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       width: 130,
       renderCell: (params: GridRenderCellParams) => {
         const status = convertInTitleCase(params.row.overAllStatus || '');
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus || '') }} />
+        return <Chip
+          label={status}
+          size="small"
+          sx={{
+            flex: 1,
+            minWidth: 80,
+            color: '#FFF',
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+          }} />
       },
     },
     ...(canEdit

@@ -9,6 +9,7 @@ export const sharedApiUrls = {
   //Approval
   UPDATE_DOCUMENT_STATUS_THREE_LEVEL_APPROVAL: (id: string) => `/documents/update/${id}`,
   UPDATE_DOCUMENT_STATUS_TWO_LEVEL_APPROVAL: (id: string) => `/documents/updatesecondlevel/${id}`,
+  UPDATE_DOCUMENT_STATUS_ONE_LEVEL_APPROVAL: (id: string) => `/documents/updatefirstlevel/${id}`,
 
   //Stock
   GET_ALL_STOCK: (queryParams?: QueryParams) => {
