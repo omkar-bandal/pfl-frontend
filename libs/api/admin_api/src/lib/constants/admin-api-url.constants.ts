@@ -2,6 +2,15 @@ import { QueryParams } from '@prime-fresh/common_api';
 import { IDocumentType } from '../models';
 
 export const adminApiUrlConstants = {
+
+  //Admin Dashboard
+  COUNT_EMPLOYEE: `/admin/dashboard/employee/total-count`,
+  COUNT_FARMER: `/admin/dashboard/farmer/total-count`,
+  COUNT_VENDOR: `/admin/dashboard/vender/total-count`,
+  COUNT_CUSTOMER: `/admin/dashboard/customer/total-count`,
+  COUNT_PRODUCTS: `/admin/dashboard/product/total-count`,
+  COUNT_BRANCHES: `/admin/dashboard/branch/total-count`,
+
   //Department
   GET_ALL_DEPARTMENT: '/departments/',
   GET_DEPARTMENT_BY_ID: '/departments',

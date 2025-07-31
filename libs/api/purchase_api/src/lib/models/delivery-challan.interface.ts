@@ -1,9 +1,32 @@
-import { FormProducts, FormProductQtyAmt, FormProductWeight, FormProductUoM, Address, DocumentStatus, ApprovalSummany } from '@prime-fresh/common_api';
+// import { FormProducts, FormProductQtyAmt, FormProductWeight, FormProductUoM, Address, DocumentStatus, ApprovalSummany } from '@prime-fresh/common_api';
+import { Address, DocumentStatus, ApprovalSummany } from '@prime-fresh/common_api';
 
 export type StockTransferType = 'from-cc-to-dc' | 'from-dc-to-cc' | 'from-cc-to-cc' | 'from-dc-to-dc';
 
-export interface IDeliveryChallanProduct extends FormProducts, FormProductUoM, FormProductQtyAmt, FormProductWeight {
+// export interface IDeliveryChallanProduct extends FormProducts, FormProductUoM, FormProductQtyAmt, FormProductWeight {
+//   id?: string;
+//   saleUoM: string | null;
+//   packagingMaterial: string | null;
+//   packagingMaterialUoM: string | null;
+//   packagingMaterialQuantity: number | null;
+//   packagingMaterialUnitPrice: number | null;
+//   packagingMaterialAmount: number | null;
+//   packagingMaterialTotalWeight: number | null;
+// }
+export interface IDeliveryChallanProduct {
   id?: string;
+  productName: string | null,
+  origin: string | null,
+  variety: string | null,
+  count: string | null,
+  size: string | null,
+  uom: string | null,
+  quantity: number | null,
+  unitPrice: number | null,
+  amount: number | null,
+  grossWeight: number | null,
+  packingMaterialWeight: number | null,
+  netWeight: number | null,
   saleUoM: string | null;
   packagingMaterial: string | null;
   packagingMaterialUoM: string | null;

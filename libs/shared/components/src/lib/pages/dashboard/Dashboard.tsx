@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from 'react';
-import { Box, Grid2 } from '@mui/material';
+import { Box, Divider, Grid2 } from '@mui/material';
 import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames } from '@prime-fresh/shared/modules';
 import { useGetDashboardData } from '@prime-fresh/purchase/modules';
-import { DashboardCard, PurchaseByProduct } from '../../components/dashboard';
+import { DashboardCard, PurchaseByFarmer, PurchaseByProduct, PurchaseByVendor } from '../../components/dashboard';
 import { Select } from '@prime-fresh/ui_shared';
 import { DashboardDataInitValue } from '@prime-fresh/purchase_api';
 
@@ -171,7 +171,12 @@ export const Dashboard = () => {
           ))}
         </Grid2>
       </Grid2>
+      <Divider sx={{ marginY: 1 }} />
       <PurchaseByProduct />
+      <Divider sx={{ marginY: 1 }} />
+      <PurchaseByVendor />
+      <Divider sx={{ marginY: 1 }} />
+      <PurchaseByFarmer />
     </Box>
   );
 };

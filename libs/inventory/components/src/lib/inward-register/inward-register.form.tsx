@@ -96,6 +96,7 @@ export const InwardRegisterForm = () => {
   const { mutateAsync: mutateAsyncPatch, error: PatchError, data: PatchData } = useUpdateInwardRegister(Id);
 
   const handleSubmit = (values: any) => {
+    console.log('Submitted Inward Data: ', values);
     Id === ''
       ? mutateAsyncPost(values)
           .then(() => {

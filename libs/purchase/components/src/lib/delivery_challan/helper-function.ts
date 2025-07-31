@@ -3,31 +3,6 @@ import { GetPackagingMaterial } from '@prime-fresh/admin_api';
 import { IDeliveryChallanProduct } from '@prime-fresh/purchase_api';
 import { numToWords } from '@prime-fresh/shared/modules';
 
-// export const normalizeData = (
-//   data: GetDeliveryChallan
-// ): PostDeliveryChallan => {
-//   return {
-//     ...data,
-//     grnNo: data.grnNo ? data.grnNo.id : null,
-//     companyName: data.companyName ? data.companyName.id : null,
-//     offices: data.offices ? data.offices.id : null,
-//     partyName:
-//       typeof data.partyName !== 'string' && data.partyName !== null
-//         ? data.partyName?.id
-//         : null,
-//     fromLocation: data.fromLocation ? data.fromLocation.id : null,
-//     toLocation: data.toLocation ? data.toLocation.id : null,
-//     deliveryChallanProducts: data.deliveryChallanProducts.map((product) => ({
-//       ...product,
-//       productName: product.productName ? product.productName.id : null,
-//       uom: product.uom ? product.uom.id : null,
-//       saleUoM: product.saleUoM ? product.saleUoM.id : null,
-//       packagingMaterial: product.packagingMaterial ? product.packagingMaterial.id : null,
-//       packagingMaterialUoM: product.packagingMaterialUoM ? product.packagingMaterialUoM.id : null,
-//     })),
-//   };
-// };
-
 export const handleProductChange = (
   event: React.ChangeEvent<HTMLInputElement>,
   index: number,

@@ -69,22 +69,22 @@ export const VendorReferences = () => {
                 <TextInput isRequired={false} name="ref2Email" label="Email" value={values.ref2Email || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="ref2Address.address1" label="Address Line 1" value={values.ref2Address.address1 || ''} handleChange={handleChange} />
+                <TextInput isRequired={false} name="ref2Address.address1" label="Address Line 1" value={values.ref2Address?.address1 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-                <TextInput isRequired={false} name="ref2Address.address2" label="Address Line 2" value={values.ref2Address.address2 || ''} handleChange={handleChange} />
+                <TextInput isRequired={false} name="ref2Address.address2" label="Address Line 2" value={values.ref2Address?.address2 || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="ref2Address.location" label="Location" value={values.ref2Address.location || ''} handleChange={handleChange} />
+                <TextInput isRequired={false} name="ref2Address.location" label="Location" value={values.ref2Address?.location || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="ref2Address.city" label="City" value={values.ref2Address.city || ''} handleChange={handleChange} />
+                <TextInput isRequired={false} name="ref2Address.city" label="City" value={values.ref2Address?.city || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="ref2Address.state" label="State" value={values.ref2Address.state || ''} handleChange={handleChange} />
+                <TextInput isRequired={false} name="ref2Address.state" label="State" value={values.ref2Address?.state || ''} handleChange={handleChange} />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput isRequired={false} name="ref2Address.pincode" label="Pincode" value={values.ref2Address.pincode || ''} handleChange={handleChange} />
+                <TextInput isRequired={false} name="ref2Address.pincode" label="Pincode" value={values.ref2Address?.pincode || ''} handleChange={handleChange} />
             </Grid2>
         </Grid2>
     )

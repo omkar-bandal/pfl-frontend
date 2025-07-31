@@ -54,7 +54,7 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
       align: 'center',
       flex: 1,
       minWidth: 150,
-      hide: false
+      hide: true
     },
     {
       field: "cugNo",

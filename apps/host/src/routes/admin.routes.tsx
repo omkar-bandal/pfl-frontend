@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { ADMIN_ROUTES, adminRoutes } from '@prime-fresh/admin/modules';
 import {
   ApprovalFlowForm,

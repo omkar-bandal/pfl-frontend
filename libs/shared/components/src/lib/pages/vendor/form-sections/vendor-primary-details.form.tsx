@@ -13,7 +13,6 @@ export const VendorPrimaryDetails = () => {
 
     const { data: vSubcat } = useGetVendorSubcategoriesByQuery(values.category || '');
     const vendorSubcategory = vSubcat?.data ? mapToValueLabelArray(vSubcat.data, 'id', 'name') : [];
-    console.log(vendorCategory, "Vendor subcategories: ", vendorSubcategory)
     return (
         <Grid2 container spacing={1} padding={1}>
             <Grid2 size={{ xs: 12 }}>

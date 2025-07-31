@@ -1,0 +1,44 @@
+import * as yup from 'yup';
+export declare const inwardRegisterValidationSchema: yup.ObjectSchema<{
+    inwardType: string;
+    deliveryChallanNo: string | null | undefined;
+    grnNo: string | null | undefined;
+    companyName: string;
+    batchNo: string | null | undefined;
+    location: string;
+    date: string;
+    source: NonNullable<"vendor" | "farmer" | undefined>;
+    selectedParty: string;
+    inwardProducts: {
+        weight?: number | null | undefined;
+        packingMaterialWeight?: number | null | undefined;
+        uom: string;
+        productName: string;
+        quantity: number;
+        unitPrice: number;
+        grossWeight: number;
+    }[] | undefined;
+    inwardBy: string;
+    purchasedBy: string;
+    purchasedQty: number;
+    inwardQtyInKg: number;
+    inwardCost: number;
+    remarks: string | null | undefined;
+}, yup.AnyObject, {
+    inwardType: undefined;
+    deliveryChallanNo: undefined;
+    grnNo: undefined;
+    companyName: undefined;
+    batchNo: undefined;
+    location: undefined;
+    date: undefined;
+    source: undefined;
+    selectedParty: undefined;
+    inwardProducts: undefined;
+    inwardBy: undefined;
+    purchasedBy: undefined;
+    purchasedQty: undefined;
+    inwardQtyInKg: undefined;
+    inwardCost: undefined;
+    remarks: undefined;
+}, "">;

@@ -1,5 +1,4 @@
-import { AddShoppingCart, Approval, Category } from '@mui/icons-material';
-import { GridViewOutlined, Groups2, LocationOn, Scale } from '@mui/icons-material';
+import { Approval, Category, Inventory, LocalMall, GridViewOutlined, Groups2, LocationOn, Scale } from '@mui/icons-material';
 import { Navigations } from '@prime-fresh/modules';
 import { stringConstants } from '@prime-fresh/modules';
 import { ADMIN_ROUTES, adminRoutes, STRINGS } from '@prime-fresh/admin/modules';
@@ -11,11 +10,6 @@ export const adminNavigations: Navigations[] = [
     logo: <GridViewOutlined />,
     path: ADMIN_ROUTES.DASHBOARD_ADMIN,
   },
-  // {
-  //   name: "Level",
-  //   logo: <GridViewOutlined />,
-  //   path: adminRoutes.CREATE_LEVEL,
-  // },
   {
     name: 'Users',
     uniqueKey: 'users',
@@ -98,7 +92,7 @@ export const adminNavigations: Navigations[] = [
   {
     name: 'Product',
     uniqueKey: 'products',
-    logo: <AddShoppingCart />,
+    logo: <LocalMall />,
     children: [
       {
         name: 'Products',
@@ -125,7 +119,7 @@ export const adminNavigations: Navigations[] = [
   {
     name: 'Packaging Material',
     uniqueKey: 'packing-material',
-    logo: <AddShoppingCart />,
+    logo: <Inventory />,
     path: adminRoutes.VIEW_ALL_PACKAGING_MATERIAL,
   },
   {

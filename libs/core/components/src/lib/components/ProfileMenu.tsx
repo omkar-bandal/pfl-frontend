@@ -4,7 +4,7 @@ import { FC, ReactNode } from 'react';
 
 type ProfileMenuPropTypes = MenuProps & {
   loggedInUsername: string;
-  menuoptions: { label: string; icon: ReactNode; onClickFn: any }[];
+  menuoptions: { label: string; icon: ReactNode; onClickFn: any, disable?: boolean }[];
 };
 export const ProfileMenu: FC<ProfileMenuPropTypes> = (props) => {
   const { loggedInUsername, menuoptions, ...rest } = props;
@@ -54,7 +54,7 @@ export const ProfileMenu: FC<ProfileMenuPropTypes> = (props) => {
       </Typography>
       <Divider />
       {menuoptions.map((option, index) => (
-        <MenuItem key={index} onClick={option.onClickFn}>
+        <MenuItem key={index} onClick={option.onClickFn} disabled={option.disable || false}>
           <ListItemIcon>{option.icon}</ListItemIcon>
           <ListItemText primary={option.label} />
         </MenuItem>

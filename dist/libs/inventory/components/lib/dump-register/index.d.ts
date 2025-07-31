@@ -1,0 +1,3 @@
+export * from './dump-register.form';
+export * from './dump-register.table';
+export * from './dump-register.view';

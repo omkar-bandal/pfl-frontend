@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
+tslib_1.__exportStar(require("./employees.rq"), exports);
+tslib_1.__exportStar(require("./department.rq"), exports);
+tslib_1.__exportStar(require("./level.rq"), exports);
+tslib_1.__exportStar(require("./document-access-config.rq"), exports);
+//# sourceMappingURL=index.js.map

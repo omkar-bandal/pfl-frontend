@@ -2,15 +2,11 @@
 import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { ApprovalFlowService, IApprovalFlow, IDocumentType, IEmployeeReplacementReq } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { queryClient } from '@prime-fresh/modules';
 
 export function useCreateApprovalFlow(): UseMutationResult<ResultModel, ErrorModel, IApprovalFlow, unknown> {
   return useMutation<ResultModel, ErrorModel, IApprovalFlow, unknown>({
     mutationKey: ['create-approval-flow'],
     mutationFn: (data) => ApprovalFlowService.getInstance().createApprovalFlow(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows'], exact: true })
-    }
   });
 }
 
@@ -18,9 +14,6 @@ export function useUpdateApprovalFlow(id: string): UseMutationResult<ResultModel
   return useMutation<ResultModel, ErrorModel, IApprovalFlow, unknown>({
     mutationKey: ['update-approval-flow'],
     mutationFn: (data) => ApprovalFlowService.getInstance().updateApprovalFlow(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows'], exact: true })
-    }
   });
 }
 
@@ -54,8 +47,5 @@ export function useReplaceEmployee(): UseMutationResult<ResultModel, ErrorModel,
   return useMutation<ResultModel, ErrorModel, IEmployeeReplacementReq, unknown>({
     mutationKey: ['replace-employee'],
     mutationFn: (data) => ApprovalFlowService.getInstance().replaceEmployee(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-all-approval-flows'], exact: true })
-    }
   });
 }

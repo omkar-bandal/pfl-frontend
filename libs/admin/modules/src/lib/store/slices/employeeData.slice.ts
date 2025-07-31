@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetEmployee, PostEmployee } from "@prime-fresh/admin_api";
+import { IEmployee } from "@prime-fresh/admin_api";
 
 type customerDataState = {
-    employees: GetEmployee[];
-    employeeFormPreview: PostEmployee | null,
+    employees: IEmployee[];
+    employeeFormPreview: IEmployee | null,
 }
 const initialState: customerDataState = {
     employees: [],
@@ -14,10 +14,10 @@ const employeeDataSlice = createSlice({
     name: 'employeeData',
     initialState,
     reducers: {
-        setEmployeeData: (state, action: PayloadAction<GetEmployee[]>) => {
+        setEmployeeData: (state, action: PayloadAction<IEmployee[]>) => {
             state.employees = action.payload;
         },
-        setEmployeeFormPreview: (state, action: PayloadAction<PostEmployee>) => {
+        setEmployeeFormPreview: (state, action: PayloadAction<IEmployee>) => {
             state.employeeFormPreview = action.payload;
         }
     }

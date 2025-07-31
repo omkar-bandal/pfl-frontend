@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { socket } from '@prime-fresh/common_api';
 import { authState, INotification, useActions, useAppSelector } from '@prime-fresh/modules';
 
-const SocketInitializer = () => {
+export const SocketInitializer = () => {
   const { loggedInUserInfo } = useAppSelector(authState);
   const { addNotification } = useActions();
 
@@ -16,37 +16,27 @@ const SocketInitializer = () => {
     // 2. On socket connect, register the user
     const handleConnect = () => {
       console.log(`✅ Socket connected: ${socket.id}`);
-      socket.emit('client:test', { msg: 'Hello from client!' });
-      console.log('send client:test');
       socket.emit('registerUser', loggedInUserInfo.id.toString());
-      socket.emit('sendNotification', { userId: loggedInUserInfo.id, message: `${loggedInUserInfo.id} This is my user id.` });
     };
 
-    // const handleNewNotification = (data: INotification) => {
-    //   console.log(`📩 Notification received:`, data);
-    //   addNotification(data);
-    // };
+    const handleNewNotification = (data: INotification) => {
+      console.log(`📩 Notification received:`, data);
+      addNotification(data);
+    };
 
     socket.on('connect', handleConnect);
-    socket.on('server:test', (data) => { console.log('Received from server', data) });
     socket.on('user-registered', (data) => { console.log(data) });
-
-    // socket.on('newNotification', handleNewNotification);
-
-    //temp
-    // socket.onAny((event, payload) => {
-    //   console.log(`📡 Incoming event: ${event} ${payload}`);
-    // });
+    socket.on('newNotification', handleNewNotification);
 
     // 4. Clean up on unmount
     return () => {
       socket.off('connect', handleConnect);
-      // socket.off('newNotification', handleNewNotification);
+      socket.off('newNotification', handleNewNotification);
       socket.disconnect();
     };
   }, [loggedInUserInfo?.id, addNotification]);
 
-  return null; // No visual UI needed
+  return null;
 };
 
 export default SocketInitializer;

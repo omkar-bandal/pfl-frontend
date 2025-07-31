@@ -1,86 +1,82 @@
 import React, { useMemo, useState } from 'react'
-import { Box, Grid2, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Grid2, ButtonGroup, Button } from '@mui/material';
 import { useGetFarmersPartialData, mapToValueLabelArray, useGetPurchaseDataByFarmer } from '@prime-fresh/shared/modules';
-import { PageTitle } from '@prime-fresh/ui_shared';
-import { LineChart } from './LineChart';
+import { Select, DateInput, PageTitle, BarChart } from '@prime-fresh/ui_shared';
 
 export const PurchaseByFarmer = () => {
   const [farmerId, setFarmerId] = useState('');
+  const [dataGroupBy, setDataGroupBy] = useState<'date' | 'month' | 'year' | 'range'>('date');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const { data: farmers } = useGetFarmersPartialData();
   const farmerData = useMemo(() => farmers?.data ? mapToValueLabelArray(farmers.data, 'id', `fullName`) : [], [farmers?.data]);
   const { data: farmerPurchaseData } = useGetPurchaseDataByFarmer(farmerId);
-  // console.log('farmer Data: ', farmerPurchaseData);
-  const farmerDataDates = farmerPurchaseData?.data ? farmerPurchaseData?.data.map(data => data.date) : [];
-  const farmerDataQuantity = farmerPurchaseData?.data ? farmerPurchaseData?.data.map(data => data.totalQuantity) : [];
-  const farmerDataAmount = farmerPurchaseData?.data ? farmerPurchaseData?.data.map(data => data.totalAmount) : [];
+  const farmerDataQuantity = farmerPurchaseData?.data ? farmerPurchaseData?.data.map(data => ({ x: data.date, y: data.totalQuantity })) : [];
+  const farmerDataAmount = farmerPurchaseData?.data ? farmerPurchaseData?.data.map(data => ({ x: data.date, y: data.totalAmount })) : [];
 
   return (
     <Box flex={1} margin={2}>
-      <PageTitle pagetitle='Purchase Data Of Farmer' />
-      <Grid2 container spacing={1} marginY={1}>
+      <Grid2 container spacing={1}>
         <Grid2 size={12}>
-          <FormControl sx={{ m: 1, minWidth: 300 }} size="small" >
-            <InputLabel id="select-farmer" sx={{ fontSize: '14px' }}>
-              Farmer
-            </InputLabel>
-            <Select
-              labelId="select-farmer"
-              id="select-farmer"
-              size="small"
-              name="farmerId"
-              value={farmerId}
-              label="Farmer"
-              onChange={(e) => setFarmerId(e.target.value)}
-              sx={{
-                height: '40px',
-                fontSize: '14px',
-                '& .MuiSelect-select': { padding: '6px 10px' },
-              }}
-            >
-              {farmerData.map((type) => {
-                return (
-                  <MenuItem key={type.value} value={type.value} sx={{ fontSize: '14px' }}>
-                    {type.label}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+          <PageTitle pagetitle='Purchase Data Of Farmer' textAlign='center' />
         </Grid2>
+        <Grid2 size={6} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+          <Select
+            name="farmerId"
+            label="Farmer"
+            options={farmerData}
+            value={farmerId}
+            onChange={(e) => setFarmerId(e.target.value)}
+          />
+        </Grid2>
+        <Grid2 size={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <ButtonGroup variant="outlined" color='secondary'>
+            <Button variant={dataGroupBy === 'date' ? 'contained' : 'outlined'} sx={{ textTransform: 'none', fontWeight: 500 }} onClick={() => setDataGroupBy('date')}>Date</Button>
+            <Button variant={dataGroupBy === 'month' ? 'contained' : 'outlined'} sx={{ textTransform: 'none', fontWeight: 500 }} onClick={() => setDataGroupBy('month')}>Month</Button>
+            <Button variant={dataGroupBy === 'year' ? 'contained' : 'outlined'} sx={{ textTransform: 'none', fontWeight: 500 }} onClick={() => setDataGroupBy('year')}>Year</Button>
+            <Button variant={dataGroupBy === 'range' ? 'contained' : 'outlined'} sx={{ textTransform: 'none', fontWeight: 500 }} onClick={() => setDataGroupBy('range')}>Range</Button>
+          </ButtonGroup>
+        </Grid2>
+        {dataGroupBy === 'range' &&
+          (<Grid2 size={12} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <DateInput
+              name="startDate"
+              label="Start Date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              sx={{ marginX: 2 }}
+            />
+            <DateInput
+              name="endDate"
+              label="End Date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              sx={{ marginX: 2 }}
+            />
+          </Grid2>)}
         <Grid2 container size={12}>
-
-          <LineChart
-            title='Quantity'
-            labels={farmerDataDates}
-            datasets={[
-              {
-                label: 'Total Quantity (Kg)',
-                data: farmerDataQuantity,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                tension: 0.4,
-                fill: true,
-              }]}
+          <BarChart
+            title='Purchased Quantity'
+            data={farmerDataQuantity}
+            groupBy={dataGroupBy}
+            startDate={startDate}
+            endDate={endDate}
             height={300}
+            color='#00C300'
           />
         </Grid2>
         <Grid2 size={12}>
-          <LineChart
-            title='Amount'
-            labels={farmerDataDates}
-            datasets={[
-              {
-                label: 'Total Amount (Rs)',
-                data: farmerDataAmount,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                tension: 0.4,
-                fill: true,
-              }]}
+          <BarChart
+            title='Purchased Amount'
+            data={farmerDataAmount}
+            groupBy={dataGroupBy}
+            startDate={startDate}
+            endDate={endDate}
             height={300}
+            color='#0061FF'
           />
         </Grid2>
       </Grid2>
-    </Box>
+    </Box >
   )
 }

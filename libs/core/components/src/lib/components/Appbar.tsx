@@ -19,23 +19,23 @@ import { useNavigate } from 'react-router-dom';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 import { ProfileMenu } from './ProfileMenu';
 import { NotificationBox } from './NotificationBox';
-import { socket } from '@prime-fresh/common_api';
+// import { socket } from '@prime-fresh/common_api';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { addNotification, setNotifications } = useActions();
+  const { setNotifications } = useActions();
   const { mobileOpen, isSidebarClosing } = useAppSelector(layoutStates);
   const { loggedInUserInfo } = useAppSelector(authState);
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
 
-  React.useEffect(() => {
-    socket.on('newNotification', (data: INotification) => {
-      console.log(`📩 Notification received:`, data);
-      addNotification(data);
-    });
-  }, [addNotification]);
+  // React.useEffect(() => {
+  //   socket.on('newNotification', (data: INotification) => {
+  //     console.log(`📩 Notification received:`, data);
+  //     addNotification(data);
+  //   });
+  // }, [addNotification]);
 
   const notifications = useAppSelector(notificationsState);
 
@@ -68,7 +68,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
     setNotifications([])
   };
 
-  const { mutateAsync, isError, error } = useSignOut();
+  const { mutateAsync, isPending, isError, error } = useSignOut();
 
   const handleLogout = () => {
     const accessToken = localStorage.getItem('access_token');
@@ -88,6 +88,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           setEmployeePermissions(null);
           handleCloseProfileMenu();
           navigate(authRouteConstants.SIGN_IN);
+          toast.success('Logout successfully.')
         })
         .catch(() => {
           if (isError) {
@@ -97,6 +98,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
             setEmployeePermissions(null);
             toast.error(error ? error.message : 'Error while logout');
             navigate(authRouteConstants.SIGN_IN);
+            toast.error('Failed to logout.')
           }
         });
     } else {
@@ -108,6 +110,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
       label: 'Logout',
       icon: <Logout />,
       onClickFn: handleLogout,
+      disable: isPending && !isError,
     },
   ];
   return (

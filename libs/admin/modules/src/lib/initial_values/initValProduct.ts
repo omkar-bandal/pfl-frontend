@@ -1,18 +1,19 @@
-import { PostProduct, QCParameters } from '@prime-fresh/admin_api'
+import { PostProduct, IQCParameters } from '@prime-fresh/admin_api'
 
-export const initValProductQCParams: QCParameters = {
+export const initValProductQCParams: IQCParameters = {
     name: '',
     type: 'good',
 }
 
 export const initValProduct: PostProduct = {
     name: '',
-    productOrigin: '',
+    prefix: '',
     brand: '',
     classification: '',
     category: '',
     subcategory: '',
     description: '',
+    productOrigin: [],
     variety: [],
     count: [],
     size: [],

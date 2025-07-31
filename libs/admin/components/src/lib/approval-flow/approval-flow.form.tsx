@@ -150,7 +150,7 @@ export const ApprovalFlowForm = () => {
                 infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
                 isReadOnly={true}
@@ -166,14 +166,17 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-            <Grid2 size={{ xs: 6, md: 3 }}>
+            <Grid2 size={{ xs: 6, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"
               label="Maximum Amount Can Approve"
               name="approvers.firstApprover.maxAmtCanApprove"
               value={formik.values.approvers.firstApprover?.maxAmtCanApprove}
-              handleChange={formik.handleChange}
+                handleChange={e => {
+                  formik.setFieldValue('approvers.firstApprover.maxAmtCanApprove', e.target.value);
+                  formik.setFieldValue('approvers.secondApprover.minAmtCanApprove', Number((formik.values.approvers.firstApprover?.maxAmtCanApprove || 0) + 1))
+                }}
               slotProps={{
                 input: {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -193,14 +196,15 @@ export const ApprovalFlowForm = () => {
                 infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
+                isReadOnly={true}
               type="number"
               label="Minimum Amount Can Approve"
               name="approvers.secondApprover.minAmtCanApprove"
               value={formik.values.approvers.secondApprover?.minAmtCanApprove}
-              handleChange={formik.handleChange}
+                // handleChange={formik.handleChange}
               slotProps={{
                 input: {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -208,14 +212,17 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"
               label="Maximum Amount Can Approve"
               name="approvers.secondApprover.maxAmtCanApprove"
               value={formik.values.approvers.secondApprover?.maxAmtCanApprove}
-              handleChange={formik.handleChange}
+                handleChange={e => {
+                  formik.setFieldValue('approvers.secondApprover.maxAmtCanApprove', e.target.value);
+                  formik.setFieldValue('approvers.thirdApprover.minAmtCanApprove', Number((formik.values.approvers.secondApprover?.maxAmtCanApprove || 0) + 1))
+                }}
               slotProps={{
                 input: {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -235,14 +242,15 @@ export const ApprovalFlowForm = () => {
                 infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
+                isReadOnly={true}
               type="number"
               label="Minimum Amount Can Approve"
               name="approvers.thirdApprover.minAmtCanApprove"
               value={formik.values.approvers.thirdApprover?.minAmtCanApprove}
-              handleChange={formik.handleChange}
+                // handleChange={formik.handleChange}
               slotProps={{
                 input: {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -250,14 +258,14 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"
               label="Maximum Amount Can Approve"
               name="approvers.thirdApprover.maxAmtCanApprove"
               value={formik.values.approvers.thirdApprover?.maxAmtCanApprove}
-              handleChange={formik.handleChange}
+                handleChange={formik.handleChange}
               slotProps={{
                 input: {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -277,7 +285,7 @@ export const ApprovalFlowForm = () => {
                 infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"
@@ -292,14 +300,14 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"
               label="Maximum Amount Can Approve"
               name="approvers.fourthApprover.maxAmtCanApprove"
               value={formik.values.approvers.fourthApprover?.maxAmtCanApprove}
-              handleChange={formik.handleChange}
+                handleChange={formik.handleChange}
               slotProps={{
                 input: {
                   endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -319,7 +327,7 @@ export const ApprovalFlowForm = () => {
                 infoTipText={`Add employee(s) who will apporve the document created by the creator.`}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"
@@ -334,7 +342,7 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 3 }}>
+            <Grid2 size={{ xs: 12, md: 3 }} paddingTop={0.7}>
             <TextInput
               isRequired={false}
               type="number"

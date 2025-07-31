@@ -1,4 +1,4 @@
-import { Address } from "@prime-fresh/purchase_api";
+import { Address } from "@prime-fresh/common_api";
 
 export const displayAddress = (address: Address | undefined) => {
     const addressParts: string[] = [];

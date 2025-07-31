@@ -1,8 +1,26 @@
-import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM } from "@prime-fresh/common_api";
+// import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM } from "@prime-fresh/common_api";
+import { ApprovalSummany, DocumentStatus } from "@prime-fresh/common_api";
 
 export type RFPASourceType = 'vendor' | 'farmer';
 
-export interface IRFPAProducts extends FormProducts, FormProductUoM, FormProductQtyAmt {
+// export interface IRFPAProducts extends FormProducts, FormProductUoM, FormProductQtyAmt {
+//     grade: string | null;
+//     purchaseDate: string | null;
+//     dispatchDate: string | null;
+//     deliveryDate: string | null;
+//     deliveryLocation: string | null;
+//     expectedHarvestDate?: string | null;
+// }
+export interface IRFPAProducts {
+    productName: string | null,
+    origin: string | null,
+    variety: string | null,
+    count: string | null,
+    size: string | null,
+    uom: string | null,
+    quantity: number | null,
+    unitPrice: number | null,
+    amount: number | null,
     grade: string | null;
     purchaseDate: string | null;
     dispatchDate: string | null;

@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useGetRFPAForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
+import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 import { useReactToPrint } from 'react-to-print';
 
@@ -21,6 +21,9 @@ export const RFPAView = () => {
   const { data, isLoading, refetch } = useGetRFPAForViewById(rfpaId);
   const rfpa = data?.data ? data.data : null;
   console.log('RFPA data: ', rfpa);
+
+  const rfpaSourceData = rfpa?.selectedParty as any;
+
   const { data: companyData, isLoading: isCompanyDataLoading } = useGetAllCompaniesData();
   const company = companyData?.data ? companyData.data.find((comp) => comp.name === rfpa?.companyName) : null;
   const { loggedInUserInfo } = useAppSelector(authState);
@@ -51,36 +54,25 @@ export const RFPAView = () => {
       title: 'Purchase For Sales Location:',
       value: rfpa?.purchaseForSalesLocation ? rfpa?.purchaseForSalesLocation : rfpa?.otherPurchaseForSalesLoc,
     },
-    { title: 'Source:', value: rfpa?.source },
   ];
 
   const rfpaVendorField = [
-    { title: 'Vendor Name:', value: rfpa?.selectedParty || '' },
-    { title: 'Vendor Code:', value: rfpa?.createdTime || '' },
-    { title: 'Contact Person:', value: rfpa?.source },
-    { title: 'Company Email:', value: rfpa?.purchaseLocation ? rfpa?.purchaseLocation : rfpa?.otherPurchaseLoc },
-    {
-      title: 'Company Contact No:',
-      value: rfpa?.purchaseForSalesLocation ? rfpa?.purchaseForSalesLocation : rfpa?.otherPurchaseForSalesLoc,
-    },
-    {
-      title: 'Company Address:',
-      value: rfpa?.purchaseForSalesLocation ? rfpa?.purchaseForSalesLocation : rfpa?.otherPurchaseForSalesLoc,
-    },
+    { title: 'Source:', value: rfpa?.source },
+    { title: 'Vendor Name:', value: rfpaSourceData?.companyName || '' },
+    { title: 'Vendor Code:', value: rfpaSourceData?.vendorCode || '' },
+    { title: 'Contact Person:', value: rfpaSourceData?.contactPersonName || '' },
+    { title: 'Company Email:', value: rfpaSourceData?.officeEmail || '' },
+    { title: 'Company Contact No:', value: rfpaSourceData?.officeContactNo || '' },
+    { title: 'Company Address:', value: formatAddress(rfpaSourceData?.officeAddress) },
   ];
 
   const rfpaFarmerField = [
-    { title: 'Farmer Name:', value: rfpa?.createdDate || '' },
-    { title: 'Farmer Code:', value: rfpa?.createdTime || '' },
-    { title: 'Farmer Email:', value: rfpa?.purchaseLocation ? rfpa?.purchaseLocation : rfpa?.otherPurchaseLoc },
-    {
-      title: 'Farmer Contact No:',
-      value: rfpa?.purchaseForSalesLocation ? rfpa?.purchaseForSalesLocation : rfpa?.otherPurchaseForSalesLoc,
-    },
-    {
-      title: 'Farmer Address:',
-      value: rfpa?.purchaseForSalesLocation ? rfpa?.purchaseForSalesLocation : rfpa?.otherPurchaseForSalesLoc,
-    },
+    { title: 'Source:', value: rfpa?.source },
+    { title: 'Farmer Name:', value: rfpaSourceData?.fullname || '' },
+    { title: 'Farmer Code:', value: rfpaSourceData?.farmerCode || '' },
+    { title: 'Farmer Contact No:', value: rfpaSourceData?.primaryMobileNo || '' },
+    { title: 'Farm Address: ', value: formatAddress(rfpaSourceData?.farmAddress) || '' },
+    { title: 'Residential Address: ', value: formatAddress(rfpaSourceData?.residensialAddress) || '' },
   ];
 
   const paymentInfoField = [

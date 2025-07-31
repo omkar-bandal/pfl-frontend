@@ -1,0 +1,10 @@
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { EmployeeStatus, IEmployee } from '@prime-fresh/admin_api';
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+export declare function useCreateEmployee(): UseMutationResult<ResultModel, ErrorModel, IEmployee, unknown>;
+export declare function useUpdateEmployeeById(id: string): UseMutationResult<ResultModel, ErrorModel, IEmployee, unknown>;
+export declare function useDeleteEmployeeById(id: string): UseMutationResult<ResultModel, ErrorModel, unknown, unknown>;
+export declare function useGetAllEmployees(queryParams?: QueryParams): UseQueryResult<ApiBaseState<IEmployee[]>, ErrorModel>;
+export declare function useGetEmployeeForView(id: string): UseQueryResult<ApiBaseState<IEmployee>, ErrorModel>;
+export declare function useGetEmployeeForUpdate(id: string): UseQueryResult<ApiBaseState<IEmployee>, ErrorModel>;
+export declare function useUpdateEmployeeStatus(id: string): UseMutationResult<ResultModel, ErrorModel, EmployeeStatus, unknown>;

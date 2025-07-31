@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PostDumpRegister } from "@prime-fresh/inventory_api";
+import { IDumpRegister } from "@prime-fresh/inventory_api";
 import { RootState } from "../store.inventory";
 
 type DumpRegisterState = {
-    dumpRegisterFormPreview: PostDumpRegister | undefined;
+    dumpRegisterFormPreview: IDumpRegister | undefined;
 }
 const initialState : DumpRegisterState = {
     dumpRegisterFormPreview: undefined,
@@ -13,7 +13,7 @@ const dumpRegisterSlice = createSlice({
     name: "dumpRegister",
     initialState,
     reducers: {
-        setDumpRegisterFormPreview: (state, action: PayloadAction<PostDumpRegister | undefined>) => {
+        setDumpRegisterFormPreview: (state, action: PayloadAction<IDumpRegister | undefined>) => {
             state.dumpRegisterFormPreview = action.payload;
         }
     }

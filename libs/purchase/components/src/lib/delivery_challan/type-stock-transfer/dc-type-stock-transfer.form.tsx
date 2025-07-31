@@ -8,6 +8,7 @@ import {
   dcTypeStockTransferSchema,
   PURCHASE_ROUTES,
   purchaseOptionsConstants,
+  setPreviewDCTypeStockTransfer,
   useCreateDCTypeStockTransfer,
   useGetDCTypeStockTransferForUpdateById,
   useUpdateDCTypeStockTransferById,
@@ -24,10 +25,11 @@ import {
 } from '@prime-fresh/shared/modules';
 import { IDeliveryChallanTypeStockTransfer } from '@prime-fresh/purchase_api';
 import { DeliveryChallanBaseForm } from '../delivery-challan-base.form';
+import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 
 export const DCTypeStockTransferForm = () => {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   //Get Id from URL
   const { id } = useParams<{ id: string }>();
   const dcId = id ? id : '';
@@ -219,12 +221,12 @@ export const DCTypeStockTransferForm = () => {
                 isSubmitError={dcId === '' ? errorPost : errorPatch}
                 resetLabel="Reset"
                 onReset={formik.handleReset}
-                // previewLabel="Preview"
-                // onPreview={() => {
-                //   console.log('Buttons press');
-                //   dispatch(setPreview(true));
-                //   dispatch(setPreviewDC(formik.values));
-                // }}
+                  previewLabel="Preview"
+                  onPreview={() => {
+                    console.log('Buttons press');
+                    dispatch(setPreview(true));
+                    dispatch(setPreviewDCTypeStockTransfer(formik.values));
+                  }}
               />
             </Grid2>
           </Grid2>

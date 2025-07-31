@@ -1,7 +1,7 @@
 export interface GetAllRFPANums {
     id: string;
     rfpaId: string;
-    approvalStatus: string;
+    documentId: string;
 }
 
 export interface GetAllGRNNums {

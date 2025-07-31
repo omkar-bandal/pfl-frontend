@@ -1,4 +1,5 @@
-import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
+// import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
+import { ApprovalSummany, DocumentStatus } from '@prime-fresh/common_api';
 
 export type IGRNLocationType = 'cc' | 'dc';
 
@@ -8,7 +9,29 @@ export type IGRNPurchaseType = 'fixed price sales' | 'consignment sales/bikri' |
 
 export type IGRNSourceType = 'vendor' | 'farmer';
 
-export interface IGRNProducts extends FormProducts, FormProductUoM, FormProductQtyAmt, FormProductWeight {
+// export interface IGRNProducts extends FormProducts, FormProductUoM, FormProductQtyAmt, FormProductWeight {
+//   rtv: boolean;
+//   revisedRate: number;
+//   revisedQuantity: number;
+//   purchaseDate: string | null;
+//   expectedHarvestDate: string | null;
+//   dispatchDate: string | null;
+//   deliveryDate: string | null;
+//   deliveryLocation: string | null;
+// }
+export interface IGRNProducts {
+  productName: string | null,
+  origin: string | null,
+  variety: string | null,
+  count: string | null,
+  size: string | null,
+  uom: string | null,
+  quantity: number | null,
+  unitPrice: number | null,
+  amount: number | null,
+  grossWeight: number | null,
+  packingMaterialWeight: number | null,
+  netWeight: number | null,
   rtv: boolean;
   revisedRate: number;
   revisedQuantity: number;

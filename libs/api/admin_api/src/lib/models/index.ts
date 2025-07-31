@@ -7,3 +7,4 @@ export * from './address.type';
 export * from './postResponse.type';
 export * from './packaging-material';
 export * from './approval-flow';
+export * from './admin-dashboard.model';

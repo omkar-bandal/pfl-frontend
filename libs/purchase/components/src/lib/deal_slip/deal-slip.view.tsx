@@ -38,14 +38,15 @@ export const DealSlipView = () => {
     },
   ];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(dealslipId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithOneApproval(dealslipId);
   const changeDealSlipStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
       reason: reason,
     })
       .then(() => {
-        toast.success(actionRes?.message ? actionRes.message : `Deal slip ${status} successfully.`)
+        toast.success(actionRes?.message ? actionRes.message : `Deal slip ${status} successfully.`);
+        setReason('')
         refetch();
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of deal slip.'));
@@ -64,17 +65,21 @@ export const DealSlipView = () => {
                 <PageTitle pagetitle="Deal Slip" />
               </Grid>
               <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {dealSlip?.createdBy !== username && <BtnSmall
+                {dealSlip?.createdBy !== username &&
+                  <BtnSmall
                   label="Approve"
                   icon={<Check fontSize="inherit" />}
                   color="success"
                   onClick={() => changeDealSlipStatus('approved')}
+                  disabled={isPending && !isError}
                 />}
-                {dealSlip?.createdBy !== username && <BtnSmall
+                {dealSlip?.createdBy !== username &&
+                  <BtnSmall
                   label="Reject"
                   icon={<Close fontSize="inherit" />}
                   color="error"
                   onClick={() => changeDealSlipStatus('reject')}
+                  disabled={isPending && !isError}
                 />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
                 {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}

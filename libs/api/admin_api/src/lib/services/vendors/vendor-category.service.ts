@@ -16,7 +16,6 @@ export class VendorCategoryService extends BaseService {
 
     getAllVendorCategories(queryParams? : QueryParams):Promise<ApiBaseState<GetVendorCategory[]>> {
         const url = adminApiUrlConstants.GET_ALL_VENDOR_CAT(queryParams);
-        console.log(url);
         return this.get(url);
     }
 

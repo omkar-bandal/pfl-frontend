@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PostInwardRegister } from "@prime-fresh/inventory_api";
+import { IInwardRegister } from "@prime-fresh/inventory_api";
 import { RootState } from "../store.inventory";
 
 type InwardRegisterState = {
-    inwardRegisterFormPreview: PostInwardRegister | undefined;
+    inwardRegisterFormPreview: IInwardRegister | undefined;
 }
 const initialState : InwardRegisterState = {
     inwardRegisterFormPreview: undefined,
@@ -13,7 +13,7 @@ const inwardRegisterSlice = createSlice({
     name: "inwardRegister",
     initialState,
     reducers: {
-        setInwardRegisterFormPreview: (state, action: PayloadAction<PostInwardRegister | undefined>) => {
+        setInwardRegisterFormPreview: (state, action: PayloadAction<IInwardRegister | undefined>) => {
             state.inwardRegisterFormPreview = action.payload;
         }
     }
