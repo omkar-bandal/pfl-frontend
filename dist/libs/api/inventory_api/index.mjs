@@ -1807,7 +1807,7 @@ A.formToJSON = (n) => Ct(c.isHTMLForm(n) ? new FormData(n) : n);
 A.getAdapter = Pt.getAdapter;
 A.HttpStatusCode = Be;
 A.default = A;
-const He = "http://ec2-13-203-204-143.ap-south-1.compute.amazonaws.com", Ls = () => A.create({
+const He = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", Ls = () => A.create({
   baseURL: He,
   withCredentials: !0,
   headers: {

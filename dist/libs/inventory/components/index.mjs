@@ -37103,7 +37103,7 @@ kn.formToJSON = (e) => aA(de.isHTMLForm(e) ? new FormData(e) : e);
 kn.getAdapter = hA.getAdapter;
 kn.HttpStatusCode = xv;
 kn.default = kn;
-const _w = "http://ec2-13-203-204-143.ap-south-1.compute.amazonaws.com", FY = () => kn.create({
+const _w = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", FY = () => kn.create({
   baseURL: _w,
   withCredentials: !0,
   headers: {

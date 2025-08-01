@@ -4046,7 +4046,7 @@ ae.formToJSON = (r) => qs(d.isHTMLForm(r) ? new FormData(r) : r);
 ae.getAdapter = Ys.getAdapter;
 ae.HttpStatusCode = ln;
 ae.default = ae;
-const wn = "http://ec2-13-203-204-143.ap-south-1.compute.amazonaws.com", Ea = () => ae.create({
+const wn = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", Ea = () => ae.create({
   baseURL: wn,
   withCredentials: !0,
   headers: {

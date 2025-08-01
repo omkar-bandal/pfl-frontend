@@ -4643,7 +4643,7 @@ Te.formToJSON = (r) => Ba(b.isHTMLForm(r) ? new FormData(r) : r);
 Te.getAdapter = Ha.getAdapter;
 Te.HttpStatusCode = xs;
 Te.default = Te;
-const Js = "http://ec2-13-203-204-143.ap-south-1.compute.amazonaws.com", ec = () => Te.create({
+const Js = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", ec = () => Te.create({
   baseURL: Js,
   withCredentials: !0,
   headers: {
