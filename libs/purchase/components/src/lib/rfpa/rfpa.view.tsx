@@ -68,7 +68,7 @@ export const RFPAView = () => {
 
   const rfpaFarmerField = [
     { title: 'Source:', value: rfpa?.source },
-    { title: 'Farmer Name:', value: rfpaSourceData?.fullname || '' },
+    { title: 'Farmer Name:', value: rfpaSourceData?.fullName || '' },
     { title: 'Farmer Code:', value: rfpaSourceData?.farmerCode || '' },
     { title: 'Farmer Contact No:', value: rfpaSourceData?.primaryMobileNo || '' },
     { title: 'Farm Address: ', value: formatAddress(rfpaSourceData?.farmAddress) || '' },
@@ -117,7 +117,7 @@ export const RFPAView = () => {
               <PageTitle pagetitle="Request For Purchase Approval" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {rfpa?.createdBy !== username &&
+                {rfpa?.createdBy !== username.split(' ')[0] &&
                   <BtnSmall
                     label="Approve"
                     icon={<Check fontSize="inherit" />}
@@ -125,7 +125,7 @@ export const RFPAView = () => {
                     disabled={isPending && !isError}
                     onClick={() => changeRFPAStatus('approved')}
                   />}
-                {rfpa?.createdBy !== username &&
+                {rfpa?.createdBy !== username.split(' ')[0] &&
                   <BtnSmall
                     label="Disapprove"
                     icon={<Close fontSize="inherit" />}

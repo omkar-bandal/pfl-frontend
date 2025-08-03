@@ -36,6 +36,11 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+        transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-5px)',
+          boxShadow: 10,
+        },
       }}
       elevation={4}
     >

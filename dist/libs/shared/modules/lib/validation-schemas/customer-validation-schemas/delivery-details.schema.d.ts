@@ -8,15 +8,13 @@ export declare const deliveryDetailsValidationSchema: yup.ObjectSchema<{
         state: string;
         pincode: string;
     };
-    deliveryAddressProofCopy: {} | null | undefined;
-    deliveryTime: string | null | undefined;
     receivingPersonFName: string;
-    receivingPersonMName: string | null | undefined;
+    receivingPersonMName: yup.Maybe<string | undefined>;
     receivingPersonLName: string;
     primaryContactNo: string;
-    secondaryContactNo: string | null | undefined;
+    secondaryContactNo: yup.Maybe<string | undefined>;
     emailPrimary: string;
-    emailSecondary: string | null | undefined;
+    emailSecondary: yup.Maybe<string | undefined>;
 }, yup.AnyObject, {
     deliveryAddress: {
         address1: undefined;
@@ -26,8 +24,6 @@ export declare const deliveryDetailsValidationSchema: yup.ObjectSchema<{
         state: undefined;
         pincode: undefined;
     };
-    deliveryAddressProofCopy: undefined;
-    deliveryTime: undefined;
     receivingPersonFName: undefined;
     receivingPersonMName: undefined;
     receivingPersonLName: undefined;

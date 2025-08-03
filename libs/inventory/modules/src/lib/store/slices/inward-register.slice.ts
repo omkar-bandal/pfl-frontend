@@ -3,7 +3,7 @@ import { IInwardRegister } from "@prime-fresh/inventory_api";
 import { RootState } from "../store.inventory";
 
 type InwardRegisterState = {
-    inwardRegisterFormPreview: IInwardRegister | undefined;
+    inwardRegisterFormPreview: Omit<IInwardRegister, 'id'> | undefined;
 }
 const initialState : InwardRegisterState = {
     inwardRegisterFormPreview: undefined,
@@ -13,7 +13,7 @@ const inwardRegisterSlice = createSlice({
     name: "inwardRegister",
     initialState,
     reducers: {
-        setInwardRegisterFormPreview: (state, action: PayloadAction<IInwardRegister | undefined>) => {
+        setInwardRegisterFormPreview: (state, action: PayloadAction<Omit<IInwardRegister, 'id'> | undefined>) => {
             state.inwardRegisterFormPreview = action.payload;
         }
     }

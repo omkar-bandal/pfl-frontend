@@ -11,6 +11,7 @@ export const formatDate = (dateString: string | null) => {
   
   // Format currency values
 export const formatCurrency = (value: number | string) => {
+  if (!value) return 0;
   return value ? `${Number(value).toFixed(2)} Rs.` : 0;
   }
   

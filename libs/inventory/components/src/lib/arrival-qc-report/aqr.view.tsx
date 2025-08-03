@@ -2,16 +2,18 @@ import { useParams } from 'react-router-dom';
 import { Box, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
 import { BtnSmall, DrawerContainer, formatDate, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useGetAQRForViewById } from '@prime-fresh/inventory/modules';
-import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
+import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
 import React, { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 import styles from './aqr.module.css';
 import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 
 export const AQRView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { canDownload } = usePermission('aqr');
   const [reason, setReason] = useState<string>('');
   const { openDrawer } = useActions();
@@ -50,6 +52,7 @@ export const AQRView = () => {
     {
       title: 'Approved',
       subtitle: aqrData?.approvalSummary?.firstApproved?.name || '',
+      description: aqrData?.approvalSummary?.firstApproved?.reason || '',
       status: aqrData?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
@@ -57,7 +60,7 @@ export const AQRView = () => {
       status: aqrData?.overAllStatus || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(aqrId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithOneApproval(aqrId);
   const changeAQRStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -66,6 +69,7 @@ export const AQRView = () => {
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `Arrival quality report ${status} successfully.`)
         refetch();
+        setReason('');
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of arrival quality report.'));
   };
@@ -80,8 +84,22 @@ export const AQRView = () => {
             <PageTitle pagetitle="Arrival Quality Report" />
           </Grid>
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeAQRStatus('approved')} />
-            <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeAQRStatus('reject')} />
+            {aqrData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Approve"
+                icon={<Check fontSize="inherit" />}
+                color="success"
+                onClick={() => changeAQRStatus('approved')}
+                disabled={isPending && !isError}
+              />}
+            {aqrData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Disapprove"
+                icon={<Close fontSize="inherit" />}
+                color="error"
+                onClick={() => changeAQRStatus('reject')}
+                disabled={isPending && !isError}
+              />}
             {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {canDownload && (
               <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />

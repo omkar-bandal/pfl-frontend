@@ -7,11 +7,13 @@ import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompanie
 import { Box, Grid, LinearProgress, Typography, TextField, Container, IconButton } from '@mui/material';
 import { useGetPackingMeterialPaymentVoucherForViewById } from '@prime-fresh/purchase/modules';
 import { BtnSmall, DrawerContainer, formatCurrency, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const PackingMaterialPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { openDrawer } = useActions();
   const { canDownload } = usePermission('packaging-material-voucher');
   // const navigate = useNavigate();
@@ -33,33 +35,39 @@ export const PackingMaterialPaymentVoucherView = () => {
     {
       title: 'Verified',
       subtitle: pmpVoucher?.approvalSummary?.verified?.name || '',
+      description: pmpVoucher?.approvalSummary?.verified?.reason || '',
       status: pmpVoucher?.approvalSummary?.verified?.status || 'hold'
     },
     {
       title: 'First Approval',
       subtitle: pmpVoucher?.approvalSummary?.firstApproved?.name || '',
+      description: pmpVoucher?.approvalSummary?.firstApproved?.reason || '',
       status: pmpVoucher?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
       title: 'Second Approval',
       subtitle: pmpVoucher?.approvalSummary?.secondApproved?.name || '',
+      description: pmpVoucher?.approvalSummary?.secondApproved?.reason || '',
       status: pmpVoucher?.approvalSummary?.secondApproved?.status || 'hold',
       disabled: pmpVoucher?.approvalSummary?.secondApproved === null ? true : false
     },
     {
       title: 'Third Approval',
       subtitle: pmpVoucher?.approvalSummary?.thirdApproved?.name || '',
+      description: pmpVoucher?.approvalSummary?.thirdApproved?.reason || '',
       status: pmpVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
       disabled: pmpVoucher?.approvalSummary?.secondApproved === null ? true : false
     },
     {
       title: 'First Finalizer',
       subtitle: pmpVoucher?.approvalSummary?.firstFinalized?.name || '',
+      description: pmpVoucher?.approvalSummary?.firstFinalized?.reason || '',
       status: pmpVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
     },
     {
       title: 'Second Finalizer',
       subtitle: pmpVoucher?.approvalSummary?.secondFinalized?.name || '',
+      description: pmpVoucher?.approvalSummary?.secondFinalized?.reason || '',
       status: pmpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
     },
     {
@@ -90,29 +98,20 @@ export const PackingMaterialPaymentVoucherView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(pmpVoucherId);
-  const approvePMPVoucher = () => {
+  const { mutateAsync, error, data: actionRes, isError, isPending } = useUpdateDocStatusWithThreeApproval(pmpVoucherId);
+  const changePMPVoucherStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
         refetch();
-        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.')
+        toast.success(actionRes?.message ? actionRes.message : `Voucher ${status}.`);
+        setReason('');
       })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while changing status of voucher.'));
   };
 
-  const rejectPMPVoucher = () => {
-    mutateAsync({
-      status: 'reject',
-      reason: reason,
-    }).then(() => {
-      refetch();
-      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
-    })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while rejecting voucher.'));
-  };
   return (
     <Container maxWidth="xl">
       {isVoucherLoading || isCompanyDataLoading ? (
@@ -126,11 +125,30 @@ export const PackingMaterialPaymentVoucherView = () => {
               <PageTitle pagetitle="Packing Material Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approvePMPVoucher()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectPMPVoucher()} />
+                {pmpVoucher?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
+                    disabled={isPending && !isError}
+                    onClick={() => changePMPVoucherStatus('approved')}
+                  />}
+                {pmpVoucher?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Disapprove"
+                    icon={<Close fontSize="inherit" />}
+                    color="error"
+                    disabled={isPending && !isError}
+                    onClick={() => changePMPVoucherStatus('reject')}
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />
               )}
             </Grid>
             <Grid item xs={12}>

@@ -12,6 +12,8 @@ import { authState, useActions, useAppSelector, usePermission } from '@prime-fre
 export const LabourPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { canDownload } = usePermission('labor-payment-voucher');
   const [reason, setReason] = useState<string>('');
   const { openDrawer } = useActions();
@@ -20,8 +22,7 @@ export const LabourPaymentVoucherView = () => {
   const { data, isLoading, refetch } = useGetLaborPaymentVoucherForViewById(lpVoucherId);
   const lpVoucher = data?.data ? data.data : null;
   console.log(lpVoucher);
-  const { loggedInUserInfo } = useAppSelector(authState);
-  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function createData(srNo: number, title: string, value: any) {
     return { srNo, title, value };
@@ -102,29 +103,19 @@ export const LabourPaymentVoucherView = () => {
         status: lpVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
       },
     ]
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(lpVoucherId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithThreeApproval(lpVoucherId);
 
-  const approveLPVoucher = () => {
+  const changeLPVoucherStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
         refetch();
-        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.');
+        toast.success(actionRes?.message ? actionRes.message : `Voucher ${status}.`);
+        setReason('')
       })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
-  };
-
-  const rejectLPVoucher = () => {
-    mutateAsync({
-      status: 'reject',
-      reason: reason,
-    }).then(() => {
-      refetch();
-      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
-    })
-      .catch(() => toast.error(error?.message ? error?.message : 'Error while rejecting voucher.'));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while changing status of voucher.'));
   };
   return (
     <Container maxWidth="xl">
@@ -139,17 +130,19 @@ export const LabourPaymentVoucherView = () => {
               <PageTitle pagetitle="Labour Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {lpVoucher?.createdBy !== username && <BtnSmall
+                {lpVoucher?.createdBy !== username.split(' ')[0] && <BtnSmall
                   label="Approve"
                   icon={<Check fontSize="inherit" />}
                   color="success"
-                  onClick={() => approveLPVoucher()}
+                  disabled={isPending && !isError}
+                  onClick={() => changeLPVoucherStatus('approved')}
                 />}
-                {lpVoucher?.createdBy !== username && <BtnSmall
-                  label="Reject"
+                {lpVoucher?.createdBy !== username.split(' ')[0] && <BtnSmall
+                  label="Disapprove"
                   icon={<Close fontSize="inherit" />}
                   color="error"
-                  onClick={() => rejectLPVoucher()}
+                  disabled={isPending && !isError}
+                  onClick={() => changeLPVoucherStatus('reject')}
                 />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (

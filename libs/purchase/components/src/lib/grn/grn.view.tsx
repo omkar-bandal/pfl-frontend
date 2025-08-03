@@ -9,7 +9,7 @@ import {
   useGetGRNForViewById,
 } from '@prime-fresh/purchase/modules';
 import { useReactToPrint } from 'react-to-print';
-import { BtnSmall, DrawerContainer, formatCurrency, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
+import { BtnSmall, DrawerContainer, formatCurrency, formatDate, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import {
   farmersDataStates,
   setSelectedFarmerPartialData,
@@ -144,14 +144,16 @@ export const GRNView = () => {
               <PageTitle pagetitle="Goods Received Note" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {grn?.createdBy !== username && <BtnSmall
+                {grn?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
                 label="Approve"
                 icon={<Check fontSize="inherit" />}
                 color="success"
                   onClick={() => changeGRNStatus('approved')}
                   disabled={grn?.overAllStatus === 'reject' || (isPending && !isError) ? true : false}
                 />}
-                {grn?.createdBy !== username && <BtnSmall
+                {grn?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
                   label="Disapprove"
                   icon={<Close fontSize="inherit" />}
                   color="error" onClick={() => changeGRNStatus('reject')}
@@ -416,7 +418,7 @@ export const GRNView = () => {
                   </div>
                 ))}
               </div>
-                {/* <div style={{ width: '100%', border: borderColor, padding: 0, display: 'flex' }}>
+                <div style={{ width: '100%', border: borderColor, padding: 0, display: 'flex' }}>
                 <div style={{ width: '75%' }} className={`${styles['payment-terms-grid']}`}>
                   {[
                     { label: 'Payment Mode', value: convertInTitleCase(grn?.paymentInfo.paymentMode || '') },
@@ -446,7 +448,7 @@ export const GRNView = () => {
                     Supervisor Signature
                   </span>
                 </div>
-              </div> */}
+                </div>
             </div>
           </Box>
         </Box>

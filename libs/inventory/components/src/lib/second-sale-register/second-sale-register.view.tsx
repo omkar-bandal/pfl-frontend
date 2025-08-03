@@ -4,14 +4,16 @@ import { useGetSecondSaleRegisterForViewById } from '@prime-fresh/inventory/modu
 import { BtnSmall, DataViewer, DrawerContainer, InfoTooltip, PageTitle, StepperData, toast, VerticalStepper } from '@prime-fresh/ui_shared';
 import { useParams } from 'react-router-dom';
 import { secondSaleRegisterViewConfig } from './second-sale-register.view-config';
-import { Check, ChevronRight, Close, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
+import { Check, ChevronRight, Close } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
 import { useState } from 'react';
-import { useActions } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector } from '@prime-fresh/modules';
 
 export const SecondSaleRegisterView = () => {
   const { id } = useParams<{ id: string }>();
   const secondSaleId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
   const { data, isLoading, refetch } = useGetSecondSaleRegisterForViewById(secondSaleId);
@@ -38,17 +40,18 @@ export const SecondSaleRegisterView = () => {
       status: secondSaleData?.approvalSummary?.secondApproved?.status || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(secondSaleId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithTwoApproval(secondSaleId);
   const changeSecondSaleStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
       reason: reason,
     })
       .then(() => {
-        toast.success(actionRes?.message ? actionRes.message : `Deal slip ${status} successfully.`)
+        toast.success(actionRes?.message ? actionRes.message : `Second sale ${status} successfully.`)
         refetch();
+        setReason('');
       })
-      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of deal slip.'));
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of second sale.'));
   };
   return isLoading ? (
     <Box flex={1}>
@@ -61,8 +64,22 @@ export const SecondSaleRegisterView = () => {
             <PageTitle pagetitle="Second Sale Register" />
           </Grid>
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeSecondSaleStatus('approved')} />
-            <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeSecondSaleStatus('reject')} />
+            {secondSaleData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Approve"
+                icon={<Check fontSize="inherit" />}
+                color="success"
+                disabled={isPending && !isError}
+                onClick={() => changeSecondSaleStatus('approved')}
+              />}
+            {secondSaleData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Disapprove"
+                icon={<Close fontSize="inherit" />}
+                color="error"
+                disabled={isPending && !isError}
+                onClick={() => changeSecondSaleStatus('reject')}
+              />}
             {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
           </Grid>

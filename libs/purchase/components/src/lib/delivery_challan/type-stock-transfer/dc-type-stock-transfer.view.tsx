@@ -8,11 +8,13 @@ import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdat
 import { Box, LinearProgress, Typography, Container, Grid, TextField, Grid2, IconButton } from '@mui/material';
 import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 import styles from './dc-type-stock-transfer.module.css';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const DCTypeStockTransferView = () => {
   const { id } = useParams<{ id: string }>();
   const dcId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { canDownload } = usePermission('delivery-challan');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
@@ -72,7 +74,7 @@ export const DCTypeStockTransferView = () => {
 
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dcId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithTwoApproval(dcId);
   const changeDCTypeStockTransferStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -80,8 +82,8 @@ export const DCTypeStockTransferView = () => {
     })
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `Delivery Challan ${status} successfully.`)
-        setReason('');
         refetch();
+        setReason('');
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of delivery challan.'));
   };
@@ -99,18 +101,22 @@ export const DCTypeStockTransferView = () => {
               <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery Challan Only For Stock Transfter" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                {dcTypeStockTransferData?.createdBy !== username.split(' ')[0] &&
                 <BtnSmall
                   label="Approve"
                   icon={<Check />}
                   color="success"
+                  disabled={isPending && !isError}
                   onClick={() => changeDCTypeStockTransferStatus('approved')}
-                />
+                  />}
+                {dcTypeStockTransferData?.createdBy !== username.split(' ')[0] &&
                 <BtnSmall
-                  label="Reject"
+                  label="Disapprove"
                   icon={<Close />}
                   color="error"
+                  disabled={isPending && !isError}
                   onClick={() => changeDCTypeStockTransferStatus('reject')}
-                />
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                   <BtnSmall

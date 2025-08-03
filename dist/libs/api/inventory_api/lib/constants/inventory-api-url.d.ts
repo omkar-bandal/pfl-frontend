@@ -56,4 +56,9 @@ export declare const inventoryApiUrl: {
     CREATE_PROF_INV: string;
     GET_ALL_FINAL_INV: string;
     CREATE_FINAL_INV: string;
+    GET_ALL_RBC: (queryParams?: QueryParams) => string;
+    GET_RBC_BY_ID: (id: string) => string;
+    UPDATE_RBC: (id: string) => string;
+    DELETE_RBC: (id: string) => string;
+    CREATE_RBC: string;
 };

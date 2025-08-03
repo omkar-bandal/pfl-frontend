@@ -29,6 +29,7 @@ export const StockTable = () => {
 
   const { data, isLoading, isError, error } = useGetStockGlobal(queryParams);
   const stockData = data ? data : null;
+  console.log('All Stock', stockData);
   const rowCountRef = React.useRef(stockData?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (stockData?.allRecords !== undefined) {

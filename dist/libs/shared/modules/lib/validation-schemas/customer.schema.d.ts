@@ -4,7 +4,6 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
     customerTypes: string;
     customerCategory: string;
     organisationType: string;
-    otherType: string | null | undefined;
     customerAddress: {
         address2?: string | null | undefined;
         address1: string;
@@ -14,19 +13,19 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         pincode: string;
     };
     primaryContactNo: string;
-    secondaryContactNo: string | null | undefined;
+    secondaryContactNo: yup.Maybe<string | undefined>;
     emailPrimary: string;
-    emailSecondary: string | null | undefined;
+    emailSecondary: yup.Maybe<string | undefined>;
     keyMobileNumbers: {
-        ref1MName?: string | null | undefined;
-        ref2FName?: string | null | undefined;
-        ref2MName?: string | null | undefined;
-        ref2LName?: string | null | undefined;
-        ref2Email?: string | null | undefined;
-        accDeptMName?: string | null | undefined;
-        ownerMName?: string | null | undefined;
-        mandiLicenceNo?: string | null | undefined;
-        regiNo?: string | null | undefined;
+        ref1MName?: yup.Maybe<string | undefined>;
+        ref2FName?: yup.Maybe<string | undefined>;
+        ref2MName?: yup.Maybe<string | undefined>;
+        ref2LName?: yup.Maybe<string | undefined>;
+        ref2Email?: yup.Maybe<string | undefined>;
+        accDeptMName?: yup.Maybe<string | undefined>;
+        ownerMName?: yup.Maybe<string | undefined>;
+        mandiLicenceNo?: yup.Maybe<string | undefined>;
+        regiNo?: yup.Maybe<string | undefined>;
         consumenrNo?: string | undefined;
         electricityBillCopy?: {} | undefined;
         notElectricityBillReason?: string | undefined;
@@ -35,7 +34,7 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         visitinContactNo?: string | undefined;
         visitingCardCopy?: {} | undefined;
         notVisitingCardReason?: string | undefined;
-        ref2ContactNo?: string | null | undefined;
+        ref2ContactNo?: yup.Maybe<string | undefined>;
         ref1FName: string;
         ref1LName: string;
         ref1Address: {
@@ -57,15 +56,12 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         customerBlacklisted: NonNullable<boolean | undefined>;
         visitingCard: NonNullable<boolean | undefined>;
         ref1ContactNo: string;
-        ref2address: {} | null;
     };
     billingDetails: {
-        commonlyKnownAs?: string | null | undefined;
-        contactPersonMName?: string | null | undefined;
-        secondaryContactNo?: string | null | undefined;
-        emailSecondary?: string | null | undefined;
-        billingAddressProofCopy?: {} | null | undefined;
-        billingFormatCopy?: {} | null | undefined;
+        commonlyKnownAs?: yup.Maybe<string | undefined>;
+        contactPersonMName?: yup.Maybe<string | undefined>;
+        secondaryContactNo?: yup.Maybe<string | undefined>;
+        emailSecondary?: yup.Maybe<string | undefined>;
         billingName: string;
         contactPersonFName: string;
         contactPersonLName: string;
@@ -81,11 +77,9 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         emailPrimary: string;
     };
     deliveryDetails: {
-        secondaryContactNo?: string | null | undefined;
-        emailSecondary?: string | null | undefined;
-        deliveryAddressProofCopy?: {} | null | undefined;
-        deliveryTime?: string | null | undefined;
-        receivingPersonMName?: string | null | undefined;
+        secondaryContactNo?: yup.Maybe<string | undefined>;
+        emailSecondary?: yup.Maybe<string | undefined>;
+        receivingPersonMName?: yup.Maybe<string | undefined>;
         primaryContactNo: string;
         emailPrimary: string;
         deliveryAddress: {
@@ -99,30 +93,10 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         receivingPersonFName: string;
         receivingPersonLName: string;
     };
-    statutoryDetails: {
-        gstn?: string | null | undefined;
-        panNo?: string | null | undefined;
-        panCopy?: {} | null | undefined;
-        aadharNo?: string | null | undefined;
-        addharCopy?: {} | null | undefined;
-        regiCertificateCopy?: {} | null | undefined;
-        billBookCopy?: {} | null | undefined;
-        certificationsDetails?: string | null | undefined;
-        otherCertifications?: string | null | undefined;
-        corpRegiDetails?: string | null | undefined;
-        otherCorpRegiDetails?: string | null | undefined;
-        incorpoCertificateCopy?: {} | null | undefined;
-        cinNo?: string | null | undefined;
-    };
     bankDetails: {
-        cancelledChequeCopy?: {} | undefined;
-        notCancelledChequeReason?: string | undefined;
-        bankAccHolderMName?: string | null | undefined;
-        otherAccType?: string | null | undefined;
-        bankStatementCopy?: any;
+        bankAccHolderMName?: yup.Maybe<string | undefined>;
         bankName: string;
         ifscCode: string;
-        ifCancelledCheque: NonNullable<boolean | undefined>;
         bankAccHolderFName: string;
         bankAccHolderLName: string;
         bankBranch: string;
@@ -185,7 +159,6 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
     customerTypes: undefined;
     customerCategory: undefined;
     organisationType: undefined;
-    otherType: undefined;
     customerAddress: {
         address1: undefined;
         address2: undefined;
@@ -236,7 +209,6 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         ref2FName: undefined;
         ref2MName: undefined;
         ref2LName: undefined;
-        ref2address: {};
         ref2ContactNo: undefined;
         ref2Email: undefined;
     };
@@ -258,8 +230,6 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         secondaryContactNo: undefined;
         emailPrimary: undefined;
         emailSecondary: undefined;
-        billingAddressProofCopy: undefined;
-        billingFormatCopy: undefined;
     };
     deliveryDetails: {
         deliveryAddress: {
@@ -270,8 +240,6 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
             state: undefined;
             pincode: undefined;
         };
-        deliveryAddressProofCopy: undefined;
-        deliveryTime: undefined;
         receivingPersonFName: undefined;
         receivingPersonMName: undefined;
         receivingPersonLName: undefined;
@@ -280,32 +248,13 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
         emailPrimary: undefined;
         emailSecondary: undefined;
     };
-    statutoryDetails: {
-        panNo: undefined;
-        panCopy: undefined;
-        aadharNo: undefined;
-        addharCopy: undefined;
-        gstn: undefined;
-        regiCertificateCopy: undefined;
-        billBookCopy: undefined;
-        certificationsDetails: undefined;
-        otherCertifications: undefined;
-        corpRegiDetails: undefined;
-        otherCorpRegiDetails: undefined;
-        incorpoCertificateCopy: undefined;
-        cinNo: undefined;
-    };
     bankDetails: {
-        ifCancelledCheque: undefined;
-        cancelledChequeCopy: undefined;
-        notCancelledChequeReason: undefined;
         bankAccHolderFName: undefined;
         bankAccHolderMName: undefined;
         bankAccHolderLName: undefined;
         bankName: undefined;
         bankBranch: undefined;
         accType: undefined;
-        otherAccType: undefined;
         bankAccNo: undefined;
         ifscCode: undefined;
         bankAddress: {
@@ -316,7 +265,6 @@ export declare const customerValidationSchema: yup.ObjectSchema<{
             state: undefined;
             pincode: undefined;
         };
-        bankStatementCopy: undefined;
     };
     productSpecification: {};
     paymentTerms: {

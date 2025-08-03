@@ -3,7 +3,6 @@ import { Box, Grid2, InputAdornment, LinearProgress } from '@mui/material';
 import {
   adminRoutes,
   PackagingMaterialInitialValues,
-  setPackagingMaterialFormPreview,
   useCreatePackagingMaterial,
   useGetPackagingMaterialById,
   useUpdatePackagingMaterialById,
@@ -25,11 +24,8 @@ import {
 import { FormikProvider, useFormik } from 'formik';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PackagingMaterialPreview } from './packaging-material.preview';
-import { useAppDispatch } from '@prime-fresh/modules';
 
 export const PackagingMaterialForm = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const packMatId = id ? id : '';
@@ -109,7 +105,6 @@ export const PackagingMaterialForm = () => {
       <LinearProgress />
     </Box>
   ) : (
-    <>
       <FormikProvider
         key={
           packMatId === ''
@@ -213,16 +208,10 @@ export const PackagingMaterialForm = () => {
                 isSubmitError={packMatId === '' ? postError : patchError}
                 resetLabel="Reset"
                 onReset={formik.handleReset}
-                previewLabel="Preview"
-                onPreview={() =>
-                  dispatch(setPackagingMaterialFormPreview(formik.values))
-                }
               />
             </Grid2>
           </Grid2>
         </form>
       </FormikProvider>
-      <PackagingMaterialPreview />
-    </>
   );
 };

@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { eodReportViewConfig } from './eod-report.view-config';
 import { useGetEODReportForViewById } from '@prime-fresh/inventory/modules';
-import { Check, ChevronRight, Close, Message } from '@mui/icons-material';
-import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
-import { useActions } from '@prime-fresh/modules';
+import { Check, ChevronRight, Close } from '@mui/icons-material';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
+import { authState, useActions, useAppSelector } from '@prime-fresh/modules';
 
 export const EODReportView = () => {
   const { id } = useParams<{ id: string }>();
   const eodId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
   const { data, isLoading, refetch } = useGetEODReportForViewById(eodId);
@@ -25,11 +27,13 @@ export const EODReportView = () => {
     {
       title: 'Approved',
       subtitle: eodReportData?.approvalSummary?.firstApproved?.name || '',
+      description: eodReportData?.approvalSummary?.firstApproved?.reason || '',
       status: eodReportData?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
       title: 'Approved',
       subtitle: eodReportData?.approvalSummary?.secondApproved?.name || '',
+      description: eodReportData?.approvalSummary?.secondApproved?.reason || '',
       status: eodReportData?.approvalSummary?.secondApproved?.status || 'hold'
     },
     {
@@ -37,7 +41,7 @@ export const EODReportView = () => {
       status: eodReportData?.approvalSummary?.secondApproved?.status || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(eodId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithTwoApproval(eodId);
   const changeEoDReportStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -46,6 +50,7 @@ export const EODReportView = () => {
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `EoD report ${status} successfully.`)
         refetch();
+        setReason('');
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of EoD report.'));
   };
@@ -60,8 +65,22 @@ export const EODReportView = () => {
             <PageTitle pagetitle="EOD Register" />
           </Grid>
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeEoDReportStatus('approved')} />
-            <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeEoDReportStatus('reject')} />
+            {eodReportData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Approve"
+                icon={<Check fontSize="inherit" />}
+                color="success"
+                disabled={isPending && !isError}
+                onClick={() => changeEoDReportStatus('approved')}
+              />}
+            {eodReportData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Disapprove"
+                icon={<Close fontSize="inherit" />}
+                color="error"
+                disabled={isPending && !isError}
+                onClick={() => changeEoDReportStatus('reject')}
+              />}
             {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
           </Grid>

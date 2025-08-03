@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 export declare const billingDetailsValidationSchema: yup.ObjectSchema<{
     billingName: string;
-    commonlyKnownAs: string | null | undefined;
+    commonlyKnownAs: yup.Maybe<string | undefined>;
     contactPersonFName: string;
-    contactPersonMName: string | null | undefined;
+    contactPersonMName: yup.Maybe<string | undefined>;
     contactPersonLName: string;
     billingAddress: {
         address2?: string | null | undefined;
@@ -14,11 +14,9 @@ export declare const billingDetailsValidationSchema: yup.ObjectSchema<{
         pincode: string;
     };
     primaryContactNo: string;
-    secondaryContactNo: string | null | undefined;
+    secondaryContactNo: yup.Maybe<string | undefined>;
     emailPrimary: string;
-    emailSecondary: string | null | undefined;
-    billingAddressProofCopy: {} | null | undefined;
-    billingFormatCopy: {} | null | undefined;
+    emailSecondary: yup.Maybe<string | undefined>;
 }, yup.AnyObject, {
     billingName: undefined;
     commonlyKnownAs: undefined;
@@ -37,6 +35,4 @@ export declare const billingDetailsValidationSchema: yup.ObjectSchema<{
     secondaryContactNo: undefined;
     emailPrimary: undefined;
     emailSecondary: undefined;
-    billingAddressProofCopy: undefined;
-    billingFormatCopy: undefined;
 }, "">;

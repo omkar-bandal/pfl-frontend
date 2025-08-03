@@ -1,6 +1,6 @@
 export declare const rootReducer: import('redux').Reducer<{
     inwardRegister: {
-        inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+        inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
     };
     dumpRegister: {
         dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -16,6 +16,9 @@ export declare const rootReducer: import('redux').Reducer<{
     };
     eodReport: {
         eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
+    };
+    rbc: {
+        rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
     };
     rfpaData: {
         rfpaFormPreview: Omit<import('../../../../../api/purchase_api/src/index.ts').IRFPA, "id"> | undefined;
@@ -114,7 +117,7 @@ export declare const rootReducer: import('redux').Reducer<{
     notifications: import('./slices').NotificationState;
 }, import('redux').UnknownAction, Partial<{
     inwardRegister: {
-        inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+        inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
     } | undefined;
     dumpRegister: {
         dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -130,6 +133,9 @@ export declare const rootReducer: import('redux').Reducer<{
     } | undefined;
     eodReport: {
         eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
+    } | undefined;
+    rbc: {
+        rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
     } | undefined;
     rfpaData: {
         rfpaFormPreview: Omit<import('../../../../../api/purchase_api/src/index.ts').IRFPA, "id"> | undefined;

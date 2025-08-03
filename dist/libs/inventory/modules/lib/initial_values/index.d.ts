@@ -6,3 +6,4 @@ export * from './vehicle-dispatch-register.initial-value';
 export * from './second-sale-register.initial-value';
 export * from './eod-report.initial-value';
 export * from './aqr-initial-value';
+export * from './returned-by-customer-initial-values';

@@ -8,6 +8,7 @@ export const billingDetailsValidationSchema = yup.object().shape({
         .required('Billing name is required.'),
     commonlyKnownAs: yup
         .string()
+        .notRequired()
         .nullable(),
     contactPersonFName: yup
         .string()
@@ -15,6 +16,7 @@ export const billingDetailsValidationSchema = yup.object().shape({
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     contactPersonMName: yup
         .string()
+        .notRequired()
         .nullable()
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     contactPersonLName: yup
@@ -28,6 +30,7 @@ export const billingDetailsValidationSchema = yup.object().shape({
         .matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
     secondaryContactNo: yup
         .string()
+        .notRequired()
         .nullable()
         .matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
     emailPrimary: yup
@@ -36,12 +39,7 @@ export const billingDetailsValidationSchema = yup.object().shape({
         .email("Please enter valid email"),
     emailSecondary: yup
         .string()
+        .notRequired()
         .nullable()
         .email("Please enter valid email"),
-    billingAddressProofCopy: yup
-        .mixed()
-        .nullable(),
-    billingFormatCopy: yup
-        .mixed()
-        .nullable(),
 })

@@ -7,12 +7,14 @@ import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 import React, { useRef, useState } from 'react';
 import styles from './inwared-register.module.css';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 import { useReactToPrint } from 'react-to-print';
 
 export const InwardRegisterView = () => {
   const { id } = useParams<{ id: string }>();
   const inwardId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { canDownload } = usePermission('inward-register');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
@@ -81,6 +83,7 @@ export const InwardRegisterView = () => {
     {
       title: 'Approved',
       subtitle: inwardData?.approvalSummary?.firstApproved?.name || '',
+      description: inwardData?.approvalSummary?.firstApproved?.reason || '',
       status: inwardData?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
@@ -88,7 +91,7 @@ export const InwardRegisterView = () => {
       status: inwardData?.overAllStatus || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(inwardId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithOneApproval(inwardId);
   const changeInwardRegisterStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -113,11 +116,30 @@ export const InwardRegisterView = () => {
               <PageTitle pagetitle="Inward Register" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeInwardRegisterStatus('approved')} />
-                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeInwardRegisterStatus('reject')} />
+                {inwardData?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
+                    disabled={isPending && !isError}
+                    onClick={() => changeInwardRegisterStatus('approved')}
+                  />}
+                {inwardData?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Disapprove"
+                    icon={<Close fontSize="inherit" />}
+                    color="error"
+                    disabled={isPending && !isError}
+                    onClick={() => changeInwardRegisterStatus('reject')}
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />
               )}
             </Grid>
             <Grid item xs={12}>

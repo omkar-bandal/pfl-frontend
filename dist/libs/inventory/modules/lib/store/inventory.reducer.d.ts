@@ -1,6 +1,6 @@
 export declare const inventoryReducer: {
     inwardRegister: import('redux').Reducer<{
-        inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+        inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
     }>;
     dumpRegister: import('redux').Reducer<{
         dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -16,5 +16,8 @@ export declare const inventoryReducer: {
     }>;
     eodReport: import('redux').Reducer<{
         eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
+    }>;
+    rbc: import('redux').Reducer<{
+        rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
     }>;
 };

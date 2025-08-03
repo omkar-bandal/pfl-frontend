@@ -1,6 +1,6 @@
 export declare const useAppSelector: import('react-redux').UseSelector<{
     inwardRegister: {
-        inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+        inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
     };
     dumpRegister: {
         dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -16,6 +16,9 @@ export declare const useAppSelector: import('react-redux').UseSelector<{
     };
     eodReport: {
         eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
+    };
+    rbc: {
+        rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
     };
     rfpaData: {
         rfpaFormPreview: Omit<import('../../../../../api/purchase_api/src/index.ts').IRFPA, "id"> | undefined;

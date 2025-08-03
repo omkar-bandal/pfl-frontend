@@ -220,7 +220,7 @@ export const GRNPreview = () => {
           },
           {
             key: 'rtv',
-            label: 'Status',
+            label: 'RTV',
             width: '10%',
             render: (value: any) => <Chip label={value ? 'RTV' : 'Non-RTV'} color="primary" size="small" />,
           },

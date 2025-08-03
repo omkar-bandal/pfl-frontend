@@ -32,6 +32,7 @@ export const CustomerRegistrationForm = () => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: customerFormInitVal,
+    validationSchema: customerValidationSchema,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => handleSubmit(values),

@@ -1,18 +1,18 @@
 import * as yup from 'yup';
 export declare const statutoryDetailsValidationSchema: yup.ObjectSchema<{
-    panNo: string | null | undefined;
-    panCopy: {} | null | undefined;
-    aadharNo: string | null | undefined;
-    addharCopy: {} | null | undefined;
-    gstn: string | null | undefined;
-    regiCertificateCopy: {} | null | undefined;
-    billBookCopy: {} | null | undefined;
-    certificationsDetails: string | null | undefined;
-    otherCertifications: string | null | undefined;
-    corpRegiDetails: string | null | undefined;
-    otherCorpRegiDetails: string | null | undefined;
-    incorpoCertificateCopy: {} | null | undefined;
-    cinNo: string | null | undefined;
+    panNo: yup.Maybe<string | undefined>;
+    panCopy: yup.Maybe<{} | undefined>;
+    aadharNo: yup.Maybe<string | undefined>;
+    addharCopy: yup.Maybe<{} | undefined>;
+    gstn: yup.Maybe<string | undefined>;
+    regiCertificateCopy: yup.Maybe<{} | undefined>;
+    billBookCopy: yup.Maybe<{} | undefined>;
+    certificationsDetails: yup.Maybe<string | undefined>;
+    otherCertifications: yup.Maybe<string | undefined>;
+    corpRegiDetails: yup.Maybe<string | undefined>;
+    otherCorpRegiDetails: yup.Maybe<string | undefined>;
+    incorpoCertificateCopy: yup.Maybe<{} | undefined>;
+    cinNo: yup.Maybe<string | undefined>;
 }, yup.AnyObject, {
     panNo: undefined;
     panCopy: undefined;

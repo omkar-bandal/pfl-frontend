@@ -84,4 +84,11 @@ export const inventoryRouteConstants = {
     FINAL_INVOICES: "/inventory/final-invoices",
     GET_ALL_FINAL_INVOICES: "/inventory/final-invoices",
 
+    //Return by customer
+    RBC: "/inventory/return-by-customer",
+    GET_ALL_RBC: "/inventory/return-by-customer",
+    CREATE_RBC: "/inventory/return-by-customer/create",
+    VIEW_RBC: "/inventory/return-by-customer/view",
+    UPDATE_RBC: "/inventory/return-by-customer/update",
+
 }

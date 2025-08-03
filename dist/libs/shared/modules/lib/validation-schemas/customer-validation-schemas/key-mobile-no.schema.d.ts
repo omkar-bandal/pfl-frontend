@@ -1,15 +1,15 @@
 import * as yup from 'yup';
 export declare const keyMobileNumValidationSchema: yup.ObjectSchema<{
     accDeptFName: string;
-    accDeptMName: string | null | undefined;
+    accDeptMName: yup.Maybe<string | undefined>;
     accDeptLName: string;
     accDeptMobileNo: string;
     ownerFName: string;
-    ownerMName: string | null | undefined;
+    ownerMName: yup.Maybe<string | undefined>;
     ownerLName: string;
     ownerMobileNo: string;
-    mandiLicenceNo: string | null | undefined;
-    regiNo: string | null | undefined;
+    mandiLicenceNo: yup.Maybe<string | undefined>;
+    regiNo: yup.Maybe<string | undefined>;
     electricityBill: NonNullable<boolean | undefined>;
     consumenrNo: string | undefined;
     electricityBillCopy: {} | undefined;
@@ -22,7 +22,7 @@ export declare const keyMobileNumValidationSchema: yup.ObjectSchema<{
     visitingCardCopy: {} | undefined;
     notVisitingCardReason: string | undefined;
     ref1FName: string;
-    ref1MName: string | null | undefined;
+    ref1MName: yup.Maybe<string | undefined>;
     ref1LName: string;
     ref1Address: {
         address2?: string | null | undefined;
@@ -34,12 +34,11 @@ export declare const keyMobileNumValidationSchema: yup.ObjectSchema<{
     };
     ref1ContactNo: string;
     ref1Email: string;
-    ref2FName: string | null | undefined;
-    ref2MName: string | null | undefined;
-    ref2LName: string | null | undefined;
-    ref2address: {} | null;
-    ref2ContactNo: string | null | undefined;
-    ref2Email: string | null | undefined;
+    ref2FName: yup.Maybe<string | undefined>;
+    ref2MName: yup.Maybe<string | undefined>;
+    ref2LName: yup.Maybe<string | undefined>;
+    ref2ContactNo: yup.Maybe<string | undefined>;
+    ref2Email: yup.Maybe<string | undefined>;
 }, yup.AnyObject, {
     accDeptFName: undefined;
     accDeptMName: undefined;
@@ -78,7 +77,6 @@ export declare const keyMobileNumValidationSchema: yup.ObjectSchema<{
     ref2FName: undefined;
     ref2MName: undefined;
     ref2LName: undefined;
-    ref2address: {};
     ref2ContactNo: undefined;
     ref2Email: undefined;
 }, "">;

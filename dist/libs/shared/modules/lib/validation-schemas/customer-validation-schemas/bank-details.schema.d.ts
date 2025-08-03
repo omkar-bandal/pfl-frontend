@@ -1,15 +1,11 @@
 import * as yup from 'yup';
 export declare const bankDetailsValidationSchema: yup.ObjectSchema<{
-    ifCancelledCheque: NonNullable<boolean | undefined>;
-    cancelledChequeCopy: {} | undefined;
-    notCancelledChequeReason: string | undefined;
     bankAccHolderFName: string;
-    bankAccHolderMName: string | null | undefined;
+    bankAccHolderMName: yup.Maybe<string | undefined>;
     bankAccHolderLName: string;
     bankName: string;
     bankBranch: string;
     accType: string;
-    otherAccType: string | null | undefined;
     bankAccNo: string;
     ifscCode: string;
     bankAddress: {
@@ -20,18 +16,13 @@ export declare const bankDetailsValidationSchema: yup.ObjectSchema<{
         state: string;
         pincode: string;
     };
-    bankStatementCopy: any;
 }, yup.AnyObject, {
-    ifCancelledCheque: undefined;
-    cancelledChequeCopy: undefined;
-    notCancelledChequeReason: undefined;
     bankAccHolderFName: undefined;
     bankAccHolderMName: undefined;
     bankAccHolderLName: undefined;
     bankName: undefined;
     bankBranch: undefined;
     accType: undefined;
-    otherAccType: undefined;
     bankAccNo: undefined;
     ifscCode: undefined;
     bankAddress: {
@@ -42,5 +33,4 @@ export declare const bankDetailsValidationSchema: yup.ObjectSchema<{
         state: undefined;
         pincode: undefined;
     };
-    bankStatementCopy: undefined;
 }, "">;

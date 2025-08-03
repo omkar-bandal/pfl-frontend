@@ -65,7 +65,7 @@ export const DealSlipView = () => {
                 <PageTitle pagetitle="Deal Slip" />
               </Grid>
               <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {dealSlip?.createdBy !== username &&
+                {dealSlip?.createdBy !== username.split(' ')[0] &&
                   <BtnSmall
                   label="Approve"
                   icon={<Check fontSize="inherit" />}
@@ -73,7 +73,7 @@ export const DealSlipView = () => {
                   onClick={() => changeDealSlipStatus('approved')}
                   disabled={isPending && !isError}
                 />}
-                {dealSlip?.createdBy !== username &&
+                {dealSlip?.createdBy !== username.split(' ')[0] &&
                   <BtnSmall
                   label="Reject"
                   icon={<Close fontSize="inherit" />}

@@ -253,11 +253,11 @@ export const InwardRegisterForm = () => {
                             name={`inwardProducts.${index}.weight`}
                             value={formik.values['inwardProducts'][index].weight || null}
                             handleChange={formik.handleChange}
-                            slotProps={{
-                              input: {
-                                endAdornment: <InputAdornment position="end">grams</InputAdornment>,
-                              },
-                            }}
+                            // slotProps={{
+                            //   input: {
+                            //     endAdornment: <InputAdornment position="end">grams</InputAdornment>,
+                            //   },
+                            // }}
                           />
                         </Grid2>
                         <Grid2 size={{ xs: 12, md: 4 }}>

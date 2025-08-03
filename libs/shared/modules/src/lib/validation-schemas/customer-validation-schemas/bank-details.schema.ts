@@ -3,29 +3,30 @@ import { addressSchema } from '../address.schema';
 import { REGEX } from '../regex';
 
 export const bankDetailsValidationSchema = yup.object().shape({
-    ifCancelledCheque: yup
-        .boolean()
-        .required('Please select yes or no.'),
-    cancelledChequeCopy: yup
-        .mixed()
-        .when('ifCancelledCheque', {
-            is: true,
-            then: (schema) => schema.required("Cancel cheque copy required if it is available."),
-            otherwise: (schema) => schema.nullable(),
-        }),
-    notCancelledChequeReason: yup
-        .string()
-        .when('ifCancelledCheque', {
-            is: false,
-            then: (schema) => schema.required("Please specify reason to not attach cancel cheque."),
-            otherwise: (schema) => schema.nullable(),
-        }),
+    // ifCancelledCheque: yup
+    //     .boolean()
+    //     .required('Please select yes or no.'),
+    // cancelledChequeCopy: yup
+    //     .mixed()
+    //     .when('ifCancelledCheque', {
+    //         is: true,
+    //         then: (schema) => schema.required("Cancel cheque copy required if it is available."),
+    //         otherwise: (schema) => schema.notRequired().nullable(),
+    //     }),
+    // notCancelledChequeReason: yup
+    //     .string()
+    //     .when('ifCancelledCheque', {
+    //         is: false,
+    //         then: (schema) => schema.required("Please specify reason to not attach cancel cheque."),
+    //         otherwise: (schema) => schema.notRequired().nullable(),
+    //     }),
     bankAccHolderFName: yup
         .string()
         .required('First name is required')
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     bankAccHolderMName: yup
         .string()
+        .notRequired()
         .nullable()
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     bankAccHolderLName: yup
@@ -41,9 +42,10 @@ export const bankDetailsValidationSchema = yup.object().shape({
     accType: yup
         .string()
         .required('Account type is required.'),
-    otherAccType: yup
-        .string()
-        .nullable(),
+    // otherAccType: yup
+    //     .string()
+    //     .notRequired()
+    //     .nullable(),
     bankAccNo: yup
         .string()
         .required('Account number is required.'),
@@ -51,5 +53,5 @@ export const bankDetailsValidationSchema = yup.object().shape({
         .string()
         .required('IFSC code is required.'),
     bankAddress: addressSchema,
-    bankStatementCopy: yup.mixed(),
+    // bankStatementCopy: yup.mixed(),
 })

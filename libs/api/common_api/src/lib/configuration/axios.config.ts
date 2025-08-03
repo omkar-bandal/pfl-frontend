@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //Local
-// export const BASE_URL = "https://b0b4a3548afa.ngrok-free.app"; 
+// export const BASE_URL = "https://3e000e49ef0a.ngrok-free.app"; 
 
 //Server
 export const BASE_URL = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com";

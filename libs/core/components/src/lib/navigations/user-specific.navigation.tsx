@@ -16,7 +16,6 @@ import {
 } from '@mui/icons-material';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
 import { inventoryRouteConstants } from '@prime-fresh/inventory/modules';
-import { salesRoutes } from '@prime-fresh/sales/modules';
 
 export const userSpecificNavigation: Navigations[] = [
   {
@@ -165,7 +164,7 @@ export const userSpecificNavigation: Navigations[] = [
     name: 'Return By Customer',
     uniqueKey: 'return-by-customer',
     logo: <FormatListBulleted />,
-    path: salesRoutes.GET_ALL_RBC,
+    path: inventoryRouteConstants.GET_ALL_RBC,
   },
   {
     name: 'Final Invoices',

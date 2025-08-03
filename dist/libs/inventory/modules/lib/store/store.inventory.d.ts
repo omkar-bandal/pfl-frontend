@@ -1,6 +1,6 @@
 export declare const storeInventory: import('@reduxjs/toolkit').EnhancedStore<{
     inwardRegister: {
-        inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+        inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
     };
     dumpRegister: {
         dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -17,10 +17,13 @@ export declare const storeInventory: import('@reduxjs/toolkit').EnhancedStore<{
     eodReport: {
         eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
     };
+    rbc: {
+        rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
+    };
 }, import('redux').UnknownAction, import('@reduxjs/toolkit').Tuple<[import('redux').StoreEnhancer<{
     dispatch: import('redux-thunk').ThunkDispatch<{
         inwardRegister: {
-            inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+            inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
         };
         dumpRegister: {
             dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -36,6 +39,9 @@ export declare const storeInventory: import('@reduxjs/toolkit').EnhancedStore<{
         };
         eodReport: {
             eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
+        };
+        rbc: {
+            rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
         };
     }, undefined, import('redux').UnknownAction>;
 }>, import('redux').StoreEnhancer]>>;

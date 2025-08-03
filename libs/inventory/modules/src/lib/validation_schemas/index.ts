@@ -5,3 +5,4 @@ export * from './vehicle-dispatch-register.schema';
 export * from './eod-report.schema';
 export * from './inward-register.schema';
 export * from './aqr.schema';
+export * from './returned-by-customer.schema';

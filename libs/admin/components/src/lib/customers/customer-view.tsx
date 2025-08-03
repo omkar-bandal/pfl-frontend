@@ -1,4 +1,3 @@
-// import { Employee } from "../../api/admin/models"
 import { useParams } from "react-router-dom";
 import { Box, Container, Grid, LinearProgress } from "@mui/material";
 import { useGetCustomerById } from "@prime-fresh/admin/modules";
@@ -79,37 +78,37 @@ export const ViewCustomer = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 1 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.address1}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.address1 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 2 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.address2}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.address2 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Location </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.location}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.location || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> City </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.city}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.city || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> State </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.state}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.state || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Pincode </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.pincode}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.customerAddress?.pincode || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Primary Contact No </span>
@@ -306,37 +305,37 @@ export const ViewCustomer = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 1 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref1Address?.address1}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address?.address1 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 2 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref1Address.address2}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address?.address2 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Location </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref1Address.location}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address?.location || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> City </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref1Address.city}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address?.city || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> State </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address.state}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address.state || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Pincode </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref1Address.pincode}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref1Address?.pincode || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_12}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Reference - 2 </span>
@@ -375,37 +374,37 @@ export const ViewCustomer = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 1 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref2Address?.address1}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref2Address?.address1 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 2 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref2Address?.address2}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref2Address?.address2 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Location </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref2Address?.location}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref2Address?.location || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> City </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref2Address?.city}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref2Address?.city || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> State </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref2Address?.state}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref2Address?.state || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Pincode </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers.ref2Address?.pincode}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.keyMobileNumbers?.ref2Address?.pincode || ''}</span>
                       </div>
                     </div>
                   </div>
@@ -451,37 +450,37 @@ export const ViewCustomer = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 1 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.address1}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.address1 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 2 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.address2}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.address2 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Location </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.location}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.location || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> City </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.city}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.city || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> State </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.state}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.state || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Pincode </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.pincode}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.billingDetails?.billingAddress?.pincode || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Primary Contact No </span>
@@ -617,37 +616,37 @@ export const ViewCustomer = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 1 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.address1}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.address1 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 2 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.address2}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.address2 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Location </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.location}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.location || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> City </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.city}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.city || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> State </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.state}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.state || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Pincode </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.pincode}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.deliveryDetails?.deliveryAddress?.pincode || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_12}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}>Receiving Person Details</span>
@@ -763,37 +762,37 @@ export const ViewCustomer = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 1 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.address1}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.address1 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Address 2 </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.address2}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.address2 || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_3}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Location </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_9}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.location}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.location || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> City </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.city}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.city || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> State </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.state}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.state || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Pincode </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.pincode}</span>
+                          <span className={`${styles.textSM} ${styles.mr}`}>{customer?.bankDetails?.bankAddress?.pincode || ''}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_4}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}>Cancel Cheque available?</span>

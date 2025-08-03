@@ -7,11 +7,13 @@ import { useGetTransportPaymentVoucherForViewById } from '@prime-fresh/purchase/
 import { Check, Close, Download, ChevronRight } from '@mui/icons-material';
 import styles from './tp-voucher.module.css';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const TransportPaymentVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { openDrawer } = useActions();
   const { canDownload } = usePermission('transport-payment-voucher');
   // const navigate = useNavigate();
@@ -105,27 +107,17 @@ export const TransportPaymentVoucherView = () => {
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
 
   const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithThreeApproval(tpVoucherId);
-  const approveTPVoucher = () => {
+  const changeTPVoucherStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
-        refetch()
-        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.')
+        refetch();
+        toast.success(actionRes?.message ? actionRes.message : `Voucher ${status}.`);
+        setReason('');
       })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
-  };
-
-  const rejectTPVoucher = () => {
-    mutateAsync({
-      status: 'reject',
-      reason: reason,
-    }).then(() => {
-      refetch();
-      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
-    })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while rejecting voucher.'));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while changing status of voucher.'));
   };
 
   return (
@@ -141,21 +133,23 @@ export const TransportPaymentVoucherView = () => {
               <PageTitle pagetitle="Transport Payment Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                {tpVoucher?.createdBy !== username.split(' ')[0] &&
                 <BtnSmall
                   label="Approve"
                   icon={<Check fontSize="inherit" />}
                   color="success"
-                  onClick={() => approveTPVoucher()}
+                  onClick={() => changeTPVoucherStatus('approved')}
                   disabled={isPending && !isError}
-                />
+                  />}
+                {tpVoucher?.createdBy !== username.split(' ')[0] &&
                 <BtnSmall
-                  label="Reject"
+                  label="Disapprove"
                   icon={<Close
                     fontSize="inherit" />}
                   color="error"
-                  onClick={() => rejectTPVoucher()}
+                  onClick={() => changeTPVoucherStatus('reject')}
                   disabled={isPending && !isError}
-                />
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />

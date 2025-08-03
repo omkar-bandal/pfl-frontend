@@ -8,11 +8,13 @@ import { useReactToPrint } from 'react-to-print';
 import styles from './dc-type-customer.module.css';
 import { convertInTitleCase, formatAddress, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
 import { Check, ChevronRight, Close, Download, InsertDriveFile } from '@mui/icons-material';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const DCTypeCustomerView = () => {
   const { id } = useParams<{ id: string }>();
   const dcId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
   const { canDownload } = usePermission('delivery-challan');
@@ -64,7 +66,7 @@ export const DCTypeCustomerView = () => {
       status: dcTypeCustomerData?.approvalSummary?.secondApproved?.status || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dcId);
+  const { mutateAsync, error, data: actionRes, isError, isPending } = useUpdateDocStatusWithTwoApproval(dcId);
   const changeDCTypeCustomerStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -73,6 +75,7 @@ export const DCTypeCustomerView = () => {
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `Delivery Challan / Proforma Inv. ${status} successfully.`)
         refetch();
+        setReason('');
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of delivery challan / proforma inv.'));
   };
@@ -89,14 +92,39 @@ export const DCTypeCustomerView = () => {
               <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery Challan Only For Customer Type" />
             </Grid2>
             <Grid2 size={{ xs: 12, md: 8 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDCTypeCustomerStatus('approved')} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDCTypeCustomerStatus('reject')} />
+                {dcTypeCustomerData?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
+                    disabled={isPending && !isError}
+                    onClick={() => changeDCTypeCustomerStatus('approved')}
+                  />}
+                {dcTypeCustomerData?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Disapprove"
+                    icon={<Close fontSize="inherit" />}
+                    color="error"
+                    disabled={isPending && !isError}
+                    onClick={() => changeDCTypeCustomerStatus('reject')}
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />
               )}
               {canDownload && (
-                <BtnSmall label="Invoice" icon={<InsertDriveFile />} color="secondary" onClick={handleDownload} />
+                  <BtnSmall
+                    label="Invoice"
+                    icon={<InsertDriveFile />}
+                    color="secondary"
+                    disabled={dcTypeCustomerData?.overAllStatus === 'COMPLETE' ? false : true}
+                    onClick={handleDownload}
+                  />
               )}
             </Grid2>
             <Grid2 size={12}>

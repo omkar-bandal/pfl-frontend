@@ -1,6 +1,6 @@
 export declare const useAppDispatch: import('react-redux').UseDispatch<import('redux-thunk').ThunkDispatch<{
     inwardRegister: {
-        inwardRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IInwardRegister | undefined;
+        inwardRegisterFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IInwardRegister, "id"> | undefined;
     };
     dumpRegister: {
         dumpRegisterFormPreview: import('../../../../../api/inventory_api/src/index.ts').IDumpRegister | undefined;
@@ -16,6 +16,9 @@ export declare const useAppDispatch: import('react-redux').UseDispatch<import('r
     };
     eodReport: {
         eodReportFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IEODReport, "id"> | undefined;
+    };
+    rbc: {
+        rbcFormPreview: Omit<import('../../../../../api/inventory_api/src/index.ts').IReturnByCustomer, "id"> | null;
     };
     rfpaData: {
         rfpaFormPreview: Omit<import('../../../../../api/purchase_api/src/index.ts').IRFPA, "id"> | undefined;

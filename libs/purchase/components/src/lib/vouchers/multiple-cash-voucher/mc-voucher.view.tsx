@@ -7,13 +7,15 @@ import { useGetMultiCashVoucherForViewById } from '@prime-fresh/purchase/modules
 import styles from './mc-voucher.module.css';
 import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithThreeApproval } from '@prime-fresh/shared/modules';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const MultipleCashVoucherView = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
   const { canDownload } = usePermission('multi-cash-voucher');
   const { openDrawer } = useActions();
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   // const navigate = useNavigate();
   const [reason, setReason] = useState<string>('');
   const { voucherid } = useParams<{ voucherid: string }>();
@@ -33,33 +35,39 @@ export const MultipleCashVoucherView = () => {
     {
       title: 'Verified',
       subtitle: mcVoucher?.approvalSummary?.verified?.name || '',
+      description: mcVoucher?.approvalSummary?.verified?.reason || '',
       status: mcVoucher?.approvalSummary?.verified?.status || 'hold'
     },
     {
       title: 'First Approval',
       subtitle: mcVoucher?.approvalSummary?.firstApproved?.name || '',
+      description: mcVoucher?.approvalSummary?.firstApproved?.reason || '',
       status: mcVoucher?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
       title: 'Second Approval',
       subtitle: mcVoucher?.approvalSummary?.secondApproved?.name || '',
+      description: mcVoucher?.approvalSummary?.secondApproved?.reason || '',
       status: mcVoucher?.approvalSummary?.secondApproved?.status || 'hold',
       disabled: mcVoucher?.approvalSummary?.secondApproved === null ? true : false
     },
     {
       title: 'Third Approval',
       subtitle: mcVoucher?.approvalSummary?.thirdApproved?.name || '',
+      description: mcVoucher?.approvalSummary?.thirdApproved?.reason || '',
       status: mcVoucher?.approvalSummary?.thirdApproved?.status || 'hold',
       disabled: mcVoucher?.approvalSummary?.secondApproved === null ? true : false
     },
     {
       title: 'First Finalizer',
       subtitle: mcVoucher?.approvalSummary?.firstFinalized?.name || '',
+      description: mcVoucher?.approvalSummary?.firstFinalized?.reason || '',
       status: mcVoucher?.approvalSummary?.firstFinalized?.status || 'hold'
     },
     {
       title: 'Second Finalizer',
       subtitle: mcVoucher?.approvalSummary?.secondFinalized?.name || '',
+      description: mcVoucher?.approvalSummary?.secondFinalized?.reason || '',
       status: mcVoucher?.approvalSummary?.secondFinalized?.status || 'hold'
     },
     {
@@ -81,29 +89,20 @@ export const MultipleCashVoucherView = () => {
     { title: 'Amount In Words:', value: convertInTitleCase(mcVoucher?.amtWords || '') },
   ];
   const signatureLabels = ['Prepared By', 'Verified By', 'Approved By', 'Approved By', 'Approved By'];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithThreeApproval(mcVoucherId);
-  const approveMCVoucher = () => {
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithThreeApproval(mcVoucherId);
+  const changeMCVoucherStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
-      status: 'approved',
+      status: status,
       reason: reason,
     })
       .then(() => {
         refetch();
-        toast.success(actionRes?.message ? actionRes.message : 'Voucher Approved.')
+        toast.success(actionRes?.message ? actionRes.message : `Voucher ${status}.`);
+        setReason('');
       })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while approving voucher.'));
+      .catch(() => toast.error(error?.message ? error.message : 'Error while changing status of voucher.'));
   };
 
-  const rejectMCVoucher = () => {
-    mutateAsync({
-      status: 'reject',
-      reason: reason,
-    }).then(() => {
-      refetch();
-      toast.success(actionRes?.message ? actionRes.message : 'Voucher Rejected.')
-    })
-      .catch(() => toast.error(error?.message ? error.message : 'Error while rejecting voucher.'));
-  };
   return (
     <Container maxWidth="xl">
       {isVoucherLoading || isCompanyDataLoading ? (
@@ -117,11 +116,31 @@ export const MultipleCashVoucherView = () => {
               <PageTitle pagetitle="Multiple Cash Voucher" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => approveMCVoucher()} />
-                <BtnSmall label="Reject" icon={<Close fontSize="inherit" />} color="error" onClick={() => rejectMCVoucher()} />
+                {mcVoucher?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
+                    disabled={isPending && !isError}
+                    onClick={() => changeMCVoucherStatus('approved')}
+                  />}
+                {mcVoucher?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Disapprove"
+                    icon={<Close
+                      fontSize="inherit" />}
+                    color="error"
+                    disabled={isPending && !isError}
+                    onClick={() => changeMCVoucherStatus('reject')}
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
-                <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
+                  <BtnSmall
+                    label="Download"
+                    icon={<Download />}
+                    color="info"
+                    onClick={() => reactToPrintFn()}
+                  />
               )}
             </Grid>
             <Grid item xs={12} margin={1}>

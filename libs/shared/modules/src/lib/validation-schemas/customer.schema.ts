@@ -5,7 +5,7 @@ import {
     keyMobileNumValidationSchema,
     billingDetailsValidationSchema,
     deliveryDetailsValidationSchema,
-    statutoryDetailsValidationSchema,
+    // statutoryDetailsValidationSchema,
     bankDetailsValidationSchema,
     productSpecificationValidationSchema,
     paymentTermsValidationSchema,
@@ -25,9 +25,9 @@ export const customerValidationSchema = yup.object().shape({
     organisationType: yup
         .string()
         .required('Organization type is required.'),
-    otherType: yup
-        .string()
-        .nullable(),
+    // otherType: yup
+    //     .string()
+    //     .notRequired().nullable(),
     customerAddress: addressSchema,
     primaryContactNo: yup
         .string()
@@ -35,6 +35,7 @@ export const customerValidationSchema = yup.object().shape({
         .matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
     secondaryContactNo: yup
         .string()
+        .notRequired()
         .nullable()
         .matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
     emailPrimary: yup
@@ -43,12 +44,13 @@ export const customerValidationSchema = yup.object().shape({
         .email("Please enter valid email"),
     emailSecondary: yup
         .string()
+        .notRequired()
         .nullable()
         .email("Please enter valid email"),
     keyMobileNumbers: keyMobileNumValidationSchema,
     billingDetails: billingDetailsValidationSchema,
     deliveryDetails: deliveryDetailsValidationSchema,
-    statutoryDetails: statutoryDetailsValidationSchema,
+    // statutoryDetails: statutoryDetailsValidationSchema,
     bankDetails: bankDetailsValidationSchema,
     productSpecification: productSpecificationValidationSchema,
     paymentTerms: paymentTermsValidationSchema,

@@ -7,3 +7,4 @@ export * from './lib/inward-register';
 export * from './lib/labor-register';
 export * from './lib/second-sale-register';
 export * from './lib/final-invoice';
+export * from './lib/return-by-customer';

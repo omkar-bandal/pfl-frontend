@@ -57,4 +57,9 @@ export declare const inventoryRouteConstants: {
     UPDATE_EOD_REPORT: string;
     FINAL_INVOICES: string;
     GET_ALL_FINAL_INVOICES: string;
+    RBC: string;
+    GET_ALL_RBC: string;
+    CREATE_RBC: string;
+    VIEW_RBC: string;
+    UPDATE_RBC: string;
 };

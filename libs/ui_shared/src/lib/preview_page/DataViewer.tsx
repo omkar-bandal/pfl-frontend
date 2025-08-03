@@ -205,7 +205,7 @@ export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, s
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {items.map((item: { [x: string]: any }, itemIndex: any) => (
+                  {items !== null ? (items?.map((item: { [x: string]: any }, itemIndex: any) => (
                     <TableRow
                       key={item[keyField ? keyField : ''] || itemIndex}
                       sx={{ "&:nth-of-type(odd)": { bgcolor: "action.hover" } }}
@@ -221,7 +221,7 @@ export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, s
                           ),
                       )}
                     </TableRow>
-                  ))}
+                  ))) : (<TableCell></TableCell>)}
                 </TableBody>
               </Table>
             </TableContainer>

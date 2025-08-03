@@ -10,8 +10,8 @@ export declare const inwardRegisterValidationSchema: yup.ObjectSchema<{
     source: NonNullable<"vendor" | "farmer" | undefined>;
     selectedParty: string;
     inwardProducts: {
-        weight?: number | null | undefined;
         packingMaterialWeight?: number | null | undefined;
+        weight?: number | null | undefined;
         uom: string;
         productName: string;
         quantity: number;

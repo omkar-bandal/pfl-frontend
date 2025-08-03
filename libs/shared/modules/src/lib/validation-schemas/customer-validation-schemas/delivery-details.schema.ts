@@ -4,18 +4,13 @@ import { REGEX } from '../regex';
 
 export const deliveryDetailsValidationSchema = yup.object().shape({
     deliveryAddress: addressSchema,
-    deliveryAddressProofCopy: yup
-        .mixed()
-        .nullable(),
-    deliveryTime: yup
-        .string()
-        .nullable(),
     receivingPersonFName: yup
         .string()
         .required('First name is required')
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     receivingPersonMName: yup
         .string()
+        .notRequired()
         .nullable()
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     receivingPersonLName: yup
@@ -28,6 +23,7 @@ export const deliveryDetailsValidationSchema = yup.object().shape({
         .matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
     secondaryContactNo: yup
         .string()
+        .notRequired()
         .nullable()
         .matches(REGEX.CONTACT_NO, 'Contact number must be 10 digits'),
     emailPrimary: yup
@@ -36,6 +32,7 @@ export const deliveryDetailsValidationSchema = yup.object().shape({
         .email("Please enter valid email"),
     emailSecondary: yup
         .string()
+        .notRequired()
         .nullable()
         .email("Please enter valid email"),
 })

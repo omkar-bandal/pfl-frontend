@@ -7,3 +7,4 @@ export * from './eod-report.services';
 export * from './labor-registration.services';
 export * from './labor-attendance.services';
 export * from './proforma.invoice.services';
+export * from './returned-by-customer.services';

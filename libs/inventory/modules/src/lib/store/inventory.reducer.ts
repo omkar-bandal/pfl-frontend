@@ -5,6 +5,7 @@ import {
   secondSaleRegisterReducer,
   vehicleDispatchRegisterReducer,
   eodReportReducer,
+  returnedByCustomerReducer,
 } from './slices';
 
 export const inventoryReducer = {
@@ -14,4 +15,5 @@ export const inventoryReducer = {
   secondSaleRegister: secondSaleRegisterReducer,
   vehicleDispatchRegister: vehicleDispatchRegisterReducer,
   eodReport: eodReportReducer,
+  rbc: returnedByCustomerReducer
 };

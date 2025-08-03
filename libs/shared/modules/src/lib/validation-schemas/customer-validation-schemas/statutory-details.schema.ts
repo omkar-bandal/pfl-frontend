@@ -1,17 +1,17 @@
 import * as yup from 'yup';
 
 export const statutoryDetailsValidationSchema = yup.object().shape({
-    panNo: yup.string().nullable(),
-    panCopy: yup.mixed().nullable(),
-    aadharNo: yup.string().nullable(),
-    addharCopy: yup.mixed().nullable(),
-    gstn: yup.string().nullable(),
-    regiCertificateCopy: yup.mixed().nullable(),
-    billBookCopy: yup.mixed().nullable(),
-    certificationsDetails: yup.string().nullable(),
-    otherCertifications: yup.string().nullable(),
-    corpRegiDetails: yup.string().nullable(),
-    otherCorpRegiDetails: yup.string().nullable(),
-    incorpoCertificateCopy: yup.mixed().nullable(),
-    cinNo: yup.string().nullable()
+    panNo: yup.string().notRequired().nullable(),
+    panCopy: yup.mixed().notRequired().nullable(),
+    aadharNo: yup.string().notRequired().nullable(),
+    addharCopy: yup.mixed().notRequired().nullable(),
+    gstn: yup.string().notRequired().nullable(),
+    regiCertificateCopy: yup.mixed().notRequired().nullable(),
+    billBookCopy: yup.mixed().notRequired().nullable(),
+    certificationsDetails: yup.string().notRequired().nullable(),
+    otherCertifications: yup.string().notRequired().nullable(),
+    corpRegiDetails: yup.string().notRequired().nullable(),
+    otherCorpRegiDetails: yup.string().notRequired().nullable(),
+    incorpoCertificateCopy: yup.mixed().notRequired().nullable(),
+    cinNo: yup.string().notRequired().nullable()
 })

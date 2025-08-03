@@ -5,13 +5,16 @@ import { useParams } from 'react-router-dom';
 import { vehicleDispatchRegisterViewConfig } from './vehicle-dispatch-register.view-config';
 import { useGetVehicleDispatchRegisterForViewById } from '@prime-fresh/inventory/modules';
 import { Check, Close, ChevronRight } from '@mui/icons-material';
-import { useActions } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector } from '@prime-fresh/modules';
 import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithOneApproval } from '@prime-fresh/shared/modules';
 import { useState } from 'react';
 
 export const VehicleDispatchRegisterView = () => {
   const { id } = useParams<{ id: string }>();
   const vehicleDispatchId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
+
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
   const { data, isLoading, refetch } = useGetVehicleDispatchRegisterForViewById(vehicleDispatchId);
@@ -33,7 +36,7 @@ export const VehicleDispatchRegisterView = () => {
       status: vehicleDispatchData?.overAllStatus || 'hold'
     },
   ];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithOneApproval(vehicleDispatchId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithOneApproval(vehicleDispatchId);
   const changeVehicleDispatchStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -42,6 +45,7 @@ export const VehicleDispatchRegisterView = () => {
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `Vehicle dispatch register ${status} successfully.`)
         refetch();
+        setReason('')
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of vehicle dispatch register.'));
   };
@@ -56,8 +60,22 @@ export const VehicleDispatchRegisterView = () => {
             <PageTitle pagetitle="Vehicle Dispatch Register" />
           </Grid>
           <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeVehicleDispatchStatus('approved')} />
-            <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeVehicleDispatchStatus('reject')} />
+            {vehicleDispatchData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Approve"
+                icon={<Check fontSize="inherit" />}
+                color="success"
+                disabled={isPending && !isError}
+                onClick={() => changeVehicleDispatchStatus('approved')}
+              />}
+            {vehicleDispatchData?.createdBy !== username.split(' ')[0] &&
+              <BtnSmall
+                label="Disapprove"
+                icon={<Close fontSize="inherit" />}
+                color="error"
+                disabled={isPending && !isError}
+                onClick={() => changeVehicleDispatchStatus('reject')}
+              />}
             {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
             {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
           </Grid>

@@ -70,7 +70,7 @@ export const BranchForm = () => {
   } = useUpdateBranchById(branchId, branchtype);
 
   const handleSubmit = (values: any) => {
-    branchId
+    branchId !== ''
       ? mutatePatch(values)
           .then(() => {
             toast.success(
@@ -86,7 +86,7 @@ export const BranchForm = () => {
             toast.error(
               patchError
                 ? patchError.message
-                : 'Error while creating new branch.'
+                : 'Error while updating new branch.'
             );
           })
       : mutatePost(values)
@@ -104,7 +104,7 @@ export const BranchForm = () => {
             toast.error(
               patchError
                 ? patchError.message
-                : 'Error while updating new branch.'
+                : 'Error while creating new branch.'
             );
           });
   };

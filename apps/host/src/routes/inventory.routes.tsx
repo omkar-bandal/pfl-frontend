@@ -24,6 +24,9 @@ import {
   InwardRegisterView,
   SecondSaleRegisterView,
   EODReportView,
+  ReturnedByCustomerForm,
+  ReturnedByCustomerTable,
+  ReturnedByCustomerView
 } from '@prime-fresh/inventory/components';
 import { Outlet } from 'react-router-dom';
 import {
@@ -35,7 +38,7 @@ export const InventoryRoutes = [
     path: inventoryRouteConstants.DASHBOARD_INVENTORY,
     element: <DashboardPurchase />,
   },
-  
+
   {
     path: inventoryRouteConstants.INWARD_REGISTER,
     element: <Outlet />,
@@ -213,5 +216,27 @@ export const InventoryRoutes = [
         element: <FinalInvoicesTable />,
       },
     ],
+  },
+  {
+    path: inventoryRouteConstants.RBC,
+    element: <Outlet />,
+    children: [
+      {
+        path: inventoryRouteConstants.GET_ALL_RBC,
+        element: <ReturnedByCustomerTable />
+      },
+      {
+        path: inventoryRouteConstants.CREATE_RBC,
+        element: <ReturnedByCustomerForm />
+      },
+      {
+        path: `${inventoryRouteConstants.VIEW_RBC}/:id`,
+        element: <ReturnedByCustomerView />
+      },
+      {
+        path: `${inventoryRouteConstants.UPDATE_RBC}/:id`,
+        element: <ReturnedByCustomerForm />
+      },
+    ]
   },
 ];

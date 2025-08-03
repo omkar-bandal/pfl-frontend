@@ -87,7 +87,7 @@ export const OfficeForm = () => {
         toast.error(
           patchError
             ? patchError.message
-            : 'Error while updating new office.'
+            : 'Error while creating new office.'
         );
       })
       : mutatePatch(values)
@@ -105,7 +105,7 @@ export const OfficeForm = () => {
             toast.error(
               patchError
                 ? patchError.message
-                : 'Error while creating new office.'
+                : 'Error while updating new office.'
             );
           })
   };

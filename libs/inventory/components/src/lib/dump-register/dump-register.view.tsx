@@ -7,13 +7,15 @@ import styles from './dump-register.module.css';
 import { convertInTitleCase, getDocStatusColor, useGetAllCompaniesData, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
 import { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { Check, ChevronRight, Close, Download, Message } from '@mui/icons-material';
+import { Check, ChevronRight, Close, Download } from '@mui/icons-material';
 import React from 'react';
-import { useActions, usePermission } from '@prime-fresh/modules';
+import { authState, useActions, useAppSelector, usePermission } from '@prime-fresh/modules';
 
 export const DumpRegisterView = () => {
   const { id } = useParams<{ id: string }>();
   const dumpRegiId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { canDownload } = usePermission('dump-register');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
@@ -37,11 +39,13 @@ export const DumpRegisterView = () => {
     {
       title: 'Approved',
       subtitle: dumpData?.approvalSummary?.firstApproved?.name || '',
+      description: dumpData?.approvalSummary?.firstApproved?.reason || '',
       status: dumpData?.approvalSummary?.firstApproved?.status || 'hold'
     },
     {
       title: 'Approved',
       subtitle: dumpData?.approvalSummary?.secondApproved?.name || '',
+      description: dumpData?.approvalSummary?.secondApproved?.reason || '',
       status: dumpData?.approvalSummary?.secondApproved?.status || 'hold'
     },
     {
@@ -67,7 +71,7 @@ export const DumpRegisterView = () => {
   ];
 
   const signatureLabels = ['Prepared By', 'Approved By', 'Approved By'];
-  const { mutateAsync, error, data: actionRes } = useUpdateDocStatusWithTwoApproval(dumpRegiId);
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithTwoApproval(dumpRegiId);
   const changeDumpRegisterStatus = (status: 'approved' | 'reject') => {
     mutateAsync({
       status: status,
@@ -76,6 +80,7 @@ export const DumpRegisterView = () => {
       .then(() => {
         toast.success(actionRes?.message ? actionRes.message : `Dump register ${status} successfully.`)
         refetch();
+        setReason('');
       })
       .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of dump register.'));
   };
@@ -92,8 +97,22 @@ export const DumpRegisterView = () => {
                 <PageTitle pagetitle="Dump Register" />
             </Grid>
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <BtnSmall label="Approve" icon={<Check fontSize="inherit" />} color="success" onClick={() => changeDumpRegisterStatus('approved')} />
-                <BtnSmall label="Disapprove" icon={<Close fontSize="inherit" />} color="error" onClick={() => changeDumpRegisterStatus('reject')} />
+                {dumpData?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
+                    disabled={isPending && !isError}
+                    onClick={() => changeDumpRegisterStatus('approved')}
+                  />}
+                {dumpData?.createdBy !== username.split(' ')[0] &&
+                  <BtnSmall
+                    label="Disapprove"
+                    icon={<Close fontSize="inherit" />}
+                    color="error"
+                    disabled={isPending && !isError}
+                    onClick={() => changeDumpRegisterStatus('reject')}
+                  />}
                 {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
               {canDownload && (
                 <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />
