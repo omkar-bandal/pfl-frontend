@@ -4785,7 +4785,7 @@ Oe.formToJSON = (t) => Ia(b.isHTMLForm(t) ? new FormData(t) : t);
 Oe.getAdapter = qa.getAdapter;
 Oe.HttpStatusCode = ss;
 Oe.default = Oe;
-const Ns = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", of = () => Oe.create({
+const Ns = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", of = () => Oe.create({
   baseURL: Ns,
   withCredentials: !0,
   headers: {

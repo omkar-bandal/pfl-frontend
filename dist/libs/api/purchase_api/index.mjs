@@ -1702,7 +1702,7 @@ O.formToJSON = (r) => Nr(h.isHTMLForm(r) ? new FormData(r) : r);
 O.getAdapter = Ir.getAdapter;
 O.HttpStatusCode = ft;
 O.default = O;
-const xt = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", Ys = () => O.create({
+const xt = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", Ys = () => O.create({
   baseURL: xt,
   withCredentials: !0,
   headers: {

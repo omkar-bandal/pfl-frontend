@@ -36928,7 +36928,7 @@ vn.formToJSON = (e) => wI(le.isHTMLForm(e) ? new FormData(e) : e);
 vn.getAdapter = PI.getAdapter;
 vn.HttpStatusCode = cy;
 vn.default = vn;
-const aw = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", b6 = () => vn.create({
+const aw = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", b6 = () => vn.create({
   baseURL: aw,
   withCredentials: !0,
   headers: {

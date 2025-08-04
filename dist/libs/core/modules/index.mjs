@@ -6619,7 +6619,7 @@ var Ee, Pt, At, mr, yr, xt, gr, br, Ma, dp = (Ma = class {
     P(this, Ee).clear(), P(this, Pt).clear();
   }
 }, Ee = new WeakMap(), Pt = new WeakMap(), At = new WeakMap(), mr = new WeakMap(), yr = new WeakMap(), xt = new WeakMap(), gr = new WeakMap(), br = new WeakMap(), Ma);
-const fp = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", ht = /* @__PURE__ */ Object.create(null);
+const fp = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", ht = /* @__PURE__ */ Object.create(null);
 ht.open = "0";
 ht.close = "1";
 ht.ping = "2";

@@ -37103,7 +37103,7 @@ Nn.formToJSON = (e) => pA(de.isHTMLForm(e) ? new FormData(e) : e);
 Nn.getAdapter = CA.getAdapter;
 Nn.HttpStatusCode = Pv;
 Nn.default = Nn;
-const Mw = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", jY = () => Nn.create({
+const Mw = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", jY = () => Nn.create({
   baseURL: Mw,
   withCredentials: !0,
   headers: {

@@ -1971,7 +1971,7 @@ R.formToJSON = (r) => Dt(c.isHTMLForm(r) ? new FormData(r) : r);
 R.getAdapter = kt.getAdapter;
 R.HttpStatusCode = Ne;
 R.default = R;
-const qe = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", Un = () => R.create({
+const qe = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", Un = () => R.create({
   baseURL: qe,
   withCredentials: !0,
   headers: {

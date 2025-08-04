@@ -4643,7 +4643,7 @@ Re.formToJSON = (r) => Mo(b.isHTMLForm(r) ? new FormData(r) : r);
 Re.getAdapter = Wo.getAdapter;
 Re.HttpStatusCode = xs;
 Re.default = Re;
-const Js = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", ec = () => Re.create({
+const Js = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", ec = () => Re.create({
   baseURL: Js,
   withCredentials: !0,
   headers: {

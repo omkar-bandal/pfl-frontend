@@ -36829,7 +36829,7 @@ Mn.formToJSON = (e) => pI(pe.isHTMLForm(e) ? new FormData(e) : e);
 Mn.getAdapter = CI.getAdapter;
 Mn.HttpStatusCode = $y;
 Mn.default = Mn;
-const DC = "http://ec2-3-111-34-32.ap-south-1.compute.amazonaws.com", F7 = () => Mn.create({
+const DC = "http://ec2-3-110-83-171.ap-south-1.compute.amazonaws.com", F7 = () => Mn.create({
   baseURL: DC,
   withCredentials: !0,
   headers: {
