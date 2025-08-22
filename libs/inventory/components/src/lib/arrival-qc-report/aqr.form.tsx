@@ -89,27 +89,28 @@ export const AQRForm = () => {
   const { mutateAsync: mutateAsyncPatch, error: PatchError, data: PatchData } = useUpdateAQR(aqrId);
 
   const handleSubmit = (values: any) => {
-    aqrId === ''
-      ? mutateAsyncPost(values)
-          .then(() => {
-            toast.success(PostData ? PostData.message : 'AQR created sucessfully.');
-            setTimeout(() => {
-              navigate(inventoryRouteConstants.GET_ALL_AQR);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(PostError ? PostError.message : 'Error while creating AQR .');
-          })
-      : mutateAsyncPatch(values)
-          .then(() => {
-            toast.success(PatchData ? PatchData.message : 'AQR updated sucessfully.');
-            setTimeout(() => {
-              navigate(inventoryRouteConstants.GET_ALL_AQR);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(PatchError ? PatchError.message : 'Error while updating AQR.');
-          });
+    console.log('Submitted AQR', values);
+    // aqrId === ''
+    //   ? mutateAsyncPost(values)
+    //       .then(() => {
+    //         toast.success(PostData ? PostData.message : 'AQR created sucessfully.');
+    //         setTimeout(() => {
+    //           navigate(inventoryRouteConstants.GET_ALL_AQR);
+    //         }, 2000);
+    //       })
+    //       .catch(() => {
+    //         toast.error(PostError ? PostError.message : 'Error while creating AQR .');
+    //       })
+    //   : mutateAsyncPatch(values)
+    //       .then(() => {
+    //         toast.success(PatchData ? PatchData.message : 'AQR updated sucessfully.');
+    //         setTimeout(() => {
+    //           navigate(inventoryRouteConstants.GET_ALL_AQR);
+    //         }, 2000);
+    //       })
+    //       .catch(() => {
+    //         toast.error(PatchError ? PatchError.message : 'Error while updating AQR.');
+    //       });
   };
   const formik = useFormik<Omit<IAQR, 'id'>>({
     enableReinitialize: true,

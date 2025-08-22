@@ -17,7 +17,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAccHolderFName"
                     label="First Name"
-                    value={values.bankDetails.bankAccHolderFName}
+                    value={values.bankDetails.bankAccHolderFName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -27,7 +27,7 @@ export const CustomerBankDetails = () => {
                     isRequired={false}
                     name="bankDetails.bankAccHolderMName"
                     label="Middle Name"
-                    value={values.bankDetails.bankAccHolderMName}
+                    value={values.bankDetails.bankAccHolderMName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -37,7 +37,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankAccHolderLName"
                     label="Last Name"
-                    value={values.bankDetails.bankAccHolderLName}
+                    value={values.bankDetails.bankAccHolderLName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -47,7 +47,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankName"
                     label="Bank Name"
-                    value={values.bankDetails.bankName}
+                    value={values.bankDetails.bankName || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -57,7 +57,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.bankBranch"
                     label="Branch Name"
-                    value={values.bankDetails.bankBranch}
+                    value={values.bankDetails.bankBranch || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -67,7 +67,7 @@ export const CustomerBankDetails = () => {
                     isRequired={false}
                     name="bankDetails.bankAccNo"
                     label="Account Number"
-                    value={values.bankDetails.bankAccNo}
+                    value={values.bankDetails.bankAccNo || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -77,7 +77,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.ifscCode"
                     label="IFSC Code"
-                    value={values.bankDetails.ifscCode}
+                    value={values.bankDetails.ifscCode || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -87,7 +87,7 @@ export const CustomerBankDetails = () => {
                     label="Type of Account"
                     name="bankDetails.accType"
                     options={sharedData.accTypes}
-                    value={values.bankDetails.accType}
+                    value={values.bankDetails.accType || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -97,7 +97,7 @@ export const CustomerBankDetails = () => {
                     isRequired={true}
                     name="bankDetails.otherAccType"
                     label="Any Other Account Type"
-                    value={values.bankDetails.otherAccType}
+                    value={values.bankDetails.otherAccType || ''}
                     handleChange={handleChange}
                 />
             </Grid2>
@@ -180,7 +180,7 @@ export const CustomerBankDetails = () => {
                     isRequired={false}
                     name="bankDetails.notCancelledChequeReason"
                     label="If cancelled cheque not attached please specify reason"
-                    value={values.bankDetails.notCancelledChequeReason}
+                    value={values.bankDetails.notCancelledChequeReason || ''}
                     handleChange={handleChange}
                 />
             </Grid2>

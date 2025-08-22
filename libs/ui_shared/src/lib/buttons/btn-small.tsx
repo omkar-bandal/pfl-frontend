@@ -8,7 +8,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   // margin: theme.spacing(1),
   width: 120,
   marginRight: 2,
-  marginLeft: 2
+  marginLeft: 2,
 }));
 type BtnSmallProps = Omit<ButtonProps, 'startIcon' | 'variant' | 'size'> & {
   label: string;

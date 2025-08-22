@@ -13,7 +13,7 @@ interface CountCardProps {
   navigateTo?: string; 
 }
 
-export const CountCard: React.FC<CountCardProps> = ({ title, count, color, icon: IconComponent, buttonTitle='', navigateTo = '' }) => {
+export const CountCard: React.FC<CountCardProps> = ({ title, count = 0, color, icon: IconComponent, buttonTitle = '', navigateTo = '' }) => {
   const cardBackground = getGrandientBackground(135, color, 20)
   return (
     <Card

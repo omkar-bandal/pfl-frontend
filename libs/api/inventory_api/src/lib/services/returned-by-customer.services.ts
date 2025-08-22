@@ -23,6 +23,16 @@ export class ReturnedByCustomerServices extends BaseService {
         return this.get(url);
     }
 
+    getReturnedByCustomerForViewById(id: string): Promise<ApiBaseState<IReturnByCustomer>> {
+        const url = inventoryApiUrl.GET_RBC_FOR_VIEW_BY_ID(id);
+        return this.get(url);
+    }
+
+    getReturnedByCustomerForUpdateById(id: string): Promise<ApiBaseState<IReturnByCustomer>> {
+        const url = inventoryApiUrl.GET_RBC_FOR_UPDATE_BY_ID(id);
+        return this.get(url);
+    }
+
     updateReturnedByCustomer(id: string, data: IReturnByCustomer): Promise<ResultModel> {
         const url = inventoryApiUrl.UPDATE_RBC(id);
         return this.patch(url, data);

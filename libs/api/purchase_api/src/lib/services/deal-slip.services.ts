@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { IDealSlip } from "../models";
 import { purchaseApiUrl } from "../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class DealSlipServices extends BaseService {
     private static _instance: DealSlipServices;
@@ -14,8 +15,8 @@ export class DealSlipServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllDealSlips(queryParams?: QueryParams):Promise<ApiBaseState<IDealSlip[]>> {
-        const url = purchaseApiUrl.GET_ALL_DEAL_SLIP(queryParams);
+    getAllDealSlips(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IDealSlip[]>> {
+        const url = buildApiUrl(purchaseApiUrl.GET_ALL_DEAL_SLIP, null, queryParams, search);
         return this.get(url);
     }
 

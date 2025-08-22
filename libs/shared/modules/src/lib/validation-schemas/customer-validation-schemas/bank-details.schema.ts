@@ -24,11 +24,11 @@ export const bankDetailsValidationSchema = yup.object().shape({
         .string()
         .required('First name is required')
         .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
-    bankAccHolderMName: yup
-        .string()
-        .notRequired()
-        .nullable()
-        .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
+    // bankAccHolderMName: yup
+    //     .string()
+    //     .notRequired()
+    //     .nullable()
+    //     .matches(REGEX.IS_STRING, 'Name should only contains alphabets.'),
     bankAccHolderLName: yup
         .string()
         .required('Last name is required')

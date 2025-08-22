@@ -22,10 +22,15 @@ import {
   useGetAllGRNNums,
   useGetBranchesPartialData,
   handleFormKeyDown,
+  useGetProductsPartialData,
+  useGetUOMPartialData,
+  getSelectedProductData,
 } from '@prime-fresh/shared/modules';
 import { IDeliveryChallanTypeStockTransfer } from '@prime-fresh/purchase_api';
 import { DeliveryChallanBaseForm } from '../delivery-challan-base.form';
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
+import { DCTypeStockTransferPreview } from './dc-type-stock-transfer.preview';
+import { useGetAllPackagingMaterials } from '@prime-fresh/admin/modules';
 
 export const DCTypeStockTransferForm = () => {
   const navigate = useNavigate();
@@ -61,15 +66,15 @@ export const DCTypeStockTransferForm = () => {
   );
 
   const { data: locations, isFetching: isFetchingLocations } = useGetBranchesPartialData();
-  
+
   const allCCLocations = useMemo(
     () =>
       locations?.data
         ? mapToValueLabelArray(
-            locations.data.filter((loc) => loc.type === 'collection-center'),
-            'id',
-            'name'
-          )
+          locations.data.filter((loc) => loc.type === 'collection-center'),
+          'id',
+          'name'
+        )
         : [],
     [locations]
   );
@@ -78,12 +83,24 @@ export const DCTypeStockTransferForm = () => {
     () =>
       locations?.data
         ? mapToValueLabelArray(
-            locations.data.filter((loc) => loc.type === 'distribution-center'),
-            'id',
-            'name'
-          )
+          locations.data.filter((loc) => loc.type === 'distribution-center'),
+          'id',
+          'name'
+        )
         : [],
     [locations]
+  );
+
+  const { data: products } = useGetProductsPartialData();
+  const allProducts = useMemo(() => products?.data ? products.data : [], [products]);
+
+  const { data: uoms } = useGetUOMPartialData();
+  const allUoMs = useMemo(() => uoms?.data ? uoms.data : [], [uoms]);
+
+  const { data: packMatData } = useGetAllPackagingMaterials();
+  const packagingMaterials = useMemo(
+    () => (packMatData?.data ? packMatData?.data : []),
+    [packMatData?.data]
   );
 
   const getFromLocations = () => {
@@ -122,26 +139,48 @@ export const DCTypeStockTransferForm = () => {
     appendFormData(formData, values);
     dcId === ''
       ? mutatePost(formData)
-          .then(() => {
-            toast.success(resPost ? resPost.message : 'Delivery challan created.');
-            setTimeout(() => {
-              navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_STOCK_TRANSFER);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(errorPost ? errorPost.message : 'Error while creating delivery challan.');
-          })
+        .then(() => {
+          toast.success(resPost ? resPost.message : 'Delivery challan created.');
+          setTimeout(() => {
+            navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_STOCK_TRANSFER);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(errorPost ? errorPost.message : 'Error while creating delivery challan.');
+        })
       : mutatePatch(formData)
-          .then(() => {
-            toast.success(resPatch ? resPatch.message : 'Delivery challan updated.');
-            setTimeout(() => {
-              navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_STOCK_TRANSFER);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(errorPatch ? errorPatch.message : 'Error while updating delivery challan.');
-          });
+        .then(() => {
+          toast.success(resPatch ? resPatch.message : 'Delivery challan updated.');
+          setTimeout(() => {
+            navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_STOCK_TRANSFER);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(errorPatch ? errorPatch.message : 'Error while updating delivery challan.');
+        });
   };
+  const handlePreviewData = () => {
+    const formdata = formik.values;
+    return {
+      ...formdata,
+      companyName: companyNames.find(item => item.value === formdata.companyName)?.label || '',
+      grnNo: allGRNNumbers.find(item => item.value === formdata.grnNo)?.label || '',
+      fromLocation: [...allCCLocations, ...allDCLocations].find(item => item.value === formdata.fromLocation)?.label || '',
+      toLocation: [...allCCLocations, ...allDCLocations].find(item => item.value === formdata.fromLocation)?.label || '',
+      deliveryChallanProducts: formdata.deliveryChallanProducts?.map((product) => ({
+        ...product,
+        productName: getSelectedProductData(product.productName, allProducts)?.name || '',
+        saleUoM: allUoMs.find(uom => uom.id === product.saleUoM)?.unit || '',
+        packagingMaterial: packagingMaterials.find(item => item.id === product.packagingMaterial)?.packagingMaterialName || '',
+        packagingMaterialUoM: allUoMs.find(uom => uom.id === product.packagingMaterialUoM)?.unit || '',
+      }))
+    }
+  }
+  const handlePreview = () => {
+    const previewData = handlePreviewData();
+    dispatch(setPreview(true));
+    dispatch(setPreviewDCTypeStockTransfer(previewData));
+  }
 
   return isLoading ? (
     <Box flex={1}>
@@ -222,17 +261,13 @@ export const DCTypeStockTransferForm = () => {
                 resetLabel="Reset"
                 onReset={formik.handleReset}
                   previewLabel="Preview"
-                  onPreview={() => {
-                    console.log('Buttons press');
-                    dispatch(setPreview(true));
-                    dispatch(setPreviewDCTypeStockTransfer(formik.values));
-                  }}
+                  onPreview={() => handlePreview()}
               />
             </Grid2>
           </Grid2>
         </form>
       </FormikProvider>
-      {/* <DeliveryChallanPreview /> */}
+        <DCTypeStockTransferPreview />
     </>
   );
 };

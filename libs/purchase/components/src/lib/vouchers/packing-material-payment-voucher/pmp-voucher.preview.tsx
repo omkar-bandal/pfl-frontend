@@ -1,14 +1,13 @@
 import React from 'react'
 import { useAppSelector } from '@prime-fresh/modules';
 import { pmpVoucherState } from '@prime-fresh/purchase/modules';
-import { DataViewer, ObjectViewerConfig, PreviewContainer } from '@prime-fresh/ui_shared';
+import { DataViewer, PreviewContainer, SectionConfig } from '@prime-fresh/ui_shared';
 import { convertInTitleCase, formatAddress } from '@prime-fresh/shared/modules';
 import { Address } from '@prime-fresh/common_api';
 
 export const PMPVoucherPreview = () => {
     const { pmpVoucherFormPreview } = useAppSelector(pmpVoucherState);
-    const pmpVoucherPreviewConfig: ObjectViewerConfig = {
-        sections: [
+    const pmpVoucherPreviewConfig: SectionConfig[] = [
             {
                 sectionType: "object",
                 layout: "grid",
@@ -64,6 +63,7 @@ export const PMPVoucherPreview = () => {
             },
             {
                 sectionType: "array",
+                layout: 'table',
                 fieldArrayName: "materials",
                 title: "Packing Material List",
                 fields: [
@@ -110,7 +110,7 @@ export const PMPVoucherPreview = () => {
                 ]
             },
         ]
-    }
+
     return (
         <PreviewContainer title='Packing Material Payment Voucher'>
              <DataViewer

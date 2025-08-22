@@ -15,7 +15,7 @@ export const useGetPurchaseDataByFarmer = (farmerId: string): UseQueryResult<Far
     enabled: !!farmerId
   });
 };
-export const useGetPurchaseDataByProduct = (productId: string): UseQueryResult<ProductPurchaseData, ErrorModel> => {
+export const useGetPurchaseDataByProduct = (productId: string | null): UseQueryResult<ProductPurchaseData, ErrorModel> => {
   return useQuery<ProductPurchaseData, ErrorModel>({
     queryKey: ['product-purchase-data', productId],
     queryFn: () => DashboardManagementService.getInstance().getPurchaseDataByProduct(productId),

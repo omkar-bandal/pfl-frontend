@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { numToWords } from "@prime-fresh/purchase/modules";
 import { FormikHelpers } from "formik";
-import { GetReturnByCustomer, PostReturnByCustomer, ReturnedProducts } from "@prime-fresh/sales_api";
+import { IReturnedProducts, IReturnByCustomer } from "@prime-fresh/inventory_api";
 
-const recalcTotalAmt = (products: PostReturnByCustomer["returnedProducts"]): number =>
-  products.reduce((sum: number, prod: ReturnedProducts) => sum + (Number(prod.amount) || 0), 0);
+const recalcTotalAmt = (products: IReturnByCustomer["returnedProducts"]): number =>
+  products.reduce((sum: number, prod: IReturnedProducts) => sum + (Number(prod.returnedQtyAmt) || 0), 0);
 
-const recalcTotalQty = (products: PostReturnByCustomer["returnedProducts"]): number =>
-  products.reduce((sum: number, prod: ReturnedProducts) => sum + (Number(prod.netWeight) || 0), 0);
+const recalcTotalQty = (products: IReturnByCustomer["returnedProducts"]): number =>
+  products.reduce((sum: number, prod: IReturnedProducts) => sum + (Number(prod.returnedNetWt) || 0), 0);
 
 
 export const handleRemoveProduct = (
   index: number,
-  values: PostReturnByCustomer | GetReturnByCustomer,
-  setFieldValue: FormikHelpers<PostReturnByCustomer>["setFieldValue"]
+  values: IReturnByCustomer,
+  setFieldValue: FormikHelpers<IReturnByCustomer>["setFieldValue"]
 ): void => {
   const updatedProducts = values.returnedProducts.filter((_, i) => i !== index);
   const newTotalAmt = recalcTotalAmt(updatedProducts);
@@ -25,9 +25,9 @@ export const handleRemoveProduct = (
 };
 
 export const handlePushProduct = (
-  newProduct: PostReturnByCustomer["returnedProducts"][0],
-  values: PostReturnByCustomer | GetReturnByCustomer,
-  setFieldValue: FormikHelpers<PostReturnByCustomer>["setFieldValue"]
+  newProduct: IReturnByCustomer["returnedProducts"][0],
+  values: IReturnByCustomer,
+  setFieldValue: FormikHelpers<IReturnByCustomer>["setFieldValue"]
 ): void => {
   const updatedProducts = [...values.returnedProducts, newProduct];
   const newTotalAmt = recalcTotalAmt(updatedProducts);
@@ -45,7 +45,7 @@ export const handleReturnedProductsChange = (
   index: number | null,
   fieldName: ReturnedProductField,
   newValue: any,
- formik: any
+  formik: any
 ): void => {
   if (index !== null) {
     // Update a product field.
@@ -77,5 +77,116 @@ export const handleReturnedProductsChange = (
     const newTotalAmt = recalcTotalAmt(updatedProducts);
     formik.setFieldValue("totalPrice", newTotalAmt.toFixed(2), false);
     formik.setFieldValue("amtInWords", numToWords(newTotalAmt), true);
-  } 
+  }
+};
+
+export const calculateReturnedQtyAmt = (event: React.ChangeEvent<HTMLInputElement>, index: number, formik: any) => {
+  const { name, value } = event.target;
+  formik.setFieldValue(name, value)
+  const returnedQtyAmt = formik.values.returnedProducts[index].unitPrice * Number(value);
+  formik.setFieldValue(`returnedProducts.${index}.returnedQtyAmt`, Number(returnedQtyAmt));
+}
+
+export const calculateReturnedNetWt = (event: React.ChangeEvent<HTMLInputElement>, index: number, formik: any) => {
+  const { name, value } = event.target;
+  formik.setFieldValue(name, value)
+  const returnedNetWt = formik.values.returnedProducts[index].returnedGrossWt - formik.values.returnedProducts[index].returnedQty * formik.values.returnedProducts[index].returnedPackingMaterialWt;
+  formik.setFieldValue(`returnedProducts.${index}.returnedNetWt`, Number(returnedNetWt));
+}
+
+export const calculateReturnedProductDetails = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  index: number,
+  formik: any
+) => {
+  const { name, value } = event.target;
+
+  const fieldName = name.split('.').pop() as keyof IReturnedProducts;
+
+  if (!fieldName) return;
+
+  const updatedProducts = [...formik.values.returnedProducts];
+  const product = updatedProducts[index];
+
+  if (!product) return;
+
+  if (
+    [
+      'returnedQty',
+      'returnedUnitPrice',
+      'returnedPackingMaterialWt',
+      'returnedGrossWt',
+    ].includes(fieldName)
+  ) {
+    const numericValue = isNaN(Number(value)) ? 0 : Number(value);
+    if (fieldName === 'returnedQty')
+      product.returnedQty = numericValue;
+    // if (fieldName === 'returnedUnitPrice')
+    //   product.returnedUnitPrice = numericValue;
+    if (fieldName === 'returnedPackingMaterialWt')
+      product.returnedPackingMaterialWt = numericValue;
+    if (fieldName === 'returnedGrossWt')
+      product.returnedGrossWt = numericValue;
+
+  }
+  product.returnedQtyAmt = (Number(product.returnedQty) || 0) * (Number(formik.values.returnedProducts[index].unitPrice) || 0);
+  console.log('returned qty amt', product.returnedQtyAmt)
+  formik.setFieldValue(
+    `returnedProducts.${index}.returnedQtyAmt`,
+    Number(product.returnedQtyAmt)
+  );
+
+  product.returnedNetWt = product.returnedGrossWt - ((product.returnedPackingMaterialWt / 1000) * product.returnedQty);
+  formik.setFieldValue(
+    `returnedProducts.${index}.returnedNetWt`,
+    Number(product.returnedNetWt)
+  );
+};
+
+export const calculateRejectedProductDetails = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  index: number,
+  formik: any
+) => {
+  const { name, value } = event.target;
+
+  const fieldName = name.split('.').pop() as keyof IReturnedProducts;
+
+  if (!fieldName) return;
+
+  const updatedProducts = [...formik.values.returnedProducts];
+  const product = updatedProducts[index];
+
+  if (!product) return;
+
+  if (
+    [
+      'rejectedQty',
+      'rejectedUnitPrice',
+      'rejectedPackingMaterialWt',
+      'rejectedGrossWt',
+    ].includes(fieldName)
+  ) {
+    const numericValue = isNaN(Number(value)) ? 0 : Number(value);
+    if (fieldName === 'rejectedQty')
+      product.rejectedQty = numericValue;
+    // if (fieldName === 'rejectedUnitPrice')
+    //   product.rejectedUnitPrice = numericValue;
+    if (fieldName === 'rejectedPackingMaterialWt')
+      product.rejectedPackingMaterialWt = numericValue;
+    if (fieldName === 'rejectedGrossWt')
+      product.rejectedGrossWt = numericValue;
+
+  }
+  product.rejectedQtyAmt = (Number(product.rejectedQty) || 0) * (Number(formik.values.returnedProducts[index].unitPrice) || 0);
+  formik.setFieldValue(
+    `returnedProducts.${index}.rejectedQtyAmt`,
+    Number(product.rejectedQtyAmt)
+  );
+
+  product.rejectedNetWt = product.rejectedGrossWt - ((product.rejectedPackingMaterialWt / 1000) * product.rejectedQty);
+  formik.setFieldValue(
+    `returnedProducts.${index}.rejectedNetWt`,
+    Number(product.rejectedNetWt)
+  );
 };

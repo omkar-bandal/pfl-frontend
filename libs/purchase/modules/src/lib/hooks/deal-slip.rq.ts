@@ -26,11 +26,11 @@ export function useDeleteDealSlipById(id: string):
     });
 }
 
-export function useGetAllDealSlips(queryParams: QueryParams):
+export function useGetAllDealSlips(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IDealSlip[]>, ErrorModel> {
     return useQuery<ApiBaseState<IDealSlip[]>, ErrorModel>({
-        queryKey: ['get-all-deal-slips', queryParams],
-        queryFn: () => DealSlipServices.getInstance().getAllDealSlips(),
+        queryKey: ['get-all-deal-slips', queryParams, search],
+        queryFn: () => DealSlipServices.getInstance().getAllDealSlips(queryParams, search),
     });
 }
 

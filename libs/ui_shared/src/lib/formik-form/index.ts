@@ -13,3 +13,4 @@ export * from './accordion';
 export * from './search';
 export * from './checkbox';
 export * from './autocomplete-mutiselect';
+export * from './autocomplete-srollable';

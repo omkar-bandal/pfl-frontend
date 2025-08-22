@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { CloudUploadOutlined, Close, Add } from "@mui/icons-material";
+import { Close, Add } from "@mui/icons-material";
 import { useField, useFormikContext } from "formik";
 import { Label } from "./label";
 

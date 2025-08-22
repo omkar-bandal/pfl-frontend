@@ -1,15 +1,16 @@
 import React from 'react';
-import { Box, Grid2 } from '@mui/material';
+import { Box, debounce, Grid2 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useGRNColumns } from './grn.columns';
 import { IGRN } from '@prime-fresh/purchase_api';
-import { grnInitialValue, grnInitValForFilter, PURCHASE_ROUTES, useGetAllGRNs } from '@prime-fresh/purchase/modules';
+import { grnInitValForFilter, PURCHASE_ROUTES, useGetAllGRNs } from '@prime-fresh/purchase/modules';
 import {
   BtnSmall,
   ColumnVisibilityPanel,
   DataGridTable,
   DialogBox,
   PageTitle,
+  SearchBox,
   toast,
   useDataTable,
 } from '@prime-fresh/ui_shared';
@@ -25,21 +26,24 @@ export const GRNTable = () => {
   const grnColumns = useGRNColumns(canEdit, canView);
   const { openDialogBox } = useActions();
   const {
+    queryParams,
     paginationModel,
+    handlePaginationChange,
     sortModel,
     handleSortingChange,
-    handlePaginationChange,
-    queryParams,
+    search,
+    setSearch,
     columnVisibilityModel,
-    displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
+    displayColumnVisibilityPanel,
     handleOpenColumnVisibilityPanel,
+    handleCloseColumnVisibilityPanel,
     handleFilterParamsChange,
   } = useDataTable({ columnDef: grnColumns, initialPageSize: 10 });
-  // console.log('QueryParams: ', queryParams);
-  const { data, isLoading, isError, error } = useGetAllGRNs(queryParams);
+
+  const { data, isLoading, isError, error } = useGetAllGRNs(queryParams, search);
   const allGRN = data ? data : null;
+
   const rowCountRef = React.useRef(allGRN?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allGRN?.allRecords !== undefined) {
@@ -47,7 +51,7 @@ export const GRNTable = () => {
     }
     return rowCountRef.current;
   }, [allGRN]);
-  console.log('All GRNs :', allGRN);
+
   React.useEffect(() => {
     if (isError) {
       toast.error(error?.message || 'Error occured please refresh the page.');
@@ -61,15 +65,23 @@ export const GRNTable = () => {
         : PURCHASE_ROUTES.CREATE_GRN;
     await navigate(route);
   };
+  const handleSearchChange = debounce((value: string) => {
+    setSearch(value);
+  }, 1000);
+
   const formik = useFormik({
     initialValues: grnInitValForFilter,
     onSubmit: (values) => handleFilterParamsChange(values),
   });
+
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={2}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
+      <Grid2 container columnSpacing={2} rowSpacing={2} marginY={2}>
+        <Grid2 size={{ xs: 12, md: 4 }}>
           <PageTitle pagetitle="Goods Received Note" />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <SearchBox name="search" value={search} onChange={e => handleSearchChange(e.target.value)} onClearSearch={() => setSearch('')} />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <BtnSmall label="Filter" icon={<Filter />} color="secondary" onClick={() => openDialogBox()} />

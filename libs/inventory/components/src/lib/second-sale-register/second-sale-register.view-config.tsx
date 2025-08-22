@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ObjectViewerConfig, formatCurrency, formatDate } from '@prime-fresh/ui_shared';
+import { SectionConfig, formatCurrency, formatDate } from '@prime-fresh/ui_shared';
 import { Typography } from '@mui/material';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 import { Inventory, LocalShipping } from '@mui/icons-material';
 
-export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
-  sections: [
+export const secondSaleRegisterViewConfig: SectionConfig[] = [
     {
       sectionType: 'object',
       layout: 'grid',
@@ -24,12 +23,12 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'dcNo',
           label: 'Delivery Challan Number',
-          render: (value: string) => (value ? String(value).toUpperCase() : '-'),
+          render: (value: string) => (value ? String(value)?.toUpperCase() : '-'),
         },
         {
           key: 'saleDate',
           label: 'Sale Date',
-          render: (value: any) => (value ? formatDate(value) : '-'),
+          render: (value: any) => (value ? formatDate(value || '') : '-'),
         },
         {
           key: 'buyerName',
@@ -60,6 +59,7 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
     {
       title: 'Second Sale Products',
       sectionType: 'array',
+      layout: 'table',
       icon: <Inventory />,
       fieldArrayName: 'secondSaleProducts',
       keyField: 'id',
@@ -93,7 +93,7 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
           key: 'amount',
           label: 'Amount',
           width: '10%',
-          render: (value: any) => (value ? formatCurrency(Number(value)) : 0),
+          render: (value: any) => (value ? formatCurrency(Number(value) || 0) : 0),
         },
         {
           key: 'netWeight',
@@ -116,7 +116,7 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'totalAmt',
           label: 'Total Amount',
-          render: (value: number) => (value ? formatCurrency(Number(value)) : 0),
+          render: (value: number) => (value ? formatCurrency(Number(value) || 0) : 0),
         },
         {
           key: 'totalAmtInWords',
@@ -130,17 +130,16 @@ export const secondSaleRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'paidAmount',
           label: 'Paid Amount',
-          render: (value: number) => (value ? formatCurrency(Number(value)) : 0),
+          render: (value: number) => (value ? formatCurrency(Number(value) || 0) : 0),
         },
         {
           key: 'pendingAmt',
           label: 'Pending Amount',
-          render: (value: number) => (value ? formatCurrency(Number(value)) : 0),
+          render: (value: number) => (value ? formatCurrency(Number(value) || 0) : 0),
         },
         { key: 'remarks', label: 'Remarks' },
         { key: 'comments', label: 'Comments' },
       ],
       gridColumns: 3,
     },
-  ],
-};
+]

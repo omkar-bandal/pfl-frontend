@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Grid2, InputAdornment, LinearProgress, SelectChangeEvent, Typography } from '@mui/material';
+import { Box, Divider, Grid2, InputAdornment, LinearProgress, SelectChangeEvent, Typography } from '@mui/material';
 import {
   returnedByCustomerInitialValues,
   returnedByCustomerSchema,
@@ -13,9 +13,9 @@ import {
   useGetReturnedByCustomerById,
   useUpdateReturnedByCustomer,
 } from '@prime-fresh/inventory/modules';
-import { FormButtonGroup, PageTitle, SectionHeader, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
-import { mapToValueLabelArray, useGetCompanyNames, useGetUOMPartialData } from '@prime-fresh/shared/modules';
-import { handleReturnedProductsChange } from './helper-function';
+import { AutoCompleteInput, FormButtonGroup, PageTitle, SectionHeader, SelectInput, TextInput, toast } from '@prime-fresh/ui_shared';
+import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames, useGetCustomerNames, useGetUOMPartialData } from '@prime-fresh/shared/modules';
+import { calculateRejectedProductDetails, calculateReturnedProductDetails, handleReturnedProductsChange } from './helper-function';
 import { useGetAllDCTypeCustomers, useGetDCTypeCustomerForUpdateById } from '@prime-fresh/purchase/modules';
 import { ProductFormFields } from '@prime-fresh/shared/components';
 import { ReturnedByCustomerFormPreview } from './returned-by-customer.preview';
@@ -39,23 +39,34 @@ export const ReturnedByCustomerForm = () => {
     }
   }, [isError, error]);
 
-  const { data: company } = useGetCompanyNames();
-  const companies = company?.data ? mapToValueLabelArray(company?.data, 'id', 'name') : [];
 
   const { data: dcs } = useGetAllDCTypeCustomers();
-  console.log('DC type customers: ', dcs?.data);
   const dcNums = React.useMemo(() => dcs?.data ? mapToValueLabelArray(dcs.data, 'id', 'challanNo') : [], [dcs]);
+
+  const { data: dc } = useGetDCTypeCustomerForUpdateById(challanNo);
+  const dcData = dc?.data ? dc.data : null;
+  console.log('DC type customer: ', dcData);
+
+  const { data: company } = useGetCompanyNames();
+  const rbcCompanyData = React.useMemo(() => company?.data ? company?.data.find(data => data.id === dcData?.companyName) : null, [dcData]);
+  console.log('RBC Company Data', rbcCompanyData);
+
+  const { data: loc } = useGetBranchesPartialData();
+  const rbcLocationData = React.useMemo(() => loc?.data ? loc?.data.find(data => data.id === dcData?.fromLocation) : null, [dcData]);
+  console.log('RBC Location Data', rbcLocationData);
+
+  const { data: custNames } = useGetCustomerNames();
+  const rbcCustomer = React.useMemo(() => custNames?.data ? custNames?.data?.find(data => data.id === dcData?.customerName) : null, [dcData]);
+  console.log('RBC Customer Data', rbcCustomer);
 
   const { data: uom } = useGetUOMPartialData();
   const uoms = uom?.data ? mapToValueLabelArray(uom.data, 'id', 'unit') : [];
-  const { data: dc } = useGetDCTypeCustomerForUpdateById(challanNo);
-  const dcData = dc?.data ? dc.data : null;
 
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: rbcInitialValue,
-    validationSchema: returnedByCustomerSchema,
+    // validationSchema: returnedByCustomerSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: (values) => {
@@ -73,14 +84,23 @@ export const ReturnedByCustomerForm = () => {
         origin: product.origin,
         variety: product.variety,
         saleUoM: product.saleUoM,
-        quantity: null,
-        unitPrice: null,
-        amount: null,
-        grossWeight: null,
-        packingMaterialWeight: null,
-        netWeight: null,
+        unitPrice: product.unitPrice,
+        returnedUoM: null,
+        returnedQty: null,
+        returnedQtyAmt: null,
+        returnedPackingMaterialWt: null,
+        returnedGrossWt: null,
+        returnedNetWt: null,
+        rejectedUoM: null,
+        rejectedQty: null,
+        rejectedQtyAmt: null,
+        rejectedPackingMaterialWt: null,
+        rejectedGrossWt: null,
+        rejectedNetWt: null,
       }));
-      formik.setFieldValue('companyName', dcData.companyName);
+      formik.setFieldValue('companyName', rbcCompanyData?.id);
+      formik.setFieldValue('location', rbcLocationData?.id);
+      formik.setFieldValue('customerName', rbcCustomer?.id);
       formik.setFieldValue('returnedProducts', mappedProductArray);
     }
   }, [dcData, formik.setFieldValue]);
@@ -102,6 +122,7 @@ export const ReturnedByCustomerForm = () => {
   const { mutateAsync: mutateAsyncPatch, error: PatchError, data: PatchData } = useUpdateReturnedByCustomer(rbcId);
 
   const handleSubmit = (values: any) => {
+    console.log('RBC submitted: ', values);
     rbcId === '' ?
       (mutateAsyncPost(values)
         .then(() => {
@@ -137,7 +158,7 @@ export const ReturnedByCustomerForm = () => {
             <Grid2 size={{ xs: 12 }}>
               <PageTitle pagetitle="Products Returned By Customer" />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 3 }}>
+              <Grid2 size={{ xs: 12, md: 4 }}>
               <SelectInput
                 isRequired
                 label="Delivery Challan No"
@@ -149,7 +170,7 @@ export const ReturnedByCustomerForm = () => {
                 }
               />
             </Grid2>
-            <Grid2 size={{ xs: 12, md: 3 }}>
+              <Grid2 size={{ xs: 12, md: 4 }}>
               <TextInput
                 type="date"
                 isRequired
@@ -159,14 +180,32 @@ export const ReturnedByCustomerForm = () => {
                 handleChange={formik.handleChange}
               />
             </Grid2>
+              <Grid2 size={{ xs: 12, md: 4 }}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
+                  isReadOnly={true}
+                  name="location"
+                  label="Location"
+                  value={rbcLocationData?.name}
+                />
+              </Grid2>
             <Grid2 size={{ xs: 12, md: 6 }}>
-              <SelectInput
+                <TextInput
                 isRequired={false}
-                disabled
+                  isReadOnly={true}
                 label="Company Name"
                 name="companyName"
-                options={companies}
-                value={formik.values.companyName}
+                  value={rbcCompanyData?.name}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
+                <TextInput
+                  isRequired={false}
+                  isReadOnly={true}
+                  label="Customer Name"
+                  name="customerName"
+                  value={rbcCustomer?.organisationName}
               />
             </Grid2>
             <Grid2 size={{ xs: 12 }} marginY={1}>
@@ -199,31 +238,10 @@ export const ReturnedByCustomerForm = () => {
                           />
                         </Grid2>
                         <Grid2 size={{ xs: 12, md: 3 }}>
-                          <SelectInput
-                            isRequired={false}
-                            label="Returned UoM"
-                            name={`returnedProducts.${index}.returnedUOM`}
-                            options={uoms}
-                            value={formik.values.returnedProducts[index].returnedUOM}
-                            handleChange={formik.handleChange}
-                          />
-                        </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
                           <TextInput
                             type="number"
                             isRequired={false}
-                            name={`returnedProducts.${index}.quantity`}
-                            label="Quantity"
-                            value={formik.values.returnedProducts[index].quantity}
-                            handleChange={(e) =>
-                              handleReturnedProductsChange(index, 'quantity', Number(e.target.value), formik)
-                            }
-                          />
-                        </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
-                          <TextInput
-                            type="number"
-                            isRequired={false}
+                            isReadOnly={true}
                             name={`returnedProducts.${index}.unitPrice`}
                             label="Unit Price"
                             value={formik.values.returnedProducts[index].unitPrice}
@@ -237,13 +255,54 @@ export const ReturnedByCustomerForm = () => {
                             }}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={12} marginY={1}>
+                          <Divider sx={{ fontSize: 12 }}>Returned Product Details</Divider>
+                        </Grid2>
+                        {/* <Grid2 size={{ xs: 12, md: 3 }}>
+                          <SelectInput
+                            isRequired={false}
+                            label="Returned in UoM"
+                            name={`returnedProducts.${index}.returnedUoM`}
+                            options={uoms}
+                            value={formik.values.returnedProducts[index].returnedUoM}
+                            handleChange={formik.handleChange}
+                          />
+                        </Grid2> */}
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            name={`returnedProducts.${index}.returnedQty`}
+                            label="Quantity"
+                            infoTipText="Quantity of returned product"
+                            value={formik.values.returnedProducts[index].returnedQty}
+                            handleChange={(e) => {
+                              calculateReturnedProductDetails(e, index, formik);
+                            }
+                            }
+                          />
+                        </Grid2>
+                        {/* <Grid2 size={{ xs: 12, md: 3 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            name={`returnedProducts.${index}.returnedUnitPrice`}
+                            label="Unit Price"
+                            value={formik.values.returnedProducts[index].returnedUnitPrice}
+                            handleChange={(e) => {
+                              calculateReturnedProductDetails(e, index, formik);
+                            }
+                            }
+                          />
+                        </Grid2> */}
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
                           <TextInput
                             isRequired={false}
                             isReadOnly={true}
-                            name={`returnedProducts.${index}.amount`}
+                            name={`returnedProducts.${index}.returnedQtyAmt`}
                             label="Amount"
-                            value={formik.values.returnedProducts[index].amount}
+                            infoTipText="Amount as per returned quantity"
+                            value={formik.values.returnedProducts[index].returnedQtyAmt}
                             slotProps={{
                               input: {
                                 endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
@@ -251,32 +310,34 @@ export const ReturnedByCustomerForm = () => {
                             }}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
                           <TextInput
                             type="number"
                             isRequired={false}
-                            name={`returnedProducts.${index}.packingMaterialWeight`}
-                            label="Total Packing Material Weight"
-                            value={formik.values.returnedProducts[index].packingMaterialWeight}
+                            name={`returnedProducts.${index}.returnedPackingMaterialWt`}
+                            label="Packing Material Weight"
+                            infoTipText="Weight of packing material of returned product if any (in grams)"
+                            value={formik.values.returnedProducts[index].returnedPackingMaterialWt}
                             handleChange={(e) =>
-                              handleReturnedProductsChange(index, 'packingMaterialWeight', Number(e.target.value), formik)
+                              calculateReturnedProductDetails(e, index, formik)
                             }
                             slotProps={{
                               input: {
-                                endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+                                endAdornment: <InputAdornment position="end">g</InputAdornment>,
                               },
                             }}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
                           <TextInput
                             type="number"
                             isRequired={false}
-                            name={`returnedProducts.${index}.grossWeight`}
+                            name={`returnedProducts.${index}.returnedGrossWt`}
                             label="Gross Weight"
-                            value={formik.values.returnedProducts[index].grossWeight}
+                            infoTipText="Gross weight of returned product (in kilograms)"
+                            value={formik.values.returnedProducts[index].returnedGrossWt}
                             handleChange={(e) =>
-                              handleReturnedProductsChange(index, 'grossWeight', Number(e.target.value), formik)
+                              calculateReturnedProductDetails(e, index, formik)
                             }
                             slotProps={{
                               input: {
@@ -285,14 +346,120 @@ export const ReturnedByCustomerForm = () => {
                             }}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
                           <TextInput
                             type="number"
                             isRequired={false}
                             isReadOnly={true}
-                            name={`returnedProducts.${index}.netWeight`}
+                            name={`returnedProducts.${index}.returnedNetWt`}
                             label="Net Weight"
-                            value={formik.values.returnedProducts[index].netWeight}
+                            infoTipText="Net weight of returned product (in kilograms)"
+                            value={formik.values.returnedProducts[index].returnedNetWt}
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+                              },
+                            }}
+                          />
+                        </Grid2>
+                        <Grid2 size={12} marginY={1}>
+                          <Divider sx={{ fontSize: 12 }}>Rejected Product Details</Divider>
+                        </Grid2>
+                        {/* <Grid2 size={{ xs: 12, md: 3 }}>
+                          <SelectInput
+                            isRequired={false}
+                            label="Rejected UoM"
+                            name={`returnedProducts.${index}.rejectedUoM`}
+                            options={uoms}
+                            value={formik.values.returnedProducts[index].rejectedUoM}
+                            handleChange={formik.handleChange}
+                          />
+                        </Grid2> */}
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            name={`returnedProducts.${index}.rejectedQty`}
+                            label="Quantity"
+                            infoTipText="Quantity of rejected product"
+                            value={formik.values.returnedProducts[index].rejectedQty}
+                            handleChange={(e) =>
+                              calculateRejectedProductDetails(e, index, formik)
+                            }
+                          />
+                        </Grid2>
+                        {/* <Grid2 size={{ xs: 12, md: 3 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            name={`returnedProducts.${index}.rejectedUnitPrice`}
+                            label="Unit Price"
+                            value={formik.values.returnedProducts[index].rejectedUnitPrice}
+                            handleChange={(e) =>
+                              calculateRejectedProductDetails(e, index, formik)
+                            }
+                          />
+                        </Grid2> */}
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
+                          <TextInput
+                            isRequired={false}
+                            isReadOnly={true}
+                            name={`returnedProducts.${index}.rejectedQtyAmt`}
+                            label="Amount"
+                            infoTipText="Amount as per rejected quantity"
+                            value={formik.values.returnedProducts[index].rejectedQtyAmt}
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                              },
+                            }}
+                          />
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            name={`returnedProducts.${index}.rejectedPackingMaterialWt`}
+                            label="Packing Material Weight"
+                            infoTipText="Weight of packing material of rejected product if any (in grams)"
+                            value={formik.values.returnedProducts[index].rejectedPackingMaterialWt}
+                            handleChange={(e) =>
+                              calculateRejectedProductDetails(e, index, formik)
+                            }
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                              },
+                            }}
+                          />
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            name={`returnedProducts.${index}.rejectedGrossWt`}
+                            label="Gross Weight"
+                            infoTipText="Gross weight of rejected product (in kilograms)"
+                            value={formik.values.returnedProducts[index].rejectedGrossWt}
+                            handleChange={(e) =>
+                              calculateRejectedProductDetails(e, index, formik)
+                            }
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+                              },
+                            }}
+                          />
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 2.4 }}>
+                          <TextInput
+                            type="number"
+                            isRequired={false}
+                            isReadOnly={true}
+                            name={`returnedProducts.${index}.rejectedNetWt`}
+                            label="Net Weight"
+                            infoTipText="Net weight of rejected product (in kilograms)"
+                            value={formik.values.returnedProducts[index].rejectedNetWt}
                             slotProps={{
                               input: {
                                 endAdornment: <InputAdornment position="end">Kg</InputAdornment>,

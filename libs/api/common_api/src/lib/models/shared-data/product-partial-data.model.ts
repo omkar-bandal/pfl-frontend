@@ -9,3 +9,4 @@ export type ProductPartialData = {
     variety: string[] | null,
     brand: string
 }
+

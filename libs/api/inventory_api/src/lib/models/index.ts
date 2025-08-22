@@ -8,3 +8,4 @@ export * from './eod-report.type';
 export * from './aqr.type';
 export * from './proforma-invoice.type';
 export * from './returned-by-customer.type';
+export * from './stock.type';

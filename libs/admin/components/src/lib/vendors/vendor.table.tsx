@@ -25,6 +25,7 @@ export function VendorTable() {
 
   const { data, isError, isLoading, error } = useGetAllVendors(queryParams);
   const allVendors = data ? data : null;
+  console.log('All Vendors: ', allVendors);
   const rowCountRef = React.useRef(allVendors?.totalPages || 0);
   const rowCount = useMemo(() => {
     if (allVendors?.totalPages !== undefined) {

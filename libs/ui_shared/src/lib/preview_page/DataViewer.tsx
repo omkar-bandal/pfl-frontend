@@ -1,22 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  type SxProps,
-  type Theme,
-} from "@mui/material"
-
+import { Box, Typography, Grid, Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, type SxProps, type Theme } from "@mui/material"
 export interface FieldConfig {
   key: string
   label?: string
@@ -25,7 +9,6 @@ export interface FieldConfig {
   hidden?: boolean
   width?: number | string
 }
-
 export interface SectionConfig {
   title?: string
   icon?: React.ReactNode
@@ -37,15 +20,13 @@ export interface SectionConfig {
   gridColumns?: number,
   tableHeadings?: string[],
 }
-
 export interface ObjectViewerConfig {
   sections?: SectionConfig[]
 }
-
 interface GenericObjectViewerProps {
-  data: Record<string, any>
-  config: ObjectViewerConfig
-  sx?: SxProps<Theme>
+  data: Record<string, any>;
+  config: SectionConfig[];
+  sx?: SxProps<Theme>;
 }
 
 export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, sx }) => {
@@ -118,7 +99,7 @@ export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, s
     const { title, icon, sectionType, fields, keyField, fieldArrayName, layout = "grid", tableHeadings = [], gridColumns = 2 } = section
     const items = fieldArrayName ? getNestedValue(data, fieldArrayName) : [];
     return (
-      <Card elevation={2} sx={{ mb: 1 }}>
+      <Card elevation={2} sx={{ mb: 1, boxSizing: 'border-box' }}>
         <CardContent>
           <Typography
             variant="h6"
@@ -189,7 +170,7 @@ export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, s
               </Table>
             </TableContainer>
           )}
-          {sectionType === "array" && (
+          {(sectionType === "array" && layout === "table") && (
             <TableContainer component={Paper} sx={{ maxHeight: 440, mb: 2 }}>
               <Table stickyHeader size="small">
                 <TableHead>
@@ -226,6 +207,28 @@ export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, s
               </Table>
             </TableContainer>
           )}
+          {(sectionType === "array" && layout === "grid") && items !== null &&
+            (items?.map((item: { [x: string]: any }) => (
+              <Grid container rowSpacing={2} padding={1} sx={{ margin: `5px 5px`, border: `1px dashed #BDBDBD`, borderRadius: `5px` }}>
+                {fields.map((field, fieldIndex) => !field.hidden &&
+                  (<Grid container item xs={12 / gridColumns} key={fieldIndex}>
+                    <Grid item xs={12}>
+                      <Typography variant="caption" color="text.secondary" component="div">
+                        {field.label || field.key}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" component="div" sx={{ fontWeight: "medium" }}>
+                        {field.render
+                          ? field.render(getNestedValue(item, field.key), item)
+                          : getNestedValue(item, field.key)}
+                      </Typography>
+                    </Grid>
+                  </Grid>)
+                )}
+              </Grid>
+            )))
+          }
         </CardContent>
       </Card>
     )
@@ -233,8 +236,8 @@ export const DataViewer: React.FC<GenericObjectViewerProps> = ({ data, config, s
 
   return (
     <Box sx={{ p: 2, ...sx }}>
-      {config.sections && config.sections.length > 0 ? (
-        config.sections.map((section) => renderSection(section, data))
+      {config && config.length > 0 ? (
+        config.map((section) => renderSection(section, data))
       ) : (
         <Typography variant="body1" color="text.secondary">
           No sections available.

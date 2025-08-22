@@ -1,4 +1,5 @@
 import { authReducer, layoutReducer, previewReducer, dialogBoxReducer, notificationReducer, drawerContainerReducer } from "./slices";
+import { queryParamsReducer } from "./slices/query-params.slice";
  
 export const coreReducer = {
     auth: authReducer,
@@ -7,4 +8,5 @@ export const coreReducer = {
     dialogBox: dialogBoxReducer,
     drawerContainer: drawerContainerReducer,
     notifications: notificationReducer,
+    queryParams: queryParamsReducer,
 }

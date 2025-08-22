@@ -1,7 +1,7 @@
-import { Info } from "@mui/icons-material";
-import { IconButton, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
 import { red } from "@mui/material/colors";
 import { InfoTooltip } from "../ui";
+
 export type LabelProps = {
     isRequired?: boolean;
     label: string;
@@ -10,14 +10,15 @@ export type LabelProps = {
     isError: boolean;
     infoTipText?: string;
 };
+
 export const Label: React.FC<LabelProps> = (props) => {
-    const { isRequired = false, isReadOnly = false, isError = false, label, name, infoTipText} = props;
+    const { isRequired = false, isReadOnly = false, isError = false, label, name, infoTipText } = props;
     const getLabelColor = (): string => {
-        if (isReadOnly) return "#9e9e9e"; 
-        if (isError) return red[900]; 
-        return "black"; 
+        if (isReadOnly) return "#9e9e9e";
+        if (isError) return red[900];
+        return "black";
     };
-    
+
     return (
         <Typography
             variant="body2"
@@ -36,12 +37,9 @@ export const Label: React.FC<LabelProps> = (props) => {
                     *&nbsp;
                 </Typography>
             )}
-            {label}
-            {infoTipText && <InfoTooltip info={infoTipText}>
-                <IconButton sx={{ fontSize: 10 }}>
-                    <Info fontSize="inherit" color="info" />
-                </IconButton>
-            </InfoTooltip>}
+            <InfoTooltip info={infoTipText ? infoTipText : null}>
+                <span>{label}</span>
+            </InfoTooltip>
         </Typography>
     )
 }

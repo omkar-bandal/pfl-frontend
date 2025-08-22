@@ -15,7 +15,7 @@ export class DashboardManagementService extends BaseService {
     const url = `/api/management/getGrns/management/farmer/${farmerId}`;
     return this.get(url);
   }
-  getPurchaseDataByProduct(productId: string): Promise<ProductPurchaseData> {
+  getPurchaseDataByProduct(productId: string | null): Promise<ProductPurchaseData> {
     const url = `/api/management/getGrns/management/product/${productId}`;
     return this.get(url);
   }

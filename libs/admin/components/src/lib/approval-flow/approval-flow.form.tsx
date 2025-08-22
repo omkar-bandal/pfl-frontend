@@ -120,21 +120,22 @@ export const ApprovalFlowForm = () => {
                 options={employees}
                 infoTipText={`Enter the name of the employee for whom the approval flow is to be created.`} />
           </Grid2>
-            <Grid2 size={{ xs: 12 }} marginY={2}>
+            {documentType === 'Procurement' &&
+              (<><Grid2 size={{ xs: 12 }} marginY={2}>
               <SectionHeader sectionHeader="Verifiers Section" />
             </Grid2>
-            <Grid2 size={{ xs: 12 }}>
-            <MultiSelectAutocomplete
-              isLoading={empFetching || empLoading}
-                limitTags={3}
-              isRequired={false}
-              label="Verifiers"
-              name="verifiers"
-              options={emps?.data || []}
-              getOptionLabel={getEmployeeOptions}
-                infoTipText={`Add employee(s) who will verify the document created by the creator.`}
-            />
-          </Grid2>
+              <Grid2 size={{ xs: 12 }}>
+                <MultiSelectAutocomplete
+                  isLoading={empFetching || empLoading}
+                  limitTags={3}
+                  isRequired={false}
+                  label="Verifiers"
+                  name="verifiers"
+                  options={emps?.data || []}
+                  getOptionLabel={getEmployeeOptions}
+                  infoTipText={`Add employee(s) who will verify the document created by the creator.`}
+                />
+                </Grid2></>)}
             <Grid2 size={{ xs: 12 }} marginY={2}>
               <SectionHeader sectionHeader="Approvers Section" />
             </Grid2>
@@ -357,33 +358,36 @@ export const ApprovalFlowForm = () => {
               }}
             />
           </Grid2>
-            <Grid2 size={{ xs: 12 }} marginY={2}>
-              <SectionHeader sectionHeader="Finalizer Section" />
-            </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
-            <MultiSelectAutocomplete
-              isLoading={empFetching || empLoading}
-                limitTags={3}
-              isRequired={false}
-              label="First Finalizer"
-              name="finalizers.firstFinalizers"
-              options={emps?.data || []}
-              getOptionLabel={getEmployeeOptions}
-                infoTipText={`Add employee(s) who will finalize the approved document created by the creator.`}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
-            <MultiSelectAutocomplete
-              isLoading={empFetching || empLoading}
-                limitTags={3}
-              isRequired={false}
-              label="Second Finalizer"
-              name="finalizers.secondFinalizers"
-              options={emps?.data || []}
-              getOptionLabel={getEmployeeOptions}
-                infoTipText={`Add employee(s) who will finalize the approved document created by the creator.`}
-            />
-          </Grid2>
+            {documentType === 'Procurement' &&
+              (<>
+              <Grid2 size={{ xs: 12 }} marginY={2}>
+                <SectionHeader sectionHeader="Finalizer Section" />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
+                <MultiSelectAutocomplete
+                  isLoading={empFetching || empLoading}
+                  limitTags={3}
+                  isRequired={false}
+                  label="First Finalizer"
+                  name="finalizers.firstFinalizers"
+                  options={emps?.data || []}
+                  getOptionLabel={getEmployeeOptions}
+                  infoTipText={`Add employee(s) who will finalize the approved document created by the creator.`}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 6 }}>
+                <MultiSelectAutocomplete
+                  isLoading={empFetching || empLoading}
+                  limitTags={3}
+                  isRequired={false}
+                  label="Second Finalizer"
+                  name="finalizers.secondFinalizers"
+                  options={emps?.data || []}
+                  getOptionLabel={getEmployeeOptions}
+                  infoTipText={`Add employee(s) who will finalize the approved document created by the creator.`}
+                />
+              </Grid2>
+              </>)}
           <Grid2
             size={{ xs: 12 }}
             marginY={2}

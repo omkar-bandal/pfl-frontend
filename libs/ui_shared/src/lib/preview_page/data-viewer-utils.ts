@@ -1,12 +1,23 @@
+import { reverseDateString } from "@prime-fresh/shared/modules"
+
 // Format date string to a more readable format
 export const formatDate = (dateString: string | null) => {
     if (!dateString) return "-"
+  if (dateString.match(/^(\d{4})-(\d{2})-(\d{2})$/)) {
     const date = new Date(dateString)
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
     })
+    } else {
+      const date = new Date(reverseDateString(dateString));
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    })
+    }
   }
   
   // Format currency values

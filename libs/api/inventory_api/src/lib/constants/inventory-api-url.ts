@@ -1,6 +1,10 @@
 import { QueryParams } from '@prime-fresh/common_api';
 
 export const inventoryApiUrl = {
+
+  //Stock
+  GET_STOCK: `/inventoryStock/stock/accesslocation`,
+
   //Inward Register
   GET_ALL_INWARD_REGISTERS: (queryParams?: QueryParams) => {
     if (queryParams) {
@@ -159,6 +163,8 @@ export const inventoryApiUrl = {
     }
   },
   GET_RBC_BY_ID: (id: string) => `/returns/${id}`,
+  GET_RBC_FOR_VIEW_BY_ID: (id: string) => `/returns/view/${id}`,
+  GET_RBC_FOR_UPDATE_BY_ID: (id: string) => `/returns/update/${id}`,
   UPDATE_RBC: (id: string) => `/returns/${id}`,
   DELETE_RBC: (id: string) => `/returns/${id}`,
   CREATE_RBC: "/returns/",

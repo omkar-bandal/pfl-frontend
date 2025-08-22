@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ObjectViewerConfig, formatCurrency, formatDate } from '@prime-fresh/ui_shared';
+import { SectionConfig, formatCurrency, formatDate } from '@prime-fresh/ui_shared';
 import { Typography } from '@mui/material';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 import { Address } from '@prime-fresh/common_api';
 
-export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
-  sections: [
+export const vehicleDispatchRegisterViewConfig: SectionConfig[] = [
     {
       sectionType: 'object',
       layout: 'grid',
@@ -19,17 +18,17 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'dcNumber',
           label: 'Delivery Challan Number',
-          render: (value: string) => (value ? value.toUpperCase() : '-'),
+          render: (value: string) => (value ? value?.toUpperCase() : '-'),
         },
         {
           key: 'date',
           label: 'Date of Inward',
-          render: (value: any) => (value ? formatDate(value) : '-'),
+          render: (value: any) => (value ? formatDate(value || '') : '-'),
         },
         {
           key: 'vehicleNo',
           label: 'Vehicle Number',
-          render: (value: string) => (value ? value.toUpperCase() : '-'),
+          render: (value: string) => (value ? value?.toUpperCase() : '-'),
         },
         {
           key: 'vehicleType',
@@ -49,17 +48,17 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'paymentDiscussed',
           label: 'Payment Discussed',
-          render: (value: number) => (value ? formatCurrency(Number(value)) : '-'),
+          render: (value: number) => (value ? formatCurrency(Number(value) || 0) : '-'),
         },
         {
           key: 'transportationBillAmt',
           label: 'Transportation Bill Amount',
-          render: (value: number) => (value ? formatCurrency(Number(value)) : '-'),
+          render: (value: number) => (value ? formatCurrency(Number(value) || 0) : '-'),
         },
         {
           key: 'advancePaid',
           label: 'Any Advance Paid to Transporter',
-          render: (value: number) => (value ? formatCurrency(Number(value)) : '-'),
+          render: (value: number) => (value ? formatCurrency(Number(value) || 0) : '-'),
         },
         {
           key: 'clientName',
@@ -69,7 +68,7 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'clientGRNNo',
           label: 'Client GRN No',
-          render: (value: string) => (value ? value.toUpperCase() : '-'),
+          render: (value: string) => (value ? value?.toUpperCase() : '-'),
         },
         {
           key: 'clientAddress',
@@ -94,12 +93,12 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         {
           key: 'reachingTime',
           label: 'Reaching Time',
-          render: (value: string) => (value ? value.toUpperCase() : '-'),
+          render: (value: string) => (value ? value?.toUpperCase() : '-'),
         },
         {
           key: 'outTime',
           label: 'Out Time',
-          render: (value: string) => (value ? value.toUpperCase() : '-'),
+          render: (value: string) => (value ? value?.toUpperCase() : '-'),
         },
         {
           key: 'accDeptVerification',
@@ -135,5 +134,4 @@ export const vehicleDispatchRegisterViewConfig: ObjectViewerConfig = {
         },
       ],
     },
-  ],
-};
+]

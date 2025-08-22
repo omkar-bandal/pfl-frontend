@@ -53,10 +53,10 @@ export const GRNView = () => {
 
   useEffect(() => {
     if (grn?.source === 'vendor') {
-      const vendor = Vendors?.find((vendor) => vendor.id === grn.selectedParty);
+      const vendor = Vendors?.find((vendor) => vendor.companyName === grn.selectedParty);
       dispatch(setSelectedVendorPartialData(vendor));
     } else {
-      const farmer = Farmers?.find((farmer) => farmer.id === grn?.selectedParty);
+      const farmer = Farmers?.find((farmer) => farmer.fullName === grn?.selectedParty);
       dispatch(setSelectedFarmerPartialData(farmer));
     }
   });
@@ -146,9 +146,9 @@ export const GRNView = () => {
             <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 {grn?.createdBy !== username.split(' ')[0] &&
                   <BtnSmall
-                label="Approve"
-                icon={<Check fontSize="inherit" />}
-                color="success"
+                    label="Approve"
+                    icon={<Check fontSize="inherit" />}
+                    color="success"
                   onClick={() => changeGRNStatus('approved')}
                   disabled={grn?.overAllStatus === 'reject' || (isPending && !isError) ? true : false}
                 />}
@@ -246,9 +246,7 @@ export const GRNView = () => {
                     { label: 'Source:', value: convertInTitleCase(grn?.source || '') },
                     { label: 'Created By:', value: grn?.createdBy },
                   { label: 'Created Date:', value: grn?.createdDate },
-                  { label: 'Created Time:', value: grn?.createdTime },
-                    // { label: 'Requested By:', value: grn?.requestedBy?.firstName },
-                    // { label: 'Base Location:', value: grn?.baseLocation },
+                    { label: 'Created Time:', value: grn?.createdTime },
                     { label: 'Purchase Location:', value: convertInTitleCase(grn?.purchaseLocation || '') },
                     { label: 'Purchase For Which Location:', value: convertInTitleCase(grn?.purchaseForSalesLocation || '') },
                 ].map((item, index) => (
@@ -264,39 +262,104 @@ export const GRNView = () => {
                 ))}
               </div>
               <div className={`${styles['details-grid']}`}>
-                {(grn?.source === 'vendor'
-                  ? [
-                      { label: 'Vendor Name:', value: grn?.selectedParty },
-                      { label: 'Vendor Code:', value: selectedVendorPartialData?.vendorCode },
-                      { label: 'Contact No:', value: selectedVendorPartialData?.officeContactNo },
-                      { label: 'Email:', value: selectedVendorPartialData?.officeEmail },
-                      { label: 'Office Address:', value: formatAddress(selectedVendorPartialData?.officeAddress) },
-                    ]
-                  : [
-                      { label: 'Farmer Name:', value: grn?.selectedParty },
-                      { label: 'Farmer Code:', value: selectedFarmerPartialData?.farmerCode },
-                      { label: 'Contact No:', value: selectedFarmerPartialData?.primaryMobileNo },
-                      { label: 'Email:', value: selectedFarmerPartialData?.email },
-                      {
-                        label: 'Farm Address:',
-                        value: formatAddress(selectedFarmerPartialData?.farmAddress),
-                      },
-                      {
-                        label: 'Residential Address:',
-                        value: formatAddress(selectedFarmerPartialData?.residensialAddress),
-                      },
-                    ]
-                ).map((item, index) => (
-                  <div key={index} className={`${styles['details-item']} ${styles['span-4']}`}>
-                    <span
-                      className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
-                      style={{ color: textColor }}
-                    >
-                      {item.label}
-                    </span>
-                    <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{item.value}</span>
-                  </div>
-                ))}
+                  {grn?.source === 'vendor' ?
+                    (
+                      <>
+                        <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                          <span
+                            className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                            style={{ color: textColor }}
+                          >
+                            Vendor Name:
+                          </span>
+                          <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{convertInTitleCase(grn?.selectedParty || '')}</span>
+                        </div>
+                        <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                          <span
+                            className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                            style={{ color: textColor }}
+                          >
+                            Vendor Code:
+                          </span>
+                          <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{selectedVendorPartialData?.vendorCode ? selectedVendorPartialData?.vendorCode.toUpperCase() : ''}</span>
+                        </div>
+                        <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                          <span
+                            className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                            style={{ color: textColor }}
+                          >
+                            Contact Person:
+                          </span>
+                          <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{convertInTitleCase(selectedVendorPartialData?.contactPersonName || '')}</span>
+                        </div>
+                        <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                          <span
+                            className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                            style={{ color: textColor }}
+                          >
+                            Contact No:
+                          </span>
+                          <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{selectedVendorPartialData?.officeContactNo}</span>
+                        </div>
+                        <div className={`${styles['details-item']} ${styles['span-8']}`}>
+                          <span
+                            className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                            style={{ color: textColor }}
+                          >
+                            Address:
+                          </span>
+                          <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{formatAddress(selectedVendorPartialData?.officeAddress)}</span>
+                        </div>
+                      </>
+                    ) :
+                    (<>
+                      <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                        <span
+                          className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                          style={{ color: textColor }}
+                        >
+                          Farmer Name:
+                        </span>
+                        <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{convertInTitleCase(grn?.selectedParty || '')}</span>
+                      </div>
+                      <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                        <span
+                          className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                          style={{ color: textColor }}
+                        >
+                          Farmer Code:
+                        </span>
+                        <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{selectedFarmerPartialData?.farmerCode ? selectedFarmerPartialData?.farmerCode.toUpperCase() : ''}</span>
+                      </div>
+                      <div className={`${styles['details-item']} ${styles['span-4']}`}>
+                        <span
+                          className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                          style={{ color: textColor }}
+                        >
+                          Contact No:
+                        </span>
+                        <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{selectedFarmerPartialData?.primaryMobileNo}</span>
+                      </div>
+                      <div className={`${styles['details-item']} ${styles['span-12']}`}>
+                        <span
+                          className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                          style={{ color: textColor }}
+                        >
+                          Residential Address:
+                        </span>
+                        <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{formatAddress(selectedFarmerPartialData?.residensialAddress)}</span>
+                      </div>
+                      <div className={`${styles['details-item']} ${styles['span-12']}`}>
+                        <span
+                          className={`${styles['text-smr']} ${styles['text-bold']} ${styles['label-mr']}`}
+                          style={{ color: textColor }}
+                        >
+                          Farm Address:
+                        </span>
+                        <span className={`${styles['text-smr']} ${styles['text-bold']}`}>{formatAddress(selectedFarmerPartialData?.farmAddress)}</span>
+                      </div>
+                    </>
+                    )}
               </div>
               {/* Product Table */}
               <table className={styles['product-table']} style={{ border: borderColor }}>
@@ -326,7 +389,7 @@ export const GRNView = () => {
                   {grn?.grnProducts.map((product, index) => (
                     <tr key={index}>
                       <th className={styles['sr-col']} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}>
-                        {index}
+                        {index + 1}
                       </th>
                       <th className={styles['product-col']} style={{ border: borderColor, backgroundColor: '#FFFFFF' }}>
                         {convertInTitleCase(product.productName || '')}
@@ -374,7 +437,7 @@ export const GRNView = () => {
                   { label: 'Total Amount:', value: formatCurrency(Number(grn?.totalAmt) || 0) },
                   {
                     label: 'Amount in Words:',
-                    value: grn?.amtWords,
+                    value: convertInTitleCase(grn?.amtWords || ''),
                   },
                 ].map((item, index) => (
                   <div

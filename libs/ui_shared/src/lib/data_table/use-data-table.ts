@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { GridPaginationModel, GridSortModel } from "@mui/x-data-grid";
 import { CustomGridColDef } from "./models";
+import { QueryParams } from "@prime-fresh/common_api";
 
 // export interface QueryParams {
 //   page: number;
@@ -82,12 +83,6 @@ import { CustomGridColDef } from "./models";
 //   };
 // };
 
-export interface QueryParams {
-  page: number;
-  limit: number;
-  sort: string;
-  filter?: Record<string, any> | null;
-}
 
 interface UseDataTableProps {
   initialPageSize?: number;
@@ -114,8 +109,9 @@ export const useDataTable = ({ initialPageSize = 10, columnDef }: UseDataTablePr
     page: 1,
     limit: initialPageSize,
     sort: '',
-    filter: null
+    filter: null,
   });
+  const [search, setSearch] = useState<string | null>(null);
 
   const handleCloseColumnVisibilityPanel = () => {
     setDisplayColumnVisibilityPanel(null);
@@ -156,6 +152,8 @@ export const useDataTable = ({ initialPageSize = 10, columnDef }: UseDataTablePr
     paginationModel,
     sortModel,
     queryParams,
+    search,
+    setSearch,
     displayColumnVisibilityPanel,
     handleCloseColumnVisibilityPanel,
     handleOpenColumnVisibilityPanel,

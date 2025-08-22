@@ -8,6 +8,7 @@ export interface ILoggedInUserInfoRes  {
     employeeId: string;
     userName: string;
     department: string ;
+    currentWorkLocation: string;
 }
 
 export interface IEmployeePermissions {

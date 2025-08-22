@@ -3,7 +3,6 @@ import React from 'react';
 import { useField } from 'formik';
 import { Autocomplete, TextField, CircularProgress, Grid2 } from '@mui/material';
 import { Label } from './label';
-
 export interface GenericAutocompleteProps<T> {
   isRequired: boolean;
   name: string;

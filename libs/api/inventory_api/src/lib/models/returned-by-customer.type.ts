@@ -1,17 +1,34 @@
 import {
   ApprovalSummany,
   DocumentStatus,
-  FormProductQtyAmt,
-  FormProducts,
-  FormProductWeight,
 } from '@prime-fresh/common_api';
 
-export type IReturnedProducts = {
+export interface IReturnedProducts {
+  id?: string;
+  productName: string | null,
+  origin: string | null,
+  variety: string | null,
+  count: string | null,
+  size: string | null,
   saleUoM: string | null;
-  returnedUOM: string | null;
-} & FormProducts &
-  FormProductQtyAmt &
-  FormProductWeight;
+  unitPrice: number | null,
+  //Returned Product Details
+  // returnedUoM: string | null;
+  returnedQty: number | null,
+  // returnedUnitPrice: number | null,
+  returnedQtyAmt: number | null,
+  returnedPackingMaterialWt: number | null;
+  returnedGrossWt: number | null;
+  returnedNetWt: number | null;
+  //Rejected Product Details
+  // rejectedUoM: string | null;
+  rejectedQty: number | null,
+  // rejectedUnitPrice: number | null,
+  rejectedQtyAmt: number | null,
+  rejectedPackingMaterialWt: number | null;
+  rejectedGrossWt: number | null;
+  rejectedNetWt: number | null;
+}
 
 export type IReturnByCustomer = {
   id: string;
@@ -20,9 +37,10 @@ export type IReturnByCustomer = {
   createdBy?: string | null;
   createdDate?: string,
   createdTime?: string,
-  proformaInvNo: string | null;
   deliveryChallanNo: string | null;
   companyName: string | null;
+  location: string | null;
+  customerName: string | null;
   date: string | null;
   returnedProducts: IReturnedProducts[];
   remark: string | null;

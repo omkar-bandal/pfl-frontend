@@ -11,6 +11,7 @@ import { salesRoutes } from '@prime-fresh/sales/modules';
 import { SalesRoutes } from './sales.routes';
 import { lazy } from 'react';
 import { sharedRoutes } from '@prime-fresh/shared/modules';
+import { StockTable } from '@prime-fresh/inventory/components';
 
 const Dashboard = lazy(() =>
   import('@prime-fresh/shared/components').then((mod) => ({
@@ -37,11 +38,11 @@ const ProductForm = lazy(() =>
     default: mod.ProductCreateForm,
   }))
 );
-const StockTable = lazy(() =>
-  import('@prime-fresh/shared/components').then((mod) => ({
-    default: mod.StockTable,
-  }))
-);
+// const StockTable = lazy(() =>
+//   import('@prime-fresh/shared/components').then((mod) => ({
+//     default: mod.StockTable,
+//   }))
+// );
 const StockLocationWiseTable = lazy(() =>
   import('@prime-fresh/shared/components').then((mod) => ({
     default: mod.StockLocationWiseTable,

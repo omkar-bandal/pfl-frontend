@@ -19,6 +19,7 @@ import {
   LocationPartialData,
   PackagingMaterialPartialData,
   ProductPartialData,
+  QueryParams,
   ResultModel,
   UOMPartialData,
   VendorPartialData,
@@ -77,8 +78,8 @@ export class SharedService extends BaseService {
   }
 
   //Product Partial Data
-  getProductsPatrialData(): Promise<ApiBaseState<ProductPartialData[]>> {
-    const url = sharedApiUrls.GET_PRODUCTS_PARTIAL;
+  getProductsPatrialData(queryParams?: QueryParams): Promise<ApiBaseState<ProductPartialData[]>> {
+    const url = sharedApiUrls.GET_PRODUCTS_PARTIAL(queryParams);
     return this.get(url);
   }
 
@@ -104,8 +105,8 @@ export class SharedService extends BaseService {
   }
 
   //Vendor Partial Data
-  getVendorsPatrialData(): Promise<ApiBaseState<VendorPartialData[]>> {
-    const url = sharedApiUrls.GET_VENDORS_PARTIAL;
+  getVendorsPatrialData(queryParams?: QueryParams): Promise<ApiBaseState<VendorPartialData[]>> {
+    const url = sharedApiUrls.GET_VENDORS_PARTIAL(queryParams);
     return this.get(url);
   }
 
@@ -120,8 +121,8 @@ export class SharedService extends BaseService {
   }
 
   //Farmer Partial Data
-  getFarmersPatrialData(): Promise<ApiBaseState<FarmerPartialData[]>> {
-    const url = sharedApiUrls.GET_FARMERS_PARTIAL;
+  getFarmersPatrialData(queryParams?: QueryParams): Promise<ApiBaseState<FarmerPartialData[]>> {
+    const url = sharedApiUrls.GET_FARMERS_PARTIAL(queryParams);
     return this.get(url);
   }
 

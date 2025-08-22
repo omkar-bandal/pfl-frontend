@@ -1,19 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FarmerPartialData, GetAllDeliveryChallanNums, GetAllGRNNums, ProductPartialData, UOMPartialData, VendorPartialData } from "@prime-fresh/common_api";
 import { IInwardRegister } from "@prime-fresh/inventory_api";
 
-// export const normalizeData = (data: GetInwardRegister): PostInwardRegister => {
-//   return {
-//     ...data,
-//     grnNo: data.grnNo ? data.grnNo.id : null,
-//     deliveryChallanNo: data.deliveryChallanNo ? data.deliveryChallanNo.id : null,
-//     selectedParty: data.selectedParty ? data.selectedParty.id : null,
-//     inwardProducts: data.inwardProducts.map(product => ({
-//       ...product,
-//       productName: product.productName ? product.productName.id : null,
-//       uom: product.uom ? product.uom.id : null,
-//     })),
-//   };
-// };
+export const normalizeData = (data: IInwardRegister,
+  allProducts: ProductPartialData[],
+  allUoMs: UOMPartialData[],
+  grnNo: GetAllGRNNums[],
+  dcNo: GetAllDeliveryChallanNums[],
+  allVendors: VendorPartialData[],
+  allFarmers: FarmerPartialData[]
+) => {
+  return {
+    ...data,
+    grnNo: grnNo ? grnNo.find(no => no.id === data.grnNo)?.grnNo : '',
+    deliveryChallanNo: dcNo ? dcNo?.find(no => no.id === data.deliveryChallanNo)?.challanNo : '',
+    selectedParty: data.source === 'vendor' ?
+      (allVendors ? allVendors?.find(vendor => vendor.id === data.selectedParty) : null) :
+      (allFarmers ? allFarmers?.find(farmer => farmer.id === data.selectedParty) : null),
+    inwardProducts: data.inwardProducts.map(product => ({
+      ...product,
+      productName: allProducts ? allProducts?.find(item => item.id === product.productName)?.name : '',
+      uom: allUoMs ? allUoMs?.find(item => item.id === product.uom)?.unit : '',
+    })),
+  };
+};
 
 
 const recalcTotalWeight = (products: IInwardRegister["inwardProducts"]): number =>

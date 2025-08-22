@@ -20,7 +20,7 @@ export function ApprovalFlowTable() {
   const docType = documentType ? documentType : null;
   const { showReplaceForm } = useAppSelector(approvalFlowStates);
   const dispatch = useAppDispatch();
-  const approvalFlowColumns = useApprovalFlowColumns();
+  const approvalFlowColumns = useApprovalFlowColumns(docType || 'Procurement');
   const {
     paginationModel,
     sortModel,

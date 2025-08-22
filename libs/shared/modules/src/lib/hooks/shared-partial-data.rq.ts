@@ -24,6 +24,7 @@ import {
   INotification,
   ResultModel,
   ApprovalRequest,
+  QueryParams,
 } from '@prime-fresh/common_api';
 
 export const useUpdateDocStatusWithThreeApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
@@ -97,10 +98,10 @@ export function useGetDepartmentById(deptId: string): UseQueryResult<ApiBaseStat
 
 //Product
 
-export function useGetProductsPartialData(): UseQueryResult<ApiBaseState<ProductPartialData[]>, ErrorModel> {
+export function useGetProductsPartialData(queryParams?: QueryParams): UseQueryResult<ApiBaseState<ProductPartialData[]>, ErrorModel> {
   return useQuery<ApiBaseState<ProductPartialData[]>, ErrorModel>({
-    queryKey: ['get-products-partial-data'],
-    queryFn: () => SharedService.getInstance().getProductsPatrialData(),
+    queryKey: ['get-products-partial-data', queryParams],
+    queryFn: () => SharedService.getInstance().getProductsPatrialData(queryParams), 
   });
 }
 
@@ -147,10 +148,10 @@ export function useGetPackagingMaterialPartialData(): UseQueryResult<
 
 //Farmers
 
-export function useGetFarmersPartialData(): UseQueryResult<ApiBaseState<FarmerPartialData[]>, ErrorModel> {
+export function useGetFarmersPartialData(queryParams?: QueryParams): UseQueryResult<ApiBaseState<FarmerPartialData[]>, ErrorModel> {
   return useQuery<ApiBaseState<FarmerPartialData[]>, ErrorModel>({
-    queryKey: ['get-farmers-partial-data'],
-    queryFn: () => SharedService.getInstance().getFarmersPatrialData(),
+    queryKey: ['get-farmers-partial-data', queryParams],
+    queryFn: () => SharedService.getInstance().getFarmersPatrialData(queryParams),
   });
 }
 
@@ -177,10 +178,10 @@ export function useSearchFarmerData(query: string): UseQueryResult<ApiBaseState<
 
 //Vendors
 
-export function useGetVendorsPartialData(): UseQueryResult<ApiBaseState<VendorPartialData[]>, ErrorModel> {
+export function useGetVendorsPartialData(queryParams?: QueryParams): UseQueryResult<ApiBaseState<VendorPartialData[]>, ErrorModel> {
   return useQuery<ApiBaseState<VendorPartialData[]>, ErrorModel>({
-    queryKey: ['get-vendors-partial-data'],
-    queryFn: () => SharedService.getInstance().getVendorsPatrialData(),
+    queryKey: ['get-vendors-partial-data', queryParams],
+    queryFn: () => SharedService.getInstance().getVendorsPatrialData(queryParams),
   });
 }
 

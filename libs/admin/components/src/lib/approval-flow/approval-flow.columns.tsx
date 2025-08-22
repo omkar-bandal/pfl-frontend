@@ -2,19 +2,20 @@ import { CustomGridColDef } from '@prime-fresh/ui_shared';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { IApprovalFlow } from '@prime-fresh/admin_api';
+import { IApprovalFlow, IDocumentType } from '@prime-fresh/admin_api';
 import { Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { adminRoutes } from '@prime-fresh/admin/modules';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 
-export const useApprovalFlowColumns = (): CustomGridColDef[] => {
+export const useApprovalFlowColumns = (documentType: IDocumentType): CustomGridColDef[] => {
   const navigate = useNavigate();
 
   return useMemo(
     () => [
       {
         field: 'creator',
+        type: 'string',
         headerName: 'Creator',
         minWidth: 120,
         flex: 1,
@@ -31,7 +32,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
-        hide: false,
+        hide: documentType === 'Procurement' ? false : true,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.verifiers || []).join(', ')),
       },
@@ -173,7 +174,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
-        hide: false,
+        hide: documentType === 'Procurement' ? false : true,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.finalizers.firstFinalizers || []).join(', ')),
       },
@@ -185,7 +186,7 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         headerAlign: 'center',
         align: 'center',
         isMobileVisible: true,
-        hide: false,
+        hide: documentType === 'Procurement' ? false : true,
         renderCell: (params: GridRenderCellParams<IApprovalFlow>) =>
           convertInTitleCase((params.row.finalizers.secondFinalizers || []).join(', ')),
       },
@@ -212,6 +213,6 @@ export const useApprovalFlowColumns = (): CustomGridColDef[] => {
         ),
       },
     ],
-    [navigate]
+    [documentType, navigate]
   );
 };

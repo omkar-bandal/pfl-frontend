@@ -7,3 +7,4 @@ export * from "./eod-report.rq";
 export * from "./labor-registration.rq";
 export * from "./proforma-invoices.rq";
 export * from "./returned-by-customer.rq";
+export * from './stock.rq';

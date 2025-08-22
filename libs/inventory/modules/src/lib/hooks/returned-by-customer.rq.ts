@@ -43,3 +43,21 @@ export function useGetReturnedByCustomerById(id: string):
         enabled: enable,
     });
 }
+export function useGetReturnedByCustomerForViewById(id: string):
+    UseQueryResult<ApiBaseState<IReturnByCustomer>, ErrorModel> {
+    const enable = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IReturnByCustomer>, ErrorModel>({
+        queryKey: ['get-rbc-for-view', id],
+        queryFn: () => ReturnedByCustomerServices.getInstance().getReturnedByCustomerForViewById(id),
+        enabled: enable,
+    });
+}
+export function useGetReturnedByCustomerForUpdateById(id: string):
+    UseQueryResult<ApiBaseState<IReturnByCustomer>, ErrorModel> {
+    const enable = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IReturnByCustomer>, ErrorModel>({
+        queryKey: ['get-rbc-for-update', id],
+        queryFn: () => ReturnedByCustomerServices.getInstance().getReturnedByCustomerForUpdateById(id),
+        enabled: enable,
+    });
+}

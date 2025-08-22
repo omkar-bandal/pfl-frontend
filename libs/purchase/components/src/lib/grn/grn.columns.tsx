@@ -129,7 +129,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (value: string) => (value ? value : '-'),
+      valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : '-'),
       hide: false,
     },
     // {
@@ -413,7 +413,7 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
           filterable: false,
           isMobileVisible: true,
           renderCell: (params: GridRenderCellParams) => (
-            <EditIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.id}`)} />
+            <EditIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.documentId}`)} />
           ),
         },
       ]
@@ -428,7 +428,6 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
           filterable: false,
           isMobileVisible: true,
           renderCell: (params: GridRenderCellParams) => {
-            console.log('Document ID in column:', params.row.documentId);
             return <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.documentId}`)} />
           },
         },
@@ -436,25 +435,3 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
       : []),
   ];
 };
-// {
-//     field: "requestedBy",
-//     headerName: "Requested By",
-//     flex: 1, minWidth: 150,
-//     align: "center",
-//     headerAlign: "center",
-//     valueGetter: (value: RequestedBy) => value !== null ? convertInTitleCase(`${value.firstName || ''} ${value.lastName || ''}`) : "-",
-// },
-// {
-//     field: "requestingDepartment",
-//     headerName: "Department",
-//     flex: 1, minWidth: 100,
-//     align: "center",
-//     headerAlign: "center",
-// },
-// {
-//     field: "baseLocation",
-//     headerName: "Base Location",
-//     flex: 1, minWidth: 100,
-//     align: "center",
-//     headerAlign: "center",
-// },

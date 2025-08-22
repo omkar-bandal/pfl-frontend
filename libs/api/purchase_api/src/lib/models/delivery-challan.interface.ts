@@ -34,6 +34,9 @@ export interface IDeliveryChallanProduct {
   packagingMaterialUnitPrice: number | null;
   packagingMaterialAmount: number | null;
   packagingMaterialTotalWeight: number | null;
+  acceptedQty?: number | null;
+  rejectedQty?: number | null;
+  returnedQty?: number | null;
 }
 
 export interface IDeliveryChallanBase {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Chip } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
@@ -51,7 +52,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       align: "center",
       headerAlign: "center",
       hide: false,
-      valueGetter: (value: string) => value ? value : '-',
+      valueGetter: (value: any) => value ? value?.name : '-',
     },
     {
       field: "fromLocation",
@@ -60,7 +61,7 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       align: "center",
       headerAlign: "center",
       hide: false,
-      valueGetter: (value: string) => value ? value : '-',
+      valueGetter: (value: any) => value ? value?.name : '-',
     },
     {
       field: "customerName",

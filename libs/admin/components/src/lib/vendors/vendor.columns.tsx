@@ -5,30 +5,32 @@ import { useNavigate } from "react-router-dom";
 import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { Address, GetVendorCategory, GetVendorSubcategory } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { displayAddress } from "@prime-fresh/purchase/modules";
 import { useMemo } from "react";
+import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
 
 export const useVendorColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
   return useMemo(() => [
-    {
-      field: "companyName",
-      headerName: "Business",
-      headerAlign: 'center',
-      flex: 1,
-      minWidth: 150,
-      hide: false,
-      isMobileVisible: true,
-    },
     {
       field: "vendorCode",
       headerName: "Code",
       headerAlign: 'center',
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 150,
       hide: false,
       isMobileVisible: true,
+      valueGetter: (value: string) => value ? value.toUpperCase() : '',
+    },
+    {
+      field: "companyName",
+      headerName: "Business",
+      headerAlign: 'center',
+      flex: 1,
+      minWidth: 200,
+      hide: false,
+      isMobileVisible: true,
+      valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '',
     },
     {
       field: "category",
@@ -36,9 +38,9 @@ export const useVendorColumns = (): CustomGridColDef[] => {
       headerAlign: 'center',
       align: 'center',
       flex: 1,
-      minWidth: 100,
-      hide: true,
-      valueGetter: (value: GetVendorCategory) => value ? value.name : "",
+      minWidth: 150,
+      hide: false,
+      valueGetter: (value: GetVendorCategory) => value ? convertInTitleCase(value.name || '') : "",
     },
     {
       field: "subcategory",
@@ -46,9 +48,9 @@ export const useVendorColumns = (): CustomGridColDef[] => {
       headerAlign: 'center',
       align: 'center',
       flex: 1,
-      minWidth: 100,
-      hide: true,
-      valueGetter: (value: GetVendorSubcategory) => value ? value.name : "",
+      minWidth: 150,
+      hide: false,
+      valueGetter: (value: GetVendorSubcategory) => value ? convertInTitleCase(value.name || '') : "",
     },
     {
       field: "officeAddress",
@@ -57,7 +59,7 @@ export const useVendorColumns = (): CustomGridColDef[] => {
       flex: 1,
       minWidth: 300,
       hide: false,
-      valueGetter: (value: Address) => value ? displayAddress(value) : "",
+      valueGetter: (value: Address) => value ? formatAddress(value) : "",
     },
     {
       field: "officeContactNo",

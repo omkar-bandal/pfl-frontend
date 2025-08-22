@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApprovalSummany, DocumentStatus, FormProductQtyAmt, FormProducts, FormProductUoM, FormProductWeight } from '@prime-fresh/common_api';
 
 export interface IInwardProducts extends FormProducts,
@@ -19,7 +20,7 @@ export interface IInwardRegister {
   location: string | null;
   date: string | null;
   batchNo: string | null;
-  selectedParty: string | null;
+  selectedParty: any | null;
   inwardProducts: IInwardProducts[];
   source: 'vendor' | 'farmer';
   purchasedBy: string | null;

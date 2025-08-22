@@ -173,10 +173,10 @@ export const Dashboard = () => {
       </Grid2>
       <Divider sx={{ marginY: 1 }} />
       <PurchaseByProduct />
-      <Divider sx={{ marginY: 1 }} />
+      {/* <Divider sx={{ marginY: 1 }} />
       <PurchaseByVendor />
       <Divider sx={{ marginY: 1 }} />
-      <PurchaseByFarmer />
+      <PurchaseByFarmer /> */}
     </Box>
   );
 };

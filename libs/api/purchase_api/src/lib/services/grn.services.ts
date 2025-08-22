@@ -1,6 +1,7 @@
 import { ApiBaseState, ApprovalRequest, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
 import { IGRN } from "../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class GRNServices extends BaseService {
     private static _instance: GRNServices;
@@ -14,8 +15,8 @@ export class GRNServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllGRNs(queryParams? : QueryParams): Promise<ApiBaseState<IGRN[]>> {
-        const url = purchaseApiUrl.GET_ALL_GRN(queryParams);
+    getAllGRNs(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IGRN[]>> {
+        const url = buildApiUrl(purchaseApiUrl.GET_ALL_GRN, null, queryParams, search);
         console.log('Get all GRNs url:', url);
         return this.get(url);
     }

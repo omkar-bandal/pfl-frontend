@@ -99,6 +99,7 @@ export const SignIn = () => {
               userName: result.userName,
               employeeId: result.employeeId,
               department: result.department,
+              currentWorkLocation: result.currentWorkLocation,
             };
             setIsLoggedIn(true);
             setLoggedInUserInfo(loggedInUserInfo);

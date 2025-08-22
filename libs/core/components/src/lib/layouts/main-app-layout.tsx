@@ -10,6 +10,7 @@ import { SocketInitializer } from '../notifications';
 const drawerWidth = 250;
 
 export function Layout() {
+  // const { mobileOpen } = useAppSelector(layoutStates);
   return (
     <Provider store={coreStore}>
       <Box sx={{ display: 'flex' }}>
@@ -23,12 +24,14 @@ export function Layout() {
             paddingX: 1,
             width: { lg: `calc(100% - ${drawerWidth}px)` },
           }}>
+          {/* <Main open={mobileOpen}> */}
           <Toolbar variant='dense' sx={{ minHeight: 40 }} />
           <ErrorBoundary FallbackCompnent={ErrorFallback}>
             <React.Suspense fallback={<div>Loading...</div>}>
               <Outlet />
             </React.Suspense>
           </ErrorBoundary>
+          {/* </Main> */}
         </Box>
       </Box>
     </Provider>

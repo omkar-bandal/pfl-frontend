@@ -1,24 +1,36 @@
-import { IReturnByCustomer, IReturnedProducts } from '@prime-fresh/sales_api';
+import { IReturnByCustomer, IReturnedProducts } from "@prime-fresh/inventory_api";
 
 export const returnedProductsInitialValues: IReturnedProducts = {
   productName: null,
-  count: null,
-  size: null,
   origin: null,
   variety: null,
+  count: null,
+  size: null,
   saleUoM: null,
-  returnedUOM: null,
-  quantity: 0,
-  unitPrice: 0,
-  amount: 0,
-  grossWeight: 0,
-  packingMaterialWeight: 0,
-  netWeight: 0,
+  unitPrice: null,
+  //Returned Product Details
+  // returnedUoM: null,
+  returnedQty: null,
+  // returnedUnitPrice: null,
+  returnedQtyAmt: null,
+  returnedPackingMaterialWt: null,
+  returnedGrossWt: null,
+  returnedNetWt: null,
+  //Rejected Product Details
+  // rejectedUoM: null,
+  rejectedQty: null,
+  // rejectedUnitPrice: null,
+  rejectedQtyAmt: null,
+  rejectedPackingMaterialWt: null,
+  rejectedGrossWt: null,
+  rejectedNetWt: null,
 };
+
 export const returnedByCustomerInitialValues: Omit<IReturnByCustomer, 'id'> = {
-  proformaInvNo: null,
   deliveryChallanNo: null,
   companyName: null,
+  location: null,
+  customerName: null,
   date: null,
   returnedProducts: [returnedProductsInitialValues],
   remark: null,

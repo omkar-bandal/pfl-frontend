@@ -23,7 +23,10 @@ import {
   useGetBranchesPartialData,
   useGetCompanyNames,
   useGetEmployeePartialData,
+  useGetFarmersPartialDataById,
+  useGetProductsPartialData,
   useGetUOMPartialData,
+  useGetVendorsPartialDataById,
 } from '@prime-fresh/shared/modules';
 import {
   AddFieldButton,
@@ -92,32 +95,61 @@ export const InwardRegisterForm = () => {
     [locations]
   );
 
+  const { data: products } = useGetProductsPartialData();
+  const allProducts = products?.data ? products.data : [];
+
+  const { data: vendor } = useGetVendorsPartialDataById(formik.values.selectedParty || '', 'vendor');
+  const vendorData = vendor?.data ? vendor.data : null;
+
+  const { data: farmer } = useGetFarmersPartialDataById(formik.values.selectedParty || '', 'farmer');
+  const farmerData = farmer?.data ? farmer.data : null;
+
   const { mutateAsync: mutateAsyncPost, error: PostError, data: PostData } = useCreateInwardRegister();
   const { mutateAsync: mutateAsyncPatch, error: PatchError, data: PatchData } = useUpdateInwardRegister(Id);
+
+  const onInwardFormPreview = () => {
+    const data = formik.values;
+    const previewData = {
+      ...data,
+      grnNo: grnNums.find(no => no.value === data.grnNo)?.label || '',
+      deliveryChallanNo: dcNums?.find(no => no.value === data.deliveryChallanNo)?.label || '',
+      companyName: companyNames?.find(company => company.value === data.companyName)?.label || '',
+      location: allLocations?.find(loc => loc.value === data.location)?.label || '',
+      selectedParty: data.source === 'vendor' ? vendorData : farmerData,
+      purchasedBy: employeeData?.find(emp => emp.value === data.purchasedBy)?.label || '',
+      inwardProducts: data.inwardProducts.map(product => ({
+        ...product,
+        productName: allProducts?.find(item => item.id === product.productName)?.name || '',
+        uom: allUOMs?.find(item => item.value === product.uom)?.label || '',
+      })),
+    }
+    dispatch(setPreview(true));
+    dispatch(setInwardRegisterFormPreview(previewData));
+  }
 
   const handleSubmit = (values: any) => {
     console.log('Submitted Inward Data: ', values);
     Id === ''
       ? mutateAsyncPost(values)
-          .then(() => {
-            toast.success(PostData ? PostData.message : 'Inward Register created successfully.');
-            setTimeout(() => {
-              navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(PostError ? PostError.message : 'Error while creating inward register.');
-          })
+        .then(() => {
+          toast.success(PostData ? PostData.message : 'Inward Register created successfully.');
+          setTimeout(() => {
+            navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(PostError ? PostError.message : 'Error while creating inward register.');
+        })
       : mutateAsyncPatch(values)
-          .then(() => {
-            toast.success(PatchData ? PatchData.message : 'Inward register updated sucessfully.');
-            setTimeout(() => {
-              navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(PatchError ? PatchError.message : 'Error while updating inward register.');
-          });
+        .then(() => {
+          toast.success(PatchData ? PatchData.message : 'Inward register updated sucessfully.');
+          setTimeout(() => {
+            navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(PatchError ? PatchError.message : 'Error while updating inward register.');
+        });
   };
   return Id !== '' && isLoading ? (
     <Box sx={{ flex: 1 }}>
@@ -441,7 +473,7 @@ export const InwardRegisterForm = () => {
                 }}
               />
             </Grid2> */}
-            
+
             <Grid2 size={{ xs: 12 }}>
               <TextInput
                 type="text"
@@ -470,10 +502,14 @@ export const InwardRegisterForm = () => {
                 resetLabel="Reset"
                 onReset={formik.handleReset}
                 previewLabel="Preview"
-                onPreview={() => {
-                  dispatch(setPreview(true));
-                  dispatch(setInwardRegisterFormPreview(formik.values));
-                }}
+                  onPreview={
+                    //   () => {
+                    //   dispatch(setPreview(true));
+                    //   dispatch(setInwardRegisterFormPreview(formik.values));
+                    // }
+                    () => onInwardFormPreview()
+                  }
+
               />
             </Grid2>
           </Grid2>

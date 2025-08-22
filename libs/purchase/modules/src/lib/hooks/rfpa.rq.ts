@@ -26,11 +26,11 @@ export function useDeleteRFPAById(id: string):
     });
 }
 
-export function useGetAllRFPAs(queryParams?: QueryParams):
+export function useGetAllRFPAs(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IRFPA[]>, ErrorModel> {
     return useQuery<ApiBaseState<IRFPA[]>, ErrorModel>({
-        queryKey: ['get-all-rfpas', queryParams],
-        queryFn: () => RFPAServices.getInstance().getAllRFPAs(queryParams),
+        queryKey: ['get-all-rfpas', queryParams, search],
+        queryFn: () => RFPAServices.getInstance().getAllRFPAs(queryParams, search),
     });
 }
 

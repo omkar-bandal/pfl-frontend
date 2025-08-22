@@ -1,19 +1,20 @@
 import { QueryParams } from '@prime-fresh/common_api';
-import { buildUrl } from '@prime-fresh/shared/modules';
+// import { buildUrl } from '@prime-fresh/shared/modules';
 
 export const purchaseApiUrl = {
   //RFPA
-  GET_ALL_RFPA: (queryParams?: QueryParams) => {
-    if (queryParams) {
-      let url = `/rfpa/?page=${queryParams.page}&limit=${queryParams.limit}`;
-      if (queryParams.sort && queryParams.sort.length > 0) {
-        url = url + `&sort=${queryParams.sort}`;
-      }
-      return url;
-    } else {
-      return `/rfpa/`;
-    }
-  },
+  // GET_ALL_RFPA: (queryParams?: QueryParams) => {
+  //   if (queryParams) {
+  //     let url = `/rfpa/?page=${queryParams.page}&limit=${queryParams.limit}`;
+  //     if (queryParams.sort && queryParams.sort.length > 0) {
+  //       url = url + `&sort=${queryParams.sort}`;
+  //     }
+  //     return url;
+  //   } else {
+  //     return `/rfpa/`;
+  //   }
+  // },
+  GET_ALL_RFPA: `/rfpa/`,
   GET_RFPA_FOR_VIEW_BY_ID: (id: string) => `/rfpa/view/${id}`,
   GET_RFPA_FOR_UPDATE_BY_ID: (id: string) => `/rfpa/${id}/update`,
   UPDATE_RFPA: (id: string) => `/rfpa/${id}`,
@@ -23,17 +24,18 @@ export const purchaseApiUrl = {
   GET_ALL_RFPA_NO: '/rfpa/rfpanumbers/getAllRfpaNo',
 
   //Deal Slip
-  GET_ALL_DEAL_SLIP: (queryParams?: QueryParams) => {
-    if (queryParams) {
-      let url = `/dealSlip/?page=${queryParams.page}&limit=${queryParams.limit}`;
-      if (queryParams.sort && queryParams.sort.length > 0) {
-        url = url + `&sort=${queryParams.sort}`;
-      }
-      return url;
-    } else {
-      return `/dealSlip/`;
-    }
-  },
+  // GET_ALL_DEAL_SLIP: (queryParams?: QueryParams) => {
+  //   if (queryParams) {
+  //     let url = `/dealSlip/?page=${queryParams.page}&limit=${queryParams.limit}`;
+  //     if (queryParams.sort && queryParams.sort.length > 0) {
+  //       url = url + `&sort=${queryParams.sort}`;
+  //     }
+  //     return url;
+  //   } else {
+  //     return `/dealSlip/`;
+  //   }
+  // },
+  GET_ALL_DEAL_SLIP: `/dealSlip/`,
   GET_DEAL_SLIP_FOR_VIEW_BY_ID: (id: string) => /*`/dealSlip/${id}/view`*/ `/dealslip/view/${id}`,
   GET_DEAL_SLIP_FOR_UPDATE_BY_ID: (id: string) => `/dealSlip/${id}/update`,
   UPDATE_DEAL_SLIP: (id: string) => `/dealSlip/${id}`,
@@ -43,22 +45,23 @@ export const purchaseApiUrl = {
   GET_ALL_DEAL_SLIP_NO: '/dealSlip/dealslipno/getAlldealslipNo',
 
   //GRN
-  GET_ALL_GRN: (queryParams?: QueryParams) => {
-    if (queryParams) {
-      let url = `/grns/?page=${queryParams.page}&limit=${queryParams.limit}`;
-      if(queryParams.filter){
-        url = buildUrl(queryParams.filter, url);
-      }
-      if (queryParams.sort && queryParams.sort.length > 0) {
-        url = url + `&sort=${queryParams.sort}`;
-      }
-      return url;
-      // return `/documents/userid/grn`
-    } else {
-      return `/grns/`;
-      // return `/documents/userid/grn`
-    }
-  },
+  // GET_ALL_GRN: (queryParams?: QueryParams) => {
+  //   if (queryParams) {
+  //     let url = `/grns/?page=${queryParams.page}&limit=${queryParams.limit}`;
+  //     if(queryParams.filter){
+  //       url = buildUrl(queryParams.filter, url);
+  //     }
+  //     if (queryParams.sort && queryParams.sort.length > 0) {
+  //       url = url + `&sort=${queryParams.sort}`;
+  //     }
+  //     return url;
+  //     // return `/documents/userid/grn`
+  //   } else {
+  //     return `/grns/`;
+  //     // return `/documents/userid/grn`
+  //   }
+  // },
+  GET_ALL_GRN: `/grns/`,
   GET_GRN_FOR_VIEW_BY_ID: (id: string) => `/grns/view/${id}`,
   // GET_GRN_FOR_VIEW_BY_ID: (id: string) => `/documents/${id}`,
   GET_GRN_FOR_UPDATE_BY_ID: (id: string) => `/grns/update/${id}`,

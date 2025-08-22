@@ -6,7 +6,7 @@ import { Box, LinearProgress, Grid, Typography, TextField, IconButton } from "@m
 import { useActions, useAppSelector, authState } from "@prime-fresh/modules";
 import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithTwoApproval } from "@prime-fresh/shared/modules";
 import { StepperData, PageTitle, BtnSmall, DrawerContainer, VerticalStepper, InfoTooltip, DataViewer, toast } from "@prime-fresh/ui_shared";
-import { useGetReturnedByCustomerById } from "@prime-fresh/inventory/modules";
+import { useGetReturnedByCustomerForViewById } from "@prime-fresh/inventory/modules";
 
 export const ReturnedByCustomerView = () => {
     const { id } = useParams<{ id: string }>();
@@ -14,7 +14,7 @@ export const ReturnedByCustomerView = () => {
     const { openDrawer } = useActions();
     // const { canDownload } = usePermission('rbc');
     const [reason, setReason] = React.useState('');
-    const { data, isLoading, refetch } = useGetReturnedByCustomerById(rbcId);
+    const { data, isLoading, refetch } = useGetReturnedByCustomerForViewById(rbcId);
     const rbc = data?.data ? data.data : null;
     console.log('RBC:', rbc);
     const { loggedInUserInfo } = useAppSelector(authState);
@@ -67,7 +67,7 @@ export const ReturnedByCustomerView = () => {
                 <Box sx={{ flex: 1, marginY: 1 }}>
                     <Grid container rowSpacing={1}>
                         <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <PageTitle pagetitle="Deal Slip" />
+                                <PageTitle pagetitle="Product Returned By Customer" />
                         </Grid>
                         <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                             {rbc?.createdBy !== username.split(' ')[0] &&

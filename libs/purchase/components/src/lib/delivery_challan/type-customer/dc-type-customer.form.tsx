@@ -30,11 +30,15 @@ import {
   useGetBranchesPartialData,
   formatAddress,
   handleFormKeyDown,
+  getSelectedProductData,
+  useGetProductsPartialData,
+  useGetUOMPartialData,
 } from '@prime-fresh/shared/modules';
 import { IDeliveryChallanTypeCustomer } from '@prime-fresh/purchase_api';
 import { DeliveryChallanBaseForm } from '../delivery-challan-base.form';
 import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 import { DCTypeCustomerPreview } from './dc-type-customer.preview';
+import { useGetAllPackagingMaterials } from '@prime-fresh/admin/modules';
 
 export const DCTypeCustomerForm = () => {
   const navigate = useNavigate();
@@ -45,7 +49,7 @@ export const DCTypeCustomerForm = () => {
 
   //Get delivery challan data by id
   const { data: dc, isLoading } = useGetDCTypeCustomerForUpdateById(dcId);
-  console.log('DC Type Customer: ',dc?.data);
+  console.log('DC Type Customer: ', dc?.data);
   const dcData = dc?.data ? dc.data : dcTypeCustomerInitialValue;
   const dcTypeCustomerInitVal = dcId === '' ? dcTypeCustomerInitialValue : dcData;
 
@@ -77,7 +81,7 @@ export const DCTypeCustomerForm = () => {
   );
 
   const { data: customer } = useGetCustomerPartialData(formik.values.customerName || '');
-  console.log("Fetched Customer: ",customer);
+  console.log("Fetched Customer: ", customer);
   const customerShippingAddress = useMemo(
     () => (customer?.data ? formatAddress(customer.data.deliveryAddress) : ''),
     [customer?.data]
@@ -92,7 +96,17 @@ export const DCTypeCustomerForm = () => {
     () => (locations?.data ? mapToValueLabelArray(locations.data, 'id', 'name') : []),
     [locations?.data]
   );
+  const { data: products } = useGetProductsPartialData();
+  const allProducts = useMemo(() => products?.data ? products.data : [], [products]);
 
+  const { data: uoms } = useGetUOMPartialData();
+  const allUoMs = useMemo(() => uoms?.data ? uoms.data : [], [uoms]);
+
+  const { data: packMatData } = useGetAllPackagingMaterials();
+  const packagingMaterials = useMemo(
+    () => (packMatData?.data ? packMatData?.data : []),
+    [packMatData?.data]
+  );
   const { mutateAsync: mutatePost, error: errorPost, data: resPost } = useCreateDCTypeCustomer();
   const { mutateAsync: mutatePatch, error: errorPatch, data: resPatch } = useUpdateDCTypeCustomerById(dcId);
 
@@ -101,27 +115,49 @@ export const DCTypeCustomerForm = () => {
     appendFormData(formData, values);
     dcId === ''
       ? mutatePost(formData)
-          .then(() => {
-            toast.success(resPost ? resPost.message : 'Delivery challan created.');
-            setTimeout(() => {
-              navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_CUSTOMER);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(errorPost ? errorPost.message : 'Error while creating delivery challan.');
-          })
+        .then(() => {
+          toast.success(resPost ? resPost.message : 'Delivery challan created.');
+          setTimeout(() => {
+            navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_CUSTOMER);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(errorPost ? errorPost.message : 'Error while creating delivery challan.');
+        })
       : mutatePatch(formData)
-          .then(() => {
-            toast.success(resPatch ? resPatch.message : 'Delivery challan updated.');
-            setTimeout(() => {
-              navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_CUSTOMER);
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error(errorPatch ? errorPatch.message : 'Error while updating delivery challan.');
-          });
+        .then(() => {
+          toast.success(resPatch ? resPatch.message : 'Delivery challan updated.');
+          setTimeout(() => {
+            navigate(PURCHASE_ROUTES.GET_ALL_DC_TYPE_CUSTOMER);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(errorPatch ? errorPatch.message : 'Error while updating delivery challan.');
+        });
   };
 
+  const handlePreviewData = () => {
+    const formdata = formik.values;
+    return {
+      ...formdata,
+      companyName: companyNames.find(item => item.value === formdata.companyName)?.label || '',
+      grnNo: allGRNNumbers.find(item => item.value === formdata.grnNo)?.label || '',
+      fromLocation: allLocations.find(item => item.value === formdata.fromLocation)?.label || '',
+      customerName: customerNames?.find(item => item.value === formdata.customerName)?.label || '',
+      deliveryChallanProducts: formdata.deliveryChallanProducts?.map((product) => ({
+        ...product,
+        productName: getSelectedProductData(product.productName, allProducts)?.name || '',
+        saleUoM: allUoMs.find(uom => uom.id === product.saleUoM)?.unit || '',
+        packagingMaterial: packagingMaterials.find(item => item.id === product.packagingMaterial)?.packagingMaterialName || '',
+        packagingMaterialUoM: allUoMs.find(uom => uom.id === product.packagingMaterialUoM)?.unit || '',
+      }))
+    }
+  }
+  const handlePreview = () => {
+    const previewData = handlePreviewData();
+    dispatch(setPreview(true));
+    dispatch(setPreviewDCTypeCustomer(previewData));
+  }
   return isLoading ? (
     <Box flex={1}>
       <LinearProgress />
@@ -217,11 +253,7 @@ export const DCTypeCustomerForm = () => {
                 resetLabel="Reset"
                 onReset={formik.handleReset}
                   previewLabel="Preview"
-                  onPreview={() => {
-                    console.log('Buttons press');
-                    dispatch(setPreview(true));
-                    dispatch(setPreviewDCTypeCustomer(formik.values));
-                  }}
+                  onPreview={() => handlePreview()}
               />
             </Grid2>
           </Grid2>

@@ -33,8 +33,8 @@ export interface IGRNProducts {
   packingMaterialWeight: number | null,
   netWeight: number | null,
   rtv: boolean;
-  revisedRate: number;
-  revisedQuantity: number;
+  revisedRate: number | null;
+  revisedQuantity: number | null;
   purchaseDate: string | null;
   expectedHarvestDate: string | null;
   dispatchDate: string | null;

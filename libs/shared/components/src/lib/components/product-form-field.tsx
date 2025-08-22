@@ -21,7 +21,6 @@ export const ProductFormFields = memo((props: ProductFormFieldsProps) => {
     const selectedProduct = useMemo(() => product?.data ? product.data : null, [product]);
     const debouncedInputChange = useCallback(
         debounce((value: string) => {
-            
             setSearchInput(value);
         }, 2000),
         []

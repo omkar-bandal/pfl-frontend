@@ -288,7 +288,7 @@ export const ProductCreateForm = () => {
                   <>
                     {values.qualityParameters.map((_, index) => (
                       <Grid2 container spacing={1}>
-                        <Grid2 size={{ xs: 12, md: 3 }}>
+                        <Grid2 size={{ xs: 12, md: 4 }}>
                           <RadioGroupInput
                             isRequired={true}
                             alignment="vertical"
@@ -299,7 +299,7 @@ export const ProductCreateForm = () => {
                             handleChange={handleChange}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 8 }}>
+                        <Grid2 size={{ xs: 12, md: 7 }}>
                           <TextInput
                             isRequired={true}
                             name={`qualityParameters.${index}.name`}
