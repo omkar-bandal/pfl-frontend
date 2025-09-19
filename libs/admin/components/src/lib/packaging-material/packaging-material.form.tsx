@@ -3,6 +3,7 @@ import { Box, Grid2, InputAdornment, LinearProgress } from '@mui/material';
 import {
   adminRoutes,
   PackagingMaterialInitialValues,
+  packingMaterailValidationSchema,
   useCreatePackagingMaterial,
   useGetPackagingMaterialById,
   useUpdatePackagingMaterialById,
@@ -43,6 +44,7 @@ export const PackagingMaterialForm = () => {
   const formik = useFormik<PostPackagingMaterial>({
     enableReinitialize: true,
     initialValues: InitValPackagingMaterial,
+    validationSchema: packingMaterailValidationSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: (values) => {
@@ -133,7 +135,7 @@ export const PackagingMaterialForm = () => {
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
               <RadioGroupInput
-                isRequired
+                isRequired={false}
                 alignment="vertical"
                 name="useFor"
                 label="Packaging Material Used For"

@@ -23,10 +23,16 @@ export interface ITranportPaymentVoucher {
   products: string | null;
   paymentMode: string | null;
   freightAmt: number | null;
-  kyc: boolean;
-  totalAmt: number | null;
+  decidedAmt: number | null;
+  actualAmt: number | null;
+  advanceAmt: number | null;
+  totalPayableAmt: number | null;
+  finalPayableAmt: number | null;
+  deductionAmt: number | null;
+  extraAmt: number | null;
   amtWords: string | null;
   receiverName: string | null;
+  kyc: boolean;
   remark: string | null;
   anyAttachment: File[] | null;
   overAllStatus?: DocumentStatus;

@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
   const { loggedInUserInfo, employeePermissions } = useAppSelector(authState);
   const userperms = employeePermissions !== null ? employeePermissions : [];
   const getNavigations = () => {
-    if (loggedInUserInfo?.department === 'admin') return adminNavigations;
+    if (loggedInUserInfo?.roles?.includes('admin')) return adminNavigations;
     else {
       const filteredNavigation = filterSidebarOptions(userSpecificNavigation, userperms, 'create', true);
       return [...commonNavigation, ...filteredNavigation];

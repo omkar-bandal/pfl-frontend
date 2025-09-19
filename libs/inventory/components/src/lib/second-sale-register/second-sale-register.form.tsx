@@ -213,6 +213,7 @@ export const SecondSaleRegisterForm = () => {
                       {formik.values.secondSaleProducts.map((_, index) => (
                         <Grid2
                           container
+                          rowSpacing={1}
                           columnSpacing={1}
                           key={index}
                           alignItems="center"
@@ -246,7 +247,7 @@ export const SecondSaleRegisterForm = () => {
                               handleChange={formik.handleChange}
                             />
                           </Grid2>
-                          <Grid2 size={{ xs: 4, md: 4 }}>
+                          <Grid2 size={{ xs: 4, md: 3 }}>
                             <TextInput
                               isRequired={true}
                               label="Quantity"
@@ -264,7 +265,7 @@ export const SecondSaleRegisterForm = () => {
                               }
                             />
                           </Grid2>
-                          <Grid2 size={{ xs: 4, md: 4 }}>
+                          <Grid2 size={{ xs: 4, md: 3 }}>
                             <TextInput
                               isRequired={true}
                               label="Rate"
@@ -287,7 +288,7 @@ export const SecondSaleRegisterForm = () => {
                               }}
                             />
                           </Grid2>
-                          <Grid2 size={{ xs: 4, md: 4 }}>
+                          <Grid2 size={{ xs: 4, md: 3 }}>
                             <TextInput
                               isRequired={false}
                               isReadOnly={true}

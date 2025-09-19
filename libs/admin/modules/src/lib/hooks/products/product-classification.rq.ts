@@ -26,11 +26,11 @@ export function useDeleteProductClassificationById(id: string):
     });
 }
 
-export function useGetAllProductClassifications(queryParams?: QueryParams):
+export function useGetAllProductClassifications(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetProductClassification[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProductClassification[]>, ErrorModel>({
-        queryKey: ['get-all-product-classifications',queryParams],
-        queryFn: () => ProductClassificationService.getInstance().getAllProductClassifications(queryParams),
+        queryKey: ['get-all-product-classifications',queryParams, search],
+        queryFn: () => ProductClassificationService.getInstance().getAllProductClassifications(queryParams, search),
     });
 }
 

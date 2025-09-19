@@ -26,11 +26,11 @@ export function useDeleteReturnedByCustomerById(id: string):
     });
 }
 
-export function useGetAllReturnedByCustomers(queryParams?: QueryParams):
+export function useGetAllReturnedByCustomers(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IReturnByCustomer[]>, ErrorModel> {
     return useQuery<ApiBaseState<IReturnByCustomer[]>, ErrorModel>({
-        queryKey: ['get-all-returned-by-customers', queryParams],
-        queryFn: () => ReturnedByCustomerServices.getInstance().getAllReturnedByCustomers(queryParams),
+        queryKey: ['get-all-returned-by-customers', queryParams, search],
+        queryFn: () => ReturnedByCustomerServices.getInstance().getAllReturnedByCustomers(queryParams, search),
     });
 }
 

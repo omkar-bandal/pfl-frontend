@@ -6,10 +6,10 @@ export const StyledGridOverlay = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   height: '100%',
-  '& .no-rows-primary': {
+  '& .no-content-primary': {
     fill: theme.palette.mode === 'light' ? '#AEB8C2' : '#3D4751',
   },
-  '& .no-rows-secondary': {
+  '& .no-content-secondary': {
     fill: theme.palette.mode === 'light' ? '#E8EAED' : '#1D2126',
   },
 }));

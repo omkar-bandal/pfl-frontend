@@ -3,6 +3,7 @@ import { GetVendorBankDetails, PostVendorBankDetails } from "./vendorBankDetails
 import { GetVendorSalesContact, PostVendorSalesContact } from "./vendorSalesContact.type";
 import { IVendorBankDetails } from "./vendorBankDetails.type";
 import { IVendorSalesContact } from "./vendorSalesContact.type";
+
 export interface IVendor {
   id: string;
   companyName: string | null;
@@ -68,11 +69,11 @@ export type GetVendor = {
   dateOfIncorporation: Date;
   officeAddress: GetAddress;
   officeContactNo: string | null;
-  email: string | null;
+  officeEmail: string | null;
   website: string | null;
   //Other Details
   mainProduct: string | null;
-  listOfAllProducts: string | null;
+  listOfAllProducts: string[] | [];
   dispatchCenter: string | null;
   warehouseLocations: string | null;
   packingCenterLocation: string | null;

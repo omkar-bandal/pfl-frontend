@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetCustomerCategory, PostCustomerCategory } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class CustomerCategoryService extends BaseService {
     private static _instance: CustomerCategoryService;
@@ -14,23 +15,23 @@ export class CustomerCategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllCustomerCategories(queryParams?: QueryParams):Promise<ApiBaseState<GetCustomerCategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_CUSTOMER_CATEGORY(queryParams);
+    getAllCustomerCategories(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetCustomerCategory[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_CUSTOMER_CATEGORY, null, queryParams, search);
         return this.get(url);
     }
 
     getCustomerCategoryById(id: string): Promise<ApiBaseState<GetCustomerCategory>> {
-        const url = `${adminApiUrlConstants.GET_A_CUSTOMER_CATEGORY}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_CUSTOMER_CATEGORY, id);
         return this.get(url);
     }
 
     updateCustomerCategory(id: string, data: GetCustomerCategory): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_CUSTOMER_CATEGORY}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_CUSTOMER_CATEGORY, id);
         return this.patch(url, data);
     }
 
     deleteCustomerCategoryById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_CUSTOMER_CATEGORY}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_CUSTOMER_CATEGORY, id);
         return this.delete(url);
     }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Grid2 } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid2 } from '@mui/material';
 import { ADMIN_ARRAYS } from '@prime-fresh/admin/modules';
 import { IEmployee } from '@prime-fresh/admin_api';
 import {
@@ -9,16 +9,23 @@ import {
   useGetCompanyNames,
   useGetOfficesPartialData,
 } from '@prime-fresh/shared/modules';
-import { AutoCompleteInput, MultiSelectAutocomplete, SelectInput, TextInput } from '@prime-fresh/ui_shared';
-import { useFormikContext } from 'formik';
+import {
+  AutoCompleteInput,
+  Label,
+  MultiSelectAutocomplete,
+  RadioGroupInput,
+  SelectInput,
+  TextInput,
+} from '@prime-fresh/ui_shared';
+import { getIn, useFormikContext } from 'formik';
 import { memo, useMemo } from 'react';
 
 export const OfficeInfo = memo(() => {
-  const { values, handleChange, touched } = useFormikContext<IEmployee>();
+  const { values, handleChange, touched, setFieldValue, errors } = useFormikContext<IEmployee>();
 
   const { data: companyNames } = useGetCompanyNames();
   const companies = useMemo(
-    () => (companyNames?.data ? mapToValueLabelArray(companyNames.data, 'id', 'name') : []),
+    () => (companyNames?.data ? companyNames.data : []),
     [companyNames]
   );
 
@@ -33,17 +40,40 @@ export const OfficeInfo = memo(() => {
   const offices = useMemo(() => (office?.data ? mapToValueLabelArray(office.data, 'id', 'name') : []), [office?.data]);
 
   const mappedLocations = useMemo(() => [...branches, ...offices], [branches, offices]);
+  const typeOfUser = [
+    { value: 'admin', label: 'Is going to handle Admin Module ?' },
+    { value: 'verifier', label: 'Is going to verify the documents ?' },
+    { value: 'approver', label: 'Is going to approve the documents ?' },
+    { value: 'finalizer', label: 'Is going to finalize the documents ?' },
+    { value: 'employee', label: 'None of the above' },
+  ];
+
+  const handleCheckboxChange = (value: string) => {
+    const currentSelection = values.roles;
+    if (currentSelection.includes(value)) {
+      // If already selected, deselect it
+      setFieldValue(
+        'roles',
+        currentSelection.filter(v => v !== value)
+      );
+    } else {
+      // If not selected, replace with this one
+      setFieldValue('roles', [value]);
+    }
+  };
+
+  const isError = touched.roles && Boolean(errors.roles);
 
   return (
     <Grid2 container spacing={1} padding={1}>
       <Grid2 size={{ xs: 12, md: 6 }}>
-        <SelectInput
+        <MultiSelectAutocomplete
           isRequired={true}
+          limitTags={1}
           name="companyName"
           label="Comapany Name"
           options={companies}
-          value={values.companyName}
-          handleChange={handleChange}
+          getOptionLabel={option => option.name}
         />
       </Grid2>
       <Grid2 size={{ xs: 12, md: 3 }}>
@@ -56,13 +86,13 @@ export const OfficeInfo = memo(() => {
         />
       </Grid2>
       <Grid2 size={{ xs: 12, md: 3 }}>
-        <SelectInput
+        <MultiSelectAutocomplete
           isRequired={true}
+          limitTags={1}
           label="Department"
           name="department"
-          value={values.department}
           options={ADMIN_ARRAYS.departments}
-          handleChange={handleChange}
+          getOptionLabel={(option) => option?.label}
         />
       </Grid2>
       <Grid2 size={{ xs: 12, md: 4 }}>
@@ -100,7 +130,7 @@ export const OfficeInfo = memo(() => {
           name="accessLocation"
           options={branchesWithAllOption || []}
           getOptionLabel={(option) => option?.name}
-          selectAllId='all-locations'
+          selectAllId="all-locations"
         />
       </Grid2>
       {touched.currentWorkLocation && values.currentWorkLocation === '' && (
@@ -131,6 +161,38 @@ export const OfficeInfo = memo(() => {
           value={values.workEmail}
           handleChange={handleChange}
         />
+      </Grid2>
+      <Grid2 size={12}>
+        {/* <RadioGroupInput
+          alignment="vertical"
+          optionAlignment="vertical"
+          isRequired={true}
+          label="Type of User"
+          name="role"
+          value={values.role}
+          options={typeOfUser}
+          handleChange={handleChange}
+        /> */}
+        <FormControl component="fieldset" error={isError}>
+        <Label name='roles' label='Type of User' isRequired={true} isError={isError || false} />
+        <FormGroup>
+          {typeOfUser.map((option, index) => (
+            <FormControlLabel
+              key={option.value}
+              control={
+                <Checkbox
+                  name={`roles`}
+                  value={option.value}
+                  checked={values.roles?.includes(option.value)}
+                  onChange={() => handleCheckboxChange(option.value)}
+                />
+              }
+              label={option.label}
+            />
+          ))}
+        </FormGroup>
+        {isError && <FormHelperText>{errors.roles}</FormHelperText>}
+      </FormControl>
       </Grid2>
     </Grid2>
   );

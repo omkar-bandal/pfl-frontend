@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import { FormikProvider, useFormik } from 'formik';
+import { FormikProvider, setIn, useFormik } from 'formik';
 import { Box, Button, Grid2, IconButton, LinearProgress, useMediaQuery, useTheme } from '@mui/material';
-import { FormMobileStepper, FormScrollContainer, FormStepper, PageTitle, toast } from '@prime-fresh/ui_shared';
+import { DataViewer, FormMobileStepper, FormScrollContainer, FormStepper, PageTitle, toast } from '@prime-fresh/ui_shared';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ADMIN_ROUTES, useCreateVendor, useGetVendorById, useUpdateVendorById } from '@prime-fresh/admin/modules';
 import { appendFormData, initValVendor, vendorValidationSchema } from '@prime-fresh/shared/modules';
@@ -14,6 +14,7 @@ import {
   VendorSalesContact,
 } from './form-sections';
 import { KeyboardArrowLeft, KeyboardArrowRight, RestartAlt } from '@mui/icons-material';
+import { VendorFormPreviewConfig } from './form-sections/vendor-form-preview.config';
 
 export const VendorRegistrationForm = () => {
   const theme = useTheme();
@@ -27,7 +28,7 @@ export const VendorRegistrationForm = () => {
   console.log('Vendor Data Get By Id: ', vendorData)
   const vendorInitValue = vendorId === '' ? initValVendor : vendorData;
 
-  const vendorFormSteps = ['Primary Details', 'Other Details', 'Sales Contact Details', 'Bank Details', 'References'];
+  const vendorFormSteps = ['Primary Details', 'Other Details', 'Sales Contact Details', 'Bank Details', 'References', 'Preview'];
   const LAST_STEP = vendorFormSteps.length - 1;
 
   const formik = useFormik({
@@ -47,18 +48,25 @@ export const VendorRegistrationForm = () => {
   })
 
   const handleNext = async () => {
-    const errors = await formik.validateForm();
-    if (Object.keys(errors).length === 0) {
-      formik.handleSubmit()
-    } else {
-      formik.setTouched(
-        Object.keys(errors).reduce((acc, key) => {
-          acc[key] = true;
-          return acc;
-        }, {} as any)
-      );
-    }
-  };
+  const errors = await formik.validateForm();
+  if (Object.keys(errors).length === 0) {
+    formik.handleSubmit();
+  } else {
+    // Deeply set all error fields as touched
+    let touched: any = {};
+    const markTouched = (errObj: any, path: string[] = []) => {
+      Object.keys(errObj).forEach(key => {
+        if (typeof errObj[key] === 'object' && errObj[key] !== null) {
+          markTouched(errObj[key], [...path, key]);
+        } else {
+          touched = setIn(touched, [...path, key].join('.'), true);
+        }
+      });
+    };
+    markTouched(errors);
+    formik.setTouched(touched, true);
+  }
+};
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
@@ -126,6 +134,7 @@ export const VendorRegistrationForm = () => {
                 {activeStep === 2 && <VendorSalesContact />}
                 {activeStep === 3 && <VendorBankDetails />}
                 {activeStep === 4 && <VendorReferences />}
+                {activeStep === 5 && <DataViewer data={formik.values} config={VendorFormPreviewConfig} />}
               </Grid2>
             </form>
           </FormikProvider>

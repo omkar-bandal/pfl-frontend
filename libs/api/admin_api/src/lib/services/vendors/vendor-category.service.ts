@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetVendorCategory, PostVendorCategory } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class VendorCategoryService extends BaseService {
     private static _instance: VendorCategoryService;
@@ -14,23 +15,23 @@ export class VendorCategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllVendorCategories(queryParams? : QueryParams):Promise<ApiBaseState<GetVendorCategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_VENDOR_CAT(queryParams);
+    getAllVendorCategories(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetVendorCategory[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_VENDOR_CAT, null, queryParams, search);
         return this.get(url);
     }
 
     getVendorCategoryById(id: string): Promise<ApiBaseState<GetVendorCategory>> {
-        const url = `${adminApiUrlConstants.GET_A_VENDOR_CAT}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_VENDOR_CAT, id);
         return this.get(url);
     }
 
     updateVendorCategory(id: string, data: GetVendorCategory): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_VENDOR_CAT}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_VENDOR_CAT, id);
         return this.patch(url, data);
     }
 
     deleteVendorCategoryById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_VENDOR_CAT}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_VENDOR_CAT, id);
         return this.delete(url);
     }
 }

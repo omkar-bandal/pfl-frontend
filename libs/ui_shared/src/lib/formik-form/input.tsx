@@ -1,9 +1,10 @@
 import React, { ChangeEvent, memo } from 'react';
 import { useField, useFormikContext } from 'formik';
-import { Grid, TextField, TextFieldProps, Typography } from '@mui/material';
+import { CircularProgress, Grid, InputAdornment, TextField, TextFieldProps, Typography } from '@mui/material';
 import { Label } from './label';
 import { toast } from '../notification/ToastProvider';
 type TextInputProps = TextFieldProps & {
+  loading?: boolean;
   isRequired?: boolean;
   label: string;
   name: string;
@@ -16,6 +17,7 @@ type TextInputProps = TextFieldProps & {
 export const TextInput: React.FC<TextInputProps> = memo(
   ({
     isRequired = false,
+    loading = false,
     label,
     name,
     type = 'text',
@@ -69,6 +71,11 @@ export const TextInput: React.FC<TextInputProps> = memo(
             InputLabelProps={{ shrink: type === 'date' }}
             InputProps={{
               readOnly: isReadOnly,
+              startAdornment: loading ? (
+                <InputAdornment position="end">
+                  <CircularProgress size={20} />
+                </InputAdornment>
+              ) : null,
             }}
             error={meta.touched && Boolean(meta.error)}
             helperText={meta.touched && meta.error ? meta.error : ''}

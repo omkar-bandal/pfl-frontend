@@ -3,7 +3,6 @@ export * from './lib/data_table/components/TableToolBar';
 export * from './lib/preview_page';
 export * from './lib/notification/ToastProvider';
 export * from './lib/buttons';
-export * from './lib/components';
 export * from './lib/error-boundary/error-boundary';
 export * from './lib/fallbacks';
 export * from './lib/data_table';

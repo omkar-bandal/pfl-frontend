@@ -1,15 +1,31 @@
 import { Chip } from '@mui/material';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { inventoryRouteConstants } from '@prime-fresh/inventory/modules';
 import { convertInTitleCase, getDocStatusColor } from '@prime-fresh/shared/modules';
-import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { CustomGridColDef } from '@prime-fresh/ui_shared';
 
-export const useDumpRegisterColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
-  const navigate = useNavigate();
-  return useMemo(
-    () => [
+export const dumpRegisterColumns : CustomGridColDef[] = [
+  {
+        field: 'overAllStatus',
+        headerName: 'Status',
+        flex: 1,
+        minWidth: 130,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        isMobileVisible: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const status = convertInTitleCase(params.row.overAllStatus || '');
+          return <Chip
+            label={status}
+            size="small"
+            sx={{
+              flex: 1,
+              minWidth: 80,
+              color: '#FFF',
+              backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+            }} />
+        },
+      },
       {
         field: 'createdBy',
         headerName: 'Created By',
@@ -125,63 +141,4 @@ export const useDumpRegisterColumns = (canEdit: boolean, canView: boolean): Cust
         hide: true,
         valueGetter: (value: string) => (value ? value.toUpperCase() : '-'),
       },
-      {
-        field: 'overAllStatus',
-        headerName: 'Status',
-        flex: 1,
-        minWidth: 130,
-        align: 'center',
-        headerAlign: 'center',
-        hide: false,
-        isMobileVisible: true,
-        renderCell: (params: GridRenderCellParams) => {
-          const status = convertInTitleCase(params.row.overAllStatus || '');
-          return <Chip
-            label={status}
-            size="small"
-            sx={{
-              flex: 1,
-              minWidth: 80,
-              color: '#FFF',
-              backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
-            }} />
-        },
-      },
-      ...(canEdit
-        ? [
-          {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <EditIconBtn
-                onClick={() => navigate(`${inventoryRouteConstants.UPDATE_DUMP_REGISTER}/${params.row.id}`)}
-              />
-            ),
-          },
-        ]
-        : []),
-      ...(canView
-        ? [
-          {
-            field: 'view',
-            headerName: 'View',
-            width: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <ViewIconBtn
-                onClick={() => navigate(`${inventoryRouteConstants.VIEW_DUMP_REGISTER}/${params.row.documentId}`)}
-              />
-            ),
-          },
-        ]
-        : []),
-    ],
-    [canEdit, canView, navigate]
-  );
-};
+    ];

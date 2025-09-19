@@ -1,96 +1,85 @@
-import React from "react";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
-import {
-    DataGrid,
-    GridApi,
-    GridPaginationModel,
-    GridSortModel,
-} from "@mui/x-data-grid";
-import { CustomGridColDef } from "./models/columntype.interface";
-import { CustomNoRowsOverlay } from "./components";
+import React, { memo } from 'react';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { DataGrid, DataGridProps as MuiDataGridProps } from '@mui/x-data-grid';
+import { CustomGridColDef } from './models/columntype.interface';
+import { NoResultsOverlay, NoRowsOverlay } from './components';
 
-export interface DataGridProps<T> {
-    columns: CustomGridColDef[];
-    columnVisibilityModel?: { [field: string]: boolean };
-    rows: T[] | undefined;
-    mode: 'server' | 'client';
-    initialPageSize?: number;
-    totalRows?: number;
-    paginationModel?: GridPaginationModel;
-    onPaginationModelChange?: (newPaginationModel: GridPaginationModel) => void;
-    sortModel?: GridSortModel;
-    onSortModelChange?: (newSortModel: GridSortModel) => void;
-    loading: boolean;
-    apiRef?: React.MutableRefObject<GridApi>;
-}
+export type DataGridProps<T> = Omit<MuiDataGridProps, 'columns' | 'rows' | 'mode' | 'initialPageSize' | 'totalRows'> & {
+  columns: CustomGridColDef[];
+  rows: T[] | undefined;
+  mode: 'server' | 'client';
+  initialPageSize?: number;
+  totalRows?: number;
+};
 
-export const DataGridTable = <T extends { id?: string | number }>(props: DataGridProps<T>) => {
-    const {
-        rows,
-        columns,
-        columnVisibilityModel,
-        mode,
-        apiRef,
-        loading,
-        totalRows,
-        paginationModel,
-        onPaginationModelChange,
-        sortModel,
-        onSortModelChange,
-        initialPageSize,
-    } = props;
+export const DataGridTable = <T extends { id?: string | number }>({
+  rows,
+  columns,
+  mode,
+  totalRows,
+  initialPageSize = 10,
+  ...rest
+}: DataGridProps<T>) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-    // Optionally filter columns for mobile view.
-    const mobileColumns = isMobile
-        ? columns.filter((col) => col.isMobileVisible)
-        : columns;
-    return (
-        <Box sx={{ height: isMobile ? '100%' : 500, width: '100%' }}>
-            <DataGrid
-                pagination
-                loading={loading}
-                rowHeight={35}
-                columnHeaderHeight={40}
-                disableColumnMenu={true}
-                disableColumnFilter={true}
-                disableColumnSelector={true}
-                disableMultipleRowSelection={true}
-                disableRowSelectionOnClick={true}
-                checkboxSelection={false}
-                slots={{ noRowsOverlay: CustomNoRowsOverlay }}
-                columns={mobileColumns}
-                columnVisibilityModel={columnVisibilityModel}
-                rows={rows || []}
-                getRowId={(row) => row.id ? row.id : row.serialNumber}
-                paginationMode={mode} 
-                rowCount={mode === 'server' ? totalRows : (rows ? rows.length : 0)}
-                paginationModel={paginationModel || { pageSize: initialPageSize || 5, page: 0 }}
-                onPaginationModelChange={onPaginationModelChange}
-                pageSizeOptions={[5, 7, 10]}
-                sortModel={sortModel}
-                onSortModelChange={onSortModelChange}
-                sx={{
-                    '& .MuiDataGrid-columnHeader': {
-                        backgroundColor: theme.palette.primary.main,
-                        height: 10,
-                    },
-                    '& .MuiDataGrid-columnHeaderTitle': {
-                        fontSize: '15px',
-                        fontWeight: 'bold',
-                        color: theme.palette.primary.contrastText,
-                    },
-                    '& .MuiDataGrid-cell': {
-                        color: '#595959',
-                        fontSize: 14,
-                        fontWeight: 500,
-                    },
-                    '--DataGrid-overlayHeight': '300px',
-                }}
-                apiRef={apiRef}
-            />
-        </Box>
-    );
+  // Optionally filter columns for mobile view.
+  const mobileColumns = isMobile ? columns.filter((col) => col.isMobileVisible) : columns;
+  return (
+    <Box sx={{ height: isMobile ? '80vh' : 500, width: '100%' }}>
+      <DataGrid
+        pagination
+        rowHeight={35}
+        columnHeaderHeight={40}
+        disableColumnMenu={true}
+        disableColumnFilter={true}
+        disableColumnSelector={true}
+        disableRowSelectionOnClick={true}
+        slots={{
+          noRowsOverlay: NoRowsOverlay,
+          noResultsOverlay: NoResultsOverlay,
+        }}
+        slotProps={{
+          loadingOverlay: {
+            variant: 'skeleton',
+            noRowsVariant: 'skeleton',
+          },
+        }}
+        columns={mobileColumns}
+        rows={rows || []}
+        getRowId={(row) => (row.id ? row.id : row.serialNumber)}
+        paginationMode={mode}
+        rowCount={mode === 'server' ? totalRows : rows ? rows.length : 0}
+        pageSizeOptions={[5, 7, 10]}
+        sx={{
+          '& .MuiDataGrid-columnHeader': {
+            backgroundColor: theme.palette.primary.main,
+            height: 15,
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontSize: '15px',
+            fontWeight: 'bold',
+            color: theme.palette.primary.contrastText,
+          },
+          '& .MuiDataGrid-cell': {
+            color: '#595959',
+            fontSize: 14,
+            fontWeight: 500,
+          },
+          '& .MuiDataGrid-columnHeaderCheckbox': {
+            backgroundColor: theme.palette.primary.main,
+            borderBottom: '2px solid #ddd',
+          },
+          '& .MuiDataGrid-columnHeaderCheckbox .MuiCheckbox-root': {
+            color: 'white',
+            '&.Mui-checked': {
+              color: 'white',
+            },
+          },
+          '--DataGrid-overlayHeight': '300px',
+        }}
+        {...rest}
+      />
+    </Box>
+  );
 };

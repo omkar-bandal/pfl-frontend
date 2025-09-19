@@ -26,11 +26,11 @@ export function useDeleteSecondSaleRegisterById(id: string):
     });
 }
 
-export function useGetAllSecondSaleRegisters(queryParams?: QueryParams):
+export function useGetAllSecondSaleRegisters(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<ISecondSaleRegister[]>, ErrorModel> {
     return useQuery<ApiBaseState<ISecondSaleRegister[]>, ErrorModel>({
-        queryKey: ['get-all-second-sale-registers', queryParams],
-        queryFn: () => SecondSaleRegisterServices.getInstance().getAllSecondSaleRegisters(queryParams),
+        queryKey: ['get-all-second-sale-registers', queryParams, search],
+        queryFn: () => SecondSaleRegisterServices.getInstance().getAllSecondSaleRegisters(queryParams, search),
     });
 }
 

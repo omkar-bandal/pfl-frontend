@@ -1,6 +1,9 @@
 import { Address } from '@prime-fresh/common_api';
 
 export type EmployeeStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+
+export type EmployeeRoles = 'admin' | 'employee' | 'verifier' | 'approver' |'finalizer';
+
 export interface IPermission {
   documentDefinition: string | null;
   canCreate: boolean;
@@ -26,11 +29,12 @@ export interface IEmployee {
   primaryEmail: string | null;
   secondaryEmail: string | null;
   residentialAddress: Address;
+  isAddressSame: boolean;
   permanentAddress: Address;
 
   //Office Info
-  companyName: string | null;
-  department: string | null;
+  companyName: string[];
+  department: string [];
   joiningDate: string | null;
   designation: string | null;
   cugNo: string | null;
@@ -39,6 +43,7 @@ export interface IEmployee {
   currentWorkLocation: string | null;
   otherWorkLocationInput: string | null;
   accessLocation: string[];
+  roles: string[];
 
   //Permission Config
   permissions: IPermission[];

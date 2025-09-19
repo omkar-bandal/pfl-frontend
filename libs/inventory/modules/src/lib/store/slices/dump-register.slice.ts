@@ -3,9 +3,9 @@ import { IDumpRegister } from "@prime-fresh/inventory_api";
 import { RootState } from "../store.inventory";
 
 type DumpRegisterState = {
-    dumpRegisterFormPreview: IDumpRegister | undefined;
+    dumpRegisterFormPreview: Omit<IDumpRegister, 'id'> | undefined;
 }
-const initialState : DumpRegisterState = {
+const initialState: DumpRegisterState = {
     dumpRegisterFormPreview: undefined,
 }
 
@@ -13,12 +13,12 @@ const dumpRegisterSlice = createSlice({
     name: "dumpRegister",
     initialState,
     reducers: {
-        setDumpRegisterFormPreview: (state, action: PayloadAction<IDumpRegister | undefined>) => {
+        setDumpRegisterFormPreview: (state, action: PayloadAction<Omit<IDumpRegister, 'id'> | undefined>) => {
             state.dumpRegisterFormPreview = action.payload;
         }
     }
 })
-export const {setDumpRegisterFormPreview } = dumpRegisterSlice.actions;
+export const { setDumpRegisterFormPreview } = dumpRegisterSlice.actions;
 
 export const dumpRegisterStates = (store: RootState) => store.dumpRegister;
 

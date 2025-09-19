@@ -1,5 +1,5 @@
 import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { ProductsService, GetProduct} from '@prime-fresh/admin_api';
+import { ProductsService, GetProduct, IProduct } from '@prime-fresh/admin_api';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateProduct():
@@ -26,20 +26,29 @@ export function useDeleteProductById(id: string):
     });
 }
 
-export function useGetAllProducts(queryParams?: QueryParams):
+export function useGetAllProducts(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetProduct[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProduct[]>, ErrorModel>({
-        queryKey: ['get-all-products', queryParams],
-        queryFn: () => ProductsService.getInstance().getAllProducts(queryParams),
+        queryKey: ['get-all-products', queryParams, search],
+        queryFn: () => ProductsService.getInstance().getAllProducts(queryParams, search),
     });
 }
 
 export function useGetProductById(id: string):
     UseQueryResult<ApiBaseState<GetProduct>, ErrorModel> {
-        const enabled = id.length > 1 ? true : false;
+    const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetProduct>, ErrorModel>({
         queryKey: ['get-product-by-id', id],
         queryFn: () => ProductsService.getInstance().getProductById(id),
         enabled: enabled,
+    });
+}
+
+export function useGetAllProductVariants(productId: string | null):
+    UseQueryResult<ApiBaseState<Pick<IProduct, 'id' | 'name' | 'variant'>>, ErrorModel> {
+    return useQuery<ApiBaseState<Pick<IProduct, 'id' | 'name' | 'variant'>>, ErrorModel>({
+        queryKey: ['get-all-products', productId],
+        queryFn: () => ProductsService.getInstance().getAllProductVariants(productId),
+        enabled: productId ? true : false
     });
 }

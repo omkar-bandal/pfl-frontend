@@ -8,6 +8,7 @@ import {
   CustomerPartialData,
   EmployeePartialData,
   FarmerPartialData,
+  GetAddressByPincode,
   GetAllDealSlipNums,
   GetAllDeliveryChallanNums,
   GetAllGRNNums,
@@ -22,9 +23,11 @@ import {
   QueryParams,
   ResultModel,
   UOMPartialData,
+  VariantPartialData,
   VendorPartialData,
 } from '../models';
 import { BaseService } from './base.service';
+import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class SharedService extends BaseService {
   public static _instance: SharedService;
@@ -32,21 +35,28 @@ export class SharedService extends BaseService {
   public static getInstance(): SharedService {
     return this._instance || (this._instance = new this());
   }
+
+  //Get address by pincode
+  getAddressByPincode(pincode: string | null): Promise<GetAddressByPincode> {
+    const url = `${sharedApiUrls.GET_ADDRESS_BY_PINCODE}${pincode}`;
+    return this.get(url);
+  }
+
   //Approval
   updateDocStatusWithThreeApproval(id: string, data: ApprovalRequest): Promise<ResultModel> {
-    console.log('Document Id:', id)
+    console.log('Document Id:', id);
     const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS_THREE_LEVEL_APPROVAL(id);
     return this.patch(url, data);
   }
 
   updateDocStatusWithTwoApproval(id: string, data: ApprovalRequest): Promise<ResultModel> {
-    console.log('Document Id:', id)
+    console.log('Document Id:', id);
     const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS_TWO_LEVEL_APPROVAL(id);
     return this.patch(url, data);
   }
 
   updateDocStatusWithOneApproval(id: string, data: ApprovalRequest): Promise<ResultModel> {
-    console.log('Document Id:', id)
+    console.log('Document Id:', id);
     const url = sharedApiUrls.UPDATE_DOCUMENT_STATUS_ONE_LEVEL_APPROVAL(id);
     return this.patch(url, data);
   }
@@ -78,8 +88,25 @@ export class SharedService extends BaseService {
   }
 
   //Product Partial Data
-  getProductsPatrialData(queryParams?: QueryParams): Promise<ApiBaseState<ProductPartialData[]>> {
-    const url = sharedApiUrls.GET_PRODUCTS_PARTIAL(queryParams);
+  getProductsPatrialData(
+    queryParams?: Partial<QueryParams>,
+    search?: string | null
+  ): Promise<ApiBaseState<ProductPartialData[]>> {
+    const url = buildApiUrl(sharedApiUrls.GET_PRODUCTS_PARTIAL, null, queryParams, search);
+    return this.get(url);
+  }
+
+  //Variant Partial Data
+  getVariantPartialData(
+    queryParams?: Partial<QueryParams>,
+    search?: string
+  ): Promise<ApiBaseState<VariantPartialData[]>> {
+    const url = buildApiUrl(sharedApiUrls.GET_VARIANTS_PARTIAL, null, queryParams, search);
+    return this.get(url);
+  }
+
+  getVariantsByProductId(productId?: string | null):  Promise<ApiBaseState<{variants: VariantPartialData[]}>> {
+    const url = buildApiUrl(sharedApiUrls.GET_VARIANTS_BY_PRODUCT_ID, productId);
     return this.get(url);
   }
 
@@ -105,8 +132,11 @@ export class SharedService extends BaseService {
   }
 
   //Vendor Partial Data
-  getVendorsPatrialData(queryParams?: QueryParams): Promise<ApiBaseState<VendorPartialData[]>> {
-    const url = sharedApiUrls.GET_VENDORS_PARTIAL(queryParams);
+  getVendorsPatrialData(
+    queryParams?: Partial<QueryParams>,
+    search?: string | null
+  ): Promise<ApiBaseState<VendorPartialData[]>> {
+    const url = buildApiUrl(sharedApiUrls.GET_VENDORS_PARTIAL, null, queryParams, search);
     return this.get(url);
   }
 
@@ -121,8 +151,11 @@ export class SharedService extends BaseService {
   }
 
   //Farmer Partial Data
-  getFarmersPatrialData(queryParams?: QueryParams): Promise<ApiBaseState<FarmerPartialData[]>> {
-    const url = sharedApiUrls.GET_FARMERS_PARTIAL(queryParams);
+  getFarmersPatrialData(
+    queryParams?: Partial<QueryParams>,
+    search?: string | null
+  ): Promise<ApiBaseState<FarmerPartialData[]>> {
+    const url = buildApiUrl(sharedApiUrls.GET_FARMERS_PARTIAL, null, queryParams, search);
     return this.get(url);
   }
 

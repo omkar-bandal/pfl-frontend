@@ -7,6 +7,8 @@ type DateInputPros = Omit<TextFieldProps, 'name' | 'type' | 'id'> & {
 export const DateInput: React.FC<DateInputPros> = ({ name, ...rest }) => {
   return (
     <TextField
+      fullWidth
+      variant="outlined"
       size="small"
       autoComplete="off"
       type='date'

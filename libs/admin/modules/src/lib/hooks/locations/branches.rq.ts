@@ -26,11 +26,11 @@ export function useDeleteBranchById(id: string, branchType: string):
     });
 }
 
-export function useGetAllBranches(branchType: string, queryParams?: QueryParams):
+export function useGetAllBranches(branchType: string, queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetBranches[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetBranches[]>, ErrorModel>({
-        queryKey: ['get-all-branchs', branchType, queryParams],
-        queryFn: () => BranchService.getInstance().getAllBranches(branchType, queryParams),
+        queryKey: ['get-all-branchs', branchType, queryParams, search],
+        queryFn: () => BranchService.getInstance().getAllBranches(branchType, queryParams, search),
         enabled: !!branchType
     });
 }

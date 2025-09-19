@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetUOM, PostUOM } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class UOMService extends BaseService {
     private static _instance: UOMService;
@@ -14,23 +15,23 @@ export class UOMService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllUOMs(queryParams?: QueryParams): Promise<ApiBaseState<GetUOM[]>> {
-        const url = adminApiUrlConstants.GET_ALL_UOM(queryParams);
+    getAllUOMs(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetUOM[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_UOM, null, queryParams, search);
         return this.get(url);
     }
 
     getUOMById(id: string): Promise<ApiBaseState<GetUOM>> {
-        const url = `${adminApiUrlConstants.GET_A_UOM}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_UOM, id);
         return this.get(url);
     }
 
     updateUOM(id: string, data: PostUOM): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_UOM}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_UOM, id);
         return this.patch(url, data);
     }
 
     deleteUOMById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_UOM}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_UOM, id);
         return this.delete(url);
     }
 }

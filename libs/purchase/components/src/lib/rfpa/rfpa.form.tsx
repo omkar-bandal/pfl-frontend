@@ -2,20 +2,14 @@
 import React from 'react';
 import { Close } from '@mui/icons-material';
 import { Box, Grid2, IconButton, InputAdornment, LinearProgress, Typography } from '@mui/material';
-import {
-  PURCHASE_ARRAYS,
-  PURCHASE_ROUTES,
-  rfpaInitialvalue,
-  setRFPAFormPreview,
-  useCreateRFPA,
-  useGetRFPAForUpdateById,
-  useUpdateRFPAById,
-} from '@prime-fresh/purchase/modules';
 import { IRFPA } from '@prime-fresh/purchase_api';
 import { setPreview, useAppDispatch, useAppSelector } from '@prime-fresh/modules';
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import { rfpaSchema } from '@prime-fresh/purchase/modules';
 import { useNavigate, useParams } from 'react-router-dom';
+import { RFPAPreview } from './rfpa.preview';
+import { calculateDueDate, calculateTotoalPrice } from './helper-functions';
+import { ProductFormFields, VendorFarmerInfo } from '@prime-fresh/shared/components';
 import {
   AddFieldButton,
   AutoCompleteInput,
@@ -25,10 +19,16 @@ import {
   SelectInput,
   TextInput,
   toast,
-  VendorFarmerInfo,
 } from '@prime-fresh/ui_shared';
-import { RFPAPreview } from './rfpa.preview';
-import { calculateDueDate, calculateTotoalPrice } from './helper-functions';
+import {
+  PURCHASE_ARRAYS,
+  PURCHASE_ROUTES,
+  rfpaInitialvalue,
+  setRFPAFormPreview,
+  useCreateRFPA,
+  useGetRFPAForUpdateById,
+  useUpdateRFPAById,
+} from '@prime-fresh/purchase/modules';
 import {
   handleFormKeyDown,
   mapToValueLabelArray,
@@ -41,10 +41,8 @@ import {
   farmersDataStates,
   setSelectedFarmerPartialData,
   setSelectedVendorPartialData,
-  useGetProductById,
   vendorsDataStates,
 } from '@prime-fresh/admin/modules';
-import { ProductFormFields } from '@prime-fresh/shared/components';
 
 export const RFPAForm = () => {
   const dispatch = useAppDispatch();

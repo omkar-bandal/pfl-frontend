@@ -53,7 +53,7 @@ import { QueryParams } from "@prime-fresh/common_api";
 export const buildApiUrl = (
   baseUrl: string,
   id?: string | null,
-  queryParams?: QueryParams,
+  queryParams?:Partial<QueryParams>,
   search?: string | null,
   searchParamName = "search"
 ): string => {

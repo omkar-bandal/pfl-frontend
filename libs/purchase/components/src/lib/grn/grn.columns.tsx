@@ -4,12 +4,26 @@ import { Chip, IconButton } from '@mui/material';
 import { AddCard } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
-import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
+import { CustomGridColDef} from '@prime-fresh/ui_shared';
 import { convertInTitleCase, getDocStatusColor, reverseDateString } from '@prime-fresh/shared/modules';
 
-export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
+export const useGRNColumns = (): CustomGridColDef[] => {
   const navigate = useNavigate();
   return [
+    {
+      field: 'overAllStatus',
+      headerName: 'Status',
+      flex: 1,
+      minWidth: 130,
+      align: 'center',
+      headerAlign: 'center',
+      hide: false,
+      isMobileVisible: true,
+      renderCell: (params: GridRenderCellParams) => {
+        const status = convertInTitleCase(params.row.overAllStatus || '');
+        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus || '') }} />
+      },
+    },
     {
       field: 'grnNo',
       headerName: 'GRN Number',
@@ -389,49 +403,5 @@ export const useGRNColumns = (canEdit: boolean, canView: boolean): CustomGridCol
         </IconButton>
       ),
     },
-    {
-      field: 'overAllStatus',
-      headerName: 'Status',
-      flex: 1,
-      minWidth: 130,
-      align: 'center',
-      headerAlign: 'center',
-      hide: false,
-      isMobileVisible: true,
-      renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus || '');
-        return <Chip label={status} size="small" sx={{ flex: 1, minWidth: 80, color: '#FFF', backgroundColor: getDocStatusColor(params.row.overAllStatus || '') }} />
-      },
-    },
-    ...(canEdit
-      ? [
-        {
-          field: 'edit',
-          headerName: 'Edit',
-          flex: 1, minWidth: 70,
-          sortable: false,
-          filterable: false,
-          isMobileVisible: true,
-          renderCell: (params: GridRenderCellParams) => (
-            <EditIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.UPDATE_GRN}/${params.row.documentId}`)} />
-          ),
-        },
-      ]
-      : []),
-    ...(canView
-      ? [
-        {
-          field: 'view',
-          headerName: 'View',
-          flex: 1, minWidth: 70,
-          sortable: false,
-          filterable: false,
-          isMobileVisible: true,
-          renderCell: (params: GridRenderCellParams) => {
-            return <ViewIconBtn onClick={() => navigate(`${PURCHASE_ROUTES.VIEW_GRN}/${params.row.documentId}`)} />
-          },
-        },
-      ]
-      : []),
   ];
 };

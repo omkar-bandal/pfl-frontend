@@ -26,11 +26,19 @@ export function useDeleteLaborPaymentVoucherById(id: string):
     });
 }
 
-export function useGetAllLaborPaymentVouchers(queryParams?: QueryParams):
+export function useDeleteMultipleLaborPaymentVouchers():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-multiple-labor-payment-vouchers'],
+        mutationFn: (data: Array<string>) => LaborPaymentVoucherServices.getInstance().deleteMultipleLaborPaymentVouchers(data),
+    });
+}
+
+export function useGetAllLaborPaymentVouchers(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<ILaborPaymentVoucher[]>, ErrorModel> {
     return useQuery<ApiBaseState<ILaborPaymentVoucher[]>, ErrorModel>({
-        queryKey: ['get-all-labor-payment-vouchers', queryParams],
-        queryFn: () => LaborPaymentVoucherServices.getInstance().getAllLaborPaymentVouchers(queryParams),
+        queryKey: ['get-all-labor-payment-vouchers', queryParams, search],
+        queryFn: () => LaborPaymentVoucherServices.getInstance().getAllLaborPaymentVouchers(queryParams, search),
     });
 }
 

@@ -26,11 +26,11 @@ export function useDeleteVendorById(id: string):
     });
 }
 
-export function useGetAllVendors(queryParams?: QueryParams):
+export function useGetAllVendors(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetVendor[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVendor[]>, ErrorModel>({
-        queryKey: ['get-all-vendors', queryParams],
-        queryFn: () => VendorsService.getInstance().getAllVendors(queryParams),
+        queryKey: ['get-all-vendors', queryParams, search],
+        queryFn: () => VendorsService.getInstance().getAllVendors(queryParams, search),
     });
 }
 

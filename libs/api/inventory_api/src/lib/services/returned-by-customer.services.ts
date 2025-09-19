@@ -1,6 +1,8 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { inventoryApiUrl } from "../constants/inventory-api-url";
 import { IReturnByCustomer } from "../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
+
 export class ReturnedByCustomerServices extends BaseService {
     private static _instance: ReturnedByCustomerServices;
 
@@ -13,33 +15,33 @@ export class ReturnedByCustomerServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllReturnedByCustomers(queryParams?: QueryParams): Promise<ApiBaseState<IReturnByCustomer[]>> {
-        const url = inventoryApiUrl.GET_ALL_RBC(queryParams);
+    getAllReturnedByCustomers(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IReturnByCustomer[]>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_ALL_RBC, null, queryParams, search);
         return this.get(url);
     }
 
     getReturnedByCustomerById(id: string): Promise<ApiBaseState<IReturnByCustomer>> {
-        const url = inventoryApiUrl.GET_RBC_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_RBC_BY_ID, id);
         return this.get(url);
     }
 
     getReturnedByCustomerForViewById(id: string): Promise<ApiBaseState<IReturnByCustomer>> {
-        const url = inventoryApiUrl.GET_RBC_FOR_VIEW_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_RBC_FOR_VIEW_BY_ID, id);
         return this.get(url);
     }
 
     getReturnedByCustomerForUpdateById(id: string): Promise<ApiBaseState<IReturnByCustomer>> {
-        const url = inventoryApiUrl.GET_RBC_FOR_UPDATE_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_RBC_FOR_UPDATE_BY_ID, id);
         return this.get(url);
     }
 
     updateReturnedByCustomer(id: string, data: IReturnByCustomer): Promise<ResultModel> {
-        const url = inventoryApiUrl.UPDATE_RBC(id);
+        const url = buildApiUrl(inventoryApiUrl.UPDATE_RBC, id);
         return this.patch(url, data);
     }
 
     deleteReturnedByCustomerById(id: string): Promise<ResultModel> {
-        const url = inventoryApiUrl.DELETE_RBC(id);
+        const url = buildApiUrl(inventoryApiUrl.DELETE_RBC, id);
         return this.delete(url);
     }
 }

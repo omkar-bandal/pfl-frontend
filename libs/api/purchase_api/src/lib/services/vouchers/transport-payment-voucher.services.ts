@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../../constants";
 import { ITranportPaymentVoucher } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class TransportPaymentVoucherServices extends BaseService {
     private static _instance: TransportPaymentVoucherServices;
@@ -14,8 +15,8 @@ export class TransportPaymentVoucherServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllTransportPaymentVouchers(queryParams? : QueryParams): Promise<ApiBaseState<ITranportPaymentVoucher[]>> {
-        const url = purchaseApiUrl.GET_ALL_TP_VOUCHER(queryParams);
+    getAllTransportPaymentVouchers(queryParams? : QueryParams, search?: string | null): Promise<ApiBaseState<ITranportPaymentVoucher[]>> {
+        const url = buildApiUrl(purchaseApiUrl.GET_ALL_TP_VOUCHER, null, queryParams, search);
         return this.get(url);
     }
 
@@ -42,5 +43,10 @@ export class TransportPaymentVoucherServices extends BaseService {
     deleteTransportPaymentVoucherById(id: string): Promise<ResultModel> {
         const url = purchaseApiUrl.DELETE_TP_VOUCHER(id);
         return this.delete(url);
+    }
+
+    deleteMultipleTransportPaymentVouchers(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_TP_VOUCHER;
+        return this.deleteMultiple(url, data);
     }
 }

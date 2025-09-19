@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetProductSubcategory, PostProductSubcategory } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class ProductSubcategoryService extends BaseService {
     private static _instance: ProductSubcategoryService;
@@ -14,22 +15,23 @@ export class ProductSubcategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllProductSubcategories(queryParams?: QueryParams):Promise<ApiBaseState<GetProductSubcategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCT_SUBCATEGORY(queryParams);
+    getAllProductSubcategories(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetProductSubcategory[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_PRODUCT_SUBCATEGORY, null, queryParams, search);
         return this.get(url);
     }
 
     getProductSubcategoryById(id: string): Promise<ApiBaseState<GetProductSubcategory>> {
-        const url = `${adminApiUrlConstants.GET_A_PRODUCT_SUBCATEGORY}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_PRODUCT_SUBCATEGORY, id);
         return this.get(url);
     }
 
     updateProductSubcategory(id: string, data: GetProductSubcategory): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_PRODUCT_SUBCATEGORY}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_PRODUCT_SUBCATEGORY, id);
         return this.patch(url, data);
     }
+
     deleteProductSubcategoryById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_PRODUCT_SUBCATEGORY}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_PRODUCT_SUBCATEGORY, id);
         return this.delete(url);
     }
 }

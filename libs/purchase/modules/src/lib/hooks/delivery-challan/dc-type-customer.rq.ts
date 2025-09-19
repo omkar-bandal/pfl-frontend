@@ -23,12 +23,21 @@ export const useDeleteDCTypeCustomerById = (id: string): UseMutationResult<Resul
   });
 }
 
+export function useDeleteMultipleDCTypeCustomers():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-multiple-dc-type-customers'],
+        mutationFn: (data: Array<string>) => DCTypeCustomerServices.getInstance().deleteMultipleDCTypeCustomers(data),
+    });
+}
+
 export const useGetAllDCTypeCustomers = (
-  queryParams?: QueryParams
+  queryParams?: QueryParams,
+  search?: string | null
 ): UseQueryResult<ApiBaseState<IDeliveryChallanTypeCustomer[]>, ErrorModel> => {
   return useQuery<ApiBaseState<IDeliveryChallanTypeCustomer[]>, ErrorModel>({
-    queryKey: ['get-all-dc-type-customer', queryParams],
-    queryFn: () => DCTypeCustomerServices.getInstance().getAllDCTypeCustomer(queryParams),
+    queryKey: ['get-all-dc-type-customer', queryParams, search],
+    queryFn: () => DCTypeCustomerServices.getInstance().getAllDCTypeCustomer(queryParams, search),
   });
 }
 

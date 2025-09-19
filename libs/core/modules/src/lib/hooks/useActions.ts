@@ -1,6 +1,6 @@
 import { bindActionCreators } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { authActionCreators, dialogBoxActionCreators, drawerContainerActionCreators, layoutActionCreators, notificationActionCreators, previewActionCreators } from "../store/slices";
+import { authActionCreators, datagridTableActionCreators, dialogBoxActionCreators, dialogContainerActionCreators, drawerContainerActionCreators, layoutActionCreators, notificationActionCreators, previewActionCreators } from "../store/slices";
 
 export const useActions = () => {
     const dispatch = useDispatch();
@@ -11,6 +11,8 @@ export const useActions = () => {
         ...dialogBoxActionCreators,
         ...notificationActionCreators,
         ...drawerContainerActionCreators,
+        ...dialogContainerActionCreators,
+        ...datagridTableActionCreators,
     }, dispatch);
   };
   

@@ -9,9 +9,17 @@ export class StockServices extends BaseService {
         return this._instance || (this._instance = new this());
     }
 
-    getStockByAccessLoc(locId: string): Promise<ApiBaseState<IStockData[]>> {
-        const url = `${inventoryApiUrl.GET_STOCK}?location=${locId}`;
+    getStockByAccessLoc(companyId?: string, locationId?: string, startDate?: string, endDate?: string): Promise<ApiBaseState<IStockData[]>> {
+        let url = inventoryApiUrl.GET_STOCK;
+        if (companyId) {
+            url += `?companyName=${companyId}`;
+        } if (locationId) {
+            url += `&locationId=${locationId}`;
+        } if (startDate) {
+            url += `&startDate=${startDate}`;
+        } if (endDate) {
+            url += `&endDate=${endDate}`;
+        }
         return this.get(url);
     }
-  }
-  
+}

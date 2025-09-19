@@ -33,13 +33,21 @@ export function useDeletePackingMeterialPaymentVoucherById(
   });
 }
 
+export function useDeleteMultiplePackingMeterialPaymentVouchers():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-multiple-packing-material-payment-vouchers'],
+        mutationFn: (data: Array<string>) => PackingMeterialPaymentVoucherServices.getInstance().deleteMultiplePackingMeterialPaymentVouchers(data),
+    });
+}
+
 export function useGetAllPackingMeterialPaymentVouchers(
-  queryParams?: QueryParams
+  queryParams?: QueryParams, search?: string | null
 ): UseQueryResult<ApiBaseState<IPackingMaterialPaymentVoucher[]>, ErrorModel> {
   return useQuery<ApiBaseState<IPackingMaterialPaymentVoucher[]>, ErrorModel>({
-    queryKey: ['get-all-packing-material-payment-vouchers', queryParams],
+    queryKey: ['get-all-packing-material-payment-vouchers', queryParams, search],
     queryFn: () =>
-      PackingMeterialPaymentVoucherServices.getInstance().getAllPackingMeterialPaymentVouchers(queryParams),
+      PackingMeterialPaymentVoucherServices.getInstance().getAllPackingMeterialPaymentVouchers(queryParams, search),
   });
 }
 

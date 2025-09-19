@@ -7,8 +7,16 @@ export interface ILoggedInUserInfoRes  {
     id: string;
     employeeId: string;
     userName: string;
-    department: string ;
+    roles: Array<string> ;
     currentWorkLocation: string;
+}
+
+export interface IPermissions {
+    canCreate: boolean,
+    canView: boolean,
+    canEdit: boolean,
+    canDelete: boolean,
+    canDownload: boolean
 }
 
 export interface IEmployeePermissions {

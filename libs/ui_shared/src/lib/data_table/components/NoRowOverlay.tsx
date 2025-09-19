@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { StyledGridOverlay } from "./StyledGridOverlay";
 
-export function CustomNoRowsOverlay() {
+export const NoRowsOverlay = () => {
   return (
     <StyledGridOverlay>
       <svg

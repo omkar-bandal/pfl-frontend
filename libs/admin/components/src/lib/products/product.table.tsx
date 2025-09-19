@@ -1,30 +1,58 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { Box, Grid2 } from '@mui/material';
-import { Add, Settings } from '@mui/icons-material';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Box, Grid2, useMediaQuery, useTheme } from '@mui/material';
+import { Add, Delete, DoneAll, Edit, KeyboardArrowDown, Preview, Settings, Visibility } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useGetAllProducts } from '@prime-fresh/admin/modules';
-import { toast, BtnSmall, DataGridTable, ColumnVisibilityPanel, PageTitle, useDataTable } from '@prime-fresh/ui_shared';
+import { ADMIN_ROUTES, useGetAllProducts } from '@prime-fresh/admin/modules';
+import {
+  toast,
+  BtnSmall,
+  DataGridTable,
+  ColumnVisibilityPanel,
+  PageTitle,
+  useDataTable,
+  SearchBox,
+  IconButtonConfig,
+  IconButtonGroup,
+  ActionMenu,
+} from '@prime-fresh/ui_shared';
 import { useProductColumns } from './product.columns';
-import { sharedRoutes } from '@prime-fresh/shared/modules';
+import { sharedRoutes, useDebounce } from '@prime-fresh/shared/modules';
+import { GetProduct } from '@prime-fresh/common_api';
+import { useGridApiRef } from '@mui/x-data-grid';
 
 export function ProductTable() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const apiRef = useGridApiRef();
+
   const navigate = useNavigate();
   const productColumns = useProductColumns();
   const {
+    actionMenu,
+    openActionMenu,
+    handleOpenActionMenu,
+    handleCloseActionMenu,
+    enableCheckboxSelection,
+    handleEnableCheckboxSelection,
+    queryParams,
     paginationModel,
+    handlePaginationChange,
     sortModel,
     handleSortingChange,
-    handlePaginationChange,
-    queryParams,
+    search,
+    setSearch,
     columnVisibilityModel,
-    displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
+    displayColumnVisibilityPanel,
     handleOpenColumnVisibilityPanel,
+    handleCloseColumnVisibilityPanel,
   } = useDataTable({ columnDef: productColumns, initialPageSize: 10 });
 
-  const { data, isLoading, error, isError } = useGetAllProducts(queryParams);
+  const debouncedSearch = useDebounce(search, 1000);
+
+  const { data, isLoading, error, isError } = useGetAllProducts(queryParams, debouncedSearch);
   const allProducts = data ? data : null;
+
   const rowCountRef = useRef(allProducts?.allRecords || 0);
   const rowCount = useMemo(() => {
     if (allProducts?.allRecords !== undefined) {
@@ -39,28 +67,130 @@ export function ProductTable() {
     }
   }, [isError, error]);
 
-  const handleCreate = () => navigate(sharedRoutes.CREATE_PRODUCT);
+  const handleCreate = useCallback(() => navigate(sharedRoutes.CREATE_PRODUCT), [navigate]);
 
+  const handleEdit = useCallback(() => {
+    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
+    if (selectedRows.length === 0) {
+      toast.info('Please select a product to edit.');
+    } else if (selectedRows.length > 1) {
+      toast.info('Please select only one product to edit.');
+    } else {
+      const selectedId = selectedRows[0];
+      navigate(`${ADMIN_ROUTES.UPDATE_PRODUCT}/${selectedId}`);
+    }
+  }, [navigate, apiRef]);
+
+  const handleView = useCallback(() => {
+    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
+    if (selectedRows.length === 0) {
+      toast.info('Please select a product to view.');
+    } else if (selectedRows.length > 1) {
+      toast.info('Please select only one product to view.');
+    } else {
+      const selectedId = selectedRows[0];
+      navigate(`${ADMIN_ROUTES.GET_A_PRODUCT}/${selectedId}`);
+    }
+  }, [navigate, apiRef]);
+
+  const handleDelete = () => {};
+
+  const buttonConfig: IconButtonConfig[] = useMemo(
+    () => [
+      {
+        icon: <DoneAll />,
+        label: 'Select',
+        color: 'secondary',
+        onClick: handleEnableCheckboxSelection,
+        toolTipText: 'Enable or disable row selection',
+      },
+      {
+        icon: <Edit />,
+        label: 'Edit',
+        color: 'info',
+        onClick: () => handleEdit(),
+        toolTipText: 'Edit selected product (select only one)',
+      },
+      {
+        icon: <Preview />,
+        label: 'View',
+        color: 'warning',
+        onClick: () => handleView(),
+        toolTipText: 'VIew selected farmer (select only one)',
+      },
+      {
+        icon: <Delete />,
+        label: 'Delete',
+        color: 'error',
+        onClick: () => handleDelete(),
+        toolTipText: 'Delete selected product (select multiple)',
+      },
+      {
+        icon: <Add />,
+        label: 'Add New',
+        color: 'success',
+        onClick: () => handleCreate(),
+        toolTipText: 'Create new product',
+      },
+      {
+        icon: <Settings />,
+        label: 'Column',
+        color: 'primary',
+        onClick: handleOpenColumnVisibilityPanel,
+        disabled: false,
+      },
+    ],
+    []
+  );
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={1}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
+      <Grid2 container spacing={2} marginY={1}>
+        <Grid2 size={{ xs: isMobile ? 8 : 12, md: 6 }}>
           <PageTitle pagetitle="Products" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
-          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
-          <ColumnVisibilityPanel
-            popoverId="products-col-def"
-            columns={productColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
-          />
+        {isMobile && (
+          <Grid2 size={{ xs: 4 }}>
+            <BtnSmall label="Actions" color="info" icon={<KeyboardArrowDown />} onClick={handleOpenActionMenu} />
+            <ActionMenu
+              menuConfig={buttonConfig}
+              anchorEl={actionMenu}
+              open={openActionMenu}
+              onClose={handleCloseActionMenu}
+            />
+          </Grid2>
+        )}
+        <Grid2 size={{ xs: 12, md: 6 }}>
+          <SearchBox name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
         </Grid2>
+        {!isMobile && (
+          <Grid2
+            size={{ xs: 12, md: 12 }}
+            sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start', alignItems: 'center' }}
+          >
+            {buttonConfig.map((button, index) => (
+              <BtnSmall
+                key={index}
+                label={button.label}
+                icon={button.icon}
+                color={button.color as any}
+                onClick={button.onClick}
+                toolTipText={button.toolTipText}
+                sx={{ marginRight: 2 }}
+              />
+            ))}
+          </Grid2>
+        )}
       </Grid2>
-      <DataGridTable
+      <ColumnVisibilityPanel
+        popoverId="products-col-def"
+        columns={productColumns}
+        columnVisibilityModel={columnVisibilityModel}
+        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+      />
+      <DataGridTable<GetProduct>
+        apiRef={apiRef}
         loading={isLoading}
         rows={allProducts?.data || []}
         columns={productColumns}
@@ -72,6 +202,7 @@ export function ProductTable() {
         sortModel={sortModel}
         onSortModelChange={handleSortingChange}
         columnVisibilityModel={columnVisibilityModel}
+        checkboxSelection={enableCheckboxSelection}
       />
     </Box>
   );

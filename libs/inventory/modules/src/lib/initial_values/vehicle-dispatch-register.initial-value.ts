@@ -1,8 +1,8 @@
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { PostVehicleDispatchRegister } from "@prime-fresh/inventory_api";
+import { IVehicleDispatchRegister } from "@prime-fresh/inventory_api";
 import {initValAddress} from "@prime-fresh/shared/modules";
 
-export const vehicleDispatchRegisterInitialValues: PostVehicleDispatchRegister = {
+export const vehicleDispatchRegisterInitialValues: Omit<IVehicleDispatchRegister, 'id'> = {
     companyName: null,
     date: null,
     vehicleType: null,

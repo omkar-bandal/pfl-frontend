@@ -2,10 +2,11 @@ import { IDumpProducts, IDumpRegister } from "@prime-fresh/inventory_api"
 
 export const dumpProductsInitialValue: IDumpProducts = {
     productName: null,
-    origin: null,
-    variety: null,
-    count: null,
-    size: null,
+    variant: null,
+    // origin: null,
+    // variety: null,
+    // count: null,
+    // size: null,
     uom: null,
     quantity: null,
     unitPrice: null,

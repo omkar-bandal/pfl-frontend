@@ -174,7 +174,7 @@ export const DealSlipForm = () => {
               handleChange={formik.handleChange}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12 }} marginY={2}>
+          <Grid2 size={{ xs: 12 }} marginY={1}>
             <SectionHeader sectionHeader="Vendor / Farmer Information" />
           </Grid2>
           <Grid2 size={{ xs: 12 }} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -231,7 +231,7 @@ export const DealSlipForm = () => {
                 </>
               )
             }
-          <Grid2 size={{ xs: 12 }} marginY={2}>
+          <Grid2 size={{ xs: 12 }} marginY={1}>
             <SectionHeader sectionHeader="Products" />
           </Grid2>
             {rfpa?.rfpaProducts.length !== 0 && rfpa !== null ? (
@@ -260,54 +260,18 @@ export const DealSlipForm = () => {
                     <TextInput
                       isRequired={false}
                       isReadOnly={true}
-                      name="productDescription"
-                      label="Description"
-                      value={''}
+                      name="productVariant"
+                      label="Product Variant Name"
+                      value={product.variant}
                     />
                   </Grid2>
-                  <Grid2 size={{ xs: 12, md: 3 }}>
-                    <TextInput
-                      isRequired={false}
-                      isReadOnly={true}
-                      label="Origin"
-                      name="origin"
-                      value={product.origin}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12, md: 3 }}>
-                    <TextInput
-                      isRequired={false}
-                      isReadOnly={true}
-                      label="Variety"
-                      name="variety"
-                      value={product.variety}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12, md: 3 }}>
-                    <TextInput isRequired={false} isReadOnly={true} label="Count" name="count" value={product.count} />
-                  </Grid2>
-                  <Grid2 size={{ xs: 12, md: 3 }}>
-                    <TextInput isRequired={false} isReadOnly={true} label="Size" name="size" value={product.size} />
-                  </Grid2>
-                  <Grid2 size={{ xs: 6, md: 3 }}>
-                    <TextInput
-                      isRequired={false}
-                      isReadOnly={true}
-                      name="productCode"
-                      label="Product Code"
-                      value={''}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 6, md: 3 }}>
-                    <TextInput isRequired={false} isReadOnly={true} name="productBrand" label="Brand" value={''} />
-                  </Grid2>
-                  <Grid2 size={{ xs: 6, md: 3 }}>
+                  <Grid2 size={{ xs: 6, md: 2 }}>
                     <TextInput isRequired={false} isReadOnly={true} name="grade" label="Grade" value={product.grade} />
                   </Grid2>
-                  <Grid2 size={{ xs: 6, md: 3 }}>
+                  <Grid2 size={{ xs: 6, md: 2 }}>
                     <TextInput isRequired={false} isReadOnly={true} name="uom" label="Unit" value={product.uom} />
                   </Grid2>
-                  <Grid2 size={{ xs: 4, md: 3 }}>
+                  <Grid2 size={{ xs: 4, md: 2 }}>
                     <TextInput
                       isRequired={false}
                       isReadOnly={true}
@@ -389,7 +353,7 @@ export const DealSlipForm = () => {
               ))
             ) : (
               <Typography variant="body2" component="data" color="error">
-                Product not found in selected RFPA
+                Please selected a RFPA to see related product details
               </Typography>
             )}
           <Grid2 size={{ xs: 12 }} marginY={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

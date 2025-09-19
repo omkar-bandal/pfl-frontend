@@ -14,3 +14,4 @@ export * from './search';
 export * from './checkbox';
 export * from './autocomplete-mutiselect';
 export * from './autocomplete-srollable';
+export * from './virtualized-autocomplete';

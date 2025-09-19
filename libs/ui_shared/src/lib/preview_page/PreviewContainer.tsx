@@ -3,7 +3,7 @@ import { Close } from "@mui/icons-material"
 import { Box, Dialog, Grid2, IconButton, Slide } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions"
 import { previewState, setPreview, useAppDispatch, useAppSelector } from "@prime-fresh/modules"
-import { PageTitle } from "../components"
+import { PageTitle } from "../ui";
 
 // type PreviewContainerPropTypes = {
 //     title: string,

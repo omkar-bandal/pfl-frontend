@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Grid2, LinearProgress } from '@mui/material';
+import { Box, Grid2, InputAdornment, LinearProgress } from '@mui/material';
 import {
   transportPaymentVoucherInitialValue,
   PURCHASE_ARRAYS,
@@ -13,6 +13,7 @@ import {
 import {
   FormButtonGroup,
   ImageUploadMultiple,
+  MultiSelectAutocomplete,
   PageTitle,
   RadioGroupInput,
   SelectInput,
@@ -237,6 +238,16 @@ export const TransportPaymentVoucherForm = () => {
               <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
+                  isRequired={true}
+                  name="receiverName"
+                  label="Receiver Name"
+                  value={formik.values.receiverName}
+                  handleChange={formik.handleChange}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 9 }}>
+                <TextInput
+                  type="text"
                   isRequired={false}
                   name="products"
                   label="Products"
@@ -244,7 +255,7 @@ export const TransportPaymentVoucherForm = () => {
                   handleChange={formik.handleChange}
                 />
               </Grid2>
-              <Grid2 size={{ xs: 12, md: 4 }}>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <SelectInput
                   isRequired={true}
                   label="Payment Mode"
@@ -254,7 +265,97 @@ export const TransportPaymentVoucherForm = () => {
                   handleChange={formik.handleChange}
                 />
               </Grid2>
-              <Grid2 size={{ xs: 12, md: 4 }}>
+              <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                  type="text"
+                  isRequired={true}
+                  name="decidedAmt"
+                  label="Decided Amount"
+                  value={formik.values.decidedAmt || ''}
+                  handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
+                  name="actualAmt"
+                  label="Actual Amount"
+                  value={formik.values.actualAmt || ''}
+                  handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
+                  name="advanceAmt"
+                  label="Advance Paid Amount"
+                  value={formik.values.advanceAmt || ''}
+                  handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
+                  name="totalPayableAmt"
+                  label="Total Payable Amount"
+                  value={formik.values.totalPayableAmt || ''}
+                  handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
+                  name="deductionAmt"
+                  label="Any Deduction"
+                  value={formik.values.deductionAmt || ''}
+                  handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
+                <TextInput
+                  type="text"
+                  isRequired={false}
+                  name="extraAmt"
+                  label="Any Extra Amount"
+                  value={formik.values.extraAmt || ''}
+                  handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
+                />
+              </Grid2>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -262,19 +363,29 @@ export const TransportPaymentVoucherForm = () => {
                   label="Freight Amount"
                   value={formik.values.freightAmt || ''}
                   handleChange={formik.handleChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
                 />
               </Grid2>
-              <Grid2 size={{ xs: 12, md: 4 }}>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <TextInput
                   type="text"
                   isRequired={true}
-                  name="totalAmt"
-                  label="Total Amount"
-                  value={formik.values.totalAmt || ''}
+                  name="finalPayableAmt"
+                  label="Final Payable Amount"
+                  value={formik.values.finalPayableAmt || ''}
                   handleChange={(e) => handleAmountChange(e)}
+                  slotProps={{
+                    input: {
+                      endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                    },
+                  }}
                 />
               </Grid2>
-              <Grid2 size={{ xs: 12, md: 9 }}>
+              <Grid2 size={{ xs: 12, md: 12 }}>
                 <TextInput
                   type="text"
                   isRequired={false}
@@ -282,16 +393,6 @@ export const TransportPaymentVoucherForm = () => {
                   name="amtWords"
                   label="Amount In Words"
                   value={formik.values.amtWords}
-                />
-              </Grid2>
-              <Grid2 size={{ xs: 12, md: 3 }}>
-                <TextInput
-                  type="text"
-                  isRequired={true}
-                  name="receiverName"
-                  label="Receiver Name"
-                  value={formik.values.receiverName}
-                  handleChange={formik.handleChange}
                 />
               </Grid2>
               <Grid2 size={{ xs: 12 }}>
@@ -335,7 +436,7 @@ export const TransportPaymentVoucherForm = () => {
                   isSubmitError={tpVoucherId === '' ? errorPost : errorPatch}
                   resetLabel="Reset"
                   onReset={formik.handleReset}
-                  previewLabel='Preview'
+                  previewLabel="Preview"
                   onPreview={() => onFormPreview(formik.values)}
                 />
               </Grid2>

@@ -1,31 +1,55 @@
-import React from 'react';
-import { Box, Grid2 } from '@mui/material';
-import { GetVehicleDispatchRegister } from '@prime-fresh/inventory_api';
-import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
-import { useVehicleDispatchRegisterColumns } from './vehicle-dispatch-register.column';
+import React, { useCallback, useMemo } from 'react';
+import { Box, DialogContentText } from '@mui/material';
+import { IVehicleDispatchRegister } from '@prime-fresh/inventory_api';
+import { vehicleDispatchRegisterColumns } from './vehicle-dispatch-register.column';
 import { inventoryRouteConstants, useGetAllVehicleDispatchRegisters } from '@prime-fresh/inventory/modules';
-import { useNavigate } from 'react-router-dom';
 import { usePermission } from '@prime-fresh/modules';
-import { Add, Settings } from '@mui/icons-material';
+import { Add, Delete, DoneAll, Edit, Settings, Visibility } from '@mui/icons-material';
+import { toolTipText, useDebounce } from '@prime-fresh/shared/modules';
+import { useGridApiRef } from '@mui/x-data-grid';
+import {
+  ColumnVisibilityPanel,
+  DataGridTable,
+  DialogContainer,
+  TableButtonConfig,
+  TableHeader,
+  TableNavActionsConfig,
+  toast,
+  useDataTableFunctions,
+  useErrorHandler,
+  useTableActions,
+  useTableUI,
+} from '@prime-fresh/ui_shared';
 
 export const VehicleDispatchRegisterTable = () => {
-  const navigate = useNavigate();
-  const { canEdit, canView } = usePermission('vehicle-dispatch-register');
-  const vehicleDispatchRegisterColumns = useVehicleDispatchRegisterColumns(canEdit, canView);
-  const {
-    paginationModel,
-    sortModel,
-    handleSortingChange,
-    handlePaginationChange,
-    queryParams,
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-  } = useDataTable({ columnDef: vehicleDispatchRegisterColumns, initialPageSize: 10 });
-  const { data, isLoading, isError, error } = useGetAllVehicleDispatchRegisters(queryParams);
+  const TABLE_ID = 'vehicle-dispatch-table';
+  const apiRef = useGridApiRef();
+  const { isMobile } = useTableUI();
+  const { canEdit, canView, canDelete } = usePermission('vehicle-dispatch-register');
+
+  const tableNavActionConfig: TableNavActionsConfig = {
+    tableId: TABLE_ID,
+    createPath: inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER,
+    editPath: inventoryRouteConstants.UPDATE_VEHILCE_DISPATCH_REGISTER,
+    viewPath: inventoryRouteConstants.VIEW_VEHILCE_DISPATCH_REGISTER,
+  };
+
+  const tableConfig = useDataTableFunctions({
+    columnDef: vehicleDispatchRegisterColumns,
+    initialPageSize: 10,
+    tableId: TABLE_ID,
+  });
+
+  const { handleCreate, handleEdit, handleView, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
+
+  const debouncedSearch = useDebounce(tableConfig.search, 1000);
+
+  const { data, isLoading, isError, error } = useGetAllVehicleDispatchRegisters(
+    tableConfig.queryParams,
+    debouncedSearch
+  );
   const dispatchRecords = data ? data : null;
+
   const rowCountRef = React.useRef(dispatchRecords?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (dispatchRecords?.allRecords !== undefined) {
@@ -33,45 +57,133 @@ export const VehicleDispatchRegisterTable = () => {
     }
     return rowCountRef.current;
   }, [dispatchRecords]);
-  React.useEffect(() => {
-    if (isError) {
-      toast.error(error?.message || 'Error occured please refresh the page.');
-    }
-  }, [isError, error]);
 
-  const handleCreate = () => navigate(inventoryRouteConstants.CREATE_VEHILCE_DISPATCH_REGISTER);
+  useErrorHandler(isError, error);
+
+  const handleSelectedDelete = useCallback(() => {
+    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
+    if (selectedRows.length === 0) {
+      toast.info('Please select a vehicle dispatch register to edit.');
+    } else if (selectedRows.length > 0) {
+      // mutateAsync(selectedRows as Array<string>)
+      //   .then(() => {
+      //     toast.success(deleteRes ? deleteRes.message : 'Inward register deleted');
+      //     setTimeout(() => {
+      //       navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
+      //     }, 2000);
+      //   })
+      //   .catch(() => {
+      //     toast.error(deleteError ? deleteError.message : 'Error while deleting Ineard Register');
+      //   });
+    } else {
+      toast.info('Please select vehicle dispatch register to delete.');
+    }
+  }, [
+    apiRef,
+    {
+      /*mutateAsync, navigate,*/
+    },
+    toast,
+  ]);
+
+  const buttonConfig: TableButtonConfig[] = useMemo(
+    () => [
+      {
+        icon: <DoneAll />,
+        label: 'Select',
+        color: 'secondary',
+        onClick: tableConfig.handleToggleCheckboxSelection,
+        toolTipText: toolTipText.SELECT_BTN,
+        visible: true,
+      },
+      {
+        icon: <Edit />,
+        label: 'Edit',
+        color: 'info',
+        onClick: handleEdit,
+        toolTipText: toolTipText.EDIT_BTN,
+        visible: canEdit,
+      },
+      {
+        icon: <Visibility />,
+        label: 'View',
+        color: 'warning',
+        onClick: handleView,
+        toolTipText: toolTipText.VIEW_BTN,
+        visible: canView,
+      },
+      {
+        icon: <Delete />,
+        label: 'Delete',
+        color: 'error',
+        onClick: handleDelete,
+        toolTipText: toolTipText.DELETE_BTN,
+        visible: canDelete,
+      },
+      {
+        icon: <Add />,
+        label: 'Add New',
+        color: 'success',
+        onClick: handleCreate,
+        toolTipText: toolTipText.ADD_NEW_BTN,
+        visible: true,
+      },
+      {
+        icon: <Settings />,
+        label: 'Column',
+        color: 'primary',
+        onClick: tableConfig.openColumnVisibilityPanel,
+        toolTipText: toolTipText.COLUMN_BTN,
+        visible: true,
+      },
+    ],
+    []
+  );
 
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={1}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle="Vehicle Dispatch Register" />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
-          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
-          <ColumnVisibilityPanel
-            popoverId="vehicle-dispatches-col-def"
-            columns={vehicleDispatchRegisterColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
-          />
-        </Grid2>
-      </Grid2>
-      <DataGridTable<GetVehicleDispatchRegister>
+      <TableHeader
+        key={TABLE_ID}
+        isMobile={isMobile}
+        pageTitle="Vehicle Dispatch Register"
+        searchText={tableConfig.search}
+        setSearchText={tableConfig.setSearchValue}
+        buttonConfig={buttonConfig}
+        actionMenu={tableConfig.actionMenu}
+        openActionMenu={tableConfig.openActionMenu}
+        onOpenActionMenu={tableConfig.handleOpenActionMenu}
+        onCloseActionMenu={tableConfig.handleCloseActionMenu}
+      />
+      <ColumnVisibilityPanel
+        popoverId="vehicle-dispatches-col-def"
+        columns={vehicleDispatchRegisterColumns}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+        closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+        onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
+      />
+      <DataGridTable<IVehicleDispatchRegister>
+        apiRef={apiRef}
         loading={isLoading}
         rows={dispatchRecords?.data || []}
         columns={vehicleDispatchRegisterColumns}
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationChange}
-        sortModel={sortModel}
-        onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        paginationModel={tableConfig.paginationModel}
+        onPaginationModelChange={tableConfig.handlePaginationChange}
+        sortModel={tableConfig.sortModel}
+        onSortModelChange={tableConfig.handleSortingChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        checkboxSelection={tableConfig.enableCheckboxSelection}
+      />
+      <DialogContainer
+        dialogKey={TABLE_ID}
+        dialogTitle="Delete Vehicle Dispatch Register"
+        dialogContent={<DialogContentText>Are you sure you want to delete ?</DialogContentText>}
+        dialogActionLabel="Delete"
+        dialogActionBtnColor="error"
+        dialogActionFn={handleSelectedDelete}
       />
     </Box>
   );

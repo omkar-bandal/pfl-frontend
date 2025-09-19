@@ -2,7 +2,7 @@ export type ProductPartialData = {
     id: string,
     name: string,
     description: string | null,
-    productCode: string | null,
+    productCode: string,
     productOrigin: string[] | null,
     count: string[] | null,
     size: string[] | null,

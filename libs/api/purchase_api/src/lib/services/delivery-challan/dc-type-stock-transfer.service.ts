@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { purchaseApiUrl } from '../../constants';
 import { IDeliveryChallanTypeStockTransfer } from '../../models';
+import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class DCTypeStockTransferServices extends BaseService {
   private static _instance: DCTypeStockTransferServices;
@@ -14,8 +15,11 @@ export class DCTypeStockTransferServices extends BaseService {
     return this.postFormData(url, data);
   }
 
-  getAllDCTypeStockTransfer(queryParams?: QueryParams): Promise<ApiBaseState<IDeliveryChallanTypeStockTransfer[]>> {
-    const url = purchaseApiUrl.GET_ALL_DC_TYPE_STOCK_TRANSFER(queryParams);
+  getAllDCTypeStockTransfer(
+    queryParams?: QueryParams,
+    search?: string | null
+  ): Promise<ApiBaseState<IDeliveryChallanTypeStockTransfer[]>> {
+    const url = buildApiUrl(purchaseApiUrl.GET_ALL_DC_TYPE_STOCK_TRANSFER, null, queryParams, search);
     return this.get(url);
   }
 
@@ -37,5 +41,10 @@ export class DCTypeStockTransferServices extends BaseService {
   deleteDCTypeStockTransferById(id: string): Promise<ResultModel> {
     const url = `${purchaseApiUrl.DELETE_DC_TYPE_STOCK_TRANSFER}/${id}`;
     return this.delete(url);
+  }
+
+  deleteMultipleDCTypeStockTransfers(data: Array<string>): Promise<ResultModel> {
+    const url = purchaseApiUrl.DELETE_MULTIPLE_DC_TYPE_STOCK_TRANSFER;
+    return this.deleteMultiple(url, data);
   }
 }

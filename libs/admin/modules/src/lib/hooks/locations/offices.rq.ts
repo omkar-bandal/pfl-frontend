@@ -26,12 +26,12 @@ export function useDeleteOfficeById(id: string, officeType: string):
     });
 }
 
-export function useGetAllOffices(officeType: string, queryParams?: QueryParams):
+export function useGetAllOffices(officeType: string, queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetOffices[]>, ErrorModel> {
         const enabled = officeType.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetOffices[]>, ErrorModel>({
-        queryKey: ['get-all-offices', officeType, queryParams],
-        queryFn: () => OfficeService.getInstance().getAllOffice(officeType, queryParams),
+        queryKey: ['get-all-offices', officeType, queryParams, search],
+        queryFn: () => OfficeService.getInstance().getAllOffice(officeType, queryParams, search),
         enabled: enabled,
     });
 }

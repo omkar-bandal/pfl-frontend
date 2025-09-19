@@ -1,15 +1,9 @@
-import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Edit, Preview } from '@mui/icons-material';
-import { IconButton } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
+import { useMemo } from "react";
 import { Address, GetVendorCategory, GetVendorSubcategory } from "@prime-fresh/admin_api";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { useMemo } from "react";
 import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
 
 export const useVendorColumns = (): CustomGridColDef[] => {
-  const navigate = useNavigate();
   return useMemo(() => [
     {
       field: "vendorCode",
@@ -142,36 +136,36 @@ export const useVendorColumns = (): CustomGridColDef[] => {
       minWidth: 150,
       hide: true,
     },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      flex: 1,
-      minWidth: 50,
-      headerAlign: 'center',
-      align: 'center',
-      sortable: false,
-      filterable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_VENDOR}/${params.row.id}`)}>
-            <Edit color="secondary" />
-          </IconButton>
-      ),
-    },
-    {
-      field: 'view',
-      headerName: 'View',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      minWidth: 50,
-      sortable: false,
-      filterable: false,
-      isMobileVisible: true,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_VENDOR}/${params.row.id}`)}>
-          <Preview color="primary" />
-        </IconButton>
-      ),
-    },
-  ], [navigate]);
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   flex: 1,
+    //   minWidth: 50,
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_VENDOR}/${params.row.id}`)}>
+    //         <Edit color="secondary" />
+    //       </IconButton>
+    //   ),
+    // },
+    // {
+    //   field: 'view',
+    //   headerName: 'View',
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   flex: 1,
+    //   minWidth: 50,
+    //   sortable: false,
+    //   filterable: false,
+    //   isMobileVisible: true,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_VENDOR}/${params.row.id}`)}>
+    //       <Preview color="primary" />
+    //     </IconButton>
+    //   ),
+    // },
+  ], []);
 };

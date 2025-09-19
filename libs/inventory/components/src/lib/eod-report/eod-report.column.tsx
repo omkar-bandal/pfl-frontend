@@ -1,15 +1,31 @@
 import { Chip } from '@mui/material';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { inventoryRouteConstants } from '@prime-fresh/inventory/modules';
 import { convertInTitleCase, getDocStatusColor } from '@prime-fresh/shared/modules';
-import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { CustomGridColDef } from '@prime-fresh/ui_shared';
 
-export const useEODReportColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
-  const navigate = useNavigate();
-  return useMemo(
-    () => [
+export const eodReportColumns : CustomGridColDef[] = [
+  {
+        field: 'overAllStatus',
+        headerName: 'Status',
+        flex: 1,
+        minWidth: 130,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        isMobileVisible: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const status = convertInTitleCase(params.row.overAllStatus || '');
+          return <Chip
+            label={status}
+            size="small"
+            sx={{
+              flex: 1,
+              minWidth: 80,
+              color: '#FFF',
+              backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+            }} />
+        },
+      },
       {
         field: 'createdBy',
         headerName: 'Created By',
@@ -92,63 +108,4 @@ export const useEODReportColumns = (canEdit: boolean, canView: boolean): CustomG
         isMobileVisible: false,
         valueGetter: (value: string) => (value ? value : '-'),
       },
-      {
-        field: 'overAllStatus',
-        headerName: 'Status',
-        flex: 1,
-        minWidth: 130,
-        align: 'center',
-        headerAlign: 'center',
-        hide: false,
-        isMobileVisible: true,
-        renderCell: (params: GridRenderCellParams) => {
-          const status = convertInTitleCase(params.row.overAllStatus || '');
-          return <Chip
-            label={status}
-            size="small"
-            sx={{
-              flex: 1,
-              minWidth: 80,
-              color: '#FFF',
-              backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
-            }} />
-        },
-      },
-      ...(canEdit
-        ? [
-          {
-            field: 'edit',
-            headerName: 'Edit',
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <EditIconBtn
-                onClick={() => navigate(`${inventoryRouteConstants.UPDATE_EOD_REPORT}/${params.row.id}`)}
-              />
-            ),
-          },
-        ]
-        : []),
-      ...(canView
-        ? [
-          {
-            field: 'view',
-            headerName: 'View',
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-            filterable: false,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-              <ViewIconBtn onClick={() => navigate(`${inventoryRouteConstants.VIEW_EOD_REPORT}/${params.row.documentId}`)} />
-            ),
-          },
-        ]
-        : []),
-    ],
-    [canEdit, canView, navigate]
-  );
-};
+    ];

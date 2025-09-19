@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { IDumpRegister } from "../models";
 import { inventoryApiUrl } from "../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class DumpRegisterServices extends BaseService {
     private static _instance: DumpRegisterServices;
@@ -14,27 +15,28 @@ export class DumpRegisterServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllDumpRegisters(queryParams?: QueryParams):Promise<ApiBaseState<IDumpRegister[]>> {
-        const url = inventoryApiUrl.GET_ALL_DUMP_REGISTERS(queryParams);
+    getAllDumpRegisters(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IDumpRegister[]>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_ALL_DUMP_REGISTERS, null, queryParams, search);
         return this.get(url);
     }
 
     getDumpRegisterForViewById(id: string): Promise<ApiBaseState<IDumpRegister>> {
-        const url = inventoryApiUrl.GET_DUMP_REGISTER_FOR_VIEW_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_DUMP_REGISTER_FOR_VIEW_BY_ID, id);
         return this.get(url);
     }
+    
     getDumpRegisterForUpdateById(id: string): Promise<ApiBaseState<IDumpRegister>> {
-        const url = inventoryApiUrl.GET_DUMP_REGISTER_FOR_UPDATE_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_DUMP_REGISTER_FOR_UPDATE_BY_ID, id);
         return this.get(url);
     }
 
     updateDumpRegister(id: string, data: IDumpRegister): Promise<ResultModel> {
-        const url = inventoryApiUrl.UPDATE_DUMP_REGISTER(id);
+        const url = buildApiUrl(inventoryApiUrl.UPDATE_DUMP_REGISTER, id);
         return this.patch(url, data);
     }
 
     deleteDumpRegisterById(id: string): Promise<ResultModel> {
-        const url = inventoryApiUrl.DELETE_DUMP_REGISTER(id);
+        const url = buildApiUrl(inventoryApiUrl.DELETE_DUMP_REGISTER, id);
         return this.delete(url);
     }
 }

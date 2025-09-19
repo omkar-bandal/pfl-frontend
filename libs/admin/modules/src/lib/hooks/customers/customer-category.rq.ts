@@ -26,11 +26,11 @@ export function useDeleteCustomerCategoryById(id: string):
     });
 }
 
-export function useGetAllCustomerCategories(queryParams?: QueryParams):
+export function useGetAllCustomerCategories(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetCustomerCategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetCustomerCategory[]>, ErrorModel>({
-        queryKey: ['get-all-customer-categories', queryParams],
-        queryFn: () => CustomerCategoryService.getInstance().getAllCustomerCategories(queryParams),
+        queryKey: ['get-all-customer-categories', queryParams, search],
+        queryFn: () => CustomerCategoryService.getInstance().getAllCustomerCategories(queryParams, search),
     });
 }
 

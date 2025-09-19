@@ -26,17 +26,17 @@ export function useDeleteDumpRegisterById(id: string):
     });
 }
 
-export function useGetAllDumpRegisters(queryParams?: QueryParams):
+export function useGetAllDumpRegisters(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IDumpRegister[]>, ErrorModel> {
     return useQuery<ApiBaseState<IDumpRegister[]>, ErrorModel>({
-        queryKey: ['get-all-dump-registers', queryParams],
-        queryFn: () => DumpRegisterServices.getInstance().getAllDumpRegisters(queryParams),
+        queryKey: ['get-all-dump-registers', queryParams, search],
+        queryFn: () => DumpRegisterServices.getInstance().getAllDumpRegisters(queryParams, search),
     });
 }
 
 export function useGetDumpRegisterForViewById(id: string):
     UseQueryResult<ApiBaseState<IDumpRegister>, ErrorModel> {
-        const enable = id.length > 1 ? true : false;
+    const enable = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<IDumpRegister>, ErrorModel>({
         queryKey: ['get-dump-register-for-view-by-id', enable],
         queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterForViewById(id),
@@ -46,7 +46,7 @@ export function useGetDumpRegisterForViewById(id: string):
 
 export function useGetDumpRegisterForUpdateById(id: string):
     UseQueryResult<ApiBaseState<IDumpRegister>, ErrorModel> {
-        const enable = id.length > 1 ? true : false;
+    const enable = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<IDumpRegister>, ErrorModel>({
         queryKey: ['get-dump-register-for-update-by-id', enable],
         queryFn: () => DumpRegisterServices.getInstance().getDumpRegisterForUpdateById(id),

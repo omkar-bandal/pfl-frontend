@@ -4,6 +4,7 @@ import {
   ColumnSettingButton,
   ColumnVisibilityPanel,
   DataGridTable,
+  DateInput,
   PageTitle,
   Select,
   toast,
@@ -12,13 +13,19 @@ import {
 import { useStockColumns } from './stock.columns';
 import { useGetStockByAccessLoc } from '@prime-fresh/inventory/modules';
 import { IStockData } from '@prime-fresh/inventory_api';
-import { mapToValueLabelArray, useGetBranchesPartialData } from '@prime-fresh/shared/modules';
+import { mapToValueLabelArray, useGetBranchesPartialData, useGetCompanyNames } from '@prime-fresh/shared/modules';
 import { authState, useAppSelector } from '@prime-fresh/modules';
+import { start } from 'repl';
 
 export const StockTable = () => {
-  const {loggedInUserInfo} = useAppSelector(authState);
+  const { loggedInUserInfo } = useAppSelector(authState);
   console.log('logged in user work location', loggedInUserInfo?.currentWorkLocation);
+
+  const [companyId, setCompanyId] = useState<string>('');
   const [locationId, setLocationId] = useState<string>(loggedInUserInfo?.currentWorkLocation || '');
+  const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState<string>(new Date().toISOString().split('T')[0]);
+
   const stockColumns = useStockColumns();
   const {
     // paginationModel,
@@ -33,7 +40,7 @@ export const StockTable = () => {
     handleOpenColumnVisibilityPanel,
   } = useDataTable({ columnDef: stockColumns, initialPageSize: 10 });
 
-  const { data, isLoading, isError, error } = useGetStockByAccessLoc(locationId)
+  const { data, isLoading, isError, error } = useGetStockByAccessLoc(companyId, locationId, startDate, endDate);
   console.log('Stock Data: ', data?.data);
   // const stockData = data?.data
   //   ? data.data.map((item, index) => ({
@@ -56,26 +63,20 @@ export const StockTable = () => {
     }
   }, [isError, error]);
 
-  const {data: loc} = useGetBranchesPartialData();
+  const { data: loc } = useGetBranchesPartialData();
   const branches = loc?.data ? mapToValueLabelArray(loc?.data, 'id', 'name') : [];
-  console.log(branches);
+
+  const { data: company } = useGetCompanyNames();
+  const companies = company?.data ? mapToValueLabelArray(company?.data, 'id', 'name') : [];
+
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={2}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
+      <Grid2 container rowSpacing={2} columnSpacing={2} marginY={2} sx={{ alignItems: 'center' }}>
+        <Grid2 size={{ xs: 10 }}>
           <PageTitle pagetitle="Main Stock" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 2 }}>
-          <Select
-            name='locId'
-            label='Location'
-            options={branches}
-            value={locationId}
-            onChange={e => setLocationId(e.target.value)}
-          />
-        </Grid2>
         <Grid2
-          size={{ xs: 12, md: 2 }}
+          size={{ xs: 2 }}
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
@@ -90,6 +91,40 @@ export const StockTable = () => {
             displayColumnVisibilityModel={displayColumnVisibilityPanel}
             closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
             onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <Select
+            name='companyId'
+            label='Company Name'
+            options={companies}
+            value={companyId}
+            onChange={e => setCompanyId(e.target.value)}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 2 }}>
+          <Select
+            name='locationId'
+            label='Location'
+            options={branches}
+            value={locationId}
+            onChange={e => setLocationId(e.target.value)}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 3 }}>
+          <DateInput
+            name='startDate'
+            label='Start Date'
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
+        </Grid2>
+        <Grid2 size={{ xs: 12, md: 3 }}>
+          <DateInput
+            name='endDate'
+            label='End Date'
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
           />
         </Grid2>
       </Grid2>

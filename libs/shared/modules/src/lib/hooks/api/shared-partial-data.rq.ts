@@ -25,23 +25,41 @@ import {
   ResultModel,
   ApprovalRequest,
   QueryParams,
+  VariantPartialData,
+  GetAddressByPincode,
 } from '@prime-fresh/common_api';
 
-export const useUpdateDocStatusWithThreeApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+//Address by pincode
+export const useGetAddressByPincode = (pincode: string | null)
+: UseQueryResult<GetAddressByPincode, ErrorModel> => {
+  return useQuery<GetAddressByPincode, ErrorModel>({
+    queryKey: ['get-address-by-pincode', pincode],
+    queryFn: () => SharedService.getInstance().getAddressByPincode(pincode),
+    enabled: pincode !== null ? true : false,
+  });
+};
+
+export const useUpdateDocStatusWithThreeApproval = (
+  id: string
+): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
   return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
     mutationKey: ['update-doc-status-with-three-approval', id],
     mutationFn: (data) => SharedService.getInstance().updateDocStatusWithThreeApproval(id, data),
   });
 };
 
-export const useUpdateDocStatusWithTwoApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+export const useUpdateDocStatusWithTwoApproval = (
+  id: string
+): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
   return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
     mutationKey: ['update-doc-status-with-two-approval', id],
     mutationFn: (data) => SharedService.getInstance().updateDocStatusWithTwoApproval(id, data),
   });
 };
 
-export const useUpdateDocStatusWithOneApproval = (id: string): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
+export const useUpdateDocStatusWithOneApproval = (
+  id: string
+): UseMutationResult<ResultModel, ErrorModel, ApprovalRequest, unknown> => {
   return useMutation<ResultModel, ErrorModel, ApprovalRequest, unknown>({
     mutationKey: ['update-doc-status-with-one-approval', id],
     mutationFn: (data) => SharedService.getInstance().updateDocStatusWithOneApproval(id, data),
@@ -57,8 +75,8 @@ export const useGetUserNotifications = (): UseQueryResult<ApiBaseState<INotifica
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
-  })
-}
+  });
+};
 
 export const useGetEmployeePartialData = (): UseQueryResult<ApiBaseState<EmployeePartialData[]>, ErrorModel> => {
   return useQuery<ApiBaseState<EmployeePartialData[]>, ErrorModel>({
@@ -98,10 +116,13 @@ export function useGetDepartmentById(deptId: string): UseQueryResult<ApiBaseStat
 
 //Product
 
-export function useGetProductsPartialData(queryParams?: QueryParams): UseQueryResult<ApiBaseState<ProductPartialData[]>, ErrorModel> {
+export function useGetProductsPartialData(
+  queryParams?: Partial<QueryParams>,
+  search?: string | null
+): UseQueryResult<ApiBaseState<ProductPartialData[]>, ErrorModel> {
   return useQuery<ApiBaseState<ProductPartialData[]>, ErrorModel>({
-    queryKey: ['get-products-partial-data', queryParams],
-    queryFn: () => SharedService.getInstance().getProductsPatrialData(queryParams), 
+    queryKey: ['get-products-partial-data', queryParams, search],
+    queryFn: () => SharedService.getInstance().getProductsPatrialData(queryParams, search),
   });
 }
 
@@ -134,6 +155,18 @@ export function useSearchProductAllData(query: string): UseQueryResult<ApiBaseSt
   });
 }
 
+//Variant
+
+export function useGetVariantsByProductId(
+  productId: string | null
+): UseQueryResult<ApiBaseState<{variants: VariantPartialData[]}>, ErrorModel> {
+  return useQuery<ApiBaseState<{variants: VariantPartialData[]}>, ErrorModel>({
+    queryKey: ['get-variants-by-product-id', productId],
+    queryFn: () => SharedService.getInstance().getVariantsByProductId(productId),
+    enabled: productId !== null ? true : false,
+  });
+}
+
 //Packaging Material
 
 export function useGetPackagingMaterialPartialData(): UseQueryResult<
@@ -148,10 +181,13 @@ export function useGetPackagingMaterialPartialData(): UseQueryResult<
 
 //Farmers
 
-export function useGetFarmersPartialData(queryParams?: QueryParams): UseQueryResult<ApiBaseState<FarmerPartialData[]>, ErrorModel> {
+export function useGetFarmersPartialData(
+  queryParams?: Partial<QueryParams>,
+  search?: string | null
+): UseQueryResult<ApiBaseState<FarmerPartialData[]>, ErrorModel> {
   return useQuery<ApiBaseState<FarmerPartialData[]>, ErrorModel>({
-    queryKey: ['get-farmers-partial-data', queryParams],
-    queryFn: () => SharedService.getInstance().getFarmersPatrialData(queryParams),
+    queryKey: ['get-farmers-partial-data', queryParams, search],
+    queryFn: () => SharedService.getInstance().getFarmersPatrialData(queryParams, search),
   });
 }
 
@@ -178,10 +214,13 @@ export function useSearchFarmerData(query: string): UseQueryResult<ApiBaseState<
 
 //Vendors
 
-export function useGetVendorsPartialData(queryParams?: QueryParams): UseQueryResult<ApiBaseState<VendorPartialData[]>, ErrorModel> {
+export function useGetVendorsPartialData(
+  queryParams?: Partial<QueryParams>,
+  search?: string | null
+): UseQueryResult<ApiBaseState<VendorPartialData[]>, ErrorModel> {
   return useQuery<ApiBaseState<VendorPartialData[]>, ErrorModel>({
-    queryKey: ['get-vendors-partial-data', queryParams],
-    queryFn: () => SharedService.getInstance().getVendorsPatrialData(queryParams),
+    queryKey: ['get-vendors-partial-data', queryParams, search],
+    queryFn: () => SharedService.getInstance().getVendorsPatrialData(queryParams, search),
   });
 }
 

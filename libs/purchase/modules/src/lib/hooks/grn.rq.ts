@@ -26,6 +26,14 @@ export const useDeleteGRNById = (id: string):
   });
 };
 
+export function useDeleteMultipleGRNs():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-multiple-grns'],
+        mutationFn: (data: Array<string>) => GRNServices.getInstance().deleteMultipleGRNs(data),
+    });
+}
+
 export const useGetAllGRNs = (queryParams?: QueryParams, search?: string | null):
   UseQueryResult<ApiBaseState<IGRN[]>, ErrorModel> => {
   return useQuery<ApiBaseState<IGRN[]>, ErrorModel>({

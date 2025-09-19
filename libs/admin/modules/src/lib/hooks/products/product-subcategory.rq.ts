@@ -26,11 +26,11 @@ export function useDeleteProductSubcategoryById(id: string):
     });
 }
 
-export function useGetAllProductSubcategories(queryParams?: QueryParams):
+export function useGetAllProductSubcategories(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetProductSubcategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProductSubcategory[]>, ErrorModel>({
-        queryKey: ['get-all-product-subcategories', queryParams],
-        queryFn: () => ProductSubcategoryService.getInstance().getAllProductSubcategories(queryParams),
+        queryKey: ['get-all-product-subcategories', queryParams, search],
+        queryFn: () => ProductSubcategoryService.getInstance().getAllProductSubcategories(queryParams, search),
     });
 }
 

@@ -26,11 +26,11 @@ export function useDeleteInwardRegisterById(id: string):
     });
 }
 
-export function useGetAllInwardRegisters(queryParams?: QueryParams):
+export function useGetAllInwardRegisters(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IInwardRegister[]>, ErrorModel> {
     return useQuery<ApiBaseState<IInwardRegister[]>, ErrorModel>({
-        queryKey: ['get-all-inward-registers', queryParams],
-        queryFn: () => InwardRegisterServices.getInstance().getAllInwardRegisters(queryParams),
+        queryKey: ['get-all-inward-registers', queryParams, search],
+        queryFn: () => InwardRegisterServices.getInstance().getAllInwardRegisters(queryParams, search),
     });
 }
 

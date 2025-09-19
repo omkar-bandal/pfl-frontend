@@ -27,12 +27,21 @@ export const useDeleteDCTypeStockTransferById = (
   });
 };
 
+export function useDeleteMultipleDCTypeStockTransfer():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-multiple-dc-type-stock-transfer'],
+        mutationFn: (data: Array<string>) => DCTypeStockTransferServices.getInstance().deleteMultipleDCTypeStockTransfers(data),
+    });
+}
+
 export const useGetAllDCTypeStockTransfers = (
-  queryParams?: QueryParams
+  queryParams?: QueryParams,
+  search?: string | null
 ): UseQueryResult<ApiBaseState<IDeliveryChallanTypeStockTransfer[]>, ErrorModel> => {
   return useQuery<ApiBaseState<IDeliveryChallanTypeStockTransfer[]>, ErrorModel>({
-    queryKey: ['get-all-dc-type-stock-transfer', queryParams],
-    queryFn: () => DCTypeStockTransferServices.getInstance().getAllDCTypeStockTransfer(queryParams),
+    queryKey: ['get-all-dc-type-stock-transfer', queryParams, search],
+    queryFn: () => DCTypeStockTransferServices.getInstance().getAllDCTypeStockTransfer(queryParams, search),
   });
 };
 

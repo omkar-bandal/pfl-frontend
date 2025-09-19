@@ -16,3 +16,4 @@ export * from './packaging-material-partial-data.model';
 export * from './levels.model';
 export * from './location-partial-data.model';
 export * from './employee-partial-data.model';
+export * from './variant-partial-data.model';

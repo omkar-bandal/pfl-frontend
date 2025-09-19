@@ -26,11 +26,11 @@ export function useDeleteEODReportById(id: string):
     });
 }
 
-export function useGetAllEODReports(queryParams?: QueryParams):
+export function useGetAllEODReports(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IEODReport[]>, ErrorModel> {
     return useQuery<ApiBaseState<IEODReport[]>, ErrorModel>({
-        queryKey: ['get-all-eod-reports', queryParams],
-        queryFn: () => EODReportServices.getInstance().getAllEODReports(queryParams),
+        queryKey: ['get-all-eod-reports', queryParams, search],
+        queryFn: () => EODReportServices.getInstance().getAllEODReports(queryParams, search),
     });
 }
 

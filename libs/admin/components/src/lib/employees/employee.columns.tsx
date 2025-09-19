@@ -1,15 +1,11 @@
-import { IconButton, Chip } from "@mui/material";
+import { Chip } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Edit, Preview } from '@mui/icons-material';
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
 import { CustomGridColDef } from "@prime-fresh/ui_shared";
 import { convertInTitleCase, formatAddress } from "@prime-fresh/shared/modules";
 import { useMemo } from "react";
 import { IEmployee } from "@prime-fresh/admin_api";
 
 export const useEmployeeColumns = (): CustomGridColDef[] => {
-  const navigate = useNavigate();
 
   return useMemo(() => [
     {
@@ -181,41 +177,41 @@ export const useEmployeeColumns = (): CustomGridColDef[] => {
         }
       }
     },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      minWidth: 70,
-      hideable: false,
-      sortable: false,
-      filterable: false,
-      disableExport: true,
-      disableColumnMenu: true,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_EMPLOYEE}/${params.row.id}`)}>
-          <Edit color="info" />
-        </IconButton>
-      ),
-    },
-    {
-      field: 'view',
-      headerName: 'View',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      minWidth: 70,
-      hideable: false,
-      sortable: false,
-      filterable: false,
-      disableExport: true,
-      disableColumnMenu: true,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton aria-label="view" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_EMPLOYEE}/${params.row.id}`)}>
-          <Preview color="primary" />
-        </IconButton>
-      ),
-    },
-  ],[navigate])
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   flex: 1,
+    //   minWidth: 70,
+    //   hideable: false,
+    //   sortable: false,
+    //   filterable: false,
+    //   disableExport: true,
+    //   disableColumnMenu: true,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_EMPLOYEE}/${params.row.id}`)}>
+    //       <Edit color="info" />
+    //     </IconButton>
+    //   ),
+    // },
+    // {
+    //   field: 'view',
+    //   headerName: 'View',
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   flex: 1,
+    //   minWidth: 70,
+    //   hideable: false,
+    //   sortable: false,
+    //   filterable: false,
+    //   disableExport: true,
+    //   disableColumnMenu: true,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton aria-label="view" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_EMPLOYEE}/${params.row.id}`)}>
+    //       <Preview color="primary" />
+    //     </IconButton>
+    //   ),
+    // },
+  ],[])
 };

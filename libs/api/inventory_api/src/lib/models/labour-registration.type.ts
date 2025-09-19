@@ -1,102 +1,68 @@
 import { Address, GetFilteredBranchData } from "@prime-fresh/admin_api";
 
-export type PostLaborBankDetails = {
-    bankName: string,
-    branchName: string,
-    accountNumber: string,
-    ifscCode: string,
-    aadharNo: string,
-    panNo: string,
-    electionCardNo: string
+export interface ILaborBankDetails {
+    // id: string;
+    bankName: string | null;
+    branchName: string | null;
+    accountNumber: string | null;
+    ifscCode: string | null;
+    aadharNo: string | null;
+    panNo: string | null;
+    electionCardNo: string | null;
 }
 
-export type GetLaborBankDetails = {id: string} & PostLaborBankDetails;
-
-export type PostLaborFamilyDetails = {
-    relation: "Father" | "Mother" | "Spouse" | "",
-    nameAsPerAadhar: string,
-    mobileNumber: string,
-    age: number
+export interface ILaborFamilyDetails {
+    // id: string;
+    relation: "Father" | "Mother" | "Spouse" | null;
+    nameAsPerAadhar: string| null;
+    mobileNumber: string| null;
+    age: number| null;
 }
 
-export type GetLaborFamilyDetails = {id: string} & PostLaborFamilyDetails;
-
-export type PostLaborWorkExperience = {
-    previousFarmOrWorkPlace: string,
-    workType: string,
-    workLocation: string,
-    workDuration: number,
-    wagesPerDayOrMonth: number
+export interface ILaborWorkExperience {
+    // id: string;
+    previousFarmOrWorkPlace: string | null;
+    workType: string | null;
+    workLocation: string | null;
+    workDuration: number | null;
+    wagesPerDayOrMonth: number | null;
 }
 
-export type GetLaborWorkExperience = {id: string} & PostLaborWorkExperience;
-
-export type PostLaborRegistration = {
-    representativeName: string,
-    siteName: string,
-    laborType: "Skilled" | "Semi-skilled" | "Unskilled" | "",
-    laborName: string,
-    nameAsPerAadhar: string,
-    nameAsPerBank: string,
-    presentAddress: Address,
-    permanentAddress: Address,
-    mobileNumber: string,
-    emergencyContactNo: string,
-    emergencyContactName: string,
-    relationWithEmergencyContact: string,
-    healthIssues: string,
-    birthDate: string,
-    gender: "Male" | "Female" | "",
-    bloodGroup: string,
-    educationQualification: string,
-    pfUanNo: string,
-    maritalStatus: "Married" | "Unmarried" | "",
-    email: string,
-    bankDetails: PostLaborBankDetails,
-    familyDetails: PostLaborFamilyDetails[],
-    workExperience: PostLaborWorkExperience[],
-    preferredWorkingLocation: string,
-    preferredWorkType: string,
-    referenceName: string,
-    referencePosition: string,
-    referenceMobileNumber: string
+export interface ILaborRegistration {
+    id: string;
+    representativeName: string | null;
+    siteName: string | null;
+    laborType: "Skilled" | "Semi-skilled" | "Unskilled" | null;
+    laborName: string | null;
+    nameAsPerAadhar: string | null;
+    nameAsPerBank: string | null;
+    presentAddress: Address;
+    permanentAddress: Address;
+    mobileNumber: string | null;
+    emergencyContactNo: string | null;
+    emergencyContactName: string | null;
+    relationWithEmergencyContact: string | null;
+    healthIssues: string | null;
+    birthDate: string | null;
+    gender: "Male" | "Female" | null;
+    bloodGroup: string | null;
+    educationQualification: string | null;
+    pfUanNo: string | null;
+    maritalStatus: "Married" | "Unmarried" | null;
+    email: string | null;
+    bankDetails: ILaborBankDetails;
+    familyDetails: ILaborFamilyDetails[];
+    workExperience: ILaborWorkExperience[];
+    preferredWorkingLocation: string | null;
+    preferredWorkType: string | null;
+    referenceName: string | null;
+    referencePosition: string | null;
+    referenceMobileNumber: string | null;
 }
 
-export type GetLaborRegistration = {
-    id: string,
-    representativeName: string,
-    siteName: GetFilteredBranchData,
-    laborType: string,
-    laborName: string,
-    nameAsPerAadhar: string,
-    nameAsPerBank: string,
-    presentAddress: Address,
-    permanentAddress: Address,
-    mobileNumber: string,
-    emergencyContactNo: string,
-    emergencyContactName: string,
-    relationWithEmergencyContact: string,
-    healthIssues: string,
-    birthDate: string,
-    gender: string,
-    bloodGroup: string,
-    educationQualification: string,
-    pfUanNo: string,
-    maritalStatus: string,
-    email: string,
-    bankDetails: GetLaborBankDetails,
-    familyDetails: GetLaborFamilyDetails[],
-    workExperience: GetLaborWorkExperience[],
-    preferredWorkingLocation: string,
-    preferredWorkType: string,
-    referenceName: string,
-    referencePosition: string,
-    referenceMobileNumber: string
+export interface ITemporaryLabor {
+    id: string;
+    laborName: string | null;
+    contactNo: string | null;
 }
 
-export type PostTempLabor = {
-    laborName: string,
-    contactNo: string,
-}
-
-export type GetTempLabor = {id: string} & PostTempLabor;

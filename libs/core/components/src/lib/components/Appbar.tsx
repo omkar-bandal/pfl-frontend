@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppBar, IconButton, Box, Badge } from '@mui/material';
+import { AppBar, IconButton, Box, Badge, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
   authRouteConstants,
@@ -12,7 +12,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@prime-fresh/modules';
-import { AccountCircle, Logout, Notifications } from '@mui/icons-material';
+import { AccountCircle, ArrowBack, Logout, Notifications } from '@mui/icons-material';
 import { ISignOutRequest, useSignOut } from '@prime-fresh/auth_api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -113,50 +113,116 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
       disable: isPending && !isError,
     },
   ];
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <AppBar
       position="fixed"
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
-        height: 40,
+        height: 40, // Increased height for better visibility
         ml: { sm: `${drawerWidth}px` },
         bgcolor: '#FFFFFF',
-        boxShadow: 'none',
+        boxShadow: 'none', // Subtle shadow
         boxSizing: 'border-box',
       }}
     >
       <Box
         width="100%"
         height="100%"
-        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2, paddingY: 1 }}
+        sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          paddingX: 2,
+          paddingY: 1,
+        }}
       >
-        <IconButton
-          color="primary"
-          aria-label="open drawer"
-          edge="start"
-          onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
-          <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
-            <Badge badgeContent={notifications.length} color="error">
-              <Notifications fontSize="medium" />
-            </Badge>
-          </IconButton>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <IconButton
-            onClick={handleOpenProfileMenu}
-            size="medium"
-            sx={{ ml: 2 }}
-            aria-controls={openProfileMenu ? 'profile-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={openProfileMenu ? 'true' : undefined}
+            color="primary"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ 
+              display: { sm: 'none' },
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              }
+            }}
           >
-            <AccountCircle fontSize="medium" />
+            <MenuIcon />
           </IconButton>
+          <Tooltip title="Go Back">
+            <IconButton
+              color="primary"
+              aria-label="go back"
+              onClick={handleGoBack}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                }
+              }}
+            >
+              <ArrowBack />
+            </IconButton>
+          </Tooltip>
         </Box>
-        <ProfileMenu
+
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: 'row', 
+          justifyContent: 'end', 
+          alignItems: 'center',
+          gap: 1 
+        }}>
+          <Tooltip title="Notifications">
+            <IconButton 
+              color="primary" 
+              size="medium" 
+              aria-label="notification" 
+              onClick={handleOpenNotificationBox}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                }
+              }}
+            >
+              <Badge 
+                badgeContent={notifications.length} 
+                color="error"
+                sx={{
+                  '& .MuiBadge-badge': {
+                    fontSize: '0.75rem',
+                    height: '20px',
+                    minWidth: '20px',
+                  }
+                }}
+              >
+                <Notifications fontSize="medium" />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Profile Menu">
+            <IconButton
+              onClick={handleOpenProfileMenu}
+              size="medium"
+              aria-controls={openProfileMenu ? 'profile-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={openProfileMenu ? 'true' : undefined}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                }
+              }}
+            >
+              <AccountCircle fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+        </Box>
+<ProfileMenu
           open={openProfileMenu}
           anchorEl={profileMenuAnchorEl}
           onClick={handleCloseProfileMenu}
@@ -172,5 +238,63 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
         />
       </Box>
     </AppBar>
+    // <AppBar
+    //   position="fixed"
+    //   sx={{
+    //     width: { sm: `calc(100% - ${drawerWidth}px)` },
+    //     height: 40,
+    //     ml: { sm: `${drawerWidth}px` },
+    //     bgcolor: '#FFFFFF',
+    //     boxShadow: 'none',
+    //     boxSizing: 'border-box',
+    //   }}
+    // >
+    //   <Box
+    //     width="100%"
+    //     height="100%"
+    //     sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2, paddingY: 1 }}
+    //   >
+    //     <IconButton
+    //       color="primary"
+    //       aria-label="open drawer"
+    //       edge="start"
+    //       onClick={handleDrawerToggle}
+    //       sx={{ mr: 2, display: { sm: 'none' } }}
+    //     >
+    //       <MenuIcon />
+    //     </IconButton>
+    //     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
+    //       <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
+    //         <Badge badgeContent={notifications.length} color="error">
+    //           <Notifications fontSize="medium" />
+    //         </Badge>
+    //       </IconButton>
+    //       <IconButton
+    //         onClick={handleOpenProfileMenu}
+    //         size="medium"
+    //         sx={{ ml: 2 }}
+    //         aria-controls={openProfileMenu ? 'profile-menu' : undefined}
+    //         aria-haspopup="true"
+    //         aria-expanded={openProfileMenu ? 'true' : undefined}
+    //       >
+    //         <AccountCircle fontSize="medium" />
+    //       </IconButton>
+    //     </Box>
+    //     <ProfileMenu
+    //       open={openProfileMenu}
+    //       anchorEl={profileMenuAnchorEl}
+    //       onClick={handleCloseProfileMenu}
+    //       onClose={handleCloseProfileMenu}
+    //       loggedInUsername={username}
+    //       menuoptions={profileMenuOptions}
+    //     />
+    //     <NotificationBox
+    //       open={openNotificationBox}
+    //       anchorEl={notificationBoxAnchorEl}
+    //       onClose={handleCloseNotificationBox}
+    //       notifications={notifications}
+    //     />
+    //   </Box>
+    // </AppBar>
   );
 }

@@ -151,4 +151,12 @@ export abstract class  BaseService implements Client {
   delete<T>(path: string): Promise<T> {
     return this.service.delete(path);
   }
+
+  deleteMultiple<T>(path: string, data: Array<any>): Promise<T> {
+    return this.service.delete(path, {
+      data: {
+        ids: data,
+      },
+    });
+  }
 }

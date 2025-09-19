@@ -2,7 +2,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useMemo } from 'react';
 import { Close } from '@mui/icons-material';
+import { IInwardRegister } from '@prime-fresh/inventory_api';
 import { Box, Grid2, IconButton, InputAdornment, LinearProgress, Typography } from '@mui/material';
+import { FieldArray, FormikProvider, useFormik } from 'formik';
+import { useNavigate, useParams } from 'react-router-dom';
+import { handleInwardProductsChange, handlePushProduct, handleRemoveProduct } from './helper-function';
+import { ProductFormFields, VendorFarmerInfo } from '@prime-fresh/shared/components';
+import { InwardRegisterFormPreview } from './inward-register.preview';
+import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 import {
   inventoryOptions,
   inventoryRouteConstants,
@@ -14,7 +21,6 @@ import {
   useGetInwardRegisterForUpdateById,
   useUpdateInwardRegister,
 } from '@prime-fresh/inventory/modules';
-import { IInwardRegister } from '@prime-fresh/inventory_api';
 import {
   handleFormKeyDown,
   mapToValueLabelArray,
@@ -37,14 +43,7 @@ import {
   SelectInput,
   TextInput,
   toast,
-  VendorFarmerInfo,
 } from '@prime-fresh/ui_shared';
-import { FieldArray, FormikProvider, useFormik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
-import { handleInwardProductsChange, handlePushProduct, handleRemoveProduct } from './helper-function';
-import { ProductFormFields } from '@prime-fresh/shared/components';
-import { InwardRegisterFormPreview } from './inward-register.preview';
-import { setPreview, useAppDispatch } from '@prime-fresh/modules';
 
 export const InwardRegisterForm = () => {
   const dispatch = useAppDispatch();
@@ -111,45 +110,45 @@ export const InwardRegisterForm = () => {
     const data = formik.values;
     const previewData = {
       ...data,
-      grnNo: grnNums.find(no => no.value === data.grnNo)?.label || '',
-      deliveryChallanNo: dcNums?.find(no => no.value === data.deliveryChallanNo)?.label || '',
-      companyName: companyNames?.find(company => company.value === data.companyName)?.label || '',
-      location: allLocations?.find(loc => loc.value === data.location)?.label || '',
+      grnNo: grnNums.find((no) => no.value === data.grnNo)?.label || '',
+      deliveryChallanNo: dcNums?.find((no) => no.value === data.deliveryChallanNo)?.label || '',
+      companyName: companyNames?.find((company) => company.value === data.companyName)?.label || '',
+      location: allLocations?.find((loc) => loc.value === data.location)?.label || '',
       selectedParty: data.source === 'vendor' ? vendorData : farmerData,
-      purchasedBy: employeeData?.find(emp => emp.value === data.purchasedBy)?.label || '',
-      inwardProducts: data.inwardProducts.map(product => ({
+      purchasedBy: employeeData?.find((emp) => emp.value === data.purchasedBy)?.label || '',
+      inwardProducts: data.inwardProducts.map((product) => ({
         ...product,
-        productName: allProducts?.find(item => item.id === product.productName)?.name || '',
-        uom: allUOMs?.find(item => item.value === product.uom)?.label || '',
+        productName: allProducts?.find((item) => item.id === product.productName)?.name || '',
+        uom: allUOMs?.find((item) => item.value === product.uom)?.label || '',
       })),
-    }
+    };
     dispatch(setPreview(true));
     dispatch(setInwardRegisterFormPreview(previewData));
-  }
+  };
 
   const handleSubmit = (values: any) => {
     console.log('Submitted Inward Data: ', values);
     Id === ''
       ? mutateAsyncPost(values)
-        .then(() => {
-          toast.success(PostData ? PostData.message : 'Inward Register created successfully.');
-          setTimeout(() => {
-            navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
-          }, 2000);
-        })
-        .catch(() => {
-          toast.error(PostError ? PostError.message : 'Error while creating inward register.');
-        })
+          .then(() => {
+            toast.success(PostData ? PostData.message : 'Inward Register created successfully.');
+            setTimeout(() => {
+              navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
+            }, 2000);
+          })
+          .catch(() => {
+            toast.error(PostError ? PostError.message : 'Error while creating inward register.');
+          })
       : mutateAsyncPatch(values)
-        .then(() => {
-          toast.success(PatchData ? PatchData.message : 'Inward register updated sucessfully.');
-          setTimeout(() => {
-            navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
-          }, 2000);
-        })
-        .catch(() => {
-          toast.error(PatchError ? PatchError.message : 'Error while updating inward register.');
-        });
+          .then(() => {
+            toast.success(PatchData ? PatchData.message : 'Inward register updated sucessfully.');
+            setTimeout(() => {
+              navigate(inventoryRouteConstants.GET_ALL_INWARD_REGISTERS);
+            }, 2000);
+          })
+          .catch(() => {
+            toast.error(PatchError ? PatchError.message : 'Error while updating inward register.');
+          });
   };
   return Id !== '' && isLoading ? (
     <Box sx={{ flex: 1 }}>
@@ -158,7 +157,11 @@ export const InwardRegisterForm = () => {
   ) : (
     <Fragment>
       <FormikProvider key={Id === '' ? 'create-inward' : 'update-inward'} value={formik}>
-        <form key={Id === '' ? 'create-form' : 'update-form'} onKeyDown={handleFormKeyDown} onSubmit={formik.handleSubmit}>
+        <form
+          key={Id === '' ? 'create-form' : 'update-form'}
+          onKeyDown={handleFormKeyDown}
+          onSubmit={formik.handleSubmit}
+        >
           <Grid2 container columnSpacing={1} rowSpacing={1} padding={1}>
             <Grid2 size={{ xs: 12 }} marginBottom={2}>
               <PageTitle pagetitle="Inward Register" />
@@ -292,7 +295,7 @@ export const InwardRegisterForm = () => {
                             // }}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 2 }}>
                           <TextInput
                             type="number"
                             isRequired={true}
@@ -304,7 +307,7 @@ export const InwardRegisterForm = () => {
                             }
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 2 }}>
                           <TextInput
                             type="number"
                             isRequired={true}
@@ -314,15 +317,25 @@ export const InwardRegisterForm = () => {
                             handleChange={(e) =>
                               handleInwardProductsChange(index, 'unitPrice', Number(e.target.value), formik)
                             }
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                              },
+                            }}
                           />
                         </Grid2>
-                        <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Grid2 size={{ xs: 12, md: 2 }}>
                           <TextInput
                             type="number"
                             isRequired={true}
                             name={`inwardProducts.${index}.amount`}
                             label="Amount"
                             value={formik.values.inwardProducts[index].amount || null}
+                            slotProps={{
+                              input: {
+                                endAdornment: <InputAdornment position="end">Rs</InputAdornment>,
+                              },
+                            }}
                           />
                         </Grid2>
                         <Grid2 size={{ xs: 12, md: 4 }}>
@@ -502,14 +515,13 @@ export const InwardRegisterForm = () => {
                 resetLabel="Reset"
                 onReset={formik.handleReset}
                 previewLabel="Preview"
-                  onPreview={
-                    //   () => {
-                    //   dispatch(setPreview(true));
-                    //   dispatch(setInwardRegisterFormPreview(formik.values));
-                    // }
-                    () => onInwardFormPreview()
-                  }
-
+                onPreview={
+                  //   () => {
+                  //   dispatch(setPreview(true));
+                  //   dispatch(setInwardRegisterFormPreview(formik.values));
+                  // }
+                  () => onInwardFormPreview()
+                }
               />
             </Grid2>
           </Grid2>

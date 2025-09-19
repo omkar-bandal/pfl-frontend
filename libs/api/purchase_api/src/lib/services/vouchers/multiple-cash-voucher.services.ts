@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { purchaseApiUrl } from '../../constants';
 import { IMultiCashVoucher } from '../../models';
+import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class MultiCashVoucherServices extends BaseService {
   private static _instance: MultiCashVoucherServices;
@@ -14,8 +15,8 @@ export class MultiCashVoucherServices extends BaseService {
     return this.postFormData(url, data);
   }
 
-  getAllMultiCashVouchers(queryParams?: QueryParams): Promise<ApiBaseState<IMultiCashVoucher[]>> {
-    const url = purchaseApiUrl.GET_ALL_MC_VOUCHER(queryParams);
+  getAllMultiCashVouchers(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IMultiCashVoucher[]>> {
+    const url = buildApiUrl(purchaseApiUrl.GET_ALL_MC_VOUCHER, null, queryParams, search);
     return this.get(url);
   }
 
@@ -38,4 +39,9 @@ export class MultiCashVoucherServices extends BaseService {
     const url = purchaseApiUrl.DELETE_MC_VOUCHER(id);
     return this.delete(url);
   }
+
+  deleteMultipleMultiCashVouchers(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_MC_VOUCHER;
+        return this.deleteMultiple(url, data);
+    }
 }

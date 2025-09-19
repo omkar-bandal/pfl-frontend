@@ -26,6 +26,14 @@ export function useDeleteRFPAById(id: string):
     });
 }
 
+export function useDeleteMultipleRFPA():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-rfpa-by-id'],
+        mutationFn: (data: Array<string>) => RFPAServices.getInstance().deleteMultipleRFPAs(data),
+    });
+}
+
 export function useGetAllRFPAs(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<IRFPA[]>, ErrorModel> {
     return useQuery<ApiBaseState<IRFPA[]>, ErrorModel>({

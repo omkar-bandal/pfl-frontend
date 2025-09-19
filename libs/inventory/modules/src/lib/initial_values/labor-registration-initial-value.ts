@@ -1,57 +1,56 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { PostLaborBankDetails, PostLaborFamilyDetails, PostLaborRegistration, PostLaborWorkExperience } from "@prime-fresh/inventory_api";
+import { ILaborBankDetails, ILaborFamilyDetails, ILaborRegistration, ILaborWorkExperience } from "@prime-fresh/inventory_api";
 import { initValAddress } from "@prime-fresh/shared/modules";
 
-export const laborBankDetailsInitialValue: PostLaborBankDetails = {
-    bankName: "",
-    branchName: "",
-    accountNumber: "",
-    ifscCode: "",
-    aadharNo: "",
-    panNo: "",
-    electionCardNo: ""
+export const laborBankDetailsInitialValue: ILaborBankDetails = {
+    bankName: null,
+    branchName: null,
+    accountNumber: null,
+    ifscCode: null,
+    aadharNo: null,
+    panNo: null,
+    electionCardNo: null
 }
-export const laborFamilyDetailsInitialValue: PostLaborFamilyDetails = {
-    relation: "",
-    nameAsPerAadhar: "",
-    mobileNumber: "",
-    age: 0
+export const laborFamilyDetailsInitialValue: ILaborFamilyDetails = {
+    relation: null,
+    nameAsPerAadhar: null,
+    mobileNumber: null,
+    age: null,
 }
-export const laborWorkExperienceInitialValue: PostLaborWorkExperience = {
-    previousFarmOrWorkPlace: "",
-    workType: "",
-    workLocation: "",
-    workDuration: 0,
-    wagesPerDayOrMonth: 0
+export const laborWorkExperienceInitialValue: ILaborWorkExperience = {
+    previousFarmOrWorkPlace: null,
+    workType: null,
+    workLocation: null,
+    workDuration: null,
+    wagesPerDayOrMonth: null
 }
 
-export const laborRegistrationInitialValue: PostLaborRegistration = {
-    representativeName: "",
-    siteName: "",
-    laborType: "",
-    laborName: "",
-    nameAsPerAadhar: "",
-    nameAsPerBank: "",
+export const laborRegistrationInitialValue: Omit<ILaborRegistration, 'id'> = {
+    representativeName: null,
+    siteName: null,
+    laborType: null,
+    laborName: null,
+    nameAsPerAadhar: null,
+    nameAsPerBank: null,
     presentAddress: initValAddress,
     permanentAddress: initValAddress,
-    mobileNumber: "",
-    emergencyContactNo: "",
-    emergencyContactName: "",
-    relationWithEmergencyContact: "",
-    healthIssues: "",
-    birthDate: "",
-    gender: "",
-    bloodGroup: "",
-    educationQualification: "",
-    pfUanNo: "",
-    maritalStatus: "",
-    email: "",
+    mobileNumber: null,
+    emergencyContactNo: null,
+    emergencyContactName: null,
+    relationWithEmergencyContact: null,
+    healthIssues: null,
+    birthDate: null,
+    gender: null,
+    bloodGroup: null,
+    educationQualification: null,
+    pfUanNo: null,
+    maritalStatus: null,
+    email: null,
     bankDetails: laborBankDetailsInitialValue,
     familyDetails: [laborFamilyDetailsInitialValue],
     workExperience: [laborWorkExperienceInitialValue],
-    preferredWorkingLocation: "",
-    preferredWorkType: "",
-    referenceName: "",
-    referencePosition: "",
-    referenceMobileNumber: ""
+    preferredWorkingLocation: null,
+    preferredWorkType: null,
+    referenceName: null,
+    referencePosition: null,
+    referenceMobileNumber: null
 }

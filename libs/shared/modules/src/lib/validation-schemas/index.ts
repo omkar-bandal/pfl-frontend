@@ -5,3 +5,5 @@ export * from './farmer.schema';
 export * from './customer.schema';
 export * from './contactNo.schema';
 export * from './regex';
+export * from './product.schema';
+export * from './image.schema';

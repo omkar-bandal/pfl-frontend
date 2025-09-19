@@ -1,6 +1,7 @@
 import {ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetProductClassification, PostProductClassification } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class ProductClassificationService extends BaseService {
     private static _instance: ProductClassificationService;
@@ -14,23 +15,23 @@ export class ProductClassificationService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllProductClassifications(queryParams?: QueryParams):Promise<ApiBaseState<GetProductClassification[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCT_CLASSIFICATION(queryParams);
+    getAllProductClassifications(queryParams?: QueryParams, search?: string | null):Promise<ApiBaseState<GetProductClassification[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_PRODUCT_CLASSIFICATION, null, queryParams, search);
         return this.get(url);
     }
 
     getProductClassificationById(id: string): Promise<ApiBaseState<GetProductClassification>> {
-        const url = `${adminApiUrlConstants.GET_A_PRODUCT_CLASSIFICATION}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_PRODUCT_CLASSIFICATION, id);
         return this.get(url);
     }
 
     updateProductClassification(id: string, data: GetProductClassification): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_PRODUCT_CLASSIFICATION}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_PRODUCT_CLASSIFICATION, id);
         return this.patch(url, data);
     }
 
     deleteProductClassificationById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_PRODUCT_CLASSIFICATION}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_PRODUCT_CLASSIFICATION, id);
         return this.delete(url);
     }
 }

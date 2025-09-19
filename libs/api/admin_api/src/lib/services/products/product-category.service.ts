@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetProductCategory, PostProductCategory } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class ProductCategoryService extends BaseService {
     private static _instance: ProductCategoryService;
@@ -14,8 +15,8 @@ export class ProductCategoryService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllProductCategories(queryParams?: QueryParams): Promise<ApiBaseState<GetProductCategory[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCT_CATEGORY(queryParams);
+    getAllProductCategories(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetProductCategory[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_PRODUCT_CATEGORY, null, queryParams, search);
         return this.get(url);
     }
 

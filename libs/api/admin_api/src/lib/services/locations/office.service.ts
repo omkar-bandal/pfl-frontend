@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetOffices, PostOffices } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class OfficeService extends BaseService {
     private static _instance: OfficeService;
@@ -14,8 +15,8 @@ export class OfficeService extends BaseService {
         return this.post(url, data);
     }
 
-    getAllOffice(officeType: string, queryParams?: QueryParams): Promise<ApiBaseState<GetOffices[]>> {
-        const url = adminApiUrlConstants.GET_ALL_OFFICES(officeType, queryParams);
+    getAllOffice(officeType: string, queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetOffices[]>> {
+        const url = buildApiUrl(`${adminApiUrlConstants.GET_ALL_OFFICES}/${officeType}`, null, queryParams, search);
         return this.get(url);
     }
 

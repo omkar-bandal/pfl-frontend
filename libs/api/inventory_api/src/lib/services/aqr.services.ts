@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { IAQR } from '../models';
 import { inventoryApiUrl } from '../constants';
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class AQRServices extends BaseService {
   private static _instance: AQRServices;
@@ -14,28 +15,28 @@ export class AQRServices extends BaseService {
     return this.post(url, data);
   }
 
-  getAllAQRs(queryParams?: QueryParams): Promise<ApiBaseState<IAQR[]>> {
-    const url = inventoryApiUrl.GET_ALL_AQR(queryParams);
+  getAllAQRs(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IAQR[]>> {
+    const url = buildApiUrl(inventoryApiUrl.GET_ALL_AQR, null, queryParams, search);
     return this.get(url);
   }
 
   getAQRForUpdateById(id: string): Promise<ApiBaseState<IAQR>> {
-    const url = inventoryApiUrl.GET_AQR_FOR_UPDATE_BY_ID(id);
+    const url = buildApiUrl(inventoryApiUrl.GET_AQR_FOR_UPDATE_BY_ID, id);
     return this.get(url);
   }
 
   getAQRForViewById(id: string): Promise<ApiBaseState<IAQR>> {
-    const url = inventoryApiUrl.GET_AQR_FOR_VIEW_BY_ID(id);
+    const url = buildApiUrl(inventoryApiUrl.GET_AQR_FOR_VIEW_BY_ID, id);
     return this.get(url);
   }
 
   updateAQR(id: string, data: IAQR): Promise<ResultModel> {
-    const url = inventoryApiUrl.UPDATE_AQR(id);
+    const url = buildApiUrl(inventoryApiUrl.UPDATE_AQR, id);
     return this.patch(url, data);
   }
 
   deleteAQRById(id: string): Promise<ResultModel> {
-    const url = inventoryApiUrl.DELETE_AQR(id);
+    const url = buildApiUrl(inventoryApiUrl.DELETE_AQR, id);
     return this.delete(url);
   }
 }

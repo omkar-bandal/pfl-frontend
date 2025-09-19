@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { ISecondSaleRegister } from "../models";
 import { inventoryApiUrl } from "../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class SecondSaleRegisterServices extends BaseService {
     private static _instance: SecondSaleRegisterServices;
@@ -14,8 +15,8 @@ export class SecondSaleRegisterServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllSecondSaleRegisters(queryParams?: QueryParams): Promise<ApiBaseState<ISecondSaleRegister[]>> {
-        const url = inventoryApiUrl.GET_ALL_SECOND_SALES(queryParams);
+    getAllSecondSaleRegisters(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<ISecondSaleRegister[]>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_ALL_SECOND_SALES, null, queryParams, search);
         return this.get(url);
     }
 
@@ -30,12 +31,12 @@ export class SecondSaleRegisterServices extends BaseService {
     }
 
     updateSecondSaleRegister(id: string, data: ISecondSaleRegister): Promise<ResultModel> {
-        const url = inventoryApiUrl.UPDATE_SECOND_SALE(id);
+        const url = buildApiUrl(inventoryApiUrl.UPDATE_SECOND_SALE, id);
         return this.patch(url, data);
     }
 
     deleteSecondSaleRegisterById(id: string): Promise<ResultModel> {
-        const url = inventoryApiUrl.DELETE_SECOND_SALE(id);
+        const url = buildApiUrl(inventoryApiUrl.DELETE_SECOND_SALE, id);
         return this.delete(url);
     }
 }

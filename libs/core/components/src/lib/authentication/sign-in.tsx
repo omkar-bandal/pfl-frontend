@@ -79,13 +79,13 @@ export const SignIn = () => {
   //Auth check and redirect
   useEffect(() => {
     if (isLoggedIn) {
-      if (loggedInUserInfo?.department === 'admin')
+      if (loggedInUserInfo?.roles?.includes('admin'))
         navigate(adminRoutes.DASHBOARD_ADMIN)
       else
         navigate(sharedRoutes.DASHBOARD);
     } else
       navigate(authRouteConstants.SIGN_IN)
-  }, [isLoggedIn, loggedInUserInfo?.department, navigate]);
+  }, [isLoggedIn, loggedInUserInfo?.roles, navigate]);
 
   //Submit function of sign in form.
   const handleSignIn = (values: ISignInRequest) => {
@@ -98,13 +98,13 @@ export const SignIn = () => {
               id: result.id,
               userName: result.userName,
               employeeId: result.employeeId,
-              department: result.department,
+              roles: result.roles,
               currentWorkLocation: result.currentWorkLocation,
             };
             setIsLoggedIn(true);
             setLoggedInUserInfo(loggedInUserInfo);
             setEmployeePermissions(result.permissions);
-            if (result.department === 'admin') navigate(adminRoutes.DASHBOARD_ADMIN);
+            if (result.roles?.includes('admin')) navigate(adminRoutes.DASHBOARD_ADMIN);
             else navigate(sharedRoutes.DASHBOARD);
           }
         }, 2000);

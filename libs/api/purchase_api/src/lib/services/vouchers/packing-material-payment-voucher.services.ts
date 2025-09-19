@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { purchaseApiUrl } from '../../constants';
 import { IPackingMaterialPaymentVoucher } from '../../models';
+import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class PackingMeterialPaymentVoucherServices extends BaseService {
   private static _instance: PackingMeterialPaymentVoucherServices;
@@ -14,8 +15,8 @@ export class PackingMeterialPaymentVoucherServices extends BaseService {
     return this.postFormData(url, data);
   }
 
-  getAllPackingMeterialPaymentVouchers(queryParams?: QueryParams): Promise<ApiBaseState<IPackingMaterialPaymentVoucher[]>> {
-    const url = purchaseApiUrl.GET_ALL_PMP_VOUCHER(queryParams);
+  getAllPackingMeterialPaymentVouchers(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IPackingMaterialPaymentVoucher[]>> {
+    const url = buildApiUrl(purchaseApiUrl.GET_ALL_PMP_VOUCHER, null, queryParams, search);
     return this.get(url);
   }
 
@@ -38,4 +39,9 @@ export class PackingMeterialPaymentVoucherServices extends BaseService {
     const url = purchaseApiUrl.DELETE_PMP_VOUCHER(id);
     return this.delete(url);
   }
+
+  deleteMultiplePackingMeterialPaymentVouchers(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_PMP_VOUCHER;
+        return this.deleteMultiple(url, data);
+    }
 }

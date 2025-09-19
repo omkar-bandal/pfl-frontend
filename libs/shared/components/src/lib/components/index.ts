@@ -1,2 +1,2 @@
-export * from './product-form-field';
 export * from './dashboard';
+export * from './form-fields';

@@ -1,36 +1,101 @@
-import React from 'react';
-import { Box, Grid2 } from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { Box, DialogContentText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { IDealSlip } from '@prime-fresh/purchase_api';
-import { PURCHASE_ROUTES, useGetAllDealSlips } from '@prime-fresh/purchase/modules';
-import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, SearchBox, toast, useDataTable } from '@prime-fresh/ui_shared';
-import { useDealSlipColumns } from './deal-slip.columns';
+import { PURCHASE_ROUTES, useDeleteMultipleDealSlips, useGetAllDealSlips } from '@prime-fresh/purchase/modules';
+import {
+  ColumnVisibilityPanel,
+  DataGridTable,
+  DialogContainer,
+  TableButtonConfig,
+  TableHeader,
+  TableNavActionsConfig,
+  toast,
+  useDataTableFunctions,
+  useTableActions,
+  useTableUI,
+} from '@prime-fresh/ui_shared';
 import { usePermission } from '@prime-fresh/modules';
-import { Add, Settings } from '@mui/icons-material';
-import { debounce } from '@prime-fresh/shared/modules';
+import { Add, Delete, DoneAll, Edit, Settings, Visibility } from '@mui/icons-material';
+import { toolTipText, useDebounce } from '@prime-fresh/shared/modules';
+import { dealSlipColumns } from './deal-slip.columns';
+import { useGridApiRef } from '@mui/x-data-grid';
 
 export const DealSlipTable = () => {
+  const TABLE_ID = 'deal-slip-table';
   const navigate = useNavigate();
-  const { canEdit, canView } = usePermission('deal-slip');
-  const dealSlipColumns = useDealSlipColumns(canEdit, canView);
-  const {
-    queryParams,
-    paginationModel,
-    handlePaginationChange,
-    sortModel,
-    handleSortingChange,
-    search,
-    setSearch,
-    columnVisibilityModel,
-    handleColumnVisibilityModelChange,
-    displayColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-    handleCloseColumnVisibilityPanel,
-  } = useDataTable({ columnDef: dealSlipColumns, initialPageSize: 10 });
+  const apiRef = useGridApiRef();
+  const { isMobile } = useTableUI();
+  const { canEdit, canView, canDelete } = usePermission('deal-slip');
 
-  const { data, isLoading, isError, error } = useGetAllDealSlips(queryParams, search);
+  const tableNavActionConfig: TableNavActionsConfig = {
+    tableId: TABLE_ID,
+    createPath: PURCHASE_ROUTES.CREATE_DEAL_SLIP,
+    editPath: PURCHASE_ROUTES.UPDATE_DEAL_SLIP,
+    viewPath: PURCHASE_ROUTES.VIEW_DEAL_SLIP,
+  };
+  const { handleCreate, handleEdit, handleView, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
+  const tableConfig = useDataTableFunctions({ columnDef: dealSlipColumns, initialPageSize: 10, tableId: TABLE_ID });
+
+  const buttonConfig: TableButtonConfig[] = useMemo(
+    () => [
+      {
+        icon: <DoneAll />,
+        label: 'Select',
+        color: 'secondary',
+        onClick: tableConfig.handleToggleCheckboxSelection,
+        toolTipText: toolTipText.SELECT_BTN,
+        visible: true,
+      },
+      {
+        icon: <Edit />,
+        label: 'Edit',
+        color: 'info',
+        onClick: handleEdit,
+        toolTipText: toolTipText.EDIT_BTN,
+        visible: canEdit,
+      },
+      {
+        icon: <Visibility />,
+        label: 'View',
+        color: 'warning',
+        onClick: handleView,
+        toolTipText: toolTipText.VIEW_BTN,
+        visible: canView,
+      },
+      {
+        icon: <Delete />,
+        label: 'Delete',
+        color: 'error',
+        onClick: handleDelete,
+        toolTipText: toolTipText.DELETE_BTN,
+        visible: canDelete,
+      },
+      {
+        icon: <Add />,
+        label: 'Add New',
+        color: 'success',
+        onClick: handleCreate,
+        toolTipText: toolTipText.ADD_NEW_BTN,
+        visible: true,
+      },
+      {
+        icon: <Settings />,
+        label: 'Column',
+        color: 'primary',
+        onClick: tableConfig.openColumnVisibilityPanel,
+        toolTipText: toolTipText.COLUMN_BTN,
+        visible: true,
+      },
+    ],
+    []
+  );
+  const debouncedSearch = useDebounce(tableConfig.search, 1000);
+
+  const { data, isLoading, isError, error } = useGetAllDealSlips(tableConfig.queryParams, debouncedSearch);
   const allDealSlip = data ? data : null;
   console.log('All Dealslip Data: ', allDealSlip);
+
   const rowCountRef = React.useRef(allDealSlip?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allDealSlip?.allRecords !== undefined) {
@@ -38,53 +103,79 @@ export const DealSlipTable = () => {
     }
     return rowCountRef.current;
   }, [allDealSlip]);
+
   React.useEffect(() => {
     if (isError) {
       toast.error(error?.message || 'Error occured please refresh the page.');
     }
   }, [isError, error]);
 
-  const handleCreate = () => {
-    navigate(PURCHASE_ROUTES.CREATE_DEAL_SLIP);
-  };
-  const handleSearchChange = debounce((value: string) => {
-    setSearch(value);
-  }, 1000);
+  const { mutateAsync, error: deleteError, data: deleteRes } = useDeleteMultipleDealSlips();
+
+  const handleSelectedDelete = useCallback(() => {
+    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
+    if (selectedRows.length === 0) {
+      toast.info('Please select a deal slip to edit.');
+    } else if (selectedRows.length > 0) {
+      mutateAsync(selectedRows as Array<string>)
+        .then(() => {
+          toast.success(deleteRes ? deleteRes.message : 'Deal slip deleted');
+          setTimeout(() => {
+            navigate(PURCHASE_ROUTES.GET_ALL_DEAL_SLIP);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(deleteError ? deleteError.message : 'Error while deleting deal slip');
+        });
+    } else {
+      toast.info('Please select deal slip to delete.');
+    }
+  }, [apiRef, mutateAsync, navigate, toast]);
 
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={2} paddingX={1}>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <PageTitle pagetitle="Deal Slip" />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <SearchBox name="search" value={search} onChange={e => handleSearchChange(e.target.value)} onClearSearch={() => setSearch('')} />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
-          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
-          <ColumnVisibilityPanel
-            popoverId="deal-slips-col-def"
-            columns={dealSlipColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
-          />
-        </Grid2>
-      </Grid2>
+      <TableHeader
+        key={TABLE_ID}
+        isMobile={isMobile}
+        pageTitle="Deal Slip"
+        searchText={tableConfig.search}
+        setSearchText={tableConfig.setSearchValue}
+        buttonConfig={buttonConfig}
+        actionMenu={tableConfig.actionMenu}
+        openActionMenu={tableConfig.openActionMenu}
+        onOpenActionMenu={tableConfig.handleOpenActionMenu}
+        onCloseActionMenu={tableConfig.handleCloseActionMenu}
+      />
+      <ColumnVisibilityPanel
+        popoverId="deal-slips-col-def"
+        columns={dealSlipColumns}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+        closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+        onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
+      />
       <DataGridTable<IDealSlip>
+        apiRef={apiRef}
         loading={isLoading}
         rows={allDealSlip?.data || []}
         columns={dealSlipColumns}
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationChange}
-        sortModel={sortModel}
-        onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        paginationModel={tableConfig.paginationModel}
+        onPaginationModelChange={tableConfig.handlePaginationChange}
+        sortModel={tableConfig.sortModel}
+        onSortModelChange={tableConfig.handleSortingChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        checkboxSelection={tableConfig.enableCheckboxSelection}
+      />
+      <DialogContainer
+        dialogKey={TABLE_ID}
+        dialogTitle="Delete Deal Slip"
+        dialogContent={<DialogContentText>Are you sure you want to delete ?</DialogContentText>}
+        dialogActionLabel="Delete"
+        dialogActionBtnColor="error"
+        dialogActionFn={handleDelete}
       />
     </Box>
   );

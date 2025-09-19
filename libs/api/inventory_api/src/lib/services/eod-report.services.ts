@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { IEODReport } from "../models";
 import { inventoryApiUrl } from "../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class EODReportServices extends BaseService {
     private static _instance: EODReportServices;
@@ -14,29 +15,29 @@ export class EODReportServices extends BaseService {
         return this.post(url, data);
     }
 
-    getAllEODReports(queryParams?: QueryParams): Promise<ApiBaseState<IEODReport[]>> {
-        const url = inventoryApiUrl.GET_ALL_EOD_REPORT(queryParams);
+    getAllEODReports(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IEODReport[]>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_ALL_EOD_REPORT, null, queryParams, search);
         return this.get(url);
     }
 
     getEODReportForViewById(id: string): Promise<ApiBaseState<IEODReport>> {
-        const url = inventoryApiUrl.GET_EOD_REPORT_FOR_VIEW_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_EOD_REPORT_FOR_VIEW_BY_ID, id);
         return this.get(url);
     }
 
     getEODReportForUpdateById(id: string): Promise<ApiBaseState<IEODReport>> {
-        const url = inventoryApiUrl.GET_EOD_REPORT_FOR_UPDATE_BY_ID(id);
+        const url = buildApiUrl(inventoryApiUrl.GET_EOD_REPORT_FOR_UPDATE_BY_ID, id);
         return this.get(url);
     }
 
     updateEODReport(id: string,
         data: IEODReport): Promise<ResultModel> {
-        const url = inventoryApiUrl.UPDATE_EOD_REPORT(id);
+        const url = buildApiUrl(inventoryApiUrl.UPDATE_EOD_REPORT, id);
         return this.patch(url, data);
     }
 
     deleteEODReportById(id: string): Promise<ResultModel> {
-        const url = inventoryApiUrl.DELETE_EOD_REPORT(id);
+        const url = buildApiUrl(inventoryApiUrl.DELETE_EOD_REPORT, id);
         return this.delete(url);
     }
 }

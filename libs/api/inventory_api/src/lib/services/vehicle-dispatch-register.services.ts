@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
-import { GetVehicleDispatchRegister, PostVehicleDispatchRegister } from "../models";
+import { IVehicleDispatchRegister } from "../models";
 import { inventoryApiUrl } from "../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class VehicleDispatchRegisterServices extends BaseService {
     private static _instance: VehicleDispatchRegisterServices;
@@ -9,33 +10,33 @@ export class VehicleDispatchRegisterServices extends BaseService {
         return this._instance || (this._instance = new this());
     }
 
-    createVehicleDispatchRegister(data: PostVehicleDispatchRegister): Promise<ResultModel> {
+    createVehicleDispatchRegister(data: Omit<IVehicleDispatchRegister, 'id'>): Promise<ResultModel> {
         const url = inventoryApiUrl.CREATE_VEHICLE_DISPATCH_REGISTER;
         return this.post(url, data);
     }
 
-    getAllVehicleDispatchRegisters(queryParams?: QueryParams): Promise<ApiBaseState<GetVehicleDispatchRegister[]>> {
-        const url = inventoryApiUrl.GET_ALL_VEHICLE_DISPATCH_REGISTERS(queryParams);
+    getAllVehicleDispatchRegisters(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IVehicleDispatchRegister[]>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_ALL_VEHICLE_DISPATCH_REGISTERS, null, queryParams, search);
         return this.get(url);
     }
 
-    getVehicleDispatchRegisterForViewById(id: string): Promise<ApiBaseState<GetVehicleDispatchRegister>> {
-        const url = inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_FOR_VIEW_BY_ID(id);
+    getVehicleDispatchRegisterForViewById(id: string): Promise<ApiBaseState<IVehicleDispatchRegister>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_FOR_VIEW_BY_ID, id);
         return this.get(url);
     }
 
-    getVehicleDispatchRegisterForUpdateById(id: string): Promise<ApiBaseState<GetVehicleDispatchRegister>> {
-        const url = inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_FOR_UPDATE_BY_ID(id);
+    getVehicleDispatchRegisterForUpdateById(id: string): Promise<ApiBaseState<IVehicleDispatchRegister>> {
+        const url = buildApiUrl(inventoryApiUrl.GET_VEHICLE_DISPATCH_REGISTER_FOR_UPDATE_BY_ID, id);
         return this.get(url);
     }
 
-    updateVehicleDispatchRegister(id: string, data: GetVehicleDispatchRegister): Promise<ResultModel> {
-        const url = inventoryApiUrl.UPDATE_VEHICLE_DISPATCH_REGISTER(id);
+    updateVehicleDispatchRegister(id: string, data: IVehicleDispatchRegister): Promise<ResultModel> {
+        const url = buildApiUrl(inventoryApiUrl.UPDATE_VEHICLE_DISPATCH_REGISTER, id);
         return this.patch(url, data);
     }
 
     deleteVehicleDispatchRegisterById(id: string): Promise<ResultModel> {
-        const url = inventoryApiUrl.DELETE_VEHICLE_DISPATCH_REGISTER(id);
+        const url = buildApiUrl(inventoryApiUrl.DELETE_VEHICLE_DISPATCH_REGISTER, id);
         return this.delete(url);
     }
 }

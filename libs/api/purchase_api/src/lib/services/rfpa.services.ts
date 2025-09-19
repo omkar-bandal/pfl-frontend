@@ -38,4 +38,9 @@ export class RFPAServices extends BaseService {
         const url = purchaseApiUrl.DELETE_RFPA(id);
         return this.delete(url);
     }
+
+    deleteMultipleRFPAs(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_RFPA;
+        return this.deleteMultiple(url, data);
+    }
 }

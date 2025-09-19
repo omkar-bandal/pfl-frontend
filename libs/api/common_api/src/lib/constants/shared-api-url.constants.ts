@@ -11,6 +11,9 @@ export const sharedApiUrls = {
   UPDATE_DOCUMENT_STATUS_TWO_LEVEL_APPROVAL: (id: string) => `/documents/updatesecondlevel/${id}`,
   UPDATE_DOCUMENT_STATUS_ONE_LEVEL_APPROVAL: (id: string) => `/documents/updatefirstlevel/${id}`,
 
+  //Get address by pincode
+  GET_ADDRESS_BY_PINCODE: `/pincode/fetchAddressByPincode?pincode=`,
+  
   //Stock
   GET_ALL_STOCK: (queryParams?: QueryParams) => {
     if (queryParams) {
@@ -74,48 +77,22 @@ export const sharedApiUrls = {
   GET_DEPARTMENT_BY_ID: '/departments',
 
   // GET_PRODUCTS_PARTIAL: '/products/partial/data',
-  GET_PRODUCTS_PARTIAL: (queryParams?: QueryParams) => {
-    if (queryParams) {
-      let url = `/products/partial/data?page=${queryParams.page}&limit=${queryParams.limit}`;
-      if (queryParams.search && queryParams.search.length > 0) {
-        url = url + `&search=${queryParams.search}`;
-      }
-      return url;
-    } else {
-      return `/products/partial/data`;
-    }
-  },
+  GET_PRODUCTS_PARTIAL: `/products/partial/data`,
   GET_PRODUCTS_PARTIAL_BY_ID: '/products/partial',
   SEARCH_PRODUCT: '/products/productname/?search=',
   SEARCH_PRODUCT_ALL_DATA: '/products/serachData/product?search=',
 
+  //Variants
+  GET_VARIANTS_PARTIAL: '/varients/partial/data',
+  GET_VARIANTS_BY_PRODUCT_ID: '/products/getall/getvarient',
+
   GET_PACKAGING_MATERIAL_PARTIAL: '/packingMaterial/all/partial',
 
-  GET_VENDORS_PARTIAL: (queryParams?: QueryParams) => {
-    if (queryParams) {
-      let url = `/vendors/filterVendor/all?page=${queryParams.page}&limit=${queryParams.limit}`;
-      if (queryParams.search && queryParams.search.length > 0) {
-        url = url + `&search=${queryParams.search}`;
-      }
-      return url;
-    } else {
-      return `/vendors/filterVendor/all`;
-    }
-  },
+  GET_VENDORS_PARTIAL: `/vendors/filterVendor/all`,
   GET_VENDORS_PARTIAL_BY_ID: '/vendors/filterData',
   SEARCH_VENDOR: '/vendors/filterVendor/withfilter?search=',
 
-  GET_FARMERS_PARTIAL: (queryParams?: QueryParams) => {
-    if (queryParams) {
-      let url = `/farmers/filterFarmer/all?page=${queryParams.page}&limit=${queryParams.limit}`;
-      if (queryParams.search && queryParams.search.length > 0) {
-        url = url + `&search=${queryParams.search}`;
-      }
-      return url;
-    } else {
-      return `/farmers/filterFarmer/all`;
-    }
-  },
+  GET_FARMERS_PARTIAL: `/farmers/filterFarmer/all`,
   GET_FARMERS_PARTIAL_BY_ID: '/farmers/filterFarmer',
   SEARCH_FARMER: '/farmers/filterFarmer/search/withfilter?search=',
 

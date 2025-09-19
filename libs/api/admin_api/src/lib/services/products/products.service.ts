@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
-import { GetProduct, ProductPartialData } from "../../models";
+import { GetProduct, IProduct, ProductPartialData } from "../../models";
 import { adminApiUrlConstants } from "../../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class ProductsService extends BaseService {
     private static _instance: ProductsService;
@@ -14,28 +15,33 @@ export class ProductsService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllProducts(queryParams?: QueryParams):Promise<ApiBaseState<GetProduct[]>> {
-        const url = adminApiUrlConstants.GET_ALL_PRODUCTS(queryParams);
-        return this.get(url);
-    }
-
-    getProductsPatrialData():Promise<ApiBaseState<ProductPartialData[]>> {
-        const url = adminApiUrlConstants.GET_PRODUCTS_PARTIAL;
+    getAllProducts(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetProduct[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_PRODUCTS, null, queryParams, search);
         return this.get(url);
     }
 
     getProductById(id: string): Promise<ApiBaseState<GetProduct>> {
-        const url = `${adminApiUrlConstants.GET_A_PRODUCTS}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_PRODUCTS, id);
         return this.get(url);
     }
 
     updateProduct(id: string, data: FormData): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_PRODUCTS}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_PRODUCTS, id);
         return this.patchFormData(url, data);
     }
 
     deleteProductById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_PRODUCT}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_PRODUCT, id);
         return this.delete(url);
+    }
+
+     getProductsPatrialData(): Promise<ApiBaseState<ProductPartialData[]>> {
+        const url = adminApiUrlConstants.GET_PRODUCTS_PARTIAL;
+        return this.get(url);
+    }
+
+    getAllProductVariants(productId: string | null): Promise<ApiBaseState<Pick<IProduct, 'id' | 'name' | 'variant'>>>{
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_PRODUCT_VARIANTS, productId);
+        return this.get(url);
     }
 }

@@ -11,7 +11,7 @@ import {
   Box,
 } from '@mui/material';
 
-export interface Option {
+interface Option {
   label: string;
   value: string | number;
 }

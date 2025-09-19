@@ -12,7 +12,7 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = ({
   ...rest
 }) => {
   return (
-    <Tooltip title={info} {...rest}>
+    <Tooltip title={info} arrow {...rest}>
       {children}
     </Tooltip>
   );

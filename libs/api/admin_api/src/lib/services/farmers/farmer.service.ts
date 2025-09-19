@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { GetFarmer } from "../../models";
 import { adminApiUrlConstants } from "../../constants";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class FarmersService extends BaseService {
     private static _instance: FarmersService;
@@ -14,23 +15,23 @@ export class FarmersService extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllFarmers(queryParams?: QueryParams): Promise<ApiBaseState<GetFarmer[]>> {
-        const url = adminApiUrlConstants.GET_ALL_FARMERS(queryParams);
+    getAllFarmers(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<GetFarmer[]>> {
+        const url = buildApiUrl(adminApiUrlConstants.GET_ALL_FARMERS, null, queryParams, search);
         return this.get(url);
     }
 
     getFarmerById(id: string): Promise<ApiBaseState<GetFarmer>> {
-        const url = `${adminApiUrlConstants.GET_A_FARMER}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.GET_A_FARMER, id);
         return this.get(url);
     }
 
     updateFarmer(id: string, data: FormData): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.UPDATE_FARMER}/${id}`;
-        return this.patchFormData(url, data);
+        const url = buildApiUrl(adminApiUrlConstants.UPDATE_FARMER, id);
+        return this.putFormData(url, data);
     }
 
     deleteFarmerById(id: string): Promise<ResultModel> {
-        const url = `${adminApiUrlConstants.DELETE_FARMER}/${id}`;
+        const url = buildApiUrl(adminApiUrlConstants.DELETE_FARMER, id);
         return this.delete(url);
     }
 }

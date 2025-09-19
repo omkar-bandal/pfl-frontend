@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { purchaseApiUrl } from '../../constants';
 import { IDeliveryChallanTypeCustomer } from '../../models';
+import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class DCTypeCustomerServices extends BaseService {
   private static _instance: DCTypeCustomerServices;
@@ -14,8 +15,8 @@ export class DCTypeCustomerServices extends BaseService {
     return this.postFormData(url, data);
   }
 
-  getAllDCTypeCustomer(queryParams?: QueryParams): Promise<ApiBaseState<IDeliveryChallanTypeCustomer[]>> {
-    const url = purchaseApiUrl.GET_ALL_DC_TYPE_CUSTOMER(queryParams);
+  getAllDCTypeCustomer(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<IDeliveryChallanTypeCustomer[]>> {
+    const url = buildApiUrl(purchaseApiUrl.GET_ALL_DC_TYPE_CUSTOMER, null, queryParams, search);
     return this.get(url);
   }
 
@@ -38,4 +39,9 @@ export class DCTypeCustomerServices extends BaseService {
     const url = `${purchaseApiUrl.DELETE_DC_TYPE_CUSTOMER}/${id}`;
     return this.delete(url);
   }
+
+  deleteMultipleDCTypeCustomers(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_DC_TYPE_CUSTOMER;
+        return this.deleteMultiple(url, data);
+    }
 }

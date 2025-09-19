@@ -45,9 +45,11 @@ import {
   PackagingMaterialView,
   LevelForm,
   ApprovalFlowTable,
+  ProductVariantTable,
 } from '@prime-fresh/admin/components';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { FarmerRegistrationForm, VendorRegistrationForm } from '@prime-fresh/shared/components';
+
 const CustomerForm = lazy(() =>
   import('@prime-fresh/shared/components').then((mod) => ({ default: mod.CustomerRegistrationForm }))
 );
@@ -181,16 +183,16 @@ export const AdminRoutes = [
       },
     ],
   },
-  {
-    path: adminRoutes.LEVEL,
-    element: <Outlet />,
-    children: [
-      {
-        path: adminRoutes.CREATE_LEVEL,
-        element: <LevelForm />,
-      },
-    ],
-  },
+  // {
+  //   path: adminRoutes.LEVEL,
+  //   element: <Outlet />,
+  //   children: [
+  //     {
+  //       path: adminRoutes.CREATE_LEVEL,
+  //       element: <LevelForm />,
+  //     },
+  //   ],
+  // },
   {
     path: ADMIN_ROUTES.PRODUCTS,
     element: <Outlet />,
@@ -206,6 +208,10 @@ export const AdminRoutes = [
       {
         path: `${ADMIN_ROUTES.UPDATE_PRODUCT}/:id`,
         element: <ProductUpdateForm />,
+      },
+      {
+        path: `${ADMIN_ROUTES.GET_ALL_PRODUCT_VARIANTS}/:id`,
+        element: <ProductVariantTable />,
       },
       {
         path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS,

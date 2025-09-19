@@ -39,4 +39,9 @@ export class DealSlipServices extends BaseService {
         const url = purchaseApiUrl.DELETE_DEAL_SLIP(id);
         return this.delete(url);
     }
+
+    deleteMultipleDealSlips(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_DEAL_SLIP;
+        return this.deleteMultiple(url, data);
+    }
 }

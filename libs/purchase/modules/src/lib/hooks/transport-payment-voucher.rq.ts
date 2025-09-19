@@ -26,11 +26,19 @@ export function useDeleteTransportPaymentVoucherById(id: string):
     });
 }
 
-export function useGetAllTransportPaymentVouchers(queryParams?: QueryParams):
+export function useDeleteMultipleTransportPaymentVoucher():
+    UseMutationResult<ResultModel, ErrorModel, Array<string>, unknown> {
+    return useMutation<ResultModel, ErrorModel, Array<string>, unknown>({
+        mutationKey: ['delete-multiple-transport-payment-vouchers'],
+        mutationFn: (data: Array<string>) => TransportPaymentVoucherServices.getInstance().deleteMultipleTransportPaymentVouchers(data),
+    });
+}
+
+export function useGetAllTransportPaymentVouchers(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<ITranportPaymentVoucher[]>, ErrorModel> {
     return useQuery<ApiBaseState<ITranportPaymentVoucher[]>, ErrorModel>({
-        queryKey: ['get-all-transport-payment-vouchers', queryParams],
-        queryFn: () => TransportPaymentVoucherServices.getInstance().getAllTransportPaymentVouchers(queryParams),
+        queryKey: ['get-all-transport-payment-vouchers', queryParams, search],
+        queryFn: () => TransportPaymentVoucherServices.getInstance().getAllTransportPaymentVouchers(queryParams, search),
     });
 }
 

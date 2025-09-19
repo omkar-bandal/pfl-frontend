@@ -1,33 +1,65 @@
-import React from 'react';
-import { Box, Grid2 } from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { Box, DialogContentText, Grid2, useMediaQuery, useTheme } from '@mui/material';
 import { IMultiCashVoucher } from '@prime-fresh/purchase_api';
-import { PURCHASE_ROUTES, useGetAllMultiCashVouchers } from '@prime-fresh/purchase/modules';
-import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
+import {
+  PURCHASE_ROUTES,
+  useDeleteMultipleMultiCashVouchers,
+  useGetAllMultiCashVouchers,
+} from '@prime-fresh/purchase/modules';
+import {
+  ActionMenu,
+  BtnSmall,
+  ColumnVisibilityPanel,
+  DataGridTable,
+  DialogContainer,
+  PageTitle,
+  SearchBox,
+  toast,
+  useDataTable,
+} from '@prime-fresh/ui_shared';
 import { useNavigate } from 'react-router-dom';
 import { useMCVoucherColumns } from './mc-voucher.columns';
-import { usePermission } from '@prime-fresh/modules';
-import { Add, Settings } from '@mui/icons-material';
+import { useActions, usePermission } from '@prime-fresh/modules';
+import { Add, Delete, DoneAll, Edit, KeyboardArrowDown, Settings } from '@mui/icons-material';
+import { useDebounce } from '@prime-fresh/shared/modules';
+import { useGridApiRef } from '@mui/x-data-grid';
+import { ButtonConfigType } from '@prime-fresh/common_api';
 
 export const MultipleCashVoucherTable = () => {
+  const apiRef = useGridApiRef();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  const { openDialog } = useActions();
   const { canEdit, canView } = usePermission('multi-cash-voucher');
   const mcVoucherColumns = useMCVoucherColumns(canEdit, canView);
   const {
+    actionMenu,
+    openActionMenu,
+    handleOpenActionMenu,
+    handleCloseActionMenu,
+    enableCheckboxSelection,
+    handleEnableCheckboxSelection,
+    queryParams,
     paginationModel,
+    handlePaginationChange,
     sortModel,
     handleSortingChange,
-    handlePaginationChange,
-    queryParams,
+    search,
+    setSearch,
     columnVisibilityModel,
-    displayColumnVisibilityPanel,
     handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
+    displayColumnVisibilityPanel,
     handleOpenColumnVisibilityPanel,
+    handleCloseColumnVisibilityPanel,
   } = useDataTable({ columnDef: mcVoucherColumns, initialPageSize: 10 });
 
-  const { data, isLoading, isError, error } = useGetAllMultiCashVouchers(queryParams);
+  const debouncedSearch = useDebounce(search, 1000);
+
+  const { data, isLoading, isError, error } = useGetAllMultiCashVouchers(queryParams, debouncedSearch);
   const allMCVouchers = data ? data : null;
-  console.log('All MC vouchers:', allMCVouchers)
+  console.log('All MC vouchers:', allMCVouchers);
+
   const rowCountRef = React.useRef(allMCVouchers?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (allMCVouchers?.allRecords !== undefined) {
@@ -41,29 +73,137 @@ export const MultipleCashVoucherTable = () => {
       toast.error(error?.message || 'Error occured please refresh the page.');
     }
   }, [isError, error]);
-  
+
   const handleCreate = () => navigate(PURCHASE_ROUTES.CREATE_MULT_CASH_VOUCHER);
+
+  const handleEdit = useCallback(() => {
+    console.log('selected rows', apiRef.current.getSelectedRows());
+    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
+    if (selectedRows.length === 0) {
+      toast.info('Please select a voucher to edit.');
+    } else if (selectedRows.length > 1) {
+      toast.info('Please select only one voucher to edit.');
+    } else {
+      const selectedId = selectedRows[0];
+      navigate(`${PURCHASE_ROUTES.UPDATE_MULT_CASH_VOUCHER}/${selectedId}`);
+    }
+  }, [navigate, apiRef]);
+
+  const { mutateAsync, error: deleteError, data: deleteRes } = useDeleteMultipleMultiCashVouchers();
+
+  const onDelete = () => {
+    openDialog();
+  };
+  const handleDelete = useCallback(() => {
+    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
+    if (selectedRows.length === 0) {
+      toast.info('Please select a voucher to edit.');
+    } else if (selectedRows.length > 0) {
+      mutateAsync(selectedRows as Array<string>)
+        .then(() => {
+          toast.success(deleteRes ? deleteRes.message : 'Voucher deleted');
+          setTimeout(() => {
+            navigate(PURCHASE_ROUTES.GET_ALL_RFPA);
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error(deleteError ? deleteError.message : 'Error while deleting voucher');
+        });
+    } else {
+      toast.info('Please select voucher to delete.');
+    }
+  }, [apiRef, mutateAsync, navigate, toast]);
+
+  const buttonConfig: ButtonConfigType[] = useMemo(
+    () => [
+      {
+        icon: <DoneAll />,
+        label: 'Select',
+        color: 'secondary',
+        onClick: handleEnableCheckboxSelection,
+        toolTipText: 'Enable or disable row selection',
+      },
+      {
+        icon: <Edit />,
+        label: 'Edit',
+        color: 'info',
+        onClick: () => handleEdit(),
+        toolTipText: 'Edit selected voucher (select only one)',
+      },
+      {
+        icon: <Delete />,
+        label: 'Delete',
+        color: 'error',
+        onClick: () => onDelete(),
+        toolTipText: 'Delete selected vouchers (select multiple)',
+      },
+      {
+        icon: <Add />,
+        label: 'Add New',
+        color: 'success',
+        onClick: () => handleCreate(),
+        toolTipText: 'Create new voucher',
+      },
+      {
+        icon: <Settings />,
+        label: 'Column',
+        color: 'primary',
+        onClick: handleOpenColumnVisibilityPanel,
+        disabled: false,
+      },
+    ],
+    []
+  );
 
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={2}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
+      <Grid2 container spacing={2} marginY={2} paddingX={1}>
+        <Grid2 size={{ xs: 12, md: 6 }}>
           <PageTitle pagetitle="Multiple Cash Voucher" />
         </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
-          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
-          <ColumnVisibilityPanel
-            popoverId="mc-vouchers-col-def"
-            columns={mcVoucherColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
-          />
+        {isMobile && (
+          <Grid2 size={{ xs: 4 }}>
+            <BtnSmall label="Actions" color="info" icon={<KeyboardArrowDown />} onClick={handleOpenActionMenu} />
+            <ActionMenu
+              menuConfig={buttonConfig}
+              anchorEl={actionMenu}
+              open={openActionMenu}
+              onClose={handleCloseActionMenu}
+            />
+          </Grid2>
+        )}
+        <Grid2 size={{ xs: 12, md: 6 }}>
+          <SearchBox name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
         </Grid2>
+        {!isMobile && (
+          <Grid2
+            size={{ xs: 12, md: 12 }}
+            sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start', alignItems: 'center' }}
+          >
+            {buttonConfig.map((button, index) => (
+              <BtnSmall
+                key={index}
+                label={button.label}
+                icon={button.icon}
+                color={button.color as any}
+                onClick={button.onClick}
+                toolTipText={button.toolTipText}
+                sx={{ marginRight: 2 }}
+              />
+            ))}
+          </Grid2>
+        )}
       </Grid2>
+      <ColumnVisibilityPanel
+        popoverId="mc-vouchers-col-def"
+        columns={mcVoucherColumns}
+        columnVisibilityModel={columnVisibilityModel}
+        displayColumnVisibilityModel={displayColumnVisibilityPanel}
+        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
+        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+      />
       <DataGridTable<IMultiCashVoucher>
+        apiRef={apiRef}
         loading={isLoading}
         rows={allMCVouchers?.data || []}
         columns={mcVoucherColumns}
@@ -75,6 +215,14 @@ export const MultipleCashVoucherTable = () => {
         sortModel={sortModel}
         onSortModelChange={handleSortingChange}
         columnVisibilityModel={columnVisibilityModel}
+        checkboxSelection={enableCheckboxSelection}
+      />
+      <DialogContainer
+        dialogTitle="Delete Multi Cash Payment Voucher"
+        dialogContent={<DialogContentText>Are you sure you want to delete ?</DialogContentText>}
+        dialogActionLabel="Delete"
+        dialogActionBtnColor="error"
+        dialogActionFn={handleDelete}
       />
     </Box>
   );

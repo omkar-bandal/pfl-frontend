@@ -1,32 +1,41 @@
 export const ADMIN_ARRAYS = {
-    departments: [
-            {value: 'admin', label: 'Admin'},
-            {value: 'management', label: 'Management'},
-            {value: 'purchase', label: 'Purchase'},
-            {value: 'sale', label: 'Sale'},
-            {value: 'operations', label: 'Operation'},
-            {value: 'other', label: 'Other'},
-    ],
-    landHoldingStatus: [
-        { value: "Owned", label: "Owned" },
-        { value: "Leased", label: "Leased" },
-        { value: "Shared", label: "Shared" },
-        { value: "Encumbered", label: "Encumbered" },
-    ],
-    landStatus: [
-        { value: "Cultivable", label: "Cultivable" },
-        { value: "Fallow", label: "Fallow" },
-        { value: "Irrigated", label: "Irrigated" },
-        { value: "Non-Irrigated", label: "Non-Irrigated" },
-    ],
-    branchType: [
-        { value: "COLLECTION_CENTER", label: "Collection Center" },
-        { value: "DISTRIBUTION_CENTER", label: "Distribution Center" },
-        { value: "SEASONAL_COLLECTION_CENTER", label: "Seasonal Collection Center" },
-        { value: "WAREHOUSE", label: "Warehouse" },
-    ],
-    officeType: [
-        { value: "CORPORATE_OFFICE", label: "Corporate Office" },
-        { value: "REGISTERED_OFFICE", label: "Registered Office" },
-    ],
-}
+  departments: [
+    { id: 'purchase', label: 'Procurement' },
+    { id: 'sale', label: 'Sales' },
+    { id: 'operations', label: 'Operation' },
+    { id: 'quality_checking', label: 'Quality Checking' },
+    { id: 'business_development', label: 'Business Development' },
+    { id: 'Branding_&_Marketing', label: 'Branding & Marketing' },
+    { id: 'exports', label: 'Exports' },
+    { id: 'farming', label: 'Farming' },
+    { id: 'farming', label: 'Farming' },
+    { id: 'accounts', label: 'Accounts' },
+    { id: 'finance', label: 'Finance' },
+    { id: 'hr', label: 'HR' },
+    { id: 'it', label: 'IT' },
+    { id: 'admin', label: 'Administration' },
+    { id: 'other', label: 'Other' },
+  ],
+  landHoldingStatus: [
+    { value: 'Owned', label: 'Owned' },
+    { value: 'Leased', label: 'Leased' },
+    { value: 'Shared', label: 'Shared' },
+    { value: 'Encumbered', label: 'Encumbered' },
+  ],
+  landStatus: [
+    { value: 'Cultivable', label: 'Cultivable' },
+    { value: 'Fallow', label: 'Fallow' },
+    { value: 'Irrigated', label: 'Irrigated' },
+    { value: 'Non-Irrigated', label: 'Non-Irrigated' },
+  ],
+  branchType: [
+    { value: 'COLLECTION_CENTER', label: 'Collection Center' },
+    { value: 'DISTRIBUTION_CENTER', label: 'Distribution Center' },
+    { value: 'SEASONAL_COLLECTION_CENTER', label: 'Seasonal Collection Center' },
+    { value: 'WAREHOUSE', label: 'Warehouse' },
+  ],
+  officeType: [
+    { value: 'CORPORATE_OFFICE', label: 'Corporate Office' },
+    { value: 'REGISTERED_OFFICE', label: 'Registered Office' },
+  ],
+};

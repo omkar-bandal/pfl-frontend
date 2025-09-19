@@ -55,6 +55,9 @@ export const ADMIN_ROUTES = {
     GET_A_PRODUCT: "/admin/products/products/view",
     UPDATE_PRODUCT: "/admin/products/product/update",
 
+    //Product Variants
+    GET_ALL_PRODUCT_VARIANTS: "/admin/products/variants/getall",
+
     GET_ALL_PRODUCT_CLASS: "/admin/products/products-classification/getall",
     GET_A_PRODUCT_CLASS: "/admin/products/products-classification/view",
     CREATE_PRODUCT_CLASS: "/admin/products/products-classification/create",

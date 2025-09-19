@@ -26,11 +26,11 @@ export function useDeleteUOMById(id: string):
     });
 }
 
-export function useGetAllUOMs(queryParams?: QueryParams):
+export function useGetAllUOMs(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetUOM[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetUOM[]>, ErrorModel>({
-        queryKey: ['get-all-uoms', queryParams],
-        queryFn: () => UOMService.getInstance().getAllUOMs(queryParams),
+        queryKey: ['get-all-uoms', queryParams, search],
+        queryFn: () => UOMService.getInstance().getAllUOMs(queryParams, search),
     });
 }
 

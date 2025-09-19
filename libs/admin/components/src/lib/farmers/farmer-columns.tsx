@@ -1,15 +1,12 @@
 import { useMemo } from 'react';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { Download, Edit, Preview } from '@mui/icons-material';
+import { Download } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { ADMIN_ROUTES } from '@prime-fresh/admin/modules';
 import { Address } from '@prime-fresh/admin_api';
 import { CustomGridColDef } from '@prime-fresh/ui_shared';
 import { convertInTitleCase, downloadDoc, formatAddress } from '@prime-fresh/shared/modules';
 
 export const useFarmerColumns = (): CustomGridColDef[] => {
-  const navigate = useNavigate();
   return useMemo(
     () => [
       {
@@ -180,34 +177,34 @@ export const useFarmerColumns = (): CustomGridColDef[] => {
           </IconButton>
         ),
       },
-      {
-        field: 'edit',
-        headerName: 'Edit',
-        headerAlign: 'center',
-        width: 70,
-        sortable: false,
-        filterable: false,
-        renderCell: (params: GridRenderCellParams) => (
-          <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_FARMER}/${params.row.id}`)}>
-            <Edit color="secondary" />
-          </IconButton>
-        ),
-      },
-      {
-        field: 'view',
-        headerName: 'View',
-        headerAlign: 'center',
-        width: 70,
-        sortable: false,
-        filterable: false,
-        isMobileVisible: true,
-        renderCell: (params: GridRenderCellParams) => (
-          <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_FARMER}/${params.row.id}`)}>
-            <Preview color="primary" />
-          </IconButton>
-        ),
-      },
+      // {
+      //   field: 'edit',
+      //   headerName: 'Edit',
+      //   headerAlign: 'center',
+      //   width: 70,
+      //   sortable: false,
+      //   filterable: false,
+      //   renderCell: (params: GridRenderCellParams) => (
+      //     <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.EDIT_FARMER}/${params.row.id}`)}>
+      //       <Edit color="secondary" />
+      //     </IconButton>
+      //   ),
+      // },
+      // {
+      //   field: 'view',
+      //   headerName: 'View',
+      //   headerAlign: 'center',
+      //   width: 70,
+      //   sortable: false,
+      //   filterable: false,
+      //   isMobileVisible: true,
+      //   renderCell: (params: GridRenderCellParams) => (
+      //     <IconButton aria-label="edit" onClick={() => navigate(`${ADMIN_ROUTES.VIEW_FARMER}/${params.row.id}`)}>
+      //       <Preview color="primary" />
+      //     </IconButton>
+      //   ),
+      // },
     ],
-    [navigate]
+    []
   );
 };

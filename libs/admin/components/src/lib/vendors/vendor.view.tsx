@@ -103,7 +103,7 @@ export const ViewVendor = () => {
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Email </span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
-                        <span className={`${styles.textSM} ${styles.mr}`}>{vendor?.email}</span>
+                        <span className={`${styles.textSM} ${styles.mr}`}>{vendor?.officeEmail}</span>
                       </div>
                       <div className={`${styles.gridItem} ${styles.span_2}`}>
                         <span className={`${styles.textSM} ${styles.textBold} ${styles.mr}`}> Website </span>

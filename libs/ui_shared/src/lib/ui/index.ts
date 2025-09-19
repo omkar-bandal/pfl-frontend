@@ -7,3 +7,7 @@ export * from './select';
 export * from './date-input';
 export * from './form-scroll-container';
 export * from './search-box';
+export * from './icon-button-group';
+export * from './scrollable-autocomplete';
+export * from './page-title';
+export * from './section-header';

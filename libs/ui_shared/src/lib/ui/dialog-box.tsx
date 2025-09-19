@@ -4,12 +4,14 @@ import { dialogBoxState, useActions, useAppSelector } from '@prime-fresh/modules
 import React from 'react';
 import { BtnSmall } from '../buttons';
 import { Close } from '@mui/icons-material';
+
 type DialogBoxProp = Omit<DialogProps, 'open' | 'onClose'> & {
   title: string;
   children: React.ReactNode;
   handleSubmit: any;
   handleReset: any;
 };
+
 export const DialogBox: React.FC<DialogBoxProp> = (props) => {
   const { title, children, handleSubmit, handleReset, ...rest } = props;
   const isDialogBoxOpen = useAppSelector(dialogBoxState);

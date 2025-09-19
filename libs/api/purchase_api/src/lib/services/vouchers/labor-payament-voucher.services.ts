@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../../constants";
 import { ILaborPaymentVoucher } from "../../models";
+import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class LaborPaymentVoucherServices extends BaseService {
     private static _instance: LaborPaymentVoucherServices;
@@ -14,8 +15,8 @@ export class LaborPaymentVoucherServices extends BaseService {
         return this.postFormData(url, data);
     }
 
-    getAllLaborPaymentVouchers(queryParams?: QueryParams): Promise<ApiBaseState<ILaborPaymentVoucher[]>> {
-        const url = purchaseApiUrl.GET_ALL_LP_VOUCHER(queryParams);
+    getAllLaborPaymentVouchers(queryParams?: QueryParams, search?: string | null): Promise<ApiBaseState<ILaborPaymentVoucher[]>> {
+        const url = buildApiUrl(purchaseApiUrl.GET_ALL_LP_VOUCHER, null, queryParams, search);
         return this.get(url);
     }
 
@@ -42,5 +43,10 @@ export class LaborPaymentVoucherServices extends BaseService {
     deleteLaborPaymentVoucherById(id: string): Promise<ResultModel> {
         const url = purchaseApiUrl.DELETE_LP_VOUCHER(id);
         return this.delete(url);
+    }
+
+    deleteMultipleLaborPaymentVouchers(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_LP_VOUCHER;
+        return this.deleteMultiple(url, data);
     }
 }

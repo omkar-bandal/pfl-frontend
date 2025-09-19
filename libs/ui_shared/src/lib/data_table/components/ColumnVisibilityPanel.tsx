@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { memo } from 'react';
 import { List, ListItemIcon, ListItemText, Checkbox, Popover, ListItemButton } from '@mui/material';
 import { CustomGridColDef } from '../models/columntype.interface';
 
@@ -12,7 +12,7 @@ export interface ColumnVisibilityPanelProps {
     onColumnVisibilityModelChange: (field: string) => void;
 }
 
-export const ColumnVisibilityPanel: React.FC<ColumnVisibilityPanelProps> = ({
+export const ColumnVisibilityPanel: React.FC<ColumnVisibilityPanelProps> = memo(({
     popoverId,
     columns,
     columnVisibilityModel,
@@ -54,4 +54,4 @@ export const ColumnVisibilityPanel: React.FC<ColumnVisibilityPanelProps> = ({
             </List>
         </Popover>
     );
-};
+});

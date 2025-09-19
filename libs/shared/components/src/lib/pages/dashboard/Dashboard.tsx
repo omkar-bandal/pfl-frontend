@@ -172,11 +172,10 @@ export const Dashboard = () => {
         </Grid2>
       </Grid2>
       <Divider sx={{ marginY: 1 }} />
-      <PurchaseByProduct />
-      {/* <Divider sx={{ marginY: 1 }} />
-      <PurchaseByVendor />
-      <Divider sx={{ marginY: 1 }} />
-      <PurchaseByFarmer /> */}
+      {selectedCard=== 'Total Purchase' && <PurchaseByProduct />}
+      {selectedCard=== 'Purchase By Farmer' && <PurchaseByFarmer />}
+      {selectedCard=== 'Purchase By Vendor' && <PurchaseByVendor />}
+    
     </Box>
   );
 };

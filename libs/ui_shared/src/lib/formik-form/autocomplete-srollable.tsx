@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Autocomplete, CircularProgress, TextField, Grid2 } from '@mui/material';
-import { nextPage, prevPage, queryParamsState, setSearchText, useAppDispatch, useAppSelector } from '@prime-fresh/modules';
 import { useField } from 'formik';
 import { Label } from './label';
-import { debounce } from '@prime-fresh/shared/modules';
-import { FixedSizeList, ListChildComponentProps, } from 'react-window';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
 export type Option = {
   label: string;
@@ -21,13 +19,19 @@ export interface SrollableAutocompleteProps<T> {
   isLoading?: boolean;
   isFetching?: boolean;
   noOptionsText?: string;
+  page: number;
   totalPages: number;
   getOptionLabel: (option: T) => string;
   onOptionSelected?: (option: T) => void;
   optionValueKey?: keyof T;
+  rowHeight?: number;
+  visibleRows?: number;
+  handleInputChange: any;
+  handleNextPage: any;
+  handlePrevPage: any;
 }
 
-export function SrollableAutocomplete<T extends { [key: string]: any }>(props: SrollableAutocompleteProps<T>) {
+export function ScrollableAutocomplete<T extends { [key: string]: any }>(props: SrollableAutocompleteProps<T>) {
   const {
     isRequired = false,
     isReadOnly = false,
@@ -37,50 +41,118 @@ export function SrollableAutocomplete<T extends { [key: string]: any }>(props: S
     noOptionsText = 'No options available',
     isFetching,
     isLoading,
+    page = 1,
     totalPages = 1,
     getOptionLabel,
     onOptionSelected,
     optionValueKey = 'id',
+    rowHeight = 30,
+    visibleRows = 5,
+    handleInputChange,
+    handleNextPage,
+    handlePrevPage,
   } = props;
 
   const [field, meta, helpers] = useField<string | null>(name);
   const { setValue } = helpers;
-  const dispatch = useAppDispatch();
-  const { page } = useAppSelector(queryParamsState);
-  // Determine the selected option from the options list using the stored id.
-  const selectedOption = options.find(opt => opt[optionValueKey] === field.value) || null;
 
-  const handleInputChange = (_: React.SyntheticEvent, newInputValue: string) => {
-    debounce(() => {
-      dispatch(setSearchText(newInputValue));
-    }, 2000)
-  }
+  console.log('Options:', options);
+  const selectedOption = options.find((opt) => opt[optionValueKey] === field.value) || null;
+  console.log('Selected Option:', selectedOption);
 
-  const handleChange = (_: React.SyntheticEvent, value: T | null) => {
-    if (value && optionValueKey) {
-      // Store only the id (not the full object)
-      setValue(value[optionValueKey]);
-      if (onOptionSelected) {
-        onOptionSelected(value);
+ // Memoize computed values
+  const { virtualHeight, windowHeight } = useMemo(() => {
+    const vHeight = options.length * rowHeight;
+    const wHeight = rowHeight * visibleRows;
+    return {
+      virtualHeight: vHeight,
+      windowHeight: wHeight,
+    };
+  }, [options, rowHeight, visibleRows]);
+
+  // Memoize the scroll handler to prevent unnecessary re-renders
+  const handleScroll = useCallback(
+    ({ scrollOffset, scrollDirection }: { scrollOffset: number; scrollDirection: string }) => {
+      // Only handle pagination, not search-related API calls
+      if (
+        scrollDirection === 'forward' &&
+        scrollOffset + windowHeight >= virtualHeight - 1 &&
+        !isFetching &&
+        page < totalPages
+      ) {
+        handleNextPage();
       }
-    } else {
-      setValue(null);
-    }
-  };
-  const handleScroll = (event: React.UIEvent<HTMLElement>) => {
-    const listboxNode = event.currentTarget;
-    const nearBottom =
-      listboxNode.scrollTop + listboxNode.clientHeight >=
-      listboxNode.scrollHeight - 1;
+      if (scrollDirection === 'backward' && scrollOffset <= 1 && !isFetching && page > 1) {
+        handlePrevPage();
+      }
+    },
+    [windowHeight, virtualHeight, isFetching, page, totalPages, handleNextPage, handlePrevPage]
+  );
 
-    if (
-      nearBottom &&
-      !isFetching &&
-      page < totalPages
-    ) {
-      dispatch(nextPage());
-    }
-  };
+  // Memoize the row renderer
+  const renderRow = useCallback(
+    (props: ListChildComponentProps) => {
+      const { index, style, data } = props;
+      return React.cloneElement(data[index] as React.ReactElement, {
+        style: { ...style, top: (style.top as number) + 0 },
+      });
+    },
+    []
+  );
+
+  // Handle option selection (this should NOT trigger search API calls)
+  const handleChange = useCallback(
+    (_: React.SyntheticEvent, value: T | null) => {
+      if (value && optionValueKey) {
+        setValue(value[optionValueKey]);
+        if (onOptionSelected) {
+          onOptionSelected(value);
+        }
+      } else {
+        setValue(null);
+      }
+    },
+    [setValue, optionValueKey, onOptionSelected]
+  );
+
+  // Separate input change handler to avoid API calls on selection
+  const handleInputChangeWrapper = useCallback(
+    (event: React.SyntheticEvent, value: string, reason: string) => {
+      // Only trigger API calls for actual typing, not for selection
+      if (reason === 'input') {
+        handleInputChange(event, value, reason);
+      }
+      // Don't call handleInputChange for 'reset' or 'clear' reasons
+    },
+    [handleInputChange]
+  );
+
+  // Memoize ListboxComponent
+  const ListboxComponent = useMemo(
+    () =>
+      React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
+        function ListboxComponent({ children, ...other }, ref) {
+          const items = React.Children.toArray(children);
+          return (
+            <div ref={ref} role="listbox" {...other}>
+              <FixedSizeList
+                height={windowHeight}
+                itemCount={items.length}
+                itemSize={rowHeight}
+                width="100%"
+                itemData={items}
+                outerElementType="ul"
+                onScroll={handleScroll}
+              >
+                {renderRow}
+              </FixedSizeList>
+            </div>
+          );
+        }
+      ),
+    [windowHeight, rowHeight, handleScroll, renderRow]
+  );
+
   return (
     <Grid2 container direction="column">
       <Grid2 size="auto">
@@ -89,11 +161,12 @@ export function SrollableAutocomplete<T extends { [key: string]: any }>(props: S
           isReadOnly={isReadOnly}
           isError={meta.touched && Boolean(meta.error)}
           name={name}
-          label={label} />
+          label={label}
+        />
       </Grid2>
       <Grid2 size="auto">
         <Autocomplete
-          size='small'
+          size="small"
           value={selectedOption}
           onChange={handleChange}
           onInputChange={handleInputChange}
@@ -101,13 +174,14 @@ export function SrollableAutocomplete<T extends { [key: string]: any }>(props: S
           getOptionLabel={getOptionLabel}
           isOptionEqualToValue={(option, value) => option[optionValueKey] === value[optionValueKey]}
           noOptionsText={noOptionsText}
+          filterOptions={(x) => x}
           loading={isFetching || isLoading}
           disabled={isReadOnly}
           renderInput={(params) => (
             <TextField
               {...params}
-              error={(meta.touched && Boolean(meta.error))}
-              helperText={(meta.touched && meta.error)}
+              error={meta.touched && Boolean(meta.error)}
+              helperText={meta.touched && meta.error}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -119,198 +193,27 @@ export function SrollableAutocomplete<T extends { [key: string]: any }>(props: S
               }}
             />
           )}
-          ListboxProps={{
-            onScroll: handleScroll,
-          }}
-        />
-      </Grid2>
-    </Grid2>
-  );
-};
-
-export interface NonFormikAutocompleteProps<
-  T extends Record<string, any>,
-  K extends keyof T = keyof T
-> {
-  name: string;
-  label: string;
-  value: T[K] | null;
-  onChange: (id: T[K] | null) => void;
-  options: T[];
-  getOptionLabel: (option: T) => string;
-  optionValueKey: K;
-  isRequired?: boolean;
-  isReadOnly?: boolean;
-  isLoading?: boolean;
-  isFetching?: boolean;
-  totalPages?: number;
-  noOptionsText?: string;
-  error?: boolean;
-  helperText?: string;
-  rowHeight?: number;
-  visibleRows?: number;
-}
-
-export function NonFormikAutocomplete<
-  T extends Record<string, any>,
-  K extends keyof T = keyof T
->(props: NonFormikAutocompleteProps<T, K>) {
-  const {
-    name,
-    label,
-    value,
-    onChange,
-    options,
-    getOptionLabel,
-    optionValueKey,
-    isRequired = false,
-    isReadOnly = false,
-    isLoading = false,
-    isFetching = false,
-    totalPages = 1,
-    noOptionsText = 'No options available',
-    error = false,
-    helperText = '',
-    rowHeight = 30,
-    visibleRows = 5,
-  } = props;
-  const dispatch = useAppDispatch();
-  const { page } = useAppSelector(queryParamsState);
-
-  // find the object matching the current ID
-  const selectedObject = options.find(item => item[optionValueKey] === value) || null;
-  const debouncedInputChange = React.useCallback(
-    debounce((value: string) => {
-      dispatch(setSearchText(value));
-    }, 1000),
-    []
-  );
-  const handleInputChange = (_: any, newInput: string) => {
-    debouncedInputChange(newInput)
-  };
-
-  // const handleScroll = (e: React.UIEvent<HTMLElement>) => {
-  //   const node = e.currentTarget;
-  //   if (
-  //     node.scrollTop + node.clientHeight >= node.scrollHeight - 1 &&
-  //     !isFetching &&
-  //     page < totalPages
-  //   ) {
-  //     dispatch(nextPage());
-  //   }
-  //   if (
-  //     node.scrollTop <= 1 &&
-  //     !isFetching &&
-  //     page > 1
-  //   ) {
-  //     dispatch(prevPage()); // You need to define a prevPage() action if not already
-  //   }
-  // };
-  // total virtual height in px
-  const virtualHeight = options.length * rowHeight;
-  // visible window height in px
-  const windowHeight = rowHeight * visibleRows;
-
-  // Renders each <li> passed in via children
-  const renderRow = (props: ListChildComponentProps) => {
-    const { index, style, data } = props;
-    // Clone the original <li> with our computed style
-    return React.cloneElement(data[index] as React.ReactElement, {
-      style: { ...style, top: (style.top as number) + 0 },
-    });
-  };
-
-  // Single-scroll ListboxComponent
-  const ListboxComponent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
-    function ListboxComponent({ children, ...other }, ref) {
-      // MUI passes an array of <li> elements as children
-      const items = React.Children.toArray(children);
-      return (
-        <div ref={ref} role="listbox" {...other}>
-          <FixedSizeList
-            height={windowHeight}
-            itemCount={items.length}
-            itemSize={rowHeight}
-            width="100%"
-            itemData={items}
-            outerElementType="ul"
-            onScroll={({ scrollOffset, scrollDirection }) => {
-              // when scrolled to bottom of virtual list
-              if (
-                scrollDirection === 'forward' &&
-                scrollOffset + windowHeight >= virtualHeight - 1 &&
-                !isFetching &&
-                page < totalPages
-              ) {
-                dispatch(nextPage());
-              }
-              if (scrollDirection === 'backward' && scrollOffset <= 1 && !isFetching) {
-                dispatch(prevPage());
-              }
-            }}
-          >
-            {renderRow}
-          </FixedSizeList>
-        </div>
-      );
-    }
-  );
-
-  return (
-    <Grid2 container size={12} columnSpacing={1}>
-      <Grid2 size={12}>
-        <Label
-          name={name}
-          label={label}
-          isRequired={isRequired}
-          isReadOnly={isReadOnly}
-          isError={error}
-        />
-      </Grid2>
-      <Grid2 size={12}>
-        <Autocomplete
-          fullWidth
-          size="small"
-          value={selectedObject}
-          onChange={(_, obj) => {
-            if (obj) onChange(obj[optionValueKey]);
-            else onChange(null);
-          }}
-          onInputChange={handleInputChange}
-          options={options}
-          getOptionLabel={getOptionLabel}
-          isOptionEqualToValue={(opt, val) =>
-            val != null && opt[optionValueKey] === (val as any)[optionValueKey]
-          }
-          noOptionsText={noOptionsText}
-          loading={isFetching || isLoading}
-          disabled={isReadOnly}
           ListboxComponent={ListboxComponent}
-          // ListboxProps={{
-          //   onScroll: handleScroll,
-          //   style: {
-          //     height: 150,
-          //     overflowY: 'scroll',
-          //   },
-          // }}
-          renderInput={params => (
-            <TextField
-              {...params}
-              error={error}
-              helperText={helperText}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {(isFetching || isLoading) && <CircularProgress size={20} color="inherit" />}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-              }}
-            />
-          )}
         />
       </Grid2>
     </Grid2>
   );
 }
+
+// const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+//   const node = e.currentTarget;
+//   if (
+//     node.scrollTop + node.clientHeight >= node.scrollHeight - 1 &&
+//     !isFetching &&
+//     page < totalPages
+//   ) {
+//     dispatch(nextPage());
+//   }
+//   if (
+//     node.scrollTop <= 1 &&
+//     !isFetching &&
+//     page > 1
+//   ) {
+//     dispatch(prevPage()); // You need to define a prevPage() action if not already
+//   }
+// };

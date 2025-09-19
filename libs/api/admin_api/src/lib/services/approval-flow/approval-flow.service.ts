@@ -1,6 +1,7 @@
 import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
 import { IApprovalFlow, IDocumentType, IEmployeeReplacementReq } from '../../models';
 import { adminApiUrlConstants } from '../../constants';
+import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class ApprovalFlowService extends BaseService {
   private static _instance: ApprovalFlowService;
@@ -20,17 +21,17 @@ export class ApprovalFlowService extends BaseService {
   }
 
   getApprovalFlowById(id: string): Promise<ApiBaseState<IApprovalFlow>> {
-    const url = adminApiUrlConstants.GET_APPROVAL_FLOW_BY_ID(id);
+    const url = buildApiUrl(adminApiUrlConstants.GET_APPROVAL_FLOW_BY_ID, id);
     return this.get(url);
   }
 
   updateApprovalFlow(id: string, data: IApprovalFlow): Promise<ResultModel> {
-    const url = adminApiUrlConstants.UPDATE_APPROVAL_FLOW(id);
+    const url = buildApiUrl(adminApiUrlConstants.UPDATE_APPROVAL_FLOW, id);
     return this.patch(url, data);
   }
 
   deleteApprovalFlow(id: string): Promise<ResultModel> {
-    const url = adminApiUrlConstants.DELETE_APPROVAL_FLOW(id);
+    const url = buildApiUrl(adminApiUrlConstants.DELETE_APPROVAL_FLOW, id);
     return this.delete(url);
   }
 

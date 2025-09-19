@@ -6,3 +6,4 @@ export * from './axios-client.model';
 export * from './query-params.type';
 export * from './approval-summany';
 export * from './dashboard-management.model';
+export * from './button-config.model';

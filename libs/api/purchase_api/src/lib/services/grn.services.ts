@@ -41,6 +41,11 @@ export class GRNServices extends BaseService {
         return this.delete(url);
     }
 
+    deleteMultipleGRNs(data: Array<string>): Promise<ResultModel> {
+        const url = purchaseApiUrl.DELETE_MULTIPLE_GRN;
+        return this.deleteMultiple(url, data);
+    }
+
     approveGRN(id: string, data: ApprovalRequest): Promise<ResultModel> {
         const url = purchaseApiUrl.APPROVE_GRN(id);
         return this.patch(url, data);

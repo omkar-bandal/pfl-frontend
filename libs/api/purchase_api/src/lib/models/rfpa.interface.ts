@@ -13,10 +13,11 @@ export type RFPASourceType = 'vendor' | 'farmer';
 // }
 export interface IRFPAProducts {
     productName: string | null,
-    origin: string | null,
-    variety: string | null,
-    count: string | null,
-    size: string | null,
+    variant: string | null,
+    // origin: string | null,
+    // variety: string | null,
+    // count: string | null,
+    // size: string | null,
     uom: string | null,
     quantity: number | null,
     unitPrice: number | null,

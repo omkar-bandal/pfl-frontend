@@ -46,7 +46,7 @@ export const FormMobileStepper: React.FC<MobileStepperProps> = ({
       activeStep={activeStep}
       nextButton={
         <StyledButton
-          variant="text"
+          variant={isLastStep ? "contained" : "text"}
           color={isLastStep ? "success" : "primary"}
           disabled={isLastStep && disableNextOnLast}
           endIcon={<KeyboardArrowRight />}
