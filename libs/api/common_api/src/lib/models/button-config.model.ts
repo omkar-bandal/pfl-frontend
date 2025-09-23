@@ -1,5 +1,5 @@
 export type ButtonConfigType = {
-  icon: React.ReactNode;     
+  icon: any;     
   label: string;   
   color?: string;           
   toolTipText?: string;       

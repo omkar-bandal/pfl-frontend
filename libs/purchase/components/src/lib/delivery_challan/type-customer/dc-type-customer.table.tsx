@@ -1,66 +1,114 @@
 import React, { useCallback, useMemo } from 'react';
-import { Box, DialogContentText, Grid2, useMediaQuery, useTheme } from '@mui/material';
+import { Box, DialogContentText } from '@mui/material';
+import { IDeliveryChallanTypeCustomer } from '@prime-fresh/purchase_api';
+import { useNavigate } from 'react-router-dom';
+import { dcTypeCustomerColumns } from './dc-type-customer.column';
+import { usePermission } from '@prime-fresh/modules';
+import { Add, Delete, DoneAll, Edit, Settings, Visibility } from '@mui/icons-material';
+import { toolTipText, useDebounce } from '@prime-fresh/shared/modules';
+import { useGridApiRef } from '@mui/x-data-grid';
 import {
+  dataTableIds,
   PURCHASE_ROUTES,
   useDeleteMultipleDCTypeCustomers,
   useGetAllDCTypeCustomers,
 } from '@prime-fresh/purchase/modules';
-import { IDeliveryChallanTypeCustomer } from '@prime-fresh/purchase_api';
 import {
-  ActionMenu,
-  BtnSmall,
   ColumnVisibilityPanel,
   DataGridTable,
   DialogContainer,
-  PageTitle,
-  SearchBox,
+  TableButtonConfig,
+  TableHeader,
+  TableNavActionsConfig,
   toast,
-  useDataTable,
+  useDataTableFunctions,
+  useErrorHandler,
+  useTableActions,
+  useTableUI,
 } from '@prime-fresh/ui_shared';
-import { useNavigate } from 'react-router-dom';
-import { useDCTypeCustomerColumns } from './dc-type-customer.column';
-import { useActions, useAppDispatch, usePermission } from '@prime-fresh/modules';
-import { Add, Delete, DoneAll, Edit, KeyboardArrowDown, Settings } from '@mui/icons-material';
-import { useDebounce } from '@prime-fresh/shared/modules';
-import { useGridApiRef } from '@mui/x-data-grid';
-import { ButtonConfigType } from '@prime-fresh/common_api';
 
 export const DCTypeCustomerTable = () => {
-  const apiRef = useGridApiRef();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { openDialog } = useActions();
-  const { canEdit, canView } = usePermission('delivery-challan');
-  const dcTypeCustomerColumns = useDCTypeCustomerColumns(canEdit, canView);
+  const apiRef = useGridApiRef();
+  const { isMobile } = useTableUI();
+  const { canEdit, canView, canDelete } = usePermission('delivery-challan');
 
-  const {
-    actionMenu,
-    openActionMenu,
-    handleOpenActionMenu,
-    handleCloseActionMenu,
-    enableCheckboxSelection,
-    handleEnableCheckboxSelection,
-    queryParams,
-    paginationModel,
-    handlePaginationChange,
-    sortModel,
-    handleSortingChange,
-    search,
-    setSearch,
-    columnVisibilityModel,
-    handleColumnVisibilityModelChange,
-    displayColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-    handleCloseColumnVisibilityPanel,
-  } = useDataTable({ columnDef: dcTypeCustomerColumns, initialPageSize: 10 });
+  const tableNavActionConfig: TableNavActionsConfig = {
+    tableId: dataTableIds.DC_TYPE_CUSTOMER_TABLE_ID,
+    createPath: PURCHASE_ROUTES.CREATE_DC_TYPE_CUSTOMER,
+    editPath: PURCHASE_ROUTES.UPDATE_DC_TYPE_CUSTOMER,
+    viewPath: PURCHASE_ROUTES.VIEW_DC_TYPE_CUSTOMER,
+  };
 
-  const debouncedSearch = useDebounce(search, 1000);
+  const { handleCreate, handleEditByDocumentId, handleViewByDocumentId, handleDelete } = useTableActions(
+    apiRef,
+    tableNavActionConfig
+  );
 
-  const { data, isLoading, isError, error } = useGetAllDCTypeCustomers(queryParams, debouncedSearch);
+  const tableConfig = useDataTableFunctions({
+    columnDef: dcTypeCustomerColumns,
+    initialPageSize: 10,
+    tableId: dataTableIds.GRN_TABLE_ID,
+  });
+
+  const buttonConfig: TableButtonConfig[] = useMemo(
+    () => [
+      {
+        icon: <DoneAll />,
+        label: 'Select',
+        color: 'secondary',
+        onClick: tableConfig.handleToggleCheckboxSelection,
+        toolTipText: toolTipText.SELECT_BTN,
+        visible: true,
+      },
+      {
+        icon: <Edit />,
+        label: 'Edit',
+        color: 'info',
+        onClick: handleEditByDocumentId,
+        toolTipText: toolTipText.EDIT_BTN,
+        visible: canEdit,
+      },
+      {
+        icon: <Visibility />,
+        label: 'View',
+        color: 'warning',
+        onClick: handleViewByDocumentId,
+        toolTipText: toolTipText.VIEW_BTN,
+        visible: canView,
+      },
+      {
+        icon: <Delete />,
+        label: 'Delete',
+        color: 'error',
+        onClick: handleDelete,
+        toolTipText: toolTipText.DELETE_BTN,
+        visible: canDelete,
+      },
+      {
+        icon: <Add />,
+        label: 'Add New',
+        color: 'success',
+        onClick: handleCreate,
+        toolTipText: toolTipText.ADD_NEW_BTN,
+        visible: true,
+      },
+      {
+        icon: <Settings />,
+        label: 'Column',
+        color: 'primary',
+        onClick: tableConfig.openColumnVisibilityPanel,
+        toolTipText: toolTipText.COLUMN_BTN,
+        visible: true,
+      },
+    ],
+    []
+  );
+
+  const debouncedSearch = useDebounce(tableConfig.search, 1000);
+
+  const { data, isLoading, isError, error } = useGetAllDCTypeCustomers(tableConfig.queryParams, debouncedSearch);
   const allDCTypeCustomers = data ? data : null;
-  console.log('DC for Customer: ', allDCTypeCustomers);
 
   const rowCountRef = React.useRef(allDCTypeCustomers?.allRecords || 0);
   const rowCount = React.useMemo(() => {
@@ -70,35 +118,14 @@ export const DCTypeCustomerTable = () => {
     return rowCountRef.current;
   }, [allDCTypeCustomers]);
 
-  React.useEffect(() => {
-    if (isError) {
-      toast.error(error?.message || 'Error occured please refresh the page.');
-    }
-  }, [isError, error]);
-
-  const handleCreate = () => navigate(PURCHASE_ROUTES.CREATE_DC_TYPE_CUSTOMER);
-  const handleEdit = useCallback(() => {
-    console.log('selected rows', apiRef.current.getSelectedRows());
-    const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
-    if (selectedRows.length === 0) {
-      toast.info('Please select a RFPA to edit.');
-    } else if (selectedRows.length > 1) {
-      toast.info('Please select only one RFPA to edit.');
-    } else {
-      const selectedId = selectedRows[0];
-      navigate(`${PURCHASE_ROUTES.UPDATE_RFPA}/${selectedId}`);
-    }
-  }, [navigate, apiRef]);
+  useErrorHandler(isError, error);
 
   const { mutateAsync, error: deleteError, data: deleteRes } = useDeleteMultipleDCTypeCustomers();
 
-  const onDelete = () => {
-    openDialog();
-  };
-  const handleDelete = useCallback(() => {
+  const handleSelectedDelete = useCallback(() => {
     const selectedRows = Array.from(apiRef.current.getSelectedRows().keys());
     if (selectedRows.length === 0) {
-      toast.info('Please select a delivery challan to edit.');
+      toast.info('Please select a delivery challan to delete.');
     } else if (selectedRows.length > 0) {
       mutateAsync(selectedRows as Array<string>)
         .then(() => {
@@ -115,93 +142,27 @@ export const DCTypeCustomerTable = () => {
     }
   }, [apiRef, mutateAsync, navigate, toast]);
 
-  const buttonConfig: ButtonConfigType[] = useMemo(
-    () => [
-      {
-        icon: <DoneAll />,
-        label: 'Select',
-        color: 'secondary',
-        onClick: handleEnableCheckboxSelection,
-        toolTipText: 'Enable or disable row selection',
-      },
-      {
-        icon: <Edit />,
-        label: 'Edit',
-        color: 'info',
-        onClick: () => handleEdit(),
-        toolTipText: 'Edit selected delivery challan (select only one)',
-      },
-      {
-        icon: <Delete />,
-        label: 'Delete',
-        color: 'error',
-        onClick: () => onDelete(),
-        toolTipText: 'Delete selected delivery challans (select multiple)',
-      },
-      {
-        icon: <Add />,
-        label: 'Add New',
-        color: 'success',
-        onClick: () => handleCreate(),
-        toolTipText: 'Create new delivery challan',
-      },
-      {
-        icon: <Settings />,
-        label: 'Column',
-        color: 'primary',
-        onClick: handleOpenColumnVisibilityPanel,
-        disabled: false,
-      },
-    ],
-    []
-  );
-
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container spacing={2} marginY={2} paddingX={1}>
-        <Grid2 size={{ xs: 8, md: 6 }}>
-          <PageTitle pagetitle="Delivery Challan" pageSubtitle="Delivery challan for the customers" />
-        </Grid2>
-        {isMobile && (
-          <Grid2 size={{ xs: 4 }}>
-            <BtnSmall label="Actions" color="info" icon={<KeyboardArrowDown />} onClick={handleOpenActionMenu} />
-            <ActionMenu
-              menuConfig={buttonConfig}
-              anchorEl={actionMenu}
-              open={openActionMenu}
-              onClose={handleCloseActionMenu}
-            />
-          </Grid2>
-        )}
-        <Grid2 size={{ xs: 12, md: 6 }}>
-          <SearchBox name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
-        </Grid2>
-        {!isMobile && (
-          <Grid2
-            size={{ xs: 12, md: 12 }}
-            sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start', alignItems: 'center' }}
-          >
-            {buttonConfig.map((button, index) => (
-              <BtnSmall
-                key={index}
-                label={button.label}
-                icon={button.icon}
-                color={button.color as any}
-                onClick={button.onClick}
-                toolTipText={button.toolTipText}
-                sx={{ marginRight: 2 }}
-              />
-            ))}
-          </Grid2>
-        )}
-      </Grid2>
+      <TableHeader
+        key={dataTableIds.DC_TYPE_CUSTOMER_TABLE_ID}
+        isMobile={isMobile}
+        pageTitle="Delivery Challan"
+        searchText={tableConfig.search}
+        setSearchText={tableConfig.setSearchValue}
+        buttonConfig={buttonConfig}
+        actionMenu={tableConfig.actionMenu}
+        openActionMenu={tableConfig.openActionMenu}
+        onOpenActionMenu={tableConfig.handleOpenActionMenu}
+        onCloseActionMenu={tableConfig.handleCloseActionMenu}
+      />
       <ColumnVisibilityPanel
         popoverId="dc-type-customer-col-def"
         columns={dcTypeCustomerColumns}
-        columnVisibilityModel={columnVisibilityModel}
-        displayColumnVisibilityModel={displayColumnVisibilityPanel}
-        closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-        onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+        closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+        onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
       />
       <DataGridTable<IDeliveryChallanTypeCustomer>
         apiRef={apiRef}
@@ -211,19 +172,20 @@ export const DCTypeCustomerTable = () => {
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationChange}
-        sortModel={sortModel}
-        onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
-        checkboxSelection={enableCheckboxSelection}
+        paginationModel={tableConfig.paginationModel}
+        onPaginationModelChange={tableConfig.handlePaginationChange}
+        sortModel={tableConfig.sortModel}
+        onSortModelChange={tableConfig.handleSortingChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        checkboxSelection={tableConfig.enableCheckboxSelection}
       />
       <DialogContainer
+        dialogKey={dataTableIds.DC_TYPE_CUSTOMER_TABLE_ID}
         dialogTitle="Delete Delivery Challan"
         dialogContent={<DialogContentText>Are you sure you want to delete ?</DialogContentText>}
         dialogActionLabel="Delete"
         dialogActionBtnColor="error"
-        dialogActionFn={handleDelete}
+        dialogActionFn={handleSelectedDelete}
       />
     </Box>
   );

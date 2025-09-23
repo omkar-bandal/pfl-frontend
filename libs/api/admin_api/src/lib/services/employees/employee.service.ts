@@ -1,7 +1,6 @@
-import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, BaseService, QueryParams, ResultModel, buildApiUrl } from '@prime-fresh/common_api';
 import { EmployeeStatus, IEmployee } from '../../models';
 import { adminApiUrlConstants } from '../../constants';
-import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class EmployeesService extends BaseService {
   private static _instance: EmployeesService;

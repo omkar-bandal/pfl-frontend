@@ -58,7 +58,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
                   <Remove />
                 </ListItemIcon>
                 <ListItemText
-                  primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>{child.name}</Typography>}
+                  primary={<Typography sx={{ fontSize: "14px", fontWeight: 550, color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>{child.name}</Typography>}
                 />
               </ListItemButton>
             </NavLink>
@@ -72,7 +72,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
                   <Remove />
                 </ListItemIcon>
                 <ListItemText
-                  primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>{child.name}</Typography>}
+                  primary={<Typography sx={{ fontSize: "14px", fontWeight: 550, color: selectedItem === child.name ? "#FFFFFF" : "#595959" }}>{child.name}</Typography>}
                 />
                 <ListItemIcon>
                   {openItems[`${parentName}-${child.name}`] ? (
@@ -113,7 +113,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
             >
               <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
               <ListItemText
-                primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>}
+                primary={<Typography sx={{ fontSize: "14px", fontWeight: 550, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>}
               />
             </ListItemButton>
           </NavLink>
@@ -121,7 +121,7 @@ const SidebarList: React.FC<SidebarListProps> = memo(({
           <React.Fragment key={item.name}>
             <ListItemButton dense={true} onClick={() => handleToggle(item.name || '')} sx={listItemStyles}>
               <ListItemIcon sx={{ fontSize: "small", color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.logo}</ListItemIcon>
-              <ListItemText primary={<Typography sx={{ fontSize: "14px", fontWeight: 600, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>} />
+              <ListItemText primary={<Typography sx={{ fontSize: "14px", fontWeight: 550, color: selectedItem === item.name ? "#FFFFFF" : "#595959" }}>{item.name}</Typography>} />
               <ListItemIcon>
                 {openItems[item.name || ''] ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
               </ListItemIcon>

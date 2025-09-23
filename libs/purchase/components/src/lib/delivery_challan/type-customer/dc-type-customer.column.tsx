@@ -1,14 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Chip } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
 import { convertInTitleCase, getDocStatusColor } from "@prime-fresh/shared/modules";
-import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
-import { useNavigate } from "react-router-dom";
+import { CustomGridColDef } from "@prime-fresh/ui_shared";
 
-export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
-  const navigate = useNavigate();
-  return [
+export const dcTypeCustomerColumns : CustomGridColDef[] = [
+  {
+      field: "overAllStatus",
+      headerName: "Status",
+      headerAlign: "center",
+      align: "center",
+      width: 130,
+      renderCell: (params: GridRenderCellParams) => {
+        const status = convertInTitleCase(params.row.overAllStatus || '');
+        return <Chip
+          label={status}
+          size="small"
+          sx={{
+            flex: 1,
+            minWidth: 80,
+            color: '#FFF',
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
+          }} />
+      },
+    },
     {
       field: "challanNo",
       headerName: "Challan Number",
@@ -189,62 +204,4 @@ export const useDCTypeCustomerColumns = (canEdit: boolean, canView: boolean): Cu
       hide: true,
       valueGetter: (value: string) => value ? convertInTitleCase(value || '') : '-',
     },
-    {
-      field: "overAllStatus",
-      headerName: "Status",
-      headerAlign: "center",
-      align: "center",
-      width: 130,
-      renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus || '');
-        return <Chip
-          label={status}
-          size="small"
-          sx={{
-            flex: 1,
-            minWidth: 80,
-            color: '#FFF',
-            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
-          }} />
-      },
-    },
-    ...(canEdit
-      ? [
-        {
-          field: 'edit',
-          headerName: 'Edit',
-          width: 70,
-          sortable: false,
-          filterable: false,
-          isMobileVisible: true,
-          renderCell: (params: GridRenderCellParams) => (
-            <EditIconBtn
-              onClick={() =>
-                navigate(`${PURCHASE_ROUTES.UPDATE_DC_TYPE_CUSTOMER}/${params.row.id}`)
-              }
-            />
-          ),
-        },
-      ]
-      : []),
-    ...(canView
-      ? [
-        {
-          field: 'view',
-          headerName: 'View',
-          width: 70,
-          sortable: false,
-          filterable: false,
-          isMobileVisible: true,
-          renderCell: (params: GridRenderCellParams) => (
-            <ViewIconBtn
-              onClick={() =>
-                navigate(`${PURCHASE_ROUTES.VIEW_DC_TYPE_CUSTOMER}/${params.row.documentId}`)
-              }
-            />
-          ),
-        },
-      ]
-      : []),
   ];
-}

@@ -1,4 +1,4 @@
-import { Address, GetFilteredBranchData } from "@prime-fresh/admin_api";
+import { Address } from "@prime-fresh/common_api";
 
 export interface ILaborBankDetails {
     // id: string;

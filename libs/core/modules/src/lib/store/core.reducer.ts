@@ -1,5 +1,4 @@
 import { authReducer, layoutReducer, previewReducer, dialogBoxReducer, notificationReducer, drawerContainerReducer, dialogContainerReducer, datagridTableReducer } from "./slices";
-import { queryParamsReducer } from "./slices/query-params.slice";
  
 export const coreReducer = {
     auth: authReducer,
@@ -9,6 +8,5 @@ export const coreReducer = {
     drawerContainer: drawerContainerReducer,
     dialogContainer: dialogContainerReducer,
     notifications: notificationReducer,
-    // queryParams: queryParamsReducer,
     datagridTable: datagridTableReducer
 }

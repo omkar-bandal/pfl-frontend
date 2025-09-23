@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ProductPartialData } from '@prime-fresh/common_api';
 import { numToWords } from '@prime-fresh/purchase/modules';
 import { IGRN } from '@prime-fresh/purchase_api';
-import { ProductPartialData } from '@prime-fresh/admin_api';
 import { FormikHelpers} from 'formik';
 
 export const getProductCount = (productId: string | null, products: ProductPartialData[] | null | undefined) => {

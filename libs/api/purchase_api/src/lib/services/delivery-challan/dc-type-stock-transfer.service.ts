@@ -1,7 +1,6 @@
-import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, BaseService, QueryParams, ResultModel, buildApiUrl } from '@prime-fresh/common_api';
 import { purchaseApiUrl } from '../../constants';
 import { IDeliveryChallanTypeStockTransfer } from '../../models';
-import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class DCTypeStockTransferServices extends BaseService {
   private static _instance: DCTypeStockTransferServices;

@@ -2,10 +2,7 @@ import { IRFPA, IRFPAProducts, IPaymentInfo } from "@prime-fresh/purchase_api";
 
 export const rfpaProductsInitialValue: IRFPAProducts = {
     productName: null,
-    count: null,
-    size: null,
-    origin: null,
-    variety: null,
+    variant: null,
     grade: null,
     quantity: null,
     uom: null,

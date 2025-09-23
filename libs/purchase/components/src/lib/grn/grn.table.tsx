@@ -8,6 +8,7 @@ import {
   PURCHASE_ROUTES,
   useDeleteMultipleGRNs,
   useGetAllGRNs,
+  dataTableIds,
 } from '@prime-fresh/purchase/modules';
 import {
   ColumnVisibilityPanel,
@@ -19,6 +20,7 @@ import {
   TableNavActionsConfig,
   toast,
   useDataTableFunctions,
+  useErrorHandler,
   useTableActions,
   useTableUI,
 } from '@prime-fresh/ui_shared';
@@ -26,11 +28,10 @@ import { useActions, usePermission } from '@prime-fresh/modules';
 import { Add, Delete, DoneAll, Edit, Filter, KeyboardArrowDown, Settings, Visibility } from '@mui/icons-material';
 import { FormikProvider, useFormik } from 'formik';
 import { GRNFilterPanel } from './grn.filter-panel';
-import { toolTipText, useDebounce } from '@prime-fresh/shared/modules';
+import { toastNotificationText, toolTipText, useDebounce } from '@prime-fresh/shared/modules';
 import { useGridApiRef } from '@mui/x-data-grid';
 
 export const GRNTable = () => {
-  const TABLE_ID = 'deal-slip-table';
   const navigate = useNavigate();
   const apiRef = useGridApiRef();
   const { openDialogBox } = useActions();
@@ -38,13 +39,20 @@ export const GRNTable = () => {
   const { canEdit, canView, canDelete } = usePermission('grn');
   const grnColumns = useGRNColumns();
   const tableNavActionConfig: TableNavActionsConfig = {
-    tableId: TABLE_ID,
+    tableId: dataTableIds.GRN_TABLE_ID,
     createPath: PURCHASE_ROUTES.CREATE_GRN,
     editPath: PURCHASE_ROUTES.UPDATE_GRN,
     viewPath: PURCHASE_ROUTES.VIEW_GRN,
   };
-  const { handleCreate, handleEdit, handleView, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
-  const tableConfig = useDataTableFunctions({ columnDef: grnColumns, initialPageSize: 10, tableId: TABLE_ID });
+  const { handleCreate, handleEditByDocumentId, handleViewByDocumentId, handleDelete } = useTableActions(
+    apiRef,
+    tableNavActionConfig
+  );
+  const tableConfig = useDataTableFunctions({
+    columnDef: grnColumns,
+    initialPageSize: 10,
+    tableId: dataTableIds.GRN_TABLE_ID,
+  });
 
   const buttonConfig: TableButtonConfig[] = useMemo(
     () => [
@@ -60,7 +68,7 @@ export const GRNTable = () => {
         icon: <Edit />,
         label: 'Edit',
         color: 'info',
-        onClick: handleEdit,
+        onClick: handleEditByDocumentId,
         toolTipText: toolTipText.EDIT_BTN,
         visible: canEdit,
       },
@@ -68,7 +76,7 @@ export const GRNTable = () => {
         icon: <Visibility />,
         label: 'View',
         color: 'warning',
-        onClick: handleView,
+        onClick: handleViewByDocumentId,
         toolTipText: toolTipText.VIEW_BTN,
         visible: canView,
       },
@@ -120,11 +128,7 @@ export const GRNTable = () => {
     return rowCountRef.current;
   }, [allGRN]);
 
-  React.useEffect(() => {
-    if (isError) {
-      toast.error(error?.message || 'Error occured please refresh the page.');
-    }
-  }, [isError, error]);
+  useErrorHandler(isError, error);
 
   const formik = useFormik({
     initialValues: grnInitValForFilter,
@@ -156,7 +160,7 @@ export const GRNTable = () => {
   return (
     <Box sx={{ flex: 1 }}>
       <TableHeader
-        key={TABLE_ID}
+        key={dataTableIds.GRN_TABLE_ID}
         isMobile={isMobile}
         pageTitle="Goods Received Note"
         searchText={tableConfig.search}
@@ -196,7 +200,7 @@ export const GRNTable = () => {
         checkboxSelection={tableConfig.enableCheckboxSelection}
       />
       <DialogContainer
-        dialogKey={TABLE_ID}
+        dialogKey={dataTableIds.GRN_TABLE_ID}
         dialogTitle="Delete GRN"
         dialogContent={<DialogContentText>Are you sure you want to delete ?</DialogContentText>}
         dialogActionLabel="Delete"

@@ -1,7 +1,6 @@
-import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel, buildApiUrl } from "@prime-fresh/common_api";
 import { adminApiUrlConstants } from "../../constants";
 import { GetProductCategory, PostProductCategory } from "../../models";
-import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class ProductCategoryService extends BaseService {
     private static _instance: ProductCategoryService;

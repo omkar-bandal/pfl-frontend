@@ -33,7 +33,7 @@ export const RFPATable = () => {
     editPath: PURCHASE_ROUTES.UPDATE_RFPA,
     viewPath: PURCHASE_ROUTES.VIEW_RFPA,
   };
-  const { handleCreate, handleEdit, handleView, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
+  const { handleCreate, handleEditByDocumentId, handleViewByDocumentId, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
   const tableConfig = useDataTableFunctions({ columnDef: rfpaColumns, initialPageSize: 10, tableId: TABLE_ID });
 
   const buttonConfig: TableButtonConfig[] = useMemo(
@@ -50,7 +50,7 @@ export const RFPATable = () => {
         icon: <Edit />,
         label: 'Edit',
         color: 'info',
-        onClick: handleEdit,
+        onClick: handleEditByDocumentId,
         toolTipText: toolTipText.EDIT_BTN,
         visible: canEdit,
       },
@@ -58,7 +58,7 @@ export const RFPATable = () => {
         icon: <Visibility />,
         label: 'View',
         color: 'warning',
-        onClick: handleView,
+        onClick: handleViewByDocumentId,
         toolTipText: toolTipText.VIEW_BTN,
         visible: canView,
       },

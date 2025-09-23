@@ -1,7 +1,6 @@
-import { ApiBaseState, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, BaseService, QueryParams, ResultModel, buildApiUrl } from "@prime-fresh/common_api";
 import { ILaborRegistration } from "../models";
 import { inventoryApiUrl } from "../constants";
-import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class LaborRegistrationServices extends BaseService {
     private static _instance: LaborRegistrationServices;

@@ -1,7 +1,6 @@
-import { ApiBaseState, ApprovalRequest, BaseService, QueryParams, ResultModel } from "@prime-fresh/common_api";
+import { ApiBaseState, ApprovalRequest, BaseService, QueryParams, ResultModel, buildApiUrl } from "@prime-fresh/common_api";
 import { purchaseApiUrl } from "../constants";
 import { IGRN } from "../models";
-import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class GRNServices extends BaseService {
     private static _instance: GRNServices;

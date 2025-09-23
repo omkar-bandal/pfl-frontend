@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GridRenderCellParams } from '@mui/x-data-grid';
 import { Chip } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { PURCHASE_ROUTES } from '@prime-fresh/purchase/modules';
-import { CustomGridColDef, EditIconBtn, ViewIconBtn } from '@prime-fresh/ui_shared';
+import { CustomGridColDef } from '@prime-fresh/ui_shared';
 import { convertInTitleCase, getDocStatusColor, reverseDateString } from '@prime-fresh/shared/modules';
 
 export const rfpaColumns: CustomGridColDef[] = [

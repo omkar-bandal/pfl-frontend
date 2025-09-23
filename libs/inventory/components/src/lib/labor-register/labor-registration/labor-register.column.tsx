@@ -1,4 +1,4 @@
-import { Address } from '@prime-fresh/admin_api';
+import { Address } from '@prime-fresh/common_api';
 import { formatAddress } from '@prime-fresh/shared/modules';
 import { CustomGridColDef } from '@prime-fresh/ui_shared';
 

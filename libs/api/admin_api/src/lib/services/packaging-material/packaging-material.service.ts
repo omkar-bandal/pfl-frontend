@@ -3,10 +3,10 @@ import {
   BaseService,
   QueryParams,
   ResultModel,
+  buildApiUrl
 } from '@prime-fresh/common_api';
 import { adminApiUrlConstants } from '../../constants';
 import { GetPackagingMaterial, PostPackagingMaterial } from '../../models';
-import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class PackagingMaterialService extends BaseService {
   private static _instance: PackagingMaterialService;

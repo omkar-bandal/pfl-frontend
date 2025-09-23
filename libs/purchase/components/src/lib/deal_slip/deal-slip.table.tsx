@@ -34,7 +34,7 @@ export const DealSlipTable = () => {
     editPath: PURCHASE_ROUTES.UPDATE_DEAL_SLIP,
     viewPath: PURCHASE_ROUTES.VIEW_DEAL_SLIP,
   };
-  const { handleCreate, handleEdit, handleView, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
+  const { handleCreate, handleEditByDocumentId, handleViewByDocumentId, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
   const tableConfig = useDataTableFunctions({ columnDef: dealSlipColumns, initialPageSize: 10, tableId: TABLE_ID });
 
   const buttonConfig: TableButtonConfig[] = useMemo(
@@ -51,7 +51,7 @@ export const DealSlipTable = () => {
         icon: <Edit />,
         label: 'Edit',
         color: 'info',
-        onClick: handleEdit,
+        onClick: handleEditByDocumentId,
         toolTipText: toolTipText.EDIT_BTN,
         visible: canEdit,
       },
@@ -59,7 +59,7 @@ export const DealSlipTable = () => {
         icon: <Visibility />,
         label: 'View',
         color: 'warning',
-        onClick: handleView,
+        onClick: handleViewByDocumentId,
         toolTipText: toolTipText.VIEW_BTN,
         visible: canView,
       },

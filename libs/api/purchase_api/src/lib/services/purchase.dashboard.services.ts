@@ -1,7 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiBaseState, BaseService } from "@prime-fresh/common_api";
 import { DashboardData, DateRangeWiseData, PurchaseQtyAmt } from "../models";
-import { buildUrl } from "@prime-fresh/shared/modules";
+
+export function buildUrl(
+    filter: Record<string, any> | null,
+    baseUrl: string
+  ): string {
+    if(filter){
+    const queryString = Object.entries(filter)
+      .filter(([_, value]) => value !== null && value !== undefined && value !== "")
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join("&");
+  
+    return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+    }else{
+        return "";
+    }
+  }
 
 export class PurchaseDashboardServices extends BaseService {
     private static _instance: PurchaseDashboardServices;

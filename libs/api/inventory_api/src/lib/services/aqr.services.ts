@@ -1,7 +1,6 @@
-import { ApiBaseState, BaseService, QueryParams, ResultModel } from '@prime-fresh/common_api';
+import { ApiBaseState, BaseService, QueryParams, ResultModel, buildApiUrl } from '@prime-fresh/common_api';
 import { IAQR } from '../models';
 import { inventoryApiUrl } from '../constants';
-import { buildApiUrl } from "@prime-fresh/shared/modules";
 
 export class AQRServices extends BaseService {
   private static _instance: AQRServices;

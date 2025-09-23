@@ -26,8 +26,8 @@ import {
   VariantPartialData,
   VendorPartialData,
 } from '../models';
+import { buildApiUrl } from '../utils/api-url-builder';
 import { BaseService } from './base.service';
-import { buildApiUrl } from '@prime-fresh/shared/modules';
 
 export class SharedService extends BaseService {
   public static _instance: SharedService;

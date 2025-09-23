@@ -2,10 +2,7 @@ import { IGRN, IGRNProducts } from '@prime-fresh/purchase_api';
 
 export const grnProductsInitialValue: IGRNProducts = {
   productName: null,
-  origin: null,
-  variety: null,
-  count: null,
-  size: null,
+  variant: null,
   uom: null,
   quantity: null,
   unitPrice: null,

@@ -1,4 +1,4 @@
-import { Address } from "@prime-fresh/admin_api";
+import { Address } from "@prime-fresh/common_api"
 
 export type SaleOrderProducts = {
     productName: string,

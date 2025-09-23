@@ -22,15 +22,13 @@
       "@prime-fresh/auth_api": ["libs/api/auth_api/src/index.ts"],
       "@prime-fresh/common_api": ["libs/api/common_api/src/index.ts"],
       "@prime-fresh/components": ["libs/core/components/src/index.ts"],
-      "@prime-fresh/inventory/components": [
-        "libs/inventory/components/src/index.ts"
-      ],
+      "@prime-fresh/inventory/components": ["libs/inventory/components/src/index.ts"],
       "@prime-fresh/inventory/modules": ["libs/inventory/modules/src/index.ts"],
       "@prime-fresh/inventory_api": ["libs/api/inventory_api/src/index.ts"],
       "@prime-fresh/modules": ["libs/core/modules/src/index.ts"],
-      "@prime-fresh/purchase/components": [
-        "libs/purchase/components/src/index.ts"
-      ],
+      "@prime-fresh/operations/components": ["libs/operations/components/src/index.ts"],
+      "@prime-fresh/operations/modules": ["libs/operations/modules/src/index.ts"],
+      "@prime-fresh/purchase/components": ["libs/purchase/components/src/index.ts"],
       "@prime-fresh/purchase/modules": ["libs/purchase/modules/src/index.ts"],
       "@prime-fresh/purchase_api": ["libs/api/purchase_api/src/index.ts"],
       "@prime-fresh/sales/components": ["libs/sales/components/src/index.ts"],

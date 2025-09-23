@@ -1,221 +1,177 @@
-import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Chip } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
-import { CustomGridColDef, EditIconBtn, ViewIconBtn } from "@prime-fresh/ui_shared";
-import { convertInTitleCase, getDocStatusColor } from "@prime-fresh/shared/modules";
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import { Chip } from '@mui/material';
+import { CustomGridColDef } from '@prime-fresh/ui_shared';
+import { convertInTitleCase, getDocStatusColor } from '@prime-fresh/shared/modules';
 
-
-export const useMCVoucherColumns = (canEdit: boolean, canView: boolean): CustomGridColDef[] => {
-  const navigate = useNavigate();
-
-  return [
-    {
-      field: "voucherNo",
-      headerName: "Voucher No",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      hide: true,
-      isMobileVisible: false,
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : "-",
-    },
-    {
-      field: 'createdBy',
-      headerName: 'Created By',
-      flex: 1,
-      minWidth: 120,
-      align: 'center',
-      headerAlign: 'center',
-      hide: false,
-      valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
-    },
-    {
-      field: "createdDate",
-      headerName: "Created Date",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      hide: false,
-    },
-    {
-      field: "createdTime",
-      headerName: "Created Time",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      hide: false,
-    },
-    {
-      field: "companyName",
-      headerName: "Company Name",
-      minWidth: 200,
-      flex: 1,
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? value : '',
-      hide: false,
-    },
-    {
-      field: "debitCreditTo",
-      headerName: "Debit From / Credit To",
-      minWidth: 200,
-      flex: 1,
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: false,
-    },
-    {
-      field: "payReceivedFrom",
-      headerName: "Received From / Pay To",
-      minWidth: 200,
-      flex: 1,
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: false,
-    },
-    {
-      field: "location",
-      headerName: "Location",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: false,
-    },
-    {
-      field: "totalAmt",
-      headerName: "Total Amount",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: number) => value ? `${Number(value)} Rs.` : 0,
-      hide: false,
-    },
-    {
-      field: "amtWords",
-      headerName: "Amount in Words",
-      minWidth: 200,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: true,
-    },
-    {
-      field: "paymentMode",
-      headerName: "Payment Mode",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: true,
-    },
-    {
-      field: "receiverName",
-      headerName: "Receiver Name",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: true,
-    },
-    {
-      field: "grnNo",
-      headerName: "Refered GRN",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? value.toUpperCase() : "-",
-      hide: true,
-    },
-    {
-      field: "challanNo",
-      headerName: "Refered Challan",
-      minWidth: 120,
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? value.toUpperCase() : "-",
-      hide: true,
-    },
-    {
-      field: "remark",
-      headerName: "Remark",
-      minWidth: 200,
-      flex: 1,
-      headerAlign: "center",
-      valueGetter: (value: string) => value ? convertInTitleCase(value) : '-',
-      hide: true,
-    },
-    {
-      field: 'overAllStatus',
-      headerName: 'Status',
-      flex: 1,
-      minWidth: 130,
-      align: 'center',
-      headerAlign: 'center',
-      hide: false,
-      isMobileVisible: true,
-      renderCell: (params: GridRenderCellParams) => {
-        const status = convertInTitleCase(params.row.overAllStatus || '');
-        return <Chip
+export const mcVoucherColumns: CustomGridColDef[] = [
+  {
+    field: 'overAllStatus',
+    headerName: 'Status',
+    flex: 1,
+    minWidth: 130,
+    align: 'center',
+    headerAlign: 'center',
+    hide: false,
+    isMobileVisible: true,
+    renderCell: (params: GridRenderCellParams) => {
+      const status = convertInTitleCase(params.row.overAllStatus || '');
+      return (
+        <Chip
           label={status}
           size="small"
           sx={{
             flex: 1,
             minWidth: 80,
             color: '#FFF',
-            backgroundColor: getDocStatusColor(params.row.overAllStatus || '')
-          }} />
-      },
+            backgroundColor: getDocStatusColor(params.row.overAllStatus || ''),
+          }}
+        />
+      );
     },
-    ...(canEdit
-      ? [
-        {
-          field: 'edit',
-          headerName: 'Edit',
-          minWidth: 70,
-          flex: 1,
-          sortable: false,
-          filterable: false,
-          isMobileVisible: true,
-          renderCell: (params: GridRenderCellParams) => (
-            <EditIconBtn
-              onClick={() =>
-                navigate(`${PURCHASE_ROUTES.UPDATE_MULT_CASH_VOUCHER}/${params.row.id}`)
-              }
-            />
-          ),
-        },
-      ]
-      : []),
-    ...(canView
-      ? [
-        {
-          field: 'view',
-          headerName: 'View',
-          minWidth: 70,
-          flex: 1,
-          sortable: false,
-          filterable: false,
-          isMobileVisible: true,
-          renderCell: (params: GridRenderCellParams) => (
-            <ViewIconBtn
-              onClick={() =>
-                navigate(`${PURCHASE_ROUTES.VIEW_MULT_CASH_VOUCHER}/${params.row.documentId}`)
-              }
-            />
-          ),
-        },
-      ]
-      : []),
-  ];
-}
+  },
+  {
+    field: 'voucherNo',
+    headerName: 'Voucher No',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    hide: true,
+    isMobileVisible: false,
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+  },
+  {
+    field: 'createdBy',
+    headerName: 'Created By',
+    flex: 1,
+    minWidth: 120,
+    align: 'center',
+    headerAlign: 'center',
+    hide: false,
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : ''),
+  },
+  {
+    field: 'createdDate',
+    headerName: 'Created Date',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    hide: false,
+  },
+  {
+    field: 'createdTime',
+    headerName: 'Created Time',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    hide: false,
+  },
+  {
+    field: 'companyName',
+    headerName: 'Company Name',
+    minWidth: 200,
+    flex: 1,
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? value : ''),
+    hide: false,
+  },
+  {
+    field: 'debitCreditTo',
+    headerName: 'Debit From / Credit To',
+    minWidth: 200,
+    flex: 1,
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: false,
+  },
+  {
+    field: 'payReceivedFrom',
+    headerName: 'Received From / Pay To',
+    minWidth: 200,
+    flex: 1,
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: false,
+  },
+  {
+    field: 'location',
+    headerName: 'Location',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: false,
+  },
+  {
+    field: 'totalAmt',
+    headerName: 'Total Amount',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: number) => (value ? `${Number(value)} Rs.` : 0),
+    hide: false,
+  },
+  {
+    field: 'amtWords',
+    headerName: 'Amount in Words',
+    minWidth: 200,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: true,
+  },
+  {
+    field: 'paymentMode',
+    headerName: 'Payment Mode',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: true,
+  },
+  {
+    field: 'receiverName',
+    headerName: 'Receiver Name',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: true,
+  },
+  {
+    field: 'grnNo',
+    headerName: 'Refered GRN',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? value.toUpperCase() : '-'),
+    hide: true,
+  },
+  {
+    field: 'challanNo',
+    headerName: 'Refered Challan',
+    minWidth: 120,
+    flex: 1,
+    align: 'center',
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? value.toUpperCase() : '-'),
+    hide: true,
+  },
+  {
+    field: 'remark',
+    headerName: 'Remark',
+    minWidth: 200,
+    flex: 1,
+    headerAlign: 'center',
+    valueGetter: (value: string) => (value ? convertInTitleCase(value) : '-'),
+    hide: true,
+  },
+];
