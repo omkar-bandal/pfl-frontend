@@ -1,6 +1,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { ApprovalFlowService, IApprovalFlow, IDocumentType, IEmployeeReplacementReq } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { ApprovalFlowService, IApprovalFlow, IDocumentType, IEmployeeReplacementReq } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateApprovalFlow(): UseMutationResult<ResultModel, ErrorModel, IApprovalFlow, unknown> {

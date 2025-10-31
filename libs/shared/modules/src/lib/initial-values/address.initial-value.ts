@@ -1,4 +1,4 @@
-import { Address } from "@prime-fresh/common_api";
+import { Address } from "../models";
 
 export const initValAddress: Address = {
     address1: null,

@@ -1,0 +1,24 @@
+.templateTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  border: 1px solid #000;
+}
+
+.templateTableHeader {
+  padding: 5px 5px;
+  border: 1px solid #000;
+  text-align: center;
+  background-color: #f2f2f2;
+}
+
+.templateTableCell{
+  padding: 5px 5px;
+  border: 1px solid #000;
+}
+
+.templateTableFooter {
+  padding: 5px 5px;
+  border: 1px solid #000;
+  background-color: #f2f2f2;
+}

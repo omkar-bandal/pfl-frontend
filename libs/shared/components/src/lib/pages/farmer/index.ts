@@ -1,1 +1,3 @@
-export * from './farmer-registration.form';
+export * from './FarmerForm';
+export * from './FarmerTable';
+export * from './FarmerView';

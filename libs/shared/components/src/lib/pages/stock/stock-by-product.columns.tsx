@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CustomGridColDef } from '@prime-fresh/ui_shared';
+import { CustomGridColDef } from '../../components';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 
 export const useStockProductWiseColumns = (): CustomGridColDef[] => {

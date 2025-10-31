@@ -5,7 +5,7 @@
 // function buildApiUrl<T extends Record<string, any>>(baseUrl: string, queryParams: T): string;
 // function buildApiUrl(baseUrl: string, searchQuery: string): string;
 
-import { QueryParams } from "@prime-fresh/common_api";
+import { QueryParams } from "@prime-fresh/services";
 
 // // Function implementation
 // function buildApiUrl<T extends Record<string, any>>(
@@ -53,7 +53,7 @@ import { QueryParams } from "@prime-fresh/common_api";
 export const buildApiUrl = (
   baseUrl: string,
   id?: string | null,
-  queryParams?: QueryParams,
+  queryParams?:Partial<QueryParams>,
   search?: string | null,
   searchParamName = "search"
 ): string => {

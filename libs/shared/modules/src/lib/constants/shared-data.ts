@@ -2,6 +2,24 @@ export const sharedData = {
     customerFormTabs: ["Empanelment", "Key Mobile No", "References", "Billing Details", "Delivery Details", "Statutory Details", "Bank Details", "Product Specification", "Payment Terms", "Office Use Only"],
     vendorFormTabs: ["Primary Details", "Other Details", "Sales Contact Details", "Bank Details", "References"],
     farmerFormTabs: ["Farmer Details", "Farm Details", "Crop Details", "Images"],
+
+    vendorClassifications: [
+        {value: "fresh fruits", label: "Fresh Fruits" },
+        {value: "mangoes", label: "Mangoes"},
+        {value: "vegetables", label: "Vegetables"},
+        {value: "onion", label: "Onion" },
+        {value: "potato", label: "Potato"},
+        {value: "tomato", label: "Tomato"},
+        {value: "value added product", label: "Value Added Product (Processed & Frozen)"},
+        {value: "service", label: "Service"},
+        {value: "stationary", label: "Stationary"},
+        {value: "packing material", label: "Packing Material"},
+        {value: "crockery", label: "Crockery"},
+        {value: "marketing product", label: "Maketing"},
+        {value: "staff wellfare", label: "Staff Wellfare"},
+        {value: "other", label: "Other"},
+    ],
+    
     accTypes: [
         { value: "savings", label: "Savings" },
         { value: "current", label: "Current" },
@@ -37,6 +55,8 @@ export const sharedData = {
     gender: [
         { value: 'male', label: 'Male' },
         { value: 'female', label: 'Female' },
+        { value: 'other', label: 'Other' },
+        { value: 'prefer not to disclose', label: 'Prefer not to disclose' },
     ],
     landHoldingStatus: [
         { value: "owned", label: "Owned" },
@@ -84,5 +104,16 @@ export const sharedData = {
     creditWorthinessDue: [
         { value: "6 Months", label: "6 Months" },
         { value: "12 Months", label: "12 Months" },
+    ],
+    sources: [
+        { value: 'vendor', label: 'Vendor' },
+        { value: 'farmer', label: 'Farmer' },
+    ],
+    dashboardPeriodFilters: [
+        { value: 'tillDate', label: 'Till Date' },
+        { value: 'year', label: 'Current Year' },
+        { value: 'month', label: 'Current Month' },
+        { value: 'dateRange', label: 'By Date Range' },
+        { value: 'specificDate', label: 'By Date' },
     ]
 }

@@ -1,5 +1,5 @@
-import { DocumentAccessConfigService } from '@prime-fresh/admin_api';
-import { ApiBaseState, GetDocumentDetails, ErrorModel } from '@prime-fresh/common_api';
+import { DocumentAccessConfigService } from '@prime-fresh/services';
+import { ApiBaseState, GetDocumentDetails, ErrorModel } from '@prime-fresh/services';
 import {
     useQuery,
     UseQueryResult,

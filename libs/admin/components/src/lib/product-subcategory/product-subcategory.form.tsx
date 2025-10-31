@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Formik } from "formik";
-import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
+import { handleFormKeyDown, mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/shared/components";
 import {
-    ADMIN_ROUTES,
+    adminRoutes,
     initValProductSubcat,
     productSubcategorySchema,
     useCreateProductSubategory,
@@ -12,7 +13,6 @@ import {
     useGetProductSubcategoryById,
     useUpdateProductSubcategoryById
 } from "@prime-fresh/admin/modules";
-import { handleFormKeyDown, mapToValueLabelArray } from "@prime-fresh/shared/modules";
 
 export function ProductSubcatForm() {
     const { id } = useParams<{ id: string }>();
@@ -36,7 +36,7 @@ export function ProductSubcatForm() {
             (postProductSubcategory(values).then(() => {
                 toast.success(postRes ? postRes.message : "Product subcategory created successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
+                    navigate(adminRoutes.VIEW_ALL_PRODUCT_SUBCAT);
                 }, 2400);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating product subcategory.");
@@ -44,7 +44,7 @@ export function ProductSubcatForm() {
             : (patchProductSubcategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Product subcategory updated successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT);
+                    navigate(adminRoutes.VIEW_ALL_PRODUCT_SUBCAT);
                 }, 2400);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating product subcategory.");

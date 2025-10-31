@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FormikProvider, useFormik } from 'formik';
 import { Box, Grid2, InputAdornment, LinearProgress } from '@mui/material';
+import { IDocumentType, IEmployee, queryClient } from '@prime-fresh/services';
+import { convertInTitleCase, handleFormKeyDown } from '@prime-fresh/shared/modules';
 import {
   AutoCompleteInput,
   FormButtonGroup,
@@ -10,7 +13,7 @@ import {
   SectionHeader,
   TextInput,
   toast,
-} from '@prime-fresh/ui_shared';
+} from '@prime-fresh/shared/components';
 import {
   adminRoutes,
   approvalFlowInitialValue,
@@ -20,10 +23,6 @@ import {
   useGetApprovalFlowById,
   useUpdateApprovalFlow,
 } from '@prime-fresh/admin/modules';
-import { IDocumentType, IEmployee } from '@prime-fresh/admin_api';
-import { convertInTitleCase, handleFormKeyDown } from '@prime-fresh/shared/modules';
-import { useNavigate, useParams } from 'react-router-dom';
-import { queryClient } from '@prime-fresh/modules';
 
 export const ApprovalFlowForm = () => {
   const navigate = useNavigate();
@@ -361,14 +360,14 @@ export const ApprovalFlowForm = () => {
             {documentType === 'Procurement' &&
               (<>
               <Grid2 size={{ xs: 12 }} marginY={2}>
-                <SectionHeader sectionHeader="Finalizer Section" />
+                <SectionHeader sectionHeader="Authorizer Section" />
               </Grid2>
               <Grid2 size={{ xs: 12, md: 6 }}>
                 <MultiSelectAutocomplete
                   isLoading={empFetching || empLoading}
                   limitTags={3}
                   isRequired={false}
-                  label="First Finalizer"
+                  label="First Authorizer"
                   name="finalizers.firstFinalizers"
                   options={emps?.data || []}
                   getOptionLabel={getEmployeeOptions}
@@ -380,7 +379,7 @@ export const ApprovalFlowForm = () => {
                   isLoading={empFetching || empLoading}
                   limitTags={3}
                   isRequired={false}
-                  label="Second Finalizer"
+                  label="Second Authorizer"
                   name="finalizers.secondFinalizers"
                   options={emps?.data || []}
                   getOptionLabel={getEmployeeOptions}

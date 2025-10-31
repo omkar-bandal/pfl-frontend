@@ -15,3 +15,4 @@ export * from './handle-form-keydown';
 export * from './get-doc-status-color';
 export * from './get-light-color';
 export * from './api-url-builder';
+export * from './format-num-with-suffix';

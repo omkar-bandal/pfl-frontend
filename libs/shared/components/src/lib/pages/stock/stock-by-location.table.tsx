@@ -6,10 +6,10 @@ import {
   DataGridTable,
   PageTitle,
   toast,
-  useDataTable,
-} from '@prime-fresh/ui_shared';
+  useDataTableFunctions,
+} from '../../components';
 import { useGetStockLocationWise } from '@prime-fresh/shared/modules';
-import { GetStockLocationWise } from '@prime-fresh/common_api';
+import { GetStockLocationWise } from '@prime-fresh/services';
 import { useParams } from 'react-router-dom';
 import { useStockLocationWiseColumns } from './stock-by-location.columns';
 
@@ -19,31 +19,20 @@ export const StockLocationWiseTable = () => {
     companyName: string;
   }>();
   const loc = location ? location : '';
-  console.log("Location: ", loc);
+  console.log('Location: ', loc);
   const comp = companyName ? companyName : '';
-  console.log("Company: ", comp);
+  console.log('Company: ', comp);
   const stockColumns = useStockLocationWiseColumns();
-  const {
-    // paginationModel,
-    // sortModel,
-    // handleSortingChange,
-    // handlePaginationChange,
-    // queryParams,
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-  } = useDataTable({ columnDef: stockColumns, initialPageSize: 10 });
-
-  const { data, isLoading, isError, error } = useGetStockLocationWise(
-    loc,
-    comp
-  );
+  const tableConfig = useDataTableFunctions({
+    columnDef: stockColumns,
+    initialPageSize: 10,
+    tableId: 'stock-by-location-table-id',
+  });
+  const { data, isLoading, isError, error } = useGetStockLocationWise(loc, comp);
   const stockData = data?.data
     ? data.data.map((item, index) => ({
         ...item,
-        id: `uniqueId-${index}`, 
+        id: `uniqueId-${index}`,
       }))
     : null;
   //   const rowCountRef = React.useRef(stockData?.allRecords || 0);
@@ -75,14 +64,14 @@ export const StockLocationWiseTable = () => {
             alignItems: 'center',
           }}
         >
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnSettingButton handleClick={tableConfig.openColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="stock-col-def"
             columns={stockColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+            columnVisibilityModel={tableConfig.columnVisibilityModel}
+            displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+            closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+            onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
           />
         </Grid2>
       </Grid2>
@@ -97,7 +86,7 @@ export const StockLocationWiseTable = () => {
         // onPaginationModelChange={handlePaginationChange}
         // sortModel={sortModel}
         // onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
       />
     </Box>
   );

@@ -1,4 +1,4 @@
-import { DocumentStatus } from "@prime-fresh/common_api";
+import { DocumentStatus } from "@prime-fresh/services";
 
 export const getDocStatusColor = (status: DocumentStatus | string) => {
   const receivedStatus = status !== null ? status.toLowerCase() : status;

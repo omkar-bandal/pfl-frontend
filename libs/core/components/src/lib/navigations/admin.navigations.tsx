@@ -1,26 +1,69 @@
-import { Approval, Category, Inventory, LocalMall, GridViewOutlined, Groups2, LocationOn, Scale } from '@mui/icons-material';
-import { Navigations } from '@prime-fresh/modules';
-import { stringConstants } from '@prime-fresh/modules';
-import { ADMIN_ROUTES, adminRoutes, STRINGS } from '@prime-fresh/admin/modules';
+import { NavigationConfig } from './navigation.type';
+import { sharedRoutes } from '@prime-fresh/shared/modules';
+import { adminRoutes, adminStaticData } from '@prime-fresh/admin/modules';
+import {
+  Approval,
+  Category,
+  Inventory,
+  LocalMall,
+  GridViewOutlined,
+  Groups2,
+  LocationOn,
+  Scale,
+  Person,
+} from '@mui/icons-material';
 
-export const adminNavigations: Navigations[] = [
+export const adminNavigations: NavigationConfig[] = [
   {
     name: 'Dashboard',
     uniqueKey: 'dashboard',
     logo: <GridViewOutlined />,
-    path: ADMIN_ROUTES.DASHBOARD_ADMIN,
+    path: adminRoutes.DASHBOARD_ADMIN,
   },
   {
     name: 'Users',
-    uniqueKey: 'users',
+    uniqueKey: 'employees',
+    logo: <Person/>,
+    path: adminRoutes.VIEW_ALL_EMPLOYEES,
+  },
+  {
+    name: 'Users Reports',
+    uniqueKey: 'employees',
+    logo: <Person/>,
+    path: sharedRoutes.USER_REPORTS,
+  },
+  {
+    name: 'Approval Module',
+    uniqueKey: 'approval-module',
+    logo: <Approval />,
+    children: [
+      {
+        name: 'For Procurement',
+        uniqueKey: 'approval-module-for-purchase',
+        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${adminStaticData.documentType.PURCHASE}`,
+      },
+      {
+        name: 'For Sales',
+        uniqueKey: 'approval-module-for-purchase',
+        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${adminStaticData.documentType.SALES}`,
+      },
+      {
+        name: 'For Operations',
+        uniqueKey: 'approval-module-for-purchase',
+        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${adminStaticData.documentType.OPERATIONS}`,
+      },
+    ],
+  },
+  {
+    name: 'Registrations',
+    uniqueKey: 'registrations',
     logo: <Groups2 />,
     children: [
       {
-        name: 'Employee',
-        uniqueKey: 'employees',
-        path: adminRoutes.VIEW_ALL_EMPLOYEES,
+        name: 'Farmers',
+        uniqueKey: 'farmers',
+        path: sharedRoutes.VIEW_ALL_FARMER,
       },
-      { name: 'Farmers', uniqueKey: 'farmers', path: ADMIN_ROUTES.GET_ALL_FARMERS },
       {
         name: 'Vendors',
         uniqueKey: 'vendors',
@@ -28,19 +71,19 @@ export const adminNavigations: Navigations[] = [
           {
             name: 'Vendor',
             uniqueKey: 'vendors',
-            path: ADMIN_ROUTES.GET_ALL_VENDORS,
+            path: sharedRoutes.VIEW_ALL_VENDOR,
           },
           {
             name: 'Vendor Category',
             uniqueKey: 'vendor-category',
             logo: <Category />,
-            path: ADMIN_ROUTES.GET_ALL_VENDORS_CAT,
+            path: adminRoutes.VIEW_ALL_VENDORS_CAT,
           },
           {
             name: 'Vendor Subategory',
             uniqueKey: 'vendor-subcategory',
             logo: <Category />,
-            path: ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT,
+            path: adminRoutes.VIEW_ALL_VENDORS_SUBCAT,
           },
         ],
       },
@@ -51,41 +94,19 @@ export const adminNavigations: Navigations[] = [
           {
             name: 'Customer',
             uniqueKey: 'customer',
-            path: ADMIN_ROUTES.GET_ALL_CUSTOMERS,
+            path: sharedRoutes.VIEW_ALL_CUSTOMER,
           },
           {
             name: 'Customer Type',
             uniqueKey: 'customer-type',
-            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES,
+            path: adminRoutes.VIEW_ALL_CUSTOMER_TYPES,
           },
           {
             name: 'Customer Category',
             uniqueKey: 'customer-category',
-            path: ADMIN_ROUTES.GET_ALL_CUSTOMER_CAT,
+            path: adminRoutes.VIEW_ALL_CUSTOMER_CAT,
           },
         ],
-      },
-    ],
-  },
-  {
-    name: 'Approval Module',
-    uniqueKey: 'approval-module',
-    logo: <Approval />,
-    children: [
-      {
-        name: 'For Purchase',
-        uniqueKey: 'approval-module-for-purchase',
-        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${STRINGS.PURCHASE}`,
-      },
-      {
-        name: 'For Sales',
-        uniqueKey: 'approval-module-for-purchase',
-        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${STRINGS.SALES}`,
-      },
-      {
-        name: 'For Operations',
-        uniqueKey: 'approval-module-for-purchase',
-        path: `${adminRoutes.VIEW_ALL_APPROVAL_FLOWS}/${STRINGS.OPERATIONS}`,
       },
     ],
   },
@@ -96,23 +117,23 @@ export const adminNavigations: Navigations[] = [
     children: [
       {
         name: 'Products',
-        path: ADMIN_ROUTES.GET_ALL_PRODUCTS,
+        path: sharedRoutes.VIEW_ALL_PRODUCT,
         uniqueKey: 'products',
       },
       {
         name: 'Product Classification',
         uniqueKey: 'products-claasification',
-        path: ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS,
+        path: adminRoutes.VIEW_ALL_PRODUCT_CLASS,
       },
       {
         name: 'Product Category',
         uniqueKey: 'products-category',
-        path: ADMIN_ROUTES.GET_ALL_PRODUCT_CAT,
+        path: adminRoutes.VIEW_ALL_PRODUCT_CAT,
       },
       {
         name: 'Product Subcategory',
         uniqueKey: 'products-subcategory',
-        path: ADMIN_ROUTES.GET_ALL_PRODUCT_SUBCAT,
+        path: adminRoutes.VIEW_ALL_PRODUCT_SUBCAT,
       },
     ],
   },
@@ -130,12 +151,12 @@ export const adminNavigations: Navigations[] = [
       {
         name: 'Units',
         uniqueKey: 'units',
-        path: ADMIN_ROUTES.GET_ALL_UOMs,
+        path: adminRoutes.VIEW_ALL_UOMs,
       },
       {
         name: 'UOM Conversion',
         uniqueKey: 'uom-conversion',
-        path: ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX,
+        path: adminRoutes.VIEW_ALL_UOMs_CONV_MATRIX,
       },
     ],
   },
@@ -143,17 +164,16 @@ export const adminNavigations: Navigations[] = [
     name: 'Locations',
     uniqueKey: 'location',
     logo: <LocationOn />,
-    depts: [stringConstants.DEPT_ADMIN],
     children: [
       {
         name: 'Registered Office',
-        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.REGISTERED_OFFICE}`,
+        path: `${adminRoutes.VIEW_ALL_OFFICES}/${adminStaticData.officeType.REGISTERED_OFFICE}`,
         uniqueKey: 'registered-office',
       },
       {
         name: 'Corporate Office',
         uniqueKey: 'corporate-office',
-        path: `${ADMIN_ROUTES.GET_ALL_OFFICES}/${STRINGS.CORPORATE_OFFICE}`,
+        path: `${adminRoutes.VIEW_ALL_OFFICES}/${adminStaticData.officeType.CORPORATE_OFFICE}`,
       },
       {
         name: 'Branches',
@@ -162,26 +182,22 @@ export const adminNavigations: Navigations[] = [
           {
             name: 'Collection Center (CC)',
             uniqueKey: 'cc',
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.CC}`,
-            depts: [stringConstants.DEPT_ADMIN],
+            path: `${adminRoutes.VIEW_ALL_BRANCHES}/${adminStaticData.branchType.CC}`,
           },
           {
             name: 'Distribution Center (DC)',
             uniqueKey: 'dc',
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.DC}`,
-            depts: [stringConstants.DEPT_ADMIN],
+            path: `${adminRoutes.VIEW_ALL_BRANCHES}/${adminStaticData.branchType.DC}`,
           },
           {
             name: 'Seasonal CC',
             uniqueKey: 'seasonal-cc',
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.SEASONAL_CC}`,
-            depts: [stringConstants.DEPT_ADMIN],
+            path: `${adminRoutes.VIEW_ALL_BRANCHES}/${adminStaticData.branchType.SEASONAL_CC}`,
           },
           {
             name: 'Warehouses (WH)',
             uniqueKey: 'wh',
-            path: `${ADMIN_ROUTES.GET_ALL_BRANCHES}/${STRINGS.WH}`,
-            depts: [stringConstants.DEPT_ADMIN],
+            path: `${adminRoutes.VIEW_ALL_BRANCHES}/${adminStaticData.branchType.WH}`,
           },
         ],
       },

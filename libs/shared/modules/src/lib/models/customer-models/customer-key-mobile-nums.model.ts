@@ -1,0 +1,40 @@
+import type { Address } from "../address.model";
+
+export interface ICustomerKeyMobileNumbers {
+    id?: string | null
+    accDeptFName: string | null;
+    accDeptMName: string | null;
+    accDeptLName: string | null;
+    accDeptMobileNo: string | null;
+    ownerFName: string | null;
+    ownerMName: string | null;
+    ownerLName: string | null;
+    ownerMobileNo: string | null;
+    mandiLicenceNo: string | null;
+    mandiLicenceCopy: string | null;
+    regiNo: string | null;
+    regiCopy: string | null;
+    electricityBill: string | null;
+    consumenrNo: string | null;
+    electricityBillCopy: string | null;
+    notElectricityBillReason: string | null;
+    customerBlacklisted: string | null;
+    ifBlacklistedReason: string | null;
+    blackListedBy: string | null;
+    visitingCard: string | null;
+    visitinContactNo: string | null;
+    visitingCardCopy: string | null;
+    notVisitingCardReason: string | null;
+    ref1FName: string | null;
+    ref1MName: string | null;
+    ref1LName: string | null;
+    ref1Address: Address;
+    ref1ContactNo: string | null;
+    ref1Email: string | null;
+    ref2FName: string | null;
+    ref2MName: string | null;
+    ref2LName: string | null;
+    ref2Address: Address;
+    ref2ContactNo: string | null;
+    ref2Email: string | null;
+  }

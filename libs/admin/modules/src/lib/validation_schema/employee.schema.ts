@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { REGEX } from '@prime-fresh/shared/modules';
+import { addressSchema, REGEX } from '@prime-fresh/shared/modules';
 
 // export const employeeValidationSchema = Yup.object().shape({
 //   firstName: Yup.string()
@@ -65,27 +65,13 @@ const empPersonalInfoSchema = Yup.object().shape({
   secondaryMobNo: Yup.string().notRequired().matches(REGEX.CONTACT_NO, 'Mobile number must contain only numbers'),
   primaryEmail: Yup.string().required('Email is required').matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
   secondaryEmail: Yup.string().notRequired().matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
-  residentialAddress: Yup.object().shape({
-    address1: Yup.string().required('Address Line 1 is required'),
-    address2: Yup.string().nullable(),
-    location: Yup.string().required('Location is required'),
-    city: Yup.string().required('City is required').matches(REGEX.IS_STRING, "City name should only contains alphabets."),
-    state: Yup.string().required('State is required').matches(REGEX.IS_STRING, "State name should only contains alphabets."),
-    pincode: Yup.string().required('Pincode is required').matches(REGEX.PINCODE, 'Pincode must be exactly 6 digits'),
-  }),
-  permanentAddress: Yup.object().shape({
-    address1: Yup.string().required('Address Line 1 is required'),
-    address2: Yup.string().nullable(),
-    location: Yup.string().required('Location is required'),
-    city: Yup.string().required('City is required').matches(REGEX.IS_STRING, "City name should only contains alphabets."),
-    state: Yup.string().required('State is required').matches(REGEX.IS_STRING, "State name should only contains alphabets."),
-    pincode: Yup.string().required('Pincode is required').matches(REGEX.PINCODE, 'Pincode must be exactly 6 digits'),
-  }),
+  residentialAddress: addressSchema,
+  permanentAddress: addressSchema,
 })
 
 const empOfficeInfoSchema = Yup.object().shape({
-  companyName: Yup.string().required('Company name is required'),
-  department: Yup.string().required('Department is required.'),
+  companyName: Yup.array().of(Yup.string()).min(1, 'Select atleast one company name.').required('Company name is required'),
+  department: Yup.array().of(Yup.string()).min(1, 'Select atleast one department.').required('Department is required'),
   joiningDate: Yup.string().required('Joining date is required'),
   joiningLocation: Yup.string().required('Joining location is required'),
   currentWorkLocation: Yup.string().required('Work location is required'),
@@ -94,9 +80,10 @@ const empOfficeInfoSchema = Yup.object().shape({
     then: (schema) => schema.required('Other work location is required'),
     otherwise: (schema) => schema.nullable(),
   }),
-  accessLocation: Yup.array().of(Yup.string()).min(1, 'Atleast one access location should be selected').required('Access location is required'),
+  accessLocation: Yup.array().of(Yup.string()).min(1, 'Select atleast one access location.').required('Access location is required'),
   cugNo: Yup.string().notRequired().matches(REGEX.CONTACT_NO, 'Mobile number must contain only numbers'),
   workEmail: Yup.string().notRequired().matches(REGEX.IS_EMAIL, 'Please enter valid email.'),
+  roles: Yup.array().of(Yup.string()).min(1, 'Select one type of user').required('Type of user is required'),
 });
 
 const empPermissionAccessSchema = Yup.object().shape({});

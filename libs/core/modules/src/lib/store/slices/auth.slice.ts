@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { sliceConstant } from '../../constants';
-import { AuthState, IEmployeePermissions, ILoggedInUserInfoRes } from '@prime-fresh/auth_api';
+import { AuthState, IEmployeePermissions, ILoggedInUserInfoRes } from '@prime-fresh/services';
 import { RootState } from '../store.core';
 
 const initialState: AuthState = {

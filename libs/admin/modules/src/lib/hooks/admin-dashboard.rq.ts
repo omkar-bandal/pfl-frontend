@@ -9,7 +9,7 @@ import {
   IProductCount,
   IBranchesCount,
   DashboardCounts
-} from '@prime-fresh/admin_api';
+} from '@prime-fresh/services';
 
 
 export function useDashboardCounts(): {

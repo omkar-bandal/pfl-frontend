@@ -1,4 +1,4 @@
-import { PostProductClassification } from "@prime-fresh/admin_api";
+import { PostProductClassification } from '@prime-fresh/services';
 
 export const initValProductClass: PostProductClassification = {
     name: '',

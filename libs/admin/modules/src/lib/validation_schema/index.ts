@@ -1,6 +1,7 @@
 export * from './employee.schema';
 export * from './product.schema';
 export * from './productClassification.schema';
+export * from './packing-material.schema';
 export * from './productCategory.schema';
 export * from './productSubcategory.schema';
 export * from './office.schema';

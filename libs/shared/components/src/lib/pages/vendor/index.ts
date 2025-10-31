@@ -1,1 +1,3 @@
-export * from './vendor-registration.form';
+export * from './VendorForm';
+export * from './VendorTable';
+export * from './VendorView';

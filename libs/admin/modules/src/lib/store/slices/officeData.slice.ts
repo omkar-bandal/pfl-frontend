@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetOffices, OfficeType, PostOffices } from "@prime-fresh/admin_api";
+import { GetOffices, OfficeType, PostOffices } from '@prime-fresh/services';
 
 type OfficesDataState = {
     offices: GetOffices[],

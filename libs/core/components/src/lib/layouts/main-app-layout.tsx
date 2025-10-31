@@ -1,19 +1,20 @@
 import * as React from 'react';
-import { Box, CssBaseline, Toolbar } from '@mui/material';
+import { Box, CssBaseline, Toolbar, useTheme } from '@mui/material';
 import { Appbar, Sidebar } from '../components';
 import { Provider } from 'react-redux';
 import { coreStore } from '@prime-fresh/modules';
 import { Outlet } from 'react-router-dom';
-import { ErrorBoundary, ErrorFallback } from '@prime-fresh/ui_shared';
+import { ErrorBoundary, ErrorFallback } from '../error-boundary';
 import { SocketInitializer } from '../notifications';
 
 const drawerWidth = 250;
 
 export function Layout() {
   // const { mobileOpen } = useAppSelector(layoutStates);
+  const theme = useTheme();
   return (
     <Provider store={coreStore}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex'}}>
         <CssBaseline />
         <SocketInitializer />
         <Appbar drawerWidth={drawerWidth} />
@@ -21,8 +22,9 @@ export function Layout() {
         <Box component="main"
           sx={{
             flexGrow: 1,
-            paddingX: 1,
+            // padding: 1,
             width: { lg: `calc(100% - ${drawerWidth}px)` },
+            background: theme.palette.background.default
           }}>
           {/* <Main open={mobileOpen}> */}
           <Toolbar variant='dense' sx={{ minHeight: 40 }} />

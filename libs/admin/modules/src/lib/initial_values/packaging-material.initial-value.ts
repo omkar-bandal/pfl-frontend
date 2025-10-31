@@ -1,4 +1,4 @@
-import { PostPackagingMaterial } from "@prime-fresh/admin_api";
+import { PostPackagingMaterial } from '@prime-fresh/services';
 
 export const PackagingMaterialInitialValues: PostPackagingMaterial = {
     useFor: 'for sale',

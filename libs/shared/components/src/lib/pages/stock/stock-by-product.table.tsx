@@ -6,34 +6,27 @@ import {
   DataGridTable,
   PageTitle,
   toast,
-  useDataTable,
-} from '@prime-fresh/ui_shared';
+  useDataTableFunctions,
+} from '../../components';
 import { convertInTitleCase, useGetStockProductWise } from '@prime-fresh/shared/modules';
-import { GetStockProductWise } from '@prime-fresh/common_api';
+import { GetStockProductWise } from '@prime-fresh/services';
 import { useParams } from 'react-router-dom';
 import { useStockProductWiseColumns } from './stock-by-product.columns';
 
 export const StockProductWiseTable = () => {
-  const { product, location, companyName } = useParams<{ product: string, location: string, companyName: string }>();
+  const { product, location, companyName } = useParams<{ product: string; location: string; companyName: string }>();
   const productName = product ? product : '';
   const locationName = location ? location : '';
   const company = companyName ? companyName : '';
   const stockColumns = useStockProductWiseColumns();
-  const {
-    // paginationModel,
-    // sortModel,
-    // handleSortingChange,
-    // handlePaginationChange,
-    // queryParams,
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-  } = useDataTable({ columnDef: stockColumns, initialPageSize: 10 });
 
-  const { data, isLoading, isError, error } =
-    useGetStockProductWise(productName, locationName, company);
+  const tableConfig = useDataTableFunctions({
+    columnDef: stockColumns,
+    initialPageSize: 10,
+    tableId: 'stock-by-product-table-id',
+  });
+
+  const { data, isLoading, isError, error } = useGetStockProductWise(productName, locationName, company);
   const stockData = data?.data
     ? data.data.map((item, index) => ({
         ...item,
@@ -68,14 +61,14 @@ export const StockProductWiseTable = () => {
             alignItems: 'center',
           }}
         >
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnSettingButton handleClick={tableConfig.openColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="stock-col-def"
             columns={stockColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+            columnVisibilityModel={tableConfig.columnVisibilityModel}
+            displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+            closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+            onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
           />
         </Grid2>
       </Grid2>
@@ -90,7 +83,7 @@ export const StockProductWiseTable = () => {
         // onPaginationModelChange={handlePaginationChange}
         // sortModel={sortModel}
         // onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
       />
     </Box>
   );

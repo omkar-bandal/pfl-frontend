@@ -16,29 +16,15 @@
     "baseUrl": ".",
     "paths": {
       "@prime-fresh/admin/components": ["libs/admin/components/src/index.ts"],
-      "@prime-fresh/admin/modules": ["libs/admin/modules/src/index.ts"],
-      "@prime-fresh/admin_api": ["libs/api/admin_api/src/index.ts"],
+      "@prime-fresh/admin/modules": ["libs/admin/modules/src/index.js"],
       "@prime-fresh/assets": ["libs/assets/src/index.ts"],
-      "@prime-fresh/auth_api": ["libs/api/auth_api/src/index.ts"],
-      "@prime-fresh/common_api": ["libs/api/common_api/src/index.ts"],
       "@prime-fresh/components": ["libs/core/components/src/index.ts"],
-      "@prime-fresh/inventory/components": [
-        "libs/inventory/components/src/index.ts"
-      ],
-      "@prime-fresh/inventory/modules": ["libs/inventory/modules/src/index.ts"],
-      "@prime-fresh/inventory_api": ["libs/api/inventory_api/src/index.ts"],
-      "@prime-fresh/modules": ["libs/core/modules/src/index.ts"],
-      "@prime-fresh/purchase/components": [
-        "libs/purchase/components/src/index.ts"
-      ],
-      "@prime-fresh/purchase/modules": ["libs/purchase/modules/src/index.ts"],
-      "@prime-fresh/purchase_api": ["libs/api/purchase_api/src/index.ts"],
-      "@prime-fresh/sales/components": ["libs/sales/components/src/index.ts"],
-      "@prime-fresh/sales/modules": ["libs/sales/modules/src/index.ts"],
-      "@prime-fresh/sales_api": ["libs/api/sales_api/src/index.ts"],
+      "@prime-fresh/modules": ["libs/core/modules/src/index.js"],
+      "@prime-fresh/operations/components": ["libs/operations/components/src/index.ts"],
+      "@prime-fresh/operations/modules": ["libs/operations/modules/src/index.js"],
+      "@prime-fresh/services": ["libs/services/src/index.js"],
       "@prime-fresh/shared/components": ["libs/shared/components/src/index.ts"],
-      "@prime-fresh/shared/modules": ["libs/shared/modules/src/index.ts"],
-      "@prime-fresh/ui_shared": ["libs/ui_shared/src/index.ts"]
+      "@prime-fresh/shared/modules": ["libs/shared/modules/src/index.js"]
     }
   },
   "exclude": ["node_modules", "tmp"]

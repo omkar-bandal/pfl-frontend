@@ -1,18 +1,26 @@
-import { Box, Grid2 } from '@mui/material';
-import {
-  adminRoutes,
-  approvalFlowStates,
-  setShowReplaceForm,
-  useGetAllApprovalFlows,
-} from '@prime-fresh/admin/modules';
-import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Grid2 } from '@mui/material';
 import { useApprovalFlowColumns } from './approval-flow.columns';
 import { EmployeeReplacementForm } from './employee-replacement.form';
 import { Add, FindReplace, Settings } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '@prime-fresh/modules';
-import { IDocumentType } from '@prime-fresh/admin_api';
+import { IDocumentType } from '@prime-fresh/services';
+import {
+  adminRoutes,
+  adminTableIds,
+  approvalFlowStates,
+  setShowReplaceForm,
+  useGetAllApprovalFlows,
+} from '@prime-fresh/admin/modules';
+import {
+  BtnSmall,
+  ColumnVisibilityPanel,
+  DataGridTable,
+  PageTitle,
+  useDataTableFunctions,
+  useErrorHandler,
+} from '@prime-fresh/shared/components';
 
 export function ApprovalFlowTable() {
   const navigate = useNavigate();
@@ -21,20 +29,14 @@ export function ApprovalFlowTable() {
   const { showReplaceForm } = useAppSelector(approvalFlowStates);
   const dispatch = useAppDispatch();
   const approvalFlowColumns = useApprovalFlowColumns(docType || 'Procurement');
-  const {
-    paginationModel,
-    sortModel,
-    handleSortingChange,
-    handlePaginationChange,
-    queryParams,
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-  } = useDataTable({ columnDef: approvalFlowColumns, initialPageSize: 10 });
 
-  const { data, isLoading, isError, error } = useGetAllApprovalFlows(docType, queryParams);
+  const tableConfig = useDataTableFunctions({
+    columnDef: approvalFlowColumns,
+    initialPageSize: 10,
+    tableId: adminTableIds.APPROVAL_FLOW_TABLE_ID,
+  });
+
+  const { data, isLoading, isError, error } = useGetAllApprovalFlows(docType, tableConfig.queryParams);
   const allApprovalFlows = data ? data : null;
   console.log('All Approval Flow: ', allApprovalFlows);
   const rowCountRef = useRef(allApprovalFlows?.allRecords || 0);
@@ -45,11 +47,7 @@ export function ApprovalFlowTable() {
     return rowCountRef.current;
   }, [allApprovalFlows]);
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(error?.message || 'Error occured please refresh the page.');
-    }
-  }, [isError, error]);
+  useErrorHandler(isError, error);
 
   const handleCreate = () => {
     navigate(`${adminRoutes.CREATE_APPROVAL_FLOW}/${docType}`);
@@ -70,15 +68,15 @@ export function ApprovalFlowTable() {
             color="warning"
             onClick={() => dispatch(setShowReplaceForm())}
           />
-          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
+          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={tableConfig.openColumnVisibilityPanel} />
           {/* <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} /> */}
           <ColumnVisibilityPanel
             popoverId="approval-flow-col-def"
             columns={approvalFlowColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+            columnVisibilityModel={tableConfig.columnVisibilityModel}
+            displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+            closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+            onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
           />
         </Grid2>
       </Grid2>
@@ -90,11 +88,11 @@ export function ApprovalFlowTable() {
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationChange}
-        sortModel={sortModel}
-        onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        paginationModel={tableConfig.paginationModel}
+        onPaginationModelChange={tableConfig.handlePaginationChange}
+        sortModel={tableConfig.sortModel}
+        onSortModelChange={tableConfig.handleSortingChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
       />
     </Box>
   );

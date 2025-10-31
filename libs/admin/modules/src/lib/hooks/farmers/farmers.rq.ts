@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { FarmersService, GetFarmer } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { FarmersService, IFarmer } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateFarmer():
@@ -26,18 +26,18 @@ export function useDeleteFarmerById(id: string):
     });
 }
 
-export function useGetAllFarmers(queryParams?: QueryParams):
-    UseQueryResult<ApiBaseState<GetFarmer[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetFarmer[]>, ErrorModel>({
-        queryKey: ['get-all-farmers', queryParams],
-        queryFn: () => FarmersService.getInstance().getAllFarmers(queryParams),
+export function useGetAllFarmers(queryParams?: QueryParams, search?: string | null):
+    UseQueryResult<ApiBaseState<IFarmer[]>, ErrorModel> {
+    return useQuery<ApiBaseState<IFarmer[]>, ErrorModel>({
+        queryKey: ['get-all-farmers', queryParams, search],
+        queryFn: () => FarmersService.getInstance().getAllFarmers(queryParams, search),
     });
 }
 
 export function useGetFarmerById(id: string):
-    UseQueryResult<ApiBaseState<GetFarmer>, ErrorModel> {
-        const enabled = id.length > 1 ? true : false;
-    return useQuery<ApiBaseState<GetFarmer>, ErrorModel>({
+    UseQueryResult<ApiBaseState<IFarmer>, ErrorModel> {
+    const enabled = id.length > 1 ? true : false;
+    return useQuery<ApiBaseState<IFarmer>, ErrorModel>({
         queryKey: ['get-farmer-by-id'],
         queryFn: () => FarmersService.getInstance().getFarmerById(id),
         enabled: enabled,

@@ -4,16 +4,6 @@
   "sourceRoot": "libs/admin/modules/src",
   "projectType": "library",
   "tags": [],
-  "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/admin/modules",
-        "main": "libs/admin/modules/src/index.ts",
-        "tsConfig": "libs/admin/modules/tsconfig.lib.json",
-        "assets": ["libs/admin/modules/*.md"]
-      }
-    }
-  }
+  "// targets": "to see all targets run: nx show project admin-modules --web",
+  "targets": {}
 }

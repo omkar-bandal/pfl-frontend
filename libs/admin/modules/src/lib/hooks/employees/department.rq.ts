@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/common_api';
-import { DepartmentService, GetDepartment } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, ResultModel } from '@prime-fresh/services';
+import { DepartmentService, GetDepartment } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateDepartment():

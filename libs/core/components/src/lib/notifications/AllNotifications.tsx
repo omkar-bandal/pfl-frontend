@@ -1,6 +1,6 @@
-import { Box, Card, CardContent, Grid, Paper, Typography } from '@mui/material'
-import { useGetUserNotifications } from '@prime-fresh/shared/modules';
 import React from 'react'
+import { useGetUserNotifications } from '@prime-fresh/shared/modules';
+import { Box, Card, CardContent, Grid, Paper, Typography } from '@mui/material'
 
 export const AllNotifications = () => {
   const { data } = useGetUserNotifications();

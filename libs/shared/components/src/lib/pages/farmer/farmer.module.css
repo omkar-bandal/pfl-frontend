@@ -1,0 +1,185 @@
+body {
+  margin: 0;
+  padding: 0 10px;
+  font-family: Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.4;
+  color: #000;
+}
+
+/* A4 page setup */
+@page {
+  size: A4;
+  margin: 1cm 0.5cm;
+}
+
+/* Force page breaks */
+.pageBreak {
+  page-break-before: always;
+}
+
+.pageSimulation {
+  margin: 20px auto;
+  padding: 10px;
+  min-height: 25cm;
+  max-width: 21cm;
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  height: 80px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.companyName {
+  width: 80;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.logo {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blockSection {
+  flex: 1;
+  margin: 20px auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  border: 1px solid #000;
+}
+
+table thead tr th {
+  padding: 5px 0px;
+  border: 1px solid #000;
+  text-align: center;
+  background-color: #f2f2f2;
+}
+
+table tbody tr td {
+  padding: 5px 0px;
+  border: 1px solid #000;
+}
+
+.articleCol {
+  width: 20%;
+}
+
+.specificationCol {
+  width: 10%;
+}
+
+.parameterCol {
+  width: 10%;
+}
+
+.packingMaterialCol {
+  width: 10%;
+}
+
+.rejectionCriteriaCol {
+  width: 10%;
+}
+
+.commentCol {
+  width: 40%;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  /* gap: 3px; */
+  margin-bottom: 5px;
+}
+
+.gridItem {
+  padding: 5px;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+}
+
+.span_2 {
+  grid-column: span 2;
+}
+
+.span_3 {
+  grid-column: span 3;
+}
+
+.span_4 {
+  grid-column: span 4;
+}
+
+.span_5 {
+  grid-column: span 5;
+}
+
+.span_6 {
+  grid-column: span 6;
+}
+
+.span_7 {
+  grid-column: span 7;
+}
+
+.span_8 {
+  grid-column: span 8;
+}
+
+.span_9 {
+  grid-column: span 9;
+}
+
+.span_10 {
+  grid-column: span 10;
+}
+
+.span_11 {
+  grid-column: span 11;
+}
+
+.span_12 {
+  grid-column: span 12;
+}
+
+.textXS {
+  font-size: 10px;
+}
+
+.textSM {
+  font-size: 14px;
+}
+
+.textMD {
+  font-size: 20px;
+}
+
+.textLG {
+  font-size: 25px;
+}
+
+.textBold {
+  font-weight: bold;
+}
+
+.textAlignCenter {
+  text-align: center;
+}
+
+.allBorder {
+  border: 1px solid black;
+}
+

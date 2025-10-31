@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { BranchService, PostBranches, GetBranches } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { BranchService, PostBranches, GetBranches } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateBranch(branchType: string):
@@ -26,11 +26,11 @@ export function useDeleteBranchById(id: string, branchType: string):
     });
 }
 
-export function useGetAllBranches(branchType: string, queryParams?: QueryParams):
+export function useGetAllBranches(branchType: string, queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetBranches[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetBranches[]>, ErrorModel>({
-        queryKey: ['get-all-branchs', branchType, queryParams],
-        queryFn: () => BranchService.getInstance().getAllBranches(branchType, queryParams),
+        queryKey: ['get-all-branchs', branchType, queryParams, search],
+        queryFn: () => BranchService.getInstance().getAllBranches(branchType, queryParams, search),
         enabled: !!branchType
     });
 }

@@ -1,9 +1,0 @@
-{
-  "name": "sales-modules",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/sales/modules/src",
-  "projectType": "library",
-  "tags": ["type:data-access", "scope:sales"],
-  "// targets": "to see all targets run: nx show project sales-modules --web",
-  "targets": {}
-}

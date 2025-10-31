@@ -1,107 +1,99 @@
-import { GridRenderCellParams } from "@mui/x-data-grid";
-import { Preview, Edit } from '@mui/icons-material';
-import { IconButton } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-import { Address } from "@prime-fresh/admin_api";
-import { CustomGridColDef } from "@prime-fresh/ui_shared";
-import { formatAddress } from "@prime-fresh/shared/modules";
-import { useCallback, useMemo } from "react";
+import { useMemo } from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { Edit, Preview } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import { adminRoutes } from '@prime-fresh/admin/modules';
+import { Address, GetOffices } from '@prime-fresh/services';
+import { CustomGridColDef } from '@prime-fresh/shared/components';
+import { formatAddress } from '@prime-fresh/shared/modules';
 
-
-export const useOfficeColumns = (): CustomGridColDef[] => {
-    const navigate = useNavigate();
-
-    const handleEdit = useCallback((officeId: string, officeType: string) => {
-        navigate(`${ADMIN_ROUTES.EDIT_OFFICE}/${officeType}/${officeId}`)
-    }, [navigate])
-
-    const handleView = useCallback((officeId: string, officeType: string) => {
-        navigate(`${ADMIN_ROUTES.VIEW_OFFICE}/${officeType}/${officeId}`)
-    }, [navigate])
-
-    return useMemo(() => [
-        {
-            field: "name",
-            headerName: "Name",
-            width: 150,
-            isMobileVisible: true,
-        },
-        {
-            field: "address",
-            headerName: "Address",
-            width: 300,
-            valueFormatter: (params: Address) => params ? formatAddress(params) : '-',
-        },
-        {
-            field: "pincode",
-            headerName: "Pincode",
-            width: 100,
-            isMobileVisible: true,
-            valueGetter: (value, row) => {
-                console.log(value);
-                return `${row.address.pincode}`;
-            }
-        },
-        {
-            field: 'fullName',
-            headerName: "Contact Person",
-            width: 170,
-            valueGetter: (value, row) => {
-                console.log(value);
-                return `${row.cFirstName || ''} ${row.cMiddleName || ''} ${row.cLastName || ''}`;
-            },
-        },
-        {
-            field: "contactNumber",
-            headerName: "Contact",
-            width: 100,
-        },
-        {
-            field: "officeEmail",
-            headerName: "Email",
-            width: 150,
-        },
-        {
-            field: "notes",
-            headerName: "Remark",
-            width: 250,
-        },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            headerAlign: 'center',
-            align: 'center',
-            width: 80,
-            hideable: false,
-            sortable: false,
-            filterable: false,
-            disableExport: true,
-            disableColumnMenu: true,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => handleEdit(params.row.id, params.row.type)}>
-                    <Edit color="secondary" />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'view',
-            headerName: 'View',
-            headerAlign: 'center',
-            align: 'center',
-            width: 80,
-            hideable: false,
-            sortable: false,
-            filterable: false,
-            disableExport: true,
-            disableColumnMenu: true,
-            isMobileVisible: true,
-            renderCell: (params: GridRenderCellParams) => (
-                <IconButton aria-label="edit" onClick={() => handleView(params.row.id, params.row.type)}>
-                    <Preview color="primary" />
-                </IconButton>
-            ),
-        },
-    ], [handleEdit, handleView]);
+export const useOfficeColumns = (navigate: NavigateFunction): CustomGridColDef[] => {
+  return useMemo(
+    () => [
+      {
+        field: 'name',
+        headerName: 'Name',
+        flex: 1,
+        minWidth: 150,
+        isMobileVisible: true,
+        hide: false,
+      },
+      {
+        field: 'address',
+        headerName: 'Address',
+        flex: 1,
+        minWidth: 400,
+        hide: false,
+        valueGetter: (value: Address) => (value ? formatAddress(value) : ''),
+      },
+      {
+        field: 'cFirstName',
+        headerName: 'Contact Person',
+        flex: 1,
+        minWidth: 170,
+        hide: false,
+        valueGetter: (value: GetOffices) =>
+          value ? `${value?.cFirstName || ''} ${value?.cMiddleName || ''} ${value?.cLastName || ''}` : '',
+      },
+      {
+        field: 'contactNumber',
+        headerName: 'Contact',
+        flex: 1,
+        minWidth: 100,
+        hide: false,
+      },
+      {
+        field: 'officeEmail',
+        headerName: 'Email',
+        flex: 1,
+        minWidth: 150,
+        hide: false,
+      },
+      {
+        field: 'notes',
+        headerName: 'Remark',
+        flex: 1,
+        minWidth: 250,
+        hide: true,
+      },
+      {
+        field: 'edit',
+        headerName: 'Edit',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        minWidth: 70,
+        hideable: false,
+        sortable: false,
+        filterable: false,
+        disableExport: true,
+        disableColumnMenu: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <IconButton aria-label="edit" onClick={() => navigate(`${adminRoutes.UPDATE_OFFICE}/${params.row.type}/${params.row.id}`)}>
+            <Edit color="info" />
+          </IconButton>
+        ),
+      },
+      {
+        field: 'view',
+        headerName: 'View',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        minWidth: 70,
+        hideable: false,
+        sortable: false,
+        filterable: false,
+        disableExport: true,
+        disableColumnMenu: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <IconButton aria-label="view" onClick={() => navigate(`${adminRoutes.VIEW_AN_OFFICE}/${params.row.type}/${params.row.id}`)}>
+            <Preview color="primary" />
+          </IconButton>
+        ),
+      },
+    ],
+    [navigate]
+  );
 };

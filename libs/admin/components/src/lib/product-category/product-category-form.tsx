@@ -1,15 +1,15 @@
 import { Formik } from "formik";
-import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { Box, Grid2, LinearProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, initValProductCat, productCategorySchema, useCreateProductCategory, useGetAllProductClassifications, useGetProductCategoryById, useUpdateProductCategoryById } from "@prime-fresh/admin/modules";
+import { Box, Grid2, LinearProgress } from "@mui/material";
 import { handleFormKeyDown, mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { adminRoutes, initValProductCat, productCategorySchema, useCreateProductCategory, useGetAllProductClassifications, useGetProductCategoryById, useUpdateProductCategoryById } from "@prime-fresh/admin/modules";
+import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/shared/components";
 
-export function ProductCatForm() {
+export const ProductCatForm = () => {
     const { id } = useParams<{ id: string }>();
     const productCatId = id ? id : "";
     const { data: cat, isLoading } = useGetProductCategoryById(productCatId);
-    const category = cat !== null && cat?.data ? { name: cat.data.name, productClassification: cat.data.productClassification.id } : { name: '', productClassification: '' };
+    const category = cat !== null && cat?.data ? { name: cat.data.name, productClassification: cat.data.productClassification?.id ?? '' } : { name: '', productClassification: '' };
     const productCatVal = productCatId ? category : initValProductCat;
 
     const { data } = useGetAllProductClassifications();
@@ -25,7 +25,7 @@ export function ProductCatForm() {
         productCatId === "" ? (postProductCategory(values).then(() => {
             toast.success(postRes ? postRes.message : "Product category created successfully.")
             setTimeout(() => {
-                navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CAT);
+                navigate(adminRoutes.VIEW_ALL_PRODUCT_CAT);
             }, 2000);
         }).catch(() => {
             toast.error(postError ? postError.message : "Error while creating product category.");
@@ -33,7 +33,7 @@ export function ProductCatForm() {
             : (patchProductCategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Product category updated successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CAT);
+                    navigate(adminRoutes.VIEW_ALL_PRODUCT_CAT);
                 }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating product category.");

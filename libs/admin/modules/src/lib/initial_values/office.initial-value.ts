@@ -1,5 +1,5 @@
-import { PostOffices } from "@prime-fresh/admin_api";
-import {initValAddress} from "@prime-fresh/shared/modules";
+import { PostOffices } from '@prime-fresh/services';
+import { initValAddress } from './address.initial-value';
 
 export const OfficeInitialValues: PostOffices = {
     name: null,

@@ -3,7 +3,7 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import { ChevronRight, Preview } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { CustomGridColDef } from '@prime-fresh/ui_shared';
+import { CustomGridColDef } from '../../components';
 import { convertInTitleCase, sharedRoutes } from '@prime-fresh/shared/modules';
 
 export const useStockColumns = (): CustomGridColDef[] => {
@@ -86,8 +86,7 @@ export const useStockColumns = (): CustomGridColDef[] => {
         headerName: 'Details',
         align: 'center',
         headerAlign: 'center',
-        flex: 1,
-        minWidth: 80,
+        width: 80,
         sortable: false,
         filterable: false,
         isMobileVisible: true,

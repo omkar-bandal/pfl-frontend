@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store.admin';
-import { GetFarmer, PostFarmer } from '@prime-fresh/admin_api';
-import { FarmerPartialData } from '@prime-fresh/common_api';
+import { IFarmer } from '@prime-fresh/services';
+import { FarmerPartialData } from '@prime-fresh/services';
 
 type farmerDataState = {
-  allFarmers: GetFarmer[];
+  allFarmers: IFarmer[];
   allFarmersPartialData: FarmerPartialData[];
   selectedFarmerPartialData: FarmerPartialData | null | undefined;
-  farmerFormPreview: PostFarmer | null;
+  farmerFormPreview: IFarmer | null;
 };
 const initialState: farmerDataState = {
   allFarmers: [],
@@ -19,7 +19,7 @@ const farmerDataSlice = createSlice({
   name: 'farmerData',
   initialState,
   reducers: {
-    setFarmerData: (state, action: PayloadAction<GetFarmer[]>) => {
+    setFarmerData: (state, action: PayloadAction<IFarmer[]>) => {
       state.allFarmers = action.payload;
     },
     setAllFarmersPartialData: (
@@ -34,7 +34,7 @@ const farmerDataSlice = createSlice({
     ) => {
       state.selectedFarmerPartialData = action.payload;
     },
-    setFarmerFormPreview: (state, action: PayloadAction<PostFarmer>) => {
+    setFarmerFormPreview: (state, action: PayloadAction<IFarmer>) => {
       state.farmerFormPreview = action.payload;
     },
   },

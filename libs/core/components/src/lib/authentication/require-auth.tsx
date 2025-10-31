@@ -1,9 +1,6 @@
 import { ComponentType, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ROUTES } from "@prime-fresh/admin/modules";
-import { inventoryRouteConstants } from "@prime-fresh/inventory/modules";
-import { authRouteConstants, stringConstants, useActions, useAppSelector } from "@prime-fresh/modules";
-import { PURCHASE_ROUTES } from "@prime-fresh/purchase/modules";
+import {stringConstants, useActions, useAppSelector } from "@prime-fresh/modules";
 
 export const requireAuth = <P extends ComponentType>(WrappedComponent: ComponentType<P>) => {
 
@@ -19,16 +16,16 @@ export const requireAuth = <P extends ComponentType>(WrappedComponent: Component
         if (isLoggedIn && dept) {
             switch (dept) {
                 case stringConstants.DEPT_ADMIN:
-                    navigate(ADMIN_ROUTES.DASHBOARD_ADMIN);
+                    navigate("/admin/dashboard");
                     break;
                 case stringConstants.DEPT_PURCHASE:
-                    navigate(PURCHASE_ROUTES.DASHBOARD_PURCHASE);
+                    navigate('/purchase/dashboard');
                     break;
                 case stringConstants.DEPT_INVENTORY:
-                    navigate(inventoryRouteConstants.DASHBOARD_INVENTORY);
+                    navigate('/inventory/dashboard');
                     break;
                 default:
-                    navigate(authRouteConstants.SIGN_IN);
+                    navigate('/');
             }
         }
     }, [checkAuth, isLoggedIn, navigate]);

@@ -1,0 +1,148 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { secondSaleRegisterViewConfig } from './second-sale-register.view-config';
+import { Check, ChevronRight, Close } from '@mui/icons-material';
+import { authState, useActions, useAppSelector } from '@prime-fresh/modules';
+import { Box, Grid, IconButton, LinearProgress, TextField, Typography } from '@mui/material';
+import { useGetSecondSaleRegisterForViewById } from '@prime-fresh/operations/modules';
+import { convertInTitleCase, getDocStatusColor, useUpdateDocStatusWithTwoApproval } from '@prime-fresh/shared/modules';
+import {
+  BtnSmall,
+  DataViewer,
+  DrawerContainer,
+  InfoTooltip,
+  PageTitle,
+  StepperData,
+  toast,
+  VerticalStepper,
+} from '@prime-fresh/shared/components';
+
+export const SecondSaleRegisterView = () => {
+  const { id } = useParams<{ id: string }>();
+  const secondSaleId = id ? id : '';
+  const { loggedInUserInfo } = useAppSelector(authState);
+  const username = convertInTitleCase(loggedInUserInfo?.userName || '');
+  const [reason, setReason] = useState('');
+  const { openDrawer } = useActions();
+  const { data, isLoading, refetch } = useGetSecondSaleRegisterForViewById(secondSaleId);
+  const secondSaleData = data?.data ? data.data : null;
+  console.log('View Second Sale :', secondSaleData);
+  const approvalSummary: StepperData[] = [
+    {
+      title: 'Created',
+      subtitle: secondSaleData?.createdBy || '',
+      status: 'COMPLETE',
+    },
+    {
+      title: 'Approved',
+      subtitle: secondSaleData?.approvalSummary?.firstApproved?.name || '',
+      status: secondSaleData?.approvalSummary?.firstApproved?.status || 'hold',
+    },
+    {
+      title: 'Approved',
+      subtitle: secondSaleData?.approvalSummary?.secondApproved?.name || '',
+      status: secondSaleData?.approvalSummary?.secondApproved?.status || 'hold',
+    },
+    {
+      title: 'Completed',
+      status: secondSaleData?.approvalSummary?.secondApproved?.status || 'hold',
+    },
+  ];
+  const { mutateAsync, error, data: actionRes, isPending, isError } = useUpdateDocStatusWithTwoApproval(secondSaleId);
+  const changeSecondSaleStatus = (status: 'approved' | 'reject') => {
+    mutateAsync({
+      status: status,
+      reason: reason,
+    })
+      .then(() => {
+        toast.success(actionRes?.message ? actionRes.message : `Second sale ${status} successfully.`);
+        refetch();
+        setReason('');
+      })
+      .catch(() => toast.error(error?.message ? error?.message : 'Error while changing status of second sale.'));
+  };
+  return isLoading ? (
+    <Box flex={1}>
+      <LinearProgress />
+    </Box>
+  ) : (
+    <Box sx={{ flex: 1, marginY: 1 }}>
+      <Grid container rowSpacing={1}>
+        <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+          <PageTitle pagetitle="Second Sale Register" />
+        </Grid>
+        <Grid item xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          {secondSaleData?.createdBy !== username.split(' ')[0] && (
+            <BtnSmall
+              label="Approve"
+              icon={<Check fontSize="inherit" />}
+              color="success"
+              disabled={isPending && !isError}
+              onClick={() => changeSecondSaleStatus('approved')}
+            />
+          )}
+          {secondSaleData?.createdBy !== username.split(' ')[0] && (
+            <BtnSmall
+              label="Disapprove"
+              icon={<Close fontSize="inherit" />}
+              color="error"
+              disabled={isPending && !isError}
+              onClick={() => changeSecondSaleStatus('reject')}
+            />
+          )}
+          {/* <BtnSmall label="Query" icon={<Message />} color="warning" /> */}
+          {/* {canDownload && <BtnSmall label="Download" icon={<Download />} color="info" onClick={() => reactToPrintFn()} />} */}
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" component="div">
+            <Typography variant="body1" component="span" color="error">
+              *
+            </Typography>
+            Mention reason for approval / not approval
+          </Typography>
+          <TextField
+            fullWidth
+            size="small"
+            name="approveOrRejectReason"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <DrawerContainer>
+            <Typography variant="h6" component="div" sx={{ fontWeight: 700, color: '#595959' }}>
+              Approval Summary
+            </Typography>
+            <Typography
+              variant="caption"
+              component="div"
+              sx={{ fontWeight: 700, color: '#595959' }}
+            >{`Current Status: ${convertInTitleCase(secondSaleData?.overAllStatus || '')}`}</Typography>
+            <VerticalStepper steps={approvalSummary} />
+          </DrawerContainer>
+        </Grid>
+        <Grid item xs={12} alignItems="center">
+          <Typography variant="subtitle1" component="span" sx={{ fontWeight: 700, color: '#2C3E50' }}>
+            Current Document Status:
+            <Typography
+              variant="subtitle1"
+              component="span"
+              sx={{ marginLeft: 2, fontWeight: 700, color: getDocStatusColor(secondSaleData?.overAllStatus || 'hold') }}
+            >
+              {convertInTitleCase(secondSaleData?.overAllStatus || '')}
+            </Typography>
+          </Typography>
+          <InfoTooltip info={`Click here to see complete approval summary.`}>
+            <IconButton size="medium" onClick={() => openDrawer()}>
+              <ChevronRight fontSize="inherit" />
+            </IconButton>
+          </InfoTooltip>
+        </Grid>
+      </Grid>
+      <Box padding={1} sx={{ border: `1px dashed #CCC`, borderRadius: 3 }}>
+        <DataViewer data={secondSaleData || []} config={secondSaleRegisterViewConfig} />
+      </Box>
+    </Box>
+  );
+};

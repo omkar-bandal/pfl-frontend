@@ -1,10 +1,10 @@
 import { Grid2 } from "@mui/material";
-import { PostVendor } from "@prime-fresh/admin_api"
-import { TextInput } from "@prime-fresh/ui_shared";
 import { useFormikContext } from "formik"
+import { IVendor } from "@prime-fresh/services"
+import { TextInput } from "../../../components";
 
 export const VendorSalesContact = () => {
-    const { values, handleChange } = useFormikContext<PostVendor>();
+    const { values, handleChange } = useFormikContext<IVendor>();
     return (
         <Grid2 container spacing={2} padding={1}>
             <Grid2 size={{ xs: 12, md: 4 }}>

@@ -1,6 +1,6 @@
-import { EmployeePermissions } from '@prime-fresh/auth_api';
-import { hasPermission } from '@prime-fresh/modules';
 import { ReactNode } from 'react';
+import { hasPermission } from '@prime-fresh/modules';
+import { IEmployeePermissions } from '@prime-fresh/services';
 
 export const PermissionWrapper = ({
   permissions,
@@ -8,8 +8,13 @@ export const PermissionWrapper = ({
   action,
   fallback = null,
   children,
-}: {permissions: EmployeePermissions[], documentUniqueKey: string, action: 'create' | 'view' | 'edit' | 'delete' | 'download', fallback: ReactNode | null, children: ReactNode}) => {
+}: {
+  permissions: IEmployeePermissions[];
+  documentUniqueKey: string;
+  action: 'create' | 'view' | 'edit' | 'delete' | 'download';
+  fallback: ReactNode | null;
+  children: ReactNode;
+}) => {
   const allowed = hasPermission(permissions, documentUniqueKey, action);
   return allowed ? children : fallback;
 };
-

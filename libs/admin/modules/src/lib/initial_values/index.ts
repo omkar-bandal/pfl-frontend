@@ -1,5 +1,3 @@
-export * from './initValCustomer';
-export * from './initValProduct';
 export * from './initValProductClass';
 export * from './initValProductCat';
 export * from './initValProductSubcat';

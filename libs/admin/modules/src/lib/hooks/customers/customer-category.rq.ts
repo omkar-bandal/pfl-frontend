@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { CustomerCategoryService, GetCustomerCategory, PostCustomerCategory } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { CustomerCategoryService, GetCustomerCategory, PostCustomerCategory } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateCustomerCategory():
@@ -26,11 +26,11 @@ export function useDeleteCustomerCategoryById(id: string):
     });
 }
 
-export function useGetAllCustomerCategories(queryParams?: QueryParams):
+export function useGetAllCustomerCategories(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetCustomerCategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetCustomerCategory[]>, ErrorModel>({
-        queryKey: ['get-all-customer-categories', queryParams],
-        queryFn: () => CustomerCategoryService.getInstance().getAllCustomerCategories(queryParams),
+        queryKey: ['get-all-customer-categories', queryParams, search],
+        queryFn: () => CustomerCategoryService.getInstance().getAllCustomerCategories(queryParams, search),
     });
 }
 

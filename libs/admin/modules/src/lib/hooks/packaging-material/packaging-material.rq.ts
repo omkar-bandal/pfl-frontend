@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { PackagingMaterialService, GetPackagingMaterial, PostPackagingMaterial } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { PackagingMaterialService, GetPackagingMaterial, PostPackagingMaterial } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreatePackagingMaterial():
@@ -26,11 +26,11 @@ export function useDeletePackagingMaterialById(id: string):
     });
 }
 
-export function useGetAllPackagingMaterials(queryParams?: QueryParams):
+export function useGetAllPackagingMaterials(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetPackagingMaterial[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetPackagingMaterial[]>, ErrorModel>({
-        queryKey: ['get-all-packaging-materials', queryParams],
-        queryFn: () => PackagingMaterialService.getInstance().getAllPackagingMaterials(queryParams),
+        queryKey: ['get-all-packaging-materials', queryParams, search],
+        queryFn: () => PackagingMaterialService.getInstance().getAllPackagingMaterials(queryParams, search),
     });
 }
 

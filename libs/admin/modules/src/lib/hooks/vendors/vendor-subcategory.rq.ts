@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { VendorSubcategoryService, GetVendorSubcategory, PostVendorSubcategory } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { VendorSubcategoryService, GetVendorSubcategory, PostVendorSubcategory } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateVendorSubategory():
@@ -26,11 +26,11 @@ export function useDeleteVendorSubcategoryById(id: string):
     });
 }
 
-export function useGetAllVendorSubcategories(queryParams?: QueryParams):
+export function useGetAllVendorSubcategories(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetVendorSubcategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetVendorSubcategory[]>, ErrorModel>({
-        queryKey: ['get-all-vendor-subcategories', queryParams],
-        queryFn: () => VendorSubcategoryService.getInstance().getAllVendorSubcategories(queryParams),
+        queryKey: ['get-all-vendor-subcategories', queryParams, search],
+        queryFn: () => VendorSubcategoryService.getInstance().getAllVendorSubcategories(queryParams, search),
     });
 }
 

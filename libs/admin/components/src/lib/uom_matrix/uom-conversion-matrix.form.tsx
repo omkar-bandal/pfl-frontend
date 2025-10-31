@@ -1,9 +1,16 @@
 import { Formik } from "formik";
-import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared"
-import { ADMIN_ROUTES, initValUOMConversionMatrix, uomConversionMatrixSchema, useCreateUOMConversionMatrix, useGetAllUOMs, useGetUOMConversionMatrixById, useUpdateUOMConversionMatrixById } from "@prime-fresh/admin/modules";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
 import { handleFormKeyDown, mapToValueLabelArray, useGetUOMPartialData } from "@prime-fresh/shared/modules";
+import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/shared/components"
+import {
+    adminRoutes,
+    initValUOMConversionMatrix,
+    uomConversionMatrixSchema,
+    useCreateUOMConversionMatrix,
+    useGetUOMConversionMatrixById,
+    useUpdateUOMConversionMatrixById
+} from "@prime-fresh/admin/modules";
 
 export const UOMConvMatrixForm = () => {
     const { oid } = useParams<{ oid: string }>();
@@ -34,7 +41,7 @@ export const UOMConvMatrixForm = () => {
             (mutatePost(values).then(() => {
                 toast.success(postRes ? postRes.message : "UOM conversion matrix created successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX);
+                    navigate(adminRoutes.VIEW_ALL_UOMs_CONV_MATRIX);
                 }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating UOM conversion matrix.");
@@ -42,7 +49,7 @@ export const UOMConvMatrixForm = () => {
             : (mutatePatch(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "UOM conversion matrix updated successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_UOMs_CONV_MATRIX);
+                    navigate(adminRoutes.VIEW_ALL_UOMs_CONV_MATRIX);
                 }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating UOM conversion matrix.");

@@ -1,4 +1,4 @@
-import { Address } from '@prime-fresh/common_api';
+import { Address } from '@prime-fresh/services';
 import { convertInTitleCase } from './convert-string-case';
 
 export const formatAddress = (address: Address | undefined | null) => {

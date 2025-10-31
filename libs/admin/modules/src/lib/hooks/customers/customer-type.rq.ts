@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { CustomerTypeService, GetCustomerType, PostCustomerType } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { CustomerTypeService, GetCustomerType, PostCustomerType } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateCustomerType():
@@ -26,11 +26,11 @@ export function useDeleteCustomerTypeById(id: string):
     });
 }
 
-export function useGetAllCustomerTypes(queryParams?: QueryParams):
+export function useGetAllCustomerTypes(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetCustomerType[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetCustomerType[]>, ErrorModel>({
-        queryKey: ['get-all-customer-types', queryParams],
-        queryFn: () => CustomerTypeService.getInstance().getAllCustomerCategories(queryParams),
+        queryKey: ['get-all-customer-types', queryParams, search],
+        queryFn: () => CustomerTypeService.getInstance().getAllCustomerTypes(queryParams, search),
     });
 }
 

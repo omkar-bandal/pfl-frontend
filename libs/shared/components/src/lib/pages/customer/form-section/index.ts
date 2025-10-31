@@ -8,3 +8,4 @@ export * from './bank-details';
 export * from './product-specification';
 export * from './payment-terms';
 export * from './office-use-only';
+export * from './customer-form-preview.config';

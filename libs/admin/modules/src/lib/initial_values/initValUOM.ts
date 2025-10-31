@@ -1,4 +1,4 @@
-import {PostUOM} from '@prime-fresh/admin_api'
+import {PostUOM} from '@prime-fresh/services'
 
 export const initValUOM: PostUOM  = {
     unit: '',

@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 interface CountCardProps {
   title: string;
-  count: number;
+  count: number | string;
   color: string;
   icon?: React.ReactNode;
   buttonTitle?: string;
@@ -14,7 +14,7 @@ interface CountCardProps {
 }
 
 export const CountCard: React.FC<CountCardProps> = ({ title, count = 0, color, icon: IconComponent, buttonTitle = '', navigateTo = '' }) => {
-  const cardBackground = getGrandientBackground(135, color, 20)
+  const cardBackground = getGrandientBackground(135, color, 5)
   return (
     <Card
       sx={{
@@ -23,7 +23,7 @@ export const CountCard: React.FC<CountCardProps> = ({ title, count = 0, color, i
         background: cardBackground,
         color: '#fff',
         minWidth: 200,
-        height: 140,
+        // height: 140,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -46,11 +46,11 @@ export const CountCard: React.FC<CountCardProps> = ({ title, count = 0, color, i
               <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', color: '#FFFFFF' }}>
                 {count}
               </Typography>
-              <NavLink to={navigateTo}>
+              {buttonTitle && <NavLink to={navigateTo}>
                 <Typography variant='body2' component='button' sx={{ fontSize: 12, fontWeight: 600, color: '#FFFFFF' }}>
                   {buttonTitle}<ChevronRight fontSize='small' />
                 </Typography>
-              </NavLink>
+              </NavLink>}
             </Stack>
           </Grid>
           <Grid item xs={2}>

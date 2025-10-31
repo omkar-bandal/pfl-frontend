@@ -20,9 +20,9 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   quantityCount,
   quantityPercent,
   color = '#1976d2',
-  onClickAction
+  onClickAction,
 }) => {
-  const cardBackground = getGrandientBackground(135, color, 20)
+  const cardBackground = getGrandientBackground(135, color, 10);
 
   return (
     <Card
@@ -51,21 +51,21 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
 
         <Box display="flex" justifyContent="space-between">
           <Box>
-            <Typography variant="caption">Amount</Typography>
-            <Typography variant="subtitle1" fontWeight={600} component='div'>
-              {amountCount}
+            <Typography variant="caption">Quantity</Typography>
+            <Typography variant="subtitle1" fontWeight={600} component="div">
+              {quantityCount}
             </Typography>
-            <Typography variant="subtitle1" fontWeight={600} component='div'>
-              ({amountPercent}%)
+            <Typography variant="subtitle1" fontWeight={600} component="div">
+              ({quantityPercent}%)
             </Typography>
           </Box>
           <Box>
-            <Typography variant="caption">Quantity</Typography>
-            <Typography variant="subtitle1" fontWeight={600} component='div'>
-              {quantityCount}
+            <Typography variant="caption">Amount</Typography>
+            <Typography variant="subtitle1" fontWeight={600} component="div">
+              {amountCount}
             </Typography>
-            <Typography variant="subtitle1" fontWeight={600} component='div'>
-              ({quantityPercent}%)
+            <Typography variant="subtitle1" fontWeight={600} component="div">
+              ({amountPercent}%)
             </Typography>
           </Box>
         </Box>

@@ -1,25 +1,24 @@
 import * as React from 'react';
-import { AppBar, IconButton, Box, Badge } from '@mui/material';
+import { AppBar, IconButton, Box, Badge, Tooltip, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
   authRouteConstants,
   authState,
-  INotification,
   layoutStates,
   notificationsState,
   setMobileOpen,
   useActions,
   useAppDispatch,
   useAppSelector,
+  useSignOut,
 } from '@prime-fresh/modules';
-import { AccountCircle, Logout, Notifications } from '@mui/icons-material';
-import { ISignOutRequest, useSignOut } from '@prime-fresh/auth_api';
+import { AccountCircle, ArrowBack, Logout, Notifications } from '@mui/icons-material';
+import { ISignOutRequest } from '@prime-fresh/services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 import { ProfileMenu } from './ProfileMenu';
 import { NotificationBox } from './NotificationBox';
-// import { socket } from '@prime-fresh/common_api';
 
 export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const dispatch = useAppDispatch();
@@ -29,13 +28,6 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
   const { loggedInUserInfo } = useAppSelector(authState);
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const { setLoggedInUserInfo, setEmployeePermissions, setIsLoggedIn } = useActions();
-
-  // React.useEffect(() => {
-  //   socket.on('newNotification', (data: INotification) => {
-  //     console.log(`📩 Notification received:`, data);
-  //     addNotification(data);
-  //   });
-  // }, [addNotification]);
 
   const notifications = useAppSelector(notificationsState);
 
@@ -65,7 +57,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
 
   const handleCloseNotificationBox = () => {
     setNotificationBoxAnchorEl(null);
-    setNotifications([])
+    setNotifications([]);
   };
 
   const { mutateAsync, isPending, isError, error } = useSignOut();
@@ -88,7 +80,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
           setEmployeePermissions(null);
           handleCloseProfileMenu();
           navigate(authRouteConstants.SIGN_IN);
-          toast.success('Logout successfully.')
+          toast.success('Logout successfully.');
         })
         .catch(() => {
           if (isError) {
@@ -98,7 +90,7 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
             setEmployeePermissions(null);
             toast.error(error ? error.message : 'Error while logout');
             navigate(authRouteConstants.SIGN_IN);
-            toast.error('Failed to logout.')
+            toast.error('Failed to logout.');
           }
         });
     } else {
@@ -113,48 +105,119 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
       disable: isPending && !isError,
     },
   ];
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <AppBar
       position="fixed"
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
-        height: 40,
+        height: 40, // Increased height for better visibility
         ml: { sm: `${drawerWidth}px` },
         bgcolor: '#FFFFFF',
-        boxShadow: 'none',
+        boxShadow: 'none', // Subtle shadow
         boxSizing: 'border-box',
       }}
     >
       <Box
         width="100%"
         height="100%"
-        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2, paddingY: 1 }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingX: 2,
+          paddingY: 1,
+        }}
       >
-        <IconButton
-          color="primary"
-          aria-label="open drawer"
-          edge="start"
-          onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
-          <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
-            <Badge badgeContent={notifications.length} color="error">
-              <Notifications fontSize="medium" />
-            </Badge>
-          </IconButton>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <IconButton
-            onClick={handleOpenProfileMenu}
-            size="medium"
-            sx={{ ml: 2 }}
-            aria-controls={openProfileMenu ? 'profile-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={openProfileMenu ? 'true' : undefined}
+            color="primary"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{
+              display: { sm: 'none' },
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              },
+            }}
           >
-            <AccountCircle fontSize="medium" />
+            <MenuIcon />
           </IconButton>
+          <Tooltip title="Go Back">
+            <IconButton
+              color="primary"
+              aria-label="go back"
+              onClick={handleGoBack}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              <ArrowBack />
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'end',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Typography variant="h6" component="div" color="text.primary" sx={{ fontWeight: 600 }}>
+            {username}
+          </Typography>
+          <Tooltip title="Notifications">
+            <IconButton
+              color="primary"
+              size="medium"
+              aria-label="notification"
+              onClick={handleOpenNotificationBox}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              <Badge
+                badgeContent={notifications.length}
+                color="error"
+                sx={{
+                  '& .MuiBadge-badge': {
+                    fontSize: '0.75rem',
+                    height: '20px',
+                    minWidth: '20px',
+                  },
+                }}
+              >
+                <Notifications fontSize="medium" />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Profile Menu">
+            <IconButton
+              onClick={handleOpenProfileMenu}
+              size="medium"
+              aria-controls={openProfileMenu ? 'profile-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={openProfileMenu ? 'true' : undefined}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              <AccountCircle fontSize="medium" />
+            </IconButton>
+          </Tooltip>
         </Box>
         <ProfileMenu
           open={openProfileMenu}
@@ -172,5 +235,63 @@ export function Appbar({ drawerWidth }: { drawerWidth: number }) {
         />
       </Box>
     </AppBar>
+    // <AppBar
+    //   position="fixed"
+    //   sx={{
+    //     width: { sm: `calc(100% - ${drawerWidth}px)` },
+    //     height: 40,
+    //     ml: { sm: `${drawerWidth}px` },
+    //     bgcolor: '#FFFFFF',
+    //     boxShadow: 'none',
+    //     boxSizing: 'border-box',
+    //   }}
+    // >
+    //   <Box
+    //     width="100%"
+    //     height="100%"
+    //     sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: 2, paddingY: 1 }}
+    //   >
+    //     <IconButton
+    //       color="primary"
+    //       aria-label="open drawer"
+    //       edge="start"
+    //       onClick={handleDrawerToggle}
+    //       sx={{ mr: 2, display: { sm: 'none' } }}
+    //     >
+    //       <MenuIcon />
+    //     </IconButton>
+    //     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'end', alignItems: 'center' }}>
+    //       <IconButton color="primary" size="medium" aria-label="notification" onClick={handleOpenNotificationBox}>
+    //         <Badge badgeContent={notifications.length} color="error">
+    //           <Notifications fontSize="medium" />
+    //         </Badge>
+    //       </IconButton>
+    //       <IconButton
+    //         onClick={handleOpenProfileMenu}
+    //         size="medium"
+    //         sx={{ ml: 2 }}
+    //         aria-controls={openProfileMenu ? 'profile-menu' : undefined}
+    //         aria-haspopup="true"
+    //         aria-expanded={openProfileMenu ? 'true' : undefined}
+    //       >
+    //         <AccountCircle fontSize="medium" />
+    //       </IconButton>
+    //     </Box>
+    //     <ProfileMenu
+    //       open={openProfileMenu}
+    //       anchorEl={profileMenuAnchorEl}
+    //       onClick={handleCloseProfileMenu}
+    //       onClose={handleCloseProfileMenu}
+    //       loggedInUsername={username}
+    //       menuoptions={profileMenuOptions}
+    //     />
+    //     <NotificationBox
+    //       open={openNotificationBox}
+    //       anchorEl={notificationBoxAnchorEl}
+    //       onClose={handleCloseNotificationBox}
+    //       notifications={notifications}
+    //     />
+    //   </Box>
+    // </AppBar>
   );
 }

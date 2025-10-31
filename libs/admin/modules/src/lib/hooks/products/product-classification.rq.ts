@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { ProductClassificationService, GetProductClassification, PostProductClassification } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { ProductClassificationService, GetProductClassification, PostProductClassification } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateProductClassification():
@@ -26,11 +26,11 @@ export function useDeleteProductClassificationById(id: string):
     });
 }
 
-export function useGetAllProductClassifications(queryParams?: QueryParams):
+export function useGetAllProductClassifications(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetProductClassification[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProductClassification[]>, ErrorModel>({
-        queryKey: ['get-all-product-classifications',queryParams],
-        queryFn: () => ProductClassificationService.getInstance().getAllProductClassifications(queryParams),
+        queryKey: ['get-all-product-classifications',queryParams, search],
+        queryFn: () => ProductClassificationService.getInstance().getAllProductClassifications(queryParams, search),
     });
 }
 

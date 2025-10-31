@@ -1,8 +1,8 @@
-import { PostVendor, PostVendorBankDetails, PostVendorSalesContact } from "@prime-fresh/admin_api";
+import { IVendor, IVendorBankDetails, IVendorSalesContact } from "@prime-fresh/services";
 import { initValAddress } from "./address.initial-value";
 
 
-const initValVendorSalesContact: PostVendorSalesContact = {
+const initValVendorSalesContact: IVendorSalesContact = {
     contactFName: null,
     contactMName: null,
     contactLName: null,
@@ -10,7 +10,7 @@ const initValVendorSalesContact: PostVendorSalesContact = {
     mobileNumber: null,
     email: null,
 }
-const initValVendorBankDetails: PostVendorBankDetails = {
+const initValVendorBankDetails: IVendorBankDetails = {
     beneficiaryFName: null,
     beneficiaryMName: null,
     beneficiaryLName: null,
@@ -23,8 +23,9 @@ const initValVendorBankDetails: PostVendorBankDetails = {
     cancelledChequeCopy: null,
 }
 
-export const initValVendor: PostVendor = {
+export const initValVendor: Omit<IVendor, 'id'> = {
     companyName: null,
+    classification: null,
     category: null,
     subcategory: null,
     inFandVBusinessSince: null,
@@ -34,8 +35,11 @@ export const initValVendor: PostVendor = {
     officeEmail: null,
     website: null,
     //Other Details
-    mainProduct: null,
     listOfAllProducts: [],
+    mainProduct: null,
+    listOfPackingMaterial: [],
+    mainPackingMaterial: null,
+    otherProductOrService: null,
     dispatchCenter: null,
     warehouseLocations: null,
     packingCenterLocation: null,
@@ -49,6 +53,7 @@ export const initValVendor: PostVendor = {
     msmeNo: null,
     msmeCopy: null,
     tradeLicenseNumber: null,
+    paymentMode: null, 
     proposedPaymentTerms: null,
     creditTerms: null,
     anyDetailsTeamAndInfra: null,

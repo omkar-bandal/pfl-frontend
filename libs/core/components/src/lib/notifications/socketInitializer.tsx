@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
-import { socket } from '@prime-fresh/common_api';
-import { authState, INotification, useActions, useAppSelector } from '@prime-fresh/modules';
+import { socket, INotification } from '@prime-fresh/services';
+import { authState, useActions, useAppSelector } from '@prime-fresh/modules';
 
 export const SocketInitializer = () => {
   const { loggedInUserInfo } = useAppSelector(authState);

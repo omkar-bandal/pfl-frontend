@@ -1,0 +1,25 @@
+export interface ICustomerOfficeUseOnly {
+    id?: string;
+    proposerBDName: string | null;
+    pflCoordinator: string | null;
+    recommendedBy: string | null;
+    dispatchLocationPfl: string | null;
+    approvedBy: string | null;
+    relationshipManager: string | null;
+    avgBillingMonthly: number;
+    volumeMonthly: number;
+    customerVerification: string | null;
+    verificationAgency: string | null;
+    validityPeriod: string | null;
+    dueDiligenceDone: string | null;
+    creditWorthinessDue: string | null;
+    keyAccountPersonAssigned: string | null;
+    sinceWhen: string | null;
+    ledgerCreatedDate: string | null;
+    ledgerCreatedBy: string | null;
+    ledgerVerifiedApprovedBy: string | null;
+    additionalNotes: string | null
+    customerCode?: string | null;
+    createdBy?: string | null;
+    createdDate?: string | null;
+}

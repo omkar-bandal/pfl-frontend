@@ -1,12 +1,17 @@
 import React from "react";
 import * as Yup from 'yup';
 import { Formik } from "formik";
-import { PostVendorCategory } from "@prime-fresh/admin_api";
-import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
+import { PostVendorCategory } from '@prime-fresh/services';
 import { Box, Grid2, LinearProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, useCreateVendorCategory, useGetVendorCategoryById, useUpdateVendorCategoryById } from "@prime-fresh/admin/modules";
 import { handleFormKeyDown } from "@prime-fresh/shared/modules";
+import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/shared/components";
+import {
+    adminRoutes,
+    useCreateVendorCategory,
+    useGetVendorCategoryById,
+    useUpdateVendorCategoryById
+} from "@prime-fresh/admin/modules";
 
 const initValVendorCat: PostVendorCategory = {
     name: '',
@@ -35,7 +40,7 @@ export function VendorCatForm() {
             (postVendorCategory(values).then(() => {
                 toast.success(postRes ? postRes.message : "Vendor category created successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_VENDORS_CAT);
+                    navigate(adminRoutes.VIEW_ALL_VENDORS_CAT);
                 }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating vendor category.");
@@ -43,7 +48,7 @@ export function VendorCatForm() {
             : (patchVendorCategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Vendor category updated successfully.")
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_VENDORS_CAT);
+                    navigate(adminRoutes.VIEW_ALL_VENDORS_CAT);
                 }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating vendor category.");

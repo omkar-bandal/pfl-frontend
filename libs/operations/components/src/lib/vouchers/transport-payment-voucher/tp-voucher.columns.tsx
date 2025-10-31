@@ -1,0 +1,304 @@
+import { useMemo } from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { Chip, IconButton } from '@mui/material';
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import { CustomGridColDef } from '@prime-fresh/shared/components';
+import { Edit, Preview } from '@mui/icons-material';
+import { operationsRoutes } from '@prime-fresh/operations/modules';
+import { convertInTitleCase, getDocStatusColor } from '@prime-fresh/shared/modules';
+
+export const useTPVoucherColumns = (
+  canEdit: boolean,
+  canView: boolean,
+  navigate: NavigateFunction
+): CustomGridColDef[] => {
+  return useMemo(
+    () => [
+      {
+        field: 'overAllStatus',
+        headerName: 'Status',
+        flex: 1,
+        minWidth: 130,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        isMobileVisible: true,
+        renderCell: (params: GridRenderCellParams) => {
+          const status = convertInTitleCase(params.row.overAllStatus || '');
+          return (
+            <Chip
+              label={status}
+              size="small"
+              sx={{
+                flex: 1,
+                minWidth: 80,
+                color: '#FFF',
+                backgroundColor: getDocStatusColor(params.row.overAllStatus || ''),
+              }}
+            />
+          );
+        },
+      },
+      {
+        field: 'voucherNo',
+        headerName: 'Voucher No',
+        flex: 1,
+        minWidth: 130,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        isMobileVisible: true,
+        valueGetter: (value: string) => (value ? value.toUpperCase() : ''),
+      },
+      {
+        field: 'createdBy',
+        headerName: 'Created By',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'createdDate',
+        headerName: 'Created Date',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+      },
+      {
+        field: 'createdTime',
+        headerName: 'Created Time',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+      },
+      {
+        field: 'companyName',
+        headerName: 'Company Name',
+        flex: 1,
+        minWidth: 200,
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'location',
+        headerName: 'Location',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'debitCreditTo',
+        headerName: 'Debit From / Credit To',
+        flex: 1,
+        minWidth: 200,
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'payReceivedFrom',
+        headerName: 'Received From / Pay To',
+        flex: 1,
+        minWidth: 200,
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'driverName',
+        headerName: 'Driver',
+        flex: 1,
+        minWidth: 150,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'contactNo',
+        headerName: 'Contact No',
+        flex: 1,
+        minWidth: 150,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? value : ''),
+      },
+      {
+        field: 'altContactNo',
+        headerName: 'Alt Contact No',
+        flex: 1,
+        minWidth: 150,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? value : ''),
+      },
+      {
+        field: 'vehicleNo',
+        headerName: 'Vehicle No',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? value?.toUpperCase() : ''),
+      },
+      {
+        field: 'dispatchLocation',
+        headerName: 'Dispatch Location',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'destinationLocation',
+        headerName: 'Destination Location',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'paymentMode',
+        headerName: 'Payment Mode',
+        flex: 1,
+        minWidth: 100,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'freightAmt',
+        headerName: 'Freight Amount',
+        flex: 1,
+        minWidth: 100,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? `${Number(value)} Rs.` : ''),
+      },
+      {
+        field: 'totalAmt',
+        headerName: 'Total Amount',
+        flex: 1,
+        minWidth: 100,
+        align: 'center',
+        headerAlign: 'center',
+        hide: false,
+        valueGetter: (value: string) => (value ? `${Number(value)} Rs.` : ''),
+      },
+      {
+        field: 'amtWords',
+        headerName: 'Amount In Words',
+        flex: 1,
+        minWidth: 200,
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'grnNo',
+        headerName: 'Reference GRN',
+        flex: 1,
+        minWidth: 120,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? value?.toUpperCase() : ''),
+      },
+      {
+        field: 'receiverName',
+        headerName: 'Receiver Name',
+        flex: 1,
+        minWidth: 150,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'kyc',
+        headerName: 'KYC',
+        flex: 1,
+        minWidth: 100,
+        align: 'center',
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: boolean) => (value === true ? 'Yes' : 'No'),
+      },
+      {
+        field: 'remark',
+        headerName: 'Remark',
+        flex: 1,
+        minWidth: 200,
+        headerAlign: 'center',
+        hide: true,
+        valueGetter: (value: string) => (value ? convertInTitleCase(value || '') : ''),
+      },
+      {
+        field: 'edit',
+        headerName: 'Edit',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        minWidth: 70,
+        hideable: false,
+        sortable: false,
+        filterable: false,
+        disableExport: true,
+        disableColumnMenu: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <IconButton
+            aria-label="edit"
+            color="info"
+            disabled={params.row.overAllStatus === 'COMPLETE' || params.row.overAllStatus === 'REJECT' ? true : false}
+            onClick={() => navigate(`${operationsRoutes.UPDATE_TRANSPORT_CASH_VOUCHER}/${params.row.id}`)}
+          >
+            <Edit />
+          </IconButton>
+        ),
+      },
+      {
+        field: 'view',
+        headerName: 'View',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        minWidth: 70,
+        hideable: false,
+        sortable: false,
+        filterable: false,
+        disableExport: true,
+        disableColumnMenu: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <IconButton
+            aria-label="view"
+            color="success"
+            onClick={() => navigate(`${operationsRoutes.VIEW_A_TRANSPORT_CASH_VOUCHER}/${params.row.documentId}`)}
+          >
+            <Preview />
+          </IconButton>
+        ),
+      },
+    ],
+    [navigate, canEdit, canView]
+  );
+};

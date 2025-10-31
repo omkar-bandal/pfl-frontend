@@ -1,4 +1,4 @@
-import { IApprovalFlow, IApprover, IEmployeeReplacementReq } from '@prime-fresh/admin_api';
+import { IApprovalFlow, IApprover, IEmployeeReplacementReq } from '@prime-fresh/services';
 
 export const approverInitialValue: IApprover = {
   hierarchy: null,

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Yup from 'yup';
 import { Formik } from "formik";
-import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
 import { Box, Grid2, LinearProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, useCreateCustomerType, useGetCustomerTypeById, useUpdateCustomerTypeById } from "@prime-fresh/admin/modules";
 import { handleFormKeyDown } from '@prime-fresh/shared/modules';
+import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/shared/components";
+import { adminRoutes, useCreateCustomerType, useGetCustomerTypeById, useUpdateCustomerTypeById } from "@prime-fresh/admin/modules";
 
 const initValCustomerType = {
     name: '',
@@ -20,7 +20,7 @@ export function CustomerTypeForm() {
     const { id } = useParams<{ id: string }>();
     const customerTypeId = id ? id : "";
     const { data: type, isLoading } = useGetCustomerTypeById(customerTypeId);
-   console.log("Customer Type: ", type?.data)
+    console.log("Customer Type: ", type?.data)
     const customerType = type?.data ? type.data : initValCustomerType;
     const customerTypeVal = customerTypeId ? customerType : initValCustomerType;
 
@@ -33,7 +33,7 @@ export function CustomerTypeForm() {
             (postCustomerType(values).then(() => {
                 toast.success(postRes ? postRes.message : "Customer type created successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES);
+                    navigate(adminRoutes.VIEW_ALL_CUSTOMER_TYPES);
                 }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating customer type.");
@@ -41,7 +41,7 @@ export function CustomerTypeForm() {
             : (patchCustomerType(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Customer type updated successfully.")
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_CUSTOMER_TYPES);
+                    navigate(adminRoutes.VIEW_ALL_CUSTOMER_TYPES);
                 }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating customer type.");

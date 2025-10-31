@@ -1,35 +1,28 @@
 import React from 'react';
 import { Box, Grid2 } from '@mui/material';
+import { useStockColumns } from './stock.columns';
+import { GetStockGlobal } from '@prime-fresh/services';
+import { sharedTableIds, useGetStockGlobal } from '@prime-fresh/shared/modules';
 import {
   ColumnSettingButton,
   ColumnVisibilityPanel,
   DataGridTable,
   PageTitle,
   toast,
-  useDataTable,
-} from '@prime-fresh/ui_shared';
-import { useStockColumns } from './stock.columns';
-import { useGetStockGlobal } from '@prime-fresh/shared/modules';
-import { GetStockGlobal } from '@prime-fresh/common_api';
+  useDataTableFunctions,
+} from '../../components';
 
 export const StockTable = () => {
   const stockColumns = useStockColumns();
-  const {
-    paginationModel,
-    sortModel,
-    handleSortingChange,
-    handlePaginationChange,
-    queryParams,
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-  } = useDataTable({ columnDef: stockColumns, initialPageSize: 10 });
+  const tableConfig = useDataTableFunctions({
+    columnDef: stockColumns,
+    initialPageSize: 10,
+    tableId: sharedTableIds.STOCK_TABLE_ID,
+  });
 
-  const { data, isLoading, isError, error } = useGetStockGlobal(queryParams);
+  const { data, isLoading, isError, error } = useGetStockGlobal(tableConfig.queryParams);
   const stockData = data ? data : null;
-  console.log('All Stock', stockData);
+  const stockTableRows = stockData?.data ? stockData?.data.filter(data => data.id !== null) : [];
   const rowCountRef = React.useRef(stockData?.allRecords || 0);
   const rowCount = React.useMemo(() => {
     if (stockData?.allRecords !== undefined) {
@@ -59,29 +52,29 @@ export const StockTable = () => {
             alignItems: 'center',
           }}
         >
-          <ColumnSettingButton handleClick={handleOpenColumnVisibilityPanel} />
+          <ColumnSettingButton handleClick={tableConfig.openColumnVisibilityPanel} />
           <ColumnVisibilityPanel
             popoverId="stock-col-def"
             columns={stockColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
+            columnVisibilityModel={tableConfig.columnVisibilityModel}
+            displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+            closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+            onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
           />
         </Grid2>
       </Grid2>
       <DataGridTable<GetStockGlobal>
         loading={isLoading}
-        rows={stockData?.data || []}
+        rows={stockTableRows}
         columns={stockColumns}
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationChange}
-        sortModel={sortModel}
-        onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        paginationModel={tableConfig.paginationModel}
+        onPaginationModelChange={tableConfig.handlePaginationChange}
+        sortModel={tableConfig.sortModel}
+        onSortModelChange={tableConfig.handleSortingChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
       />
     </Box>
   );

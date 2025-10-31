@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { IEmployee } from '@prime-fresh/admin_api';
-import { GetDocumentDetails } from '@prime-fresh/common_api';
-import { CheckboxInput } from '@prime-fresh/ui_shared';
+import { IEmployee } from '@prime-fresh/services';
+import { GetDocumentDetails } from '@prime-fresh/services';
+import { CheckboxInput } from '@prime-fresh/shared/components';
 import { FieldArray, useFormikContext } from 'formik';
 import { convertInTitleCase } from '@prime-fresh/shared/modules';
 

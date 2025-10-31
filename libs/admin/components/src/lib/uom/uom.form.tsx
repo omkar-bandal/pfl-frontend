@@ -1,10 +1,10 @@
 import { Formik } from "formik";
-import { ADMIN_ROUTES, initValUOM, uomSchema, useCreateUOM, useGetUOMById, useUpdateUOMById } from "@prime-fresh/admin/modules";
-import { PostUOM } from "@prime-fresh/admin_api";
-import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
+import { PostUOM } from '@prime-fresh/services';
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
 import { handleFormKeyDown } from "@prime-fresh/shared/modules";
+import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/shared/components";
+import { adminRoutes, initValUOM, uomSchema, useCreateUOM, useGetUOMById, useUpdateUOMById } from "@prime-fresh/admin/modules";
 
 export const UOMForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -33,7 +33,7 @@ export const UOMForm = () => {
             (mutatePost(values).then(() => {
                 toast.success(postRes ? postRes.message : "UOM created successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_UOMs);
+                    navigate(adminRoutes.VIEW_ALL_UOMs);
                 }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating UOM");
@@ -41,7 +41,7 @@ export const UOMForm = () => {
             : (mutatePatch(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "UOM updated successfully.");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_UOMs);
+                    navigate(adminRoutes.VIEW_ALL_UOMs);
                 }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating UOM");

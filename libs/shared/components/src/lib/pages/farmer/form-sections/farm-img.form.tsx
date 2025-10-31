@@ -1,6 +1,5 @@
 import { Grid2 } from '@mui/material'
-import { ImageUpload } from '@prime-fresh/ui_shared'
-import React from 'react'
+import { ImageUpload } from '../../../components'
 
 export const FarmerImageSection = () => {
     return (

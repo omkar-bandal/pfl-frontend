@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetVendor, PostVendor } from "@prime-fresh/admin_api";
-import { VendorPartialData } from "@prime-fresh/common_api";
+import { IVendor } from '@prime-fresh/services';
+import { VendorPartialData } from '@prime-fresh/services';
 
 type vendorDataState = {
-    allVendors: GetVendor[] | [];
+    allVendors: IVendor[] | [];
     allVendorssPartialData : VendorPartialData[];
     selectedVendorPartialData : VendorPartialData | null | undefined;
-    vendorFormPreview: PostVendor | null;
+    vendorFormPreview: IVendor | null;
 }
 const initialState: vendorDataState = {
     allVendors: [],
@@ -20,7 +20,7 @@ const vendorDataSlice = createSlice({
     name: 'vendorData',
     initialState,
     reducers: {
-        setVendorData: (state, action: PayloadAction<GetVendor[]>) => {
+        setVendorData: (state, action: PayloadAction<IVendor[]>) => {
             state.allVendors = action.payload;
         },
         setAllVendorsPartialData: (state, action: PayloadAction<VendorPartialData[]>) => {
@@ -29,7 +29,7 @@ const vendorDataSlice = createSlice({
         setSelectedVendorPartialData: (state, action: PayloadAction<VendorPartialData | null | undefined>) => {
             state.selectedVendorPartialData = action.payload;
         },
-        setVendorFormPreview: (state, action: PayloadAction<PostVendor>) => {
+        setVendorFormPreview: (state, action: PayloadAction<IVendor>) => {
             state.vendorFormPreview = action.payload;
           },
     }

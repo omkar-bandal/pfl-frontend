@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetProduct, GetProductCategory, GetProductSubcategory, PostProduct, ProductPartialData } from "@prime-fresh/admin_api";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IProduct, GetProductCategory, GetProductSubcategory, ProductPartialData } from '@prime-fresh/services';
 
 type ProductDataState = {
-    allProducts: GetProduct[],
-    selectedProduct: GetProduct | null | undefined,
+    allProducts: IProduct[],
+    selectedProduct: IProduct | null | undefined,
     productCat: GetProductCategory[],
     productSubCat: GetProductSubcategory[],
     productPartialData: ProductPartialData[],
-    productFormPreview: PostProduct | null,
+    productFormPreview: IProduct | null,
 }
 const initialState: ProductDataState = {
     allProducts: [],
@@ -22,10 +22,10 @@ const productDataSlice = createSlice({
     name: 'productData',
     initialState,
     reducers: {
-        setProducts: (state, action: PayloadAction<GetProduct[]>) => {
+        setProducts: (state, action: PayloadAction<IProduct[]>) => {
             state.allProducts = action.payload;
         },
-        setSelectedProduct: (state, action: PayloadAction<GetProduct | null | undefined>) => {
+        setSelectedProduct: (state, action: PayloadAction<IProduct | null | undefined>) => {
             state.selectedProduct = action.payload;
         },
         setProductCat: (state, action: PayloadAction<GetProductCategory[]>) => {
@@ -51,22 +51,22 @@ const productDataSlice = createSlice({
             const index = action.payload;
             state.productPartialData.splice(index, 1);
         },
-        setProductFormPreview: (state, action: PayloadAction<PostProduct>) => {
+        setProductFormPreview: (state, action: PayloadAction<IProduct>) => {
             state.productFormPreview = action.payload;
         }
     }
 });
 
-export const { 
-    setProducts, 
-    setProductCat, 
-    setProductSubCat, 
-    setSelectedProduct, 
-    addorupdateProductPartialData, 
-    removeProductPartialData, 
+export const {
+    setProducts,
+    setProductCat,
+    setProductSubCat,
+    setSelectedProduct,
+    addorupdateProductPartialData,
+    removeProductPartialData,
     clearProductPartialData,
     setProductFormPreview
- } = productDataSlice.actions;
+} = productDataSlice.actions;
 
 export const productsDataStates = (state: RootState) => state.productData;
 export const productsState = (state: RootState) => state.productData.allProducts;

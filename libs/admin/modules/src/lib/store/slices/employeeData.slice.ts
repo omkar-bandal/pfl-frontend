@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { IEmployee } from "@prime-fresh/admin_api";
+import { IEmployee } from '@prime-fresh/services';
 
 type customerDataState = {
     employees: IEmployee[];

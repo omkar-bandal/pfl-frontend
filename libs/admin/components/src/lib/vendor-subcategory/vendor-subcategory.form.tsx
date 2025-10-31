@@ -2,10 +2,16 @@ import { Formik } from "formik";
 import * as Yup from 'yup';
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid2, LinearProgress } from "@mui/material";
-import { PostVendorSubcategory } from "@prime-fresh/admin_api";
-import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/ui_shared";
-import { ADMIN_ROUTES, useCreateVendorSubategory, useGetAllVendorCategories, useGetVendorSubcategoryById, useUpdateVendorSubcategoryById } from "@prime-fresh/admin/modules";
+import { PostVendorSubcategory } from '@prime-fresh/services';
 import { handleFormKeyDown, mapToValueLabelArray } from "@prime-fresh/shared/modules";
+import { FormButtonGroup, PageTitle, SelectInput, TextInput, toast } from "@prime-fresh/shared/components";
+import {
+    adminRoutes,
+    useCreateVendorSubategory,
+    useGetAllVendorCategories,
+    useGetVendorSubcategoryById,
+    useUpdateVendorSubcategoryById
+} from "@prime-fresh/admin/modules";
 
 const initValVendorSubcat: PostVendorSubcategory = {
     name: '',
@@ -40,7 +46,7 @@ export function VendorSubcatForm() {
                 console.log("Response", postRes);
                 toast.success(postRes ? postRes.message : "Vendor subcategory created successfully.")
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT);
+                    navigate(adminRoutes.VIEW_ALL_VENDORS_SUBCAT);
                 }, 2000);
             }).catch(() => {
                 toast.error(postError ? postError.message : "Error while creating vendor subcategory")
@@ -48,7 +54,7 @@ export function VendorSubcatForm() {
             (patchVendorSubcategory(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Vendor subcategory updated successfully.")
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_VENDORS_SUBCAT);
+                    navigate(adminRoutes.VIEW_ALL_VENDORS_SUBCAT);
                 }, 2000);
             }).catch(() => {
                 toast.error(patchError ? patchError.message : "Error while updating vendor subcategory")

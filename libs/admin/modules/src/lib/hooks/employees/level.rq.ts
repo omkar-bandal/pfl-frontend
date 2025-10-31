@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LevelsService } from '@prime-fresh/admin_api';
+import { LevelsService } from '@prime-fresh/services';
 import {
   ApiBaseState,
   ErrorModel,
@@ -8,7 +8,7 @@ import {
   GetLevel,
   // GetDocumentDetails,
   DocumentDetails,
-} from '@prime-fresh/common_api';
+} from '@prime-fresh/services';
 import {
   useMutation,
   UseMutationResult,

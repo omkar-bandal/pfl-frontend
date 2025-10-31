@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { CustomersService, GetCustomer } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { CustomersService, ICustomer } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateCustomer():
@@ -26,18 +26,18 @@ export function useDeleteCustomerById(id: string):
     });
 }
 
-export function useGetAllCustomers(queryParams?: QueryParams):
-    UseQueryResult<ApiBaseState<GetCustomer[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetCustomer[]>, ErrorModel>({
-        queryKey: ['get-all-customers',queryParams],
-        queryFn: () => CustomersService.getInstance().getAllCustomers(queryParams),
+export function useGetAllCustomers(queryParams?: QueryParams, search?: string | null):
+    UseQueryResult<ApiBaseState<ICustomer[]>, ErrorModel> {
+    return useQuery<ApiBaseState<ICustomer[]>, ErrorModel>({
+        queryKey: ['get-all-customers', queryParams, search],
+        queryFn: () => CustomersService.getInstance().getAllCustomers(queryParams, search),
     });
 }
 
 export function useGetCustomerById(id: string):
-    UseQueryResult<ApiBaseState<GetCustomer>, ErrorModel> {
-        const enabled = id.length > 0 ? true : false;
-    return useQuery<ApiBaseState<GetCustomer>, ErrorModel>({
+    UseQueryResult<ApiBaseState<ICustomer>, ErrorModel> {
+    const enabled = id.length > 0 ? true : false;
+    return useQuery<ApiBaseState<ICustomer>, ErrorModel>({
         queryKey: ['get-customer-by-id', id],
         queryFn: () => CustomersService.getInstance().getCustomerById(id),
         enabled: enabled,

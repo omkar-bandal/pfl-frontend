@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store.admin";
-import { GetCustomer, PostCustomer } from "@prime-fresh/admin_api";
+import { ICustomer } from '@prime-fresh/services';
 
 type customerDataState = {
-    customers: GetCustomer[];
-    customerFormPreview: PostCustomer | null,
+    customers: ICustomer[];
+    customerFormPreview: ICustomer | null,
 }
 const initialState: customerDataState = {
     customers: [],
@@ -14,10 +14,10 @@ const customerDataSlice = createSlice({
     name: 'customerData',
     initialState,
     reducers: {
-        setCustomerData: (state, action: PayloadAction<GetCustomer[]>) => {
+        setCustomerData: (state, action: PayloadAction<ICustomer[]>) => {
             state.customers = action.payload;
         },
-        setCustomerFormPreview: (state, action: PayloadAction<PostCustomer>) => {
+        setCustomerFormPreview: (state, action: PayloadAction<ICustomer>) => {
             state.customerFormPreview = action.payload;
         }
     }

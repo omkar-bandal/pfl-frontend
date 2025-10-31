@@ -1,35 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const getLightColor = (hexColor: string) => {
-  // Remove the '#' if present
-  const cleanHex = hexColor.startsWith('#') ? hexColor.slice(1) : hexColor;
-
-  // Validate hex code length
-  if (!/^[0-9A-Fa-f]{6}$/.test(cleanHex)) {
-    console.error("Invalid hex color code provided.");
-    return hexColor; // Return original if invalid
+export const getLightColor = (hex: string, perc?: number) => {
+  const percent = perc ?? 60;
+  // 1. Clean and normalize the hex input
+  let color = hex.startsWith('#') ? hex.slice(1) : hex;
+  
+  // Handle shorthand hex codes (e.g., #F00 -> #FF0000)
+  if (color.length === 3) {
+    color = color[0] + color[0] + color[1] + color[1] + color[2] + color[2];
   }
+  
+  // 2. Convert percentage (0-100) to a factor (0-255)
+  // 2.55 is 255 / 100, which scales the percentage to the 8-bit color range.
+  const factor = Math.round(2.55 * percent);
 
-  // Convert hex to RGB components
-  let r = parseInt(cleanHex.substring(0, 2), 16);
-  let g = parseInt(cleanHex.substring(2, 4), 16);
-  let b = parseInt(cleanHex.substring(4, 6), 16);
+  // 3. Extract R, G, B components and convert them to decimal (0-255)
+  let R = parseInt(color.substring(0, 2), 16);
+  let G = parseInt(color.substring(2, 4), 16);
+  let B = parseInt(color.substring(4, 6), 16);
 
-  // Define the lightening factor (how much to blend with white)
-  // A higher factor (closer to 1) means a lighter shade.
-  const lightenFactor = 0.85; // Blends 85% towards white
+  // 4. Increase each component and clamp the result at 255 (pure white)
+  R = Math.min(255, R + factor);
+  G = Math.min(255, G + factor);
+  B = Math.min(255, B + factor);
 
-  // Blend each RGB component with white (255)
-  r = Math.min(255, r + (255 - r) * lightenFactor);
-  g = Math.min(255, g + (255 - g) * lightenFactor);
-  b = Math.min(255, b + (255 - b) * lightenFactor);
+  // 5. Convert the new decimal values back to two-digit hexadecimal strings
+  // .toString(16) converts to hex; .padStart(2, '0') ensures two digits.
+  const RR = R.toString(16).padStart(2, '0');
+  const GG = G.toString(16).padStart(2, '0');
+  const BB = B.toString(16).padStart(2, '0');
 
-  // Convert RGB components back to a 2-digit hex string
-  const toHex = (c: any) => {
-    const hex = Math.round(c).toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
-  };
-
-  // Return the new hex color code
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
-
+  // 6. Return the final hex code
+  return `#${RR}${GG}${BB}`;
+};

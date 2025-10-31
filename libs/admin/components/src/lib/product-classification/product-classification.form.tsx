@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Formik } from "formik";
-import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/ui_shared";
 import { useNavigate, useParams } from "react-router-dom";
-import { ADMIN_ROUTES, initValProductClass, productClassificationSchema, useGetProductClassificationById, useCreateProductClassification, useUpdateProductClassification } from "@prime-fresh/admin/modules";
-import { Box, Grid2, LinearProgress } from "@mui/material";
 import { handleFormKeyDown } from "@prime-fresh/shared/modules";
+import { Box, Grid2, LinearProgress } from "@mui/material";
+import { FormButtonGroup, PageTitle, TextInput, toast } from "@prime-fresh/shared/components";
+import { adminRoutes, initValProductClass, productClassificationSchema, useGetProductClassificationById, useCreateProductClassification, useUpdateProductClassification } from "@prime-fresh/admin/modules";
 
-export function ProductClassForm() {
+export const ProductClassForm = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const classificationId = id ? id : "";
 
     const { data, isLoading } = useGetProductClassificationById(classificationId);
@@ -16,22 +17,20 @@ export function ProductClassForm() {
     const { mutateAsync: postProductClassification, error: postError, data: postRes } = useCreateProductClassification();
     const { mutateAsync: patchProductClassification, error: patchError, data: patchRes } = useUpdateProductClassification(classificationId);
 
-    const navigate = useNavigate();
 
     const handleSubmit = (values: any) => {
-        console.log(values);
         classificationId === "" ?
             (postProductClassification(values).then(() => {
                 toast.success(postRes ? postRes.message : "Product Classification Created")
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
+                    navigate(adminRoutes.VIEW_ALL_PRODUCT_CLASS);
                 }, 2000);
             }).catch(() => {
                 toast.error(`Error: ${postError?.message}`)
             })) : (patchProductClassification(values).then(() => {
                 toast.success(patchRes ? patchRes.message : "Product Classification Updated");
                 setTimeout(() => {
-                    navigate(ADMIN_ROUTES.GET_ALL_PRODUCT_CLASS);
+                    navigate(adminRoutes.VIEW_ALL_PRODUCT_CLASS);
                 }, 2000);
             }).catch(() => {
                 toast.error(`Error: ${patchError?.message}`)

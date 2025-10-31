@@ -1,8 +1,8 @@
-import { CustomGridColDef } from '@prime-fresh/ui_shared';
 import { useMemo } from 'react';
+import { CustomGridColDef } from '@prime-fresh/shared/components';
 import { useNavigate } from 'react-router-dom';
 import { GridRenderCellParams } from '@mui/x-data-grid';
-import { IApprovalFlow, IDocumentType } from '@prime-fresh/admin_api';
+import { IApprovalFlow, IDocumentType } from '@prime-fresh/services';
 import { Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { adminRoutes } from '@prime-fresh/admin/modules';
@@ -168,7 +168,7 @@ export const useApprovalFlowColumns = (documentType: IDocumentType): CustomGridC
       },
       {
         field: 'firstFinalizerUsers',
-        headerName: 'First Finalizer (s)',
+        headerName: 'First Authorizer (s)',
         minWidth: 200,
         flex: 1,
         headerAlign: 'center',
@@ -180,7 +180,7 @@ export const useApprovalFlowColumns = (documentType: IDocumentType): CustomGridC
       },
       {
         field: 'secondFinalizerUsers',
-        headerName: 'Second Finalizer (s)',
+        headerName: 'Second Authorizer (s)',
         minWidth: 200,
         flex: 1,
         headerAlign: 'center',

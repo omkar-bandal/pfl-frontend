@@ -1,16 +1,71 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Business } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { officesDataStates } from '@prime-fresh/admin/modules';
-import { Address } from '@prime-fresh/common_api';
+import { GetOffices } from '@prime-fresh/services';
+import { Address } from '@prime-fresh/services';
 import { useAppSelector } from '@prime-fresh/modules';
-import { convertInTitleCase } from '@prime-fresh/shared/modules';
-import {
-  DataViewer,
-  ObjectViewerConfig,
-  PreviewContainer,
-} from '@prime-fresh/ui_shared';
+import { convertInTitleCase, formatAddress } from '@prime-fresh/shared/modules';
+import { DataViewer, PreviewContainer, SectionConfig } from '@prime-fresh/shared/components';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+
+export const officePreviewConfig: SectionConfig[] = [
+  {
+    sectionType: 'object',
+    title: `Office Details`,
+    icon: <Business />,
+    layout: 'grid',
+    gridColumns: 3,
+    fields: [
+      {
+        key: 'name',
+        label: 'Office Name',
+        width: 12,
+        render: (value) => (value ? convertInTitleCase(value) : '-'),
+      },
+      {
+        key: 'address',
+        label: 'Office Address',
+        width: 12,
+        render: (value: Address) => (value ? formatAddress(value) : null),
+      },
+      {
+        key: '',
+        label: 'Contact Person Name',
+        width: 12,
+        isHeader: true,
+      },
+      {
+        key: 'cFirstName',
+        label: 'First Name',
+        render: (value: string) => value ? convertInTitleCase( value || '') : '',
+      },
+      {
+        key: 'cMiddleName',
+        label: 'Middle Name',
+        render: (value: string) => value ? convertInTitleCase( value || '') : '',
+      },
+      {
+        key: 'cLastName',
+        label: 'Last Name',
+        render: (value: string) => value ? convertInTitleCase( value || '') : '',
+      },
+      {
+        key: 'contactNumber',
+        label: 'Contact Number',
+      },
+      {
+        key: 'officeEmail',
+        label: 'Office Email',
+      },
+      {
+        key: 'notes',
+        label: 'Notes',
+      },
+    ],
+  },
+];
 
 export const OfficeFormPreview = () => {
   const { officeType } = useParams<{ officeType: string }>();
@@ -22,55 +77,9 @@ export const OfficeFormPreview = () => {
         .join(' '),
     [OfficeType]
   );
-  const {officeFormPreview} = useAppSelector(officesDataStates);
+  const { officeFormPreview } = useAppSelector(officesDataStates);
   // console.log("officeFormPreview", officeFormPreview)
-  const officePreviewConfig: ObjectViewerConfig = {
-    sections: [
-      {
-        sectionType: 'object',
-        layout: 'grid',
-        gridColumns: 2,
-        fields: [
-          {
-            key: 'name',
-            label: 'Office Name',
-            render: (value) => value? convertInTitleCase(value) : '-',
-          },
-          {
-            key: 'address',
-            label: 'Office Address',
-            render: (value: Address) =>
-              value ? (
-                <>
-                  <Typography variant="body2" component="div">
-                    {convertInTitleCase(`${value.address1}, ${value.address2}`)}
-                  </Typography>
-                  <Typography variant="body2" component="div">
-                   {convertInTitleCase(`${value.location}, ${value.city}, ${value.state}, ${value.pincode}`)}
-                  </Typography>
-                </>
-              ) : null,
-          },
-          {
-            key: 'cFirstName',
-            label: 'First Name',
-          },
-          {
-            key: 'contactNumber',
-            label: 'Contact Number',
-          },
-          {
-            key: 'officeEmail',
-            label: 'Office Email',
-          },
-          {
-            key: 'notes',
-            label: 'Notes',
-          },
-        ],
-      },
-    ],
-  };
+
   return (
     <PreviewContainer title={OfficeTypeLabel}>
       <DataViewer data={officeFormPreview || []} config={officePreviewConfig} />

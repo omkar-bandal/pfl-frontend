@@ -1,20 +1,13 @@
-import React, { memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { Box, Drawer, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import {
-  authState,
-  filterSidebarOptions,
-  mobileOpenState,
-  setIsSidebarClosing,
-  setMobileOpen,
-  SidebarProps,
-  useAppSelector,
-} from '@prime-fresh/modules';
+import { authState, mobileOpenState, setIsSidebarClosing, setMobileOpen, useAppSelector } from '@prime-fresh/modules';
 import Logo from './Logo';
 import SidebarList from './SidebarList';
 import { adminNavigations, commonNavigation, userSpecificNavigation } from '../navigations';
+import { filterSidebarOptions } from './filter-siderbar-opts';
 
-export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
+export const Sidebar = memo(({ drawerWidth }: { drawerWidth: number }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
@@ -23,7 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
   const { loggedInUserInfo, employeePermissions } = useAppSelector(authState);
   const userperms = employeePermissions !== null ? employeePermissions : [];
   const getNavigations = () => {
-    if (loggedInUserInfo?.department === 'admin') return adminNavigations;
+    if (loggedInUserInfo?.roles?.includes('admin')) return adminNavigations;
     else {
       const filteredNavigation = filterSidebarOptions(userSpecificNavigation, userperms, 'create', true);
       return [...commonNavigation, ...filteredNavigation];
@@ -38,7 +31,20 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
   const handleDrawerTransitionEnd = () => {
     dispatch(setIsSidebarClosing(false));
   };
-
+  const drawerStyle = {
+    '& .MuiDrawer-paper': {
+      borderTopRightRadius: 20,
+      borderBottomRightRadius: 20,
+      paddingX: 1,
+      boxSizing: 'border-box',
+      width: drawerWidth,
+      backgroundColor: theme.palette.background.default,
+      boxShadow: `0 4px 8px 0 rgba(0, 0, 0, 0.2)`,
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
+    },
+  };
   return (
     <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
       <Drawer
@@ -51,15 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
         }}
         sx={{
           display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': {
-            paddingX: 1,
-            boxSizing: 'border-box',
-            width: drawerWidth,
-            backgroundColor: theme.palette.primary.light,
-            '&::-webkit-scrollbar': {
-              display: 'none',
-            },
-          },
+          ...drawerStyle,
         }}
       >
         <Logo />
@@ -70,24 +68,11 @@ export const Sidebar: React.FC<SidebarProps> = memo(({ drawerWidth }) => {
         variant="permanent"
         sx={{
           display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': {
-            paddingX: 1,
-            boxSizing: 'border-box',
-            width: drawerWidth,
-            backgroundColor: theme.palette.primary.light,
-            '&::-webkit-scrollbar': {
-              display: 'none',
-            },
-          },
+          ...drawerStyle,
         }}
       >
         <Logo />
-        <SidebarList
-          // dept={dept ? dept : "Default"}
-          navigations={navigations}
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-        />
+        <SidebarList navigations={navigations} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
       </Drawer>
     </Box>
   );

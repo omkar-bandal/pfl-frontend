@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { VendorsService, GetVendor } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { VendorsService, IVendor } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateVendor():
@@ -26,17 +26,17 @@ export function useDeleteVendorById(id: string):
     });
 }
 
-export function useGetAllVendors(queryParams?: QueryParams):
-    UseQueryResult<ApiBaseState<GetVendor[]>, ErrorModel> {
-    return useQuery<ApiBaseState<GetVendor[]>, ErrorModel>({
-        queryKey: ['get-all-vendors', queryParams],
-        queryFn: () => VendorsService.getInstance().getAllVendors(queryParams),
+export function useGetAllVendors(queryParams?: QueryParams, search?: string | null):
+    UseQueryResult<ApiBaseState<IVendor[]>, ErrorModel> {
+    return useQuery<ApiBaseState<IVendor[]>, ErrorModel>({
+        queryKey: ['get-all-vendors', queryParams, search],
+        queryFn: () => VendorsService.getInstance().getAllVendors(queryParams, search),
     });
 }
 
 export function useGetVendorById(id: string):
-    UseQueryResult<ApiBaseState<GetVendor>, ErrorModel> {
-    return useQuery<ApiBaseState<GetVendor>, ErrorModel>({
+    UseQueryResult<ApiBaseState<IVendor>, ErrorModel> {
+    return useQuery<ApiBaseState<IVendor>, ErrorModel>({
         queryKey: ['get-vendor-by-id'],
         queryFn: () => VendorsService.getInstance().getVendorById(id),
         enabled: !!id,

@@ -1,29 +1,102 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { Box, Grid2 } from '@mui/material';
-import { Add, Settings } from '@mui/icons-material';
+import { useMemo, useRef } from 'react';
 import { useVendorCategoryColumns } from './vendor-category.columns';
-import { BtnSmall, ColumnVisibilityPanel, DataGridTable, PageTitle, toast, useDataTable } from '@prime-fresh/ui_shared';
+import { useGetAllVendorCategories } from '@prime-fresh/admin/modules';
+import { useGridApiRef } from '@mui/x-data-grid';
+import { Box, DialogContentText } from '@mui/material';
+import { toolTipText, useDebounce } from '@prime-fresh/shared/modules';
+import { Add, Delete, DoneAll, Edit, Settings } from '@mui/icons-material';
+import { adminRoutes, adminTableIds } from '@prime-fresh/admin/modules';
+import {
+  ColumnVisibilityPanel,
+  DataGridTable,
+  DialogContainer,
+  TableButtonConfig,
+  TableHeader,
+  TableNavActionsConfig,
+  useDataTableFunctions,
+  useErrorHandler,
+  useTableActions,
+  useTableUI,
+} from '@prime-fresh/shared/components';
 import { useNavigate } from 'react-router-dom';
-import { ADMIN_ROUTES, useGetAllVendorCategories } from '@prime-fresh/admin/modules';
 
-export function VendorCatTable() {
+export const VendorCatTable = () => {
   const navigate = useNavigate();
-  const vendorCategoryColumns = useVendorCategoryColumns();
-  const {
-    paginationModel,
-    sortModel,
-    handleSortingChange,
-    handlePaginationChange,
-    queryParams,
-    columnVisibilityModel,
-    displayColumnVisibilityPanel,
-    handleColumnVisibilityModelChange,
-    handleCloseColumnVisibilityPanel,
-    handleOpenColumnVisibilityPanel,
-  } = useDataTable({ columnDef: vendorCategoryColumns, initialPageSize: 10 });
+  const apiRef = useGridApiRef();
+  const { isMobile } = useTableUI();
+  const vendorCategoryColumns = useVendorCategoryColumns(navigate);
 
-  const { data, isLoading, isError, error } = useGetAllVendorCategories(queryParams);
+  const tableNavActionConfig: TableNavActionsConfig = {
+    tableId: adminTableIds.VENDOR_CAT_TABLE_ID,
+    createPath: adminRoutes.CREATE_VENDORS_CAT,
+    editPath: adminRoutes.UPDATE_VENDORS_CAT,
+  };
+
+  const { handleCreate, handleEdit, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
+
+  const tableConfig = useDataTableFunctions({
+    columnDef: vendorCategoryColumns,
+    initialPageSize: 10,
+    tableId: adminTableIds.VENDOR_CAT_TABLE_ID,
+  });
+
+  const buttonConfig: TableButtonConfig[] = useMemo(
+    () => [
+      // {
+      //   icon: <DoneAll />,
+      //   label: 'Select',
+      //   color: 'secondary',
+      //   onClick: tableConfig.handleToggleCheckboxSelection,
+      //   toolTipText: toolTipText.SELECT_BTN,
+      //   visible: true,
+      // },
+      // {
+      //   icon: <Edit />,
+      //   label: 'Edit',
+      //   color: 'info',
+      //   onClick: handleEdit,
+      //   toolTipText: toolTipText.EDIT_BTN,
+      //   visible: isMobile,
+      // },
+      {
+        icon: <Add />,
+        label: 'Add New',
+        color: 'success',
+        onClick: handleCreate,
+        toolTipText: toolTipText.ADD_NEW_BTN,
+        visible: true,
+      },
+      {
+        icon: <Settings />,
+        label: 'Column',
+        color: 'secondary',
+        onClick: tableConfig.openColumnVisibilityPanel,
+        toolTipText: toolTipText.COLUMN_BTN,
+        visible: true,
+      },
+      // {
+      //   icon: <Delete />,
+      //   label: 'Delete',
+      //   color: 'error',
+      //   onClick: handleDelete,
+      //   toolTipText: toolTipText.DELETE_BTN,
+      //   visible: true,
+      // },
+    ],
+    [
+      handleCreate,
+      handleDelete,
+      handleEdit,
+      tableConfig.handleToggleCheckboxSelection,
+      tableConfig.openColumnVisibilityPanel,
+    ]
+  );
+
+  const debouncedSearch = useDebounce(tableConfig.search, 1000);
+
+  const { data, isLoading, isError, error } = useGetAllVendorCategories(tableConfig.queryParams, debouncedSearch);
   const VendorCat = data ? data : null;
+
   const rowCountRef = useRef(VendorCat?.allRecords || 0);
   const rowCount = useMemo(() => {
     if (VendorCat?.allRecords !== undefined) {
@@ -32,46 +105,53 @@ export function VendorCatTable() {
     return rowCountRef.current;
   }, [VendorCat]);
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(error?.message || 'Error occured please refresh the page.');
-    }
-  }, [isError, error]);
-
-  const handleCreate = () => navigate(ADMIN_ROUTES.CREATE_VENDORS_CAT);
+  useErrorHandler(isError, error);
 
   return (
     <Box sx={{ flex: 1 }}>
-      <Grid2 container marginY={1}>
-        <Grid2 size={{ xs: 12, md: 8 }}>
-          <PageTitle pagetitle="Vendor Categories" />
-        </Grid2>
-        <Grid2 size={{ xs: 12, md: 4 }} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <BtnSmall label="Add New" icon={<Add />} color="primary" onClick={handleCreate} />
-          <BtnSmall label="Columns" icon={<Settings />} color="info" onClick={handleOpenColumnVisibilityPanel} />
-          <ColumnVisibilityPanel
-            popoverId="vendor-cat-col-def"
-            columns={vendorCategoryColumns}
-            columnVisibilityModel={columnVisibilityModel}
-            displayColumnVisibilityModel={displayColumnVisibilityPanel}
-            closeColumnVisibilityModel={handleCloseColumnVisibilityPanel}
-            onColumnVisibilityModelChange={handleColumnVisibilityModelChange}
-          />
-        </Grid2>
-      </Grid2>
+      <TableHeader
+        key={adminTableIds.VENDOR_CAT_TABLE_ID}
+        isMobile={isMobile}
+        pageTitle="Vendor Categories"
+        searchText={tableConfig.search}
+        setSearchText={tableConfig.setSearchValue}
+        buttonConfig={buttonConfig}
+        actionMenu={tableConfig.actionMenu}
+        openActionMenu={tableConfig.openActionMenu}
+        onOpenActionMenu={tableConfig.handleOpenActionMenu}
+        onCloseActionMenu={tableConfig.handleCloseActionMenu}
+      />
+      <ColumnVisibilityPanel
+        popoverId="vendor-cat-col-def"
+        columns={vendorCategoryColumns}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        displayColumnVisibilityModel={tableConfig.columnVisibilityPanel}
+        closeColumnVisibilityModel={tableConfig.closeColumnVisibilityPanel}
+        onColumnVisibilityModelChange={tableConfig.handleToggleColumnVisibility}
+      />
       <DataGridTable
+        apiRef={apiRef}
         loading={isLoading}
         rows={VendorCat?.data || []}
         columns={vendorCategoryColumns}
         mode="server"
         initialPageSize={10}
         totalRows={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationChange}
-        sortModel={sortModel}
-        onSortModelChange={handleSortingChange}
-        columnVisibilityModel={columnVisibilityModel}
+        paginationModel={tableConfig.paginationModel}
+        onPaginationModelChange={tableConfig.handlePaginationChange}
+        sortModel={tableConfig.sortModel}
+        onSortModelChange={tableConfig.handleSortingChange}
+        columnVisibilityModel={tableConfig.columnVisibilityModel}
+        checkboxSelection={tableConfig.enableCheckboxSelection}
+      />
+      <DialogContainer
+        dialogKey={adminTableIds.VENDOR_CAT_TABLE_ID}
+        dialogTitle="Delete Vendor Category"
+        dialogContent={<DialogContentText>Are you sure you want to delete ?</DialogContentText>}
+        dialogActionLabel="Delete"
+        dialogActionBtnColor="error"
+        dialogActionFn={handleDelete}
       />
     </Box>
   );
-}
+};

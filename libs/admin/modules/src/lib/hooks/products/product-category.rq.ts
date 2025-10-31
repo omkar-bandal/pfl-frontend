@@ -1,5 +1,5 @@
-import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/common_api';
-import { ProductCategoryService, GetProductCategory, PostProductCategory } from '@prime-fresh/admin_api';
+import { ApiBaseState, ErrorModel, QueryParams, ResultModel } from '@prime-fresh/services';
+import { ProductCategoryService, GetProductCategory, PostProductCategory } from '@prime-fresh/services';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export function useCreateProductCategory():
@@ -26,17 +26,17 @@ export function useDeleteProductCategoryById(id: string):
     });
 }
 
-export function useGetAllProductCategories(queryParams?: QueryParams):
+export function useGetAllProductCategories(queryParams?: QueryParams, search?: string | null):
     UseQueryResult<ApiBaseState<GetProductCategory[]>, ErrorModel> {
     return useQuery<ApiBaseState<GetProductCategory[]>, ErrorModel>({
-        queryKey: ['get-all-product-categories', queryParams],
-        queryFn: () => ProductCategoryService.getInstance().getAllProductCategories(queryParams),
+        queryKey: ['get-all-product-categories', queryParams, search],
+        queryFn: () => ProductCategoryService.getInstance().getAllProductCategories(queryParams, search),
     });
 }
 
 export function useGetProductCategoryById(id: string):
     UseQueryResult<ApiBaseState<GetProductCategory>, ErrorModel> {
-        const enabled = id.length > 1 ? true : false;
+    const enabled = id.length > 1 ? true : false;
     return useQuery<ApiBaseState<GetProductCategory>, ErrorModel>({
         queryKey: ['get-product-category-by-id'],
         queryFn: () => ProductCategoryService.getInstance().getProductCategoryById(id),

@@ -1,16 +1,17 @@
 import {
-    PostBankDetails,
-    PostBillingDetails,
-    PostDeliveryDetails,
-    PostKeyMobileNumbers,
-    PostOfficeUseOnly,
-    PostPaymentTerms,
-    PostProductSpecification,
-    PostStatutoryDetails
-} from '@prime-fresh/admin_api';
+    ICustomer,
+    ICustomerBankDetails,
+    ICustomerBillingDetails,
+    ICustomerDeliveryDetails,
+    ICustomerKeyMobileNumbers,
+    ICustomerOfficeUseOnly,
+    ICustomerPaymentTerms,
+    ICustomerProductSpecs,
+    ICustomerStatutoryDetails
+} from '../models';
 import { initValAddress } from './address.initial-value';
 
-const initKeyMobileNumbers: PostKeyMobileNumbers = {
+const initKeyMobileNumbers: ICustomerKeyMobileNumbers = {
     accDeptFName: null,
     accDeptMName: null,
     accDeptLName: null,
@@ -48,7 +49,7 @@ const initKeyMobileNumbers: PostKeyMobileNumbers = {
     ref2Email: null,
 }
 
-const initBillingDetails: PostBillingDetails = {
+const initBillingDetails: ICustomerBillingDetails = {
     billingName: null,
     contactPersonFName: null,
     contactPersonMName: null,
@@ -63,7 +64,7 @@ const initBillingDetails: PostBillingDetails = {
     billingFormatCopy: null,
 }
 
-const initDeliveryDetails: PostDeliveryDetails = {
+const initDeliveryDetails: ICustomerDeliveryDetails = {
     deliveryAddress: initValAddress,
     deliveryAddressProofCopy: null,
     deliveryTime: null,
@@ -76,7 +77,7 @@ const initDeliveryDetails: PostDeliveryDetails = {
     emailSecondary: null,
 }
 
-const initStatutoryDetails: PostStatutoryDetails = {
+const initStatutoryDetails: ICustomerStatutoryDetails = {
     panNo: null,
     panCopy: null,
     aadharNo: null,
@@ -92,7 +93,7 @@ const initStatutoryDetails: PostStatutoryDetails = {
     cinNo: null,
 }
 
-const initBankDetails: PostBankDetails = {
+const initBankDetails: ICustomerBankDetails = {
     ifCancelledCheque: null,
     notCancelledChequeReason: null,
     cancelledChequeCopy: null,
@@ -109,7 +110,7 @@ const initBankDetails: PostBankDetails = {
     bankAddress: initValAddress,
 }
 
-export const initProductSpecification: PostProductSpecification = {
+export const initProductSpecification: ICustomerProductSpecs = {
     articleName: null,
     specifications: null,
     parameters: null,
@@ -119,7 +120,7 @@ export const initProductSpecification: PostProductSpecification = {
 }
 
 
-const initPaymentTerms: PostPaymentTerms = {
+const initPaymentTerms: ICustomerPaymentTerms = {
     paymentMade: null,
     otherPaymentMade: null,
     paymentMode: null,
@@ -141,12 +142,12 @@ const initPaymentTerms: PostPaymentTerms = {
     docEvidenceCopy: null,
 }
 
-const initOfficeUseOnly: PostOfficeUseOnly = {
+const initOfficeUseOnly: ICustomerOfficeUseOnly = {
     proposerBDName: null,
-    pflCoordinator: null,
     recommendedBy: null,
-    dispatchLocationPfl: null,
     approvedBy: null,
+    pflCoordinator: null,
+    dispatchLocationPfl: null,
     relationshipManager: null,
     avgBillingMonthly: 0,
     volumeMonthly: 0,
@@ -163,7 +164,7 @@ const initOfficeUseOnly: PostOfficeUseOnly = {
     additionalNotes: null,
 }
 
-export const initValCustomer = {
+export const initValCustomer: Omit<ICustomer, 'id'> = {
     organisationName: null,
     customerTypes: null,
     customerCategory: null,

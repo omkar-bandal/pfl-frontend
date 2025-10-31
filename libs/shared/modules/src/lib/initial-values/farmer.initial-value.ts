@@ -1,7 +1,7 @@
-import { PostCrops, PostFarmer } from "@prime-fresh/admin_api"
+import { ICrops, IFarmer } from "../models"
 import { initValAddress } from "./address.initial-value"
 
-export const initValCrop: PostCrops = {
+export const initValCrop: ICrops = {
     crop: null,
     variety: null,
     noOfPlants: null,
@@ -10,7 +10,7 @@ export const initValCrop: PostCrops = {
     expectedQuantityInTonnes: null
 }
 
-export const initValFarmer: PostFarmer = {
+export const initValFarmer: Omit<IFarmer, 'id'> = {
     //Farmer Details
     farmerfName: null,
     farmermName: null,

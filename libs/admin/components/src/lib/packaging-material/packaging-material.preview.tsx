@@ -4,7 +4,7 @@ import {
   DataViewer,
   ObjectViewerConfig,
   PreviewContainer,
-} from '@prime-fresh/ui_shared';
+} from '@prime-fresh/shared/components';
 
 export const PackagingMaterialPreview = () => {
   const packagingMaterialPreview = useAppSelector(packagingMaterialDataStates);

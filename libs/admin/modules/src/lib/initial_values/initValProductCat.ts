@@ -1,4 +1,4 @@
-import { PostProductCategory } from "@prime-fresh/admin_api";
+import { PostProductCategory } from '@prime-fresh/services';
 
 export const initValProductCat: PostProductCategory = {
     name: '',

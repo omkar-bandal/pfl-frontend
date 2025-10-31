@@ -1,1 +1,3 @@
-export * from './customer-registration.form';
+export * from './CustomerForm';
+export * from './CustomerTable';
+export * from './CustomerView';

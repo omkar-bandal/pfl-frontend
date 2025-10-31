@@ -1,4 +1,4 @@
-import { GetPackagingMaterial } from "@prime-fresh/admin_api";
+import { GetPackagingMaterial } from "@prime-fresh/services";
 
 export const getSelectedPackMatData = (packMatId: string | null, packMatData: GetPackagingMaterial[] | null | undefined) => {
     if (packMatData !== null && packMatId !== null) {

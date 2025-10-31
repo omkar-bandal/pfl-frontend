@@ -3,11 +3,12 @@ import { Box, Grid2, InputAdornment, LinearProgress } from '@mui/material';
 import {
   adminRoutes,
   PackagingMaterialInitialValues,
+  packingMaterailValidationSchema,
   useCreatePackagingMaterial,
   useGetPackagingMaterialById,
   useUpdatePackagingMaterialById,
 } from '@prime-fresh/admin/modules';
-import { PostPackagingMaterial } from '@prime-fresh/admin_api';
+import { PostPackagingMaterial } from '@prime-fresh/services';
 import {
   handleFormKeyDown,
   mapToValueLabelArray,
@@ -20,7 +21,7 @@ import {
   SelectInput,
   TextInput,
   toast,
-} from '@prime-fresh/ui_shared';
+} from '@prime-fresh/shared/components';
 import { FormikProvider, useFormik } from 'formik';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -43,6 +44,7 @@ export const PackagingMaterialForm = () => {
   const formik = useFormik<PostPackagingMaterial>({
     enableReinitialize: true,
     initialValues: InitValPackagingMaterial,
+    validationSchema: packingMaterailValidationSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: (values) => {
@@ -133,7 +135,7 @@ export const PackagingMaterialForm = () => {
             </Grid2>
             <Grid2 size={{ xs: 12, md: 4 }}>
               <RadioGroupInput
-                isRequired
+                isRequired={false}
                 alignment="vertical"
                 name="useFor"
                 label="Packaging Material Used For"
