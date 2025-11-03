@@ -16,10 +16,10 @@ export const DCTypeCustomerView = () => {
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
-  const { canDownload } = usePermission('delivery-challan');
+  const { canDownload } = usePermission('deliveryChallan-Customer');
   const { data, isLoading, refetch } = useGetDCTypeCustomerForViewById(dcId);
   const dcTypeCustomerData = data?.data ? data.data : null;
-  console.log('DC Type Customer Data: ', dcTypeCustomerData);
+  // console.log('DC Type Customer Data: ', dcTypeCustomerData);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({ contentRef });

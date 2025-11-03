@@ -15,7 +15,7 @@ export const DCTypeStockTransferView = () => {
   const dcId = id ? id : '';
   const { loggedInUserInfo } = useAppSelector(authState);
   const username = convertInTitleCase(loggedInUserInfo?.userName || '');
-  const { canDownload } = usePermission('delivery-challan');
+  const { canDownload } = usePermission('deliveryChallan-Stock-Transfer');
   const [reason, setReason] = useState('');
   const { openDrawer } = useActions();
   const { data, isLoading: isDCTypeStockTransferLoading, refetch } = useGetDCTypeStockTransferForViewById(dcId);

@@ -73,13 +73,13 @@ export const userSpecificNavigation: NavigationConfig[] = [
     children: [
       {
         name: 'For Customer',
-        uniqueKey: 'delivery-challan',
+        uniqueKey: 'deliveryChallan-Customer',
         logo: <Remove />,
         path: operationsRoutes.VIEW_ALL_DC_TYPE_CUSTOMER,
       },
       {
         name: 'For Stock Transfer',
-        uniqueKey: 'delivery-challan',
+        uniqueKey: 'deliveryChallan-Stock-Transfer',
         logo: <Remove />,
         path: operationsRoutes.VIEW_ALL_DC_TYPE_STOCK_TRANSFER,
       },

@@ -31,7 +31,7 @@ export const DCTypeCustomerTable = () => {
   const navigate = useNavigate();
   const apiRef = useGridApiRef();
   const { isMobile } = useTableUI();
-  const { canEdit, canView, canDelete } = usePermission('delivery-challan');
+  const { canEdit, canView, canDelete } = usePermission('deliveryChallan-Customer');
   const dcTypeCustomerColumns = useDCTypeCustomerColumns(canEdit, canView, navigate);
 
   const tableNavActionConfig: TableNavActionsConfig = {

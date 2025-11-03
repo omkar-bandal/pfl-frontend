@@ -11,7 +11,7 @@ export const commonNavigation: NavigationConfig[] = [
   },
   {
     name: 'Inventory',
-    uniqueKey: 'stock',
+    uniqueKey: 'Inventory',
     logo: <Inventory />,
     path: sharedRoutes.GET_ALL_STOCK,
   },
