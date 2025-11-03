@@ -4,7 +4,7 @@ import { GetProductSubcategory } from '@prime-fresh/services';
 import { useGridApiRef } from '@mui/x-data-grid';
 import { Box, DialogContentText } from '@mui/material';
 import { toolTipText, useDebounce } from '@prime-fresh/shared/modules';
-import { Add, Delete, DoneAll, Edit, Settings } from '@mui/icons-material';
+import { Add, Edit, Settings } from '@mui/icons-material';
 import { adminRoutes, adminTableIds, useGetAllProductSubcategories } from '@prime-fresh/admin/modules';
 import {
   ColumnVisibilityPanel,
@@ -28,8 +28,8 @@ export const ProductSubCatTable = () => {
 
   const tableNavActionConfig: TableNavActionsConfig = {
     tableId: adminTableIds.PRODUCT_SUBCAT_TABLE_ID,
-    createPath: adminRoutes.CREATE_CUSTOMER_CAT,
-    editPath: adminRoutes.UPDATE_CUSTOMER_CAT,
+    createPath: adminRoutes.CREATE_PRODUCT_SUBCAT,
+    editPath: adminRoutes.UPDATE_PRODUCT_SUBCAT
   };
 
   const { handleCreate, handleEdit, handleDelete } = useTableActions(apiRef, tableNavActionConfig);
